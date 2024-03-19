@@ -1,0 +1,5 @@
+[workspace.package]
+rust-version = "1.72.0"
+
+[workspace]
+members = ["cmd"]

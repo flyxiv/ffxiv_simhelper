@@ -1,0 +1,17 @@
+[package]
+name = "ffxiv-simbot-lib-db"
+version = "0.1.0"
+edition = "2021"
+description = "MySQL Database Interface for ffxivsimbot"
+authors = ["Junyeop Na <ns0902@naver.com>"]
+repository = "https://github.com/ffxiv-simbot"
+
+
+[dependencies]
+mysql = "23.*"
+serde = { version = "1.*", features = ["derive"] }
+fstrings = "0.2.*"
+serde_yaml = "0.9.*"
+itertools = "0.10.*"
+cargo-docs = "0.1.*"
+mockall = "0.10.*"
