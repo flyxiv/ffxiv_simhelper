@@ -7,7 +7,14 @@ use crate::job::Job;
 use crate::medicine::Medicine;
 use crate::stat::{add_main_stats, add_sub_stats, MainStats, SubStats};
 
-struct Character {
+/// Data for a single Character in FFXIV Simbot.
+/// Combat Data for Characters in FFXIV include:
+/// 1. Current Clan(Race)
+/// 2. Current Job
+/// 3. Equipments
+/// 4. Food
+/// 5. Medicine
+pub struct Character {
     clan: Clan,
     job: Job,
     /// 0: Weapon

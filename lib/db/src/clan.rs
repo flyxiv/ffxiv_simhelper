@@ -22,7 +22,7 @@ struct EtroClan {
     mind: usize,
 }
 
-pub(crate) struct Clan {
+pub struct Clan {
     id: usize,
     name: String,
     main_stats: MainStats,

@@ -4,10 +4,10 @@ use std::fmt::{Debug, Display, Formatter};
 type Result<T> = std::result::Result<T, DataError>;
 
 pub(crate) mod character;
-pub(crate) mod clan;
-pub(crate) mod equipment;
-pub(crate) mod food;
-pub(crate) mod job;
+pub mod clan;
+pub mod equipment;
+pub mod food;
+pub mod job;
 pub(crate) mod materia;
 mod medicine;
 pub(crate) mod stat;

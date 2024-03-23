@@ -26,8 +26,11 @@ trait MateriaTrait {
     fn unequip_materia(&mut self, slot: usize) -> bool;
 }
 
+/// Equipment Data Type for FFXIV Simbot
+/// Equipments of different kinds(weapons, armor, accessories) are all
+/// represented by this one data, since it makes it more flexible for changes.
 #[derive(PartialEq, Eq, Hash, Clone)]
-pub(crate) struct Equipment {
+pub struct Equipment {
     id: usize,
     slot_name: String,
     name: String,

@@ -23,7 +23,9 @@ struct EtroFood {
     spell_speed: usize,
 }
 
-pub(crate) struct Food {
+/// Buff Food Data for FFXIV Simbot.
+/// Only treat Combat Foods as of now.
+pub struct Food {
     id: usize,
     name: String,
     sub_stats: SubStats,

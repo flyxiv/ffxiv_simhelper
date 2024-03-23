@@ -37,8 +37,10 @@ struct StatModifier {
     hp_per_vitality_tank: f64,
 }
 
+/// Job for FFXIV Simbot.
+/// Only treat Combat Jobs as of now.
 #[derive(PartialEq, Clone)]
-pub(crate) struct Job {
+pub struct Job {
     id: usize,
     abbrev: String,
     name: String,
