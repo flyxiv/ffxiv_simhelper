@@ -1,7 +1,7 @@
+use ffxiv_simbot_lib_db::clan::*;
 use ffxiv_simbot_lib_db::data::EngineData;
 use ffxiv_simbot_lib_db::equipment::*;
-use ffxiv_simbot_lib_db::jobclass::*;
-use ffxiv_simbot_lib_db::race::*;
+use ffxiv_simbot_lib_db::job::*;
 use std::collections::HashMap;
 
 pub type EquipmentSearchTable = HashMap<EquipmentKey, Vec<Equipment>>;

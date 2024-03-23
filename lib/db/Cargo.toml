@@ -13,6 +13,7 @@ mysql = "23.*"
 serde = { version = "1.*", features = ["derive"] }
 fstrings = "0.2.*"
 serde_yaml = "0.9.*"
+serde_json = "1.*"
 itertools = "0.10.*"
 cargo-docs = "0.1.*"
 mockall = "0.10.*"
