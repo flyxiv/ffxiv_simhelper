@@ -8,6 +8,7 @@ repository = "https://github.com/ffxiv-simbot"
 
 
 [dependencies]
+project-root = "0.2.2"
 mysql = "23.*"
 serde = { version = "1.*", features = ["derive"] }
 fstrings = "0.2.*"

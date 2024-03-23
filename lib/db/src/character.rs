@@ -10,3 +10,14 @@ pub(crate) struct Character {
     main_stats: MainStat,
     sub_stats: SubStats,
 }
+
+impl Character {
+    fn create(race: Race, job_class: JobClass) -> Self {
+        Character {
+            weapon_attack: 0,
+            race,
+            job_class,
+            main_stats: MainStat::new(0, 0, 0, 0, 0, 0),
+        }
+    }
+}

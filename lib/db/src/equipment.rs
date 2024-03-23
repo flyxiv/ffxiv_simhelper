@@ -11,8 +11,9 @@ pub struct EquipmentKey {
     slot: EquipmentSlot,
 }
 
+/// Equipment data from the Etro API
 #[derive(PartialEq, Eq)]
-pub struct EquipmentDbData {
+pub struct EquipmentEtroData {
     equipment_id: usize,
     slot: usize,
     name: String,

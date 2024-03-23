@@ -1,7 +1,9 @@
 pub mod character;
-pub mod equipment;
-pub mod stat;
-pub mod race;
-pub mod jobclass;
-pub mod database_manager;
+mod config;
 pub mod data;
+pub mod database_manager;
+pub mod equipment;
+pub mod jobclass;
+mod jsonparser;
+pub mod race;
+pub mod stat;

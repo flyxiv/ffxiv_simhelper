@@ -1,0 +1,15 @@
+max_level_main_stat_modifier: 390
+max_level_hp_modifier: 3000
+max_level_mp_modifier: 10000
+max_level_critical_strike_base: 400
+max_level_direct_hit_base: 400
+max_level_determination_base: 390
+max_level_tenacity_base: 400
+max_level_skill_speed_base: 400
+max_level_spell_speed_base: 400
+equipment_json_file_name: equipment.json
+jobs_json_file_name: jobs.json
+food_json_file_name: food.json
+materia_json_file_name: materia.json
+clans_json_file_name: clans.json
+medicine_json_file_name: medicine.json
