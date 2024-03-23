@@ -4,91 +4,97 @@ use std::collections::HashMap;
 /// 0 -> strength, 1 -> dexterity, 2 -> intelligence, 3 -> mind
 /// For equipments, MainStat Ideally should have only one key-value pair,
 /// since in FFXIV no equipment has more than one main stat as of now.
-pub(crate) type MainStat = HashMap<usize, usize>;
-
-/// Saves the sub stat of the equipment/character.
-#[derive(PartialEq, Eq)]
-pub(crate) struct SubStats {
-    pub(crate) critical_strike: usize,
-    pub(crate) direct_hit: usize,
-    pub(crate) determination: usize,
-    pub(crate) speed: usize,
-    pub(crate) tenacity: usize,
-    pub(crate) piety: usize,
-}
-
-pub(crate) fn make_equipment_main_stat(main_stat_id: usize, value: usize) -> MainStat {
-    let mut main_stat = HashMap::new();
-    main_stat.insert(main_stat_id, value);
-    main_stat
-}
-
-pub(crate) fn make_race_main_stat(
+pub(crate) struct MainStat {
     strength: usize,
     dexterity: usize,
+    vitality: usize,
     intelligence: usize,
     mind: usize,
-) -> MainStat {
-    let mut main_stat = HashMap::new();
-    main_stat.insert(0, strength);
-    main_stat.insert(1, dexterity);
-    main_stat.insert(2, intelligence);
-    main_stat.insert(3, mind);
-    main_stat
 }
 
-impl SubStats {
-    pub(crate) fn new(
-        crit: Option<usize>,
-        dh: Option<usize>,
-        det: Option<usize>,
-        speed: Option<usize>,
-        tenacity: Option<usize>,
-        piety: Option<usize>,
-    ) -> Self {
-        SubStats {
-            critical_strike: crit.unwrap_or_else(|| 0),
-            direct_hit: dh.unwrap_or_else(|| 0),
-            determination: det.unwrap_or_else(|| 0),
-            speed: speed.unwrap_or_else(|| 0),
-            tenacity: tenacity.unwrap_or_else(|| 0),
-            piety: piety.unwrap_or_else(|| 0),
-        }
+/// Trait used for in-game entities that have main stat.
+pub(crate) trait MainStatTrait {
+    fn get_strength(&self) -> usize;
+    fn get_dexterity(&self) -> usize;
+    fn get_vitality(&self) -> usize;
+    fn get_intelligence(&self) -> usize;
+    fn get_mind(&self) -> usize;
+}
+
+impl MainStatTrait for MainStat {
+    fn get_strength(&self) -> usize {
+        self.strength
+    }
+
+    fn get_dexterity(&self) -> usize {
+        self.dexterity
+    }
+
+    fn get_vitality(&self) -> usize {
+        self.vitality
+    }
+
+    fn get_intelligence(&self) -> usize {
+        self.intelligence
+    }
+
+    fn get_mind(&self) -> usize {
+        self.mind
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::stat::{make_equipment_main_stat, make_race_main_stat, SubStats};
-    #[test]
-    fn test_substat() {
-        let substats = SubStats::new(Some(100), None, Some(102), None, None, None);
+/// Trait for in-game entities that have sub stats
+pub(crate) trait SubStatTrait {
+    fn get_critical_strike(&self) -> usize;
+    fn get_direct_hit(&self) -> usize;
+    fn get_determination(&self) -> usize;
+    fn get_skill_speed(&self) -> usize;
+    fn get_spell_speed(&self) -> usize;
+    fn get_tenacity(&self) -> usize;
+    fn get_piety(&self) -> usize;
+}
 
-        assert_eq!(substats.critical_strike, 100);
-        assert_eq!(substats.direct_hit, 0);
-        assert_eq!(substats.determination, 102);
-        assert_eq!(substats.speed, 0);
-        assert_eq!(substats.tenacity, 0);
-        assert_eq!(substats.piety, 0);
+pub(crate) struct SubStat {
+    critical_strike: usize,
+    direct_hit: usize,
+    determination: usize,
+    skill_speed: usize,
+    spell_speed: usize,
+    tenacity: usize,
+    piety: usize,
+}
+
+impl SubStatTrait for SubStat {
+    fn get_critical_strike(&self) -> usize {
+        self.critical_strike
     }
 
-    #[test]
-    fn test_equipment_mainstat() {
-        let mainstat = make_equipment_main_stat(3, 100);
-
-        assert_eq!(mainstat.get(&0), None);
-        assert_eq!(mainstat.get(&1), None);
-        assert_eq!(mainstat.get(&2), None);
-        assert_eq!(mainstat.get(&3), Some(&100));
+    fn get_direct_hit(&self) -> usize {
+        self.direct_hit
     }
 
-    #[test]
-    fn test_character_mainstat() {
-        let mainstat = make_race_main_stat(23, 21, 22, 24);
-
-        assert_eq!(mainstat.get(&0), Some(&23));
-        assert_eq!(mainstat.get(&1), Some(&21));
-        assert_eq!(mainstat.get(&2), Some(&22));
-        assert_eq!(mainstat.get(&3), Some(&24));
+    fn get_determination(&self) -> usize {
+        self.determination
     }
+
+    fn get_skill_speed(&self) -> usize {
+        self.skill_speed
+    }
+
+    fn get_spell_speed(&self) -> usize {
+        self.spell_speed
+    }
+
+    fn get_tenacity(&self) -> usize {
+        self.tenacity
+    }
+
+    fn get_piety(&self) -> usize {
+        self.piety
+    }
+}
+
+/// Trait for stats that aren't included in main/sub stats.
+pub(crate) trait SpecialStatTrait {
+    fn get_hp(&self) -> usize;
 }

@@ -3,12 +3,23 @@ use crate::stat::{make_equipment_main_stat, MainStat, SubStats};
 use itertools::Itertools;
 use std::collections::HashMap;
 
-pub type EquipmentSlot = usize;
+/// Trait for weapon actions
+pub trait WeaponAttackTrait {
+    fn get_damage_mag(&self) -> usize;
+    fn get_damage_phys(&self) -> usize;
+}
+
+/// Trait for armor actions
+pub trait ArmorTrait {
+    fn get_defense_phys(&self) -> usize;
+    fn get_defense_mag(&self) -> usize;
+}
 
 #[derive(PartialEq, Eq, Hash, Clone)]
-pub struct EquipmentKey {
-    pub job_id: JobId,
-    slot: EquipmentSlot,
+struct ArmorAccessory {
+    id: usize,
+    slot_name: String,
+    name: String,
 }
 
 /// Equipment data from the Etro API
