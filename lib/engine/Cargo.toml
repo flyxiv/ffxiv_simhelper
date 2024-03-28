@@ -11,6 +11,8 @@ repository = "https://github.com/ffxiv-simbot"
 project-root = "0.2.2"
 itertools = { version = "0.10.0", features = [] }
 cargo-docs = "0.1.*"
+serde_yaml = "0.9.30"
+serde = { version = "1.0.196", features = ["derive"] }
 
 [dependencies.ffxiv-simbot-lib-db]
 version = "0.1.0"

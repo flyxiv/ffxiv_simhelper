@@ -1,42 +1,48 @@
-use std::ops;
+use serde::Deserialize;
+pub type StatType = i32;
+pub type HpType = usize;
+
+pub trait StatFrom<T>: Sized {
+    fn stat_from(stat: &T) -> Self;
+}
 
 /// Saves the main stats of the equipment/character/race.
-#[derive(Eq, PartialEq, Clone, Copy)]
+#[derive(Eq, PartialEq, Clone, Copy, Hash)]
 pub(crate) struct MainStats {
-    pub(crate) strength: usize,
-    pub(crate) dexterity: usize,
-    pub(crate) vitality: usize,
-    pub(crate) intelligence: usize,
-    pub(crate) mind: usize,
+    pub(crate) strength: StatType,
+    pub(crate) dexterity: StatType,
+    pub(crate) vitality: StatType,
+    pub(crate) intelligence: StatType,
+    pub(crate) mind: StatType,
 }
 
 /// Trait used for in-game entities that have main stat.
-pub(crate) trait MainStatTrait {
-    fn get_strength(&self) -> usize;
-    fn get_dexterity(&self) -> usize;
-    fn get_vitality(&self) -> usize;
-    fn get_intelligence(&self) -> usize;
-    fn get_mind(&self) -> usize;
+pub trait MainStatTrait: Sized {
+    fn get_strength(&self) -> StatType;
+    fn get_dexterity(&self) -> StatType;
+    fn get_vitality(&self) -> StatType;
+    fn get_intelligence(&self) -> StatType;
+    fn get_mind(&self) -> StatType;
 }
 
 impl MainStatTrait for MainStats {
-    fn get_strength(&self) -> usize {
+    fn get_strength(&self) -> StatType {
         self.strength
     }
 
-    fn get_dexterity(&self) -> usize {
+    fn get_dexterity(&self) -> StatType {
         self.dexterity
     }
 
-    fn get_vitality(&self) -> usize {
+    fn get_vitality(&self) -> StatType {
         self.vitality
     }
 
-    fn get_intelligence(&self) -> usize {
+    fn get_intelligence(&self) -> StatType {
         self.intelligence
     }
 
-    fn get_mind(&self) -> usize {
+    fn get_mind(&self) -> StatType {
         self.mind
     }
 }
@@ -73,11 +79,11 @@ where
     }
 }
 
-impl<T> From<T> for MainStats
+impl<T> StatFrom<T> for MainStats
 where
     T: MainStatTrait,
 {
-    fn from(main_stat_trait: T) -> Self {
+    fn stat_from(main_stat_trait: &T) -> Self {
         MainStats {
             strength: main_stat_trait.get_strength(),
             dexterity: main_stat_trait.get_dexterity(),
@@ -89,33 +95,21 @@ where
 }
 
 /// Trait for in-game entities that have sub stats
-pub(crate) trait SubStatTrait {
-    fn get_critical_strike(&self) -> usize;
-    fn get_direct_hit(&self) -> usize;
-    fn get_determination(&self) -> usize;
-    fn get_skill_speed(&self) -> usize;
-    fn get_spell_speed(&self) -> usize;
-    fn get_tenacity(&self) -> usize;
-    fn get_piety(&self) -> usize;
-
-    fn add_sub_stats(&self, sub_stats: &SubStats) -> SubStats {
-        SubStats {
-            critical_strike: self.get_critical_strike() + sub_stats.critical_strike,
-            direct_hit: self.get_direct_hit() + sub_stats.direct_hit,
-            determination: self.get_determination() + sub_stats.determination,
-            skill_speed: self.get_skill_speed() + sub_stats.skill_speed,
-            spell_speed: self.get_spell_speed() + sub_stats.spell_speed,
-            tenacity: self.get_tenacity() + sub_stats.tenacity,
-            piety: self.get_piety() + sub_stats.piety,
-        }
-    }
+pub trait SubStatTrait: Sized {
+    fn get_critical_strike(&self) -> StatType;
+    fn get_direct_hit(&self) -> StatType;
+    fn get_determination(&self) -> StatType;
+    fn get_skill_speed(&self) -> StatType;
+    fn get_spell_speed(&self) -> StatType;
+    fn get_tenacity(&self) -> StatType;
+    fn get_piety(&self) -> StatType;
 }
 
-impl<T> From<T> for SubStats
+impl<T> StatFrom<T> for SubStats
 where
     T: SubStatTrait,
 {
-    fn from(sub_stat_trait: T) -> Self {
+    fn stat_from(sub_stat_trait: &T) -> Self {
         SubStats {
             critical_strike: sub_stat_trait.get_critical_strike(),
             direct_hit: sub_stat_trait.get_direct_hit(),
@@ -128,48 +122,90 @@ where
     }
 }
 
-#[derive(Eq, PartialEq)]
-pub(crate) struct SubStats {
-    pub(crate) critical_strike: usize,
-    pub(crate) direct_hit: usize,
-    pub(crate) determination: usize,
-    pub(crate) skill_speed: usize,
-    pub(crate) spell_speed: usize,
-    pub(crate) tenacity: usize,
-    pub(crate) piety: usize,
+#[derive(Eq, PartialEq, Clone, Deserialize)]
+pub struct SubStats {
+    pub critical_strike: StatType,
+    pub direct_hit: StatType,
+    pub determination: StatType,
+    pub skill_speed: StatType,
+    pub spell_speed: StatType,
+    pub tenacity: StatType,
+    pub piety: StatType,
 }
 
 impl SubStatTrait for SubStats {
-    fn get_critical_strike(&self) -> usize {
+    fn get_critical_strike(&self) -> StatType {
         self.critical_strike
     }
 
-    fn get_direct_hit(&self) -> usize {
+    fn get_direct_hit(&self) -> StatType {
         self.direct_hit
     }
 
-    fn get_determination(&self) -> usize {
+    fn get_determination(&self) -> StatType {
         self.determination
     }
 
-    fn get_skill_speed(&self) -> usize {
+    fn get_skill_speed(&self) -> StatType {
         self.skill_speed
     }
 
-    fn get_spell_speed(&self) -> usize {
+    fn get_spell_speed(&self) -> StatType {
         self.spell_speed
     }
 
-    fn get_tenacity(&self) -> usize {
+    fn get_tenacity(&self) -> StatType {
         self.tenacity
     }
 
-    fn get_piety(&self) -> usize {
+    fn get_piety(&self) -> StatType {
         self.piety
     }
 }
 
 /// Trait for stats that aren't included in main/sub stats.
 pub(crate) trait SpecialStatTrait {
-    fn get_hp(&self) -> usize;
+    fn get_hp(&self) -> HpType;
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::stat::{MainStatTrait, MainStats, SubStatTrait, SubStats};
+
+    #[test]
+    fn main_stat_basic_test() {
+        let main_stats = MainStats {
+            strength: 1,
+            dexterity: 2,
+            vitality: 3,
+            intelligence: 4,
+            mind: 5,
+        };
+
+        assert_eq!(main_stats.get_strength(), 1);
+        assert_eq!(main_stats.get_dexterity(), 2);
+        assert_eq!(main_stats.get_vitality(), 3);
+        assert_eq!(main_stats.get_intelligence(), 4);
+        assert_eq!(main_stats.get_mind(), 5);
+    }
+
+    fn sub_stat_basic_test() {
+        let substats = SubStats {
+            critical_strike: 1,
+            direct_hit: 2,
+            determination: 3,
+            skill_speed: 4,
+            spell_speed: 5,
+            tenacity: 6,
+            piety: 7,
+        };
+
+        assert_eq!(substats.get_critical_strike(), 1);
+        assert_eq!(substats.get_determination(), 2);
+        assert_eq!(substats.get_vitality(), 3);
+        assert_eq!(substats.get_skill_speed(), 4);
+        assert_eq!(substats.get_spell_speed(), 5);
+        assert_eq!(substats.get_tenacity(), 6);
+        assert_eq!(substats.get_piety(), 7);
+    }
 }

@@ -1,6 +1,12 @@
+use crate::equipment::SlotType;
+use std::collections::HashMap;
 use std::error::Error;
 use std::fmt::{Debug, Display, Formatter};
+use std::hash::Hash;
+use std::path::PathBuf;
 
+/// Hash Table for fast searching by the object's Id.
+pub type IdTable<T: Hash + Sized, U: SearchKeyEntity<T> + Sized> = HashMap<T, U>;
 type Result<T> = std::result::Result<T, DataError>;
 
 pub(crate) mod character;
@@ -8,28 +14,32 @@ pub mod clan;
 pub mod equipment;
 pub mod food;
 pub mod job;
-pub(crate) mod materia;
+pub mod materia;
 mod medicine;
-pub(crate) mod stat;
+pub mod stat;
 
-pub(crate) enum DataError {
+pub enum DataError {
     FileNotFoundError(String),
-    JsonParseError,
-    EquipmentParseError,
-    JobClassParseError,
-    RaceParseError,
-    StatParseError,
+    JsonParseError(String),
+    EquipmentParseError(String),
+    JobClassParseError(String),
+    RaceParseError(String),
+    StatParseError(String),
+    EquipError(SlotType),
+    UnEquipError(SlotType),
 }
 
 impl Debug for DataError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            DataError::FileNotFoundError(_) => f.fmt("File not found"),
-            DataError::JsonParseError => f.fmt("Error parsing JSON"),
-            DataError::EquipmentParseError => f.fmt("Error parsing equipment"),
-            DataError::JobClassParseError => f.fmt("Error parsing job class"),
-            DataError::RaceParseError => f.fmt("Error parsing race"),
-            DataError::StatParseError => f.fmt("Error parsing stat"),
+            DataError::FileNotFoundError(s) => write!(f, "File not found: {}", s),
+            DataError::JsonParseError(s) => write!(f, "Error parsing JSON: {}", s),
+            DataError::EquipmentParseError(s) => write!(f, "Error parsing equipment: {}", s),
+            DataError::JobClassParseError(s) => write!(f, "Error parsing job class: {}", s),
+            DataError::RaceParseError(s) => write!(f, "Error parsing race: {}", s),
+            DataError::StatParseError(s) => write!(f, "Error parsing stat: {}", s),
+            DataError::EquipError(slot) => write!(f, "Equip to Invalid Slot: {:?}", slot),
+            DataError::UnEquipError(slot) => write!(f, "Unequip Invalid Slot: {:?}", slot),
         }
     }
 }
@@ -37,12 +47,14 @@ impl Debug for DataError {
 impl Display for DataError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            DataError::FileNotFoundError(_) => f.fmt("File not found"),
-            DataError::JsonParseError => f.fmt("Error parsing JSON"),
-            DataError::EquipmentParseError => f.fmt("Error parsing equipment"),
-            DataError::JobClassParseError => f.fmt("Error parsing job class"),
-            DataError::RaceParseError => f.fmt("Error parsing race"),
-            DataError::StatParseError => f.fmt("Error parsing stat"),
+            DataError::FileNotFoundError(s) => write!(f, "File not found: {}", s),
+            DataError::JsonParseError(s) => write!(f, "Error parsing JSON: {}", s),
+            DataError::EquipmentParseError(s) => write!(f, "Error parsing equipment: {}", s),
+            DataError::JobClassParseError(s) => write!(f, "Error parsing job class: {}", s),
+            DataError::RaceParseError(s) => write!(f, "Error parsing race: {}", s),
+            DataError::StatParseError(s) => write!(f, "Error parsing stat: {}", s),
+            DataError::EquipError(slot) => write!(f, "Equip to Invalid Slot: {:?}", slot),
+            DataError::UnEquipError(slot) => write!(f, "Unequip Invalid Slot: {:?}", slot),
         }
     }
 }
@@ -50,8 +62,8 @@ impl Display for DataError {
 impl Error for DataError {}
 
 impl From<serde_json::Error> for DataError {
-    fn from(_: serde_json::Error) -> Self {
-        DataError::JsonParseError
+    fn from(e: serde_json::Error) -> Self {
+        DataError::JsonParseError(e.to_string())
     }
 }
 
@@ -62,7 +74,34 @@ impl From<String> for DataError {
 }
 
 trait JsonFileReader {
-    fn read_json_file(&self, file_name: &str) -> Result<String> {
-        std::fs::read_to_string(file_name).map_err(|e| format!("{:?}", e).into())
+    fn read_json_file(&self, file_path: &PathBuf) -> Result<String> {
+        std::fs::read_to_string(file_path).map_err(|e| format!("{:?}", e).into())
     }
+}
+
+/// Extract the Search Key from the object.
+trait SearchKeyEntity<T>
+where
+    T: Hash + Sized + Eq,
+{
+    fn get_search_key(&self) -> Vec<T>;
+}
+
+/// convert id containing item vector to id -> item hash map for faster search.
+pub(crate) fn item_vec_to_id_table<T, U>(items: Vec<U>) -> IdTable<T, U>
+where
+    T: Hash + Sized + Eq,
+    U: SearchKeyEntity<T> + Sized + Clone,
+{
+    let mut table = HashMap::new();
+
+    for item in items {
+        let keys = item.get_search_key();
+
+        for key in keys {
+            table.insert(key, item.clone());
+        }
+    }
+
+    table
 }
