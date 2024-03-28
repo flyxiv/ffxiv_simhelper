@@ -107,3 +107,88 @@ impl SearchKeyEntity<ClanId> for Clan {
         vec![self.id]
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::clan::*;
+
+    #[test]
+    fn clan_basic_test() {
+        let clan = Clan {
+            id: 7,
+            name: "Seeker of the Sun".into(),
+            main_stats: MainStats {
+                strength: 2,
+                dexterity: 3,
+                vitality: 0,
+                intelligence: -1,
+                mind: -1,
+            },
+        };
+
+        assert_eq!(clan.get_strength(), 2);
+        assert_eq!(clan.get_dexterity(), 3);
+        assert_eq!(clan.get_vitality(), 0);
+        assert_eq!(clan.get_intelligence(), -1);
+        assert_eq!(clan.get_mind(), -1);
+        assert_eq!(clan.name, "Seeker of the Sun");
+        assert_eq!(clan.id, 7);
+    }
+
+    #[test]
+    fn clan_search_table_test() {
+        let clans = vec![
+            Clan {
+                id: 7,
+                name: "Seeker of the Sun".into(),
+                main_stats: MainStats {
+                    strength: 2,
+                    dexterity: 3,
+                    vitality: 0,
+                    intelligence: -1,
+                    mind: -1,
+                },
+            },
+            Clan {
+                id: 9,
+                name: "Sea Wolf".into(),
+                main_stats: MainStats {
+                    strength: 2,
+                    dexterity: -1,
+                    vitality: 3,
+                    intelligence: -2,
+                    mind: 1,
+                },
+            },
+            Clan {
+                id: 5,
+                name: "Plainsfolk".into(),
+                main_stats: MainStats {
+                    strength: -1,
+                    dexterity: 3,
+                    vitality: -1,
+                    intelligence: 2,
+                    mind: 0,
+                },
+            },
+            Clan {
+                id: 11,
+                name: "Raen".into(),
+                main_stats: MainStats {
+                    strength: -1,
+                    dexterity: 2,
+                    vitality: -1,
+                    intelligence: 0,
+                    mind: 3,
+                },
+            },
+        ];
+
+        let clan_table = item_vec_to_id_table(clans);
+
+        assert_eq!(clan_table.get(&7).unwrap().name, "Seeker of the Sun");
+        assert_eq!(clan_table.get(&9).unwrap().name, "Sea Wolf");
+        assert_eq!(clan_table.get(&5).unwrap().name, "Plainsfolk");
+        assert_eq!(clan_table.get(&11).unwrap().name, "Raen");
+    }
+}

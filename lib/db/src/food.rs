@@ -1,6 +1,6 @@
 /// Saves functions needed to implement food data
 /// for FFXIV Simbot.
-use crate::stat::{StatType, SubStatTrait, SubStats};
+use crate::stat::{MainStatTrait, StatType, SubStatTrait, SubStats};
 use crate::{item_vec_to_id_table, IdTable, JsonFileReader, Result, SearchKeyEntity};
 use itertools::Itertools;
 use serde::Deserialize;
@@ -36,6 +36,29 @@ pub struct Food {
     id: FoodId,
     name: String,
     sub_stats: SubStats,
+    vitality: StatType,
+}
+
+impl MainStatTrait for Food {
+    fn get_strength(&self) -> StatType {
+        0
+    }
+
+    fn get_dexterity(&self) -> StatType {
+        0
+    }
+
+    fn get_vitality(&self) -> StatType {
+        self.vitality
+    }
+
+    fn get_intelligence(&self) -> StatType {
+        0
+    }
+
+    fn get_mind(&self) -> StatType {
+        0
+    }
 }
 
 impl SubStatTrait for Food {
@@ -113,5 +136,98 @@ impl FoodFactory {
                 piety: etro_food.piety,
             },
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::food::*;
+
+    #[test]
+    fn food_basic_test() {
+        let food = Food {
+            id: 1,
+            name: "Baked Onion Soup".to_string(),
+            sub_stats: SubStats::new(1, 2, 3, 4, 5, 6, 7),
+            vitality: 15,
+        };
+
+        assert_eq!(food.get_critical_strike(), 1);
+        assert_eq!(food.get_direct_hit(), 2);
+        assert_eq!(food.get_determination(), 3);
+        assert_eq!(food.get_skill_speed(), 4);
+        assert_eq!(food.get_spell_speed(), 5);
+        assert_eq!(food.get_tenacity(), 6);
+        assert_eq!(food.get_piety(), 7);
+        assert_eq!(food.get_vitality(), 15);
+    }
+
+    #[test]
+    fn food_search_table_test() {
+        let foods = vec![
+            Food {
+                id: 421,
+                name: "Masala Chai".into(),
+                sub_stats: SubStats {
+                    critical_strike: 33,
+                    direct_hit: 0,
+                    determination: 0,
+                    skill_speed: 0,
+                    spell_speed: 0,
+                    tenacity: 0,
+                    piety: 54,
+                },
+                vitality: 58,
+            },
+            Food {
+                id: 121,
+                name: "La Noscean Toast".into(),
+                sub_stats: SubStats {
+                    critical_strike: 12,
+                    direct_hit: 0,
+                    determination: 0,
+                    skill_speed: 0,
+                    spell_speed: 23,
+                    tenacity: 0,
+                    piety: 0,
+                },
+                vitality: 14,
+            },
+            Food {
+                id: 140,
+                name: "Mugwort Carp".into(),
+                sub_stats: SubStats {
+                    critical_strike: 8,
+                    direct_hit: 12,
+                    determination: 0,
+                    skill_speed: 0,
+                    spell_speed: 0,
+                    tenacity: 0,
+                    piety: 0,
+                },
+                vitality: 10,
+            },
+            Food {
+                id: 525,
+                name: "Spicy Shakshouka".into(),
+                sub_stats: SubStats {
+                    critical_strike: 0,
+                    direct_hit: 0,
+                    determination: 45,
+                    skill_speed: 0,
+                    spell_speed: 75,
+                    tenacity: 0,
+                    piety: 0,
+                },
+                vitality: 81,
+            },
+        ];
+
+        let food_table = item_vec_to_id_table(foods);
+
+        assert_eq!(food_table.get(&421).unwrap().name, "Masala Chai");
+        assert_eq!(food_table.get(&121).unwrap().name, "La Noscean Toast");
+        assert_eq!(food_table.get(&140).unwrap().name, "Mugwort Carp");
+        assert_eq!(food_table.get(&525).unwrap().name, "Spicy Shakshouka");
     }
 }

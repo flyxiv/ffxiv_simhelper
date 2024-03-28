@@ -385,4 +385,26 @@ mod tests {
         assert_eq!(390, job.get_piety());
         assert_eq!(3150, job.get_hp());
     }
+
+
+    #[test]
+    fn job_table_test() {
+        let stat_modifier = StatModifier {
+            max_level_main_stat_modifier: 390f64,
+            max_level_base_piety: 390,
+            max_level_base_direct_hit: 400,
+            max_level_base_critical_hit: 400,
+            max_level_base_determination: 400,
+            max_level_base_skill_speed: 400,
+            max_level_base_spell_speed: 400,
+            max_level_base_tenacity: 400,
+            max_level_hp_modifier: 1900f64,
+            max_level_div: 3000f64,
+            hp_per_vitality_non_tank: 22.1f64,
+            hp_per_vitality_tank: 32.5f64,
+        },
+        let jobs = vec![
+
+        ]
+    }
 }
