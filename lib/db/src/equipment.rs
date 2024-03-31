@@ -26,12 +26,12 @@ type Result<T> = std::result::Result<T, DataError>;
 
 /// Trait for Weapons
 /// give magic/weapon damage info
-trait WeaponTrait {
+pub trait WeaponTrait {
     fn get_damage_mag(&self) -> usize;
     fn get_damage_phys(&self) -> usize;
 }
 
-trait ArmorTrait {
+pub trait ArmorTrait {
     fn get_defense_mag(&self) -> usize;
     fn get_defense_phys(&self) -> usize;
 }
@@ -45,31 +45,31 @@ pub trait MateriaTrait {
 /// Equipment Data Type for FFXIV Simbot
 /// Equipments of different kinds(weapons, armor, accessories) are all
 /// represented by this one data, since it makes it more flexible for changes.
-#[derive(PartialEq, Clone)]
+#[derive(PartialEq, Clone, Debug)]
 pub struct Equipment {
-    id: usize,
-    slot_name: String,
+    pub(crate) id: usize,
+    pub(crate) slot_name: String,
     pub slot_category: SlotType,
-    name: String,
+    pub(crate) name: String,
     pub equipable_jobs: Vec<JobAbbrevType>,
-    main_stats: MainStats,
-    sub_stats: SubStats,
-    weapon_damage: WeaponDamage,
-    armor_defense: ArmorDefense,
-    materia_slot_count: SlotType,
-    materia_slot: Vec<Option<Materia>>,
+    pub(crate) main_stats: MainStats,
+    pub(crate) sub_stats: SubStats,
+    pub(crate) weapon_damage: WeaponDamage,
+    pub(crate) armor_defense: ArmorDefense,
+    pub(crate) materia_slot_count: SlotType,
+    pub(crate) materia_slot: Vec<Option<Materia>>,
 }
 
-#[derive(Eq, PartialEq, Clone)]
-struct WeaponDamage {
-    damage_mag: usize,
-    damage_phys: usize,
+#[derive(Eq, PartialEq, Clone, Debug)]
+pub(crate) struct WeaponDamage {
+    pub(crate) damage_mag: usize,
+    pub(crate) damage_phys: usize,
 }
 
-#[derive(Eq, PartialEq, Clone)]
-struct ArmorDefense {
-    defense_mag: usize,
-    defense_phys: usize,
+#[derive(Eq, PartialEq, Clone, Debug)]
+pub(crate) struct ArmorDefense {
+    pub(crate) defense_mag: usize,
+    pub(crate) defense_phys: usize,
 }
 
 impl WeaponTrait for WeaponDamage {
@@ -236,7 +236,7 @@ struct EtroEquipment {
     level: usize,
 
     #[serde(rename = "jobName")]
-    job_name: String,
+    job_name: Vec<String>,
 
     #[serde(rename = "slotName")]
     slot_name: String,
@@ -343,16 +343,6 @@ impl SearchKeyEntity<EquipmentKey> for Equipment {
     }
 }
 
-/// job_name comes in job abbrevs, splitted by one space
-/// ex) "PLD WAR DRK GNB"
-/// Convert this to Vec!["PLD", "WAR", "DRK", "GNB"]
-fn convert_to_equipable_jobs(job_name: String) -> Vec<JobAbbrevType> {
-    job_name
-        .split(" ")
-        .map(|job_abbrev| job_abbrev.to_string())
-        .collect_vec()
-}
-
 pub struct EquipmentFactory {}
 impl JsonFileReader for EquipmentFactory {}
 
@@ -387,7 +377,7 @@ impl EquipmentFactory {
             slot_name: etro_equipment.slot_name,
             slot_category: etro_equipment.slot_category,
             name: etro_equipment.name,
-            equipable_jobs: convert_to_equipable_jobs(etro_equipment.job_name),
+            equipable_jobs: etro_equipment.job_name,
             main_stats,
             sub_stats,
             weapon_damage,
@@ -410,20 +400,253 @@ impl EquipmentFactory {
     }
 }
 
-/*
 #[cfg(test)]
 mod tests {
-    use crate::equipment::Equipment;
+    use crate::equipment::{ArmorDefense, Equipment, EquipmentKey, SlotType, WeaponDamage};
+    use crate::item_vec_to_id_table;
+    use crate::job::JobAbbrevType;
+    use crate::materia::Materia;
+    use crate::stat::{MainStatTrait, MainStats, SubStatTrait, SubStats};
 
     #[test]
     fn test_weapon_equipment() {
         let weapon = Equipment {
-            0,
-            "Weapon".to_string(),
-            "Excalibur".to_string(),
-            "Paladin".to_string(),
+            id: 35175,
+            slot_name: "weapon".to_string(),
+            slot_category: 13,
+            name: "Augmented Radiant's Sword Breakers".to_string(),
+            equipable_jobs: vec!["NIN".to_string()],
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 296,
+                intelligence: 0,
+                mind: 0,
+                vitality: 310,
+            },
+            sub_stats: SubStats {
+                direct_hit: 266,
+                critical_strike: 186,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            weapon_damage: {
+                WeaponDamage {
+                    damage_mag: 0,
+                    damage_phys: 119,
+                }
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            materia_slot_count: 2,
+            materia_slot: vec![None; 2],
+        };
 
-        }
+        assert_eq!(weapon.id, 35175);
+        assert_eq!(weapon.slot_name, "weapon".to_string());
+        assert_eq!(weapon.slot_category, 13);
+        assert_eq!(
+            weapon.name,
+            "Augmented Radiant's Sword Breakers".to_string()
+        );
+        assert_eq!(weapon.equipable_jobs, vec!["NIN".to_string()]);
+        assert_eq!(weapon.get_dexterity(), 296);
+        assert_eq!(weapon.get_direct_hit(), 266);
+        assert_eq!(weapon.get_critical_strike(), 186);
+        assert_eq!(weapon.get_determination(), 0);
+        assert_eq!(weapon.get_skill_speed(), 0);
+    }
+
+    #[test]
+    fn test_armor_equipment() {
+        let armor = Equipment {
+            id: 37812,
+            slot_name: "finger".to_string(),
+            slot_category: 12,
+            name: "Rinascita Ring of Fending".to_string(),
+            equipable_jobs: vec!["PLD", "WAR", "DRK", "GNB"]
+                .iter()
+                .map(|s| s.to_string())
+                .collect(),
+            main_stats: MainStats {
+                strength: 149,
+                dexterity: 0,
+                intelligence: 0,
+                mind: 0,
+                vitality: 158,
+            },
+            sub_stats: SubStats {
+                direct_hit: 0,
+                critical_strike: 130,
+                determination: 91,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            weapon_damage: {
+                WeaponDamage {
+                    damage_mag: 0,
+                    damage_phys: 0,
+                }
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 1,
+                defense_phys: 1,
+            },
+            materia_slot_count: 1,
+            materia_slot: vec![None; 1],
+        };
+
+        assert_eq!(armor.id, 37812);
+        assert_eq!(armor.slot_name, "finger".to_string());
+        assert_eq!(armor.slot_category, 12);
+        assert_eq!(armor.name, "Rinascita Ring of Fending".to_string());
+        assert_eq!(
+            armor.equipable_jobs,
+            vec!["PLD", "WAR", "DRK", "GNB"]
+                .iter()
+                .map(|s| s.to_string())
+                .collect::<Vec<String>>()
+        );
+    }
+
+    #[test]
+    fn equipment_table_test() {
+        let weapon = Equipment {
+            id: 35175,
+            slot_name: "weapon".to_string(),
+            slot_category: 13,
+            name: "Augmented Radiant's Sword Breakers".to_string(),
+            equipable_jobs: vec!["NIN".into()],
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 296,
+                intelligence: 0,
+                mind: 0,
+                vitality: 310,
+            },
+            sub_stats: SubStats {
+                direct_hit: 266,
+                critical_strike: 186,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            weapon_damage: {
+                WeaponDamage {
+                    damage_mag: 0,
+                    damage_phys: 119,
+                }
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            materia_slot_count: 2,
+            materia_slot: vec![None; 2],
+        };
+
+        let armor = Equipment {
+            id: 37812,
+            slot_name: "finger".to_string(),
+            slot_category: 12,
+            name: "Rinascita Ring of Fending".to_string(),
+            equipable_jobs: vec!["PLD", "WAR", "DRK", "GNB"]
+                .iter()
+                .map(|s| s.to_string())
+                .collect(),
+            main_stats: MainStats {
+                strength: 149,
+                dexterity: 0,
+                intelligence: 0,
+                mind: 0,
+                vitality: 158,
+            },
+            sub_stats: SubStats {
+                direct_hit: 0,
+                critical_strike: 130,
+                determination: 91,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            weapon_damage: {
+                WeaponDamage {
+                    damage_mag: 0,
+                    damage_phys: 0,
+                }
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 1,
+                defense_phys: 1,
+            },
+            materia_slot_count: 1,
+            materia_slot: vec![None; 1],
+        };
+
+        let equipment_table = item_vec_to_id_table(vec![weapon.clone(), armor.clone()]);
+
+        assert_eq!(
+            equipment_table
+                .get(&EquipmentKey {
+                    job_id: "NIN".to_string(),
+                    slot_id: 13
+                })
+                .unwrap()
+                .id,
+            weapon.id
+        );
+
+        assert_eq!(
+            equipment_table
+                .get(&EquipmentKey {
+                    job_id: "PLD".to_string(),
+                    slot_id: 12
+                })
+                .unwrap()
+                .id,
+            armor.id
+        );
+
+        assert_eq!(
+            equipment_table
+                .get(&EquipmentKey {
+                    job_id: "WAR".to_string(),
+                    slot_id: 12
+                })
+                .unwrap()
+                .id,
+            armor.id
+        );
+
+        assert_eq!(
+            equipment_table
+                .get(&EquipmentKey {
+                    job_id: "GNB".to_string(),
+                    slot_id: 12
+                })
+                .unwrap()
+                .id,
+            armor.id
+        );
+
+        assert_eq!(
+            equipment_table
+                .get(&EquipmentKey {
+                    job_id: "DRK".to_string(),
+                    slot_id: 12
+                })
+                .unwrap()
+                .id,
+            armor.id
+        );
     }
 }
-*/

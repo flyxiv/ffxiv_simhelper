@@ -6,7 +6,7 @@ use std::hash::Hash;
 use std::path::PathBuf;
 
 /// Hash Table for fast searching by the object's Id.
-pub type IdTable<T: Hash + Sized, U: SearchKeyEntity<T> + Sized> = HashMap<T, U>;
+pub type IdTable<T, U> = HashMap<T, U>;
 type Result<T> = std::result::Result<T, DataError>;
 
 pub(crate) mod character;
@@ -80,7 +80,7 @@ trait JsonFileReader {
 }
 
 /// Extract the Search Key from the object.
-trait SearchKeyEntity<T>
+pub trait SearchKeyEntity<T>
 where
     T: Hash + Sized + Eq,
 {

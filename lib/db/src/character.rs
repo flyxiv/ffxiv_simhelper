@@ -104,10 +104,90 @@ pub fn get_character_sub_stats(character: &Character) -> SubStats {
     sub_stats
 }
 
-/*
 #[cfg(test)]
 mod tests {
+    use crate::character::{get_character_main_stats, Character};
+    use crate::clan::Clan;
+    use crate::equipment::{ArmorDefense, Equipment, WeaponDamage};
+    use crate::food::Food;
+    use crate::job::tests::get_test_stat_modifier;
+    use crate::job::Job;
+    use crate::medicine::Medicine;
+    use crate::stat::{MainStats, StatType, SubStats};
+
     #[test]
-    fn test_get_character_default_main_stats() {
+    fn test_get_character_stats() {
+        let weapon = Equipment {
+            id: 40170,
+            name: "Knives of Ascension".to_string(),
+            slot_name: "weapon".to_string(),
+            slot_category: 13,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 416,
+                vitality: 458,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 306,
+                determination: 214,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 0,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 66,
+                damage_phys: 132,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+        };
+
+        // TODO:
+        // 1) equip armor
+        // 2) equip food
+        // 3) equip medicine
+        // 4) equip viable materia to equipment
+        // 5) equip viable materia to equipment where the stat must be capped
+
+        let character = Character {
+            clan: Clan {
+                id: 7,
+                name: "Seeker of the Sun".to_string(),
+                main_stats: MainStats {
+                    strength: 2,
+                    dexterity: 3,
+                    vitality: 0,
+                    intelligence: -1,
+                    mind: -1,
+                },
+            },
+            job: Job {
+                id: 25,
+                name: "Black Mage".to_string(),
+                abbrev: "BLM".to_string(),
+                base_main_stats: MainStats {
+                    strength: 45,
+                    dexterity: 100,
+                    vitality: 100,
+                    intelligence: 115,
+                    mind: 75,
+                },
+                base_hp: 105,
+                stat_modifier: get_test_stat_modifier(),
+                is_tank: false,
+            },
+            equipments: vec![],
+            food: None,
+            medicine: None,
+        };
+    }
 }
-*/

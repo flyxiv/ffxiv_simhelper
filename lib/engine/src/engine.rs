@@ -12,6 +12,7 @@ impl From<&EngineConfig> for StatModifier {
     fn from(engine_config: &EngineConfig) -> Self {
         StatModifier {
             max_level_main_stat_modifier: engine_config.max_level_main_stat_modifier,
+            max_level_base_vitality: engine_config.max_level_base_vitality,
             max_level_base_piety: engine_config.max_level_base_piety,
             max_level_base_direct_hit: engine_config.max_level_base_direct_hit,
             max_level_base_critical_hit: engine_config.max_level_base_direct_hit,

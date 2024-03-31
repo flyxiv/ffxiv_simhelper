@@ -7,8 +7,8 @@ pub trait StatFrom<T>: Sized {
 }
 
 /// Saves the main stats of the equipment/character/race.
-#[derive(Eq, PartialEq, Clone, Copy, Hash)]
-pub(crate) struct MainStats {
+#[derive(Eq, PartialEq, Clone, Copy, Hash, Debug)]
+pub struct MainStats {
     pub(crate) strength: StatType,
     pub(crate) dexterity: StatType,
     pub(crate) vitality: StatType,
@@ -122,7 +122,7 @@ where
     }
 }
 
-#[derive(Eq, PartialEq, Clone, Deserialize)]
+#[derive(Eq, PartialEq, Clone, Deserialize, Debug)]
 pub struct SubStats {
     pub critical_strike: StatType,
     pub direct_hit: StatType,
@@ -201,8 +201,8 @@ mod tests {
         };
 
         assert_eq!(substats.get_critical_strike(), 1);
-        assert_eq!(substats.get_determination(), 2);
-        assert_eq!(substats.get_vitality(), 3);
+        assert_eq!(substats.get_direct_hit(), 2);
+        assert_eq!(substats.get_determination(), 3);
         assert_eq!(substats.get_skill_speed(), 4);
         assert_eq!(substats.get_spell_speed(), 5);
         assert_eq!(substats.get_tenacity(), 6);

@@ -4,7 +4,7 @@ use crate::stat::{StatType, SubStatTrait, SubStats};
 /// Class for Materias
 /// Materias only need three fields: substat, value, and whether it can be pentamelded
 /// Only Account Combat Materias as of now.
-#[derive(Eq, PartialEq, Clone)]
+#[derive(Eq, PartialEq, Clone, Debug)]
 pub struct Materia {
     sub_stats: SubStats,
     pub(crate) penta_meldable: bool,
@@ -68,7 +68,7 @@ mod tests {
             penta_meldable: true,
         };
 
-        assert_eq!(materia.get_critical_strike(), 7);
+        assert_eq!(materia.get_critical_strike(), 76);
         assert_eq!(materia.get_direct_hit(), 0);
         assert_eq!(materia.get_determination(), 0);
         assert_eq!(materia.get_skill_speed(), 0);

@@ -27,6 +27,8 @@ struct EtroFood {
     skill_speed: StatType,
     #[serde(rename = "Spell Speed")]
     spell_speed: StatType,
+    #[serde(rename = "Vitality")]
+    vitality: StatType,
 }
 
 /// Buff Food Data for FFXIV Simbot.
@@ -135,6 +137,7 @@ impl FoodFactory {
                 tenacity: etro_food.tenacity,
                 piety: etro_food.piety,
             },
+            vitality: etro_food.vitality,
         }
     }
 }
@@ -148,12 +151,20 @@ mod tests {
         let food = Food {
             id: 1,
             name: "Baked Onion Soup".to_string(),
-            sub_stats: SubStats::new(1, 2, 3, 4, 5, 6, 7),
+            sub_stats: SubStats {
+                direct_hit: 1,
+                critical_strike: 2,
+                determination: 3,
+                skill_speed: 4,
+                spell_speed: 5,
+                tenacity: 6,
+                piety: 7,
+            },
             vitality: 15,
         };
 
-        assert_eq!(food.get_critical_strike(), 1);
-        assert_eq!(food.get_direct_hit(), 2);
+        assert_eq!(food.get_direct_hit(), 1);
+        assert_eq!(food.get_critical_strike(), 2);
         assert_eq!(food.get_determination(), 3);
         assert_eq!(food.get_skill_speed(), 4);
         assert_eq!(food.get_spell_speed(), 5);

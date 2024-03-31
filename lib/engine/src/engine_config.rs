@@ -1,4 +1,4 @@
-use ffxiv_simbot_lib_db::job::{StatModifier, StatModifierType};
+use ffxiv_simbot_lib_db::job::StatModifierType;
 use ffxiv_simbot_lib_db::stat::StatType;
 use serde::Deserialize;
 
@@ -14,6 +14,7 @@ pub struct EngineConfig {
     pub(crate) max_level_div: StatModifierType,
     pub(crate) hp_per_vitality_non_tank: StatModifierType,
     pub(crate) hp_per_vitality_tank: StatModifierType,
+    pub(crate) max_level_base_vitality: StatType,
     pub(crate) max_level_base_piety: StatType,
     pub(crate) max_level_base_direct_hit: StatType,
     pub(crate) max_level_base_critical_hit: StatType,

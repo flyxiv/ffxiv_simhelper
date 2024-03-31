@@ -33,6 +33,8 @@ pub struct EtroJob {
     mind: StatType,
     #[serde(rename = "Hp")]
     hp: HpType,
+    #[serde(rename = "IsTank")]
+    is_tank: bool,
 }
 
 /// Saves Base Constants Needed for getting Job Attributes for Stats
@@ -40,6 +42,7 @@ pub struct EtroJob {
 #[derive(PartialEq, Copy, Clone)]
 pub struct StatModifier {
     pub max_level_main_stat_modifier: StatModifierType,
+    pub max_level_base_vitality: StatType,
     pub max_level_base_piety: StatType,
     pub max_level_base_direct_hit: StatType,
     pub max_level_base_critical_hit: StatType,
@@ -57,14 +60,15 @@ pub struct StatModifier {
 /// Only treat Combat Jobs as of now.
 #[derive(Clone)]
 pub struct Job {
-    id: JobId,
-    abbrev: String,
-    name: String,
-    base_main_stats: MainStats,
-    base_hp: usize,
+    pub(crate) id: JobId,
+    pub(crate) abbrev: String,
+    pub(crate) name: String,
+    pub(crate) base_main_stats: MainStats,
+    pub(crate) base_hp: usize,
     // https://www.akhmorning.com/allagan-studies/modifiers/levelmods/
     // base stats are determined by base * level stat modifier
-    stat_modifier: StatModifier,
+    pub(crate) stat_modifier: StatModifier,
+    pub(crate) is_tank: bool,
 }
 
 impl PartialEq for Job {
@@ -148,12 +152,18 @@ impl SubStatTrait for Job {
     }
 }
 
+// TODO: Fix HP equation.
 impl SpecialStatTrait for Job {
     fn get_hp(&self) -> usize {
-        calculate_modified_stat(
-            self.base_hp as StatType,
-            self.stat_modifier.max_level_hp_modifier,
-        ) as usize
+        let hp_stat_base = self.base_hp * self.stat_modifier.max_level_hp_modifier as usize;
+        let vitality_stat = self.get_vitality() - self.stat_modifier.max_level_base_vitality;
+        let vitality_stat_hp = if self.is_tank {
+            self.stat_modifier.hp_per_vitality_tank * vitality_stat as f64
+        } else {
+            self.stat_modifier.hp_per_vitality_non_tank * vitality_stat as f64
+        };
+
+        hp_stat_base + vitality_stat_hp as usize
     }
 }
 
@@ -207,6 +217,7 @@ impl JobFactory {
             abbrev: etro_job.abbrev.clone(),
             name: etro_job.name.clone(),
             base_hp: etro_job.hp,
+            is_tank: etro_job.is_tank,
             base_main_stats: etro_job.into(),
             stat_modifier: stat_modifier,
         }
@@ -214,9 +225,28 @@ impl JobFactory {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
+    use crate::item_vec_to_id_table;
     use crate::job::{Job, StatModifier};
     use crate::stat::{MainStatTrait, MainStats, SpecialStatTrait, SubStatTrait};
+
+    pub fn get_test_stat_modifier() -> StatModifier {
+        StatModifier {
+            max_level_main_stat_modifier: 390f64,
+            max_level_base_vitality: 390,
+            max_level_base_piety: 390,
+            max_level_base_direct_hit: 400,
+            max_level_base_critical_hit: 400,
+            max_level_base_determination: 400,
+            max_level_base_skill_speed: 400,
+            max_level_base_spell_speed: 400,
+            max_level_base_tenacity: 400,
+            max_level_hp_modifier: 30f64,
+            max_level_div: 3000f64,
+            hp_per_vitality_non_tank: 24.3f64,
+            hp_per_vitality_tank: 34.6f64,
+        }
+    }
 
     #[test]
     fn job_basic_test() {
@@ -224,22 +254,16 @@ mod tests {
             id: 21,
             abbrev: "WAR".to_string(),
             name: "Warrior".to_string(),
-            base_main_stats: MainStats::new(105, 95, 110, 40, 55),
-            base_hp: 145,
-            stat_modifier: StatModifier {
-                max_level_main_stat_modifier: 390f64,
-                max_level_base_piety: 390,
-                max_level_base_direct_hit: 400,
-                max_level_base_critical_hit: 400,
-                max_level_base_determination: 400,
-                max_level_base_skill_speed: 400,
-                max_level_base_spell_speed: 400,
-                max_level_base_tenacity: 400,
-                max_level_hp_modifier: 1900f64,
-                max_level_div: 3000f64,
-                hp_per_vitality_non_tank: 22.1f64,
-                hp_per_vitality_tank: 32.5f64,
+            base_main_stats: MainStats {
+                strength: 105,
+                dexterity: 95,
+                vitality: 110,
+                intelligence: 40,
+                mind: 55,
             },
+            base_hp: 145,
+            stat_modifier: get_test_stat_modifier(),
+            is_tank: true,
         };
     }
 
@@ -249,22 +273,16 @@ mod tests {
             id: 21,
             abbrev: "WAR".to_string(),
             name: "Warrior".to_string(),
-            base_main_stats: MainStats::new(105, 95, 110, 40, 55),
-            base_hp: 145,
-            stat_modifier: StatModifier {
-                max_level_main_stat_modifier: 390f64,
-                max_level_base_piety: 390,
-                max_level_base_direct_hit: 400,
-                max_level_base_critical_hit: 400,
-                max_level_base_determination: 400,
-                max_level_base_skill_speed: 400,
-                max_level_base_spell_speed: 400,
-                max_level_base_tenacity: 400,
-                max_level_hp_modifier: 1900f64,
-                max_level_div: 3000f64,
-                hp_per_vitality_non_tank: 22.1f64,
-                hp_per_vitality_tank: 32.5f64,
+            base_main_stats: MainStats {
+                strength: 105,
+                dexterity: 95,
+                vitality: 110,
+                intelligence: 40,
+                mind: 55,
             },
+            base_hp: 145,
+            stat_modifier: get_test_stat_modifier(),
+            is_tank: true,
         };
 
         assert_eq!(409, job.get_strength());
@@ -284,22 +302,16 @@ mod tests {
             id: 23,
             abbrev: "BRD".to_string(),
             name: "BARD".to_string(),
-            base_main_stats: MainStats::new(90, 115, 100, 85, 80),
-            base_hp: 105,
-            stat_modifier: StatModifier {
-                max_level_main_stat_modifier: 390f64,
-                max_level_base_piety: 390,
-                max_level_base_direct_hit: 400,
-                max_level_base_critical_hit: 400,
-                max_level_base_determination: 400,
-                max_level_base_skill_speed: 400,
-                max_level_base_spell_speed: 400,
-                max_level_base_tenacity: 400,
-                max_level_hp_modifier: 1900f64,
-                max_level_div: 3000f64,
-                hp_per_vitality_non_tank: 22.1f64,
-                hp_per_vitality_tank: 32.5f64,
+            base_main_stats: MainStats {
+                strength: 90,
+                dexterity: 115,
+                vitality: 100,
+                intelligence: 85,
+                mind: 80,
             },
+            base_hp: 105,
+            stat_modifier: get_test_stat_modifier(),
+            is_tank: false,
         };
 
         assert_eq!(448, job.get_dexterity());
@@ -320,22 +332,16 @@ mod tests {
             id: 35,
             abbrev: "RDM".to_string(),
             name: "Red Mage".to_string(),
-            base_main_stats: MainStats::new(55, 105, 100, 115, 110),
-            base_hp: 105,
-            stat_modifier: StatModifier {
-                max_level_main_stat_modifier: 390f64,
-                max_level_base_piety: 390,
-                max_level_base_direct_hit: 400,
-                max_level_base_critical_hit: 400,
-                max_level_base_determination: 400,
-                max_level_base_skill_speed: 400,
-                max_level_base_spell_speed: 400,
-                max_level_base_tenacity: 400,
-                max_level_hp_modifier: 1900f64,
-                max_level_div: 3000f64,
-                hp_per_vitality_non_tank: 22.1f64,
-                hp_per_vitality_tank: 32.5f64,
+            base_main_stats: MainStats {
+                strength: 55,
+                dexterity: 105,
+                vitality: 100,
+                intelligence: 115,
+                mind: 110,
             },
+            base_hp: 105,
+            stat_modifier: get_test_stat_modifier(),
+            is_tank: false,
         };
 
         assert_eq!(448, job.get_intelligence());
@@ -353,25 +359,19 @@ mod tests {
     #[test]
     fn job_sch_base_stat_calculation_test() {
         let job = Job {
-            id: 35,
+            id: 28,
             abbrev: "SCH".to_string(),
             name: "Scholar".to_string(),
-            base_main_stats: MainStats::new(90, 100, 100, 105, 115),
-            base_hp: 105,
-            stat_modifier: StatModifier {
-                max_level_main_stat_modifier: 390f64,
-                max_level_base_piety: 390,
-                max_level_base_direct_hit: 400,
-                max_level_base_critical_hit: 400,
-                max_level_base_determination: 400,
-                max_level_base_skill_speed: 400,
-                max_level_base_spell_speed: 400,
-                max_level_base_tenacity: 400,
-                max_level_hp_modifier: 1900f64,
-                max_level_div: 3000f64,
-                hp_per_vitality_non_tank: 22.1f64,
-                hp_per_vitality_tank: 32.5f64,
+            base_main_stats: MainStats {
+                strength: 90,
+                dexterity: 100,
+                vitality: 100,
+                intelligence: 105,
+                mind: 115,
             },
+            base_hp: 105,
+            stat_modifier: get_test_stat_modifier(),
+            is_tank: false,
         };
 
         assert_eq!(448, job.get_mind());
@@ -386,25 +386,76 @@ mod tests {
         assert_eq!(3150, job.get_hp());
     }
 
-
     #[test]
     fn job_table_test() {
-        let stat_modifier = StatModifier {
-            max_level_main_stat_modifier: 390f64,
-            max_level_base_piety: 390,
-            max_level_base_direct_hit: 400,
-            max_level_base_critical_hit: 400,
-            max_level_base_determination: 400,
-            max_level_base_skill_speed: 400,
-            max_level_base_spell_speed: 400,
-            max_level_base_tenacity: 400,
-            max_level_hp_modifier: 1900f64,
-            max_level_div: 3000f64,
-            hp_per_vitality_non_tank: 22.1f64,
-            hp_per_vitality_tank: 32.5f64,
-        },
         let jobs = vec![
+            Job {
+                id: 28,
+                abbrev: "SCH".to_string(),
+                name: "Scholar".to_string(),
+                base_main_stats: MainStats {
+                    strength: 90,
+                    dexterity: 100,
+                    vitality: 100,
+                    intelligence: 105,
+                    mind: 115,
+                },
+                base_hp: 105,
+                stat_modifier: get_test_stat_modifier(),
+                is_tank: false,
+            },
+            Job {
+                id: 35,
+                abbrev: "RDM".to_string(),
+                name: "Red Mage".to_string(),
+                base_main_stats: MainStats {
+                    strength: 55,
+                    dexterity: 105,
+                    vitality: 100,
+                    intelligence: 115,
+                    mind: 110,
+                },
+                base_hp: 105,
+                stat_modifier: get_test_stat_modifier(),
+                is_tank: false,
+            },
+            Job {
+                id: 23,
+                abbrev: "BRD".to_string(),
+                name: "BARD".to_string(),
+                base_main_stats: MainStats {
+                    strength: 90,
+                    dexterity: 115,
+                    vitality: 100,
+                    intelligence: 85,
+                    mind: 80,
+                },
+                base_hp: 105,
+                stat_modifier: get_test_stat_modifier(),
+                is_tank: false,
+            },
+            Job {
+                id: 21,
+                abbrev: "WAR".to_string(),
+                name: "Warrior".to_string(),
+                base_main_stats: MainStats {
+                    strength: 105,
+                    dexterity: 95,
+                    vitality: 110,
+                    intelligence: 40,
+                    mind: 55,
+                },
+                base_hp: 145,
+                stat_modifier: get_test_stat_modifier(),
+                is_tank: true,
+            },
+        ];
 
-        ]
+        let job_table = item_vec_to_id_table(jobs);
+
+        assert_eq!(job_table.get("SCH").unwrap().id, 28);
+        assert_eq!(job_table.get("RDM").unwrap().id, 35);
+        assert_eq!(job_table.get("BRD").unwrap().id, 23);
+        assert_eq!(job_table.get("WAR").unwrap().id, 21);
     }
 }

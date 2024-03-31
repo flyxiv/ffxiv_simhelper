@@ -46,7 +46,17 @@ mod tests {
 
     #[test]
     fn medicine_basic_test() {
-        let medicine = Medicine::new(MainStats::new(1, 2, 3, 4, 5), 10, 20);
+        let medicine = Medicine::new(
+            MainStats {
+                strength: 1,
+                dexterity: 2,
+                vitality: 3,
+                intelligence: 4,
+                mind: 5,
+            },
+            10,
+            20,
+        );
 
         assert_eq!(medicine.get_strength(), 1);
         assert_eq!(medicine.get_dexterity(), 2);

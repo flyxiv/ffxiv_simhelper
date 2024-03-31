@@ -30,9 +30,9 @@ struct EtroClan {
 
 #[derive(Clone, Hash, Eq, PartialEq)]
 pub struct Clan {
-    id: ClanId,
-    name: String,
-    main_stats: MainStats,
+    pub(crate) id: ClanId,
+    pub(crate) name: String,
+    pub(crate) main_stats: MainStats,
 }
 
 impl MainStatTrait for Clan {
