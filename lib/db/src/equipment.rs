@@ -50,14 +50,78 @@ pub struct Equipment {
     pub(crate) id: usize,
     pub(crate) slot_name: String,
     pub slot_category: SlotType,
+
     pub(crate) name: String,
     pub equipable_jobs: Vec<JobAbbrevType>,
+
     pub(crate) main_stats: MainStats,
     pub(crate) sub_stats: SubStats,
+
     pub(crate) weapon_damage: WeaponDamage,
     pub(crate) armor_defense: ArmorDefense,
+
     pub(crate) materia_slot_count: SlotType,
     pub(crate) materia_slot: Vec<Option<Materia>>,
+    pub(crate) pentameldable: bool,
+}
+
+impl Equipment {
+    pub(crate) fn get_substat_cap(&self) -> StatType {
+        let substats_list = vec![
+            self.get_raw_direct_hit(),
+            self.get_raw_critical_strike(),
+            self.get_raw_determination(),
+            self.get_raw_skill_speed(),
+            self.get_raw_spell_speed(),
+            self.get_raw_tenacity(),
+            self.get_raw_piety(),
+        ];
+
+        let max = substats_list.iter().max();
+
+        if max.is_none() {
+            return 0;
+        }
+        let max = max.unwrap();
+        *max
+    }
+
+    fn get_raw_direct_hit(&self) -> StatType {
+        self.sub_stats.direct_hit
+    }
+    fn get_raw_critical_strike(&self) -> StatType {
+        self.sub_stats.critical_strike
+    }
+
+    fn get_raw_determination(&self) -> StatType {
+        self.sub_stats.determination
+    }
+
+    fn get_raw_skill_speed(&self) -> StatType {
+        self.sub_stats.skill_speed
+    }
+
+    fn get_raw_spell_speed(&self) -> StatType {
+        self.sub_stats.spell_speed
+    }
+
+    fn get_raw_tenacity(&self) -> StatType {
+        self.sub_stats.tenacity
+    }
+
+    fn get_raw_piety(&self) -> StatType {
+        self.sub_stats.piety
+    }
+
+    fn clip_to_max_stat(&self, stat: StatType) -> StatType {
+        let max_stat_threshold = self.get_substat_cap();
+
+        if stat >= max_stat_threshold {
+            max_stat_threshold
+        } else {
+            stat
+        }
+    }
 }
 
 #[derive(Eq, PartialEq, Clone, Debug)]
@@ -116,18 +180,6 @@ impl MainStatTrait for Equipment {
 
 /// Equipment Sub Stat = Equipment Stat + sum(Melded Materia Stat)
 impl SubStatTrait for Equipment {
-    fn get_critical_strike(&self) -> StatType {
-        let equipment_critical_strike = self.sub_stats.get_critical_strike();
-        let materia_critical_strike = self
-            .materia_slot
-            .iter()
-            .filter_map(|materia| materia.as_ref())
-            .map(|materia| materia.get_critical_strike())
-            .sum::<StatType>();
-
-        equipment_critical_strike + materia_critical_strike
-    }
-
     fn get_direct_hit(&self) -> StatType {
         let equipment_direct_hit = self.sub_stats.get_direct_hit();
         let materia_direct_hit = self
@@ -137,7 +189,19 @@ impl SubStatTrait for Equipment {
             .map(|materia| materia.get_direct_hit())
             .sum::<StatType>();
 
-        equipment_direct_hit + materia_direct_hit
+        self.clip_to_max_stat(equipment_direct_hit + materia_direct_hit)
+    }
+
+    fn get_critical_strike(&self) -> StatType {
+        let equipment_critical_strike = self.sub_stats.get_critical_strike();
+        let materia_critical_strike = self
+            .materia_slot
+            .iter()
+            .filter_map(|materia| materia.as_ref())
+            .map(|materia| materia.get_critical_strike())
+            .sum::<StatType>();
+
+        self.clip_to_max_stat(equipment_critical_strike + materia_critical_strike)
     }
 
     fn get_determination(&self) -> StatType {
@@ -149,7 +213,7 @@ impl SubStatTrait for Equipment {
             .map(|materia| materia.get_determination())
             .sum::<StatType>();
 
-        equipment_determination + materia_determination
+        self.clip_to_max_stat(equipment_determination + materia_determination)
     }
 
     fn get_skill_speed(&self) -> StatType {
@@ -161,7 +225,7 @@ impl SubStatTrait for Equipment {
             .map(|materia| materia.get_skill_speed())
             .sum::<StatType>();
 
-        equipment_skill_speed + materia_skill_speed
+        self.clip_to_max_stat(equipment_skill_speed + materia_skill_speed)
     }
 
     fn get_spell_speed(&self) -> StatType {
@@ -173,7 +237,7 @@ impl SubStatTrait for Equipment {
             .map(|materia| materia.get_spell_speed())
             .sum::<StatType>();
 
-        equipment_spell_speed + materia_spell_speed
+        self.clip_to_max_stat(equipment_spell_speed + materia_spell_speed)
     }
 
     fn get_tenacity(&self) -> StatType {
@@ -185,7 +249,7 @@ impl SubStatTrait for Equipment {
             .map(|materia| materia.get_tenacity())
             .sum::<StatType>();
 
-        equipment_tenacity + materia_tenacity
+        self.clip_to_max_stat(equipment_tenacity + materia_tenacity)
     }
 
     fn get_piety(&self) -> StatType {
@@ -197,7 +261,7 @@ impl SubStatTrait for Equipment {
             .map(|materia| materia.get_piety())
             .sum::<StatType>();
 
-        equipment_piety + materia_piety
+        self.clip_to_max_stat(equipment_piety + materia_piety)
     }
 }
 
@@ -207,16 +271,15 @@ impl MateriaTrait for Equipment {
     }
 
     fn equip_materia(&mut self, slot: usize, materia: Materia) -> bool {
-        if self.materia_slot.len() < self.materia_slot_count {
-            if slot > 2 && !materia.penta_meldable {
+        if self.materia_slot.len() < slot {
+            if !self.pentameldable || slot >= 5 {
                 return false;
             }
-
-            self.materia_slot[slot] = Some(materia);
-            true
-        } else {
-            false
         }
+
+        self.materia_slot[slot] = Some(materia);
+        self.materia_slot_count += 1;
+        true
     }
 
     fn unequip_materia(&mut self, slot: usize) -> bool {
@@ -256,6 +319,8 @@ struct EtroEquipment {
 
     #[serde(rename = "materiaSlotCount")]
     materia_slot_count: usize,
+    #[serde(rename = "pentameldable")]
+    pentameldable: bool,
 
     #[serde(rename = "Strength")]
     strength: StatType,
@@ -384,6 +449,7 @@ impl EquipmentFactory {
             armor_defense,
             materia_slot_count: etro_equipment.materia_slot_count,
             materia_slot: vec![None; etro_equipment.materia_slot_count],
+            pentameldable: etro_equipment.pentameldable,
         }
     }
 
@@ -402,7 +468,9 @@ impl EquipmentFactory {
 
 #[cfg(test)]
 mod tests {
-    use crate::equipment::{ArmorDefense, Equipment, EquipmentKey, SlotType, WeaponDamage};
+    use crate::equipment::{
+        ArmorDefense, Equipment, EquipmentKey, MateriaTrait, SlotType, WeaponDamage,
+    };
     use crate::item_vec_to_id_table;
     use crate::job::JobAbbrevType;
     use crate::materia::Materia;
@@ -444,6 +512,7 @@ mod tests {
             },
             materia_slot_count: 2,
             materia_slot: vec![None; 2],
+            pentameldable: false,
         };
 
         assert_eq!(weapon.id, 35175);
@@ -500,6 +569,7 @@ mod tests {
             },
             materia_slot_count: 1,
             materia_slot: vec![None; 1],
+            pentameldable: false,
         };
 
         assert_eq!(armor.id, 37812);
@@ -551,6 +621,7 @@ mod tests {
             },
             materia_slot_count: 2,
             materia_slot: vec![None; 2],
+            pentameldable: false,
         };
 
         let armor = Equipment {
@@ -590,6 +661,7 @@ mod tests {
             },
             materia_slot_count: 1,
             materia_slot: vec![None; 1],
+            pentameldable: false,
         };
 
         let equipment_table = item_vec_to_id_table(vec![weapon.clone(), armor.clone()]);
@@ -647,6 +719,215 @@ mod tests {
                 .unwrap()
                 .id,
             armor.id
+        );
+    }
+
+    #[test]
+    fn test_materia_cap_equip() {
+        let mut weapon = Equipment {
+            id: 35175,
+            slot_name: "weapon".to_string(),
+            slot_category: 13,
+            name: "Augmented Radiant's Sword Breakers".to_string(),
+            equipable_jobs: vec!["NIN".to_string()],
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 296,
+                intelligence: 0,
+                mind: 0,
+                vitality: 310,
+            },
+            sub_stats: SubStats {
+                direct_hit: 220,
+                critical_strike: 186,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            weapon_damage: {
+                WeaponDamage {
+                    damage_mag: 0,
+                    damage_phys: 119,
+                }
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            materia_slot_count: 2,
+            materia_slot: vec![None; 2],
+            pentameldable: false,
+        };
+
+        let crit_materia = Materia {
+            sub_stats: SubStats {
+                critical_strike: 32,
+                direct_hit: 0,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            penta_meldable: false,
+        };
+
+        weapon.equip_materia(0, crit_materia.clone());
+
+        assert_eq!(weapon.get_critical_strike(), 186 + 32);
+
+        // if two crit materia is wielded, critical strike becomes 186 + 64 = 250,
+        // exceeding the substat cap of 220.
+        // Make sure equipment clips their stat to the cap 220
+
+        weapon.equip_materia(1, crit_materia.clone());
+        assert_eq!(weapon.get_critical_strike(), weapon.get_substat_cap());
+
+        // unequip a crit materia, and and determination materia
+        let determination_materia = Materia {
+            sub_stats: SubStats {
+                critical_strike: 0,
+                direct_hit: 0,
+                determination: 32,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            penta_meldable: false,
+        };
+
+        weapon.unequip_materia(0);
+        weapon.equip_materia(0, determination_materia.clone());
+
+        assert_eq!(weapon.get_determination(), 32);
+        assert_eq!(weapon.get_critical_strike(), 186 + 32);
+
+        // Weapon is unpentameldable, so make sure it doesn't equip materia at a penta-meldable slot
+        let determination_materia_pentameldable = Materia {
+            sub_stats: SubStats {
+                critical_strike: 0,
+                direct_hit: 0,
+                determination: 24,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            penta_meldable: false,
+        };
+
+        assert!(!weapon.equip_materia(2, determination_materia));
+        assert!(!weapon.equip_materia(2, determination_materia_pentameldable));
+    }
+
+    #[test]
+    fn equipment_pentameld_test() {
+        let mut weapon = Equipment {
+            id: 35175,
+            slot_name: "weapon".to_string(),
+            slot_category: 13,
+            name: "Augmented Radiant's Sword Breakers".to_string(),
+            equipable_jobs: vec!["NIN".to_string()],
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 296,
+                intelligence: 0,
+                mind: 0,
+                vitality: 310,
+            },
+            sub_stats: SubStats {
+                direct_hit: 220,
+                critical_strike: 186,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            weapon_damage: {
+                WeaponDamage {
+                    damage_mag: 0,
+                    damage_phys: 119,
+                }
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            materia_slot_count: 2,
+            materia_slot: vec![None; 2],
+            pentameldable: true,
+        };
+
+        let crit_materia = Materia {
+            sub_stats: SubStats {
+                critical_strike: 32,
+                direct_hit: 0,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            penta_meldable: false,
+        };
+
+        let det_materia = Materia {
+            sub_stats: SubStats {
+                critical_strike: 0,
+                direct_hit: 0,
+                determination: 32,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            penta_meldable: false,
+        };
+
+        let det_penta_materia = Materia {
+            sub_stats: SubStats {
+                critical_strike: 0,
+                direct_hit: 0,
+                determination: 24,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            penta_meldable: true,
+        };
+
+        let dh_penta_materia = Materia {
+            sub_stats: SubStats {
+                critical_strike: 0,
+                direct_hit: 24,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                piety: 0,
+            },
+            penta_meldable: true,
+        };
+
+        weapon.equip_materia(0, crit_materia.clone());
+        weapon.equip_materia(1, det_materia.clone());
+        weapon.equip_materia(2, dh_penta_materia.clone());
+        weapon.equip_materia(3, det_penta_materia.clone());
+        weapon.equip_materia(4, det_penta_materia.clone());
+
+        assert!(weapon.equip_materia(5, crit_materia.clone()));
+        assert_eq!(
+            weapon.get_critical_strike(),
+            weapon.get_raw_critical_strike() + crit_materia.get_critical_strike()
+        );
+        assert_eq!(
+            weapon.get_determination(),
+            weapon.get_raw_determination() + 2 * det_materia.get_determination()
         );
     }
 }

@@ -6,7 +6,7 @@ use crate::stat::{StatType, SubStatTrait, SubStats};
 /// Only Account Combat Materias as of now.
 #[derive(Eq, PartialEq, Clone, Debug)]
 pub struct Materia {
-    sub_stats: SubStats,
+    pub(crate) sub_stats: SubStats,
     pub(crate) penta_meldable: bool,
 }
 

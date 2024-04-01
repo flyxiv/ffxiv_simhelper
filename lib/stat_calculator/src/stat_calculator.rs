@@ -10,7 +10,7 @@ pub struct EndwalkerStatCalculator {
     /// base dexterity for a Dexterity Job(ex) Ninja, Bard)
     /// is different from base main stat of jobs whose main stat isn't dexterity.
     base_mainstats: MainStat,
-    base_substats: SubStats
+    base_substats: SubStats,
 }
 
-impl EndwalkerStatCalculator
+impl EndwalkerStatCalculator {}

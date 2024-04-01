@@ -149,6 +149,7 @@ mod tests {
                 defense_phys: 0,
             },
             equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
         };
 
         // TODO:

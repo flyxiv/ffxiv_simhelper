@@ -38,6 +38,7 @@ _MAIN_STAT_ABBREV_NAME_MAP = {
 
 _MAX_MATERIA_TIER = 10
 
+
 def initialize_all_stat_dict():
     init_dict = {}
 
@@ -45,6 +46,7 @@ def initialize_all_stat_dict():
         init_dict[stat_name] = 0
 
     return init_dict
+
 
 def initialize_sub_stat_dict():
     return {
@@ -62,6 +64,15 @@ def load_etro_json_data_if_not_loaded(py_directory, file_name):
     json_file_path = os.path.join(py_directory, f'{file_name}.json')
     if not os.path.exists(json_file_path):
         os.system(f'coreapi action {file_name} list > {json_file_path}')
+
+
+def filter_low_jobs(job_name):
+    jobs_list = job_name.split(' ')
+
+    valid_jobs = ["PLD", "WAR", "GNB", "DRK", "WHM", "SCH", "AST", "SGE", "MNK", "DRG", "NIN", "SAM", "RPR", "BRD",
+                  "MCH", "DNC", "BLM", "RDM", "SMN"]
+    return [job for job in jobs_list if job in valid_jobs]
+
 
 def convert_equipment(equipment):
     """extract and convert needed equipment data
@@ -91,13 +102,14 @@ def convert_equipment(equipment):
             Determination,
             Skill Speed,
             Spell Speed,
-            materiaSlotCount
+            materiaSlotCount,
+            pentameldable
     """
     equipment_entity = {
         'id': equipment['id'],
         'name': equipment['name'],
         'level': equipment['level'],
-        'jobName': equipment['jobName'],
+        'jobName': filter_low_jobs(equipment['jobName']),
         'slotCategory': equipment['slotCategory'],
         'weapon': equipment['weapon'],
         'damageMag': equipment['damageMag'],
@@ -108,13 +120,16 @@ def convert_equipment(equipment):
         'materiaSlotCount': equipment['materiaSlotCount']
     }
 
+    equipment_entity['pentameldable'] = 'Diadochos' in equipment['name']
+
     stat_data = convert_stat_data(equipment)
     equipment_entity.update(stat_data)
 
     for stat_name in _STAT_ID_NAME_MAP.values():
-         assert(stat_name in equipment_entity)
+        assert (stat_name in equipment_entity)
 
     return equipment_entity
+
 
 def convert_stat_data(equipment):
     # convert param1-6 to readable stat name - value
@@ -127,6 +142,7 @@ def convert_stat_data(equipment):
         stat_data[stat_name] = equipment[f'param{param_id}Value']
 
     return stat_data
+
 
 def is_combat_item(equipment):
     """Check if the equipment is a combat item
@@ -145,6 +161,7 @@ def is_combat_item(equipment):
             return False
 
     return True
+
 
 def convert_equipments(equipments):
     """Load and convert PVE Combat Items
@@ -170,43 +187,50 @@ def convert_equipments(equipments):
 
 
 def convert_jobs(jobs):
-   """convert jobs data
+    """convert jobs data
 
-   Args:
-       jobs: List of jobs data from Etro API
+    Args:
+        jobs: List of jobs data from Etro API
 
-   Returns:
-       Dictionary
-          id
-          abbrev
-          name
-          Strength
-          Dexterity
-          Mind
-          Vitality
-          Piety
-          Strength
-          Hp
-   """
-   jobs_only_combat = [job for job in jobs if (not job['isCrafting']) and (not job['isGathering'])]
+    Returns:
+        Dictionary
+           id
+           abbrev
+           name
+           Strength
+           Dexterity
+           Mind
+           Vitality
+           Piety
+           Strength
+           Hp
+           IsTank
+    """
+    jobs_only_combat = [job for job in jobs if (not job['isCrafting']) and (not job['isGathering'])]
 
-   converted_jobs = []
+    converted_jobs = []
 
-   for job in jobs_only_combat:
-      converted_job = {
-          'id': job['id'],
-          'abbrev': job['abbrev'],
-          'name': job['name'],
-      }
+    for job in jobs_only_combat:
+        converted_job = {
+            'id': job['id'],
+            'abbrev': job['abbrev'],
+            'name': job['name'],
+        }
 
-      for stat_abbrev, stat_value in job.items():
-          if stat_abbrev in _MAIN_STAT_ABBREV_NAME_MAP:
-            stat_full_name = _MAIN_STAT_ABBREV_NAME_MAP[stat_abbrev]
-            converted_job[stat_full_name] = stat_value
+        if converted_job['abbrev'] in ['PLD', 'WAR', 'GNB', 'DRK']:
+            converted_job['IsTank'] = True
+        else:
+            converted_job['IsTank'] = False
 
-      converted_jobs.append(converted_job)
+        for stat_abbrev, stat_value in job.items():
+            if stat_abbrev in _MAIN_STAT_ABBREV_NAME_MAP:
+                stat_full_name = _MAIN_STAT_ABBREV_NAME_MAP[stat_abbrev]
+                converted_job[stat_full_name] = stat_value
 
-   return converted_jobs
+        converted_jobs.append(converted_job)
+
+    return converted_jobs
+
 
 def is_combat_food(food):
     """Check if the food is a combat food
@@ -224,6 +248,7 @@ def is_combat_food(food):
 
     return True
 
+
 def convert_food(food):
     converted_food = {
         'id': food['id'],
@@ -239,6 +264,7 @@ def convert_food(food):
         converted_food[stat_name] = food[f'maxHQ{i}']
 
     return converted_food
+
 
 def convert_foods(foods):
     """convert combat food data
@@ -314,6 +340,7 @@ def convert_data(py_directory, file_name, convert_function):
 _ETRO_JSON_FILES = ['equipment', 'jobs', 'food', 'clans']
 _CONVERT_FUNCTIONS = [convert_equipments, convert_jobs, convert_foods, convert_clans]
 
+
 def main():
     working_directory = os.getcwd()
     py_directory = os.path.join(working_directory, 'py')
@@ -323,8 +350,6 @@ def main():
         load_etro_json_data_if_not_loaded(py_directory, file_name)
 
         convert_data(py_directory, file_name, convert_function)
-
-
 
 
 if __name__ == '__main__':
