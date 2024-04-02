@@ -1,11 +1,25 @@
 use crate::clan::Clan;
 /// Implements features needed to represent a Character in FFXIV Simbot.
-use crate::equipment::Equipment;
+use crate::equipment::{Equipment, SlotType};
 use crate::food::Food;
 use crate::job::Job;
 use crate::medicine::Medicine;
 use crate::stat::{add_main_stats, add_sub_stats, MainStats, StatFrom, SubStats};
 use crate::{DataError, Result};
+
+static EQUIPMENT_SLOTS: usize = 14;
+static WEAPON_SLOT: usize = 13;
+static OFFHAND_SLOT: usize = 2;
+static HEAD_SLOT: usize = 3;
+static BODY_SLOT: usize = 4;
+static HANDS_SLOT: usize = 5;
+static LEGS_SLOT: usize = 7;
+static FEET_SLOT: usize = 8;
+static EARS_SLOT: usize = 9;
+static NECK_SLOT: usize = 10;
+static WRISTS_SLOT: usize = 11;
+static RING_SLOT: usize = 12;
+static RING_SLOT2: usize = 14;
 
 /// Data for a single Character in FFXIV Simbot.
 /// Combat Data for Characters in FFXIV include:
@@ -37,31 +51,61 @@ pub struct Character {
 pub trait ItemManager {
     /// Equip an item to the character.
     /// If there is already another equipment in the slot, replace it.
-    fn equip_or_replace(&mut self, item: Equipment) -> Result<()>;
+    fn equip_or_replace(&mut self, item: Equipment, slot: SlotType) -> Result<()>;
 
     /// Unequip an item from the character.
-    fn unequip(&mut self, slot: usize) -> Result<()>;
+    fn unequip(&mut self, slot: SlotType) -> Result<()>;
 }
 
 impl ItemManager for Character {
-    fn equip_or_replace(&mut self, item: Equipment) -> Result<()> {
-        let slot = item.slot_category;
-
-        if slot > self.equipments.len() {
+    fn equip_or_replace(&mut self, item: Equipment, slot: SlotType) -> Result<()> {
+        if slot > EQUIPMENT_SLOTS {
             return Err(DataError::EquipError(slot));
         }
 
-        self.equipments[slot] = Some(item);
-        Ok(())
+        if slot == RING_SLOT {
+            self.equip_ring_if_not_duplicate(item, RING_SLOT, RING_SLOT2)
+        } else if slot == RING_SLOT2 {
+            self.equip_ring_if_not_duplicate(item, RING_SLOT2, RING_SLOT)
+        } else {
+            self.equipments[slot] = Some(item);
+            Ok(())
+        }
     }
 
-    fn unequip(&mut self, slot: usize) -> Result<()> {
+    fn unequip(&mut self, slot: SlotType) -> Result<()> {
         if slot > self.equipments.len() {
             return Err(DataError::UnEquipError(slot));
         }
 
         self.equipments[slot] = None;
         Ok(())
+    }
+}
+
+impl Character {
+    fn equip_ring_if_not_duplicate(
+        &mut self,
+        item: Equipment,
+        current_ring_slot: usize,
+        other_ring_slot: SlotType,
+    ) -> Result<()> {
+        if let Some(other_ring) = &self.equipments[other_ring_slot] {
+            if item.id == other_ring.id {
+                return Err(DataError::EquipError(current_ring_slot));
+            }
+        }
+
+        self.equipments[current_ring_slot] = Some(item);
+        Ok(())
+    }
+
+    pub fn eat_food(&mut self, food: Food) {
+        self.food = Some(food);
+    }
+
+    pub fn eat_medicine(&mut self, medicine: Medicine) {
+        self.medicine = Some(medicine);
     }
 }
 
@@ -106,12 +150,18 @@ pub fn get_character_sub_stats(character: &Character) -> SubStats {
 
 #[cfg(test)]
 mod tests {
-    use crate::character::Character;
+    use crate::character::{
+        get_character_main_stats, get_character_sub_stats, Character, ItemManager, BODY_SLOT,
+        EARS_SLOT, FEET_SLOT, HANDS_SLOT, HEAD_SLOT, LEGS_SLOT, NECK_SLOT, RING_SLOT, RING_SLOT2,
+        WEAPON_SLOT, WRISTS_SLOT,
+    };
     use crate::clan::Clan;
     use crate::equipment::{ArmorDefense, Equipment, WeaponDamage};
+    use crate::food::Food;
     use crate::job::tests::get_test_stat_modifier;
     use crate::job::Job;
-    use crate::stat::{MainStats, SubStats};
+    use crate::medicine::Medicine;
+    use crate::stat::{MainStats, SubStatTrait, SubStats};
 
     #[test]
     fn test_get_character_stats() {
@@ -151,20 +201,20 @@ mod tests {
         };
 
         let helmet = Equipment {
-            id: 40170,
-            name: "Knives of Ascension".to_string(),
-            slot_name: "weapon".to_string(),
-            slot_category: 13,
+            id: 40130,
+            name: "Augmented Credendum Blinder of Scouting".to_string(),
+            slot_name: "head".to_string(),
+            slot_category: 3,
             main_stats: MainStats {
                 strength: 0,
-                dexterity: 416,
-                vitality: 458,
+                dexterity: 248,
+                vitality: 277,
                 intelligence: 0,
                 mind: 0,
             },
             sub_stats: SubStats {
-                critical_strike: 306,
-                determination: 214,
+                critical_strike: 129,
+                determination: 184,
                 skill_speed: 0,
                 spell_speed: 0,
                 tenacity: 0,
@@ -174,8 +224,8 @@ mod tests {
             materia_slot: vec![None; 2],
             materia_slot_count: 2,
             weapon_damage: WeaponDamage {
-                damage_mag: 66,
-                damage_phys: 132,
+                damage_mag: 0,
+                damage_phys: 0,
             },
             armor_defense: ArmorDefense {
                 defense_mag: 0,
@@ -185,14 +235,322 @@ mod tests {
             pentameldable: false,
         };
 
-        // TODO:
-        // 1) equip armor
-        // 2) equip food
-        // 3) equip medicine
-        // 4) equip viable materia to equipment
-        // 5) equip viable materia to equipment where the stat must be capped
+        let body = Equipment {
+            id: 40131,
+            name: "Augmented Credendum Courselet of Scouting".to_string(),
+            slot_name: "body".to_string(),
+            slot_category: 4,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 394,
+                vitality: 440,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 0,
+                determination: 204,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 292,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 0,
+                damage_phys: 0,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
+        };
 
-        let character = Character {
+        let hand = Equipment {
+            id: 40132,
+            name: "Augmented Credendum Armguards of Scouting".to_string(),
+            slot_name: "hand".to_string(),
+            slot_category: 5,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 248,
+                vitality: 277,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 184,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 129,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 0,
+                damage_phys: 0,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
+        };
+
+        let leg = Equipment {
+            id: 40133,
+            name: "Augmented Credendum Trousers of Scouting".to_string(),
+            slot_name: "legs".to_string(),
+            slot_category: 7,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 394,
+                vitality: 440,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 204,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 292,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 0,
+                damage_phys: 0,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
+        };
+
+        let foot = Equipment {
+            id: 40209,
+            name: "Ascension Sabatons of Scounting".to_string(),
+            slot_name: "foot".to_string(),
+            slot_category: 8,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 248,
+                vitality: 277,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 129,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 184,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 0,
+                damage_phys: 0,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
+        };
+
+        let earring = Equipment {
+            id: 40147,
+            name: "Augmented Credendum Earrings of Aiming".to_string(),
+            slot_name: "ears".to_string(),
+            slot_category: 9,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 196,
+                vitality: 218,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 102,
+                determination: 145,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 0,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 0,
+                damage_phys: 0,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
+        };
+
+        let necklace = Equipment {
+            id: 40148,
+            name: "Augmented Credendum Necklace of Aiming".to_string(),
+            slot_name: "neck".to_string(),
+            slot_category: 10,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 196,
+                vitality: 218,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 145,
+                determination: 102,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 0,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 0,
+                damage_phys: 0,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
+        };
+
+        let wrist = Equipment {
+            id: 40149,
+            name: "Augmented Credendum Bracelet of Aiming".to_string(),
+            slot_name: "wrists".to_string(),
+            slot_category: 11,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 196,
+                vitality: 218,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 102,
+                determination: 145,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 0,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 0,
+                damage_phys: 0,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
+        };
+
+        let ring1 = Equipment {
+            id: 40150,
+            name: "Augmented Credendum Ring of Aiming".to_string(),
+            slot_name: "ring".to_string(),
+            slot_category: 12,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 196,
+                vitality: 218,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 145,
+                determination: 102,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 0,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 0,
+                damage_phys: 0,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
+        };
+
+        let ring2 = Equipment {
+            id: 40151,
+            name: "Ascension Ring of Aiming".to_string(),
+            slot_name: "ring".to_string(),
+            slot_category: 12,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 196,
+                vitality: 218,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 102,
+                determination: 0,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 145,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 0,
+                damage_phys: 0,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
+        };
+
+        let mut character = Character {
             clan: Clan {
                 id: 7,
                 name: "Seeker of the Sun".to_string(),
@@ -209,19 +567,78 @@ mod tests {
                 name: "Black Mage".to_string(),
                 abbrev: "BLM".to_string(),
                 base_main_stats: MainStats {
-                    strength: 45,
-                    dexterity: 100,
+                    strength: 85,
+                    dexterity: 110,
                     vitality: 100,
-                    intelligence: 115,
+                    intelligence: 65,
                     mind: 75,
                 },
-                base_hp: 105,
+                base_hp: 108,
                 stat_modifier: get_test_stat_modifier(),
                 is_tank: false,
             },
-            equipments: vec![],
+            equipments: vec![None; 15],
             food: None,
             medicine: None,
         };
+
+        assert_eq!(get_character_main_stats(&character).dexterity, 432);
+
+        assert!(character.equip_or_replace(weapon, WEAPON_SLOT).is_ok());
+        assert!(character.equip_or_replace(helmet, HEAD_SLOT).is_ok());
+        assert!(character.equip_or_replace(body, BODY_SLOT).is_ok());
+        assert!(character.equip_or_replace(hand, HANDS_SLOT).is_ok());
+        assert!(character.equip_or_replace(leg, LEGS_SLOT).is_ok());
+        assert!(character.equip_or_replace(foot, FEET_SLOT).is_ok());
+        assert!(character.equip_or_replace(earring, EARS_SLOT).is_ok());
+        assert!(character.equip_or_replace(necklace, NECK_SLOT).is_ok());
+        assert!(character.equip_or_replace(wrist, WRISTS_SLOT).is_ok());
+        assert!(character.equip_or_replace(ring1.clone(), RING_SLOT).is_ok());
+        assert!(character.equip_or_replace(ring2, RING_SLOT2).is_ok());
+        assert!(character
+            .equip_or_replace(ring1.clone(), RING_SLOT2)
+            .is_err());
+        assert!(character.equip_or_replace(ring1, 15).is_err());
+
+        let food = Food {
+            id: 1,
+            name: "Baked Eggplant".to_string(),
+            sub_stats: SubStats {
+                critical_strike: 62,
+                determination: 103,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 0,
+                piety: 0,
+            },
+            vitality: 143,
+        };
+
+        let medicine = Medicine {
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 262,
+                vitality: 0,
+                intelligence: 0,
+                mind: 0,
+            },
+            duration: 0,
+        };
+
+        character.eat_food(food);
+        assert_eq!(get_character_main_stats(&character).dexterity, 3360);
+
+        let sub_stats = get_character_sub_stats(&character);
+        assert_eq!(sub_stats.get_critical_strike(), 2010);
+        assert_eq!(sub_stats.get_determination(), 1589);
+        assert_eq!(sub_stats.get_spell_speed(), 400);
+        assert_eq!(sub_stats.get_spell_speed(), 400);
+        assert_eq!(sub_stats.get_tenacity(), 400);
+        assert_eq!(sub_stats.get_direct_hit(), 1442);
+        assert_eq!(sub_stats.get_piety(), 390);
+
+        character.eat_medicine(medicine);
+        assert_eq!(get_character_main_stats(&character).dexterity, 3622);
     }
 }

@@ -35,10 +35,10 @@ struct EtroFood {
 /// Only treat Combat Foods as of now.
 #[derive(Clone, Eq, PartialEq)]
 pub struct Food {
-    id: FoodId,
-    name: String,
-    sub_stats: SubStats,
-    vitality: StatType,
+    pub(crate) id: FoodId,
+    pub(crate) name: String,
+    pub(crate) sub_stats: SubStats,
+    pub(crate) vitality: StatType,
 }
 
 impl MainStatTrait for Food {

@@ -237,7 +237,7 @@ pub(crate) mod tests {
             max_level_base_piety: 390,
             max_level_base_direct_hit: 400,
             max_level_base_critical_hit: 400,
-            max_level_base_determination: 400,
+            max_level_base_determination: 390,
             max_level_base_skill_speed: 400,
             max_level_base_spell_speed: 400,
             max_level_base_tenacity: 400,
@@ -288,7 +288,7 @@ pub(crate) mod tests {
         assert_eq!(409, job.get_strength());
         assert_eq!(429, job.get_vitality());
         assert_eq!(400, job.get_critical_strike());
-        assert_eq!(400, job.get_determination());
+        assert_eq!(390, job.get_determination());
         assert_eq!(400, job.get_direct_hit());
         assert_eq!(400, job.get_skill_speed());
         assert_eq!(400, job.get_spell_speed());
@@ -317,7 +317,7 @@ pub(crate) mod tests {
         assert_eq!(448, job.get_dexterity());
         assert_eq!(390, job.get_vitality());
         assert_eq!(400, job.get_critical_strike());
-        assert_eq!(400, job.get_determination());
+        assert_eq!(390, job.get_determination());
         assert_eq!(400, job.get_direct_hit());
         assert_eq!(400, job.get_skill_speed());
         assert_eq!(400, job.get_spell_speed());
@@ -347,7 +347,7 @@ pub(crate) mod tests {
         assert_eq!(448, job.get_intelligence());
         assert_eq!(390, job.get_vitality());
         assert_eq!(400, job.get_critical_strike());
-        assert_eq!(400, job.get_determination());
+        assert_eq!(390, job.get_determination());
         assert_eq!(400, job.get_direct_hit());
         assert_eq!(400, job.get_skill_speed());
         assert_eq!(400, job.get_spell_speed());
@@ -377,7 +377,7 @@ pub(crate) mod tests {
         assert_eq!(448, job.get_mind());
         assert_eq!(390, job.get_vitality());
         assert_eq!(400, job.get_critical_strike());
-        assert_eq!(400, job.get_determination());
+        assert_eq!(390, job.get_determination());
         assert_eq!(400, job.get_direct_hit());
         assert_eq!(400, job.get_skill_speed());
         assert_eq!(400, job.get_spell_speed());

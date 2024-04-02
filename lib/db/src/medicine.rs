@@ -4,15 +4,13 @@ use crate::stat::{MainStatTrait, MainStats, StatType};
 
 pub struct Medicine {
     pub(crate) main_stats: MainStats,
-    pub(crate) value: StatType,
     pub(crate) duration: StatType,
 }
 
 impl Medicine {
-    pub(crate) fn new(main_stats: MainStats, value: StatType, duration: StatType) -> Self {
+    pub(crate) fn new(main_stats: MainStats, duration: StatType) -> Self {
         Medicine {
             main_stats,
-            value,
             duration,
         }
     }
@@ -54,7 +52,6 @@ mod tests {
                 intelligence: 4,
                 mind: 5,
             },
-            10,
             20,
         );
 
@@ -63,7 +60,6 @@ mod tests {
         assert_eq!(medicine.get_vitality(), 3);
         assert_eq!(medicine.get_intelligence(), 4);
         assert_eq!(medicine.get_mind(), 5);
-        assert_eq!(medicine.value, 10);
         assert_eq!(medicine.duration, 20);
     }
 }
