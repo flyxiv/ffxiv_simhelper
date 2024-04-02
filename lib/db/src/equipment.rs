@@ -6,10 +6,12 @@ use crate::stat::{MainStatTrait, MainStats, StatType, SubStatTrait, SubStats};
 use crate::{item_vec_to_id_table, DataError, IdTable, JsonFileReader, SearchKeyEntity};
 use itertools::Itertools;
 use serde::Deserialize;
+use std::fmt::Debug;
 use std::path::PathBuf;
 
 pub type EquipmentId = usize;
 pub type SlotType = usize;
+static PENTAMELD_MATERIA_SLOT: usize = 5;
 
 /// Equipment is usually searched by
 /// 1. Equipments that can be equipped by the selected Job
@@ -38,8 +40,8 @@ pub trait ArmorTrait {
 
 pub trait MateriaTrait {
     fn get_materias(&self) -> &[Option<Materia>];
-    fn equip_materia(&mut self, slot: SlotType, materia: Materia) -> bool;
-    fn unequip_materia(&mut self, slot: SlotType) -> bool;
+    fn equip_materia(&mut self, slot: SlotType, materia: Materia) -> Result<()>;
+    fn unequip_materia(&mut self, slot: SlotType) -> Result<()>;
 }
 
 /// Equipment Data Type for FFXIV Simbot
@@ -270,24 +272,33 @@ impl MateriaTrait for Equipment {
         self.materia_slot.as_slice()
     }
 
-    fn equip_materia(&mut self, slot: usize, materia: Materia) -> bool {
-        if self.materia_slot.len() < slot {
-            if !self.pentameldable || slot >= 5 {
-                return false;
+    fn equip_materia(&mut self, slot: usize, materia: Materia) -> Result<()> {
+        if slot >= PENTAMELD_MATERIA_SLOT {
+            return Err(DataError::MateriaEquipError(slot));
+        }
+
+        if self.materia_slot_count <= slot {
+            if !self.pentameldable || slot >= PENTAMELD_MATERIA_SLOT {
+                return Err(DataError::MateriaEquipError(slot));
             }
         }
 
+        let materia_in_slot = &self.materia_slot[slot];
+
+        if materia_in_slot.is_some() {
+            return Err(DataError::MateriaEquipError(slot));
+        }
+
         self.materia_slot[slot] = Some(materia);
-        self.materia_slot_count += 1;
-        true
+        Ok(())
     }
 
-    fn unequip_materia(&mut self, slot: usize) -> bool {
+    fn unequip_materia(&mut self, slot: usize) -> Result<()> {
         if self.materia_slot.len() > slot {
             self.materia_slot[slot] = None;
-            true
+            Ok(())
         } else {
-            false
+            Err(DataError::MateriaUnequipError(slot))
         }
     }
 }
@@ -437,6 +448,12 @@ impl EquipmentFactory {
         let (main_stats, sub_stats, weapon_damage, armor_defense) =
             self.make_needed_sub_data(&etro_equipment);
 
+        let max_materia_slot = if etro_equipment.pentameldable {
+            5
+        } else {
+            etro_equipment.materia_slot_count
+        };
+
         Equipment {
             id: etro_equipment.id,
             slot_name: etro_equipment.slot_name,
@@ -448,7 +465,7 @@ impl EquipmentFactory {
             weapon_damage,
             armor_defense,
             materia_slot_count: etro_equipment.materia_slot_count,
-            materia_slot: vec![None; etro_equipment.materia_slot_count],
+            materia_slot: vec![None; max_materia_slot],
             pentameldable: etro_equipment.pentameldable,
         }
     }
@@ -819,8 +836,10 @@ mod tests {
             penta_meldable: false,
         };
 
-        assert!(!weapon.equip_materia(2, determination_materia));
-        assert!(!weapon.equip_materia(2, determination_materia_pentameldable));
+        assert!(weapon.equip_materia(2, determination_materia).is_err());
+        assert!(weapon
+            .equip_materia(2, determination_materia_pentameldable)
+            .is_err());
     }
 
     #[test]
@@ -858,7 +877,7 @@ mod tests {
                 defense_phys: 0,
             },
             materia_slot_count: 2,
-            materia_slot: vec![None; 2],
+            materia_slot: vec![None; 5],
             pentameldable: true,
         };
 
@@ -914,20 +933,22 @@ mod tests {
             penta_meldable: true,
         };
 
-        weapon.equip_materia(0, crit_materia.clone());
-        weapon.equip_materia(1, det_materia.clone());
-        weapon.equip_materia(2, dh_penta_materia.clone());
-        weapon.equip_materia(3, det_penta_materia.clone());
-        weapon.equip_materia(4, det_penta_materia.clone());
+        assert!(weapon.equip_materia(0, crit_materia.clone()).is_ok());
+        assert!(weapon.equip_materia(1, det_materia.clone()).is_ok());
+        assert!(weapon.equip_materia(2, dh_penta_materia.clone()).is_ok());
+        assert!(weapon.equip_materia(3, det_penta_materia.clone()).is_ok());
+        assert!(weapon.equip_materia(4, det_penta_materia.clone()).is_ok());
 
-        assert!(weapon.equip_materia(5, crit_materia.clone()));
+        assert!(weapon.equip_materia(5, crit_materia.clone()).is_err());
         assert_eq!(
             weapon.get_critical_strike(),
             weapon.get_raw_critical_strike() + crit_materia.get_critical_strike()
         );
         assert_eq!(
             weapon.get_determination(),
-            weapon.get_raw_determination() + 2 * det_materia.get_determination()
+            weapon.get_raw_determination()
+                + det_materia.get_determination()
+                + det_penta_materia.get_determination() * 2
         );
     }
 }

@@ -106,18 +106,51 @@ pub fn get_character_sub_stats(character: &Character) -> SubStats {
 
 #[cfg(test)]
 mod tests {
-    use crate::character::{get_character_main_stats, Character};
+    use crate::character::Character;
     use crate::clan::Clan;
     use crate::equipment::{ArmorDefense, Equipment, WeaponDamage};
-    use crate::food::Food;
     use crate::job::tests::get_test_stat_modifier;
     use crate::job::Job;
-    use crate::medicine::Medicine;
-    use crate::stat::{MainStats, StatType, SubStats};
+    use crate::stat::{MainStats, SubStats};
 
     #[test]
     fn test_get_character_stats() {
         let weapon = Equipment {
+            id: 40170,
+            name: "Knives of Ascension".to_string(),
+            slot_name: "weapon".to_string(),
+            slot_category: 13,
+            main_stats: MainStats {
+                strength: 0,
+                dexterity: 416,
+                vitality: 458,
+                intelligence: 0,
+                mind: 0,
+            },
+            sub_stats: SubStats {
+                critical_strike: 306,
+                determination: 214,
+                skill_speed: 0,
+                spell_speed: 0,
+                tenacity: 0,
+                direct_hit: 0,
+                piety: 0,
+            },
+            materia_slot: vec![None; 2],
+            materia_slot_count: 2,
+            weapon_damage: WeaponDamage {
+                damage_mag: 66,
+                damage_phys: 132,
+            },
+            armor_defense: ArmorDefense {
+                defense_mag: 0,
+                defense_phys: 0,
+            },
+            equipable_jobs: vec!["NIN".to_string()],
+            pentameldable: false,
+        };
+
+        let helmet = Equipment {
             id: 40170,
             name: "Knives of Ascension".to_string(),
             slot_name: "weapon".to_string(),

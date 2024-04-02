@@ -27,6 +27,8 @@ pub enum DataError {
     StatParseError(String),
     EquipError(SlotType),
     UnEquipError(SlotType),
+    MateriaEquipError(SlotType),
+    MateriaUnequipError(SlotType),
 }
 
 impl Debug for DataError {
@@ -40,6 +42,12 @@ impl Debug for DataError {
             DataError::StatParseError(s) => write!(f, "Error parsing stat: {}", s),
             DataError::EquipError(slot) => write!(f, "Equip to Invalid Slot: {:?}", slot),
             DataError::UnEquipError(slot) => write!(f, "Unequip Invalid Slot: {:?}", slot),
+            DataError::MateriaEquipError(slot) => {
+                write!(f, "Cannot Equip Materia to Slot: {:?}", slot)
+            }
+            DataError::MateriaUnequipError(slot) => {
+                write!(f, "Cannot Unequip Materia in Slot: {:?}", slot)
+            }
         }
     }
 }
@@ -55,6 +63,10 @@ impl Display for DataError {
             DataError::StatParseError(s) => write!(f, "Error parsing stat: {}", s),
             DataError::EquipError(slot) => write!(f, "Equip to Invalid Slot: {:?}", slot),
             DataError::UnEquipError(slot) => write!(f, "Unequip Invalid Slot: {:?}", slot),
+            DataError::MateriaEquipError(slot) => write!(f, "Cannot Equip to Slot: {:?}", slot),
+            DataError::MateriaUnequipError(slot) => {
+                write!(f, "Cannot Unequip Materia in Slot: {:?}", slot)
+            }
         }
     }
 }
