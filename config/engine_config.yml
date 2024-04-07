@@ -6,7 +6,7 @@ clans_json_file_name: clans_data.json
 
 # Job Main/Sub Stat Constants
 max_level_main_stat_modifier: 390.0
-max_level_hp_modifier: 1900.0
+max_level_substat_modifier: 1900.0
 max_level_div: 3000.0
 hp_per_vitality_non_tank: 24.3
 hp_per_vitality_tank: 34.6

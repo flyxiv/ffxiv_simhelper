@@ -1,4 +1,6 @@
 use crate::equipment::SlotType;
+use crate::job::StatModifierType;
+use crate::stat::StatType;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fmt::{Debug, Display, Formatter};
@@ -17,6 +19,26 @@ pub mod job;
 pub mod materia;
 mod medicine;
 pub mod stat;
+mod stat_calculator;
+
+/// Saves Base Constants Needed for getting Job Attributes for Stats
+/// https://www.akhmorning.com/allagan-studies/modifiers/levelmods/
+#[derive(PartialEq, Copy, Clone)]
+pub struct StatModifier {
+    pub max_level_main_stat_modifier: StatModifierType,
+    pub max_level_base_vitality: StatType,
+    pub max_level_base_piety: StatType,
+    pub max_level_base_direct_hit: StatType,
+    pub max_level_base_critical_hit: StatType,
+    pub max_level_base_determination: StatType,
+    pub max_level_base_skill_speed: StatType,
+    pub max_level_base_spell_speed: StatType,
+    pub max_level_base_tenacity: StatType,
+    pub max_level_sub_stat_modifier: StatModifierType,
+    pub max_level_div: StatModifierType,
+    pub hp_per_vitality_non_tank: StatModifierType,
+    pub hp_per_vitality_tank: StatModifierType,
+}
 
 pub enum DataError {
     FileNotFoundError(String),

@@ -2,7 +2,7 @@
 /// in FFXIV Simbot.
 /// Only save combat jobs as of now.
 use crate::stat::{HpType, MainStatTrait, MainStats, SpecialStatTrait, StatType, SubStatTrait};
-use crate::{item_vec_to_id_table, IdTable, JsonFileReader, Result, SearchKeyEntity};
+use crate::{item_vec_to_id_table, IdTable, JsonFileReader, Result, SearchKeyEntity, StatModifier};
 use itertools::Itertools;
 use serde::Deserialize;
 use std::path::PathBuf;
@@ -35,25 +35,6 @@ pub struct EtroJob {
     hp: HpType,
     #[serde(rename = "IsTank")]
     is_tank: bool,
-}
-
-/// Saves Base Constants Needed for getting Job Attributes for Stats
-/// https://www.akhmorning.com/allagan-studies/modifiers/levelmods/
-#[derive(PartialEq, Copy, Clone)]
-pub struct StatModifier {
-    pub max_level_main_stat_modifier: StatModifierType,
-    pub max_level_base_vitality: StatType,
-    pub max_level_base_piety: StatType,
-    pub max_level_base_direct_hit: StatType,
-    pub max_level_base_critical_hit: StatType,
-    pub max_level_base_determination: StatType,
-    pub max_level_base_skill_speed: StatType,
-    pub max_level_base_spell_speed: StatType,
-    pub max_level_base_tenacity: StatType,
-    pub max_level_hp_modifier: StatModifierType,
-    pub max_level_div: StatModifierType,
-    pub hp_per_vitality_non_tank: StatModifierType,
-    pub hp_per_vitality_tank: StatModifierType,
 }
 
 /// Job for FFXIV Simbot.
