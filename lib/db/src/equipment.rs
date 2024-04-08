@@ -158,6 +158,16 @@ impl ArmorTrait for ArmorDefense {
     }
 }
 
+impl WeaponTrait for Equipment {
+    fn get_damage_mag(&self) -> usize {
+        self.weapon_damage.get_damage_mag()
+    }
+
+    fn get_damage_phys(&self) -> usize {
+        self.weapon_damage.get_damage_phys()
+    }
+}
+
 impl MainStatTrait for Equipment {
     fn get_strength(&self) -> StatType {
         self.main_stats.get_strength()
@@ -489,7 +499,6 @@ mod tests {
         ArmorDefense, Equipment, EquipmentKey, MateriaTrait, SlotType, WeaponDamage,
     };
     use crate::item_vec_to_id_table;
-    use crate::job::JobAbbrevType;
     use crate::materia::Materia;
     use crate::stat::{MainStatTrait, MainStats, SubStatTrait, SubStats};
 

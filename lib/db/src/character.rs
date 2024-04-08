@@ -1,25 +1,12 @@
 use crate::clan::Clan;
+use crate::constants::*;
 /// Implements features needed to represent a Character in FFXIV Simbot.
-use crate::equipment::{Equipment, SlotType};
+use crate::equipment::{Equipment, SlotType, WeaponTrait};
 use crate::food::Food;
 use crate::job::Job;
 use crate::medicine::Medicine;
 use crate::stat::{add_main_stats, add_sub_stats, MainStats, StatFrom, SubStats};
 use crate::{DataError, Result};
-
-static EQUIPMENT_SLOTS: usize = 14;
-static WEAPON_SLOT: usize = 13;
-static OFFHAND_SLOT: usize = 2;
-static HEAD_SLOT: usize = 3;
-static BODY_SLOT: usize = 4;
-static HANDS_SLOT: usize = 5;
-static LEGS_SLOT: usize = 7;
-static FEET_SLOT: usize = 8;
-static EARS_SLOT: usize = 9;
-static NECK_SLOT: usize = 10;
-static WRISTS_SLOT: usize = 11;
-static RING_SLOT: usize = 12;
-static RING_SLOT2: usize = 14;
 
 /// Data for a single Character in FFXIV Simbot.
 /// Combat Data for Characters in FFXIV include:
@@ -29,8 +16,8 @@ static RING_SLOT2: usize = 14;
 /// 4. Food
 /// 5. Medicine
 pub struct Character {
-    clan: Clan,
-    job: Job,
+    pub(crate) clan: Clan,
+    pub(crate) job: Job,
     /// 0: Weapon
     /// 1: Head
     /// 2: Body
@@ -42,9 +29,9 @@ pub struct Character {
     /// 8: Wrists
     /// 9: Ring
     /// 10: Ring
-    equipments: Vec<Option<Equipment>>,
-    food: Option<Food>,
-    medicine: Option<Medicine>,
+    pub(crate) equipments: Vec<Option<Equipment>>,
+    pub(crate) food: Option<Food>,
+    pub(crate) medicine: Option<Medicine>,
 }
 
 /// Defines actions of a character to equip/unequip items.
@@ -57,16 +44,40 @@ pub trait ItemManager {
     fn unequip(&mut self, slot: SlotType) -> Result<()>;
 }
 
+impl WeaponTrait for Character {
+    fn get_damage_mag(&self) -> usize {
+        let equipped_weapon = &self.equipments[*WEAPON_SLOT];
+
+        if equipped_weapon.is_none() {
+            0
+        } else {
+            let equipped_weapon = equipped_weapon.as_ref().unwrap();
+            equipped_weapon.get_damage_mag()
+        }
+    }
+
+    fn get_damage_phys(&self) -> usize {
+        let equipped_weapon = &self.equipments[*WEAPON_SLOT];
+
+        if equipped_weapon.is_none() {
+            0
+        } else {
+            let equipped_weapon = equipped_weapon.as_ref().unwrap();
+            equipped_weapon.get_damage_phys()
+        }
+    }
+}
+
 impl ItemManager for Character {
     fn equip_or_replace(&mut self, item: Equipment, slot: SlotType) -> Result<()> {
-        if slot > EQUIPMENT_SLOTS {
+        if slot > *EQUIPMENT_SLOTS {
             return Err(DataError::EquipError(slot));
         }
 
-        if slot == RING_SLOT {
-            self.equip_ring_if_not_duplicate(item, RING_SLOT, RING_SLOT2)
-        } else if slot == RING_SLOT2 {
-            self.equip_ring_if_not_duplicate(item, RING_SLOT2, RING_SLOT)
+        if slot == *RING_SLOT {
+            self.equip_ring_if_not_duplicate(item, *RING_SLOT, *RING_SLOT2)
+        } else if slot == *RING_SLOT2 {
+            self.equip_ring_if_not_duplicate(item, *RING_SLOT2, *RING_SLOT)
         } else {
             self.equipments[slot] = Some(item);
             Ok(())
@@ -158,7 +169,6 @@ mod tests {
     use crate::clan::Clan;
     use crate::equipment::{ArmorDefense, Equipment, WeaponDamage};
     use crate::food::Food;
-    use crate::job::tests::get_test_stat_modifier;
     use crate::job::Job;
     use crate::medicine::Medicine;
     use crate::stat::{MainStats, SubStatTrait, SubStats};
@@ -564,8 +574,8 @@ mod tests {
             },
             job: Job {
                 id: 25,
-                name: "Black Mage".to_string(),
-                abbrev: "BLM".to_string(),
+                name: "Ninja".to_string(),
+                abbrev: "NIN".to_string(),
                 base_main_stats: MainStats {
                     strength: 85,
                     dexterity: 110,
@@ -574,7 +584,6 @@ mod tests {
                     mind: 75,
                 },
                 base_hp: 108,
-                stat_modifier: get_test_stat_modifier(),
                 is_tank: false,
             },
             equipments: vec![None; 15],
@@ -584,19 +593,21 @@ mod tests {
 
         assert_eq!(get_character_main_stats(&character).dexterity, 432);
 
-        assert!(character.equip_or_replace(weapon, WEAPON_SLOT).is_ok());
-        assert!(character.equip_or_replace(helmet, HEAD_SLOT).is_ok());
-        assert!(character.equip_or_replace(body, BODY_SLOT).is_ok());
-        assert!(character.equip_or_replace(hand, HANDS_SLOT).is_ok());
-        assert!(character.equip_or_replace(leg, LEGS_SLOT).is_ok());
-        assert!(character.equip_or_replace(foot, FEET_SLOT).is_ok());
-        assert!(character.equip_or_replace(earring, EARS_SLOT).is_ok());
-        assert!(character.equip_or_replace(necklace, NECK_SLOT).is_ok());
-        assert!(character.equip_or_replace(wrist, WRISTS_SLOT).is_ok());
-        assert!(character.equip_or_replace(ring1.clone(), RING_SLOT).is_ok());
-        assert!(character.equip_or_replace(ring2, RING_SLOT2).is_ok());
+        assert!(character.equip_or_replace(weapon, *WEAPON_SLOT).is_ok());
+        assert!(character.equip_or_replace(helmet, *HEAD_SLOT).is_ok());
+        assert!(character.equip_or_replace(body, *BODY_SLOT).is_ok());
+        assert!(character.equip_or_replace(hand, *HANDS_SLOT).is_ok());
+        assert!(character.equip_or_replace(leg, *LEGS_SLOT).is_ok());
+        assert!(character.equip_or_replace(foot, *FEET_SLOT).is_ok());
+        assert!(character.equip_or_replace(earring, *EARS_SLOT).is_ok());
+        assert!(character.equip_or_replace(necklace, *NECK_SLOT).is_ok());
+        assert!(character.equip_or_replace(wrist, *WRISTS_SLOT).is_ok());
         assert!(character
-            .equip_or_replace(ring1.clone(), RING_SLOT2)
+            .equip_or_replace(ring1.clone(), *RING_SLOT)
+            .is_ok());
+        assert!(character.equip_or_replace(ring2, *RING_SLOT2).is_ok());
+        assert!(character
+            .equip_or_replace(ring1.clone(), *RING_SLOT2)
             .is_err());
         assert!(character.equip_or_replace(ring1, 15).is_err());
 

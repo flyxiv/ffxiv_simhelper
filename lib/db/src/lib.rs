@@ -13,6 +13,7 @@ type Result<T> = std::result::Result<T, DataError>;
 
 pub(crate) mod character;
 pub mod clan;
+mod constants;
 pub mod equipment;
 pub mod food;
 pub mod job;
@@ -24,20 +25,21 @@ mod stat_calculator;
 /// Saves Base Constants Needed for getting Job Attributes for Stats
 /// https://www.akhmorning.com/allagan-studies/modifiers/levelmods/
 #[derive(PartialEq, Copy, Clone)]
-pub struct StatModifier {
-    pub max_level_main_stat_modifier: StatModifierType,
-    pub max_level_base_vitality: StatType,
-    pub max_level_base_piety: StatType,
-    pub max_level_base_direct_hit: StatType,
-    pub max_level_base_critical_hit: StatType,
-    pub max_level_base_determination: StatType,
-    pub max_level_base_skill_speed: StatType,
-    pub max_level_base_spell_speed: StatType,
-    pub max_level_base_tenacity: StatType,
-    pub max_level_sub_stat_modifier: StatModifierType,
-    pub max_level_div: StatModifierType,
-    pub hp_per_vitality_non_tank: StatModifierType,
-    pub hp_per_vitality_tank: StatModifierType,
+pub(crate) struct StatModifier {
+    pub(crate) max_level_main_stat_modifier: StatModifierType,
+    pub(crate) max_level_base_vitality: StatType,
+    pub(crate) max_level_base_piety: StatType,
+    pub(crate) max_level_base_direct_hit: StatType,
+    pub(crate) max_level_base_critical_hit: StatType,
+    pub(crate) max_level_base_determination: StatType,
+    pub(crate) max_level_base_skill_speed: StatType,
+    pub(crate) max_level_base_spell_speed: StatType,
+    pub(crate) max_level_base_tenacity: StatType,
+    pub(crate) max_level_sub_stat_modifier: StatModifierType,
+    pub(crate) max_level_div: StatModifierType,
+    pub(crate) hp_per_vitality_non_tank: StatModifierType,
+    pub(crate) hp_per_vitality_tank: StatModifierType,
+    pub(crate) max_level_hp_modifier: f64,
 }
 
 pub enum DataError {

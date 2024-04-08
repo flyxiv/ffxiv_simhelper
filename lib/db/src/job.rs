@@ -1,3 +1,4 @@
+use crate::constants::FFXIV_STAT_MODIFIER;
 /// Implements functions needed to save Job data
 /// in FFXIV Simbot.
 /// Only save combat jobs as of now.
@@ -6,6 +7,7 @@ use crate::{item_vec_to_id_table, IdTable, JsonFileReader, Result, SearchKeyEnti
 use itertools::Itertools;
 use serde::Deserialize;
 use std::path::PathBuf;
+use std::string::ToString;
 
 /// Type for Stat modifiers.
 pub type StatModifierType = f64;
@@ -48,8 +50,14 @@ pub struct Job {
     pub(crate) base_hp: usize,
     // https://www.akhmorning.com/allagan-studies/modifiers/levelmods/
     // base stats are determined by base * level stat modifier
-    pub(crate) stat_modifier: StatModifier,
     pub(crate) is_tank: bool,
+}
+
+pub fn is_tank(abbrev: String) -> bool {
+    match abbrev.as_str() {
+        "PLD" | "WAR" | "DRK" | "GNB" => true,
+        _ => false,
+    }
 }
 
 impl PartialEq for Job {
@@ -61,87 +69,72 @@ impl PartialEq for Job {
 
 impl Eq for Job {}
 
-fn calculate_modified_stat(base_stat: i32, modifier: f64) -> i32 {
-    (base_stat as f64 * modifier / 100f64).floor() as i32
+fn calculate_modified_stat(base_stat: i32) -> i32 {
+    (base_stat as f64 * FFXIV_STAT_MODIFIER.max_level_main_stat_modifier / 100f64).floor() as i32
 }
 
 impl MainStatTrait for Job {
     //https://finalfantasy.fandom.com/wiki/Final_Fantasy_XIV_attributes
     fn get_strength(&self) -> i32 {
-        calculate_modified_stat(
-            self.base_main_stats.strength,
-            self.stat_modifier.max_level_main_stat_modifier,
-        )
+        calculate_modified_stat(self.base_main_stats.strength)
     }
 
     fn get_dexterity(&self) -> i32 {
-        calculate_modified_stat(
-            self.base_main_stats.dexterity,
-            self.stat_modifier.max_level_main_stat_modifier,
-        )
+        calculate_modified_stat(self.base_main_stats.dexterity)
     }
 
     fn get_vitality(&self) -> i32 {
-        calculate_modified_stat(
-            self.base_main_stats.vitality,
-            self.stat_modifier.max_level_main_stat_modifier,
-        )
+        calculate_modified_stat(self.base_main_stats.vitality)
     }
 
     fn get_intelligence(&self) -> i32 {
-        calculate_modified_stat(
-            self.base_main_stats.intelligence,
-            self.stat_modifier.max_level_main_stat_modifier,
-        )
+        calculate_modified_stat(self.base_main_stats.intelligence)
     }
 
     fn get_mind(&self) -> i32 {
-        calculate_modified_stat(
-            self.base_main_stats.mind,
-            self.stat_modifier.max_level_main_stat_modifier,
-        )
+        calculate_modified_stat(self.base_main_stats.mind)
     }
 }
 
 impl SubStatTrait for Job {
     fn get_critical_strike(&self) -> i32 {
-        self.stat_modifier.max_level_base_critical_hit
+        FFXIV_STAT_MODIFIER.max_level_base_critical_hit
     }
 
     fn get_direct_hit(&self) -> i32 {
-        self.stat_modifier.max_level_base_direct_hit
+        FFXIV_STAT_MODIFIER.max_level_base_direct_hit
     }
 
     fn get_determination(&self) -> i32 {
-        self.stat_modifier.max_level_base_determination
+        FFXIV_STAT_MODIFIER.max_level_base_determination
     }
 
     fn get_piety(&self) -> i32 {
-        self.stat_modifier.max_level_base_piety
+        FFXIV_STAT_MODIFIER.max_level_base_piety
     }
 
     fn get_skill_speed(&self) -> i32 {
-        self.stat_modifier.max_level_base_skill_speed
+        FFXIV_STAT_MODIFIER.max_level_base_skill_speed
     }
 
     fn get_spell_speed(&self) -> i32 {
-        self.stat_modifier.max_level_base_spell_speed
+        FFXIV_STAT_MODIFIER.max_level_base_spell_speed
     }
 
     fn get_tenacity(&self) -> i32 {
-        self.stat_modifier.max_level_base_tenacity
+        FFXIV_STAT_MODIFIER.max_level_base_tenacity
     }
 }
 
 // TODO: Fix HP equation.
 impl SpecialStatTrait for Job {
     fn get_hp(&self) -> usize {
-        let hp_stat_base = self.base_hp * self.stat_modifier.max_level_hp_modifier as usize;
-        let vitality_stat = self.get_vitality() - self.stat_modifier.max_level_base_vitality;
+        let hp_stat_base = self.base_hp * FFXIV_STAT_MODIFIER.max_level_hp_modifier as usize;
+        let vitality_stat = self.get_vitality() - FFXIV_STAT_MODIFIER.max_level_base_vitality;
         let vitality_stat_hp = if self.is_tank {
-            self.stat_modifier.hp_per_vitality_tank * vitality_stat as f64
+            FFXIV_STAT_MODIFIER.hp_per_vitality_tank * vitality_stat as f64
         } else {
-            self.stat_modifier.hp_per_vitality_non_tank * vitality_stat as f64
+            FFXIV_STAT_MODIFIER.hp_per_vitality_non_tank * vitality_stat as f64
         };
 
         hp_stat_base + vitality_stat_hp as usize
@@ -177,7 +170,6 @@ impl JobFactory {
     /// parse jobs_data.json file into Job usable in the engine.
     pub fn parse_jobs_json_file(
         &self,
-        stat_modifier: StatModifier,
         data_directory: &PathBuf,
         file_path: &str,
     ) -> Result<JobTable> {
@@ -186,13 +178,13 @@ impl JobFactory {
 
         let jobs = etro_jobs
             .into_iter()
-            .map(|etro_job| self.convert_to_job(etro_job, stat_modifier))
+            .map(|etro_job| self.convert_to_job(etro_job))
             .collect_vec();
 
         Ok(item_vec_to_id_table(jobs))
     }
 
-    fn convert_to_job(&self, etro_job: EtroJob, stat_modifier: StatModifier) -> Job {
+    fn convert_to_job(&self, etro_job: EtroJob) -> Job {
         Job {
             id: etro_job.id,
             abbrev: etro_job.abbrev.clone(),
@@ -200,7 +192,6 @@ impl JobFactory {
             base_hp: etro_job.hp,
             is_tank: etro_job.is_tank,
             base_main_stats: etro_job.into(),
-            stat_modifier: stat_modifier,
         }
     }
 }
@@ -208,26 +199,8 @@ impl JobFactory {
 #[cfg(test)]
 pub(crate) mod tests {
     use crate::item_vec_to_id_table;
-    use crate::job::{Job, StatModifier};
+    use crate::job::Job;
     use crate::stat::{MainStatTrait, MainStats, SpecialStatTrait, SubStatTrait};
-
-    pub fn get_test_stat_modifier() -> StatModifier {
-        StatModifier {
-            max_level_main_stat_modifier: 390f64,
-            max_level_base_vitality: 390,
-            max_level_base_piety: 390,
-            max_level_base_direct_hit: 400,
-            max_level_base_critical_hit: 400,
-            max_level_base_determination: 390,
-            max_level_base_skill_speed: 400,
-            max_level_base_spell_speed: 400,
-            max_level_base_tenacity: 400,
-            max_level_hp_modifier: 30f64,
-            max_level_div: 3000f64,
-            hp_per_vitality_non_tank: 24.3f64,
-            hp_per_vitality_tank: 34.6f64,
-        }
-    }
 
     #[test]
     fn job_basic_test() {
@@ -243,7 +216,6 @@ pub(crate) mod tests {
                 mind: 55,
             },
             base_hp: 145,
-            stat_modifier: get_test_stat_modifier(),
             is_tank: true,
         };
     }
@@ -262,7 +234,6 @@ pub(crate) mod tests {
                 mind: 55,
             },
             base_hp: 145,
-            stat_modifier: get_test_stat_modifier(),
             is_tank: true,
         };
 
@@ -291,7 +262,6 @@ pub(crate) mod tests {
                 mind: 80,
             },
             base_hp: 105,
-            stat_modifier: get_test_stat_modifier(),
             is_tank: false,
         };
 
@@ -321,7 +291,6 @@ pub(crate) mod tests {
                 mind: 110,
             },
             base_hp: 105,
-            stat_modifier: get_test_stat_modifier(),
             is_tank: false,
         };
 
@@ -351,7 +320,6 @@ pub(crate) mod tests {
                 mind: 115,
             },
             base_hp: 105,
-            stat_modifier: get_test_stat_modifier(),
             is_tank: false,
         };
 
@@ -382,7 +350,6 @@ pub(crate) mod tests {
                     mind: 115,
                 },
                 base_hp: 105,
-                stat_modifier: get_test_stat_modifier(),
                 is_tank: false,
             },
             Job {
@@ -397,7 +364,6 @@ pub(crate) mod tests {
                     mind: 110,
                 },
                 base_hp: 105,
-                stat_modifier: get_test_stat_modifier(),
                 is_tank: false,
             },
             Job {
@@ -412,7 +378,6 @@ pub(crate) mod tests {
                     mind: 80,
                 },
                 base_hp: 105,
-                stat_modifier: get_test_stat_modifier(),
                 is_tank: false,
             },
             Job {
@@ -427,7 +392,6 @@ pub(crate) mod tests {
                     mind: 55,
                 },
                 base_hp: 145,
-                stat_modifier: get_test_stat_modifier(),
                 is_tank: true,
             },
         ];
