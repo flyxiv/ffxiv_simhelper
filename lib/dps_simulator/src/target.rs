@@ -1,7 +1,7 @@
-use crate::skill::DebuffStatus;
-use crate::status::{Status, StatusHolder, StatusInfo, StatusTimer, TimeType};
+use crate::status::{DebuffStatus, Status, StatusHolder, StatusInfo, StatusTimer};
+use crate::TimeType;
 use ffxiv_simbot_lib_db::stat_calculator::CharacterPower;
-use sorted_vec::partial::SortedVec;
+use std::cell::{Ref, RefCell, RefMut};
 
 static DIRECT_HIT_DAMAGE_MULTIPLIER: f64 = 0.25f64;
 
@@ -9,9 +9,10 @@ fn get_increase_rate(rate: usize) -> f64 {
     1.0f64 + (rate as f64 / 100f64)
 }
 
-pub trait Target {
+pub trait Target: StatusHolder<DebuffStatus> {
     fn get_debuff_multiplier(&self, character: &CharacterPower) -> f64 {
-        let debuffs = self.get_debuff_list();
+        let debuffs = self.get_status_list();
+        let debuffs: &Vec<DebuffStatus> = debuffs.as_ref();
 
         let critical_strike_damage = character.critical_strike_damage - 1.0f64;
         let mut critical_strike_rate_increase = 1.0f64;
@@ -37,40 +38,31 @@ pub trait Target {
 
         return damage_multiplier * direct_hit_multiplier * critical_strike_multiplier;
     }
-    fn apply_debuff(&mut self, debuff: DebuffStatus);
-    fn remove_time_out_debuffs(&mut self);
 }
 
 /// Stores the debuff list of the target
 /// debuff list will be sorted in the order of debuff time left so that
 /// it is easy to search which debuffs will be removed.
 pub struct FfxivTarget {
-    debuff_list: SortedVec<DebuffStatus>,
+    debuff_list: RefCell<Vec<DebuffStatus>>,
     combat_time_millisecond: TimeType,
 }
 
 impl StatusHolder<DebuffStatus> for FfxivTarget {
-    fn get_status_list(&mut self) -> &mut Vec<DebuffStatus> {
-        &mut self.debuff_list
+    fn get_status_list(&self) -> Ref<Vec<DebuffStatus>> {
+        self.debuff_list.borrow()
     }
 
-    fn get_combat_time(&self) -> i32 {
+    fn get_status_list_mut(&self) -> RefMut<Vec<DebuffStatus>> {
+        self.debuff_list.borrow_mut()
+    }
+
+    fn get_combat_time_millisecond(&self) -> i32 {
         self.combat_time_millisecond
     }
 }
 
 impl StatusTimer<DebuffStatus> for FfxivTarget {}
-
-impl Target for FfxivTarget {
-    fn apply_debuff(&mut self, debuff: DebuffStatus) {
-        self.debuff_list.insert(debuff);
-    }
-
-    fn remove_time_out_debuffs(&mut self) {
-        self.debuff_list
-            .retain(|debuff| debuff.get_duration_left_millisecond() > 0);
-    }
-}
 
 #[cfg(test)]
 mod tests {
@@ -80,7 +72,7 @@ mod tests {
     #[test]
     fn target_basic_test() {
         let mut target = FfxivTarget {
-            debuff_list: SortedVec::new(),
+            debuff_list: RefCell::new(vec![]),
             combat_time_millisecond: 0,
         };
 
@@ -93,9 +85,10 @@ mod tests {
 
         target.add_status(debuff1);
 
-        assert_eq!(target.debuff_list.len(), 1);
+        let debuff_list = target.get_status_list();
+        assert_eq!(debuff_list.len(), 1);
 
-        let debuff = &target.debuff_list[0];
+        let debuff = &debuff_list[0];
         assert_eq!(debuff.id, 1);
         assert_eq!(debuff.get_duration_left_millisecond(), 1000);
         assert_eq!(debuff.get_status_info(), StatusInfo::CritHitRatePercent(10));
@@ -104,7 +97,7 @@ mod tests {
     #[test]
     fn target_debuff_timer_test() {
         let mut target = FfxivTarget {
-            debuff_list: SortedVec::new(),
+            debuff_list: RefCell::new(vec![]),
             combat_time_millisecond: 50000,
         };
 
@@ -126,10 +119,12 @@ mod tests {
         target.add_status(five_seconds_left_debuff);
 
         target.update_combat_time(3000);
+        assert_eq!(target.get_status_list().len(), 2);
 
-        let debuff = &target.get_debuff_list()[0];
+        target.update_combat_time(53000);
+        assert_eq!(target.get_status_list().len(), 1);
 
-        assert_eq!(debuff.len(), 1);
+        let debuff = &target.get_status_list()[0];
         assert_eq!(debuff.get_id(), 2);
         assert_eq!(debuff.get_duration_left_millisecond(), 2000);
     }

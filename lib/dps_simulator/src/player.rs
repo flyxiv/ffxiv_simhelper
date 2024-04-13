@@ -1,17 +1,21 @@
 use crate::status::{BuffStatus, StatusHolder, StatusTimer};
+use crate::TimeType;
 use ffxiv_simbot_lib_db::job::Job;
 use ffxiv_simbot_lib_db::stat_calculator::CharacterPower;
+use sorted_vec::SortedVec;
+use std::cell::{Ref, RefCell, RefMut};
 
 /// Saves information about the player: buffs, stat multipliers, jobs.
 pub trait Player {
     fn get_job(&self) -> &Job;
     fn get_power(&self) -> &CharacterPower;
+    fn apply_buff(&mut self, buff: BuffStatus);
 }
 
 pub struct FfxivPlayer {
     job: Job,
     power: CharacterPower,
-    buff_list: Vec<BuffStatus>,
+    buff_list: RefCell<Vec<BuffStatus>>,
     combat_time_millisecond: i32,
 }
 
@@ -23,14 +27,21 @@ impl Player for FfxivPlayer {
     fn get_power(&self) -> &CharacterPower {
         &self.power
     }
+    fn apply_buff(&mut self, buff: BuffStatus) {
+        self.get_status_list_mut().push(buff);
+    }
 }
 
 impl StatusHolder<BuffStatus> for FfxivPlayer {
-    fn get_status_list(&mut self) -> &mut Vec<BuffStatus> {
-        &mut self.buff_list
+    fn get_status_list(&self) -> Ref<Vec<BuffStatus>> {
+        self.buff_list.borrow()
     }
 
-    fn get_combat_time(&self) -> i32 {
+    fn get_status_list_mut(&self) -> RefMut<Vec<BuffStatus>> {
+        self.buff_list.borrow_mut()
+    }
+
+    fn get_combat_time_millisecond(&self) -> TimeType {
         self.combat_time_millisecond
     }
 }
@@ -47,7 +58,7 @@ mod tests {
         let mut target = FfxivPlayer {
             job: Job::default(),
             power: CharacterPower::default(),
-            buff_list: vec![],
+            buff_list: RefCell::new(vec![]),
             combat_time_millisecond: 0,
         };
 
@@ -60,18 +71,12 @@ mod tests {
         };
 
         target.add_status(buff1);
-        assert_eq!(target.get_status_list(), 1);
+        assert_eq!(target.get_status_list().len(), 1);
 
         let buff = &target.get_status_list()[0];
-        assert_eq!(target.get()[0].get_id(), 1);
-        assert_eq!(
-            target.get_debuff_list()[0].get_duration_left_millisecond(),
-            1000
-        );
-        assert_eq!(
-            target.get_debuff_list()[0].get_status_info(),
-            StatusInfo::CritHitRatePercent(10)
-        );
+        assert_eq!(buff.id, 1);
+        assert_eq!(buff.get_duration_left_millisecond(), 1000);
+        assert_eq!(buff.get_status_info(), StatusInfo::CritHitRatePercent(10));
     }
 
     #[test]
@@ -79,7 +84,7 @@ mod tests {
         let mut target = FfxivPlayer {
             job: Job::default(),
             power: CharacterPower::default(),
-            buff_list: vec![],
+            buff_list: RefCell::new(vec![]),
             combat_time_millisecond: 0,
         };
 

@@ -1,8 +1,9 @@
+use crate::TimeType;
+use sorted_vec::SortedVec;
+use std::cell::{Ref, RefMut};
 use std::cmp::Ordering;
 
-pub(crate) type TimeType = i32;
-
-#[derive(Copy, Clone, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug)]
 pub(crate) enum StatusInfo {
     DamagePercent(usize),
     CritHitRatePercent(usize),
@@ -10,11 +11,26 @@ pub(crate) enum StatusInfo {
     SpeedPercent(usize),
 }
 
+impl PartialEq<Self> for StatusInfo {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (StatusInfo::DamagePercent(a), StatusInfo::DamagePercent(b)) => a == b,
+            (StatusInfo::CritHitRatePercent(a), StatusInfo::CritHitRatePercent(b)) => a == b,
+            (StatusInfo::DirectHitRatePercent(a), StatusInfo::DirectHitRatePercent(b)) => a == b,
+            (StatusInfo::SpeedPercent(a), StatusInfo::SpeedPercent(b)) => a == b,
+            _ => false,
+        }
+    }
+}
+
+impl Eq for StatusInfo {}
+
 /// Interface for player buffs and target debuffs
 pub trait Status {
     fn get_id(&self) -> i32;
     /// in miliseconds
     fn get_duration_left_millisecond(&self) -> TimeType;
+    fn set_duration_left_millisecond(&mut self, duration: TimeType);
     /// get the type of status and amount
     /// ex) Battle Litany: 10% Crit Buff = CritHitRatePercent(10)
     fn get_status_info(&self) -> StatusInfo;
@@ -23,36 +39,40 @@ pub trait Status {
 
 /// Implements entity that hold buff/debuff status
 /// which are characters and attack targets.
-pub trait StatusHolder<T: Status + Sized>: Sized {
-    fn get_status_list(&mut self) -> &mut Vec<T>;
-    fn get_combat_time(&self) -> i32;
-    fn add_status(&mut self, status: T) {
-        self.get_status_list().push(status);
+pub trait StatusHolder<T: Status + Sized + Ord>: Sized {
+    fn get_status_list(&self) -> Ref<Vec<T>>;
+    fn get_status_list_mut(&self) -> RefMut<Vec<T>>;
+
+    fn get_combat_time_millisecond(&self) -> TimeType;
+    fn add_status(&self, status: T) {
+        let mut status_list = self.get_status_list_mut();
+
+        status_list.push(status);
     }
 }
 
 /// Every time combat time updates,
 /// Update the remaining time of buffs and debuffs and remove status that has expired.
-pub trait StatusTimer<T: Status>: StatusHolder<T> {
+pub trait StatusTimer<T: Status + Ord>: StatusHolder<T> {
     /// Update combat time by getting the time different and decreasing the
     /// time left on each buff and debuff.
-    fn update_combat_time<T>(&mut self, current_combat_time_millisecond: i32) {
-        if self.get_combat_time() >= current_combat_time_millisecond {
+    fn update_combat_time(&mut self, current_combat_time_millisecond: i32) {
+        if self.get_combat_time_millisecond() >= current_combat_time_millisecond {
             return;
         }
 
-        let time_diff = current_combat_time_millisecond - self.get_combat_time();
-        let mut buff_list: &mut T = &self.get_buff_list();
+        let time_diff = current_combat_time_millisecond - self.get_combat_time_millisecond();
+        let mut buff_list = self.get_status_list_mut();
 
         for buff in buff_list.iter_mut() {
-            buff.duration_left_millisecond -= time_diff;
+            buff.set_duration_left_millisecond(buff.get_duration_left_millisecond() - time_diff);
         }
 
         buff_list.retain(|buff| buff.get_duration_left_millisecond() > 0);
     }
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub struct BuffStatus {
     pub(crate) id: i32,
     pub(crate) duration_left_millisecond: TimeType,
@@ -61,7 +81,7 @@ pub struct BuffStatus {
     pub(crate) is_raidwide: bool,
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 pub struct DebuffStatus {
     pub(crate) id: i32,
     pub(crate) duration_left_millisecond: TimeType,
@@ -76,6 +96,9 @@ impl Status for BuffStatus {
 
     fn get_duration_left_millisecond(&self) -> i32 {
         self.duration_left_millisecond
+    }
+    fn set_duration_left_millisecond(&mut self, duration: TimeType) {
+        self.duration_left_millisecond = duration;
     }
 
     fn get_status_info(&self) -> StatusInfo {
@@ -95,6 +118,9 @@ impl Status for DebuffStatus {
     fn get_duration_left_millisecond(&self) -> i32 {
         self.duration_left_millisecond
     }
+    fn set_duration_left_millisecond(&mut self, duration: TimeType) {
+        self.duration_left_millisecond = duration;
+    }
 
     fn get_status_info(&self) -> StatusInfo {
         self.status_data
@@ -105,10 +131,22 @@ impl Status for DebuffStatus {
     }
 }
 
+impl PartialOrd<Self> for BuffStatus {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 impl Ord for BuffStatus {
     fn cmp(&self, other: &Self) -> Ordering {
         self.duration_left_millisecond
             .cmp(&other.duration_left_millisecond)
+    }
+}
+
+impl PartialOrd<Self> for DebuffStatus {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 
