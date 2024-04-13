@@ -43,20 +43,40 @@ pub struct EtroJob {
 /// Only treat Combat Jobs as of now.
 #[derive(Clone)]
 pub struct Job {
-    pub(crate) id: JobId,
-    pub(crate) abbrev: String,
-    pub(crate) name: String,
-    pub(crate) base_main_stats: MainStats,
-    pub(crate) base_hp: usize,
+    pub id: JobId,
+    pub abbrev: String,
+    pub name: String,
+    pub base_main_stats: MainStats,
+    pub base_hp: usize,
     // https://www.akhmorning.com/allagan-studies/modifiers/levelmods/
     // base stats are determined by base * level stat modifier
-    pub(crate) is_tank: bool,
+    pub is_tank: bool,
 }
 
 pub fn is_tank(abbrev: String) -> bool {
     match abbrev.as_str() {
         "PLD" | "WAR" | "DRK" | "GNB" => true,
         _ => false,
+    }
+}
+
+impl Default for Job {
+    #[inline]
+    fn default() -> Self {
+        Self {
+            id: 1,
+            abbrev: "WAR".to_string(),
+            name: "Warrior".to_string(),
+            is_tank: true,
+            base_main_stats: MainStats {
+                strength: 100,
+                dexterity: 100,
+                vitality: 100,
+                intelligence: 100,
+                mind: 100,
+            },
+            base_hp: 100,
+        }
     }
 }
 

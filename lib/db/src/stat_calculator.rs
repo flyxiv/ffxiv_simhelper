@@ -6,13 +6,28 @@ use crate::stat::{MainStatTrait, MainStats, StatType, SubStatTrait, SubStats};
 use crate::{DataError, Result, StatModifier};
 
 pub struct CharacterPower {
-    critical_strike_rate: f64,
-    critical_strike_damage: f64,
-    direct_hit_rate: f64,
-    determination_damage_multiplier: f64,
-    speed_multiplier: f64,
-    weapon_damage_multiplier: f64,
-    main_stat_multiplier: f64,
+    pub critical_strike_rate: f64,
+    pub critical_strike_damage: f64,
+    pub direct_hit_rate: f64,
+    pub determination_damage_multiplier: f64,
+    pub speed_multiplier: f64,
+    pub weapon_damage_multiplier: f64,
+    pub main_stat_multiplier: f64,
+}
+
+impl Default for CharacterPower {
+    #[inline]
+    fn default() -> Self {
+        CharacterPower {
+            critical_strike_rate: 0.0,
+            critical_strike_damage: 0.0,
+            direct_hit_rate: 0.0,
+            determination_damage_multiplier: 0.0,
+            speed_multiplier: 0.0,
+            weapon_damage_multiplier: 0.0,
+            main_stat_multiplier: 0.0,
+        }
+    }
 }
 
 #[inline]

@@ -20,7 +20,7 @@ pub mod job;
 pub mod materia;
 mod medicine;
 pub mod stat;
-mod stat_calculator;
+pub mod stat_calculator;
 
 /// Saves Base Constants Needed for getting Job Attributes for Stats
 /// https://www.akhmorning.com/allagan-studies/modifiers/levelmods/

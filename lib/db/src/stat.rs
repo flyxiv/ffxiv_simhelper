@@ -9,11 +9,11 @@ pub trait StatFrom<T>: Sized {
 /// Saves the main stats of the equipment/character/race.
 #[derive(Eq, PartialEq, Clone, Copy, Hash, Debug)]
 pub struct MainStats {
-    pub(crate) strength: StatType,
-    pub(crate) dexterity: StatType,
-    pub(crate) vitality: StatType,
-    pub(crate) intelligence: StatType,
-    pub(crate) mind: StatType,
+    pub strength: StatType,
+    pub dexterity: StatType,
+    pub vitality: StatType,
+    pub intelligence: StatType,
+    pub mind: StatType,
 }
 
 /// Trait used for in-game entities that have main stat.
