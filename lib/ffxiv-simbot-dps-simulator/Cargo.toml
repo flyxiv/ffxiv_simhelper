@@ -1,5 +1,5 @@
 [package]
-name = "ffxiv-simbot-lib-engine"
+name = "ffxiv-simbot-dps-simulator"
 version = "0.1.0"
 edition = "2021"
 description = "Raidbot engine for ffxivsimbot"
@@ -11,9 +11,13 @@ repository = "https://github.com/ffxiv-simbot"
 project-root = "0.2.2"
 itertools = { version = "0.10.0", features = [] }
 cargo-docs = "0.1.*"
-serde_yaml = "0.9.30"
-serde = { version = "1.0.196", features = ["derive"] }
+sorted-vec = "0.8.3"
+lazy_static = "1.4.0"
 
-[dependencies.ffxiv-simbot-lib-db]
+[dependencies.ffxiv-simbot-db]
 version = "0.1.0"
-path = "../db"
+path = "../ffxiv-simbot-db"
+
+[dependencies.ffxiv-simbot-combat-components]
+version = "0.1.0"
+path = "../ffxiv-simbot-combat-components"

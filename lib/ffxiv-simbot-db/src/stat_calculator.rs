@@ -1,18 +1,19 @@
 use crate::character::{get_character_main_stats, get_character_sub_stats, Character};
 use crate::constants::*;
 use crate::equipment::WeaponTrait;
-use crate::job::StatModifierType;
-use crate::stat::{MainStatTrait, MainStats, StatType, SubStatTrait, SubStats};
+use crate::stat::{MainStatTrait, MainStats, StatType, SubStatTrait};
+use crate::{DamageMultiplierType, StatModifierType};
 use crate::{DataError, Result, StatModifier};
 
 pub struct CharacterPower {
-    pub critical_strike_rate: f64,
-    pub critical_strike_damage: f64,
-    pub direct_hit_rate: f64,
-    pub determination_damage_multiplier: f64,
-    pub speed_multiplier: f64,
-    pub weapon_damage_multiplier: f64,
-    pub main_stat_multiplier: f64,
+    pub critical_strike_rate: DamageMultiplierType,
+    pub critical_strike_damage: DamageMultiplierType,
+    pub direct_hit_rate: DamageMultiplierType,
+    pub determination_damage_multiplier: DamageMultiplierType,
+    pub tenacity_damage_multiplier: DamageMultiplierType,
+    pub speed_multiplier: DamageMultiplierType,
+    pub weapon_damage_multiplier: DamageMultiplierType,
+    pub main_stat_multiplier: DamageMultiplierType,
 }
 
 impl Default for CharacterPower {
@@ -26,6 +27,7 @@ impl Default for CharacterPower {
             speed_multiplier: 0.0,
             weapon_damage_multiplier: 0.0,
             main_stat_multiplier: 0.0,
+            tenacity_damage_multiplier: 0.0,
         }
     }
 }
@@ -149,6 +151,7 @@ pub fn convert_character_to_power(
         speed_multiplier,
         weapon_damage_multiplier,
         main_stat_multiplier,
+        tenacity_damage_multiplier,
     })
 }
 
@@ -173,6 +176,8 @@ fn get_speed_multiplier(
     let speed_multiplier = f64::ceil(multiplier * speed_diff / max_level_sub_stat_modifier);
     (speed_multiplier + *UNIT_BASE) / *UNIT_BASE
 }
+
+impl CharacterPower {}
 
 #[cfg(test)]
 mod test {

@@ -1,5 +1,5 @@
-use crate::job::StatModifierType;
 use crate::StatModifier;
+use crate::StatModifierType;
 use mockall::lazy_static;
 use std::collections::HashMap;
 

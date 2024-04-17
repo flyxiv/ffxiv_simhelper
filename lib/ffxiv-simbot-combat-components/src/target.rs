@@ -1,44 +1,8 @@
 use crate::status::{DebuffStatus, Status, StatusHolder, StatusInfo, StatusTimer};
 use crate::TimeType;
-use ffxiv_simbot_lib_db::stat_calculator::CharacterPower;
 use std::cell::{Ref, RefCell, RefMut};
 
-static DIRECT_HIT_DAMAGE_MULTIPLIER: f64 = 0.25f64;
-
-fn get_increase_rate(rate: usize) -> f64 {
-    1.0f64 + (rate as f64 / 100f64)
-}
-
-pub trait Target: StatusHolder<DebuffStatus> {
-    fn get_debuff_multiplier(&self, character: &CharacterPower) -> f64 {
-        let debuffs = self.get_status_list();
-        let debuffs: &Vec<DebuffStatus> = debuffs.as_ref();
-
-        let critical_strike_damage = character.critical_strike_damage - 1.0f64;
-        let mut critical_strike_rate_increase = 1.0f64;
-        let mut direct_hit_rate_increase = 1.0f64;
-        let mut damage_increase = 1.0f64;
-
-        for debuff in debuffs {
-            match debuff.get_status_info() {
-                StatusInfo::CritHitRatePercent(rate) => {
-                    critical_strike_rate_increase *= get_increase_rate(rate)
-                }
-                StatusInfo::DirectHitRatePercent(rate) => {
-                    direct_hit_rate_increase *= get_increase_rate(rate)
-                }
-                StatusInfo::DamagePercent(rate) => damage_increase *= get_increase_rate(rate),
-                StatusInfo::SpeedPercent(rate) => damage_increase *= get_increase_rate(rate),
-            }
-        }
-
-        let critical_strike_multiplier = critical_strike_damage * critical_strike_rate_increase;
-        let direct_hit_multiplier = DIRECT_HIT_DAMAGE_MULTIPLIER * direct_hit_rate_increase;
-        let damage_multiplier = damage_increase;
-
-        return damage_multiplier * direct_hit_multiplier * critical_strike_multiplier;
-    }
-}
+pub trait Target: StatusHolder<DebuffStatus> + Sized {}
 
 /// Stores the debuff list of the target
 /// debuff list will be sorted in the order of debuff time left so that
@@ -81,6 +45,8 @@ mod tests {
             duration_left_millisecond: 1000,
             status_data: StatusInfo::CritHitRatePercent(10),
             duration_millisecond: 1000,
+            cumulative_damage: None,
+            owner_player_id: 0,
         };
 
         target.add_status(debuff1);
@@ -106,6 +72,8 @@ mod tests {
             duration_left_millisecond: 2000,
             status_data: StatusInfo::CritHitRatePercent(10),
             duration_millisecond: 10000,
+            cumulative_damage: None,
+            owner_player_id: 0,
         };
 
         let five_seconds_left_debuff = DebuffStatus {
@@ -113,6 +81,8 @@ mod tests {
             duration_left_millisecond: 5000,
             status_data: StatusInfo::CritHitRatePercent(10),
             duration_millisecond: 10000,
+            cumulative_damage: None,
+            owner_player_id: 0,
         };
 
         target.add_status(two_seconds_left_debuff);

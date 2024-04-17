@@ -10,14 +10,13 @@ use std::path::PathBuf;
 use std::string::ToString;
 
 /// Type for Stat modifiers.
-pub type StatModifierType = f64;
 pub type JobAbbrevType = String;
 pub(crate) type JobId = usize;
 /// Equipment Searches Jobs by its Abbrev, so key has to be Abbrev for jobs.
 pub type JobTable = IdTable<JobAbbrevType, Job>;
 
 /// Crude Job Data fetched from Etro
-/// Gets converted to JobCLass, the engine's preferred type for the corresponding entity.
+/// Gets converted to JobCLass, the ffxiv-simbot-engine's preferred type for the corresponding entity.
 #[derive(Deserialize, Clone)]
 pub struct EtroJob {
     id: JobId,
@@ -187,7 +186,7 @@ impl JobFactory {
         JobFactory {}
     }
 
-    /// parse jobs_data.json file into Job usable in the engine.
+    /// parse jobs_data.json file into Job usable in the ffxiv-simbot-engine.
     pub fn parse_jobs_json_file(
         &self,
         data_directory: &PathBuf,

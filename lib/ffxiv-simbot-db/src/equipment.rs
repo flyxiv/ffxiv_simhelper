@@ -437,7 +437,7 @@ impl EquipmentFactory {
         EquipmentFactory {}
     }
 
-    /// parse equipment_data.json file into Equipment usable in the engine.
+    /// parse equipment_data.json file into Equipment usable in the ffxiv-simbot-engine.
     pub fn parse_equipment_json_file(
         &self,
         data_directory: &PathBuf,

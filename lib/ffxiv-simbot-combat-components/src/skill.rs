@@ -1,31 +1,41 @@
-use crate::player::Player;
-use crate::status::{BuffStatus, DebuffStatus};
+use crate::owner_tracker::OwnerTracker;
+use crate::player::{FfxivTurnType, Player, TurnType};
+use crate::status::{BuffStatus, DebuffStatus, StatusHolder};
 use crate::target::Target;
-use crate::{Result, SimulatorError, TimeType};
+use crate::{DamageType, IdType, Result, SimulatorError, TimeType};
 
-pub static NON_GCD_DELAY_MILLISECOND: i32 = 700;
+/// The normal delay time for o-GCD skills.
+/// After using 1 oGCD, the player cannot use another skill for 0.7 seconds.
+pub(crate) static NON_GCD_DELAY_MILLISECOND: i32 = 700;
 
+/// The resource requirements for a skill.
+/// Skill might need mana, status(suiton status is needed for Trick Attack), or combo status.
 pub(crate) enum ResourceRequirements {
     Mana(i32),
     Status(i32),
-    Combo(i32),
+    PreviousCombo(IdType),
 }
 
-pub trait Skill {
-    fn get_potency(&self) -> i32;
+pub trait Skill: Sized {
+    fn get_potency(&self) -> DamageType;
     fn get_cooldown_millisecond(&self) -> TimeType;
     fn get_delay_millisecond(&self) -> TimeType;
     fn is_gcd(&self) -> bool;
-    fn afflict_debuff<T: Target>(&self, target: &mut T) -> Result<()>;
-    fn afflict_buff<P: Player>(&self, player: &mut P, party: &mut Vec<P>) -> Result<()>;
+    fn afflict_debuff<T: StatusHolder<DebuffStatus>>(&self, target: &mut T) -> Result<()>;
+    fn afflict_buff<P: StatusHolder<BuffStatus>>(
+        &self,
+        player: &mut P,
+        party: &mut Vec<P>,
+    ) -> Result<()>;
 }
 
 pub struct AttackSkill {
     pub(crate) name: String,
+    pub(crate) player_id: IdType,
     pub(crate) potency: i32,
     pub(crate) buff: Option<BuffStatus>,
     pub(crate) debuff: Option<DebuffStatus>,
-    pub(crate) is_gcd: bool,
+    pub(crate) turn_type: FfxivTurnType,
     pub(crate) delay_millisecond: Option<TimeType>,
     pub(crate) is_modified: bool,
     pub(crate) cooldown_millisecond: i32,
@@ -55,7 +65,7 @@ impl Skill for AttackSkill {
         self.is_gcd
     }
 
-    fn afflict_debuff<T: Target>(&self, target: &mut T) -> Result<()> {
+    fn afflict_debuff<T: StatusHolder<DebuffStatus>>(&self, target: &mut T) -> Result<()> {
         let debuff = &self.debuff;
 
         if let Some(debuff) = debuff {
@@ -68,13 +78,17 @@ impl Skill for AttackSkill {
         }
     }
 
-    fn afflict_buff<P: Player>(&self, player: &mut P, party: &mut Vec<P>) -> Result<()> {
+    fn afflict_buff<P: StatusHolder<BuffStatus>>(
+        &self,
+        player: &mut P,
+        party: &mut Vec<P>,
+    ) -> Result<()> {
         let buff = &self.buff;
 
         if let Some(buff) = buff {
-            player.apply_buff(buff.clone());
+            player.add_status(buff.clone());
             for member in party.iter_mut() {
-                member.apply_buff(buff.clone());
+                member.add_status(buff.clone());
             }
             Ok(())
         } else {
@@ -82,6 +96,12 @@ impl Skill for AttackSkill {
                 "Buff not found".to_string(),
             ))
         }
+    }
+}
+
+impl OwnerTracker for AttackSkill {
+    fn get_owner_id(&self) -> IdType {
+        self.player_id
     }
 }
 
@@ -94,6 +114,7 @@ mod tests {
     fn attack_skill_test() {
         let skill: AttackSkill = AttackSkill {
             name: "Trick Attack".to_string(),
+            player_id: 0,
             potency: 500,
             buff: Some(BuffStatus {
                 id: 1,
@@ -101,6 +122,9 @@ mod tests {
                 status_data: StatusInfo::DamagePercent(10),
                 duration_millisecond: 15000,
                 is_raidwide: false,
+                cumulative_damage: None,
+                owner_player_id: 0,
+                status_info: (),
             }),
             debuff: None,
             is_gcd: true,

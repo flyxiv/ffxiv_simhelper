@@ -1,5 +1,4 @@
 use crate::equipment::SlotType;
-use crate::job::StatModifierType;
 use crate::stat::StatType;
 use std::collections::HashMap;
 use std::error::Error;
@@ -10,6 +9,8 @@ use std::path::PathBuf;
 /// Hash Table for fast searching by the object's Id.
 pub type IdTable<T, U> = HashMap<T, U>;
 type Result<T> = std::result::Result<T, DataError>;
+pub type StatModifierType = f64;
+pub type DamageMultiplierType = f64;
 
 pub(crate) mod character;
 pub mod clan;

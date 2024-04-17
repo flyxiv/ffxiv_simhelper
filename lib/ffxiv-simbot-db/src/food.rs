@@ -107,7 +107,7 @@ impl FoodFactory {
         FoodFactory {}
     }
 
-    /// parse jobs_data.json file into Job usable in the engine.
+    /// parse jobs_data.json file into Job usable in the ffxiv-simbot-engine.
     pub fn parse_food_json_file(
         &self,
         data_directory: &PathBuf,

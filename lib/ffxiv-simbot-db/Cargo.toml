@@ -1,5 +1,5 @@
 [package]
-name = "ffxiv-simbot-lib-db"
+name = "ffxiv-simbot-db"
 version = "0.1.0"
 edition = "2021"
 description = "MySQL Database Interface for ffxivsimbot"

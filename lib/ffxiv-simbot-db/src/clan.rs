@@ -76,7 +76,7 @@ impl ClanFactory {
         ClanFactory {}
     }
 
-    /// parse clans_data.json file into Job usable in the engine.
+    /// parse clans_data.json file into Job usable in the ffxiv-simbot-engine.
     pub fn parse_clans_json_file(
         &self,
         data_directory: &PathBuf,
