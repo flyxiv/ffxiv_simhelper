@@ -9,6 +9,7 @@ mod simulator;
 mod skill_calculator;
 mod skill_simulator;
 mod turn_calculator;
+mod util;
 
 pub enum SimulatorError {
     DebuffNotFoundError(String),

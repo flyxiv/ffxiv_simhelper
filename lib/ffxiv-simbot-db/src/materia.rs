@@ -10,15 +10,6 @@ pub struct Materia {
     pub(crate) penta_meldable: bool,
 }
 
-impl Materia {
-    pub(crate) fn new(sub_stats: SubStats, penta_meldable: bool) -> Self {
-        Materia {
-            sub_stats,
-            penta_meldable,
-        }
-    }
-}
-
 impl SubStatTrait for Materia {
     fn get_critical_strike(&self) -> StatType {
         self.sub_stats.get_critical_strike()

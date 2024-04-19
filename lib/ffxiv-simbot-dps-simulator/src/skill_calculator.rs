@@ -4,6 +4,9 @@ use ffxiv_simbot_combat_components::status::{BuffStatus, DebuffStatus, Status, S
 use ffxiv_simbot_combat_components::{DamageType, IdType};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::DamageMultiplierType;
+use std::cell::Ref;
+use std::collections::HashMap;
+use std::default;
 
 /// Simulates the effect of a single skill and distribute the damage contribution of each
 /// buff to the rightful owner.
@@ -22,8 +25,8 @@ pub(crate) trait SkillCalculator {
     /// 3) Order each buff to update its RDPS contribution.
     fn make_damage_profile<SHB: StatusHolder<BuffStatus>, SHD: StatusHolder<DebuffStatus>>(
         &self,
-        buff_holder: &SHB,
-        debuff_holder: &SHD,
+        buff_holder: Ref<SHB>,
+        debuff_holder: Ref<SHD>,
         skill_damage: DamageType,
         power: &CharacterPower,
         player_id: IdType,
@@ -41,8 +44,8 @@ impl MultiplierCalculator for FfxivSkillCalculator {}
 impl SkillCalculator for FfxivSkillCalculator {
     fn make_damage_profile<SHB, SHD>(
         &self,
-        buff_holder: &SHB,
-        debuff_holder: &SHD,
+        buff_holder: Ref<SHB>,
+        debuff_holder: Ref<SHD>,
         skill_damage: DamageType,
         power: &CharacterPower,
         player_id: IdType,
@@ -54,7 +57,9 @@ impl SkillCalculator for FfxivSkillCalculator {
         let mut damage_profile: SkillDamageResult = SkillDamageResult {
             raw_damage: skill_damage,
             final_damage: skill_damage,
-            raid_damage_profile: FfxivRaidDamageTable::new(),
+            raid_damage_profile: FfxivRaidDamageTable {
+                rdps_table: Default::default(),
+            },
         };
 
         let buff_list = buff_holder.get_status_list().borrow();

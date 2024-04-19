@@ -1,10 +1,10 @@
 use crate::engine_config::EngineConfig;
 use crate::ffxivcontext::FfxivContext;
 use crate::Result;
-use ffxiv_simbot_lib_db::clan::ClanFactory;
-use ffxiv_simbot_lib_db::equipment::EquipmentFactory;
-use ffxiv_simbot_lib_db::food::FoodFactory;
-use ffxiv_simbot_lib_db::job::JobFactory;
+use ffxiv_simbot_db::clan::ClanFactory;
+use ffxiv_simbot_db::equipment::EquipmentFactory;
+use ffxiv_simbot_db::food::FoodFactory;
+use ffxiv_simbot_db::job::JobFactory;
 use itertools::Itertools;
 use std::fs::File;
 

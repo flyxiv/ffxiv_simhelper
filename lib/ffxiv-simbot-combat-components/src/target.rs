@@ -1,6 +1,6 @@
 use crate::status::{DebuffStatus, Status, StatusHolder, StatusInfo, StatusTimer};
 use crate::TimeType;
-use std::cell::{Ref, RefCell, RefMut};
+use std::cell::RefCell;
 use std::rc::Rc;
 
 pub trait Target: StatusHolder<DebuffStatus> + Sized {}
@@ -13,13 +13,11 @@ pub struct FfxivTarget {
     combat_time_millisecond: TimeType,
 }
 
+impl Target for FfxivTarget {}
+
 impl StatusHolder<DebuffStatus> for FfxivTarget {
     fn get_status_list(&self) -> Rc<RefCell<Vec<DebuffStatus>>> {
         self.debuff_list.clone()
-    }
-
-    fn get_combat_time_millisecond(&self) -> i32 {
-        self.combat_time_millisecond
     }
 }
 

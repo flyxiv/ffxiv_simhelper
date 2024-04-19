@@ -2,8 +2,8 @@ use crate::owner_tracker::OwnerTracker;
 use crate::player::Player;
 use crate::skill::Skill;
 use crate::target::Target;
-use crate::{BuffIncreaseType, IdType, TimeType};
-use std::cell::{Ref, RefCell, RefMut};
+use crate::{BuffIncreaseType, DamageType, IdType, TimeType};
+use std::cell::{RefCell, RefMut};
 use std::rc::Rc;
 
 #[derive(Copy, Clone, Debug)]
@@ -26,11 +26,7 @@ impl PartialEq<Self> for StatusInfo {
     }
 }
 
-impl Eq for StatusInfo {
-    fn eq(&self, other: &Self) -> bool {
-        self.eq(other)
-    }
-}
+impl Eq for StatusInfo {}
 
 /// Interface for player buffs and target debuffs
 pub trait Status: Sized {
@@ -49,9 +45,9 @@ pub trait Status: Sized {
 pub trait StatusHolder<S: Status>: Sized {
     fn get_status_list(&self) -> Rc<RefCell<Vec<S>>>;
 
-    fn get_combat_time_millisecond(&self) -> TimeType;
-    fn add_status(&self, status: S) {
-        let mut status_list = self.get_status_list_mut();
+    fn add_status(&mut self, status: S) {
+        let status_list = self.get_status_list();
+        let mut status_list = status_list.borrow_mut();
 
         status_list.push(status);
     }
@@ -59,19 +55,21 @@ pub trait StatusHolder<S: Status>: Sized {
 
 /// Every time combat time updates,
 /// Update the remaining time of buffs and debuffs and remove status that has expired.
-pub trait StatusTimer<T: Status + Ord>: StatusHolder<T> {
+pub trait StatusTimer<T: Status>: StatusHolder<T> {
     /// Update combat time by getting the time different and decreasing the
     /// time left on each buff and debuff.
-    fn update_status_time(&mut self, current_combat_time_millisecond: i32) {
-        if self.get_combat_time_millisecond() >= current_combat_time_millisecond {
+    fn update_status_time(&mut self, elapsed_time: TimeType) {
+        if elapsed_time <= 0 {
             return;
         }
 
-        let time_diff = current_combat_time_millisecond - self.get_combat_time_millisecond();
-        let mut buff_list = self.get_status_list_mut();
+        let status_list = self.get_status_list();
+        let mut status_list = status_list.borrow_mut();
 
-        for buff in buff_list.iter_mut() {
-            buff.set_duration_left_millisecond(buff.get_duration_left_millisecond() - time_diff);
+        for status in status_list.iter_mut() {
+            status.set_duration_left_millisecond(
+                status.get_duration_left_millisecond() - elapsed_time,
+            );
         }
     }
 }
@@ -83,8 +81,7 @@ pub struct BuffStatus {
     pub(crate) duration_left_millisecond: TimeType,
     pub(crate) status_info: StatusInfo,
     pub(crate) duration_millisecond: TimeType,
-    pub(crate) is_raidwide: bool,
-    pub(crate) cumulative_damage: Option<RefCell<usize>>,
+    pub is_raidwide: bool,
     pub(crate) owner_player_id: IdType,
 }
 
@@ -95,7 +92,6 @@ pub struct DebuffStatus {
     pub(crate) duration_left_millisecond: TimeType,
     pub(crate) status_info: StatusInfo,
     pub(crate) duration_millisecond: TimeType,
-    pub(crate) cumulative_damage: Option<RefCell<usize>>,
     pub(crate) owner_player_id: IdType,
 }
 
@@ -150,12 +146,6 @@ impl Status for DebuffStatus {
 
     fn get_duration_millisecond(&self) -> TimeType {
         self.duration_millisecond
-    }
-
-    fn add_damage_contribution(&self, damage: usize) {
-        if let Some(cumulative_damage) = &self.cumulative_damage {
-            *cumulative_damage.borrow_mut() += damage;
-        }
     }
 }
 

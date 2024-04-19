@@ -10,12 +10,11 @@ pub mod skill;
 pub mod status;
 pub mod target;
 mod turn_type;
-mod util;
 
 type Result<T> = std::result::Result<T, CombatComponentsError>;
 
 /// Shows the damage profile: Damage contribution of each buff/skill.
-pub type DamageProfileTable = HashMap<IdType, DpsType>;
+pub type DamageProfileTable = HashMap<IdType, DamageType>;
 
 pub type TimeType = i32;
 pub(crate) type StatusIdType = usize;

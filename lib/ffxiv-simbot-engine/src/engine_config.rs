@@ -1,5 +1,5 @@
-use ffxiv_simbot_lib_db::job::StatModifierType;
-use ffxiv_simbot_lib_db::stat::StatType;
+use ffxiv_simbot_db::stat::StatType;
+use ffxiv_simbot_db::StatModifierType;
 use serde::Deserialize;
 
 /// Saves Constants needed for running the Engine.

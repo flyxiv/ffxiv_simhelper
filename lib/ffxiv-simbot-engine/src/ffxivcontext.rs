@@ -1,8 +1,7 @@
-use ffxiv_simbot_lib_db::clan::*;
-use ffxiv_simbot_lib_db::equipment::*;
-use ffxiv_simbot_lib_db::food::*;
-use ffxiv_simbot_lib_db::job::*;
-use std::collections::HashMap;
+use ffxiv_simbot_db::clan::*;
+use ffxiv_simbot_db::equipment::*;
+use ffxiv_simbot_db::food::*;
+use ffxiv_simbot_db::job::*;
 
 /// The Monolith FFXIV Database that stores all the data needed for DPS simulation.
 /// Data is organized into a hashmap for faster searching via Id.

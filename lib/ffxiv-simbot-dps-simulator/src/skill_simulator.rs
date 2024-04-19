@@ -1,17 +1,19 @@
 use crate::skill_calculator::{FfxivSkillCalculator, SkillCalculator, SkillDamageResult};
 use ffxiv_simbot_combat_components::IdType;
+use std::cell::{Ref, RefCell};
+use std::rc::Rc;
 
 use crate::raw_damage_calculator::{FfxivRawDamageCalculator, RawDamageCalculator};
 use ffxiv_simbot_combat_components::player::{FfxivPlayer, Player};
 use ffxiv_simbot_combat_components::skill::{AttackSkill, Skill, SkillInfo};
-use ffxiv_simbot_combat_components::status::{BuffStatus, DebuffStatus, StatusHolder};
+use ffxiv_simbot_combat_components::status::{BuffStatus, DebuffStatus};
 use ffxiv_simbot_combat_components::target::{FfxivTarget, Target};
 
 pub(crate) struct SkillSimulationResult {
-    skill_damage_result: SkillDamageResult,
-    buff: Option<BuffStatus>,
-    debuff: Option<DebuffStatus>,
-    skill_user_id: IdType,
+    pub(crate) skill_damage_result: SkillDamageResult,
+    pub(crate) buff: Option<BuffStatus>,
+    pub(crate) debuff: Option<DebuffStatus>,
+    pub(crate) skill_user_id: IdType,
 }
 
 /// Gets necessary data needed for simulating skill's damage and effects
@@ -23,33 +25,34 @@ where
     S: Skill,
 {
     fn make_skill_simulation_result(
-        &mut self,
+        &self,
         turn_player_id: IdType,
-        players: &Vec<FfxivPlayer>,
-        target: &FfxivTarget,
+        players: Rc<RefCell<Vec<FfxivPlayer>>>,
+        target: Rc<RefCell<FfxivTarget>>,
         skill_info: &SkillInfo<AttackSkill>,
     ) -> SkillDamageResult;
 }
 
-impl FfxivSkillSimulator {
+impl SkillSimulator<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSkillSimulator {
     fn make_skill_simulation_result(
-        &mut self,
+        &self,
         turn_player_id: IdType,
-        players: &Vec<FfxivPlayer>,
-        target: &FfxivTarget,
+        players: &Vec<Rc<RefCell<FfxivPlayer>>>,
+        target: Rc<RefCell<FfxivTarget>>,
         skill_info: &SkillInfo<AttackSkill>,
     ) -> SkillDamageResult {
-        let skill_user = &players[turn_player_id];
+        let skill_user = players[turn_player_id].borrow();
+        let power = skill_user.get_player_power();
 
         let raw_damage = self
             .raw_damage_calculator
-            .calculate_raw_damage(skill_info, skill_user.get_power());
+            .calculate_raw_damage(skill_info, power);
 
         self.skill_calculator.make_damage_profile(
             skill_user,
-            target,
+            target.borrow(),
             raw_damage,
-            skill_user.get_power(),
+            power,
             turn_player_id,
         )
     }

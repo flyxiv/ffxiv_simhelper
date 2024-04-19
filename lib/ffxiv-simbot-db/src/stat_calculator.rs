@@ -50,7 +50,7 @@ fn get_job_main_stat(main_stat: &MainStats, job_abbrev: &String) -> StatType {
     }
 }
 
-pub fn convert_character_to_power(
+pub(crate) fn convert_character_to_power(
     character: &Character,
     stat_modifier: StatModifier,
 ) -> Result<CharacterPower> {

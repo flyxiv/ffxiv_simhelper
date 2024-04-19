@@ -1,23 +1,27 @@
 use crate::owner_tracker::OwnerTracker;
-use crate::player::{FfxivTurnType, Player, TurnType};
+use crate::player::Player;
 use crate::status::{BuffStatus, DebuffStatus, StatusHolder};
 use crate::target::Target;
 use crate::turn_type::FfxivTurnType;
-use crate::{DamageType, IdType, Result, SimulatorError, TimeType};
+use crate::CombatComponentsError;
+use crate::{DamageType, IdType, Result, TimeType};
 
+pub static GCD_TURN_DELAY_THRESHOLD: TimeType = 3 * NON_GCD_DELAY_MILLISECOND;
 /// The normal delay time for o-GCD skills.
 /// After using 1 oGCD, the player cannot use another skill for 0.7 seconds.
-pub(crate) static NON_GCD_DELAY_MILLISECOND: i32 = 700;
+pub static NON_GCD_DELAY_MILLISECOND: i32 = 700;
 
 /// The resource requirements for a skill.
 /// Skill might need mana, status(suiton status is needed for Trick Attack), or combo status.
+#[derive(Clone)]
 pub(crate) enum ResourceRequirements {
     Mana(i32),
     Status(i32),
     PreviousCombo(IdType),
 }
 
-pub trait Skill: Sized {
+pub trait Skill: Sized + Clone {
+    fn get_id(&self) -> IdType;
     fn get_potency(&self) -> DamageType;
     fn get_cooldown_millisecond(&self) -> TimeType;
     fn get_delay_millisecond(&self) -> TimeType;
@@ -30,12 +34,15 @@ pub trait Skill: Sized {
     ) -> Result<()>;
 }
 
+#[derive(Clone)]
 pub struct AttackSkill {
+    pub(crate) id: IdType,
     pub(crate) name: String,
     pub(crate) player_id: IdType,
-    pub(crate) potency: i32,
+    pub(crate) potency: DamageType,
     pub buff: Option<BuffStatus>,
     pub debuff: Option<DebuffStatus>,
+    pub is_gcd: bool,
     pub(crate) turn_type: FfxivTurnType,
     pub(crate) delay_millisecond: Option<TimeType>,
     pub(crate) is_modified: bool,
@@ -50,7 +57,10 @@ pub struct SkillInfo<S: Skill> {
 }
 
 impl Skill for AttackSkill {
-    fn get_potency(&self) -> i32 {
+    fn get_id(&self) -> IdType {
+        self.id
+    }
+    fn get_potency(&self) -> DamageType {
         self.potency
     }
 
@@ -79,7 +89,7 @@ impl Skill for AttackSkill {
             target.add_status(debuff.clone());
             Ok(())
         } else {
-            Err(SimulatorError::DebuffNotFoundError(
+            Err(CombatComponentsError::DebuffNotFoundError(
                 "Debuff not found".to_string(),
             ))
         }
@@ -99,7 +109,7 @@ impl Skill for AttackSkill {
             }
             Ok(())
         } else {
-            Err(SimulatorError::BuffNotFoundError(
+            Err(CombatComponentsError::BuffNotFoundError(
                 "Buff not found".to_string(),
             ))
         }
