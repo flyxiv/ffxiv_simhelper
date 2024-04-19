@@ -5,23 +5,26 @@ use std::fmt::{Debug, Display, Formatter};
 
 mod owner_tracker;
 pub mod player;
+pub mod priority_table;
 pub mod skill;
 pub mod status;
 pub mod target;
+mod turn_type;
+mod util;
 
 type Result<T> = std::result::Result<T, CombatComponentsError>;
 
 /// Shows the damage profile: Damage contribution of each buff/skill.
-pub type DamageProfile = HashMap<IdType, DpsType>;
+pub type DamageProfileTable = HashMap<IdType, DpsType>;
 
-pub(crate) type TimeType = i32;
+pub type TimeType = i32;
 pub(crate) type StatusIdType = usize;
-pub(crate) type DpsType = f64;
-pub(crate) type DamageType = usize;
-pub(crate) type IdType = usize;
+pub type DpsType = f64;
+pub type DamageType = usize;
+pub type IdType = usize;
 pub(crate) type PotencyType = usize;
 pub(crate) type ManaType = i32;
-pub(crate) type BuffIncreaseType = usize;
+pub type BuffIncreaseType = usize;
 pub(crate) type BuffTable<S: Status + Sized> = HashMap<IdType, S>;
 pub(crate) type Party<P: Player + Sized> = Vec<P>;
 

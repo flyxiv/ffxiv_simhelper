@@ -1,9 +1,13 @@
-use std::collections::HashMap;
-use crate::{BuffIncreaseType, IdType};
-use ffxiv_simbot_lib_db::stat_calculator::CharacterPower;
-use ffxiv_simbot_lib_db::DamageMultiplierType;
-/// Calculates Expected Damage Multiplier for Critical/Direct Hit/Damage buff and debuff.
+use ffxiv_simbot_combat_components::status::{Status, StatusInfo};
+use ffxiv_simbot_combat_components::BuffIncreaseType;
+use ffxiv_simbot_db::stat_calculator::CharacterPower;
+use ffxiv_simbot_db::DamageMultiplierType;
 use lazy_static::lazy_static;
+
+#[inline]
+pub(crate) fn percent_to_actual_value(increase_percent: BuffIncreaseType) -> DamageMultiplierType {
+    increase_percent as DamageMultiplierType / 100f64
+}
 
 lazy_static! {
     static ref DIRECT_HIT_DAMAGE_MULTIPLIER: f64 = 0.25f64;
@@ -37,20 +41,30 @@ pub trait MultiplierCalculator {
         1.0f64 + expected_damage_increase
     }
 
-    /// Given the raw damage and all the list of buffs/debuffs on the player and the target,
-    /// 1) Convert the buffs to a damage multiplier.
-    /// 2) Calculate the RDPS contribution of each buff and update it to the RDPS table
-    /// 3) Give the final damage with all multipliers - all contributions as the raw DPS of the skill.
-    fn convert_buffs_to_damage_multiplier(&self, total_rdps_table: buff_list: HashMap<IdType, DamageMultiplierType>) -> DamageMultiplierType {
-
+    fn calculate_multiplier<S>(
+        &self,
+        status: &S,
+        character_power: &CharacterPower,
+    ) -> DamageMultiplierType
+    where
+        S: Status,
+    {
+        match status.get_status_info() {
+            StatusInfo::DamagePercent(damage_increase) => {
+                let damage_multiplier = self.calculate_damage_multiplier(damage_increase);
+                status.set_damage_multiplier(damage_multiplier);
+            }
+            StatusInfo::CritHitRatePercent(crit_rate_increase) => {
+                let crit_rate_multiplier =
+                    self.calculate_crit_hit_rate_multiplier(character_power, crit_rate_increase);
+                status.set_crit_rate_multiplier(crit_rate_multiplier);
+            }
+            StatusInfo::DirectHitRatePercent(direct_hit_rate_increase) => {
+                let direct_hit_rate_multiplier =
+                    self.calculate_direct_hit_rate_multiplier(direct_hit_rate_increase);
+                status.set_direct_hit_rate_multiplier(direct_hit_rate_multiplier);
+            }
+            _ => {}
+        }
     }
-}
-
-pub struct FfxivMultiplierCalculator {}
-
-impl MultiplierCalculator for FfxivMultiplierCalculator {}
-
-#[inline]
-fn percent_to_actual_value(increase_percent: BuffIncreaseType) -> DamageMultiplierType {
-    increase_percent as DamageMultiplierType / 100f64
 }

@@ -1,6 +1,7 @@
 use crate::status::{DebuffStatus, Status, StatusHolder, StatusInfo, StatusTimer};
 use crate::TimeType;
 use std::cell::{Ref, RefCell, RefMut};
+use std::rc::Rc;
 
 pub trait Target: StatusHolder<DebuffStatus> + Sized {}
 
@@ -8,17 +9,13 @@ pub trait Target: StatusHolder<DebuffStatus> + Sized {}
 /// debuff list will be sorted in the order of debuff time left so that
 /// it is easy to search which debuffs will be removed.
 pub struct FfxivTarget {
-    debuff_list: RefCell<Vec<DebuffStatus>>,
+    debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
     combat_time_millisecond: TimeType,
 }
 
 impl StatusHolder<DebuffStatus> for FfxivTarget {
-    fn get_status_list(&self) -> Ref<Vec<DebuffStatus>> {
-        self.debuff_list.borrow()
-    }
-
-    fn get_status_list_mut(&self) -> RefMut<Vec<DebuffStatus>> {
-        self.debuff_list.borrow_mut()
+    fn get_status_list(&self) -> Rc<RefCell<Vec<DebuffStatus>>> {
+        self.debuff_list.clone()
     }
 
     fn get_combat_time_millisecond(&self) -> i32 {

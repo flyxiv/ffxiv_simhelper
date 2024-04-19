@@ -2,6 +2,7 @@ use crate::owner_tracker::OwnerTracker;
 use crate::player::{FfxivTurnType, Player, TurnType};
 use crate::status::{BuffStatus, DebuffStatus, StatusHolder};
 use crate::target::Target;
+use crate::turn_type::FfxivTurnType;
 use crate::{DamageType, IdType, Result, SimulatorError, TimeType};
 
 /// The normal delay time for o-GCD skills.
@@ -33,13 +34,19 @@ pub struct AttackSkill {
     pub(crate) name: String,
     pub(crate) player_id: IdType,
     pub(crate) potency: i32,
-    pub(crate) buff: Option<BuffStatus>,
-    pub(crate) debuff: Option<DebuffStatus>,
+    pub buff: Option<BuffStatus>,
+    pub debuff: Option<DebuffStatus>,
     pub(crate) turn_type: FfxivTurnType,
     pub(crate) delay_millisecond: Option<TimeType>,
     pub(crate) is_modified: bool,
     pub(crate) cooldown_millisecond: i32,
     pub(crate) resource_required: Vec<ResourceRequirements>,
+}
+
+pub struct SkillInfo<S: Skill> {
+    pub skill: S,
+    pub guaranteed_critical_hit: bool,
+    pub guaranteed_direct_hit: bool,
 }
 
 impl Skill for AttackSkill {
