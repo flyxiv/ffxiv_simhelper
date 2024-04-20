@@ -4,9 +4,10 @@ use ffxiv_simbot_combat_components::status::{BuffStatus, DebuffStatus, Status, S
 use ffxiv_simbot_combat_components::{DamageType, IdType};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::DamageMultiplierType;
-use std::cell::Ref;
+use std::cell::{Ref, RefCell};
 use std::collections::HashMap;
 use std::default;
+use std::rc::Rc;
 
 /// Simulates the effect of a single skill and distribute the damage contribution of each
 /// buff to the rightful owner.
@@ -25,8 +26,8 @@ pub(crate) trait SkillCalculator {
     /// 3) Order each buff to update its RDPS contribution.
     fn make_damage_profile<SHB: StatusHolder<BuffStatus>, SHD: StatusHolder<DebuffStatus>>(
         &self,
-        buff_holder: Ref<SHB>,
-        debuff_holder: Ref<SHD>,
+        buff_holder: Rc<RefCell<SHB>>,
+        debuff_holder: Rc<RefCell<SHD>>,
         skill_damage: DamageType,
         power: &CharacterPower,
         player_id: IdType,
@@ -44,8 +45,8 @@ impl MultiplierCalculator for FfxivSkillCalculator {}
 impl SkillCalculator for FfxivSkillCalculator {
     fn make_damage_profile<SHB, SHD>(
         &self,
-        buff_holder: Ref<SHB>,
-        debuff_holder: Ref<SHD>,
+        buff_holder: Rc<RefCell<SHB>>,
+        debuff_holder: Rc<RefCell<SHD>>,
         skill_damage: DamageType,
         power: &CharacterPower,
         player_id: IdType,
@@ -62,8 +63,13 @@ impl SkillCalculator for FfxivSkillCalculator {
             },
         };
 
-        let buff_list = buff_holder.get_status_list().borrow();
-        let debuff_list = debuff_holder.get_status_list().borrow();
+        let buff_holder = buff_holder.borrow();
+        let debuff_holder = debuff_holder.borrow();
+
+        let buff_list = buff_holder.get_status_list();
+        let buff_list = buff_list.borrow();
+        let debuff_list = debuff_holder.get_status_list();
+        let debuff_list = debuff_list.borrow();
 
         for buff in buff_list.iter() {
             let buff_id = buff.get_id();

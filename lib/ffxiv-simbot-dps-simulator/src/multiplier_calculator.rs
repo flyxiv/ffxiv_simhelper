@@ -51,20 +51,15 @@ pub trait MultiplierCalculator {
     {
         match status.get_status_info() {
             StatusInfo::DamagePercent(damage_increase) => {
-                let damage_multiplier = self.calculate_damage_multiplier(damage_increase);
-                status.set_damage_multiplier(damage_multiplier);
+                self.calculate_damage_multiplier(damage_increase)
             }
             StatusInfo::CritHitRatePercent(crit_rate_increase) => {
-                let crit_rate_multiplier =
-                    self.calculate_crit_hit_rate_multiplier(character_power, crit_rate_increase);
-                status.set_crit_rate_multiplier(crit_rate_multiplier);
+                self.calculate_crit_hit_rate_multiplier(character_power, crit_rate_increase)
             }
             StatusInfo::DirectHitRatePercent(direct_hit_rate_increase) => {
-                let direct_hit_rate_multiplier =
-                    self.calculate_direct_hit_rate_multiplier(direct_hit_rate_increase);
-                status.set_direct_hit_rate_multiplier(direct_hit_rate_multiplier);
+                self.calculate_direct_hit_rate_multiplier(direct_hit_rate_increase)
             }
-            _ => {}
+            _ => 1.0f64,
         }
     }
 }

@@ -54,7 +54,7 @@ impl FfxivTurnType {
 /// Ffxiv players have a 0.7 second delay after using an oGCD skill, and GCD seconds delay for each
 /// Consecutive GCD skill, so FFXIV's combat can be seen as players taking turns, with the player
 /// getting the earliest turn going first.
-pub(crate) struct PlayerTurn {
+pub struct PlayerTurn {
     pub(crate) turn_type: FfxivTurnType,
     pub(crate) next_turn_combat_time_millisecond: TimeType,
 }

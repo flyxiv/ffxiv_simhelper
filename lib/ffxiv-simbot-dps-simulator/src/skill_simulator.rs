@@ -27,7 +27,7 @@ where
     fn make_skill_simulation_result(
         &self,
         turn_player_id: IdType,
-        players: Rc<RefCell<Vec<FfxivPlayer>>>,
+        players: &Vec<Rc<RefCell<FfxivPlayer>>>,
         target: Rc<RefCell<FfxivTarget>>,
         skill_info: &SkillInfo<AttackSkill>,
     ) -> SkillDamageResult;
@@ -41,8 +41,10 @@ impl SkillSimulator<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSkillSimulat
         target: Rc<RefCell<FfxivTarget>>,
         skill_info: &SkillInfo<AttackSkill>,
     ) -> SkillDamageResult {
-        let skill_user = players[turn_player_id].borrow();
-        let power = skill_user.get_player_power();
+        let skill_user = players[turn_player_id].clone();
+        let skill_user2 = skill_user.clone();
+        let skill_user2 = skill_user2.borrow();
+        let power = skill_user2.get_player_power();
 
         let raw_damage = self
             .raw_damage_calculator
@@ -50,7 +52,7 @@ impl SkillSimulator<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSkillSimulat
 
         self.skill_calculator.make_damage_profile(
             skill_user,
-            target.borrow(),
+            target.clone(),
             raw_damage,
             power,
             turn_player_id,

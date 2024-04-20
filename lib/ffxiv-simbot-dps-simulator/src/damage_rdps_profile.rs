@@ -15,7 +15,7 @@ pub trait RaidDamageTable {
     fn query_by_player_id(&self, player_id: IdType) -> DamageType;
     fn query_by_key(&self, key: RaidDamageTableKey) -> DamageType;
     fn insert(&mut self, key: RaidDamageTableKey, damage: DamageType);
-    fn update_table(&mut self, new_data: &self);
+    fn update_table(&mut self, new_data: &Self);
 }
 
 pub(crate) struct FfxivRaidDamageTable {
@@ -45,8 +45,8 @@ impl RaidDamageTable for FfxivRaidDamageTable {
         total_damage
     }
 
-    fn query_by_key(&self, key: &RaidDamageTableKey) -> DamageType {
-        if let Some(damage) = self.rdps_table.get(key) {
+    fn query_by_key(&self, key: RaidDamageTableKey) -> DamageType {
+        if let Some(damage) = self.rdps_table.get(&key) {
             *damage
         } else {
             0
@@ -57,12 +57,12 @@ impl RaidDamageTable for FfxivRaidDamageTable {
         self.rdps_table.insert(key, damage);
     }
 
-    fn update_table(&mut self, new_data: &self) {
-        for (key, damage) in new_data {
+    fn update_table(&mut self, new_data: &Self) {
+        for (key, damage) in &new_data.rdps_table {
             if let Some(current_damage) = self.rdps_table.get_mut(key) {
                 *current_damage += damage;
             } else {
-                self.rdps_table.insert(key.clone(), damage);
+                self.rdps_table.insert(key.clone(), *damage);
             }
         }
     }
