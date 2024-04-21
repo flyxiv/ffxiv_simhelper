@@ -63,15 +63,10 @@ impl SkillCalculator for FfxivSkillCalculator {
             },
         };
 
-        let buff_holder = buff_holder.borrow();
-        let debuff_holder = debuff_holder.borrow();
+        let buff_list = buff_holder.borrow().get_status_list();
+        let debuff_list = debuff_holder.borrow().get_status_list();
 
-        let buff_list = buff_holder.get_status_list();
-        let buff_list = buff_list.borrow();
-        let debuff_list = debuff_holder.get_status_list();
-        let debuff_list = debuff_list.borrow();
-
-        for buff in buff_list.iter() {
+        for buff in buff_list.borrow().iter() {
             let buff_id = buff.get_id();
 
             let raid_damage_profile_key = RaidDamageTableKey {
@@ -89,7 +84,7 @@ impl SkillCalculator for FfxivSkillCalculator {
                 .insert(raid_damage_profile_key, contribution);
         }
 
-        for debuff in debuff_list.iter() {
+        for debuff in debuff_list.borrow().iter() {
             let buff_id = debuff.get_id();
 
             let raid_damage_profile_key = RaidDamageTableKey {
@@ -108,5 +103,11 @@ impl SkillCalculator for FfxivSkillCalculator {
         }
 
         damage_profile
+    }
+}
+
+impl Default for FfxivSkillCalculator {
+    fn default() -> Self {
+        FfxivSkillCalculator {}
     }
 }

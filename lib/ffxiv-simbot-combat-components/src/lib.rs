@@ -3,13 +3,14 @@ use crate::status::Status;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display, Formatter};
 
+pub mod jobs;
 mod owner_tracker;
 pub mod player;
 pub mod priority_table;
 pub mod skill;
 pub mod status;
 pub mod target;
-mod turn_type;
+pub mod turn_type;
 
 type Result<T> = std::result::Result<T, CombatComponentsError>;
 
@@ -24,6 +25,8 @@ pub type IdType = usize;
 pub(crate) type PotencyType = usize;
 pub(crate) type ManaType = i32;
 pub type BuffIncreaseType = usize;
+pub(crate) type TurnCount = usize;
+
 pub(crate) type BuffTable<S: Status + Sized> = HashMap<IdType, S>;
 pub(crate) type Party<P: Player + Sized> = Vec<P>;
 

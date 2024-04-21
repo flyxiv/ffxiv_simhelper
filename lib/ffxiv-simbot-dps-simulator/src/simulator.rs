@@ -1,7 +1,7 @@
 use crate::damage_rdps_profile::{FfxivRaidDamageTable, RaidDamageTable};
 use crate::skill_simulator::{FfxivSkillSimulator, SkillSimulationResult, SkillSimulator};
 use crate::turn_calculator::{FfxivTurnCalculator, TurnCalculator};
-use crate::util::round_to;
+use crate::util::calculate_gcd;
 use ffxiv_simbot_combat_components::player::{FfxivPlayer, Player};
 use ffxiv_simbot_combat_components::skill::{
     AttackSkill, Skill, SkillInfo, NON_GCD_DELAY_MILLISECOND,
@@ -10,10 +10,9 @@ use ffxiv_simbot_combat_components::status::{BuffStatus, DebuffStatus, StatusHol
 use ffxiv_simbot_combat_components::target::{FfxivTarget, Target};
 use ffxiv_simbot_combat_components::{DamageProfileTable, DamageType, DpsType, IdType, TimeType};
 use ffxiv_simbot_db::DamageMultiplierType;
-use std::cell::{Ref, RefCell, RefMut};
+use std::cell::{Ref, RefCell};
 use std::collections::HashMap;
 use std::rc::Rc;
-use std::thread::current;
 
 /// Simulate DPS for a job based on Priority System
 /// 1) Read the priority table and get the next skill
@@ -26,16 +25,9 @@ where
     P: Player + Sized,
     S: Skill + Sized,
 {
-    fn get_player_data(&self, player_id: IdType) -> Ref<P>;
-    fn get_target(&self) -> Ref<T>;
-    fn update_skill_simulation_result(&self, skill_id: IdType, result: SkillSimulationResult);
-    fn update_turn(&self);
-    fn request_skill_simulation(&self, skill: SkillInfo<S>) -> SkillSimulationResult;
-    fn use_skill(&self, skill: &AttackSkill);
-    fn get_final_rotation_log(&self) -> Vec<PlayerSimulationData<P, S>>;
+    fn run_simulation(&self, target_combat_time_millsecond: TimeType);
     /// Gets the RDPS Profile by each buff. Raw Damage is id 0.
-    fn get_final_rdps_table(&self) -> HashMap<IdType, DpsType>;
-    fn get_finish_combat_time_millisecond(&self) -> TimeType;
+    fn get_simulation_result(&self) -> HashMap<IdType, DpsType>;
 }
 
 pub struct PlayerSimulationData<P, S>
@@ -54,135 +46,46 @@ where
 /// Keeps RDPS contribution for all buffs that are in the party.
 pub struct FfxivSimulationBoard {
     skill_simulator: FfxivSkillSimulator,
-    turn_simulator: FfxivTurnCalculator,
+    turn_calculator: FfxivTurnCalculator,
 
     damage_profiles: Vec<Rc<RefCell<DamageProfileTable>>>,
 
-    current_turn_player_id: IdType,
+    current_turn_player_id: RefCell<IdType>,
     party: Vec<Rc<RefCell<FfxivPlayer>>>,
     target: Rc<RefCell<FfxivTarget>>,
     rdps_table: RefCell<FfxivRaidDamageTable>,
 
     current_combat_time_millisecond: RefCell<TimeType>,
-    finish_combat_time_millisecond: TimeType,
 }
 
 impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationBoard {
-    fn get_player_data(&self, player_id: IdType) -> Ref<FfxivPlayer> {
-        let party_ref = &self.party;
-        let player_search = party_ref.get(player_id).unwrap();
+    fn run_simulation(&self, target_combat_time_millsecond: TimeType) {
+        loop {
+            println!(
+                "combat_time: {}",
+                *self.current_combat_time_millisecond.borrow()
+            );
+            println!("turn: {}", *self.current_turn_player_id.borrow());
+            if *self.current_combat_time_millisecond.borrow() >= target_combat_time_millsecond {
+                break;
+            }
 
-        player_search.borrow()
-    }
+            self.update_turn();
+            let skill_info = self.get_next_skill();
 
-    fn get_target(&self) -> Ref<FfxivTarget> {
-        self.target.borrow()
-    }
+            if let Some(skill_info) = skill_info {
+                self.use_skill(skill_info);
+            }
 
-    fn update_skill_simulation_result(&self, skill_id: IdType, result: SkillSimulationResult) {
-        let skill_damage_result = result.skill_damage_result;
-        let skill_user_id = result.skill_user_id;
-        let buff = result.buff;
-        let debuff = result.debuff;
+            let current_combat_time_millisecond = *self.current_combat_time_millisecond.borrow();
+            let current_player = self.get_current_player();
 
-        if let Some(buff) = buff {
-            self.add_buff(buff);
-        }
-
-        if let Some(debuff) = debuff {
-            self.add_debuff(debuff);
-        }
-
-        self.update_damage_profile(skill_id, skill_damage_result.raw_damage);
-        self.update_rdps_table(skill_damage_result.raid_damage_profile);
-    }
-
-    fn update_turn(&self) {
-        let next_turn_player_id = self.turn_simulator.find_next_turn_player_id(&self.party);
-        let mut current_turn_player_id = self.current_turn_player_id;
-
-        current_turn_player_id = next_turn_player_id;
-    }
-
-    fn request_skill_simulation(
-        &self,
-        skill_info: SkillInfo<AttackSkill>,
-    ) -> SkillSimulationResult {
-        let skill_damage_result = self.skill_simulator.make_skill_simulation_result(
-            self.current_turn_player_id,
-            &self.party,
-            self.target.clone(),
-            &skill_info,
-        );
-
-        let skill = skill_info.skill;
-        let buff = skill.buff;
-        let debuff = skill.debuff;
-
-        SkillSimulationResult {
-            skill_damage_result,
-            buff,
-            debuff,
-            skill_user_id: self.current_turn_player_id,
+            current_player.borrow_mut().calculate_next_turn();
         }
     }
 
-    fn use_skill(&self, skill: &AttackSkill) {
-        let current_turn_player = self.get_current_player();
-        let mut current_turn_player = current_turn_player.borrow_mut();
-        let next_turn_time_millisecond = current_turn_player.get_next_turn_time_milliseconds();
-        let mut total_delay = current_turn_player.get_delay();
-
-        if skill.is_gcd() {
-            let gcd_delay_millisecond = round_to(
-                skill.get_cooldown_millisecond() as DamageMultiplierType
-                    / current_turn_player.get_player_power().speed_multiplier,
-                1,
-            ) as TimeType;
-
-            current_turn_player.set_next_gcd_time_milliseconds(gcd_delay_millisecond);
-            total_delay = NON_GCD_DELAY_MILLISECOND;
-        } else {
-            total_delay += NON_GCD_DELAY_MILLISECOND;
-        }
-
-        let mut current_combat_time_millsecond = self.current_combat_time_millisecond.borrow_mut();
-        let elapsed_time = *current_combat_time_millsecond - next_turn_time_millisecond;
-
-        for player_pointer in self.party.clone() {
-            let mut player = player_pointer.borrow_mut();
-            player.update_status_time(elapsed_time)
-        }
-
-        let mut target = self.target.borrow_mut();
-        target.update_status_time(elapsed_time);
-
-        *current_combat_time_millsecond = next_turn_time_millisecond;
-
-        let current_player = self.get_current_player();
-        let mut current_player = current_player.borrow_mut();
-        let current_combat_time_millisecond = *self.current_combat_time_millisecond.borrow();
-        current_player.calculate_next_turn(current_combat_time_millisecond);
-
-        let current_player = self.get_current_player();
-        let current_player = current_player.borrow();
-        let skill_info = current_player.get_next_skill(target.get_status_list());
-        let skill_id = skill_info.skill.get_id();
-
-        let skill_simulation_result = self.request_skill_simulation(skill_info);
-        self.update_skill_simulation_result(skill_id, skill_simulation_result);
-    }
-
-    fn get_final_rotation_log(&self) -> Vec<PlayerSimulationData<FfxivPlayer, AttackSkill>> {
+    fn get_simulation_result(&self) -> HashMap<IdType, DpsType> {
         todo!()
-    }
-
-    fn get_final_rdps_table(&self) -> HashMap<IdType, DpsType> {
-        todo!()
-    }
-
-    fn get_finish_combat_time_millisecond(&self) -> TimeType {
-        self.finish_combat_time_millisecond
     }
 }
 
@@ -190,30 +93,28 @@ impl FfxivSimulationBoard {
     fn add_buff(&self, buff: BuffStatus) {
         if buff.is_raidwide {
             for player in self.party.clone().into_iter() {
-                let mut player = player.borrow_mut();
-                player.add_status(buff.clone());
+                player.borrow_mut().add_status(buff.clone());
             }
         } else {
-            let owner_player_id = self.current_turn_player_id;
+            let owner_player_id = self.current_turn_player_id.clone();
+            let owner_player_id = *owner_player_id.borrow();
 
             for player in self.party.clone() {
-                let mut player = player.borrow_mut();
-
-                if player.get_id() == owner_player_id {
-                    player.add_status(buff.clone());
+                if player.borrow().get_id() == owner_player_id {
+                    player.borrow_mut().add_status(buff.clone());
                 }
             }
         }
     }
 
     fn add_debuff(&self, debuff: DebuffStatus) {
-        let mut target = self.target.borrow_mut();
-
-        target.add_status(debuff);
+        self.target.borrow_mut().add_status(debuff);
     }
 
     fn update_damage_profile(&self, skill_id: IdType, raw_damage: DamageType) {
-        let damage_profile = self.damage_profiles[self.current_turn_player_id].clone();
+        let current_turn_player_id = self.current_turn_player_id.clone();
+        let current_turn_player_id = current_turn_player_id.borrow();
+        let damage_profile = self.damage_profiles[*current_turn_player_id].clone();
         let mut damage_profile = damage_profile.borrow_mut();
 
         if let Some(cumulative_damage) = damage_profile.get_mut(&skill_id) {
@@ -237,8 +138,141 @@ impl FfxivSimulationBoard {
 
     fn get_current_player(&self) -> Rc<RefCell<FfxivPlayer>> {
         let party = &self.party;
-        let owner_player_id = self.current_turn_player_id;
+        let owner_player_id = self.current_turn_player_id.clone();
+        let owner_player_id = owner_player_id.borrow();
 
-        party[owner_player_id].clone()
+        party[*owner_player_id].clone()
+    }
+
+    fn get_player_data(&self, player_id: IdType) -> Ref<FfxivPlayer> {
+        let party_ref = &self.party;
+        let player_search = party_ref.get(player_id).unwrap();
+
+        player_search.borrow()
+    }
+
+    fn get_target(&self) -> Rc<RefCell<FfxivTarget>> {
+        self.target.clone()
+    }
+
+    fn update_skill_simulation_result(&self, skill_id: IdType, result: SkillSimulationResult) {
+        let skill_damage_result = result.skill_damage_result;
+        let buff = result.buff;
+        let debuff = result.debuff;
+
+        if let Some(buff) = buff {
+            self.add_buff(buff);
+        }
+
+        if let Some(debuff) = debuff {
+            self.add_debuff(debuff);
+        }
+
+        self.update_damage_profile(skill_id, skill_damage_result.raw_damage);
+        self.update_rdps_table(skill_damage_result.raid_damage_profile);
+    }
+
+    fn update_turn(&self) {
+        let next_turn_player_id = self.turn_calculator.find_next_turn_player_id(&self.party);
+
+        *self.current_turn_player_id.borrow_mut() = next_turn_player_id;
+    }
+
+    fn request_skill_simulation(
+        &self,
+        skill_info: SkillInfo<AttackSkill>,
+    ) -> SkillSimulationResult {
+        let current_turn_player_id = self.current_turn_player_id.clone();
+
+        let skill_damage_result = self.skill_simulator.make_skill_simulation_result(
+            *current_turn_player_id.borrow(),
+            &self.party,
+            self.target.clone(),
+            &skill_info,
+        );
+
+        let skill = skill_info.skill;
+        let buff = skill.buff;
+        let debuff = skill.debuff;
+        let skill_user_id = *current_turn_player_id.borrow();
+
+        SkillSimulationResult {
+            skill_damage_result,
+            buff,
+            debuff,
+            skill_user_id,
+        }
+    }
+
+    fn get_next_skill(&self) -> Option<SkillInfo<AttackSkill>> {
+        let current_turn_player = self.get_current_player();
+        let current_turn_player = current_turn_player.borrow();
+        let target = self.get_target();
+        let target = target.borrow();
+
+        current_turn_player.get_next_skill(target.get_status_list())
+    }
+
+    fn use_skill(&self, skill_info: SkillInfo<AttackSkill>) {
+        let skill = &skill_info.skill;
+
+        let current_turn_player = self.get_current_player();
+        let next_turn_time_millisecond = current_turn_player
+            .borrow()
+            .get_next_turn_time_milliseconds();
+
+        {
+            let mut current_turn_player = current_turn_player.borrow_mut();
+
+            if skill.is_gcd() {
+                let gcd_delay_millisecond = calculate_gcd(
+                    skill.get_cooldown_millisecond(),
+                    current_turn_player.get_player_power().speed_multiplier,
+                );
+
+                current_turn_player.set_next_gcd_time_milliseconds(gcd_delay_millisecond);
+            }
+        }
+
+        let elapsed_time =
+            *self.current_combat_time_millisecond.borrow() - next_turn_time_millisecond;
+
+        for player_pointer in self.party.clone() {
+            player_pointer.borrow_mut().update_status_time(elapsed_time)
+        }
+
+        self.target.borrow_mut().update_status_time(elapsed_time);
+
+        *self.current_combat_time_millisecond.borrow_mut() = next_turn_time_millisecond;
+
+        let skill_id = skill_info.skill.get_id();
+        let simulation_result = self.request_skill_simulation(skill_info);
+        self.update_skill_simulation_result(skill_id, simulation_result);
+    }
+
+    fn get_final_rotation_log(&self) -> Vec<PlayerSimulationData<FfxivPlayer, AttackSkill>> {
+        todo!()
+    }
+
+    fn get_final_rdps_table(&self) -> HashMap<IdType, DpsType> {
+        todo!()
+    }
+    pub fn new(party: Vec<Rc<RefCell<FfxivPlayer>>>, target: Rc<RefCell<FfxivTarget>>) -> Self {
+        let mut damage_profiles = vec![];
+
+        for _ in 0..party.len() {
+            damage_profiles.push(Rc::new(RefCell::new(DamageProfileTable::new())));
+        }
+
+        FfxivSimulationBoard {
+            skill_simulator: FfxivSkillSimulator::default(),
+            turn_calculator: FfxivTurnCalculator::default(),
+            damage_profiles,
+            current_turn_player_id: RefCell::new(0),
+            party,
+            target,
+            rdps_table: RefCell::new(FfxivRaidDamageTable::default()),
+            current_combat_time_millisecond: RefCell::new(0),
+        }
     }
 }

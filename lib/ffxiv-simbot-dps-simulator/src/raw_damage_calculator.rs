@@ -19,13 +19,13 @@ pub(crate) trait RawDamageCalculator: MultiplierCalculator {
         let critical_hit_rate = if skill_info.guaranteed_critical_hit {
             1.0f64
         } else {
-            player_power.critical_strike_rate
+            player_power.critical_strike_rate - 1.0f64
         };
 
         let direct_hit_rate = if skill_info.guaranteed_direct_hit {
             1.0f64
         } else {
-            player_power.direct_hit_rate
+            player_power.direct_hit_rate - 1.0f64
         };
 
         let mut raw_damage = skill_info.skill.get_potency() as DamageMultiplierType;
@@ -33,15 +33,10 @@ pub(crate) trait RawDamageCalculator: MultiplierCalculator {
         raw_damage *= self
             .calculate_crit_hit_rate_multiplier(player_power, to_increase_rate(critical_hit_rate));
         raw_damage *= self.calculate_direct_hit_rate_multiplier(to_increase_rate(direct_hit_rate));
-        raw_damage *= self.calculate_damage_multiplier(to_increase_rate(
-            player_power.determination_damage_multiplier,
-        ));
-        raw_damage *= self
-            .calculate_damage_multiplier(to_increase_rate(player_power.tenacity_damage_multiplier));
-        raw_damage *=
-            self.calculate_damage_multiplier(to_increase_rate(player_power.main_stat_multiplier));
-        raw_damage *= self
-            .calculate_damage_multiplier(to_increase_rate(player_power.weapon_damage_multiplier));
+        raw_damage *= player_power.determination_damage_multiplier;
+        raw_damage *= player_power.tenacity_damage_multiplier;
+        raw_damage *= player_power.main_stat_multiplier;
+        raw_damage *= player_power.weapon_damage_multiplier;
 
         raw_damage as DamageType
     }
@@ -56,3 +51,9 @@ pub(crate) struct FfxivRawDamageCalculator {}
 
 impl MultiplierCalculator for FfxivRawDamageCalculator {}
 impl RawDamageCalculator for FfxivRawDamageCalculator {}
+
+impl Default for FfxivRawDamageCalculator {
+    fn default() -> Self {
+        FfxivRawDamageCalculator {}
+    }
+}

@@ -11,7 +11,7 @@ pub(crate) trait TurnType {
 /// oGCD1: First oGCD Skill after a GCD skill
 /// oGCD2: Second oGCD Skill after a GCD
 #[derive(Clone)]
-pub(crate) enum FfxivTurnType {
+pub enum FfxivTurnType {
     Gcd,
     Ogcd1,
     Ogcd2,
@@ -55,8 +55,8 @@ impl FfxivTurnType {
 /// Consecutive GCD skill, so FFXIV's combat can be seen as players taking turns, with the player
 /// getting the earliest turn going first.
 pub struct PlayerTurn {
-    pub(crate) turn_type: FfxivTurnType,
-    pub(crate) next_turn_combat_time_millisecond: TimeType,
+    pub turn_type: FfxivTurnType,
+    pub next_turn_combat_time_millisecond: TimeType,
 }
 
 impl Default for PlayerTurn {

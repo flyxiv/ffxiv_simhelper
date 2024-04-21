@@ -5,6 +5,7 @@ use crate::stat::{MainStatTrait, MainStats, StatType, SubStatTrait};
 use crate::{DamageMultiplierType, StatModifierType};
 use crate::{DataError, Result, StatModifier};
 
+#[derive(Clone)]
 pub struct CharacterPower {
     pub critical_strike_rate: DamageMultiplierType,
     pub critical_strike_damage: DamageMultiplierType,

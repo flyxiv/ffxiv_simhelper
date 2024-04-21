@@ -2,7 +2,6 @@ use std::fmt::{Debug, Display, Formatter};
 
 pub mod engine;
 mod engine_config;
-pub(crate) mod ffxivcontext;
 
 pub(crate) type Result<T> = std::result::Result<T, EngineError>;
 

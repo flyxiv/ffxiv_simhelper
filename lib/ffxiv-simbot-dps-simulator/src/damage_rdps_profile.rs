@@ -8,6 +8,8 @@ pub(crate) struct RaidDamageTableKey {
     pub(crate) status_id: IdType,
 }
 
+pub type RdpsTable = HashMap<RaidDamageTableKey, DamageType>;
+
 pub trait RaidDamageTable {
     /// get total raid damage of the status
     fn query_by_status_id(&self, status_id: IdType) -> DamageType;
@@ -19,7 +21,7 @@ pub trait RaidDamageTable {
 }
 
 pub(crate) struct FfxivRaidDamageTable {
-    pub(crate) rdps_table: HashMap<RaidDamageTableKey, DamageType>,
+    pub(crate) rdps_table: RdpsTable,
 }
 
 impl RaidDamageTable for FfxivRaidDamageTable {
@@ -64,6 +66,14 @@ impl RaidDamageTable for FfxivRaidDamageTable {
             } else {
                 self.rdps_table.insert(key.clone(), *damage);
             }
+        }
+    }
+}
+
+impl Default for FfxivRaidDamageTable {
+    fn default() -> Self {
+        FfxivRaidDamageTable {
+            rdps_table: RdpsTable::new(),
         }
     }
 }

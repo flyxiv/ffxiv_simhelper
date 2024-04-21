@@ -19,3 +19,7 @@ path = "../lib/ffxiv-simbot-engine"
 [dependencies.ffxiv-simbot-dps-simulator]
 version = "0.1.0"
 path = "../lib/ffxiv-simbot-dps-simulator"
+
+[dependencies.ffxiv-simbot-combat-components]
+version = "0.1.0"
+path = "../lib/ffxiv-simbot-combat-components"

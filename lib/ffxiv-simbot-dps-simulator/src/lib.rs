@@ -5,7 +5,7 @@ type Result<T> = std::result::Result<T, SimulatorError>;
 mod damage_rdps_profile;
 mod multiplier_calculator;
 mod raw_damage_calculator;
-mod simulator;
+pub mod simulator;
 mod skill_calculator;
 mod skill_simulator;
 mod turn_calculator;

@@ -1,8 +1,8 @@
 use crate::engine_config::EngineConfig;
-use crate::ffxivcontext::FfxivContext;
 use crate::Result;
 use ffxiv_simbot_db::clan::ClanFactory;
 use ffxiv_simbot_db::equipment::EquipmentFactory;
+use ffxiv_simbot_db::ffxiv_context::FfxivContext;
 use ffxiv_simbot_db::food::FoodFactory;
 use ffxiv_simbot_db::job::JobFactory;
 use itertools::Itertools;
@@ -13,7 +13,7 @@ use std::fs::File;
 /// Singleton Entity. Only one instance of Engine is created.
 pub struct Engine {
     config: EngineConfig,
-    context: FfxivContext,
+    pub context: FfxivContext,
 }
 
 impl Engine {

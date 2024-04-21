@@ -1,4 +1,11 @@
-pub fn round_to(x: f64, decimals: u32) -> f64 {
-    let y = 10i32.pow(decimals) as f64;
-    (x * y).round() / y
+use ffxiv_simbot_combat_components::TimeType;
+use ffxiv_simbot_db::DamageMultiplierType;
+
+pub(crate) fn calculate_gcd(
+    gcd_delay: TimeType,
+    speed_multiplier: DamageMultiplierType,
+) -> TimeType {
+    let gcd_millisecond = gcd_delay as DamageMultiplierType / speed_multiplier;
+
+    (gcd_millisecond / 10.0f64) as TimeType * 10
 }

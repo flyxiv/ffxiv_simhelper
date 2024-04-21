@@ -5,6 +5,7 @@ use crate::target::Target;
 use crate::turn_type::FfxivTurnType;
 use crate::CombatComponentsError;
 use crate::{DamageType, IdType, Result, TimeType};
+use ffxiv_simbot_db::DamageMultiplierType;
 
 pub static GCD_TURN_DELAY_THRESHOLD: TimeType = 3 * NON_GCD_DELAY_MILLISECOND;
 /// The normal delay time for o-GCD skills.
@@ -40,6 +41,7 @@ pub struct AttackSkill {
     pub(crate) name: String,
     pub(crate) player_id: IdType,
     pub(crate) potency: DamageType,
+    pub(crate) trait_multiplier: DamageMultiplierType,
     pub buff: Option<BuffStatus>,
     pub debuff: Option<DebuffStatus>,
     pub is_gcd: bool,
@@ -61,7 +63,7 @@ impl Skill for AttackSkill {
         self.id
     }
     fn get_potency(&self) -> DamageType {
-        self.potency
+        (self.potency as DamageMultiplierType * self.trait_multiplier) as DamageType
     }
 
     fn get_cooldown_millisecond(&self) -> TimeType {

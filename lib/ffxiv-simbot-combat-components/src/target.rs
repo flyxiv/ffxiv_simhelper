@@ -9,8 +9,8 @@ pub trait Target: StatusHolder<DebuffStatus> + Sized {}
 /// debuff list will be sorted in the order of debuff time left so that
 /// it is easy to search which debuffs will be removed.
 pub struct FfxivTarget {
-    debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-    combat_time_millisecond: TimeType,
+    pub debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
+    pub combat_time_millisecond: TimeType,
 }
 
 impl Target for FfxivTarget {}

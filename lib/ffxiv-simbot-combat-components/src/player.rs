@@ -3,8 +3,9 @@ use crate::status::{BuffStatus, DebuffStatus, Status, StatusHolder, StatusInfo, 
 use crate::target::Target;
 use crate::{IdType, TimeType};
 
-use crate::priority_table::{FfxivPriorityTable, PriorityTable};
-use crate::turn_type::{PlayerTurn, TurnType};
+use crate::jobs::FfxivPriorityTable;
+use crate::priority_table::PriorityTable;
+use crate::turn_type::{FfxivTurnType, PlayerTurn, TurnType};
 use ffxiv_simbot_db::job::Job;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use std::cell::RefCell;
@@ -22,38 +23,42 @@ pub trait Player: Sized + StatusHolder<BuffStatus> {
     fn get_job(&self) -> &Job;
     fn get_player_power(&self) -> &CharacterPower;
     fn get_delay(&self) -> TimeType;
-    fn get_next_skill(&self, debuff_list: Rc<RefCell<Vec<DebuffStatus>>>)
-        -> SkillInfo<AttackSkill>;
+    fn get_next_skill(
+        &self,
+        debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
+    ) -> Option<SkillInfo<AttackSkill>>;
 
     fn set_delay(&mut self, delay: TimeType);
     fn has_resources_for_skill<S: Skill>(&self, skill: S) -> bool;
     fn get_next_gcd_time_millisecond(&self) -> TimeType;
     fn set_next_gcd_time_milliseconds(&mut self, next_gcd_time_millisecond: TimeType);
     fn get_next_turn_time_milliseconds(&self) -> TimeType;
+    fn get_turn(&self) -> &FfxivTurnType;
+    fn get_turn_type(&self) -> &FfxivTurnType;
 }
 
 /// The Abstraction for an actual FFXIV Player in the combat.
 pub struct FfxivPlayer {
     /// Stat/Job Data about the player
-    id: IdType,
-    job: Job,
-    power: CharacterPower,
+    pub id: IdType,
+    pub job: Job,
+    pub power: CharacterPower,
 
-    priority_table: FfxivPriorityTable<AttackSkill>,
-    rotation_log: Vec<AttackSkill>,
+    pub priority_table: FfxivPriorityTable,
+    pub rotation_log: Vec<AttackSkill>,
 
     /// Realtime Combat Data about the player
-    buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-    current_combo: Option<IdType>,
+    pub buff_list: Rc<RefCell<Vec<BuffStatus>>>,
+    pub current_combo: Option<IdType>,
     /// How many seconds passed after the most recent GCD. If delay is close to GCD, an oGCD will
     /// clip the player's next GCD so it becomes a GCD turn.
-    total_delay: TimeType,
+    pub total_delay: TimeType,
 
     /// Combat time related data
-    next_gcd_time_millisecond: TimeType,
-    next_turn: PlayerTurn,
+    pub next_gcd_time_millisecond: TimeType,
+    pub next_turn: PlayerTurn,
 
-    mana_available: Option<i32>,
+    pub mana_available: Option<i32>,
 }
 
 impl Player for FfxivPlayer {
@@ -79,7 +84,7 @@ impl Player for FfxivPlayer {
     fn get_next_skill(
         &self,
         debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-    ) -> SkillInfo<AttackSkill> {
+    ) -> Option<SkillInfo<AttackSkill>> {
         self.priority_table
             .get_next_skill(self.buff_list.clone(), debuff_list, self)
     }
@@ -100,14 +105,44 @@ impl Player for FfxivPlayer {
     fn get_next_turn_time_milliseconds(&self) -> TimeType {
         self.next_turn.next_turn_combat_time_millisecond
     }
+
+    fn get_turn_type(&self) -> &FfxivTurnType {
+        &self.next_turn.turn_type
+    }
+
+    fn get_turn(&self) -> &FfxivTurnType {
+        &self.next_turn.turn_type
+    }
 }
 
 impl FfxivPlayer {
     /// After using a turn, calculate when the next turn will be in combat time,
     /// and also figure out if it is a GCD/oGCD turn.
-    pub fn calculate_next_turn(&mut self, current_combat_time_millisecond: TimeType) -> PlayerTurn {
+    pub fn calculate_next_turn(&mut self) {
         let current_turn = &self.next_turn;
-        current_turn.get_next_turn(self, current_combat_time_millisecond)
+        self.next_turn =
+            current_turn.get_next_turn(self, current_turn.next_turn_combat_time_millisecond)
+    }
+
+    pub fn new(
+        id: IdType,
+        job: Job,
+        power: CharacterPower,
+        priority_table: FfxivPriorityTable,
+    ) -> FfxivPlayer {
+        FfxivPlayer {
+            id,
+            job,
+            power,
+            priority_table,
+            rotation_log: vec![],
+            buff_list: Rc::new(RefCell::new(vec![])),
+            current_combo: None,
+            total_delay: 0,
+            next_gcd_time_millisecond: 0,
+            next_turn: PlayerTurn::default(),
+            mana_available: None,
+        }
     }
 }
 

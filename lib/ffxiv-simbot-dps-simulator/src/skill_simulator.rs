@@ -42,25 +42,33 @@ impl SkillSimulator<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSkillSimulat
         skill_info: &SkillInfo<AttackSkill>,
     ) -> SkillDamageResult {
         let skill_user = players[turn_player_id].clone();
-        let skill_user2 = skill_user.clone();
-        let skill_user2 = skill_user2.borrow();
-        let power = skill_user2.get_player_power();
 
         let raw_damage = self
             .raw_damage_calculator
-            .calculate_raw_damage(skill_info, power);
+            .calculate_raw_damage(skill_info, skill_user.borrow().get_player_power());
+
+        let player_power = skill_user.borrow().get_player_power().clone();
 
         self.skill_calculator.make_damage_profile(
             skill_user,
             target.clone(),
             raw_damage,
-            power,
+            &player_power,
             turn_player_id,
         )
     }
 }
 
-pub(crate) struct FfxivSkillSimulator {
+pub struct FfxivSkillSimulator {
     skill_calculator: FfxivSkillCalculator,
     raw_damage_calculator: FfxivRawDamageCalculator,
+}
+
+impl Default for FfxivSkillSimulator {
+    fn default() -> Self {
+        FfxivSkillSimulator {
+            skill_calculator: FfxivSkillCalculator::default(),
+            raw_damage_calculator: FfxivRawDamageCalculator::default(),
+        }
+    }
 }

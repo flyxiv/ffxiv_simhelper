@@ -16,6 +16,7 @@ pub(crate) mod character;
 pub mod clan;
 mod constants;
 pub mod equipment;
+pub mod ffxiv_context;
 pub mod food;
 pub mod job;
 pub mod materia;
