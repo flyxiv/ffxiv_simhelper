@@ -2,19 +2,19 @@ use crate::character::{get_character_main_stats, get_character_sub_stats, Charac
 use crate::constants::*;
 use crate::equipment::WeaponTrait;
 use crate::stat::{MainStatTrait, MainStats, StatType, SubStatTrait};
-use crate::{DamageMultiplierType, StatModifierType};
 use crate::{DataError, Result, StatModifier};
+use crate::{MultiplierType, StatModifierType};
 
 #[derive(Clone)]
 pub struct CharacterPower {
-    pub critical_strike_rate: DamageMultiplierType,
-    pub critical_strike_damage: DamageMultiplierType,
-    pub direct_hit_rate: DamageMultiplierType,
-    pub determination_damage_multiplier: DamageMultiplierType,
-    pub tenacity_damage_multiplier: DamageMultiplierType,
-    pub speed_multiplier: DamageMultiplierType,
-    pub weapon_damage_multiplier: DamageMultiplierType,
-    pub main_stat_multiplier: DamageMultiplierType,
+    pub critical_strike_rate: MultiplierType,
+    pub critical_strike_damage: MultiplierType,
+    pub direct_hit_rate: MultiplierType,
+    pub determination_damage_multiplier: MultiplierType,
+    pub tenacity_damage_multiplier: MultiplierType,
+    pub speed_multiplier: MultiplierType,
+    pub weapon_damage_multiplier: MultiplierType,
+    pub main_stat_multiplier: MultiplierType,
 }
 
 impl Default for CharacterPower {

@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 pub type StatType = i32;
 pub type HpType = usize;
 
@@ -7,7 +7,7 @@ pub trait StatFrom<T>: Sized {
 }
 
 /// Saves the main stats of the equipment/character/race.
-#[derive(Eq, PartialEq, Clone, Copy, Hash, Debug)]
+#[derive(Eq, PartialEq, Clone, Copy, Hash, Debug, Serialize)]
 pub struct MainStats {
     pub strength: StatType,
     pub dexterity: StatType,
@@ -122,7 +122,7 @@ where
     }
 }
 
-#[derive(Eq, PartialEq, Clone, Deserialize, Debug)]
+#[derive(Eq, PartialEq, Clone, Deserialize, Serialize, Debug)]
 pub struct SubStats {
     pub critical_strike: StatType,
     pub direct_hit: StatType,

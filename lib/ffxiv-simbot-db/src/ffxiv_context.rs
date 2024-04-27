@@ -5,8 +5,9 @@ use crate::job::JobTable;
 
 /// The Monolith FFXIV Database that stores all the data needed for DPS simulation.
 /// Data is organized into a hashmap for faster searching via Id.
-/// Equipments' key is the jobs and slots the equipments belong to, since those are the data
+/// Equipments' key is the rotation and slots the equipments belong to, since those are the data
 /// equipments will be most searched by
+#[derive(Clone)]
 pub struct FfxivContext {
     pub jobs: JobTable,
     pub equipments: EquipmentTable,

@@ -11,6 +11,7 @@ use std::fs::File;
 /// The Main Engine of FFXIV Simbot.
 /// Loads Needed Data, Simulates User DPS.
 /// Singleton Entity. Only one instance of Engine is created.
+#[derive(Clone)]
 pub struct Engine {
     config: EngineConfig,
     pub context: FfxivContext,
@@ -33,7 +34,7 @@ impl Engine {
 
         let jobs = JobFactory::new()
             .parse_jobs_json_file(&data_dir, &engine_config.jobs_json_file_name)
-            .expect("failed to parse jobs json file");
+            .expect("failed to parse rotation json file");
 
         let equipments = EquipmentFactory::new()
             .parse_equipment_json_file(&data_dir, &engine_config.equipment_json_file_name)

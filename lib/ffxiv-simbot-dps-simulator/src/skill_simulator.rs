@@ -1,13 +1,17 @@
 use crate::skill_calculator::{FfxivSkillCalculator, SkillCalculator, SkillDamageResult};
+use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
+use ffxiv_simbot_combat_components::live_objects::player::Player;
+use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
+use ffxiv_simbot_combat_components::live_objects::target::Target;
 use ffxiv_simbot_combat_components::IdType;
-use std::cell::{Ref, RefCell};
+use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::raw_damage_calculator::{FfxivRawDamageCalculator, RawDamageCalculator};
-use ffxiv_simbot_combat_components::player::{FfxivPlayer, Player};
-use ffxiv_simbot_combat_components::skill::{AttackSkill, Skill, SkillInfo};
-use ffxiv_simbot_combat_components::status::{BuffStatus, DebuffStatus};
-use ffxiv_simbot_combat_components::target::{FfxivTarget, Target};
+use ffxiv_simbot_combat_components::skill::attack_skill::{AttackSkill, SkillInfo};
+use ffxiv_simbot_combat_components::skill::skill::Skill;
+use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
+use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
 
 pub(crate) struct SkillSimulationResult {
     pub(crate) skill_damage_result: SkillDamageResult,
@@ -60,7 +64,7 @@ impl SkillSimulator<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSkillSimulat
 }
 
 pub struct FfxivSkillSimulator {
-    skill_calculator: FfxivSkillCalculator,
+    pub(crate) skill_calculator: FfxivSkillCalculator,
     raw_damage_calculator: FfxivRawDamageCalculator,
 }
 

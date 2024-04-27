@@ -1,5 +1,7 @@
-use crate::player::Player;
-use crate::skill::{GCD_TURN_DELAY_THRESHOLD, NON_GCD_DELAY_MILLISECOND};
+use ffxiv_simbot_db::MultiplierType;
+use crate::live_objects::player::Player;
+use crate::skill::{GCD_TURN_DELAY_PERCENTAGE_THRESHOLD, NON_GCD_DELAY_MILLISECOND};
+use crate::skill::skill::NON_GCD_DELAY_MILLISECOND;
 use crate::TimeType;
 
 pub(crate) trait TurnType {
@@ -17,6 +19,13 @@ pub enum FfxivTurnType {
     Ogcd2,
 }
 
+#[inline]
+fn get_gcd_turn_delay_threshold(
+    next_gcd_delay_millisecond: TimeType,
+) -> TimeType {
+    ((next_gcd_delay_millisecond as MultiplierType) * GCD_TURN_DELAY_PERCENTAGE_THRESHOLD) as TimeType
+}
+
 impl FfxivTurnType {
     fn get_next_turn<P>(&self, player: &P, current_combat_time_millisecond: TimeType) -> PlayerTurn
     where
@@ -29,7 +38,10 @@ impl FfxivTurnType {
                     + NON_GCD_DELAY_MILLISECOND,
             },
             FfxivTurnType::Ogcd1 => {
-                if player.get_delay() >= GCD_TURN_DELAY_THRESHOLD {
+                if player.get_delay()
+                    >= get_gcd_turn_delay_threshold(player.get)
+                    )
+                {
                     PlayerTurn {
                         turn_type: FfxivTurnType::Gcd,
                         next_turn_combat_time_millisecond: player.get_next_gcd_time_millisecond(),

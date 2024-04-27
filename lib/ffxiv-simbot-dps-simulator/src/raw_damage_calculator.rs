@@ -1,8 +1,9 @@
 use crate::multiplier_calculator::MultiplierCalculator;
-use ffxiv_simbot_combat_components::skill::{Skill, SkillInfo};
-use ffxiv_simbot_combat_components::{BuffIncreaseType, DamageType};
+use ffxiv_simbot_combat_components::skill::attack_skill::SkillInfo;
+use ffxiv_simbot_combat_components::skill::skill::Skill;
+use ffxiv_simbot_combat_components::{BuffIncreasePercentType, DamageType};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
-use ffxiv_simbot_db::DamageMultiplierType;
+use ffxiv_simbot_db::MultiplierType;
 
 /// Calculate the expected raw damage of the skill
 /// Depending on the player's power, the skill's potency, and whether there is a
@@ -28,7 +29,7 @@ pub(crate) trait RawDamageCalculator: MultiplierCalculator {
             player_power.direct_hit_rate - 1.0f64
         };
 
-        let mut raw_damage = skill_info.skill.get_potency() as DamageMultiplierType;
+        let mut raw_damage = skill_info.skill.get_potency() as MultiplierType;
 
         raw_damage *= self
             .calculate_crit_hit_rate_multiplier(player_power, to_increase_rate(critical_hit_rate));
@@ -43,8 +44,8 @@ pub(crate) trait RawDamageCalculator: MultiplierCalculator {
 }
 
 #[inline]
-fn to_increase_rate(multiplier: DamageMultiplierType) -> BuffIncreaseType {
-    (multiplier * 100f64) as BuffIncreaseType
+fn to_increase_rate(multiplier: MultiplierType) -> BuffIncreasePercentType {
+    (multiplier * 100f64) as BuffIncreasePercentType
 }
 
 pub(crate) struct FfxivRawDamageCalculator {}

@@ -1,12 +1,13 @@
 use crate::damage_rdps_profile::{FfxivRaidDamageTable, RaidDamageTable, RaidDamageTableKey};
 use crate::multiplier_calculator::MultiplierCalculator;
-use ffxiv_simbot_combat_components::status::{BuffStatus, DebuffStatus, Status, StatusHolder};
+use ffxiv_simbot_combat_components::id_entity::IdEntity;
+use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
+use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
+use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::{DamageType, IdType};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
-use ffxiv_simbot_db::DamageMultiplierType;
-use std::cell::{Ref, RefCell};
-use std::collections::HashMap;
-use std::default;
+use ffxiv_simbot_db::MultiplierType;
+use std::cell::RefCell;
 use std::rc::Rc;
 
 /// Simulates the effect of a single skill and distribute the damage contribution of each
@@ -34,8 +35,8 @@ pub(crate) trait SkillCalculator {
     ) -> SkillDamageResult;
 }
 
-fn apply_multiplier(damage: DamageType, multiplier: DamageMultiplierType) -> DamageType {
-    f64::floor(damage as DamageMultiplierType * multiplier) as DamageType
+fn apply_multiplier(damage: DamageType, multiplier: MultiplierType) -> DamageType {
+    f64::floor(damage as MultiplierType * multiplier) as DamageType
 }
 
 pub(crate) struct FfxivSkillCalculator {}
@@ -72,6 +73,7 @@ impl SkillCalculator for FfxivSkillCalculator {
             let raid_damage_profile_key = RaidDamageTableKey {
                 player_id,
                 status_id: buff_id,
+                owner_id: buff.get_owner_id(),
             };
 
             let damage_multiplier = self.calculate_multiplier(buff, power);
@@ -90,6 +92,7 @@ impl SkillCalculator for FfxivSkillCalculator {
             let raid_damage_profile_key = RaidDamageTableKey {
                 player_id,
                 status_id: buff_id,
+                owner_id: debuff.get_owner_id(),
             };
 
             let damage_multiplier = self.calculate_multiplier(debuff, power);

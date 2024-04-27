@@ -6,6 +6,7 @@ use std::collections::HashMap;
 pub(crate) struct RaidDamageTableKey {
     pub(crate) player_id: IdType,
     pub(crate) status_id: IdType,
+    pub(crate) owner_id: IdType,
 }
 
 pub type RdpsTable = HashMap<RaidDamageTableKey, DamageType>;
@@ -13,11 +14,12 @@ pub type RdpsTable = HashMap<RaidDamageTableKey, DamageType>;
 pub trait RaidDamageTable {
     /// get total raid damage of the status
     fn query_by_status_id(&self, status_id: IdType) -> DamageType;
-    /// get total raid damage of the player
-    fn query_by_player_id(&self, player_id: IdType) -> DamageType;
+    /// get total raid damage contribution of the player
     fn query_by_key(&self, key: RaidDamageTableKey) -> DamageType;
     fn insert(&mut self, key: RaidDamageTableKey, damage: DamageType);
     fn update_table(&mut self, new_data: &Self);
+    fn get_rdps_contribution(&self, player_id: IdType) -> DamageType;
+    fn get_rdps_earned(&self, player_id: IdType) -> DamageType;
 }
 
 pub(crate) struct FfxivRaidDamageTable {
@@ -36,7 +38,7 @@ impl RaidDamageTable for FfxivRaidDamageTable {
         total_damage
     }
 
-    fn query_by_player_id(&self, player_id: IdType) -> DamageType {
+    fn get_rdps_contribution(&self, player_id: IdType) -> DamageType {
         let mut total_damage = 0;
 
         for (key, damage) in &self.rdps_table {
@@ -44,6 +46,18 @@ impl RaidDamageTable for FfxivRaidDamageTable {
                 total_damage += damage;
             }
         }
+        total_damage
+    }
+
+    fn get_rdps_earned(&self, player_id: IdType) -> DamageType {
+        let mut total_damage = 0;
+
+        for (key, damage) in &self.rdps_table {
+            if key.owner_id == player_id {
+                total_damage += damage;
+            }
+        }
+
         total_damage
     }
 

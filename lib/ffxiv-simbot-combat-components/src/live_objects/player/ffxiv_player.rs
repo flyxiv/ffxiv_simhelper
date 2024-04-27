@@ -1,41 +1,23 @@
-use crate::skill::{AttackSkill, Skill, SkillInfo};
-use crate::status::{BuffStatus, DebuffStatus, Status, StatusHolder, StatusInfo, StatusTimer};
-use crate::target::Target;
+use crate::id_entity::IdEntity;
+use crate::live_objects::player::gcd_calculator::GcdCalculator;
+use crate::live_objects::player::Player;
+use crate::live_objects::turn_type::{FfxivTurnType, PlayerTurn, TurnType};
+use crate::rotation::cooldown_timer::CooldownTimer;
+use crate::rotation::priority_table::PriorityTable;
+use crate::rotation::FfxivPriorityTable;
+use crate::skill::attack_skill::{AttackSkill, SkillInfo};
+use crate::skill::Skill;
+use crate::status::buff_status::BuffStatus;
+use crate::status::debuff_status::DebuffStatus;
+use crate::status::status_holder::StatusHolder;
+use crate::status::status_info::StatusInfo;
+use crate::status::status_timer::StatusTimer;
 use crate::{IdType, TimeType};
-
-use crate::jobs::FfxivPriorityTable;
-use crate::priority_table::PriorityTable;
-use crate::turn_type::{FfxivTurnType, PlayerTurn, TurnType};
 use ffxiv_simbot_db::job::Job;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
+use ffxiv_simbot_db::MultiplierType;
 use std::cell::RefCell;
 use std::rc::Rc;
-
-/// If the delay is over 3 * OGCD delay, then it is turn to use a GCD skill,
-/// Since in FFXIV a player can use at most 2 OGCD skills between GCD skills.
-/// so 1 GCD delay + 2 oGCD delay = 3 * oGCD delay.
-
-static MAX_MANA: i32 = 10000;
-
-/// Saves information about the player: buffs, stat multipliers, jobs.
-pub trait Player: Sized + StatusHolder<BuffStatus> {
-    fn get_id(&self) -> IdType;
-    fn get_job(&self) -> &Job;
-    fn get_player_power(&self) -> &CharacterPower;
-    fn get_delay(&self) -> TimeType;
-    fn get_next_skill(
-        &self,
-        debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-    ) -> Option<SkillInfo<AttackSkill>>;
-
-    fn set_delay(&mut self, delay: TimeType);
-    fn has_resources_for_skill<S: Skill>(&self, skill: S) -> bool;
-    fn get_next_gcd_time_millisecond(&self) -> TimeType;
-    fn set_next_gcd_time_milliseconds(&mut self, next_gcd_time_millisecond: TimeType);
-    fn get_next_turn_time_milliseconds(&self) -> TimeType;
-    fn get_turn(&self) -> &FfxivTurnType;
-    fn get_turn_type(&self) -> &FfxivTurnType;
-}
 
 /// The Abstraction for an actual FFXIV Player in the combat.
 pub struct FfxivPlayer {
@@ -44,12 +26,10 @@ pub struct FfxivPlayer {
     pub job: Job,
     pub power: CharacterPower,
 
-    pub priority_table: FfxivPriorityTable,
-    pub rotation_log: Vec<AttackSkill>,
+    pub priority_table: RefCell<FfxivPriorityTable>,
 
     /// Realtime Combat Data about the player
     pub buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-    pub current_combo: Option<IdType>,
     /// How many seconds passed after the most recent GCD. If delay is close to GCD, an oGCD will
     /// clip the player's next GCD so it becomes a GCD turn.
     pub total_delay: TimeType,
@@ -62,9 +42,6 @@ pub struct FfxivPlayer {
 }
 
 impl Player for FfxivPlayer {
-    fn get_id(&self) -> IdType {
-        self.id
-    }
     fn get_job(&self) -> &Job {
         &self.job
     }
@@ -77,16 +54,27 @@ impl Player for FfxivPlayer {
         self.total_delay
     }
 
-    fn set_delay(&mut self, delay: TimeType) {
-        self.total_delay = delay;
-    }
-
     fn get_next_skill(
         &self,
         debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
     ) -> Option<SkillInfo<AttackSkill>> {
         self.priority_table
+            .borrow_mut()
             .get_next_skill(self.buff_list.clone(), debuff_list, self)
+    }
+
+    fn set_delay(&mut self, delay: TimeType) {
+        self.total_delay = delay;
+    }
+
+    fn get_damage_inflict_time_millisecond<S: Skill>(&self, skill: &S) -> Option<TimeType> {
+        let inflict_time = skill.get_charging_time_millisecond() + self.get_cast_time(skill);
+
+        if inflict_time == 0 {
+            None
+        } else {
+            Some(inflict_time)
+        }
     }
 
     fn has_resources_for_skill<S: Skill>(&self, skill: S) -> bool {
@@ -98,7 +86,8 @@ impl Player for FfxivPlayer {
         self.next_gcd_time_millisecond
     }
 
-    fn set_next_gcd_time_milliseconds(&mut self, gcd_delay: TimeType) {
+    fn set_next_gcd_time_milliseconds<S: Skill>(&mut self, skill: &S) {
+        let gcd_delay = self.get_gcd(skill);
         self.next_gcd_time_millisecond += gcd_delay;
     }
 
@@ -106,16 +95,89 @@ impl Player for FfxivPlayer {
         self.next_turn.next_turn_combat_time_millisecond
     }
 
-    fn get_turn_type(&self) -> &FfxivTurnType {
-        &self.next_turn.turn_type
+    fn get_gcd_delay_millisecond<S: Skill>(&self, skill: &S) -> TimeType {
+        let gcd_cooldown_millisecond = skill.get_gcd_cooldown_millsecond()
+
+        if skill.is_speed_buffed() {
+            self.get_speed_buffed_time(gcd_cooldown_millisecond)
+        } else {
+            gcd_cooldown_millisecond
+        }
     }
 
     fn get_turn(&self) -> &FfxivTurnType {
         &self.next_turn.turn_type
     }
+
+    fn get_turn_type(&self) -> &FfxivTurnType {
+        &self.next_turn.turn_type
+    }
+}
+
+impl IdEntity for FfxivPlayer {
+    fn get_id(&self) -> IdType {
+        self.id
+    }
+}
+
+impl StatusHolder<BuffStatus> for FfxivPlayer {
+    fn get_status_list(&self) -> Rc<RefCell<Vec<BuffStatus>>> {
+        self.buff_list.clone()
+    }
+}
+
+impl CooldownTimer for FfxivPlayer {
+    fn update_cooldown(&mut self, time_passed: TimeType) {
+        self.priority_table.update_cooldown(time_passed);
+    }
 }
 
 impl FfxivPlayer {
+    fn get_gcd<S: Skill>(&self, skill: &S) -> TimeType {
+        let mut gcd_cooldown_millisecond = skill.get_gcd_cooldown_millsecond();
+
+        let charging_time = skill.get_charging_time_millisecond();
+
+        if skill.is_speed_buffed() {
+            gcd_cooldown_millisecond = self.get_speed_buffed_time(gcd_cooldown_millisecond)
+        }
+
+        charging_time + gcd_cooldown_millisecond
+    }
+
+    fn get_cast_time(&self, skill: &AttackSkill) -> TimeType {
+        let cast_time = skill.get_cast_time();
+
+        if skill.is_speed_buffed {
+            Some(self.get_speed_buffed_time(cast_time))
+        }
+        Some(cast_time)
+    }
+
+    fn get_speed_buffed_time(&self, time_millisecond: TimeType) -> TimeType {
+        let speed_buff_multiplier = self.get_gcd_buff_multiplier();
+
+        self.calculate_gcd_millisecond(
+            time_millisecond,
+            self.get_player_power().speed_multiplier,
+            speed_buff_multiplier,
+        )
+    }
+
+    fn get_gcd_buff_multiplier(&self) -> MultiplierType {
+        let mut gcd_buffs_multiplier = 1.0;
+        for buff in self.buff_list.borrow().iter() {
+            match buff {
+                StatusInfo::SpeedPercent(buff_increase_percent) => {
+                    gcd_buffs_multiplier =
+                        gcd_buffs_multiplier * (*buff_increase_percent as MultiplierType / 100.0);
+                }
+                _ => {}
+            }
+        }
+        gcd_buffs_multiplier
+    }
+
     /// After using a turn, calculate when the next turn will be in combat time,
     /// and also figure out if it is a GCD/oGCD turn.
     pub fn calculate_next_turn(&mut self) {
@@ -134,10 +196,8 @@ impl FfxivPlayer {
             id,
             job,
             power,
-            priority_table,
-            rotation_log: vec![],
+            priority_table: RefCell::new(priority_table),
             buff_list: Rc::new(RefCell::new(vec![])),
-            current_combo: None,
             total_delay: 0,
             next_gcd_time_millisecond: 0,
             next_turn: PlayerTurn::default(),
@@ -145,6 +205,8 @@ impl FfxivPlayer {
         }
     }
 }
+
+impl GcdCalculator for FfxivPlayer {}
 
 impl StatusHolder<BuffStatus> for FfxivPlayer {
     fn get_status_list(&self) -> Rc<RefCell<Vec<BuffStatus>>> {
@@ -157,7 +219,7 @@ impl StatusTimer<BuffStatus> for FfxivPlayer {}
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::status::{Status, StatusInfo};
+    use crate::skill::status::{Status, StatusInfo};
 
     #[test]
     fn target_basic_test() {

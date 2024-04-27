@@ -6,7 +6,7 @@ use std::collections::HashMap;
 /// Gets all the constant values needed for simulating FFXIV players.
 
 lazy_static! {
-    pub(crate) static ref EQUIPMENT_SLOTS: usize = 14;
+    pub static ref EQUIPMENT_SLOTS: usize = 14;
     pub(crate) static ref WEAPON_SLOT: usize = 13;
     pub(crate) static ref OFFHAND_SLOT: usize = 2;
     pub(crate) static ref HEAD_SLOT: usize = 3;

@@ -1,4 +1,5 @@
-use ffxiv_simbot_combat_components::player::{FfxivPlayer, Player};
+use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
+use ffxiv_simbot_combat_components::live_objects::player::Player;
 use ffxiv_simbot_combat_components::IdType;
 use std::cell::RefCell;
 use std::rc::Rc;

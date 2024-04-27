@@ -10,8 +10,6 @@ repository = "https://github.com/ffxiv-simbot"
 [dependencies]
 project-root = "0.2.2"
 itertools = { version = "0.10.0", features = [] }
-cargo-docs = "0.1.*"
-sorted-vec = "0.8.3"
 lazy_static = "1.4.0"
 
 [dependencies.ffxiv-simbot-db]

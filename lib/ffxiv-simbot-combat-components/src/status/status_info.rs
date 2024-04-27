@@ -1,0 +1,23 @@
+use crate::BuffIncreasePercentType;
+
+#[derive(Copy, Clone, Debug)]
+pub enum StatusInfo {
+    DamagePercent(BuffIncreasePercentType),
+    CritHitRatePercent(BuffIncreasePercentType),
+    DirectHitRatePercent(BuffIncreasePercentType),
+    SpeedPercent(BuffIncreasePercentType),
+}
+
+impl PartialEq<Self> for StatusInfo {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (StatusInfo::DamagePercent(a), StatusInfo::DamagePercent(b)) => a == b,
+            (StatusInfo::CritHitRatePercent(a), StatusInfo::CritHitRatePercent(b)) => a == b,
+            (StatusInfo::DirectHitRatePercent(a), StatusInfo::DirectHitRatePercent(b)) => a == b,
+            (StatusInfo::SpeedPercent(a), StatusInfo::SpeedPercent(b)) => a == b,
+            _ => false,
+        }
+    }
+}
+
+impl Eq for StatusInfo {}

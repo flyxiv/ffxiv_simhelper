@@ -3,7 +3,7 @@ use ffxiv_simbot_db::StatModifierType;
 use serde::Deserialize;
 
 /// Saves Constants needed for running the Engine.
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct EngineConfig {
     pub(crate) equipment_json_file_name: String,
     pub(crate) jobs_json_file_name: String,

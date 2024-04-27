@@ -1,0 +1,20 @@
+[package]
+name = "ffxiv-simbot-server"
+version = "0.1.0"
+edition = "2021"
+rust-version.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = "0.7"
+axum-macros = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+
+[dependencies.ffxiv-simbot-engine]
+version = "0.1.0"
+path = "../ffxiv-simbot-engine"
+
+[dependencies.ffxiv-simbot-db]
+version = "0.1.0"
+path = "../ffxiv-simbot-db"

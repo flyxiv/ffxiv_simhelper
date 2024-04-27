@@ -1,15 +1,17 @@
-use crate::status::{DebuffStatus, Status, StatusHolder, StatusInfo, StatusTimer};
+use crate::live_objects::target::Target;
+use crate::status::debuff_status::DebuffStatus;
+use crate::status::status_holder::StatusHolder;
+use crate::status::status_timer::StatusTimer;
 use crate::TimeType;
 use std::cell::RefCell;
 use std::rc::Rc;
-
-pub trait Target: StatusHolder<DebuffStatus> + Sized {}
 
 /// Stores the debuff list of the target
 /// debuff list will be sorted in the order of debuff time left so that
 /// it is easy to search which debuffs will be removed.
 pub struct FfxivTarget {
     pub debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
+    // TODO: Add Dots
     pub combat_time_millisecond: TimeType,
 }
 
@@ -26,7 +28,8 @@ impl StatusTimer<DebuffStatus> for FfxivTarget {}
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::status::DebuffStatus;
+    use crate::status::debuff_status::DebuffStatus;
+    use crate::status::status_info::StatusInfo;
 
     #[test]
     fn target_basic_test() {

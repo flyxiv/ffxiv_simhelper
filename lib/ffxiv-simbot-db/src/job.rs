@@ -1,7 +1,7 @@
 use crate::constants::FFXIV_STAT_MODIFIER;
 /// Implements functions needed to save Job data
 /// in FFXIV Simbot.
-/// Only save combat jobs as of now.
+/// Only save combat rotation as of now.
 use crate::stat::{HpType, MainStatTrait, MainStats, SpecialStatTrait, StatType, SubStatTrait};
 use crate::{item_vec_to_id_table, IdTable, JsonFileReader, Result, SearchKeyEntity, StatModifier};
 use itertools::Itertools;
@@ -12,7 +12,7 @@ use std::string::ToString;
 /// Type for Stat modifiers.
 pub type JobAbbrevType = String;
 pub(crate) type JobId = usize;
-/// Equipment Searches Jobs by its Abbrev, so key has to be Abbrev for jobs.
+/// Equipment Searches Jobs by its Abbrev, so key has to be Abbrev for rotation.
 pub type JobTable = IdTable<JobAbbrevType, Job>;
 
 /// Crude Job Data fetched from Etro

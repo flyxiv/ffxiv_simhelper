@@ -10,11 +10,11 @@ use std::path::PathBuf;
 pub type IdTable<T, U> = HashMap<T, U>;
 type Result<T> = std::result::Result<T, DataError>;
 pub type StatModifierType = f64;
-pub type DamageMultiplierType = f64;
+pub type MultiplierType = f64;
 
 pub(crate) mod character;
 pub mod clan;
-mod constants;
+pub mod constants;
 pub mod equipment;
 pub mod ffxiv_context;
 pub mod food;
@@ -138,6 +138,29 @@ where
 
         for key in keys {
             table.insert(key, item.clone());
+        }
+    }
+
+    table
+}
+
+pub(crate) fn item_vec_to_id_vec_table<T, U>(items: Vec<U>) -> IdTable<T, Vec<U>>
+where
+    T: Hash + Sized + Eq,
+    U: SearchKeyEntity<T> + Sized + Clone,
+{
+    let mut table = HashMap::new();
+
+    for item in items {
+        let keys = item.get_search_key();
+
+        for key in keys {
+            if !table.contains_key(&key) {
+                table.insert(key, vec![item.clone()]);
+            } else {
+                let mut entry = table.get_mut(&key).unwrap();
+                entry.push(item.clone());
+            }
         }
     }
 

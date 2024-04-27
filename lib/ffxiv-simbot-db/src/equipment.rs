@@ -3,9 +3,9 @@ use crate::job::JobAbbrevType;
 /// in FFXIV Simbot.
 use crate::materia::Materia;
 use crate::stat::{MainStatTrait, MainStats, StatType, SubStatTrait, SubStats};
-use crate::{item_vec_to_id_table, DataError, IdTable, JsonFileReader, SearchKeyEntity};
+use crate::{item_vec_to_id_vec_table, DataError, IdTable, JsonFileReader, SearchKeyEntity};
 use itertools::Itertools;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
 use std::path::PathBuf;
 
@@ -19,11 +19,11 @@ static PENTAMELD_MATERIA_SLOT: usize = 5;
 /// So Equipment's Key must be <JobId, SlotId>
 #[derive(Hash, Eq, PartialEq, Clone)]
 pub struct EquipmentKey {
-    job_id: JobAbbrevType,
-    slot_id: SlotType,
+    pub job_id: JobAbbrevType,
+    pub slot_id: SlotType,
 }
 
-pub type EquipmentTable = IdTable<EquipmentKey, Equipment>;
+pub type EquipmentTable = IdTable<EquipmentKey, Vec<Equipment>>;
 type Result<T> = std::result::Result<T, DataError>;
 
 /// Trait for Weapons
@@ -47,7 +47,7 @@ pub trait MateriaTrait {
 /// Equipment Data Type for FFXIV Simbot
 /// Equipments of different kinds(weapons, armor, accessories) are all
 /// represented by this one data, since it makes it more flexible for changes.
-#[derive(PartialEq, Clone, Debug)]
+#[derive(PartialEq, Clone, Debug, Serialize)]
 pub struct Equipment {
     pub(crate) id: usize,
     pub(crate) slot_name: String,
@@ -126,13 +126,13 @@ impl Equipment {
     }
 }
 
-#[derive(Eq, PartialEq, Clone, Debug)]
+#[derive(Eq, PartialEq, Clone, Debug, Serialize)]
 pub(crate) struct WeaponDamage {
     pub(crate) damage_mag: usize,
     pub(crate) damage_phys: usize,
 }
 
-#[derive(Eq, PartialEq, Clone, Debug)]
+#[derive(Eq, PartialEq, Clone, Debug, Serialize)]
 pub(crate) struct ArmorDefense {
     pub(crate) defense_mag: usize,
     pub(crate) defense_phys: usize,
@@ -451,7 +451,7 @@ impl EquipmentFactory {
             .map(|etro_equipment| self.convert_to_equipment(etro_equipment))
             .collect_vec();
 
-        Ok(item_vec_to_id_table(equipments))
+        Ok(item_vec_to_id_vec_table(equipments))
     }
 
     fn convert_to_equipment(&self, etro_equipment: EtroEquipment) -> Equipment {
@@ -495,9 +495,7 @@ impl EquipmentFactory {
 
 #[cfg(test)]
 mod tests {
-    use crate::equipment::{
-        ArmorDefense, Equipment, EquipmentKey, MateriaTrait, SlotType, WeaponDamage,
-    };
+    use crate::equipment::{ArmorDefense, Equipment, EquipmentKey, MateriaTrait, WeaponDamage};
     use crate::item_vec_to_id_table;
     use crate::materia::Materia;
     use crate::stat::{MainStatTrait, MainStats, SubStatTrait, SubStats};

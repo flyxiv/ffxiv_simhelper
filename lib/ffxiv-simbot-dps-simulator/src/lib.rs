@@ -5,11 +5,11 @@ type Result<T> = std::result::Result<T, SimulatorError>;
 mod damage_rdps_profile;
 mod multiplier_calculator;
 mod raw_damage_calculator;
+mod simulation_result;
 pub mod simulator;
 mod skill_calculator;
 mod skill_simulator;
 mod turn_calculator;
-mod util;
 
 pub enum SimulatorError {
     DebuffNotFoundError(String),
