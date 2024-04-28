@@ -12,7 +12,6 @@ pub struct BuffStatus {
     pub(crate) status_info: StatusInfo,
     pub(crate) duration_millisecond: TimeType,
     pub is_raidwide: bool,
-    pub(crate) owner_player_id: IdType,
 }
 
 impl Status for BuffStatus {
@@ -40,7 +39,7 @@ impl IdEntity for BuffStatus {
 
 impl OwnerTracker for BuffStatus {
     fn get_owner_id(&self) -> IdType {
-        self.owner_player_id
+        self.owner_id
     }
 }
 

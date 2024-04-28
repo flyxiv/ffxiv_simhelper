@@ -11,7 +11,7 @@ pub struct DebuffStatus {
     pub(crate) duration_left_millisecond: TimeType,
     pub(crate) status_info: StatusInfo,
     pub(crate) duration_millisecond: TimeType,
-    pub(crate) owner_player_id: IdType,
+    pub(crate) is_raidwide: bool,
 }
 
 impl Status for DebuffStatus {
@@ -39,7 +39,7 @@ impl IdEntity for DebuffStatus {
 
 impl OwnerTracker for DebuffStatus {
     fn get_owner_id(&self) -> IdType {
-        self.owner_player_id
+        self.owner_id
     }
 }
 

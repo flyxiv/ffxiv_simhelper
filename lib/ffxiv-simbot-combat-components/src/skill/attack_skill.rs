@@ -7,7 +7,7 @@ use crate::skill::{ResourceRequirements, Skill, NON_GCD_DELAY_MILLISECOND};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
-use crate::{DamageType, IdType, StackType, TimeType};
+use crate::{DamageType, IdType, ResourceType, StackType, TimeType};
 use ffxiv_simbot_db::MultiplierType;
 use std::cmp::max;
 
@@ -23,21 +23,23 @@ pub struct AttackSkill {
     pub debuff: Option<DebuffStatus>,
     pub combo: Option<IdType>,
 
-    pub gcd_cooldown_millisecond: TimeType,
-    pub(crate) turn_type: FfxivTurnType,
     pub(crate) delay_millisecond: Option<TimeType>,
 
     pub(crate) casting_time_millisecond: TimeType,
-    pub(crate) gcd_time_millisecond: TimeType,
+    pub(crate) gcd_cooldown_millisecond: TimeType,
     pub(crate) charging_time_millisecond: TimeType,
     pub(crate) is_speed_buffed: bool,
 
-    pub(crate) cooldown_millisecond: TimeType,
     pub(crate) resource_required: Vec<ResourceRequirements>,
+    pub(crate) resource1_created: ResourceType,
+    pub(crate) resource2_created: ResourceType,
+
+    pub(crate) cooldown_millisecond: TimeType,
     pub(crate) current_cooldown_millisecond: TimeType,
     pub(crate) stacks: StackType,
 }
 
+#[derive(Clone)]
 pub struct SkillInfo<S: Skill> {
     pub skill: S,
     pub damage_inflict_time_millisecond: Option<TimeType>,
@@ -75,16 +77,18 @@ impl Skill for AttackSkill {
 
     #[inline]
     fn is_gcd(&self) -> bool {
-        self.gcd_time_millisecond > 0
+        self.gcd_cooldown_millisecond > 0
     }
 
     fn get_gcd_cast_time(&self) -> TimeType {
         self.casting_time_millisecond
     }
     fn get_gcd_time_millisecond(&self) -> TimeType {
-        self.gcd_time_millisecond
+        self.gcd_cooldown_millisecond
     }
-
+    fn get_current_cooldown_millisecond(&self) -> TimeType {
+        self.current_cooldown_millisecond
+    }
     fn get_gcd_cooldown_millsecond(&self) -> TimeType {
         max(self.gcd_cooldown_millisecond, self.casting_time_millisecond)
     }
@@ -96,6 +100,17 @@ impl Skill for AttackSkill {
 
     fn is_ready(&self) -> bool {
         self.stacks >= 1
+    }
+    fn is_raidbuff(&self) -> bool {
+        if let Some(buff) = &self.buff {
+            return buff.is_raidwide;
+        }
+
+        if let Some(debuff) = &self.debuff {
+            return debuff.is_raidwide;
+        }
+
+        false
     }
 }
 

@@ -6,6 +6,7 @@ pub enum StatusInfo {
     CritHitRatePercent(BuffIncreasePercentType),
     DirectHitRatePercent(BuffIncreasePercentType),
     SpeedPercent(BuffIncreasePercentType),
+    None,
 }
 
 impl PartialEq<Self> for StatusInfo {

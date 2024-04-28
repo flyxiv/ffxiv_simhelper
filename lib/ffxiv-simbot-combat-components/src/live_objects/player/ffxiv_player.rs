@@ -3,7 +3,7 @@ use crate::live_objects::player::gcd_calculator::GcdCalculator;
 use crate::live_objects::player::Player;
 use crate::live_objects::turn_type::{FfxivTurnType, PlayerTurn, TurnType};
 use crate::rotation::cooldown_timer::CooldownTimer;
-use crate::rotation::priority_table::PriorityTable;
+use crate::rotation::priority_table::{PriorityTable, SkillResult};
 use crate::rotation::FfxivPriorityTable;
 use crate::skill::attack_skill::{AttackSkill, SkillInfo};
 use crate::skill::Skill;
@@ -18,6 +18,10 @@ use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
 use std::cell::RefCell;
 use std::rc::Rc;
+
+static TWO_MINUTES_IN_MILLISECOND: TimeType = 120000;
+static BURST_START_TIME_MILLISECOND: TimeType = 7000;
+static BURST_END_TIME_MILLISECOND: TimeType = 23000;
 
 /// The Abstraction for an actual FFXIV Player in the combat.
 pub struct FfxivPlayer {
@@ -36,6 +40,7 @@ pub struct FfxivPlayer {
 
     /// Combat time related data
     pub next_gcd_time_millisecond: TimeType,
+    pub last_gcd_time_millisecond: TimeType,
     pub next_turn: PlayerTurn,
 
     pub mana_available: Option<i32>,
@@ -57,7 +62,7 @@ impl Player for FfxivPlayer {
     fn get_next_skill(
         &self,
         debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-    ) -> Option<SkillInfo<AttackSkill>> {
+    ) -> Option<SkillResult<AttackSkill>> {
         self.priority_table
             .borrow_mut()
             .get_next_skill(self.buff_list.clone(), debuff_list, self)
@@ -82,21 +87,29 @@ impl Player for FfxivPlayer {
         return false;
     }
 
+    fn get_last_gcd_time_millisecond(&self) -> TimeType {
+        self.last_gcd_time_millisecond
+    }
+
+    fn set_last_gcd_time_millisecond(&mut self, time: TimeType) {
+        self.last_gcd_time_millisecond = time;
+    }
+
     fn get_next_gcd_time_millisecond(&self) -> TimeType {
         self.next_gcd_time_millisecond
     }
 
-    fn set_next_gcd_time_milliseconds<S: Skill>(&mut self, skill: &S) {
+    fn set_next_gcd_time_millisecond<S: Skill>(&mut self, skill: &S) {
         let gcd_delay = self.get_gcd(skill);
         self.next_gcd_time_millisecond += gcd_delay;
     }
 
-    fn get_next_turn_time_milliseconds(&self) -> TimeType {
+    fn get_next_turn_time_millisecond(&self) -> TimeType {
         self.next_turn.next_turn_combat_time_millisecond
     }
 
     fn get_gcd_delay_millisecond<S: Skill>(&self, skill: &S) -> TimeType {
-        let gcd_cooldown_millisecond = skill.get_gcd_cooldown_millsecond()
+        let gcd_cooldown_millisecond = skill.get_gcd_cooldown_millsecond();
 
         if skill.is_speed_buffed() {
             self.get_speed_buffed_time(gcd_cooldown_millisecond)
@@ -111,6 +124,14 @@ impl Player for FfxivPlayer {
 
     fn get_turn_type(&self) -> &FfxivTurnType {
         &self.next_turn.turn_type
+    }
+    fn get_millisecond_before_burst(&self) -> TimeType {
+        let combat_time = self.next_turn.next_turn_combat_time_millisecond;
+        self.get_next_burst_time(combat_time)
+    }
+
+    fn delay_turn_by(&mut self, delay: TimeType) {
+        self.next_turn.next_turn_combat_time_millisecond += delay;
     }
 }
 
@@ -133,6 +154,18 @@ impl CooldownTimer for FfxivPlayer {
 }
 
 impl FfxivPlayer {
+    fn get_next_burst_time(&self, combat_time: TimeType) -> TimeType {
+        let burst_number_offset = combat_time % TWO_MINUTES_IN_MILLISECOND;
+
+        if burst_number_offset < BURST_START_TIME_MILLISECOND {
+            BURST_START_TIME_MILLISECOND - burst_number_offset
+        } else if burst_number_offset > BURST_END_TIME_MILLISECOND {
+            TWO_MINUTES_IN_MILLISECOND + BURST_START_TIME_MILLISECOND - burst_number_offset
+        } else {
+            0
+        }
+    }
+
     fn get_gcd<S: Skill>(&self, skill: &S) -> TimeType {
         let mut gcd_cooldown_millisecond = skill.get_gcd_cooldown_millsecond();
 
@@ -200,6 +233,7 @@ impl FfxivPlayer {
             buff_list: Rc::new(RefCell::new(vec![])),
             total_delay: 0,
             next_gcd_time_millisecond: 0,
+            last_gcd_time_millisecond: 0,
             next_turn: PlayerTurn::default(),
             mana_available: None,
         }

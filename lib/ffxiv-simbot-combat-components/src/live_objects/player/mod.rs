@@ -29,14 +29,18 @@ pub trait Player: Sized + StatusHolder<BuffStatus> + IdEntity {
         debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
     ) -> Option<SkillInfo<AttackSkill>>;
 
+    fn get_last_gcd_time_millisecond(&self) -> TimeType;
     fn set_delay(&mut self, delay: TimeType);
 
     fn get_damage_inflict_time_millisecond<S: Skill>(&self, skill: &S) -> Option<TimeType>;
     fn has_resources_for_skill<S: Skill>(&self, skill: S) -> bool;
     fn get_next_gcd_time_millisecond(&self) -> TimeType;
-    fn set_next_gcd_time_milliseconds<S: Skill>(&mut self, skill: &S);
-    fn get_next_turn_time_milliseconds(&self) -> TimeType;
+    fn set_next_gcd_time_millisecond<S: Skill>(&mut self, skill: &S);
+    fn get_next_turn_time_millisecond(&self) -> TimeType;
     fn get_gcd_delay_millisecond<S: Skill>(&self, skill: &S) -> TimeType;
     fn get_turn(&self) -> &FfxivTurnType;
     fn get_turn_type(&self) -> &FfxivTurnType;
+    fn get_millisecond_before_burst(&self) -> TimeType;
+    fn set_last_gcd_time_millisecond(&mut self, time: TimeType);
+    fn delay_turn_by(&mut self, delay: TimeType);
 }

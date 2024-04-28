@@ -13,98 +13,6 @@ use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::rc::Rc;
 
-lazy_static! {
-    static ref DOT: AttackSkill = AttackSkill {
-        id: 0,
-        name: String::from("Eukrasian Dosis III"),
-        player_id: 0,
-        potency: 750,
-        trait_multiplier: 1.3,
-        buff: None,
-        debuff: None,
-        combo: None,
-        turn_type: FfxivTurnType::Gcd,
-        delay_millisecond: None,
-        cooldown_millisecond: 30000,
-        resource_required: vec![],
-        current_cooldown_millisecond: 0,
-        stacks: 1,
-    };
-    static ref GCD: AttackSkill = AttackSkill {
-        id: 1,
-        name: String::from("Dosis III"),
-        player_id: 0,
-        potency: 330,
-        trait_multiplier: 1.3,
-        buff: None,
-        debuff: None,
-        combo: None,
-        turn_type: FfxivTurnType::Gcd,
-        delay_millisecond: None,
-        cooldown_millisecond: 0,
-        resource_required: vec![],
-        current_cooldown_millisecond: 0,
-        stacks: 1,
-    };
-    static ref PHLEGMA: AttackSkill = AttackSkill {
-        id: 2,
-        name: String::from("Phlegma III"),
-        player_id: 0,
-        potency: 600,
-        trait_multiplier: 1.3,
-        buff: None,
-        debuff: None,
-        combo: None,
-        turn_type: FfxivTurnType::Gcd,
-        delay_millisecond: None,
-        cooldown_millisecond: 40000,
-        resource_required: vec![],
-        current_cooldown_millisecond: 0,
-        stacks: 2,
-    };
-    static ref SAGE_OPENER: Vec<Option<AttackSkill>> = vec![
-        Some(GCD.clone()),
-        None,
-        None,
-        Some(DOT.clone()),
-        None,
-        None,
-        Some(GCD.clone()),
-        None,
-        None,
-        Some(GCD.clone()),
-    ];
-    static ref SAGE_PRIORITY_LIST: Vec<SkillPriorityInfo> = vec![
-        SkillPriorityInfo {
-            skill: DOT.clone(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill: PHLEGMA.clone(),
-            prerequisite: Some(SkillPrerequisite::Or(
-                SkillPrerequisite::HasStacks(2),
-                SkillPrerequisite::IsBurst
-            )),
-        },
-        SkillPriorityInfo {
-            skill: GCD.clone(),
-            prerequisite: None,
-        },
-    ];
-}
-
-impl Default for SagePriorityTable {
-    fn default() -> Self {
-        SagePriorityTable {
-            turn_count: 0,
-            skills: vec![DOT.clone(), GCD.clone(), PHLEGMA.clone()],
-            opener: SAGE_OPENER.clone(),
-            priority_list: SAGE_PRIORITY_LIST.clone(),
-            current_combo: None,
-        }
-    }
-}
-
 #[derive(Clone)]
 pub struct SagePriorityTable {
     turn_count: TurnCount,
@@ -116,15 +24,13 @@ pub struct SagePriorityTable {
 }
 
 impl PriorityTable<FfxivPlayer, AttackSkill> for SagePriorityTable {
-    fn get_highest_priority_skill<P>(
+    fn get_highest_priority_skill(
         &mut self,
         _: Rc<RefCell<Vec<BuffStatus>>>,
         _: Rc<RefCell<Vec<DebuffStatus>>>,
-        player: &P,
-    ) -> Option<SkillInfo<AttackSkill>>
-    where
-        P: Player,
-    {
+        player: &FfxivPlayer,
+        ffxiv_turn_type: &FfxivTurnType,
+    ) -> Option<SkillInfo<AttackSkill>> {
         let mut skill_info = SkillInfo {
             skill: GCD.clone(),
             guaranteed_critical_hit: false,

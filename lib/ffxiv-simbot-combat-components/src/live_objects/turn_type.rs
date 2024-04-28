@@ -1,7 +1,6 @@
 use ffxiv_simbot_db::MultiplierType;
 use crate::live_objects::player::Player;
 use crate::skill::{GCD_TURN_DELAY_PERCENTAGE_THRESHOLD, NON_GCD_DELAY_MILLISECOND};
-use crate::skill::skill::NON_GCD_DELAY_MILLISECOND;
 use crate::TimeType;
 
 pub(crate) trait TurnType {

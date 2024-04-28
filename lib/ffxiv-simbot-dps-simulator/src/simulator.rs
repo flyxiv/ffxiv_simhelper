@@ -10,18 +10,21 @@ use ffxiv_simbot_combat_components::live_objects::player::Player;
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
 use ffxiv_simbot_combat_components::live_objects::target::Target;
 use ffxiv_simbot_combat_components::rotation::cooldown_timer::CooldownTimer;
+use ffxiv_simbot_combat_components::rotation::priority_table::SkillResult;
 use ffxiv_simbot_combat_components::skill::attack_skill::{AttackSkill, SkillInfo};
+use ffxiv_simbot_combat_components::skill::Skill;
 use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
 use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
 use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use std::cell::{Ref, RefCell};
 use std::collections::HashMap;
 use std::rc::Rc;
-use ffxiv_simbot_combat_components::skill::Skill;
+
+pub static SIMULATION_START_TIME_MILLISECOND: TimeType = -5000;
 
 enum EventType {
     PlayerTurn,
-    InflictDamage(Vec<AttackSkill>),
+    InflictDamage(Vec<SkillInfo<AttackSkill>>),
 }
 
 struct CombatEvent {
@@ -73,7 +76,7 @@ pub struct FfxivSimulationBoard {
 
     current_combat_time_millisecond: RefCell<TimeType>,
     pub(crate) finish_combat_time_millisecond: TimeType,
-    pub(crate) skill_queue: RefCell<HashMap<TimeType, Vec<AttackSkill>>>,
+    pub(crate) skill_queue: RefCell<HashMap<TimeType, Vec<SkillInfo<AttackSkill>>>>,
 }
 
 impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationBoard {
@@ -110,10 +113,32 @@ impl FfxivSimulationBoard {
                 let current_player = self.get_current_player();
                 current_player.borrow_mut().calculate_next_turn();
             }
-            EventType::InflictDamage(_) => {
-                todo!()
+            EventType::InflictDamage(skills) => {
+                for skill in skills {
+                    if skill.is_auto_attack() {
+                        self.add_next_auto_attack_to_queue(&skill, &combat_event);
+                    }
+
+                    self.simulate_skill(skill);
+                }
             }
         }
+    }
+
+    fn add_next_auto_attack_to_queue(
+        &self,
+        skill_info: &SkillInfo<AttackSkill>,
+        combat_event: &CombatEvent,
+    ) {
+        let mut next_auto_attack = skill_info.clone();
+        let auto_attack_player = self.get_player_data(next_auto_attack.skill.get_owner_id());
+
+        next_auto_attack.damage_inflict_time_millisecond = Some(
+            combat_event.event_time_millisecond
+                + auto_attack_player.get_gcd_delay_millisecond(&next_auto_attack.skill),
+        );
+
+        self.add_to_skill_queue(next_auto_attack);
     }
 
     #[inline]
@@ -260,7 +285,7 @@ impl FfxivSimulationBoard {
         }
     }
 
-    fn get_next_skill(&self) -> Option<SkillInfo<AttackSkill>> {
+    fn get_next_skill(&self) -> Option<SkillResult<AttackSkill>> {
         let current_turn_player = self.get_current_player();
         let current_turn_player = current_turn_player.borrow();
         let target = self.get_target();
@@ -270,20 +295,64 @@ impl FfxivSimulationBoard {
     }
 
     fn use_skill(&self) {
-        let skill_info = self.get_next_skill();
+        let skill_result = self.get_next_skill();
+        let mut skill_info = None;
 
-        if skill_info.is_none() {
+        if let Some(skill_result) = skill_result {
+            match skill_result {
+                SkillResult::Delay(delay_time) => {
+                    let current_player = self.get_current_player();
+                    current_player.borrow_mut().delay_turn_by(delay_time);
+                    return;
+                }
+                SkillResult::UseSkill(skill_info_of_result) => {
+                    skill_info = Some(skill_info_of_result);
+                }
+            }
+        } else {
             return;
         }
 
         let skill_info = skill_info.unwrap();
+        self.update_current_player_gcd_time(&skill_info.skill);
 
-        self.update_current_player_next_gcd_time(&skill_info.skill);
+        if skill_info.damage_inflict_time_millisecond.is_some() {
+            self.add_to_skill_queue(skill_info);
+        } else {
+            self.simulate_skill(skill_info);
+        }
+    }
+
+    fn update_current_player_gcd_time(&self, skill: &AttackSkill) {
+        if !skill.is_gcd() {
+            return;
+        }
+
+        let current_turn_player = self.get_current_player();
+        let mut current_turn_player = current_turn_player.borrow_mut();
+
+        current_turn_player
+            .set_last_gcd_time_millisecond(current_turn_player.get_next_gcd_time_millisecond());
+        current_turn_player.set_next_gcd_time_millisecond(skill);
+    }
+
+    fn simulate_skill(&self, skill_info: SkillInfo<AttackSkill>) {
         let skill_id = skill_info.skill.get_id();
-
         let simulation_result = self.request_skill_simulation(skill_info);
+
         self.update_skill_simulation_result(skill_id, simulation_result);
         self.add_skill_to_rotation_log(skill_id);
+    }
+
+    fn add_to_skill_queue(&self, skill_info: SkillInfo<AttackSkill>) {
+        let mut skill_queue = self.skill_queue.borrow_mut();
+        let time_millisecond = skill_info.damage_inflict_time_millisecond.unwrap();
+
+        if let Some(skill_list) = skill_queue.get_mut(&time_millisecond) {
+            skill_list.push(skill_info);
+        } else {
+            skill_queue.insert(time_millisecond, vec![skill_info]);
+        }
     }
 
     fn add_skill_to_rotation_log(&self, skill_id: IdType) {
@@ -351,7 +420,7 @@ impl FfxivSimulationBoard {
             party,
             target,
             rdps_table: RefCell::new(FfxivRaidDamageTable::default()),
-            current_combat_time_millisecond: RefCell::new(0),
+            current_combat_time_millisecond: RefCell::new(-SIMULATION_START_TIME_MILLISECOND),
             finish_combat_time_millisecond: 0,
             skill_queue: Default::default(),
         }
