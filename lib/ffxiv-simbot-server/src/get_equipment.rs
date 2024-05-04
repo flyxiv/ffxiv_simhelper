@@ -1,7 +1,5 @@
 use axum::extract::{Query, State};
-use axum::response::IntoResponse;
 use axum::Json;
-use axum_macros::debug_handler;
 use ffxiv_simbot_db::equipment::{Equipment, EquipmentKey};
 use ffxiv_simbot_engine::engine::Engine;
 use serde::Deserialize;

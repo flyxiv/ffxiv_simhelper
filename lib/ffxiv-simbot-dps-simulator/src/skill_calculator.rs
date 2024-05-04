@@ -1,6 +1,7 @@
 use crate::damage_rdps_profile::{FfxivRaidDamageTable, RaidDamageTable, RaidDamageTableKey};
 use crate::multiplier_calculator::MultiplierCalculator;
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
+use ffxiv_simbot_combat_components::owner_tracker::OwnerTracker;
 use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
 use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
 use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;

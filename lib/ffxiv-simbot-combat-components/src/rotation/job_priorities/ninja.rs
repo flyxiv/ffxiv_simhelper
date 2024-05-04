@@ -1,106 +1,81 @@
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
-use crate::live_objects::player::Player;
 use crate::live_objects::turn_type::FfxivTurnType;
+use crate::rotation::cooldown_timer::CooldownTimer;
 use crate::rotation::job_priorities::job_abilities::ninja_abilities::{
     bunshin_gcd_ids, get_bunshin_stack, make_ninja_gcd_table, make_ninja_ogcd_table,
     make_ninja_opener, make_ninja_skill_list,
 };
 use crate::rotation::job_priorities::SkillTable;
-use crate::rotation::priority_table::{PriorityTable, SkillResult};
-use crate::rotation::SkillPriorityInfo;
+use crate::rotation::priority_table::PriorityTable;
+use crate::rotation::{FfxivPriorityTable, SkillPriorityInfo};
 use crate::skill::attack_skill::{AttackSkill, SkillInfo};
-use crate::skill::ResourceRequirements;
-use crate::status::buff_status::BuffStatus;
-use crate::status::debuff_status::DebuffStatus;
 use crate::{IdType, ResourceType, StackType, TurnCount};
+use ffxiv_simbot_db::ffxiv_context::FfxivContext;
+use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use std::cell::RefCell;
-use std::rc::Rc;
 
+#[derive(Clone)]
 pub(crate) struct NinjaPriorityTable {
     turn_count: TurnCount,
     skills: SkillTable,
 
     opener: Vec<Option<AttackSkill>>,
 
-    gcd_priority_table: Vec<SkillPriorityInfo>,
-    ogcd_priority_table: Vec<SkillPriorityInfo>,
+    gcd_priority_table: Vec<SkillPriorityInfo<AttackSkill>>,
+    ogcd_priority_table: Vec<SkillPriorityInfo<AttackSkill>>,
 
-    ninki: ResourceType,
-    bunshin_count: ResourceType,
+    ninki: RefCell<ResourceType>,
+    bunshin_count: RefCell<ResourceType>,
 
     current_combo: Option<IdType>,
 }
 
 impl PriorityTable<FfxivPlayer, AttackSkill> for NinjaPriorityTable {
-    fn update_stack_status(
-        &mut self,
-        skill: &AttackSkill,
-        buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-        debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-    ) {
-        self.ninki += skill.resource1_created;
-        self.bunshin_count += skill.resource2_created;
-
-        self.current_combo = skill.combo;
-
-        for resource in skill.resource_required {
-            match resource {
-                ResourceRequirements::StackResource1(required_resource) => {
-                    self.ninki -= required_resource;
-                }
-                ResourceRequirements::CheckStatus(status_id) => {
-                    for debuff in debuff_list.borrow_mut().iter_mut() {
-                        if debuff.get_id() == status_id {
-                            debuff.duration_left_millisecond = 0;
-                        }
-                    }
-
-                    for buff in buff_list.borrow_mut().iter_mut() {
-                        if buff.get_id() == status_id {
-                            buff.duration_left_millisecond = 0;
-                        }
-                    }
-                }
-                _ => {}
-            }
-        }
+    fn add_resource1(&self, resource: ResourceType) {
+        *self.ninki.borrow_mut() += resource;
     }
 
-    fn is_opener(&self) -> bool {
-        self.turn_count < self.opener.len()
+    fn add_resource2(&self, resource: ResourceType) {
+        *self.bunshin_count.borrow_mut() += resource;
     }
 
-    fn get_opener(&mut self, player: &FfxivPlayer) -> Option<SkillResult<AttackSkill>> {
-        let skill = &self.opener[self.turn_count];
+    fn update_combo(&mut self, combo_id: Option<IdType>) {
+        self.current_combo = combo_id;
+    }
+
+    fn get_opener_len(&self) -> usize {
+        self.opener.len()
+    }
+
+    fn get_opener_at(&self, index: usize) -> &Option<AttackSkill> {
+        &self.opener[index]
+    }
+
+    fn get_turn_count(&self) -> IdType {
+        self.turn_count
+    }
+
+    fn increment_turn(&mut self) {
         self.turn_count += 1;
-
-        if let Some(skill) = skill {
-            Some(SkillResult::UseSkill(vec![SkillInfo {
-                skill: skill.clone(),
-                damage_inflict_time_millisecond: player.get_damage_inflict_time_millisecond(skill),
-                guaranteed_critical_hit: false,
-                guaranteed_direct_hit: false,
-            }]))
-        } else {
-            None
-        }
     }
 
     fn add_additional_skills(
-        &mut self,
-        skill: AttackSkill,
+        &self,
+        skills: &Vec<SkillInfo<AttackSkill>>,
         player: &FfxivPlayer,
-    ) -> Vec<AttackSkill> {
-        let skill_id = skill.get_id();
+    ) -> Vec<SkillInfo<AttackSkill>> {
+        let skill_info = &skills[0];
+        let skill_id = skill_info.skill.get_id();
+        let mut skills = skills.clone();
 
-        if bunshin_gcd_ids().contains(&skill_id) && self.bunshin_count > 0 {
-            self.bunshin_count -= 1;
-            self.ninki += 5;
-            vec![skill, get_bunshin_stack(player.get_id())]
-        } else {
-            vec![skill]
+        if bunshin_gcd_ids().contains(&skill_id) && self.get_resource(1) > 0 {
+            self.add_resource1(5);
+            self.add_resource2(-1);
+            skills.push(self.make_skill_info(get_bunshin_stack(player.get_id()), player));
         }
+
+        skills
     }
 
     fn get_skills_mut(&mut self) -> &mut SkillTable {
@@ -109,9 +84,9 @@ impl PriorityTable<FfxivPlayer, AttackSkill> for NinjaPriorityTable {
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            self.ninki
+            *self.ninki.borrow()
         } else {
-            self.bunshin_count
+            *self.bunshin_count.borrow()
         }
     }
 
@@ -121,7 +96,10 @@ impl PriorityTable<FfxivPlayer, AttackSkill> for NinjaPriorityTable {
         skill.stacks
     }
 
-    fn get_priority_table(&self, turn_type: &FfxivTurnType) -> &Vec<SkillPriorityInfo> {
+    fn get_priority_table(
+        &self,
+        turn_type: &FfxivTurnType,
+    ) -> &Vec<SkillPriorityInfo<AttackSkill>> {
         match turn_type {
             FfxivTurnType::Gcd => &self.gcd_priority_table,
             _ => &self.ogcd_priority_table,
@@ -149,9 +127,34 @@ impl NinjaPriorityTable {
             opener: make_ninja_opener(player_id),
             gcd_priority_table: make_ninja_gcd_table(player_id),
             ogcd_priority_table: make_ninja_ogcd_table(player_id),
-            ninki: 0,
-            bunshin_count: 0,
+            ninki: RefCell::new(0),
+            bunshin_count: RefCell::new(0),
             current_combo: None,
+        }
+    }
+}
+
+impl FfxivPlayer {
+    pub fn new_ninja(
+        player_id: IdType,
+        power: CharacterPower,
+        context: &FfxivContext,
+    ) -> FfxivPlayer {
+        let ninja_job = context.jobs.get("NIN").unwrap();
+
+        Self::new(
+            player_id,
+            ninja_job.clone(),
+            power,
+            FfxivPriorityTable::Ninja(NinjaPriorityTable::new(player_id)),
+        )
+    }
+}
+
+impl CooldownTimer for NinjaPriorityTable {
+    fn update_cooldown(&mut self, elapsed_time: i32) {
+        for (_, skill) in self.skills.iter_mut() {
+            skill.update_cooldown(elapsed_time);
         }
     }
 }

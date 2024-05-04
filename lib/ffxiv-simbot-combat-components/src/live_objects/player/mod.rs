@@ -1,6 +1,7 @@
 use crate::id_entity::IdEntity;
 use crate::live_objects::turn_type::FfxivTurnType;
-use crate::skill::attack_skill::{AttackSkill, SkillInfo};
+use crate::rotation::priority_table::SkillResult;
+use crate::skill::attack_skill::AttackSkill;
 use crate::skill::Skill;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
@@ -27,7 +28,7 @@ pub trait Player: Sized + StatusHolder<BuffStatus> + IdEntity {
     fn get_next_skill(
         &self,
         debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-    ) -> Option<SkillInfo<AttackSkill>>;
+    ) -> Option<SkillResult<AttackSkill>>;
 
     fn get_last_gcd_time_millisecond(&self) -> TimeType;
     fn set_delay(&mut self, delay: TimeType);

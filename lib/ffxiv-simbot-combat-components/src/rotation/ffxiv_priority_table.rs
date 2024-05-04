@@ -5,105 +5,182 @@ use crate::rotation::job_priorities::SkillTable;
 use crate::rotation::priority_table::PriorityTable;
 use crate::rotation::{FfxivPriorityTable, SkillPriorityInfo};
 use crate::skill::attack_skill::{AttackSkill, SkillInfo};
-use crate::status::buff_status::BuffStatus;
-use crate::status::debuff_status::DebuffStatus;
-use crate::{IdType, ResourceType, StackType};
-use std::cell::RefCell;
-use std::rc::Rc;
+use crate::{IdType, ResourceType, StackType, TimeType};
 
-impl CooldownTimer for FfxivPriorityTable {
-    fn update_cooldown(&mut self, elapsed_time: i32) {
+impl PriorityTable<FfxivPlayer, AttackSkill> for FfxivPriorityTable {
+    fn add_resource1(&self, resource: ResourceType) {
         match self {
             FfxivPriorityTable::Sage(sage_priority_table) => {
-                sage_priority_table.update_cooldown(elapsed_time)
+                sage_priority_table.add_resource1(resource)
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.add_resource1(resource)
             }
         }
     }
-}
 
-impl PriorityTable<AttackSkill, FfxivPlayer> for FfxivPriorityTable {
-    fn get_next_skill(
-        &mut self,
-        buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-        debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
+    fn add_resource2(&self, resource: ResourceType) {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => {
+                sage_priority_table.add_resource2(resource)
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.add_resource2(resource)
+            }
+        }
+    }
+
+    fn update_combo(&mut self, combo_id: Option<IdType>) {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => {
+                sage_priority_table.update_combo(combo_id)
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.update_combo(combo_id)
+            }
+        }
+    }
+
+    fn get_opener_len(&self) -> usize {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => sage_priority_table.get_opener_len(),
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.get_opener_len()
+            }
+        }
+    }
+
+    fn get_opener_at(&self, index: usize) -> &Option<AttackSkill> {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => {
+                sage_priority_table.get_opener_at(index)
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.get_opener_at(index)
+            }
+        }
+    }
+
+    fn get_turn_count(&self) -> IdType {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => sage_priority_table.get_turn_count(),
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.get_turn_count()
+            }
+        }
+    }
+
+    fn increment_turn(&mut self) {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => sage_priority_table.increment_turn(),
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.increment_turn()
+            }
+        }
+    }
+
+    fn add_additional_skills(
+        &self,
+        skill: &Vec<SkillInfo<AttackSkill>>,
         player: &FfxivPlayer,
-    ) -> Option<SkillInfo<AttackSkill>> {
+    ) -> Vec<SkillInfo<AttackSkill>> {
         match self {
             FfxivPriorityTable::Sage(sage_priority_table) => {
-                sage_priority_table.get_next_skill(buff_list, debuff_list, player)
+                sage_priority_table.add_additional_skills(skill, player)
             }
-        }
-    }
-
-    fn is_opener(&self, player_turn: &FfxivTurnType) -> bool {
-        match self {
-            FfxivPriorityTable::Sage(sage_priority_table) => {
-                sage_priority_table.is_opener(player_turn)
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.add_additional_skills(skill, player)
             }
-        }
-    }
-
-    fn use_opener(&self, player_turn: &FfxivTurnType) -> Option<SkillInfo<AttackSkill>> {
-        match self {
-            FfxivPriorityTable::Sage(sage_priority_table) => {
-                sage_priority_table.use_opener(player_turn)
-            }
-        }
-    }
-
-    fn get_highest_priority_skill(
-        &mut self,
-        buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-        debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-        player: &FfxivPlayer,
-        turn_type: &FfxivTurnType,
-    ) -> Option<SkillInfo<AttackSkill>> {
-        match self {
-            FfxivPriorityTable::Sage(sage_priority_table) => sage_priority_table
-                .get_highest_priority_skill(buff_list, debuff_list, player, turn_type),
         }
     }
 
     fn get_skills_mut(&mut self) -> &mut SkillTable {
         match self {
             FfxivPriorityTable::Sage(sage_priority_table) => sage_priority_table.get_skills_mut(),
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.get_skills_mut()
+            }
         }
     }
 
-    fn get_opener(&self) -> Option<SkillInfo<FfxivPlayer>> {
-        todo!()
-    }
-
-    fn get_resource(&self) -> ResourceType {
-        todo!()
+    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => {
+                sage_priority_table.get_resource(resource_id)
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.get_resource(resource_id)
+            }
+        }
     }
 
     fn get_skill_stack(&self, skill_id: IdType) -> StackType {
-        todo!()
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => {
+                sage_priority_table.get_skill_stack(skill_id)
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.get_skill_stack(skill_id)
+            }
+        }
     }
 
-    fn get_priority_table(&self, turn_type: &FfxivTurnType) -> &Vec<SkillPriorityInfo> {
-        todo!()
+    fn get_priority_table(
+        &self,
+        turn_type: &FfxivTurnType,
+    ) -> &Vec<SkillPriorityInfo<AttackSkill>> {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => {
+                sage_priority_table.get_priority_table(turn_type)
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.get_priority_table(turn_type)
+            }
+        }
     }
 
-    fn is_guaranteed_crit(&self, skill: &FfxivPlayer) -> bool {
-        todo!()
+    fn is_guaranteed_crit(&self, skill: &AttackSkill) -> bool {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => {
+                sage_priority_table.is_guaranteed_crit(skill)
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.is_guaranteed_crit(skill)
+            }
+        }
     }
 
-    fn is_guaranteed_direct_hit(&self, skill: &FfxivPlayer) -> bool {
-        todo!()
+    fn is_guaranteed_direct_hit(&self, skill: &AttackSkill) -> bool {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => {
+                sage_priority_table.is_guaranteed_direct_hit(skill)
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.is_guaranteed_direct_hit(skill)
+            }
+        }
     }
 
     fn get_current_combo(&self) -> Option<IdType> {
-        todo!()
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => {
+                sage_priority_table.get_current_combo()
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.get_current_combo()
+            }
+        }
     }
 }
 
 impl CooldownTimer for FfxivPriorityTable {
-    fn update_cooldown(&mut self, elapsed_time: i32) {
+    fn update_cooldown(&mut self, elapsed_time: TimeType) {
         match self {
             FfxivPriorityTable::Sage(sage_priority_table) => {
                 sage_priority_table.update_cooldown(elapsed_time)
+            }
+            FfxivPriorityTable::Ninja(ninja_priority_table) => {
+                ninja_priority_table.update_cooldown(elapsed_time)
             }
         }
     }

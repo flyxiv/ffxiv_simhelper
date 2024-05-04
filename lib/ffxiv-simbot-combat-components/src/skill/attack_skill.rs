@@ -1,12 +1,9 @@
 use crate::id_entity::IdEntity;
-use crate::live_objects::player::gcd_calculator::GcdCalculator;
-use crate::live_objects::turn_type::FfxivTurnType;
 use crate::owner_tracker::OwnerTracker;
 use crate::rotation::cooldown_timer::CooldownTimer;
 use crate::skill::{ResourceRequirements, Skill, NON_GCD_DELAY_MILLISECOND};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::status_holder::StatusHolder;
 use crate::{DamageType, IdType, ResourceType, StackType, TimeType};
 use ffxiv_simbot_db::MultiplierType;
 use std::cmp::max;
@@ -37,6 +34,7 @@ pub struct AttackSkill {
     pub(crate) cooldown_millisecond: TimeType,
     pub(crate) current_cooldown_millisecond: TimeType,
     pub(crate) stacks: StackType,
+    pub(crate) stack_skill_id: Option<IdType>,
 }
 
 #[derive(Clone)]
@@ -45,6 +43,12 @@ pub struct SkillInfo<S: Skill> {
     pub damage_inflict_time_millisecond: Option<TimeType>,
     pub guaranteed_critical_hit: bool,
     pub guaranteed_direct_hit: bool,
+}
+
+impl SkillInfo<AttackSkill> {
+    pub fn is_auto_attack(&self) -> bool {
+        self.skill.is_auto_attack()
+    }
 }
 
 impl IdEntity for AttackSkill {
@@ -111,6 +115,38 @@ impl Skill for AttackSkill {
         }
 
         false
+    }
+
+    fn is_speed_buffed(&self) -> bool {
+        self.is_speed_buffed
+    }
+
+    fn stack_skill_id(&self) -> IdType {
+        if let Some(skill_id) = self.stack_skill_id {
+            skill_id
+        } else {
+            self.id
+        }
+    }
+
+    fn is_auto_attack(&self) -> bool {
+        self.id == 0
+    }
+
+    fn get_resource1_created(&self) -> ResourceType {
+        self.resource1_created
+    }
+
+    fn get_resource2_created(&self) -> ResourceType {
+        self.resource2_created
+    }
+
+    fn get_combo(&self) -> Option<IdType> {
+        self.combo
+    }
+
+    fn get_resource_required(&self) -> &Vec<ResourceRequirements> {
+        &self.resource_required
     }
 }
 

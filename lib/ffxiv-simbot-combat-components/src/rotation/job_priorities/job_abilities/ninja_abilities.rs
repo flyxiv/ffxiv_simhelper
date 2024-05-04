@@ -1,5 +1,6 @@
 use crate::rotation::job_priorities::SkillTable;
-use crate::rotation::priority_table::{SkillPrerequisite, SkillPriorityInfo};
+use crate::rotation::priority_table::SkillPrerequisite;
+use crate::rotation::SkillPriorityInfo;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::ResourceRequirements;
 use crate::status::buff_status::BuffStatus;
@@ -103,6 +104,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref RAITON: AttackSkill = AttackSkill {
         id: 1001,
@@ -124,6 +126,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref RAIJU: AttackSkill = AttackSkill {
         id: 1002,
@@ -145,6 +148,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref HYOSHO: AttackSkill = AttackSkill {
         id: 1003,
@@ -166,6 +170,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref SUITON: AttackSkill = AttackSkill {
         id: 1004,
@@ -187,6 +192,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref SPINNING_EDGE: AttackSkill = AttackSkill {
         id: 1005,
@@ -208,6 +214,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref GUST_SLASH: AttackSkill = AttackSkill {
         id: 1006,
@@ -229,6 +236,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref AEOLIAN_EDGE: AttackSkill = AttackSkill {
         id: 1007,
@@ -250,6 +258,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref ARMOR_CRUSH: AttackSkill = AttackSkill {
         id: 1008,
@@ -271,6 +280,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref MUG: AttackSkill = AttackSkill {
         id: 1009,
@@ -292,6 +302,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref TRICK_ATTACK: AttackSkill = AttackSkill {
         id: 1010,
@@ -313,6 +324,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref MUDRA: AttackSkill = AttackSkill {
         id: 1010,
@@ -334,6 +346,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 2,
+        stack_skill_id: None,
     };
     static ref KASSATSU: AttackSkill = AttackSkill {
         id: 1011,
@@ -355,6 +368,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref BHAVACAKRA: AttackSkill = AttackSkill {
         id: 1012,
@@ -376,6 +390,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref TENCHIJIN: AttackSkill = AttackSkill {
         id: 1013,
@@ -397,6 +412,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref FUMA_TENCHIJIN: AttackSkill = AttackSkill {
         id: 1014,
@@ -418,6 +434,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref RAITON_TENCHIJIN: AttackSkill = AttackSkill {
         id: 1015,
@@ -439,6 +456,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref SUITON_TENCHIJIN: AttackSkill = AttackSkill {
         id: 1016,
@@ -460,6 +478,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref BUNSHIN: AttackSkill = AttackSkill {
         id: 1017,
@@ -481,6 +500,7 @@ lazy_static! {
         resource2_created: 50,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref DREAM: AttackSkill = AttackSkill {
         id: 1018,
@@ -502,6 +522,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref PHANTOM_KAMAITACHI: AttackSkill = AttackSkill {
         id: 1019,
@@ -523,6 +544,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref MEISUI: AttackSkill = AttackSkill {
         id: 1020,
@@ -544,6 +566,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 120000,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref BHAVACAKRA_MEISUI: AttackSkill = AttackSkill {
         id: 1021,
@@ -568,6 +591,7 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
     static ref BUNSHIN_STACK: AttackSkill = AttackSkill {
         id: 1022,
@@ -589,11 +613,12 @@ lazy_static! {
         resource2_created: 0,
         current_cooldown_millisecond: 0,
         stacks: 1,
+        stack_skill_id: None,
     };
 }
 
-pub(crate) fn make_ninja_gcd_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
-    let mut ninja_gcd_priority_table: Vec<SkillPriorityInfo> = vec![
+pub(crate) fn make_ninja_gcd_table(player_id: IdType) -> Vec<SkillPriorityInfo<AttackSkill>> {
+    let mut ninja_gcd_priority_table: Vec<SkillPriorityInfo<AttackSkill>> = vec![
         SkillPriorityInfo {
             skill: FUMA_TENCHIJIN.clone(),
             prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1006)),
@@ -609,8 +634,8 @@ pub(crate) fn make_ninja_gcd_table(player_id: IdType) -> Vec<SkillPriorityInfo> 
         SkillPriorityInfo {
             skill: ARMOR_CRUSH.clone(),
             prerequisite: Some(SkillPrerequisite::And(
-                SkillPrerequisite::BufforDebuffLessThan(1000, 8000),
-                SkillPrerequisite::Combo(2),
+                Box::new(SkillPrerequisite::BufforDebuffLessThan(1000, 8000)),
+                Box::new(SkillPrerequisite::Combo(2)),
             )),
         },
         SkillPriorityInfo {
@@ -624,8 +649,8 @@ pub(crate) fn make_ninja_gcd_table(player_id: IdType) -> Vec<SkillPriorityInfo> 
         SkillPriorityInfo {
             skill: HYOSHO.clone(),
             prerequisite: Some(SkillPrerequisite::And(
-                SkillPrerequisite::HasBufforDebuff(1004),
-                SkillPrerequisite::HasBufforDebuff(1005),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1005)),
             )),
         },
         SkillPriorityInfo {
@@ -635,14 +660,16 @@ pub(crate) fn make_ninja_gcd_table(player_id: IdType) -> Vec<SkillPriorityInfo> 
         SkillPriorityInfo {
             skill: AEOLIAN_EDGE.clone(),
             prerequisite: Some(SkillPrerequisite::And(
-                SkillPrerequisite::HasBufforDebuff(1004),
-                SkillPrerequisite::And(
-                    SkillPrerequisite::Combo(2),
-                    SkillPrerequisite::And(
-                        SkillPrerequisite::HasResource2(1),
-                        SkillPrerequisite::Not(SkillPrerequisite::HasBufforDebuff(1001)),
-                    ),
-                ),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
+                Box::new(SkillPrerequisite::And(
+                    Box::new(SkillPrerequisite::Combo(2)),
+                    Box::new(SkillPrerequisite::And(
+                        Box::new(SkillPrerequisite::HasResource2(1)),
+                        Box::new(SkillPrerequisite::Not(Box::new(
+                            SkillPrerequisite::HasBufforDebuff(1001),
+                        ))),
+                    )),
+                )),
             )),
         },
         SkillPriorityInfo {
@@ -656,25 +683,27 @@ pub(crate) fn make_ninja_gcd_table(player_id: IdType) -> Vec<SkillPriorityInfo> 
         SkillPriorityInfo {
             skill: RAITON.clone(),
             prerequisite: Some(SkillPrerequisite::Or(
-                SkillPrerequisite::HasBufforDebuff(1004),
-                SkillPrerequisite::HasBufforDebuff(1003),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1003)),
             )),
         },
         SkillPriorityInfo {
             skill: RAITON.clone(),
             prerequisite: Some(SkillPrerequisite::Or(
-                SkillPrerequisite::HasBufforDebuff(1004),
-                SkillPrerequisite::HasBufforDebuff(1003),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1003)),
             )),
         },
         SkillPriorityInfo {
             skill: ARMOR_CRUSH.clone(),
             prerequisite: Some(SkillPrerequisite::And(
-                SkillPrerequisite::Not(SkillPrerequisite::MillisecondsBeforeBurst(0)),
-                SkillPrerequisite::And(
-                    SkillPrerequisite::BufforDebuffLessThan(1000, 30000),
-                    SkillPrerequisite::Combo(2),
-                ),
+                Box::new(SkillPrerequisite::Not(Box::new(
+                    SkillPrerequisite::MillisecondsBeforeBurst(0),
+                ))),
+                Box::new(SkillPrerequisite::And(
+                    Box::new(SkillPrerequisite::BufforDebuffLessThan(1000, 30000)),
+                    Box::new(SkillPrerequisite::Combo(2)),
+                )),
             )),
         },
         SkillPriorityInfo {
@@ -698,9 +727,9 @@ pub(crate) fn make_ninja_gcd_table(player_id: IdType) -> Vec<SkillPriorityInfo> 
     ninja_gcd_priority_table
 }
 
-pub(crate) fn make_ninja_ogcd_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
+pub(crate) fn make_ninja_ogcd_table(player_id: IdType) -> Vec<SkillPriorityInfo<AttackSkill>> {
     // TODO: calculate future ninki
-    let mut ninja_ogcd_table: Vec<SkillPriorityInfo> = vec![
+    let mut ninja_ogcd_table: Vec<SkillPriorityInfo<AttackSkill>> = vec![
         SkillPriorityInfo {
             skill: BUNSHIN.clone(),
             prerequisite: Some(SkillPrerequisite::HasResource1(50)),
@@ -708,8 +737,8 @@ pub(crate) fn make_ninja_ogcd_table(player_id: IdType) -> Vec<SkillPriorityInfo>
         SkillPriorityInfo {
             skill: BHAVACAKRA.clone(),
             prerequisite: Some(SkillPrerequisite::And(
-                SkillPrerequisite::HasResource1(50),
-                SkillPrerequisite::HasBufforDebuff(1002),
+                Box::new(SkillPrerequisite::HasResource1(50)),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1002)),
             )),
         },
         SkillPriorityInfo {

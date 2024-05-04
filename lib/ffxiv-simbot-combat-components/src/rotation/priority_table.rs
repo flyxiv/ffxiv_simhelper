@@ -1,9 +1,11 @@
+use crate::id_entity::IdEntity;
 use crate::live_objects::player::Player;
 use crate::live_objects::turn_type::FfxivTurnType;
+use crate::rotation::cooldown_timer::CooldownTimer;
 use crate::rotation::job_priorities::SkillTable;
 use crate::rotation::SkillPriorityInfo;
 use crate::skill::attack_skill::SkillInfo;
-use crate::skill::Skill;
+use crate::skill::{ResourceRequirements, Skill};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{IdType, ResourceType, StackType, TimeType};
@@ -17,10 +19,11 @@ pub enum PriorityResult {
     False,
 }
 
+#[derive(Clone)]
 pub(crate) enum SkillPrerequisite {
-    Or(SkillPrerequisite, SkillPrerequisite),
-    And(SkillPrerequisite, SkillPrerequisite),
-    Not(SkillPrerequisite),
+    Or(Box<SkillPrerequisite>, Box<SkillPrerequisite>),
+    And(Box<SkillPrerequisite>, Box<SkillPrerequisite>),
+    Not(Box<SkillPrerequisite>),
     Combo(IdType),
     HasBufforDebuff(IdType),
     BufforDebuffLessThan(IdType, TimeType),
@@ -44,7 +47,7 @@ pub enum SkillResult<S: Skill> {
 
 /// Stores the priority list of the job's offensive skills
 /// And gets the next skill to use based on the priority list
-pub trait PriorityTable<P: Player, S: Skill> {
+pub(crate) trait PriorityTable<P: Player, S: Skill>: CooldownTimer {
     fn get_next_skill(
         &mut self,
         buff_list: Rc<RefCell<Vec<BuffStatus>>>,
@@ -67,21 +70,82 @@ pub trait PriorityTable<P: Player, S: Skill> {
 
         self.start_cooldown(&next_skill);
 
-        if let Some(SkillResult::UseSkill(skills)) = &next_skill {
-            self.update_stack_status(&skills[0].skill, buff_list, debuff_list);
+        if let Some(SkillResult::UseSkill(skills)) = next_skill {
+            self.update_stack_status(&skills, buff_list, debuff_list);
+            Some(SkillResult::UseSkill(
+                self.add_additional_skills(&skills, player),
+            ))
+        } else {
+            None
         }
-        next_skill
     }
 
     fn update_stack_status(
         &mut self,
-        skill: &S,
+        skills: &Vec<SkillInfo<S>>,
         buff_list: Rc<RefCell<Vec<BuffStatus>>>,
         debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-    );
+    ) {
+        for skill in skills.iter() {
+            let skill = &skill.skill;
 
-    fn is_opener(&self) -> bool;
-    fn get_opener(&mut self, player: &P) -> Option<SkillResult<S>>;
+            self.add_resource1(skill.get_resource1_created());
+            self.add_resource2(skill.get_resource2_created());
+
+            self.update_combo(skill.get_combo());
+
+            for resource in skill.get_resource_required() {
+                match resource {
+                    ResourceRequirements::StackResource1(required_resource) => {
+                        self.add_resource1(-required_resource);
+                    }
+                    ResourceRequirements::CheckStatus(status_id) => {
+                        for debuff in debuff_list.borrow_mut().iter_mut() {
+                            if debuff.get_id() == *status_id {
+                                debuff.duration_left_millisecond = 0;
+                            }
+                        }
+
+                        for buff in buff_list.borrow_mut().iter_mut() {
+                            if buff.get_id() == *status_id {
+                                buff.duration_left_millisecond = 0;
+                            }
+                        }
+                    }
+                    _ => {}
+                }
+            }
+        }
+    }
+
+    fn add_resource1(&self, resource: ResourceType);
+    fn add_resource2(&self, resource: ResourceType);
+
+    fn update_combo(&mut self, combo_id: Option<IdType>);
+    fn is_opener(&self) -> bool {
+        self.get_turn_count() < self.get_opener_len()
+    }
+
+    fn get_opener_len(&self) -> usize;
+
+    fn get_opener_at(&self, index: usize) -> &Option<S>;
+
+    fn get_turn_count(&self) -> IdType;
+
+    fn get_opener(&mut self, player: &P) -> Option<SkillResult<S>> {
+        let next_skill = self.get_opener_at(self.get_turn_count());
+
+        if next_skill.is_some() {
+            let next_skill = next_skill.clone().unwrap();
+            self.increment_turn();
+            Some(self.make_skill_result(vec![next_skill], player))
+        } else {
+            None
+        }
+    }
+
+    fn increment_turn(&mut self);
+
     fn get_highest_priority_skill(
         &mut self,
         buff_list: Rc<RefCell<Vec<BuffStatus>>>,
@@ -100,10 +164,13 @@ pub trait PriorityTable<P: Player, S: Skill> {
 
             match self.meets_requirements(&skill_priority_info, &combat_info, skill, player) {
                 PriorityResult::True => {
-                    return Some(self.make_skill_result(
-                        self.add_additional_skills(&skill_priority_info.skill, player),
-                        player.get_damage_inflict_time_millisecond(skill),
-                    ))
+                    return Some(SkillResult::UseSkill(vec![SkillInfo {
+                        guaranteed_critical_hit: self.is_guaranteed_crit(skill),
+                        guaranteed_direct_hit: self.is_guaranteed_direct_hit(skill),
+                        skill: skill.clone(),
+                        damage_inflict_time_millisecond: player
+                            .get_damage_inflict_time_millisecond(skill),
+                    }]))
                 }
                 PriorityResult::DelayOgcdFor(delay_time) => {
                     return Some(SkillResult::Delay(delay_time))
@@ -117,7 +184,7 @@ pub trait PriorityTable<P: Player, S: Skill> {
 
     fn meets_requirements(
         &self,
-        skill_priority_info: &SkillPriorityInfo,
+        skill_priority_info: &SkillPriorityInfo<S>,
         combat_info: &CombatInfo,
         skill: &S,
         player: &P,
@@ -137,20 +204,16 @@ pub trait PriorityTable<P: Player, S: Skill> {
         PriorityResult::True
     }
 
-    fn add_additional_skills(&mut self, skill_priority_info: &S, player: &P) -> Vec<S>;
+    fn add_additional_skills(&self, skills: &Vec<SkillInfo<S>>, player: &P) -> Vec<SkillInfo<S>>;
 
-    fn make_skill_result(
-        &self,
-        skills: Vec<S>,
-        damage_inflict_time_millisecond: Option<TimeType>,
-    ) -> SkillResult<S> {
+    fn make_skill_result(&self, skills: Vec<S>, player: &P) -> SkillResult<S> {
         let skill_results = skills
             .into_iter()
             .map(|skill| SkillInfo {
                 guaranteed_critical_hit: self.is_guaranteed_crit(&skill),
                 guaranteed_direct_hit: self.is_guaranteed_direct_hit(&skill),
+                damage_inflict_time_millisecond: player.get_damage_inflict_time_millisecond(&skill),
                 skill,
-                damage_inflict_time_millisecond,
             })
             .collect_vec();
 
@@ -159,12 +222,19 @@ pub trait PriorityTable<P: Player, S: Skill> {
 
     fn get_skills_mut(&mut self) -> &mut SkillTable;
 
-    fn start_cooldown(&mut self, skill_info: &Option<SkillInfo<S>>) {
-        if let Some(skill_info) = skill_info {
-            for (skill_id, skill) in self.get_skills_mut().iter_mut() {
-                if *skill_id == skill_info.skill.get_id() {
-                    skill.start_cooldown();
+    fn start_cooldown(&mut self, skill_info: &Option<SkillResult<S>>) {
+        if let Some(skill_result) = skill_info {
+            match skill_result {
+                SkillResult::UseSkill(skills) => {
+                    for skill_info in skills.iter() {
+                        let cooldown_skill_id = skill_info.skill.stack_skill_id();
+
+                        let cooldown_skill =
+                            self.get_skills_mut().get_mut(&cooldown_skill_id).unwrap();
+                        cooldown_skill.start_cooldown();
+                    }
                 }
+                SkillResult::Delay(_) => {}
             }
         }
     }
@@ -255,10 +325,18 @@ pub trait PriorityTable<P: Player, S: Skill> {
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType;
     fn get_skill_stack(&self, skill_id: IdType) -> StackType;
-    fn get_priority_table(&self, turn_type: &FfxivTurnType) -> &Vec<SkillPriorityInfo>;
+    fn get_priority_table(&self, turn_type: &FfxivTurnType) -> &Vec<SkillPriorityInfo<S>>;
     fn is_guaranteed_crit(&self, skill: &S) -> bool;
     fn is_guaranteed_direct_hit(&self, skill: &S) -> bool;
     fn get_current_combo(&self) -> Option<IdType>;
+    fn make_skill_info(&self, skill: S, player: &P) -> SkillInfo<S> {
+        SkillInfo {
+            guaranteed_critical_hit: self.is_guaranteed_crit(&skill),
+            guaranteed_direct_hit: self.is_guaranteed_direct_hit(&skill),
+            damage_inflict_time_millisecond: player.get_damage_inflict_time_millisecond(&skill),
+            skill,
+        }
+    }
 }
 
 fn check_non_clipping_delay_time<P: Player, S: Skill>(

@@ -14,7 +14,7 @@ where
     fn find_next_turn_player_id(&self, players: &Vec<Rc<RefCell<P>>>) -> IdType {
         let earliest_turn_player = players
             .iter()
-            .min_by_key(|player| player.borrow().get_next_turn_time_milliseconds())
+            .min_by_key(|player| player.borrow().get_next_turn_time_millisecond())
             .unwrap();
 
         let earliest_turn_player = earliest_turn_player.borrow();

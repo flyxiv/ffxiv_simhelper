@@ -1,8 +1,8 @@
 use crate::id_entity::IdEntity;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::status_info::StatusInfo;
-use crate::{IdType, TimeType};
 use crate::status::Status;
+use crate::{IdType, TimeType};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct DebuffStatus {
@@ -46,7 +46,6 @@ impl OwnerTracker for DebuffStatus {
 #[cfg(test)]
 mod tests {
 
-
     fn debuff_status_test() {
         let debuff = DebuffStatus {
             id: 1,
@@ -62,5 +61,4 @@ mod tests {
         assert_eq!(debuff.get_status_info(), StatusInfo::CritHitRatePercent(10));
         assert_eq!(debuff.get_duration_millisecond(), 15000);
     }
-}
 }

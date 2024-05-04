@@ -2,7 +2,7 @@ use crate::damage_rdps_profile::RaidDamageTable;
 use crate::simulator::FfxivSimulationBoard;
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
 use ffxiv_simbot_combat_components::live_objects::player::Player;
-use ffxiv_simbot_combat_components::{DpsType, IdType, TimeType};
+use ffxiv_simbot_combat_components::{DamageType, DpsType, IdType, TimeType};
 use std::collections::HashMap;
 
 /// Shows the result of the simulation.
@@ -14,7 +14,7 @@ pub type SimulationResponse = HashMap<IdType, SimulationResult>;
 
 pub struct SimulationResult {
     job_name: String,
-    raw_dps: DpsType,
+    raw_damage_total: DamageType,
     /// Rdps the job's buff skills earned.
     rdps_earned: DpsType,
     /// The job's Rdps contribution to the other party member's buffs
@@ -72,12 +72,12 @@ impl From<FfxivSimulationBoard> for SimulationResponse {
                 player_id,
                 SimulationResult {
                     job_name,
-                    raw_dps: raw_damage_total,
+                    raw_damage_total,
                     rdps_earned,
                     rdps_contributed,
                     rotation_log,
                 },
-            )
+            );
         }
 
         result

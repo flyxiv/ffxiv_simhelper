@@ -1,10 +1,14 @@
-use ffxiv_simbot_db::MultiplierType;
 use crate::live_objects::player::Player;
-use crate::skill::{GCD_TURN_DELAY_PERCENTAGE_THRESHOLD, NON_GCD_DELAY_MILLISECOND};
+use crate::skill::NON_GCD_DELAY_MILLISECOND;
 use crate::TimeType;
 
 pub(crate) trait TurnType {
-    fn get_next_turn<P: Player>(&self, player: &P, current_combat_time: TimeType) -> PlayerTurn;
+    fn get_next_turn<P: Player>(
+        &self,
+        player: &P,
+        skill_delay: TimeType,
+        current_combat_time: TimeType,
+    ) -> PlayerTurn;
 }
 
 /// Represents what type of skill the player can use the next turn.
@@ -18,15 +22,25 @@ pub enum FfxivTurnType {
     Ogcd2,
 }
 
-#[inline]
-fn get_gcd_turn_delay_threshold(
-    next_gcd_delay_millisecond: TimeType,
-) -> TimeType {
-    ((next_gcd_delay_millisecond as MultiplierType) * GCD_TURN_DELAY_PERCENTAGE_THRESHOLD) as TimeType
+fn not_enough_time_for_another_ogcd<P>(player: &P, skill_delay: TimeType) -> bool
+where
+    P: Player,
+{
+    let delay = player.get_delay();
+    let last_gcd_time_millisecond = player.get_last_gcd_time_millisecond();
+    let next_gcd_time_minus_delay = player.get_next_gcd_time_millisecond();
+
+    last_gcd_time_millisecond + delay + skill_delay
+        < next_gcd_time_minus_delay - NON_GCD_DELAY_MILLISECOND
 }
 
 impl FfxivTurnType {
-    fn get_next_turn<P>(&self, player: &P, current_combat_time_millisecond: TimeType) -> PlayerTurn
+    fn get_next_turn<P>(
+        &self,
+        player: &P,
+        skill_delay: TimeType,
+        current_combat_time_millisecond: TimeType,
+    ) -> PlayerTurn
     where
         P: Player + Sized,
     {
@@ -37,10 +51,7 @@ impl FfxivTurnType {
                     + NON_GCD_DELAY_MILLISECOND,
             },
             FfxivTurnType::Ogcd1 => {
-                if player.get_delay()
-                    >= get_gcd_turn_delay_threshold(player.get)
-                    )
-                {
+                if not_enough_time_for_another_ogcd(player, skill_delay) {
                     PlayerTurn {
                         turn_type: FfxivTurnType::Gcd,
                         next_turn_combat_time_millisecond: player.get_next_gcd_time_millisecond(),
@@ -80,11 +91,16 @@ impl Default for PlayerTurn {
 }
 
 impl TurnType for PlayerTurn {
-    fn get_next_turn<P>(&self, player: &P, current_combat_time_millisecond: TimeType) -> PlayerTurn
+    fn get_next_turn<P>(
+        &self,
+        player: &P,
+        skill_delay: TimeType,
+        current_combat_time_millisecond: TimeType,
+    ) -> PlayerTurn
     where
         P: Player + Sized,
     {
         self.turn_type
-            .get_next_turn(player, current_combat_time_millisecond)
+            .get_next_turn(player, skill_delay, current_combat_time_millisecond)
     }
 }

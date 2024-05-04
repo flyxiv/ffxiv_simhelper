@@ -5,13 +5,14 @@ use crate::live_objects::turn_type::{FfxivTurnType, PlayerTurn, TurnType};
 use crate::rotation::cooldown_timer::CooldownTimer;
 use crate::rotation::priority_table::{PriorityTable, SkillResult};
 use crate::rotation::FfxivPriorityTable;
-use crate::skill::attack_skill::{AttackSkill, SkillInfo};
+use crate::skill::attack_skill::AttackSkill;
 use crate::skill::Skill;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_info::StatusInfo;
 use crate::status::status_timer::StatusTimer;
+use crate::status::Status;
 use crate::{IdType, TimeType};
 use ffxiv_simbot_db::job::Job;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
@@ -82,7 +83,7 @@ impl Player for FfxivPlayer {
         }
     }
 
-    fn has_resources_for_skill<S: Skill>(&self, skill: S) -> bool {
+    fn has_resources_for_skill<S: Skill>(&self, _: S) -> bool {
         /// TODO: Implement mana resource check for casters.
         return false;
     }
@@ -141,15 +142,11 @@ impl IdEntity for FfxivPlayer {
     }
 }
 
-impl StatusHolder<BuffStatus> for FfxivPlayer {
-    fn get_status_list(&self) -> Rc<RefCell<Vec<BuffStatus>>> {
-        self.buff_list.clone()
-    }
-}
-
 impl CooldownTimer for FfxivPlayer {
     fn update_cooldown(&mut self, time_passed: TimeType) {
-        self.priority_table.update_cooldown(time_passed);
+        self.priority_table
+            .borrow_mut()
+            .update_cooldown(time_passed);
     }
 }
 
@@ -178,13 +175,17 @@ impl FfxivPlayer {
         charging_time + gcd_cooldown_millisecond
     }
 
-    fn get_cast_time(&self, skill: &AttackSkill) -> TimeType {
-        let cast_time = skill.get_cast_time();
+    fn get_cast_time<S>(&self, skill: &S) -> TimeType
+    where
+        S: Skill,
+    {
+        let cast_time = skill.get_gcd_cast_time();
 
-        if skill.is_speed_buffed {
-            Some(self.get_speed_buffed_time(cast_time))
+        if skill.is_speed_buffed() {
+            self.get_speed_buffed_time(cast_time)
+        } else {
+            cast_time
         }
-        Some(cast_time)
     }
 
     fn get_speed_buffed_time(&self, time_millisecond: TimeType) -> TimeType {
@@ -200,10 +201,10 @@ impl FfxivPlayer {
     fn get_gcd_buff_multiplier(&self) -> MultiplierType {
         let mut gcd_buffs_multiplier = 1.0;
         for buff in self.buff_list.borrow().iter() {
-            match buff {
+            match buff.status_info {
                 StatusInfo::SpeedPercent(buff_increase_percent) => {
                     gcd_buffs_multiplier =
-                        gcd_buffs_multiplier * (*buff_increase_percent as MultiplierType / 100.0);
+                        gcd_buffs_multiplier * (buff_increase_percent as MultiplierType / 100.0);
                 }
                 _ => {}
             }
@@ -213,10 +214,13 @@ impl FfxivPlayer {
 
     /// After using a turn, calculate when the next turn will be in combat time,
     /// and also figure out if it is a GCD/oGCD turn.
-    pub fn calculate_next_turn(&mut self) {
+    pub fn calculate_next_turn(&mut self, skill_delay: TimeType) {
         let current_turn = &self.next_turn;
-        self.next_turn =
-            current_turn.get_next_turn(self, current_turn.next_turn_combat_time_millisecond)
+        self.next_turn = current_turn.get_next_turn(
+            self,
+            skill_delay,
+            current_turn.next_turn_combat_time_millisecond,
+        )
     }
 
     pub fn new(
@@ -248,7 +252,21 @@ impl StatusHolder<BuffStatus> for FfxivPlayer {
     }
 }
 
-impl StatusTimer<BuffStatus> for FfxivPlayer {}
+impl StatusTimer<BuffStatus> for FfxivPlayer {
+    fn update_status_time(&mut self, elapsed_time: TimeType) {
+        if elapsed_time <= 0 {
+            return;
+        }
+
+        let status_list = self.get_status_list();
+
+        for status in status_list.borrow_mut().iter_mut() {
+            status.set_duration_left_millisecond(
+                status.get_duration_left_millisecond() - elapsed_time,
+            );
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {

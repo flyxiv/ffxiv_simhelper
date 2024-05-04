@@ -9,7 +9,7 @@ use std::rc::Rc;
 
 use crate::raw_damage_calculator::{FfxivRawDamageCalculator, RawDamageCalculator};
 use ffxiv_simbot_combat_components::skill::attack_skill::{AttackSkill, SkillInfo};
-use ffxiv_simbot_combat_components::skill::skill::Skill;
+use ffxiv_simbot_combat_components::skill::Skill;
 use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
 use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
 

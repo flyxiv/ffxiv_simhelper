@@ -1,114 +1,126 @@
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
-use crate::live_objects::player::Player;
 use crate::live_objects::turn_type::FfxivTurnType;
+use crate::rotation::cooldown_timer::CooldownTimer;
+use crate::rotation::job_priorities::job_abilities::sage_abilities::{
+    make_sage_gcd_priority_table, make_sage_opener, make_sage_skills,
+};
+use crate::rotation::job_priorities::SkillTable;
 use crate::rotation::priority_table::PriorityTable;
-use crate::rotation::{FfxivPriorityTable, SkillPrerequisite, SkillPriorityInfo};
+use crate::rotation::{FfxivPriorityTable, SkillPriorityInfo};
 use crate::skill::attack_skill::{AttackSkill, SkillInfo};
-use crate::status::buff_status::BuffStatus;
-use crate::status::debuff_status::DebuffStatus;
 use crate::{IdType, ResourceType, StackType, TurnCount};
 use ffxiv_simbot_db::ffxiv_context::FfxivContext;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
-use lazy_static::lazy_static;
-use std::cell::RefCell;
-use std::rc::Rc;
 
 #[derive(Clone)]
 pub struct SagePriorityTable {
     turn_count: TurnCount,
-
-    skills: Vec<AttackSkill>,
+    skills: SkillTable,
     opener: Vec<Option<AttackSkill>>,
-    priority_list: Vec<SkillPriorityInfo>,
-    current_combo: Option<IdType>,
+    gcd_priority_list: Vec<SkillPriorityInfo<AttackSkill>>,
+    ogcd_priority_list: Vec<SkillPriorityInfo<AttackSkill>>,
 }
 
 impl PriorityTable<FfxivPlayer, AttackSkill> for SagePriorityTable {
-    fn get_highest_priority_skill(
-        &mut self,
-        _: Rc<RefCell<Vec<BuffStatus>>>,
-        _: Rc<RefCell<Vec<DebuffStatus>>>,
-        player: &FfxivPlayer,
-        ffxiv_turn_type: &FfxivTurnType,
-    ) -> Option<SkillInfo<AttackSkill>> {
-        let mut skill_info = SkillInfo {
-            skill: GCD.clone(),
-            guaranteed_critical_hit: false,
-            guaranteed_direct_hit: false,
-        };
+    fn add_resource1(&self, _: ResourceType) {}
 
-        match player.get_turn_type() {
-            FfxivTurnType::Gcd => {
-                if self.dot_skill.cooldown_millisecond == 0 {
-                    skill_info.skill = self.dot_skill.clone();
-                    Some(skill_info)
-                } else {
-                    Some(skill_info)
-                }
-            }
-            _ => None,
-        }
+    fn add_resource2(&self, _: ResourceType) {}
+
+    fn update_combo(&mut self, _: Option<IdType>) {}
+
+    fn get_opener_len(&self) -> usize {
+        self.opener.len()
     }
 
-    fn use_opener(&self, player_turn: &FfxivTurnType) -> Option<SkillInfo<AttackSkill>> {
-        todo!()
+    fn get_opener_at(&self, index: usize) -> &Option<AttackSkill> {
+        &self.opener[index]
     }
 
-    fn use_highest_priority_skill<P>(
-        &mut self,
-        buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-        debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-        player: &P,
-    ) -> Option<SkillInfo<AttackSkill>> {
-        todo!()
+    fn get_turn_count(&self) -> IdType {
+        self.turn_count
     }
 
-    fn get_skills_mut(&mut self) -> &mut Vec<AttackSkill> {
-        todo!()
+    fn increment_turn(&mut self) {
+        self.turn_count += 1;
     }
 
-    fn start_cooldown(&mut self, skill_info: &Option<SkillInfo<AttackSkill>>) {
-        todo!()
+    fn add_additional_skills(
+        &self,
+        skills: &Vec<SkillInfo<AttackSkill>>,
+        _: &FfxivPlayer,
+    ) -> Vec<SkillInfo<AttackSkill>> {
+        skills.clone()
     }
 
-    fn get_current_combo(&self) -> Option<IdType> {
-        self.current_combo
+    fn get_skills_mut(&mut self) -> &mut SkillTable {
+        &mut self.skills
     }
 
-    fn get_opener(&self) -> Option<SkillInfo<AttackSkill>> {
-        todo!()
-    }
-
-    fn get_resource(&self) -> ResourceType {
-        todo!()
+    fn get_resource(&self, _: IdType) -> ResourceType {
+        0
     }
 
     fn get_skill_stack(&self, skill_id: IdType) -> StackType {
-        todo!()
+        let skill = self.skills.get(&skill_id).unwrap();
+        skill.stacks
     }
 
-    fn get_priority_table(&self, turn_type: &FfxivTurnType) -> &Vec<SkillPriorityInfo> {
-        todo!()
+    fn get_priority_table(
+        &self,
+        turn_type: &FfxivTurnType,
+    ) -> &Vec<SkillPriorityInfo<AttackSkill>> {
+        match turn_type {
+            FfxivTurnType::Gcd => &self.gcd_priority_list,
+            _ => &self.ogcd_priority_list,
+        }
     }
 
-    fn is_guaranteed_crit(&self, skill: &AttackSkill) -> bool {
-        todo!()
+    fn is_guaranteed_crit(&self, _: &AttackSkill) -> bool {
+        false
     }
 
-    fn is_guaranteed_direct_hit(&self, skill: &AttackSkill) -> bool {
-        todo!()
+    fn is_guaranteed_direct_hit(&self, _: &AttackSkill) -> bool {
+        false
+    }
+
+    fn get_current_combo(&self) -> Option<IdType> {
+        None
+    }
+}
+
+impl SagePriorityTable {
+    pub fn new(player_id: IdType) -> Self {
+        Self {
+            turn_count: 0,
+            skills: make_sage_skills(player_id),
+            opener: make_sage_opener(player_id),
+            gcd_priority_list: make_sage_gcd_priority_table(player_id),
+            ogcd_priority_list: Vec::new(),
+        }
     }
 }
 
 impl FfxivPlayer {
-    pub fn new_sage(id: IdType, power: CharacterPower, context: &FfxivContext) -> FfxivPlayer {
+    pub fn new_sage(
+        player_id: IdType,
+        power: CharacterPower,
+        context: &FfxivContext,
+    ) -> FfxivPlayer {
         let sage_job = context.jobs.get("SGE").unwrap();
 
         Self::new(
-            id,
+            player_id,
             sage_job.clone(),
             power,
-            FfxivPriorityTable::Sage(SagePriorityTable::default()),
+            FfxivPriorityTable::Sage(SagePriorityTable::new(player_id)),
         )
+    }
+}
+
+impl CooldownTimer for SagePriorityTable {
+    fn update_cooldown(&mut self, elapsed_time: i32) {
+        for (_, skill) in self.skills.iter_mut() {
+            skill.update_cooldown(elapsed_time);
+        }
     }
 }

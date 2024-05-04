@@ -1,8 +1,6 @@
 pub mod attack_skill;
 
 use crate::id_entity::IdEntity;
-use crate::live_objects::player::gcd_calculator::GcdCalculator;
-use crate::status::status_holder::StatusHolder;
 use crate::{DamageType, IdType, ResourceType, TimeType};
 use ffxiv_simbot_db::MultiplierType;
 
@@ -36,4 +34,12 @@ pub trait Skill: Sized + Clone + IdEntity {
     fn start_cooldown(&mut self);
     fn is_ready(&self) -> bool;
     fn is_raidbuff(&self) -> bool;
+    fn is_speed_buffed(&self) -> bool;
+    fn stack_skill_id(&self) -> IdType;
+    fn is_auto_attack(&self) -> bool;
+
+    fn get_resource1_created(&self) -> ResourceType;
+    fn get_resource2_created(&self) -> ResourceType;
+    fn get_combo(&self) -> Option<IdType>;
+    fn get_resource_required(&self) -> &Vec<ResourceRequirements>;
 }
