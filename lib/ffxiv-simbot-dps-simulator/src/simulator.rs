@@ -4,6 +4,7 @@ use crate::skill_simulator::{FfxivSkillSimulator, SkillSimulationResult, SkillSi
 use crate::turn_calculator::{FfxivTurnCalculator, TurnCalculator};
 use ffxiv_simbot_combat_components::owner_tracker::OwnerTracker;
 use ffxiv_simbot_combat_components::{DamageProfileTable, DamageType, DpsType, IdType, TimeType};
+use log::{info, warn};
 
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -13,16 +14,20 @@ use ffxiv_simbot_combat_components::live_objects::target::Target;
 use ffxiv_simbot_combat_components::rotation::cooldown_timer::CooldownTimer;
 use ffxiv_simbot_combat_components::rotation::priority_table::SkillResult;
 use ffxiv_simbot_combat_components::skill::attack_skill::{AttackSkill, SkillInfo};
-use ffxiv_simbot_combat_components::skill::Skill;
+use ffxiv_simbot_combat_components::skill::{Skill, NON_GCD_DELAY_MILLISECOND};
 use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
 use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
+use ffxiv_simbot_combat_components::status::status_apply::{ApplyInfo, StatusApply};
+use ffxiv_simbot_combat_components::status::status_event::StatusApplyType;
 use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
 use std::cell::{Ref, RefCell};
 use std::collections::HashMap;
 use std::rc::Rc;
+use crate::event_ticker::EventTicker;
 
 pub static SIMULATION_START_TIME_MILLISECOND: TimeType = -5000;
+static INFINITE_TIME: TimeType = 10000000;
 
 #[derive(Clone)]
 enum EventType {
@@ -46,7 +51,7 @@ where
     P: Player + Sized,
     S: Skill + Sized,
 {
-    fn run_simulation(&self, target_combat_time_millsecond: TimeType);
+    fn run_simulation(&self);
     /// Gets the RDPS Profile by each buff. Raw Damage is id 0.
     fn get_simulation_result(&self) -> HashMap<IdType, DpsType>;
 }
@@ -79,19 +84,21 @@ pub struct FfxivSimulationBoard {
 
     current_combat_time_millisecond: RefCell<TimeType>,
     pub(crate) finish_combat_time_millisecond: TimeType,
-    pub(crate) skill_queue: RefCell<HashMap<TimeType, Vec<SkillInfo<AttackSkill>>>>,
+    pub(crate) tickers: RefCell<Vec<Box<dyn EventTicker>>>,
+    pub(crate) event_queue: RefCell<FfxivEvent>,
 }
 
 impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationBoard {
-    fn run_simulation(&self, target_combat_time_millsecond: TimeType) {
+    fn run_simulation(&self) {
         loop {
-            println!(
+            self.find_next_player();
+            info!(
                 "combat_time: {}",
                 *self.current_combat_time_millisecond.borrow()
             );
-            println!("turn: {}", *self.current_turn_player_id.borrow());
 
-            if self.combat_time_exceeded_finish_time(target_combat_time_millsecond) {
+            if self.combat_time_exceeded_finish_time(self.finish_combat_time_millisecond) {
+                info!("combat finished");
                 break;
             }
 
@@ -114,6 +121,7 @@ impl FfxivSimulationBoard {
                 self.use_skill();
             }
             EventType::InflictDamage(skills) => {
+                info!("inflict damage: skill {}", skills[0].skill.get_id());
                 for skill in skills {
                     if skill.is_auto_attack() {
                         self.add_next_auto_attack_to_queue(
@@ -149,24 +157,56 @@ impl FfxivSimulationBoard {
         *self.current_combat_time_millisecond.borrow() >= target_combat_time_millsecond
     }
 
-    fn add_buff(&self, buff: BuffStatus) {
-        if buff.is_raidwide {
-            for player in self.party.clone().into_iter() {
+    fn apply_buff(&self, buff: StatusApply<BuffStatus>) {
+        match buff.get_apply_type() {
+            StatusApplyType::SelfBuff => {
+                let owner_player_id = self.current_turn_player_id.clone();
+                let owner_player_id = *owner_player_id.borrow();
+
+                let player = self.party[owner_player_id].clone();
                 player.borrow_mut().add_status(buff.clone());
             }
-        } else {
-            let owner_player_id = self.current_turn_player_id.clone();
-            let owner_player_id = *owner_player_id.borrow();
-
-            for player in self.party.clone() {
-                if player.borrow().get_id() == owner_player_id {
+            StatusApplyType::RaidBuff => {
+                for player in self.party.clone() {
                     player.borrow_mut().add_status(buff.clone());
                 }
             }
+            StatusApplyType::ConnectBuff(apply_player_id) => {
+                let owner_player_id = self.current_turn_player_id.clone();
+                let owner_player_id = *owner_player_id.borrow();
+
+                for player in self.party.clone() {
+                    if player.borrow().get_id() == owner_player_id {
+                        player.borrow_mut().add_status(buff.clone());
+                    }
+
+                    if player.borrow().get_id() == *apply_player_id {
+                        player.borrow_mut().add_status(buff.clone());
+                    }
+                }
+            }
+            StatusApplyType::ConnectHalfBuff(apply_player_id) => {
+                let owner_player_id = self.current_turn_player_id.clone();
+                let owner_player_id = *owner_player_id.borrow();
+                let half_buff = buff.get_status().clone().make_half_status();
+                let mut half_apply = buff.clone();
+                half_apply.set_buff(half_buff);
+
+                for player in self.party.clone() {
+                    if player.borrow().get_id() == owner_player_id {
+                        player.borrow_mut().add_status(buff.clone());
+                    }
+
+                    if player.borrow().get_id() == *apply_player_id {
+                        player.borrow_mut().add_status(half_apply.clone());
+                    }
+                }
+            }
+            _ => {}
         }
     }
 
-    fn add_debuff(&self, debuff: DebuffStatus) {
+    fn apply_debuff(&self, debuff: StatusApply<DebuffStatus>) {
         self.target.borrow_mut().add_status(debuff);
     }
 
@@ -221,11 +261,11 @@ impl FfxivSimulationBoard {
         let debuff = result.debuff;
 
         if let Some(buff) = buff {
-            self.add_buff(buff);
+            self.apply_buff(buff);
         }
 
         if let Some(debuff) = debuff {
-            self.add_debuff(debuff);
+            self.apply_debuff(debuff);
         }
 
         self.update_damage_profile(skill_id, skill_damage_result.raw_damage);
@@ -236,20 +276,26 @@ impl FfxivSimulationBoard {
         let next_turn_player = self.get_current_player();
         let next_turn_time_millisecond = next_turn_player.borrow().get_next_turn_time_millisecond();
 
-        let next_damage_time = self.skill_queue.borrow();
-        let next_damage_time = next_damage_time.keys().min().unwrap();
+        let next_damage_time = *self
+            .event_queue
+            .borrow()
+            .keys()
+            .min()
+            .unwrap_or(&INFINITE_TIME);
 
-        if *next_damage_time < next_turn_time_millisecond {
+        if next_damage_time < next_turn_time_millisecond {
+            info!("next turn: damage tick");
             let skills = self
-                .skill_queue
+                .event_queue
                 .borrow_mut()
-                .remove(next_damage_time)
+                .remove(&next_damage_time)
                 .unwrap();
             CombatEvent {
                 event_type: EventType::InflictDamage(skills),
-                event_time_millisecond: *next_damage_time,
+                event_time_millisecond: next_damage_time,
             }
         } else {
+            info!("next turn: use skill");
             CombatEvent {
                 event_time_millisecond: next_turn_time_millisecond,
                 event_type: EventType::PlayerTurn,
@@ -295,6 +341,7 @@ impl FfxivSimulationBoard {
         let target = self.get_target();
         let target = target.borrow();
 
+        info!("turn type: {}", current_turn_player.get_player_turn());
         current_turn_player.get_next_skill(target.get_status_list())
     }
 
@@ -305,19 +352,25 @@ impl FfxivSimulationBoard {
         if let Some(skill_result) = skill_result {
             match skill_result {
                 SkillResult::Delay(delay_time) => {
+                    info!("delayed by {}", delay_time);
                     let current_player = self.get_current_player();
                     current_player.borrow_mut().delay_turn_by(delay_time);
                     return;
                 }
                 SkillResult::UseSkill(skill_info_of_result) => {
-                    let current_player = self.get_current_player();
-                    current_player
-                        .borrow_mut()
-                        .calculate_next_turn(skill_info_of_result[0].skill.get_delay_millisecond());
+                    let main_skill = &skill_info_of_result[0].skill;
+                    self.update_current_player_turn(
+                        main_skill.get_delay_millisecond(),
+                        main_skill.get_charging_time_millisecond(),
+                    );
+
+                    info!("used skill {}", main_skill.get_name());
+                    self.add_skill_to_rotation_log(main_skill.get_id());
                     skill_info = Some(skill_info_of_result);
                 }
             }
         } else {
+            self.update_current_player_turn(NON_GCD_DELAY_MILLISECOND, 0);
             return;
         }
 
@@ -332,6 +385,18 @@ impl FfxivSimulationBoard {
                 self.simulate_skill(skill_info);
             }
         }
+    }
+
+    fn update_current_player_turn(&self, delay_time: TimeType, charging_time: TimeType) {
+        let current_turn_player = self.get_current_player();
+
+        current_turn_player
+            .borrow_mut()
+            .calculate_next_turn(delay_time, charging_time);
+
+        current_turn_player
+            .borrow_mut()
+            .update_delay(delay_time + charging_time);
     }
 
     fn update_current_player_gcd_time(&self, skill: &AttackSkill) {
@@ -352,36 +417,50 @@ impl FfxivSimulationBoard {
         let simulation_result = self.request_skill_simulation(skill_info);
 
         self.update_skill_simulation_result(skill_id, simulation_result);
-        self.add_skill_to_rotation_log(skill_id);
     }
 
     fn add_to_skill_queue(&self, skill_info: SkillInfo<AttackSkill>) {
-        let mut skill_queue = self.skill_queue.borrow_mut();
+        let mut skill_queue = self.event_queue.borrow_mut();
         let time_millisecond = skill_info.damage_inflict_time_millisecond.unwrap();
 
         if let Some(skill_list) = skill_queue.get_mut(&time_millisecond) {
             skill_list.push(skill_info);
         } else {
-            skill_queue.insert(time_millisecond, vec![skill_info]);
+            skill_queue.insert(
+                *self.current_combat_time_millisecond.borrow() + time_millisecond,
+                vec![skill_info],
+            );
         }
     }
 
     fn add_skill_to_rotation_log(&self, skill_id: IdType) {
-        if let Some(skill_rotation_list) = self
+        let rotation_log = RotationLog {
+            casted_time_millisecond: *self.current_combat_time_millisecond.borrow(),
+            skill_id,
+        };
+
+        if self
             .rotation_logs
-            .borrow_mut()
-            .get_mut(&self.current_turn_player_id.borrow())
+            .borrow()
+            .contains_key(&self.current_turn_player_id.borrow())
         {
-            skill_rotation_list.push(RotationLog {
-                casted_time_millisecond: *self.current_combat_time_millisecond.borrow(),
-                skill_id,
-            })
+            self.rotation_logs
+                .borrow_mut()
+                .get_mut(&self.current_turn_player_id.borrow())
+                .unwrap()
+                .push(rotation_log);
+        } else {
+            self.rotation_logs
+                .borrow_mut()
+                .insert(*self.current_turn_player_id.borrow(), vec![rotation_log]);
         }
     }
 
     fn update_time_related_informations(&self, next_event_time: TimeType) {
-        self.update_player_target_time_informations(next_event_time);
-        self.update_combat_time(next_event_time);
+        let elapsed_time = self.get_elapsed_time(next_event_time);
+
+        self.update_player_target_time_informations(elapsed_time);
+        self.update_combat_time(elapsed_time);
     }
 
     #[inline]
@@ -389,14 +468,9 @@ impl FfxivSimulationBoard {
         *self.current_combat_time_millisecond.borrow_mut() += elapsed_time;
     }
 
-    fn get_elapsed_time(&self) -> TimeType {
-        let current_turn_player = self.get_current_player();
-
-        let next_turn_time_millisecond = current_turn_player
-            .borrow()
-            .get_next_turn_time_millisecond();
-
-        next_turn_time_millisecond - *self.current_combat_time_millisecond.borrow()
+    #[inline]
+    fn get_elapsed_time(&self, next_event_time_millisecond: TimeType) -> TimeType {
+        next_event_time_millisecond - *self.current_combat_time_millisecond.borrow()
     }
 
     fn update_player_target_time_informations(&self, elapsed_time: TimeType) {
@@ -415,7 +489,11 @@ impl FfxivSimulationBoard {
     fn get_final_rdps_table(&self) -> HashMap<IdType, DpsType> {
         todo!()
     }
-    pub fn new(party: Vec<Rc<RefCell<FfxivPlayer>>>, target: Rc<RefCell<FfxivTarget>>) -> Self {
+    pub fn new(
+        party: Vec<Rc<RefCell<FfxivPlayer>>>,
+        target: Rc<RefCell<FfxivTarget>>,
+        finish_combat_time_millisecond: TimeType,
+    ) -> Self {
         let mut damage_profiles = vec![];
 
         for _ in 0..party.len() {
@@ -431,9 +509,9 @@ impl FfxivSimulationBoard {
             party,
             target,
             rdps_table: RefCell::new(FfxivRaidDamageTable::default()),
-            current_combat_time_millisecond: RefCell::new(-SIMULATION_START_TIME_MILLISECOND),
-            finish_combat_time_millisecond: 0,
-            skill_queue: Default::default(),
+            current_combat_time_millisecond: RefCell::new(SIMULATION_START_TIME_MILLISECOND),
+            finish_combat_time_millisecond,
+            event_queue: Default::default(),
         }
     }
 }

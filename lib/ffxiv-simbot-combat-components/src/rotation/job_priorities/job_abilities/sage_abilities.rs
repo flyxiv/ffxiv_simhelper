@@ -1,3 +1,5 @@
+use crate::id_entity::IdEntity;
+use crate::rotation::job_priorities::job_abilities::{make_opener, make_skill_table};
 use crate::rotation::job_priorities::SkillTable;
 use crate::rotation::priority_table::SkillPrerequisite;
 use crate::rotation::SkillPriorityInfo;
@@ -74,30 +76,24 @@ lazy_static! {
     };
 }
 
-pub(crate) fn make_sage_gcd_priority_table(
-    player_id: IdType,
-) -> Vec<SkillPriorityInfo<AttackSkill>> {
-    let mut sage_priority_list: Vec<SkillPriorityInfo<AttackSkill>> = vec![
+pub(crate) fn make_sage_gcd_priority_table() -> Vec<SkillPriorityInfo> {
+    let mut sage_priority_list: Vec<SkillPriorityInfo> = vec![
         SkillPriorityInfo {
-            skill: PHLEGMA.clone(),
+            skill_id: PHLEGMA.get_id(),
             prerequisite: Some(SkillPrerequisite::Or(
                 Box::new(SkillPrerequisite::HasStacks(702, 2)),
                 Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
             )),
         },
         SkillPriorityInfo {
-            skill: DOT.clone(),
+            skill_id: DOT.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill: GCD.clone(),
+            skill_id: GCD.get_id(),
             prerequisite: None,
         },
     ];
-
-    for priority in sage_priority_list.iter_mut() {
-        priority.skill.player_id = player_id;
-    }
 
     sage_priority_list
 }
@@ -115,27 +111,11 @@ pub(crate) fn make_sage_opener(player_id: IdType) -> Vec<Option<AttackSkill>> {
         Some(GCD.clone()),
     ];
 
-    for skill in sage_opener.iter_mut() {
-        if let Some(skill) = skill {
-            skill.player_id = player_id;
-        }
-    }
-
-    sage_opener
+    make_opener(player_id, sage_opener)
 }
 
-pub(crate) fn make_sage_skills(player_id: IdType) -> SkillTable {
+pub(crate) fn make_sage_skills(player_id: IdType) -> SkillTable<AttackSkill> {
     let mut all_skills = vec![DOT.clone(), GCD.clone(), PHLEGMA.clone()];
 
-    for skill in all_skills.iter_mut() {
-        skill.player_id = player_id;
-    }
-
-    let mut skill_table = SkillTable::new();
-
-    for skill in all_skills {
-        skill_table.insert(skill.id, skill);
-    }
-
-    skill_table
+    make_skill_table(player_id, all_skills)
 }

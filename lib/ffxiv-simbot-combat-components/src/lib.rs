@@ -27,7 +27,7 @@ pub(crate) type ManaType = i32;
 pub type BuffIncreasePercentType = usize;
 pub(crate) type TurnCount = usize;
 
-pub(crate) type BuffTable<S: Status + Sized> = HashMap<IdType, S>;
+pub(crate) type BuffTable<S> = HashMap<IdType, S>;
 pub(crate) type Party<P> = Vec<P>;
 
 pub enum CombatComponentsError {

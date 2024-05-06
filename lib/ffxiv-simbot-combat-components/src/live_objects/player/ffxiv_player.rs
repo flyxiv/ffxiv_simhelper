@@ -18,6 +18,7 @@ use ffxiv_simbot_db::job::Job;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
 use std::cell::RefCell;
+use std::cmp::max;
 use std::rc::Rc;
 
 static TWO_MINUTES_IN_MILLISECOND: TimeType = 120000;
@@ -69,8 +70,13 @@ impl Player for FfxivPlayer {
             .get_next_skill(self.buff_list.clone(), debuff_list, self)
     }
 
-    fn set_delay(&mut self, delay: TimeType) {
-        self.total_delay = delay;
+    fn update_delay(&mut self, delay: TimeType) {
+        let current_delay = self.get_delay();
+
+        self.total_delay = match &self.next_turn.turn_type {
+            FfxivTurnType::Gcd => 0,
+            _ => current_delay + delay,
+        };
     }
 
     fn get_damage_inflict_time_millisecond<S: Skill>(&self, skill: &S) -> Option<TimeType> {
@@ -84,7 +90,7 @@ impl Player for FfxivPlayer {
     }
 
     fn has_resources_for_skill<S: Skill>(&self, _: S) -> bool {
-        /// TODO: Implement mana resource check for casters.
+        // TODO: Implement mana resource check for casters.
         return false;
     }
 
@@ -119,8 +125,8 @@ impl Player for FfxivPlayer {
         }
     }
 
-    fn get_turn(&self) -> &FfxivTurnType {
-        &self.next_turn.turn_type
+    fn get_player_turn(&self) -> &PlayerTurn {
+        &self.next_turn
     }
 
     fn get_turn_type(&self) -> &FfxivTurnType {
@@ -203,8 +209,8 @@ impl FfxivPlayer {
         for buff in self.buff_list.borrow().iter() {
             match buff.status_info {
                 StatusInfo::SpeedPercent(buff_increase_percent) => {
-                    gcd_buffs_multiplier =
-                        gcd_buffs_multiplier * (buff_increase_percent as MultiplierType / 100.0);
+                    gcd_buffs_multiplier = gcd_buffs_multiplier
+                        * (1.0 + (buff_increase_percent as MultiplierType / 100.0));
                 }
                 _ => {}
             }
@@ -214,11 +220,12 @@ impl FfxivPlayer {
 
     /// After using a turn, calculate when the next turn will be in combat time,
     /// and also figure out if it is a GCD/oGCD turn.
-    pub fn calculate_next_turn(&mut self, skill_delay: TimeType) {
+    pub fn calculate_next_turn(&mut self, skill_delay: TimeType, charging_time: TimeType) {
         let current_turn = &self.next_turn;
         self.next_turn = current_turn.get_next_turn(
             self,
             skill_delay,
+            charging_time,
             current_turn.next_turn_combat_time_millisecond,
         )
     }
@@ -228,17 +235,19 @@ impl FfxivPlayer {
         job: Job,
         power: CharacterPower,
         priority_table: FfxivPriorityTable,
+        start_gcd_time: TimeType,
+        buff_list: Vec<BuffStatus>,
     ) -> FfxivPlayer {
         FfxivPlayer {
             id,
             job,
             power,
             priority_table: RefCell::new(priority_table),
-            buff_list: Rc::new(RefCell::new(vec![])),
+            buff_list: Rc::new(RefCell::new(buff_list)),
             total_delay: 0,
-            next_gcd_time_millisecond: 0,
-            last_gcd_time_millisecond: 0,
-            next_turn: PlayerTurn::default(),
+            next_gcd_time_millisecond: start_gcd_time,
+            last_gcd_time_millisecond: start_gcd_time,
+            next_turn: PlayerTurn::new(start_gcd_time),
             mana_available: None,
         }
     }
@@ -252,21 +261,7 @@ impl StatusHolder<BuffStatus> for FfxivPlayer {
     }
 }
 
-impl StatusTimer<BuffStatus> for FfxivPlayer {
-    fn update_status_time(&mut self, elapsed_time: TimeType) {
-        if elapsed_time <= 0 {
-            return;
-        }
-
-        let status_list = self.get_status_list();
-
-        for status in status_list.borrow_mut().iter_mut() {
-            status.set_duration_left_millisecond(
-                status.get_duration_left_millisecond() - elapsed_time,
-            );
-        }
-    }
-}
+impl StatusTimer<BuffStatus> for FfxivPlayer {}
 
 #[cfg(test)]
 mod tests {

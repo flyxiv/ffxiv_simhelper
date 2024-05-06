@@ -2,9 +2,9 @@ use crate::id_entity::IdEntity;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::turn_type::FfxivTurnType;
 use crate::rotation::cooldown_timer::CooldownTimer;
-use crate::rotation::job_priorities::job_abilities::ninja_abilities::{
-    bunshin_gcd_ids, get_bunshin_stack, get_huton_status, make_ninja_gcd_table,
-    make_ninja_ogcd_table, make_ninja_opener, make_ninja_skill_list,
+use crate::rotation::job_priorities::job_abilities::dragoon_abilities::{
+    get_dragoon_crit_skill_ids, make_dragoon_gcd_table, make_dragoon_ogcd_table,
+    make_dragoon_opener, make_dragoon_skill_list,
 };
 use crate::rotation::job_priorities::SkillTable;
 use crate::rotation::priority_table::PriorityTable;
@@ -15,10 +15,10 @@ use ffxiv_simbot_db::ffxiv_context::FfxivContext;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use std::cell::RefCell;
 
-static NINJA_START_TIME_MILLISECOND: TimeType = -2500;
+static DRAGOON_START_TIME_MILLISECOND: TimeType = 0;
 
 #[derive(Clone)]
-pub(crate) struct NinjaPriorityTable {
+pub(crate) struct DragoonPriorityTable {
     turn_count: TurnCount,
     skills: SkillTable<AttackSkill>,
 
@@ -27,21 +27,21 @@ pub(crate) struct NinjaPriorityTable {
     gcd_priority_table: Vec<SkillPriorityInfo>,
     ogcd_priority_table: Vec<SkillPriorityInfo>,
 
-    ninki: RefCell<ResourceType>,
-    bunshin_count: RefCell<ResourceType>,
+    mirage_gauge: RefCell<ResourceType>,
+    firstmind_focus: RefCell<ResourceType>,
 
     current_combo: Option<IdType>,
 }
 
-impl PriorityTable<FfxivPlayer, AttackSkill> for NinjaPriorityTable {
+impl PriorityTable<FfxivPlayer, AttackSkill> for DragoonPriorityTable {
     fn add_buff_distribute_to(&self, _: &mut Vec<SkillInfo<AttackSkill>>, _: &FfxivPlayer) {}
 
     fn add_resource1(&self, resource: ResourceType) {
-        *self.ninki.borrow_mut() += resource;
+        *self.mirage_gauge.borrow_mut() += resource;
     }
 
     fn add_resource2(&self, resource: ResourceType) {
-        *self.bunshin_count.borrow_mut() += resource;
+        *self.firstmind_focus.borrow_mut() += resource;
     }
 
     fn update_combo(&mut self, combo_id: Option<IdType>) {
@@ -67,19 +67,9 @@ impl PriorityTable<FfxivPlayer, AttackSkill> for NinjaPriorityTable {
     fn add_additional_skills(
         &self,
         skills: &Vec<SkillInfo<AttackSkill>>,
-        player: &FfxivPlayer,
+        _: &FfxivPlayer,
     ) -> Vec<SkillInfo<AttackSkill>> {
-        let skill_info = &skills[0];
-        let skill_id = skill_info.skill.get_id();
-        let mut skills = skills.clone();
-
-        if bunshin_gcd_ids().contains(&skill_id) && self.get_resource(1) > 0 {
-            self.add_resource1(5);
-            self.add_resource2(-1);
-            skills.push(self.make_skill_info(get_bunshin_stack(player.get_id()), player));
-        }
-
-        skills
+        skills.clone()
     }
 
     fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill> {
@@ -92,9 +82,9 @@ impl PriorityTable<FfxivPlayer, AttackSkill> for NinjaPriorityTable {
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            *self.ninki.borrow()
+            *self.mirage_gauge.borrow()
         } else {
-            *self.bunshin_count.borrow()
+            *self.firstmind_focus.borrow()
         }
     }
 
@@ -112,10 +102,10 @@ impl PriorityTable<FfxivPlayer, AttackSkill> for NinjaPriorityTable {
     }
 
     fn is_guaranteed_crit(&self, skill: &AttackSkill) -> bool {
-        false
+        get_dragoon_crit_skill_ids().contains(&skill.get_id())
     }
 
-    fn is_guaranteed_direct_hit(&self, skill: &AttackSkill) -> bool {
+    fn is_guaranteed_direct_hit(&self, _: &AttackSkill) -> bool {
         false
     }
 
@@ -124,41 +114,41 @@ impl PriorityTable<FfxivPlayer, AttackSkill> for NinjaPriorityTable {
     }
 }
 
-impl NinjaPriorityTable {
+impl DragoonPriorityTable {
     pub fn new(player_id: IdType) -> Self {
         Self {
             turn_count: 0,
-            skills: make_ninja_skill_list(player_id),
-            opener: make_ninja_opener(player_id),
-            gcd_priority_table: make_ninja_gcd_table(),
-            ogcd_priority_table: make_ninja_ogcd_table(),
-            ninki: RefCell::new(0),
-            bunshin_count: RefCell::new(0),
+            skills: make_dragoon_skill_list(player_id),
+            opener: make_dragoon_opener(player_id),
+            gcd_priority_table: make_dragoon_gcd_table(),
+            ogcd_priority_table: make_dragoon_ogcd_table(),
+            mirage_gauge: RefCell::new(0),
+            firstmind_focus: RefCell::new(0),
             current_combo: None,
         }
     }
 }
 
 impl FfxivPlayer {
-    pub fn new_ninja(
+    pub fn new_dragoon(
         player_id: IdType,
         power: CharacterPower,
         context: &FfxivContext,
     ) -> FfxivPlayer {
-        let ninja_job = context.jobs.get("NIN").unwrap();
+        let dragoon_job = context.jobs.get("DRG").unwrap();
 
         Self::new(
             player_id,
-            ninja_job.clone(),
+            dragoon_job.clone(),
             power,
-            FfxivPriorityTable::Ninja(NinjaPriorityTable::new(player_id)),
-            NINJA_START_TIME_MILLISECOND,
-            vec![get_huton_status(player_id)],
+            FfxivPriorityTable::Dragoon(DragoonPriorityTable::new(player_id)),
+            DRAGOON_START_TIME_MILLISECOND,
+            vec![],
         )
     }
 }
 
-impl CooldownTimer for NinjaPriorityTable {
+impl CooldownTimer for DragoonPriorityTable {
     fn update_cooldown(&mut self, elapsed_time: i32) {
         for (_, skill) in self.skills.iter_mut() {
             skill.update_cooldown(elapsed_time);

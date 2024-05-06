@@ -94,12 +94,19 @@ impl PriorityTable<FfxivPlayer, AttackSkill> for FfxivPriorityTable {
         }
     }
 
-    fn get_skills_mut(&mut self) -> &mut SkillTable {
+    fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill> {
         match self {
             FfxivPriorityTable::Sage(sage_priority_table) => sage_priority_table.get_skills_mut(),
             FfxivPriorityTable::Ninja(ninja_priority_table) => {
                 ninja_priority_table.get_skills_mut()
             }
+        }
+    }
+
+    fn get_skills(&self) -> &SkillTable<AttackSkill> {
+        match self {
+            FfxivPriorityTable::Sage(sage_priority_table) => sage_priority_table.get_skills(),
+            FfxivPriorityTable::Ninja(ninja_priority_table) => ninja_priority_table.get_skills(),
         }
     }
 
@@ -125,10 +132,7 @@ impl PriorityTable<FfxivPlayer, AttackSkill> for FfxivPriorityTable {
         }
     }
 
-    fn get_priority_table(
-        &self,
-        turn_type: &FfxivTurnType,
-    ) -> &Vec<SkillPriorityInfo<AttackSkill>> {
+    fn get_priority_table(&self, turn_type: &FfxivTurnType) -> &Vec<SkillPriorityInfo> {
         match self {
             FfxivPriorityTable::Sage(sage_priority_table) => {
                 sage_priority_table.get_priority_table(turn_type)

@@ -13,19 +13,19 @@ use std::collections::HashMap;
 pub type SimulationResponse = HashMap<IdType, SimulationResult>;
 
 pub struct SimulationResult {
-    job_name: String,
-    raw_damage_total: DamageType,
+    pub job_name: String,
+    pub raw_damage_total: DamageType,
     /// Rdps the job's buff skills earned.
-    rdps_earned: DpsType,
+    pub rdps_earned: DpsType,
     /// The job's Rdps contribution to the other party member's buffs
-    rdps_contributed: DpsType,
-    rotation_log: Vec<RotationLog>,
+    pub rdps_contributed: DpsType,
+    pub rotation_log: Vec<RotationLog>,
 }
 
 #[derive(Clone)]
 pub struct RotationLog {
-    pub(crate) casted_time_millisecond: TimeType,
-    pub(crate) skill_id: IdType,
+    pub casted_time_millisecond: TimeType,
+    pub skill_id: IdType,
 }
 
 impl From<FfxivSimulationBoard> for SimulationResponse {

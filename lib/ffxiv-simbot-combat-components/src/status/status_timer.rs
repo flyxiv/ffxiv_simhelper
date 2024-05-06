@@ -20,5 +20,7 @@ pub trait StatusTimer<T: Status>: StatusHolder<T> {
                 status.get_duration_left_millisecond() - elapsed_time,
             );
         }
+
+        status_list.retain(|status| status.get_duration_left_millisecond() > 0);
     }
 }

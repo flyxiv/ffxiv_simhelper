@@ -12,6 +12,7 @@ pub struct DebuffStatus {
     pub(crate) status_info: StatusInfo,
     pub(crate) duration_millisecond: TimeType,
     pub(crate) is_raidwide: bool,
+    pub(crate) name: String,
 }
 
 impl Status for DebuffStatus {
@@ -21,6 +22,9 @@ impl Status for DebuffStatus {
     fn set_duration_left_millisecond(&mut self, duration: TimeType) {
         self.duration_left_millisecond = duration;
     }
+    fn get_name(&self) -> &String {
+        &self.name
+    }
 
     fn get_status_info(&self) -> StatusInfo {
         self.status_info
@@ -28,6 +32,10 @@ impl Status for DebuffStatus {
 
     fn get_duration_millisecond(&self) -> TimeType {
         self.duration_millisecond
+    }
+
+    fn is_raidwide(&self) -> bool {
+        self.is_raidwide
     }
 }
 

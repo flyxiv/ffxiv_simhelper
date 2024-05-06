@@ -1,5 +1,6 @@
+use crate::damage_calculator::multiplier_calculator::MultiplierCalculator;
 use crate::damage_rdps_profile::{FfxivRaidDamageTable, RaidDamageTable, RaidDamageTableKey};
-use crate::multiplier_calculator::MultiplierCalculator;
+use crate::skill_simulator::SkillDamageResult;
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
 use ffxiv_simbot_combat_components::owner_tracker::OwnerTracker;
 use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
@@ -10,16 +11,6 @@ use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
 use std::cell::RefCell;
 use std::rc::Rc;
-
-/// Simulates the effect of a single skill and distribute the damage contribution of each
-/// buff to the rightful owner.
-
-pub(crate) struct SkillDamageResult {
-    pub(crate) raw_damage: DamageType,
-    /// damage after adding all buffs/debuffs
-    pub(crate) final_damage: DamageType,
-    pub(crate) raid_damage_profile: FfxivRaidDamageTable,
-}
 
 pub(crate) trait SkillCalculator {
     /// Given the raw damage and all the list of buffs/debuffs on the player and the target,

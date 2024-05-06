@@ -1,5 +1,5 @@
 use crate::id_entity::IdEntity;
-use crate::live_objects::turn_type::FfxivTurnType;
+use crate::live_objects::turn_type::{FfxivTurnType, PlayerTurn};
 use crate::rotation::priority_table::SkillResult;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::Skill;
@@ -31,7 +31,7 @@ pub trait Player: Sized + StatusHolder<BuffStatus> + IdEntity {
     ) -> Option<SkillResult<AttackSkill>>;
 
     fn get_last_gcd_time_millisecond(&self) -> TimeType;
-    fn set_delay(&mut self, delay: TimeType);
+    fn update_delay(&mut self, delay: TimeType);
 
     fn get_damage_inflict_time_millisecond<S: Skill>(&self, skill: &S) -> Option<TimeType>;
     fn has_resources_for_skill<S: Skill>(&self, skill: S) -> bool;
@@ -39,7 +39,7 @@ pub trait Player: Sized + StatusHolder<BuffStatus> + IdEntity {
     fn set_next_gcd_time_millisecond<S: Skill>(&mut self, skill: &S);
     fn get_next_turn_time_millisecond(&self) -> TimeType;
     fn get_gcd_delay_millisecond<S: Skill>(&self, skill: &S) -> TimeType;
-    fn get_turn(&self) -> &FfxivTurnType;
+    fn get_player_turn(&self) -> &PlayerTurn;
     fn get_turn_type(&self) -> &FfxivTurnType;
     fn get_millisecond_before_burst(&self) -> TimeType;
     fn set_last_gcd_time_millisecond(&mut self, time: TimeType);

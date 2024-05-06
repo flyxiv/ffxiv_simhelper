@@ -1,4 +1,4 @@
-use crate::multiplier_calculator::MultiplierCalculator;
+use crate::damage_calculator::multiplier_calculator::MultiplierCalculator;
 use ffxiv_simbot_combat_components::skill::attack_skill::SkillInfo;
 use ffxiv_simbot_combat_components::skill::Skill;
 use ffxiv_simbot_combat_components::{BuffIncreasePercentType, DamageType};

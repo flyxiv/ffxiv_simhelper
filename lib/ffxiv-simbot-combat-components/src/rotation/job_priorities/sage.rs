@@ -8,20 +8,23 @@ use crate::rotation::job_priorities::SkillTable;
 use crate::rotation::priority_table::PriorityTable;
 use crate::rotation::{FfxivPriorityTable, SkillPriorityInfo};
 use crate::skill::attack_skill::{AttackSkill, SkillInfo};
-use crate::{IdType, ResourceType, StackType, TurnCount};
+use crate::{IdType, ResourceType, StackType, TimeType, TurnCount};
 use ffxiv_simbot_db::ffxiv_context::FfxivContext;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
+
+static SAGE_START_TIME_MILLISECOND: TimeType = -1500;
 
 #[derive(Clone)]
 pub struct SagePriorityTable {
     turn_count: TurnCount,
-    skills: SkillTable,
+    skills: SkillTable<AttackSkill>,
     opener: Vec<Option<AttackSkill>>,
-    gcd_priority_list: Vec<SkillPriorityInfo<AttackSkill>>,
-    ogcd_priority_list: Vec<SkillPriorityInfo<AttackSkill>>,
+    gcd_priority_list: Vec<SkillPriorityInfo>,
+    ogcd_priority_list: Vec<SkillPriorityInfo>,
 }
 
 impl PriorityTable<FfxivPlayer, AttackSkill> for SagePriorityTable {
+    fn add_buff_distribute_to(&self, _: &mut Vec<SkillInfo<AttackSkill>>, _: &FfxivPlayer) {}
     fn add_resource1(&self, _: ResourceType) {}
 
     fn add_resource2(&self, _: ResourceType) {}
@@ -52,8 +55,12 @@ impl PriorityTable<FfxivPlayer, AttackSkill> for SagePriorityTable {
         skills.clone()
     }
 
-    fn get_skills_mut(&mut self) -> &mut SkillTable {
+    fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill> {
         &mut self.skills
+    }
+
+    fn get_skills(&self) -> &SkillTable<AttackSkill> {
+        &self.skills
     }
 
     fn get_resource(&self, _: IdType) -> ResourceType {
@@ -65,10 +72,7 @@ impl PriorityTable<FfxivPlayer, AttackSkill> for SagePriorityTable {
         skill.stacks
     }
 
-    fn get_priority_table(
-        &self,
-        turn_type: &FfxivTurnType,
-    ) -> &Vec<SkillPriorityInfo<AttackSkill>> {
+    fn get_priority_table(&self, turn_type: &FfxivTurnType) -> &Vec<SkillPriorityInfo> {
         match turn_type {
             FfxivTurnType::Gcd => &self.gcd_priority_list,
             _ => &self.ogcd_priority_list,
@@ -94,7 +98,7 @@ impl SagePriorityTable {
             turn_count: 0,
             skills: make_sage_skills(player_id),
             opener: make_sage_opener(player_id),
-            gcd_priority_list: make_sage_gcd_priority_table(player_id),
+            gcd_priority_list: make_sage_gcd_priority_table(),
             ogcd_priority_list: Vec::new(),
         }
     }
@@ -113,6 +117,8 @@ impl FfxivPlayer {
             sage_job.clone(),
             power,
             FfxivPriorityTable::Sage(SagePriorityTable::new(player_id)),
+            SAGE_START_TIME_MILLISECOND,
+            vec![],
         )
     }
 }

@@ -1,7 +1,7 @@
 pub mod attack_skill;
 
 use crate::id_entity::IdEntity;
-use crate::{DamageType, IdType, ResourceType, TimeType};
+use crate::{DamageType, IdType, ResourceType, StackType, TimeType};
 use ffxiv_simbot_db::MultiplierType;
 
 pub static GCD_TURN_DELAY_PERCENTAGE_THRESHOLD: MultiplierType = 0.65;
@@ -37,6 +37,8 @@ pub trait Skill: Sized + Clone + IdEntity {
     fn is_speed_buffed(&self) -> bool;
     fn stack_skill_id(&self) -> IdType;
     fn is_auto_attack(&self) -> bool;
+    fn get_name(&self) -> &String;
+    fn get_stacks(&self) -> StackType;
 
     fn get_resource1_created(&self) -> ResourceType;
     fn get_resource2_created(&self) -> ResourceType;

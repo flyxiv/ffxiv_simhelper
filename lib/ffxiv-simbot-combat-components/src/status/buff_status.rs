@@ -12,6 +12,7 @@ pub struct BuffStatus {
     pub(crate) status_info: StatusInfo,
     pub(crate) duration_millisecond: TimeType,
     pub is_raidwide: bool,
+    pub(crate) name: String,
 }
 
 impl Status for BuffStatus {
@@ -22,12 +23,44 @@ impl Status for BuffStatus {
         self.duration_left_millisecond = duration;
     }
 
+    fn get_name(&self) -> &String {
+        &self.name
+    }
+
     fn get_status_info(&self) -> StatusInfo {
         self.status_info
     }
 
     fn get_duration_millisecond(&self) -> i32 {
         self.duration_millisecond
+    }
+
+    fn is_raidwide(&self) -> bool {
+        self.is_raidwide
+    }
+}
+
+impl BuffStatus {
+    pub fn make_half_status(&self) -> Self {
+        let mut buff = self.clone();
+
+        match &self.status_info {
+            StatusInfo::DamagePercent(damage_percent) => {
+                buff.status_info = StatusInfo::DamagePercent(damage_percent / 2);
+            }
+            StatusInfo::CritHitRatePercent(crit_hit_rate_percent) => {
+                buff.status_info = StatusInfo::CritHitRatePercent(crit_hit_rate_percent / 2);
+            }
+            StatusInfo::DirectHitRatePercent(direct_hit_rate_percent) => {
+                buff.status_info = StatusInfo::DirectHitRatePercent(direct_hit_rate_percent / 2);
+            }
+            StatusInfo::SpeedPercent(attack_speed_percent) => {
+                buff.status_info = StatusInfo::SpeedPercent(attack_speed_percent / 2);
+            }
+            _ => {}
+        }
+
+        buff
     }
 }
 

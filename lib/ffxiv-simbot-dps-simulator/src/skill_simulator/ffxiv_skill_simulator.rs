@@ -1,41 +1,18 @@
-use crate::skill_calculator::{FfxivSkillCalculator, SkillCalculator, SkillDamageResult};
+use crate::skill_simulator::skill_calculator::{
+    FfxivSkillCalculator, SkillCalculator, SkillDamageResult,
+};
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
 use ffxiv_simbot_combat_components::live_objects::player::Player;
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
-use ffxiv_simbot_combat_components::live_objects::target::Target;
 use ffxiv_simbot_combat_components::IdType;
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::raw_damage_calculator::{FfxivRawDamageCalculator, RawDamageCalculator};
+use crate::damage_calculator::raw_damage_calculator::{
+    FfxivRawDamageCalculator, RawDamageCalculator,
+};
+use crate::skill_simulator::SkillSimulator;
 use ffxiv_simbot_combat_components::skill::attack_skill::{AttackSkill, SkillInfo};
-use ffxiv_simbot_combat_components::skill::Skill;
-use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
-use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
-
-pub(crate) struct SkillSimulationResult {
-    pub(crate) skill_damage_result: SkillDamageResult,
-    pub(crate) buff: Option<BuffStatus>,
-    pub(crate) debuff: Option<DebuffStatus>,
-    pub(crate) skill_user_id: IdType,
-}
-
-/// Gets necessary data needed for simulating skill's damage and effects
-/// Then orders players/target/rdps table to update the simulated result
-pub(crate) trait SkillSimulator<T, P, S>
-where
-    T: Target,
-    P: Player,
-    S: Skill,
-{
-    fn make_skill_simulation_result(
-        &self,
-        turn_player_id: IdType,
-        players: &Vec<Rc<RefCell<FfxivPlayer>>>,
-        target: Rc<RefCell<FfxivTarget>>,
-        skill_info: &SkillInfo<AttackSkill>,
-    ) -> SkillDamageResult;
-}
 
 impl SkillSimulator<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSkillSimulator {
     fn make_skill_simulation_result(
