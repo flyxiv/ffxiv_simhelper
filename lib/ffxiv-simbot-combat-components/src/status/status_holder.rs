@@ -1,15 +1,17 @@
 use crate::status::status_apply::StatusApply;
 use crate::status::Status;
+use crate::IdType;
 use std::cell::RefCell;
 use std::cmp::min;
+use std::collections::HashMap;
 use std::rc::Rc;
 
 /// Implements entity that hold buff/debuff status
 /// which are characters and attack targets.
 pub trait StatusHolder<S: Status>: Sized {
-    fn get_status_list(&self) -> Rc<RefCell<Vec<S>>>;
+    fn get_status_list(&self) -> Rc<RefCell<HashMap<IdType, S>>>;
 
-    fn add_status(&mut self, status: StatusApply<S>) {
+    fn add_status(&mut self, status: S) {
         let status_list = self.get_status_list();
         let mut status_list = status_list.borrow_mut();
 

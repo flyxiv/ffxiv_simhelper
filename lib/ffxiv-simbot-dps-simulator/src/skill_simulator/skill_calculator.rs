@@ -1,5 +1,7 @@
+use crate::damage_calculator::damage_rdps_profile::{
+    FfxivRaidDamageTable, RaidDamageTable, RaidDamageTableKey,
+};
 use crate::damage_calculator::multiplier_calculator::MultiplierCalculator;
-use crate::damage_rdps_profile::{FfxivRaidDamageTable, RaidDamageTable, RaidDamageTableKey};
 use crate::skill_simulator::SkillDamageResult;
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
 use ffxiv_simbot_combat_components::owner_tracker::OwnerTracker;

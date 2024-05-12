@@ -1,23 +1,30 @@
+use crate::combat_resources::CombatResource;
+use crate::event::turn_info::TurnInfo;
 use crate::id_entity::IdEntity;
-use crate::live_objects::player::Player;
-use crate::live_objects::turn_type::{FfxivTurnType, PlayerTurn};
-use crate::rotation::cooldown_timer::CooldownTimer;
-use crate::rotation::job_priorities::SkillTable;
+use crate::live_objects::player::ffxiv_player::FfxivPlayer;
+use crate::live_objects::player::{Player, StatusKey};
+use crate::live_objects::turn_type::FfxivTurnType;
+use crate::rotation::simulate_status::simulate_status;
+use crate::rotation::simulated_combat_resource::FirstSkillCombatSimulation;
 use crate::rotation::SkillPriorityInfo;
-use crate::skill::attack_skill::SkillInfo;
-use crate::skill::{ResourceRequirements, Skill};
+use crate::skill::attack_skill::AttackSkill;
+use crate::skill::{ResourceRequirements, Skill, NON_GCD_DELAY_MILLISECOND};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{IdType, ResourceType, StackType, TimeType};
 use itertools::Itertools;
 use std::cell::RefCell;
+use std::cmp::max;
+use std::collections::HashMap;
 use std::rc::Rc;
 
-pub enum PriorityResult {
-    True,
-    DelayOgcdFor(TimeType),
-    False,
+#[derive(Clone)]
+pub(crate) enum Opener {
+    GcdOpener(IdType),
+    OgcdOpener((Option<IdType>, Option<IdType>)),
 }
+
+static OGCD_PENALTY: usize = 4;
 
 #[derive(Clone)]
 pub(crate) enum SkillPrerequisite {
@@ -36,247 +43,353 @@ pub(crate) enum SkillPrerequisite {
 
 #[derive(Clone)]
 pub(crate) struct CombatInfo {
-    buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-    debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-    milliseconds_before_burst: TimeType,
+    pub(crate) buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
+    pub(crate) debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+    pub(crate) milliseconds_before_burst: TimeType,
 }
 
-pub enum SkillResult<S: Skill> {
-    UseSkill(Vec<SkillInfo<S>>),
-    Delay(TimeType),
+#[derive(Clone)]
+pub(crate) struct SkillUsageInfo {
+    pub(crate) skill_id: IdType,
+    pub(crate) use_later_time: Option<TimeType>,
+}
+
+#[derive(Clone)]
+pub(crate) struct OgcdPlan {
+    pub(crate) skill: SkillUsageInfo,
+    pub(crate) priority_number: IdType,
+}
+
+impl SkillUsageInfo {
+    pub(crate) fn new(skill_id: IdType) -> Self {
+        Self {
+            skill_id,
+            use_later_time: None,
+        }
+    }
+
+    pub(crate) fn new_delay(skill_id: IdType, use_later_time: Option<TimeType>) -> Self {
+        Self {
+            skill_id,
+            use_later_time,
+        }
+    }
 }
 
 /// Stores the priority list of the job's offensive skills
 /// And gets the next skill to use based on the priority list
-pub(crate) trait PriorityTable<P: Player, S: Skill>: CooldownTimer {
+pub(crate) trait PriorityTable {
     fn get_next_skill(
-        &mut self,
-        buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-        debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-        player: &P,
-    ) -> Option<SkillResult<S>> {
-        let current_turn = player.get_player_turn();
-        let mut next_skill = None;
-
-        if self.is_opener() {
-            next_skill = self.get_opener(player);
+        &self,
+        debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        turn_info: &TurnInfo,
+        player: &FfxivPlayer,
+        combat_resource: Box<dyn CombatResource>,
+    ) -> Vec<SkillUsageInfo> {
+        let mut next_skills = if self.is_opener() {
+            self.get_opener(turn_info)
         } else {
-            next_skill = self.get_highest_priority_skill(
-                buff_list.clone(),
+            self.get_highest_priority_skills(
                 debuff_list.clone(),
                 player,
-                current_turn,
+                turn_info,
+                combat_resource,
             )
-        }
+        };
 
-        self.start_cooldown(&next_skill);
-
-        if let Some(SkillResult::UseSkill(mut skills)) = next_skill {
-            self.update_stack_status(&skills, buff_list, debuff_list);
-            self.add_buff_distribute_to(&mut skills, player);
-            Some(SkillResult::UseSkill(
-                self.add_additional_skills(&skills, player),
-            ))
-        } else {
-            None
-        }
+        next_skills
     }
 
-    fn add_buff_distribute_to(&self, skills: &mut Vec<SkillInfo<S>>, player: &P);
-
-    fn update_stack_status(
-        &mut self,
-        skills: &Vec<SkillInfo<S>>,
-        buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-        debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-    ) {
-        for skill in skills.iter() {
-            let skill = &skill.skill;
-
-            self.add_resource1(skill.get_resource1_created());
-            self.add_resource2(skill.get_resource2_created());
-
-            self.update_combo(skill.get_combo());
-
-            for resource in skill.get_resource_required() {
-                match resource {
-                    ResourceRequirements::StackResource1(required_resource) => {
-                        self.add_resource1(-required_resource);
-                    }
-                    ResourceRequirements::StackResource2(required_resource) => {
-                        self.add_resource2(-required_resource);
-                    }
-                    ResourceRequirements::UseStatus(status_id) => {
-                        for debuff in debuff_list.borrow_mut().iter_mut() {
-                            if debuff.get_id() == *status_id {
-                                debuff.duration_left_millisecond = 0;
-                            }
-                        }
-
-                        for buff in buff_list.borrow_mut().iter_mut() {
-                            if buff.get_id() == *status_id {
-                                buff.duration_left_millisecond = 0;
-                            }
-                        }
-                    }
-                    _ => {}
-                }
-            }
-        }
-    }
-
-    fn add_resource1(&self, resource: ResourceType);
-    fn add_resource2(&self, resource: ResourceType);
-
-    fn update_combo(&mut self, combo_id: Option<IdType>);
     fn is_opener(&self) -> bool {
         self.get_turn_count() < self.get_opener_len()
     }
 
     fn get_opener_len(&self) -> usize;
 
-    fn get_opener_at(&self, index: usize) -> &Option<S>;
+    fn get_opener_at(&self, index: usize) -> Opener;
 
-    fn get_turn_count(&self) -> IdType;
-
-    fn get_opener(&mut self, player: &P) -> Option<SkillResult<S>> {
+    fn get_opener(&self, turn_info: &TurnInfo) -> Vec<SkillUsageInfo> {
         self.increment_turn();
-        let next_skill = self.get_opener_at(self.get_turn_count() - 1);
+        let opener = self.get_opener_at(self.get_turn_count() - 1);
 
-        if next_skill.is_some() {
-            let next_skill = next_skill.clone().unwrap();
-            Some(self.make_skill_result(vec![next_skill], player))
-        } else {
-            None
+        match opener {
+            Opener::GcdOpener(skill_id) => vec![SkillUsageInfo::new(skill_id)],
+            Opener::OgcdOpener(ogcd_skills) => {
+                let mut skills = vec![];
+                let first_skill = ogcd_skills[0];
+                let second_skill = ogcd_skills[1];
+
+                let mut delay = 0;
+
+                if let Some(first_skill_id) = first_skill {
+                    let first_skill = self.get_skills().get(first_skill_id).unwrap();
+                    skills.push(SkillUsageInfo::new_delay(
+                        first_skill_id,
+                        Some(turn_info.lower_bound_millisecond),
+                    ));
+                    delay += first_skill.get_delay_millisecond();
+                } else {
+                    delay += NON_GCD_DELAY_MILLISECOND;
+                }
+
+                if let Some(second_skill_id) = second_skill {
+                    skills.push(SkillUsageInfo::new_delay(
+                        second_skill_id,
+                        Some(turn_info.lower_bound_millisecond + delay),
+                    ));
+                }
+
+                skills
+            }
         }
     }
 
-    fn increment_turn(&mut self);
-
-    fn get_highest_priority_skill(
-        &mut self,
-        buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-        debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-        player: &P,
-        player_turn: &PlayerTurn,
-    ) -> Option<SkillResult<S>> {
+    fn get_highest_priority_skills(
+        &self,
+        debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        player: &FfxivPlayer,
+        turn_info: &TurnInfo,
+        combat_resource: Box<dyn CombatResource>,
+    ) -> Vec<SkillUsageInfo> {
         let combat_info = CombatInfo {
-            buff_list: buff_list.clone(),
+            buff_list: player.buff_list.clone(),
             debuff_list: debuff_list.clone(),
-            milliseconds_before_burst: player.get_millisecond_before_burst(),
+            milliseconds_before_burst: turn_info.get_millisecond_before_burst(),
         };
 
-        for skill_priority_info in self.get_priority_table(&player_turn.turn_type).iter() {
-            let skill = self
-                .get_skills()
-                .get(&skill_priority_info.skill_id)
-                .unwrap();
-
-            match self.meets_requirements(
-                &skill_priority_info,
+        if matches!(turn_info.turn_type, FfxivTurnType::Gcd) {
+            self.find_highest_gcd_skill(combat_info, player, combat_resource)
+        } else {
+            if let Some(ogcd_plans) = self.find_best_ogcd_skill_combination(
                 &combat_info,
-                skill,
                 player,
-                player_turn.delay_left,
+                combat_resource,
+                turn_info,
             ) {
-                PriorityResult::True => {
-                    return Some(SkillResult::UseSkill(vec![SkillInfo {
-                        guaranteed_critical_hit: self.is_guaranteed_crit(skill),
-                        guaranteed_direct_hit: self.is_guaranteed_direct_hit(skill),
-                        skill: skill.clone(),
-                        damage_inflict_time_millisecond: player
-                            .get_damage_inflict_time_millisecond(skill),
-                    }]))
+                ogcd_plans.into_iter().map(|plan| plan.skill).collect_vec()
+            }
+        }
+    }
+
+    fn find_best_ogcd_skill_combination(
+        &self,
+        combat_info: &CombatInfo,
+        player: &FfxivPlayer,
+        combat_resource: Box<dyn CombatResource>,
+        turn_info: &TurnInfo,
+    ) -> Option<Vec<OgcdPlan>> {
+        let ogcd_priority_table = self.get_ogcd_priority_table();
+        let next_gcd_millisecond = turn_info.upper_bound_millisecond;
+        let mut best_ogcd_pair = None;
+        let mut best_one_ogcd = None;
+
+        for (priority_number, skill_priority) in ogcd_priority_table.iter().enumerate() {
+            let skill = combat_resource.get_skill(skill_priority.skill_id);
+            let skill_delay_millisecond = skill.get_delay_millisecond();
+            let latest_time_to_use = next_gcd_millisecond - skill_delay_millisecond;
+
+            let first_skill_start_time =
+                turn_info.lower_bound_millisecond + skill.current_cooldown_millisecond;
+
+            if first_skill_start_time <= latest_time_to_use {
+                let mut combat_info_simulation = combat_info.clone();
+                let mut combat_resource_simulation = Box::new(combat_resource.clone());
+                advance_time(
+                    &mut combat_info_simulation,
+                    &mut combat_resource_simulation,
+                    skill.current_cooldown_millisecond,
+                );
+
+                if self.can_use_skill(
+                    skill_priority,
+                    &combat_info_simulation,
+                    &player,
+                    &combat_resource_simulation,
+                ) {
+                    if best_one_ogcd.is_none() {
+                        best_one_ogcd = Some(vec![OgcdPlan {
+                            skill: SkillUsageInfo::new_delay(
+                                skill_priority.skill_id,
+                                Some(first_skill_start_time),
+                            ),
+                            priority_number,
+                        }]);
+                    }
+                    let second_skill_start_time = first_skill_start_time + skill_delay_millisecond;
+                    let first_skill_simulation =
+                        FirstSkillCombatSimulation::new(player.get_id(), skill);
+
+                    advance_time(
+                        &mut combat_info_simulation,
+                        &mut combat_resource_simulation,
+                        skill_delay_millisecond,
+                    );
+
+                    simulate_status(
+                        &mut combat_info_simulation,
+                        &mut combat_resource_simulation,
+                        &first_skill_simulation,
+                    );
+                    if let Some(second_skill_plan) = self.find_second_highest_ogcd_skill(
+                        combat_info_simulation,
+                        player,
+                        combat_resource_simulation,
+                        &ogcd_priority_table,
+                        second_skill_start_time,
+                        turn_info,
+                    ) {
+                        let first_skill_plan = OgcdPlan {
+                            skill: SkillUsageInfo::new_delay(
+                                skill_priority.skill_id,
+                                Some(first_skill_start_time),
+                            ),
+                            priority_number,
+                        };
+
+                        let skill_pair = vec![first_skill_plan, second_skill_plan];
+
+                        if let Some(current_best_pair) = best_ogcd_pair {
+                            best_ogcd_pair =
+                                Some(get_higher_priority_ogcd_set(skill_pair, current_best_pair));
+                        } else {
+                            best_ogcd_pair = Some(skill_pair);
+                        }
+                    }
                 }
-                PriorityResult::DelayOgcdFor(delay_time) => {
-                    return Some(SkillResult::Delay(delay_time))
+            }
+        }
+
+        if let Some(best_ogcd_pair) = best_ogcd_pair {
+            if let Some(best_one_ogcd) = best_one_ogcd {
+                return Some(get_higher_priority_ogcd_set(best_ogcd_pair, best_one_ogcd));
+            } else {
+                Some(best_ogcd_pair)
+            }
+        } else {
+            best_one_ogcd
+        }
+    }
+
+    fn find_second_highest_ogcd_skill(
+        &self,
+        combat_info: CombatInfo,
+        player: &FfxivPlayer,
+        combat_resource: Box<dyn CombatResource>,
+        ogcd_priority_table: &Vec<SkillPriorityInfo>,
+        start_time: TimeType,
+        turn_info: &TurnInfo,
+    ) -> Option<OgcdPlan> {
+        let next_gcd_millisecond = turn_info.upper_bound_millisecond;
+
+        for (priority_number, skill_priority) in ogcd_priority_table.iter().enumerate() {
+            let skill = combat_resource.get_skill(skill_priority.skill_id);
+            let skill_delay_millisecond = skill.get_delay_millisecond();
+            let latest_time_to_use = next_gcd_millisecond - skill_delay_millisecond;
+
+            let skill_start_time = start_time + skill.current_cooldown_millisecond;
+
+            if skill_start_time <= latest_time_to_use {
+                if self.can_use_skill(skill_priority, &combat_info, &player, &combat_resource) {
+                    return Some(OgcdPlan {
+                        skill: SkillUsageInfo::new_delay(
+                            skill_priority.skill_id,
+                            Some(skill_start_time),
+                        ),
+                        priority_number,
+                    });
                 }
-                PriorityResult::False => continue,
             }
         }
 
         None
     }
 
+    fn find_highest_gcd_skill(
+        &self,
+        combat_info: CombatInfo,
+        player: &FfxivPlayer,
+        combat_resource: Box<dyn CombatResource>,
+    ) -> Vec<SkillUsageInfo> {
+        let gcd_priority_table = self.get_gcd_priority_table();
+
+        for skill_priority in gcd_priority_table {
+            if self.can_use_skill(skill_priority, &combat_info, player, &combat_resource) {
+                return vec![SkillUsageInfo::new(skill_priority.skill_id)];
+            }
+        }
+
+        return vec![];
+    }
+
+    fn can_use_skill(
+        &self,
+        skill_priority: &SkillPriorityInfo,
+        combat_info: &CombatInfo,
+        player: &FfxivPlayer,
+        combat_resource: &Box<dyn CombatResource>,
+    ) -> bool {
+        if skill_priority.prerequisite.is_none() {
+            return true;
+        }
+
+        let prerequisite = skill_priority.prerequisite.clone().unwrap();
+        let skill = combat_resource.get_skill(skill_priority.skill_id);
+
+        if self.get_stack(skill) == 0
+            || self.meets_requirements(combat_info, combat_resource, skill, player.get_id())
+        {
+            return false;
+        }
+
+        self.meets_prequisite(&prerequisite, &combat_info, skill, player)
+    }
+
+    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo>;
+    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo>;
+
     fn meets_requirements(
         &self,
-        skill_priority_info: &SkillPriorityInfo,
         combat_info: &CombatInfo,
-        skill: &S,
-        player: &P,
-        delay_left: TimeType,
-    ) -> PriorityResult {
-        if skill.is_raidbuff() {
-            if let Some(delay_time) = check_non_clipping_delay_time(skill, player) {
-                return PriorityResult::DelayOgcdFor(delay_time);
-            }
-        }
-
-        if delay_left < skill.get_delay_millisecond() || self.get_stack(skill) == 0 {
-            return PriorityResult::False;
-        }
-
-        if let Some(prerequisite) = &skill_priority_info.prerequisite {
-            self.meets_prequisite(prerequisite, combat_info, skill, player)
-                .into()
-        } else {
-            PriorityResult::True
-        }
-    }
-
-    fn get_stack(&self, skill: &S) -> StackType {
-        let skill_table = self.get_skills();
-
-        let stack_skill = skill_table.get(&skill.stack_skill_id()).unwrap();
-        stack_skill.get_stacks()
-    }
-
-    fn add_additional_skills(&self, skills: &Vec<SkillInfo<S>>, player: &P) -> Vec<SkillInfo<S>>;
-
-    fn make_skill_result(&self, skills: Vec<S>, player: &P) -> SkillResult<S> {
-        let skill_results = skills
-            .into_iter()
-            .map(|skill| SkillInfo {
-                guaranteed_critical_hit: self.is_guaranteed_crit(&skill),
-                guaranteed_direct_hit: self.is_guaranteed_direct_hit(&skill),
-                damage_inflict_time_millisecond: player.get_damage_inflict_time_millisecond(&skill),
-                skill,
-            })
-            .collect_vec();
-
-        SkillResult::UseSkill(skill_results)
-    }
-
-    fn get_skills_mut(&mut self) -> &mut SkillTable<S>;
-    fn get_skills(&self) -> &SkillTable<S>;
-
-    fn start_cooldown(&mut self, skill_info: &Option<SkillResult<S>>) {
-        if let Some(skill_result) = skill_info {
-            match skill_result {
-                SkillResult::UseSkill(skills) => {
-                    for skill_info in skills.iter() {
-                        let cooldown_skill_id = skill_info.skill.stack_skill_id();
-
-                        let cooldown_skill =
-                            self.get_skills_mut().get_mut(&cooldown_skill_id).unwrap();
-                        cooldown_skill.start_cooldown();
+        combat_resource: &Box<dyn CombatResource>,
+        skill: &AttackSkill,
+        player_id: IdType,
+    ) -> bool {
+        for resource_required in skill.get_resource_required() {
+            match resource_required {
+                ResourceRequirements::Resource(id, resource) => {
+                    if combat_resource.get_resource(id) < resource {
+                        return false;
                     }
                 }
-                SkillResult::Delay(_) => {}
+                ResourceRequirements::UseBuff(status_id) => {
+                    if !self.has_status(combat_info, status_id, player_id) {
+                        return false;
+                    }
+                }
+                ResourceRequirements::UseDebuff(status_id) => {
+                    if !self.has_status(combat_info, status_id, player_id) {
+                        return false;
+                    }
+                }
+                ResourceRequirements::CheckStatus(status_id) => {
+                    if !self.has_status(combat_info, status_id, player_id) {
+                        return false;
+                    }
+                }
+                _ => {}
             }
         }
+
+        true
     }
 
     fn meets_prequisite(
         &self,
         prerequisite: &SkillPrerequisite,
         combat_info: &CombatInfo,
-        skill: &S,
-        player: &P,
-    ) -> bool
-    where
-        P: Player,
-    {
+        skill: &AttackSkill,
+        player: &FfxivPlayer,
+    ) -> bool {
         match prerequisite {
             SkillPrerequisite::Or(left, right) => {
                 self.meets_prequisite(left, combat_info, skill, player)
@@ -301,11 +414,11 @@ pub(crate) trait PriorityTable<P: Player, S: Skill>: CooldownTimer {
                 }
             }
             SkillPrerequisite::HasBufforDebuff(status_id) => {
-                self.has_status(combat_info, *status_id)
+                self.has_status(combat_info, *status_id, player.get_id())
             }
             SkillPrerequisite::BufforDebuffLessThan(status_id, time_millisecond) => {
                 let status_remaining_time =
-                    self.find_status_remaining_time(combat_info, *status_id);
+                    self.find_status_remaining_time(combat_info, *status_id, player.get_id());
 
                 if let Some(remaining_time) = status_remaining_time {
                     remaining_time <= *time_millisecond
@@ -330,24 +443,25 @@ pub(crate) trait PriorityTable<P: Player, S: Skill>: CooldownTimer {
         }
     }
 
-    fn has_status(&self, combat_info: &CombatInfo, status_id: IdType) -> bool {
-        let buff_list = combat_info.buff_list.borrow();
-        let debuff_list = combat_info.debuff_list.borrow();
+    #[inline]
+    fn has_status(&self, combat_info: &CombatInfo, status_id: IdType, player_id: IdType) -> bool {
+        let key = StatusKey::new(status_id, player_id);
 
-        buff_list.iter().any(|buff| buff.id == status_id)
-            || debuff_list.iter().any(|debuff| debuff.id == status_id)
+        combat_info.buff_list.get(&key).is_some() || combat_info.debuff_list.get(&key).is_some()
     }
 
     fn find_status_remaining_time(
         &self,
         combat_info: &CombatInfo,
         status_id: IdType,
+        player_id: IdType,
     ) -> Option<TimeType> {
+        let key = StatusKey::new(status_id, player_id);
         let buff_list = combat_info.buff_list.borrow();
         let debuff_list = combat_info.debuff_list.borrow();
 
-        let buff_search = buff_list.iter().find(|buff| buff.id == status_id);
-        let debuff_search = debuff_list.iter().find(|debuff| debuff.id == status_id);
+        let buff_search = buff_list.get(&key);
+        let debuff_search = debuff_list.get(&key);
 
         if let Some(buff) = buff_search {
             return Some(buff.duration_left_millisecond);
@@ -360,20 +474,8 @@ pub(crate) trait PriorityTable<P: Player, S: Skill>: CooldownTimer {
         None
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType;
-    fn get_skill_stack(&self, skill_id: IdType) -> StackType;
-    fn get_priority_table(&self, turn_type: &FfxivTurnType) -> &Vec<SkillPriorityInfo>;
-    fn is_guaranteed_crit(&self, skill: &S) -> bool;
-    fn is_guaranteed_direct_hit(&self, skill: &S) -> bool;
-    fn get_current_combo(&self) -> Option<IdType>;
-    fn make_skill_info(&self, skill: S, player: &P) -> SkillInfo<S> {
-        SkillInfo {
-            guaranteed_critical_hit: self.is_guaranteed_crit(&skill),
-            guaranteed_direct_hit: self.is_guaranteed_direct_hit(&skill),
-            damage_inflict_time_millisecond: player.get_damage_inflict_time_millisecond(&skill),
-            skill,
-        }
-    }
+    fn increment_turn(&self);
+    fn get_turn_count(&self) -> IdType;
 }
 
 fn check_non_clipping_delay_time<P: Player, S: Skill>(
@@ -393,12 +495,58 @@ fn check_non_clipping_delay_time<P: Player, S: Skill>(
     }
 }
 
-impl From<bool> for PriorityResult {
-    fn from(value: bool) -> Self {
-        if value {
-            PriorityResult::True
-        } else {
-            PriorityResult::False
-        }
+fn advance_time(
+    combat_info: &mut CombatInfo,
+    combat_resources: &mut Box<dyn CombatResource>,
+    elapsed_time: TimeType,
+) {
+    for buff in combat_info.buff_list.borrow_mut().values_mut() {
+        buff.duration_left_millisecond -= elapsed_time;
+    }
+
+    for debuff in combat_info.debuff_list.borrow_mut().values_mut() {
+        debuff.duration_left_millisecond -= elapsed_time;
+    }
+
+    combat_info
+        .buff_list
+        .borrow_mut()
+        .retain(|_, buff| buff.duration_left_millisecond > 0);
+    combat_info
+        .debuff_list
+        .borrow_mut()
+        .retain(|_, debuff| debuff.duration_left_millisecond > 0);
+    combat_info.milliseconds_before_burst =
+        max(combat_info.milliseconds_before_burst - elapsed_time, 0);
+
+    combat_resources.update_cooldown(elapsed_time);
+}
+
+/// first_set must have the bigger ogcd count.
+fn get_higher_priority_ogcd_set(
+    first_set: Vec<OgcdPlan>,
+    second_set: Vec<OgcdPlan>,
+) -> Vec<OgcdPlan> {
+    let penalty = if first_set.len() > second_set.len() {
+        OGCD_PENALTY
+    } else {
+        0
+    };
+
+    let first_set_priority = first_set
+        .iter()
+        .map(|plan| plan.priority_number)
+        .sum::<IdType>();
+    let second_set_priority = second_set
+        .iter()
+        .map(|plan| plan.priority_number)
+        .sum::<IdType>();
+
+    let first_set_better = first_set_priority <= second_set_priority + penalty;
+
+    if first_set_better {
+        first_set
+    } else {
+        second_set
     }
 }

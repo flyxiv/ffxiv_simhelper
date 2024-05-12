@@ -38,6 +38,28 @@ impl RaidDamageTable for FfxivRaidDamageTable {
         total_damage
     }
 
+    fn query_by_key(&self, key: RaidDamageTableKey) -> DamageType {
+        if let Some(damage) = self.rdps_table.get(&key) {
+            *damage
+        } else {
+            0
+        }
+    }
+
+    fn insert(&mut self, key: RaidDamageTableKey, damage: DamageType) {
+        self.rdps_table.insert(key, damage);
+    }
+
+    fn update_table(&mut self, new_data: &Self) {
+        for (key, damage) in &new_data.rdps_table {
+            if let Some(current_damage) = self.rdps_table.get_mut(key) {
+                *current_damage += damage;
+            } else {
+                self.rdps_table.insert(key.clone(), *damage);
+            }
+        }
+    }
+
     fn get_rdps_contribution(&self, player_id: IdType) -> DamageType {
         let mut total_damage = 0;
 
@@ -59,28 +81,6 @@ impl RaidDamageTable for FfxivRaidDamageTable {
         }
 
         total_damage
-    }
-
-    fn query_by_key(&self, key: RaidDamageTableKey) -> DamageType {
-        if let Some(damage) = self.rdps_table.get(&key) {
-            *damage
-        } else {
-            0
-        }
-    }
-
-    fn insert(&mut self, key: RaidDamageTableKey, damage: DamageType) {
-        self.rdps_table.insert(key, damage);
-    }
-
-    fn update_table(&mut self, new_data: &Self) {
-        for (key, damage) in &new_data.rdps_table {
-            if let Some(current_damage) = self.rdps_table.get_mut(key) {
-                *current_damage += damage;
-            } else {
-                self.rdps_table.insert(key.clone(), *damage);
-            }
-        }
     }
 }
 

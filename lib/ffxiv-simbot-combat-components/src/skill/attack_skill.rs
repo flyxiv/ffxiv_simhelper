@@ -1,14 +1,21 @@
+use crate::event::ffxiv_event::FfxivEvent;
+use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
 use crate::id_entity::IdEntity;
+use crate::live_objects::player::ffxiv_player::FfxivPlayer;
+use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::rotation::cooldown_timer::CooldownTimer;
-use crate::skill::{ResourceRequirements, Skill, NON_GCD_DELAY_MILLISECOND};
+use crate::skill::{
+    ResourceRequirements, ResourceTable, Skill, SkillEvents, NON_GCD_DELAY_MILLISECOND,
+};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::status_apply::StatusApply;
-use crate::status::status_event::BuffTypes;
 use crate::{DamageType, IdType, ResourceType, StackType, TimeType};
 use ffxiv_simbot_db::MultiplierType;
+use std::cell::RefCell;
 use std::cmp::max;
+use std::collections::HashMap;
+use std::rc::Rc;
 
 #[derive(Clone)]
 pub struct AttackSkill {
@@ -18,40 +25,26 @@ pub struct AttackSkill {
     pub(crate) potency: DamageType,
     pub(crate) trait_multiplier: MultiplierType,
 
-    pub buff: Option<StatusApply<BuffStatus>>,
-    pub debuff: Option<StatusApply<DebuffStatus>>,
+    pub buff_events: Vec<FfxivEvent>,
+    pub debuff_events: Vec<FfxivEvent>,
     pub combo: Option<IdType>,
 
     pub(crate) delay_millisecond: Option<TimeType>,
-
     pub(crate) casting_time_millisecond: TimeType,
     pub(crate) gcd_cooldown_millisecond: TimeType,
     pub(crate) charging_time_millisecond: TimeType,
     pub(crate) is_speed_buffed: bool,
 
     pub(crate) resource_required: Vec<ResourceRequirements>,
-    pub(crate) resource1_created: ResourceType,
-    pub(crate) resource2_created: ResourceType,
+    pub(crate) resource_created: ResourceTable,
+
+    pub(crate) is_guaranteed_crit: bool,
+    pub(crate) is_guaranteed_direct_hit: bool,
 
     pub(crate) cooldown_millisecond: TimeType,
     pub(crate) current_cooldown_millisecond: TimeType,
     pub(crate) stacks: StackType,
     pub(crate) stack_skill_id: Option<IdType>,
-}
-
-#[derive(Clone)]
-pub struct SkillInfo<S: Skill> {
-    pub skill: S,
-    pub damage_inflict_time_millisecond: Option<TimeType>,
-    pub guaranteed_critical_hit: bool,
-    pub guaranteed_direct_hit: bool,
-    pub apply_buff_to_ids: Option<Vec<IdType>>,
-}
-
-impl SkillInfo<AttackSkill> {
-    pub fn is_auto_attack(&self) -> bool {
-        self.skill.is_auto_attack()
-    }
 }
 
 impl IdEntity for AttackSkill {
@@ -61,20 +54,139 @@ impl IdEntity for AttackSkill {
 }
 
 impl Skill for AttackSkill {
+    fn start_cooldown(&mut self) {
+        if self.cooldown_millisecond == 0 {
+            return;
+        }
+
+        self.stacks -= 1;
+        self.current_cooldown_millisecond += self.cooldown_millisecond;
+    }
+
+    /// Generate the internal and combat events for the skill
+    fn generate_skill_events(
+        &self,
+        buffs: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
+        debuffs: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        current_combat_time_milliseconds: TimeType,
+        player: &FfxivPlayer,
+    ) -> SkillEvents {
+        let mut internal_events = vec![];
+        let resource_events = self.generate_resource_events();
+        let cooldown_event = self.generate_cooldown_event();
+
+        internal_events.push(cooldown_event);
+        internal_events.extend(resource_events);
+
+        let mut ffxiv_events = vec![];
+        let damage_event = self.generate_damage_event(
+            buffs.clone(),
+            debuffs.clone(),
+            current_combat_time_milliseconds,
+            player,
+        );
+
+        if let Some(damage_event) = damage_event {
+            ffxiv_events.push(damage_event);
+        }
+
+        if let Some(skill_events) = player.combat_resources.borrow().trigger_on_event(
+            self.id,
+            buffs.clone(),
+            debuffs.clone(),
+            current_combat_time_milliseconds,
+            player,
+        ) {
+            ffxiv_events.extend(skill_events.0);
+            internal_events.extend(skill_events.1);
+        }
+
+        (ffxiv_events, internal_events)
+    }
+}
+
+impl AttackSkill {
     fn get_potency(&self) -> DamageType {
         (self.potency as MultiplierType * self.trait_multiplier) as DamageType
     }
 
-    fn get_cooldown_millisecond(&self) -> TimeType {
-        self.cooldown_millisecond
+    /// generate events that update the resource of the player.
+    pub(crate) fn generate_resource_events(&self) -> Vec<FfxivPlayerInternalEvent> {
+        let mut events = vec![];
+
+        for resource_requirement in self.resource_required.iter() {
+            if let Some(resource_event) = self.create_resource_use_event(resource_requirement) {
+                events.push(resource_event)
+            }
+        }
+
+        for (resource_id, resource_amount) in self.resource_created.iter() {
+            events.push(FfxivPlayerInternalEvent::IncreaseResource(
+                *resource_id,
+                *resource_amount,
+            ));
+        }
+
+        if let Some(combo) = self.combo {
+            events.push(FfxivPlayerInternalEvent::UpdateCombo(Some(combo)));
+        }
+
+        events
     }
-    fn get_charging_time_millisecond(&self) -> TimeType {
-        self.charging_time_millisecond
+
+    fn create_resource_use_event(
+        &self,
+        resource_requirement: &ResourceRequirements,
+    ) -> Option<FfxivPlayerInternalEvent> {
+        match resource_requirement {
+            ResourceRequirements::Resource(stack_id, required_resource) => Some(
+                FfxivPlayerInternalEvent::UseResource(*stack_id, *required_resource),
+            ),
+            ResourceRequirements::UseBuff(status_id) => {
+                Some(FfxivPlayerInternalEvent::RemoveBuff(*status_id))
+            }
+            ResourceRequirements::UseDebuff(status_id) => {
+                Some(FfxivPlayerInternalEvent::RemoveDebuff(*status_id))
+            }
+            _ => None,
+        }
+    }
+
+    fn generate_damage_event(
+        &self,
+        buffs: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
+        debuffs: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        current_combat_milliseconds: TimeType,
+        player: &FfxivPlayer,
+    ) -> Option<FfxivEvent> {
+        if self.potency == 0 {
+            return None;
+        }
+
+        let inflict_damage_time = player.get_damage_inflict_time_millisecond(self);
+        Some(FfxivEvent::Damage(
+            self.player_id,
+            self.id,
+            self.get_potency(),
+            self.is_guaranteed_crit,
+            self.is_guaranteed_direct_hit,
+            buffs.borrow().clone(),
+            debuffs.borrow().clone(),
+            current_combat_milliseconds + inflict_damage_time,
+        ))
+    }
+
+    fn generate_cooldown_event(&self) -> FfxivPlayerInternalEvent {
+        if let Some(stack_skill_id) = self.stack_skill_id {
+            FfxivPlayerInternalEvent::StartCooldown(stack_skill_id)
+        } else {
+            FfxivPlayerInternalEvent::StartCooldown(self.id)
+        }
     }
 
     /// All FFXIV Offensive Skills can be double-weaved except for Stardiver, so
     /// just give a default of 700ms, which is right for almost all skills.
-    fn get_delay_millisecond(&self) -> TimeType {
+    pub(crate) fn get_delay_millisecond(&self) -> TimeType {
         if let Some(delay) = self.delay_millisecond {
             delay
         } else {
@@ -93,41 +205,22 @@ impl Skill for AttackSkill {
     fn get_gcd_time_millisecond(&self) -> TimeType {
         self.gcd_cooldown_millisecond
     }
-    fn get_current_cooldown_millisecond(&self) -> TimeType {
+    pub(crate) fn get_current_cooldown_millisecond(&self) -> TimeType {
         self.current_cooldown_millisecond
     }
     fn get_gcd_cooldown_millsecond(&self) -> TimeType {
         max(self.gcd_cooldown_millisecond, self.casting_time_millisecond)
-    }
-    fn start_cooldown(&mut self) {
-        if self.cooldown_millisecond == 0 {
-            return;
-        }
-
-        self.stacks -= 1;
-        self.current_cooldown_millisecond += self.cooldown_millisecond;
     }
 
     fn is_ready(&self) -> bool {
         self.stacks >= 1
     }
 
-    fn is_raidbuff(&self) -> bool {
-        if let Some(buff) = &self.buff {
-            return buff.is_raidwide();
-        }
-
-        if let Some(debuff) = &self.debuff {
-            return debuff.is_raidwide();
-        }
-
-        false
-    }
     fn is_speed_buffed(&self) -> bool {
         self.is_speed_buffed
     }
 
-    fn stack_skill_id(&self) -> IdType {
+    pub(crate) fn stack_skill_id(&self) -> IdType {
         if let Some(skill_id) = self.stack_skill_id {
             skill_id
         } else {
@@ -135,39 +228,29 @@ impl Skill for AttackSkill {
         }
     }
 
+    #[inline]
     fn is_auto_attack(&self) -> bool {
         self.id == 0
     }
 
+    #[inline]
     fn get_name(&self) -> &String {
         &self.name
     }
 
-    fn get_stacks(&self) -> StackType {
-        self.stacks
+    #[inline]
+    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+        *self.resource_created.get(&resource_id)
     }
 
-    fn get_resource1_created(&self) -> ResourceType {
-        self.resource1_created
-    }
-
-    fn get_resource2_created(&self) -> ResourceType {
-        self.resource2_created
-    }
-
+    #[inline]
     fn get_combo(&self) -> Option<IdType> {
         self.combo
     }
 
-    fn get_resource_required(&self) -> &Vec<ResourceRequirements> {
-        &self.resource_required
-    }
-}
-
-impl AttackSkill {
-    #[inline]
-    fn is_speed_buffed(&self) -> bool {
-        self.is_speed_buffed
+    fn get_stack(&self) -> StackType {
+        f64::ceil(self.current_cooldown_millisecond as f64 / self.cooldown_millisecond as f64)
+            as StackType
     }
 }
 
@@ -188,49 +271,5 @@ impl CooldownTimer for AttackSkill {
         if past_stack != current_stack {
             self.stacks += 1;
         }
-    }
-}
-
-impl AttackSkill {
-    fn get_stack(&self) -> StackType {
-        f64::ceil(self.current_cooldown_millisecond as f64 / self.cooldown_millisecond as f64)
-            as StackType
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::skill::status::StatusInfo;
-
-    #[test]
-    fn attack_skill_test() {
-        let skill: AttackSkill = AttackSkill {
-            name: "Trick Attack".to_string(),
-            player_id: 0,
-            potency: 500,
-            buff: Some(BuffStatus {
-                id: 1,
-                duration_left_millisecond: 15000,
-                status_data: StatusInfo::DamagePercent(10),
-                duration_millisecond: 15000,
-                is_raidwide: false,
-                cumulative_damage: None,
-                owner_player_id: 0,
-                status_info: (),
-            }),
-            debuff: None,
-            is_gcd: true,
-            delay_millisecond: None,
-            is_modified: false,
-            cooldown_millisecond: 2500,
-            resource_required: vec![ResourceRequirements::Mana(100)],
-        };
-
-        assert_eq!(skill.get_potency(), 500);
-        assert_eq!(skill.get_delay_millisecond(), NON_GCD_DELAY_MILLISECOND);
-        assert_eq!(skill.is_gcd(), true);
-        assert_eq!(skill.buff.is_some(), true);
-        assert_eq!(skill.debuff.is_none(), true);
     }
 }

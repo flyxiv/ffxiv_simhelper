@@ -1,4 +1,4 @@
-use crate::damage_rdps_profile::FfxivRaidDamageTable;
+use crate::damage_calculator::damage_rdps_profile::FfxivRaidDamageTable;
 use ffxiv_simbot_combat_components::DamageType;
 use std::cell::RefCell;
 use std::rc::Rc;

@@ -1,29 +1,32 @@
+use crate::combat_resources::CombatResource;
+use crate::event::ffxiv_event::FfxivEvent;
+use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
+use crate::event::turn_info::TurnInfo;
+use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::gcd_calculator::GcdCalculator;
-use crate::live_objects::player::Player;
-use crate::live_objects::turn_type::{FfxivTurnType, PlayerTurn, TurnType};
+use crate::live_objects::player::player_turn_calculator::PlayerTurnCalculator;
+use crate::live_objects::player::{Player, StatusKey};
+use crate::live_objects::turn_type::FfxivTurnType;
 use crate::rotation::cooldown_timer::CooldownTimer;
-use crate::rotation::priority_table::{PriorityTable, SkillResult};
-use crate::rotation::FfxivPriorityTable;
+use crate::rotation::job_priorities::ninja::NinjaPriorityTable;
+use crate::rotation::priority_table::{PriorityTable, SkillUsageInfo};
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::job_abilities::ninja_abilities::get_huton_status;
 use crate::skill::Skill;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_info::StatusInfo;
 use crate::status::status_timer::StatusTimer;
-use crate::status::Status;
 use crate::{IdType, TimeType};
+use ffxiv_simbot_db::ffxiv_context::FfxivContext;
 use ffxiv_simbot_db::job::Job;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
 use std::cell::RefCell;
-use std::cmp::max;
+use std::collections::HashMap;
 use std::rc::Rc;
-
-static TWO_MINUTES_IN_MILLISECOND: TimeType = 120000;
-static BURST_START_TIME_MILLISECOND: TimeType = 7000;
-static BURST_END_TIME_MILLISECOND: TimeType = 23000;
 
 /// The Abstraction for an actual FFXIV Player in the combat.
 pub struct FfxivPlayer {
@@ -32,87 +35,175 @@ pub struct FfxivPlayer {
     pub job: Job,
     pub power: CharacterPower,
 
-    pub priority_table: RefCell<FfxivPriorityTable>,
+    pub priority_table: Box<dyn PriorityTable>,
 
     /// Realtime Combat Data about the player
-    pub buff_list: Rc<RefCell<Vec<BuffStatus>>>,
-    /// How many seconds passed after the most recent GCD. If delay is close to GCD, an oGCD will
-    /// clip the player's next GCD so it becomes a GCD turn.
-    pub total_delay: TimeType,
-
-    /// Combat time related data
-    pub next_gcd_time_millisecond: TimeType,
-    pub last_gcd_time_millisecond: TimeType,
-    pub next_turn: PlayerTurn,
-
+    pub buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
+    pub(crate) combat_resources: RefCell<Box<dyn CombatResource>>,
+    pub(crate) internal_event_queue: RefCell<Vec<FfxivPlayerInternalEvent>>,
+    pub event_queue: Rc<RefCell<FfxivEventQueue>>,
+    pub turn_calculator: RefCell<PlayerTurnCalculator>,
     pub mana_available: Option<i32>,
 }
 
+impl Clone for FfxivPlayer {
+    fn clone(&self) -> Self {
+        FfxivPlayer {
+            id: self.id,
+            job: self.job.clone(),
+            power: self.power.clone(),
+            priority_table: Box::new(self.priority_table.clone()),
+            buff_list: Rc::new(RefCell::new(self.buff_list.borrow().clone())),
+            combat_resources: RefCell::new(Box::new(self.combat_resources.clone())),
+            internal_event_queue: RefCell::new(self.internal_event_queue.borrow().clone()),
+            event_queue: self.event_queue.clone(),
+            turn_calculator: self.turn_calculator.clone(),
+            mana_available: self.mana_available,
+        }
+    }
+}
+
 impl Player for FfxivPlayer {
-    fn get_job(&self) -> &Job {
-        &self.job
+    fn use_turn(
+        &self,
+        turn_info: TurnInfo,
+        debuffs: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        combat_time_millisecond: TimeType,
+    ) {
+        let next_skill_ids = self.get_next_skill(&turn_info, debuffs.clone());
+        self.insert_turn_update_internal_event(&next_skill_ids, turn_info);
+
+        if next_skill_ids.is_none() {
+            return;
+        }
+
+        let next_skill_ids = next_skill_ids.unwrap();
+
+        for use_skill in next_skill_ids.clone() {
+            if let Some(use_later_time) = use_skill.use_later_time {
+                self.event_queue.borrow_mut().push(FfxivEvent::UseSkill(
+                    self.id,
+                    use_skill.skill_id,
+                    use_later_time,
+                ));
+            } else {
+                self.use_skill(use_skill.skill_id, debuffs.clone(), combat_time_millisecond)
+            }
+        }
     }
 
-    fn get_player_power(&self) -> &CharacterPower {
-        &self.power
+    fn use_skill(
+        &self,
+        skill_id: IdType,
+        debuffs: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        combat_time_millisecond: TimeType,
+    ) {
+        let skill = self.combat_resources.borrow().get_skill(skill_id);
+        let (ffxiv_events, internal_events) = skill.generate_skill_events(
+            self.buff_list.clone(),
+            debuffs.clone(),
+            combat_time_millisecond,
+            self,
+        );
+
+        self.internal_event_queue
+            .borrow_mut()
+            .extend(internal_events);
+
+        for ffxiv_event in ffxiv_events {
+            // extend doesn't insert and sort, so we need to push one by one.
+            self.event_queue.borrow_mut().push(ffxiv_event);
+        }
+
+        self.consume_internal_events(debuffs);
     }
 
-    fn get_delay(&self) -> TimeType {
-        self.total_delay
+    fn consume_internal_events(&self, debuffs: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>) {
+        for internal_event in self.internal_event_queue.borrow().iter() {
+            self.handle_internal_event(internal_event, debuffs.clone());
+        }
+        self.internal_event_queue.borrow_mut().clear();
+    }
+}
+
+impl FfxivPlayer {
+    fn insert_turn_update_internal_event(
+        &self,
+        next_skill_ids: Vec<SkillUsageInfo>,
+        turn_info: TurnInfo,
+    ) {
+        let update_turn_event = match turn_info.turn_type {
+            FfxivTurnType::Gcd => {
+                let gcd_skill_id = next_skill_ids.unwrap()[0].skill_id;
+                let gcd_skill = self.combat_resources.borrow().get_skill(gcd_skill_id);
+
+                FfxivPlayerInternalEvent::UpdateTurn(
+                    FfxivTurnType::Gcd,
+                    turn_info.lower_bound_millisecond,
+                    gcd_skill.charging_time_millisecond,
+                    self.get_cast_time(gcd_skill),
+                    self.get_gcd(gcd_skill),
+                    gcd_skill.get_delay_millisecond(),
+                )
+            }
+            FfxivTurnType::Ogcd => {
+                FfxivPlayerInternalEvent::UpdateTurn(FfxivTurnType::Ogcd, 0, 0, 0, 0, 0)
+            }
+        };
+
+        self.internal_event_queue
+            .borrow_mut()
+            .push(update_turn_event);
+    }
+
+    fn handle_internal_event(
+        &self,
+        internal_event: &FfxivPlayerInternalEvent,
+        debuffs: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+    ) {
+        match internal_event {
+            FfxivPlayerInternalEvent::UpdateTurn(_, _, _, _, _, _) => {
+                self.turn_calculator
+                    .borrow_mut()
+                    .update_internal_status(internal_event);
+                self.turn_calculator.borrow().produce_event_to_queue();
+            }
+            FfxivPlayerInternalEvent::UpdateCombo(combo) => {
+                self.combat_resources.borrow_mut().update_combo(combo)
+            }
+            FfxivPlayerInternalEvent::StartCooldown(skill_id) => {
+                self.combat_resources.borrow_mut().start_cooldown(*skill_id)
+            }
+            FfxivPlayerInternalEvent::IncreaseResource(resource_id, resource_amount) => self
+                .combat_resources
+                .borrow_mut()
+                .increase_resource(*resource_id, *resource_amount),
+            FfxivPlayerInternalEvent::RemoveBuff(buff_id) => {
+                self.buff_list.borrow_mut().remove(buff_id);
+            }
+            FfxivPlayerInternalEvent::RemoveDebuff(debuff_id) => {
+                debuffs.borrow_mut().remove(debuff_id);
+            }
+        }
     }
 
     fn get_next_skill(
         &self,
-        debuff_list: Rc<RefCell<Vec<DebuffStatus>>>,
-    ) -> Option<SkillResult<AttackSkill>> {
+        turn_info: &TurnInfo,
+        debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+    ) -> Vec<SkillUsageInfo> {
         self.priority_table
-            .borrow_mut()
-            .get_next_skill(self.buff_list.clone(), debuff_list, self)
+            .get_next_skill(debuff_list, turn_info, self)
     }
 
-    fn update_delay(&mut self, delay: TimeType) {
-        let current_delay = self.get_delay();
-
-        self.total_delay = match &self.next_turn.turn_type {
-            FfxivTurnType::Gcd => 0,
-            _ => current_delay + delay,
-        };
-    }
-
-    fn get_damage_inflict_time_millisecond<S: Skill>(&self, skill: &S) -> Option<TimeType> {
-        let inflict_time = skill.get_charging_time_millisecond() + self.get_cast_time(skill);
-
-        if inflict_time == 0 {
-            None
-        } else {
-            Some(inflict_time)
-        }
+    #[inline]
+    pub(crate) fn get_damage_inflict_time_millisecond(&self, skill: &AttackSkill) -> TimeType {
+        skill.get_charging_time_millisecond() + self.get_cast_time(skill);
     }
 
     fn has_resources_for_skill<S: Skill>(&self, _: S) -> bool {
         // TODO: Implement mana resource check for casters.
         return false;
-    }
-
-    fn get_last_gcd_time_millisecond(&self) -> TimeType {
-        self.last_gcd_time_millisecond
-    }
-
-    fn set_last_gcd_time_millisecond(&mut self, time: TimeType) {
-        self.last_gcd_time_millisecond = time;
-    }
-
-    fn get_next_gcd_time_millisecond(&self) -> TimeType {
-        self.next_gcd_time_millisecond
-    }
-
-    fn set_next_gcd_time_millisecond<S: Skill>(&mut self, skill: &S) {
-        let gcd_delay = self.get_gcd(skill);
-        self.next_gcd_time_millisecond += gcd_delay;
-    }
-
-    fn get_next_turn_time_millisecond(&self) -> TimeType {
-        self.next_turn.next_turn_combat_time_millisecond
     }
 
     fn get_gcd_delay_millisecond<S: Skill>(&self, skill: &S) -> TimeType {
@@ -125,20 +216,9 @@ impl Player for FfxivPlayer {
         }
     }
 
-    fn get_player_turn(&self) -> &PlayerTurn {
-        &self.next_turn
-    }
-
-    fn get_turn_type(&self) -> &FfxivTurnType {
-        &self.next_turn.turn_type
-    }
-    fn get_millisecond_before_burst(&self) -> TimeType {
-        let combat_time = self.next_turn.next_turn_combat_time_millisecond;
+    pub(crate) fn get_millisecond_before_burst(&self) -> TimeType {
+        let combat_time = self.turn_calculator.borrow().combat_time_millisecond;
         self.get_next_burst_time(combat_time)
-    }
-
-    fn delay_turn_by(&mut self, delay: TimeType) {
-        self.next_turn.next_turn_combat_time_millisecond += delay;
     }
 }
 
@@ -150,25 +230,11 @@ impl IdEntity for FfxivPlayer {
 
 impl CooldownTimer for FfxivPlayer {
     fn update_cooldown(&mut self, time_passed: TimeType) {
-        self.priority_table
-            .borrow_mut()
-            .update_cooldown(time_passed);
+        self.combat_resources.borrow().update_cooldown(time_passed);
     }
 }
 
 impl FfxivPlayer {
-    fn get_next_burst_time(&self, combat_time: TimeType) -> TimeType {
-        let burst_number_offset = combat_time % TWO_MINUTES_IN_MILLISECOND;
-
-        if burst_number_offset < BURST_START_TIME_MILLISECOND {
-            BURST_START_TIME_MILLISECOND - burst_number_offset
-        } else if burst_number_offset > BURST_END_TIME_MILLISECOND {
-            TWO_MINUTES_IN_MILLISECOND + BURST_START_TIME_MILLISECOND - burst_number_offset
-        } else {
-            0
-        }
-    }
-
     fn get_gcd<S: Skill>(&self, skill: &S) -> TimeType {
         let mut gcd_cooldown_millisecond = skill.get_gcd_cooldown_millsecond();
 
@@ -218,36 +284,33 @@ impl FfxivPlayer {
         gcd_buffs_multiplier
     }
 
-    /// After using a turn, calculate when the next turn will be in combat time,
-    /// and also figure out if it is a GCD/oGCD turn.
-    pub fn calculate_next_turn(&mut self, skill_delay: TimeType, charging_time: TimeType) {
-        let current_turn = &self.next_turn;
-        self.next_turn = current_turn.get_next_turn(
-            self,
-            skill_delay,
-            charging_time,
-            current_turn.next_turn_combat_time_millisecond,
-        )
-    }
-
     pub fn new(
         id: IdType,
         job: Job,
         power: CharacterPower,
-        priority_table: FfxivPriorityTable,
-        start_gcd_time: TimeType,
-        buff_list: Vec<BuffStatus>,
+        priority_table: Box<dyn PriorityTable>,
+        buff_list: HashMap<StatusKey, BuffStatus>,
+        event_queue: Rc<RefCell<FfxivEventQueue>>,
+        start_time_millisecond: TimeType,
     ) -> FfxivPlayer {
+        // Add player's first turn to event queue
+        event_queue.borrow_mut().push(FfxivEvent::PlayerTurn(
+            id,
+            FfxivTurnType::Gcd,
+            start_time_millisecond,
+            start_time_millisecond,
+        ));
+
         FfxivPlayer {
             id,
             job,
             power,
-            priority_table: RefCell::new(priority_table),
+            priority_table,
             buff_list: Rc::new(RefCell::new(buff_list)),
-            total_delay: 0,
-            next_gcd_time_millisecond: start_gcd_time,
-            last_gcd_time_millisecond: start_gcd_time,
-            next_turn: PlayerTurn::new(start_gcd_time),
+            combat_resources: RefCell::new(Box::new(())),
+            internal_event_queue: RefCell::new(vec![]),
+            event_queue,
+            turn_calculator: RefCell::new(PlayerTurnCalculator::new(id, start_time_millisecond)),
             mana_available: None,
         }
     }
@@ -262,86 +325,3 @@ impl StatusHolder<BuffStatus> for FfxivPlayer {
 }
 
 impl StatusTimer<BuffStatus> for FfxivPlayer {}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::skill::status::{Status, StatusInfo};
-
-    #[test]
-    fn target_basic_test() {
-        let mut target = FfxivPlayer {
-            id: 0,
-            job: Job::default(),
-            power: CharacterPower::default(),
-            buff_list: RefCell::new(vec![]),
-            total_delay: RefCell::new(0),
-            combat_time_millisecond: 0,
-            buff_scores: RefCell::new(Default::default()),
-            mana_available: RefCell::new(0),
-        };
-
-        let buff1 = BuffStatus {
-            id: 1,
-            duration_left_millisecond: 1000,
-            status_data: StatusInfo::CritHitRatePercent(10),
-            duration_millisecond: 1000,
-            is_raidwide: false,
-            cumulative_damage: None,
-            owner_player_id: 0,
-        };
-
-        target.add_status(buff1);
-        assert_eq!(target.get_status_list().len(), 1);
-
-        let buff = &target.get_status_list()[0];
-        assert_eq!(buff.id, 1);
-        assert_eq!(buff.get_duration_left_millisecond(), 1000);
-        assert_eq!(buff.get_status_info(), StatusInfo::CritHitRatePercent(10));
-    }
-
-    #[test]
-    fn target_debuff_timer_test() {
-        let mut target = FfxivPlayer {
-            id: 0,
-            job: Job::default(),
-            power: CharacterPower::default(),
-            buff_list: RefCell::new(vec![]),
-            total_delay: RefCell::new(0),
-            combat_time_millisecond: 0,
-            buff_scores: RefCell::new(Default::default()),
-            mana_available: RefCell::new(0),
-        };
-
-        let two_seconds_left_buff = BuffStatus {
-            id: 1,
-            duration_left_millisecond: 2000,
-            status_data: StatusInfo::CritHitRatePercent(10),
-            duration_millisecond: 10000,
-            is_raidwide: false,
-            cumulative_damage: None,
-            owner_player_id: 0,
-        };
-
-        let five_seconds_left_buff = BuffStatus {
-            id: 2,
-            duration_left_millisecond: 5000,
-            status_data: StatusInfo::CritHitRatePercent(10),
-            duration_millisecond: 10000,
-            is_raidwide: true,
-            cumulative_damage: None,
-            owner_player_id: 0,
-        };
-
-        target.add_status(two_seconds_left_buff);
-        target.add_status(five_seconds_left_buff);
-
-        target.update_combat_time(3000);
-
-        assert_eq!(target.get_status_list().len(), 1);
-
-        let buff = &target.get_status_list()[0];
-        assert_eq!(buff.id, 2);
-        assert_eq!(buff.get_duration_left_millisecond(), 2000);
-    }
-}

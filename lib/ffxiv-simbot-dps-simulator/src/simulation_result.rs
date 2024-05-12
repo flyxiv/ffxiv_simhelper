@@ -1,4 +1,4 @@
-use crate::damage_rdps_profile::RaidDamageTable;
+use crate::damage_calculator::damage_rdps_profile::RaidDamageTable;
 use crate::simulator::FfxivSimulationBoard;
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
 use ffxiv_simbot_combat_components::live_objects::player::Player;

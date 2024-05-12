@@ -1,4 +1,4 @@
-use crate::id_entity::IdEntity;
+/*use crate::id_entity::IdEntity;
 use crate::rotation::job_priorities::job_abilities::{make_opener, make_skill_table};
 use crate::rotation::job_priorities::SkillTable;
 use crate::rotation::priority_table::PriorityResult::True;
@@ -942,3 +942,4 @@ pub(crate) fn get_dragoon_crit_skill_ids() -> Vec<IdType> {
         HEAVENS_THRUST_SURGE.get_id(),
     ]
 }
+*/

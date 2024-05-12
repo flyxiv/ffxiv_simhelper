@@ -2,7 +2,7 @@ use crate::id_entity::IdEntity;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::{IdType, TimeType};
+use crate::{IdType, ResourceType, TimeType};
 
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct BuffStatus {
@@ -13,10 +13,11 @@ pub struct BuffStatus {
     pub(crate) duration_millisecond: TimeType,
     pub is_raidwide: bool,
     pub(crate) name: String,
+    pub(crate) stacks: ResourceType,
 }
 
 impl Status for BuffStatus {
-    fn get_duration_left_millisecond(&self) -> i32 {
+    fn get_duration_left_millisecond(&self) -> TimeType {
         self.duration_left_millisecond
     }
     fn set_duration_left_millisecond(&mut self, duration: TimeType) {
@@ -40,30 +41,6 @@ impl Status for BuffStatus {
     }
 }
 
-impl BuffStatus {
-    pub fn make_half_status(&self) -> Self {
-        let mut buff = self.clone();
-
-        match &self.status_info {
-            StatusInfo::DamagePercent(damage_percent) => {
-                buff.status_info = StatusInfo::DamagePercent(damage_percent / 2);
-            }
-            StatusInfo::CritHitRatePercent(crit_hit_rate_percent) => {
-                buff.status_info = StatusInfo::CritHitRatePercent(crit_hit_rate_percent / 2);
-            }
-            StatusInfo::DirectHitRatePercent(direct_hit_rate_percent) => {
-                buff.status_info = StatusInfo::DirectHitRatePercent(direct_hit_rate_percent / 2);
-            }
-            StatusInfo::SpeedPercent(attack_speed_percent) => {
-                buff.status_info = StatusInfo::SpeedPercent(attack_speed_percent / 2);
-            }
-            _ => {}
-        }
-
-        buff
-    }
-}
-
 impl IdEntity for BuffStatus {
     fn get_id(&self) -> IdType {
         self.id
@@ -73,28 +50,5 @@ impl IdEntity for BuffStatus {
 impl OwnerTracker for BuffStatus {
     fn get_owner_id(&self) -> IdType {
         self.owner_id
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn buff_status_test() {
-        let buff = BuffStatus {
-            id: 1,
-            duration_left_millisecond: 3000,
-            status_info: StatusInfo::CritHitRatePercent(10),
-            duration_millisecond: 15000,
-            is_raidwide: false,
-            cumulative_damage: None,
-            owner_player_id: 0,
-        };
-
-        assert_eq!(buff.get_id(), 1);
-        assert_eq!(buff.get_duration_left_millisecond(), 3000);
-        assert_eq!(buff.get_status_info(), StatusInfo::CritHitRatePercent(10));
-        assert_eq!(buff.get_duration_millisecond(), 15000);
     }
 }

@@ -1,70 +1,22 @@
-use crate::damage_rdps_profile::{FfxivRaidDamageTable, RaidDamageTable};
+use crate::damage_calculator::damage_rdps_profile::FfxivRaidDamageTable;
+use crate::event_ticker::EventTicker;
 use crate::simulation_result::RotationLog;
-use crate::skill_simulator::{FfxivSkillSimulator, SkillSimulationResult, SkillSimulator};
-use crate::turn_calculator::{FfxivTurnCalculator, TurnCalculator};
-use ffxiv_simbot_combat_components::owner_tracker::OwnerTracker;
-use ffxiv_simbot_combat_components::{DamageProfileTable, DamageType, DpsType, IdType, TimeType};
-use log::{info, warn};
-
-use ffxiv_simbot_combat_components::id_entity::IdEntity;
+use crate::simulator::{PlayerSimulationData, SimulationBoard, SIMULATION_START_TIME_MILLISECOND};
+use crate::skill_simulator::ffxiv_skill_simulator::FfxivSkillSimulator;
+use crate::skill_simulator::SkillSimulationResult;
+use crate::turn_calculator::FfxivTurnCalculator;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
-use ffxiv_simbot_combat_components::live_objects::player::Player;
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
-use ffxiv_simbot_combat_components::live_objects::target::Target;
-use ffxiv_simbot_combat_components::rotation::cooldown_timer::CooldownTimer;
 use ffxiv_simbot_combat_components::rotation::priority_table::SkillResult;
 use ffxiv_simbot_combat_components::skill::attack_skill::{AttackSkill, SkillInfo};
-use ffxiv_simbot_combat_components::skill::{Skill, NON_GCD_DELAY_MILLISECOND};
+use ffxiv_simbot_combat_components::skill::NON_GCD_DELAY_MILLISECOND;
 use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
 use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
-use ffxiv_simbot_combat_components::status::status_apply::{ApplyInfo, StatusApply};
-use ffxiv_simbot_combat_components::status::status_event::StatusApplyType;
-use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
-use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
+use ffxiv_simbot_combat_components::{DamageProfileTable, DamageType, DpsType, IdType, TimeType};
+use log::info;
 use std::cell::{Ref, RefCell};
 use std::collections::HashMap;
 use std::rc::Rc;
-use crate::event_ticker::EventTicker;
-
-pub static SIMULATION_START_TIME_MILLISECOND: TimeType = -5000;
-static INFINITE_TIME: TimeType = 10000000;
-
-#[derive(Clone)]
-enum EventType {
-    PlayerTurn,
-    InflictDamage(Vec<SkillInfo<AttackSkill>>),
-}
-
-struct CombatEvent {
-    event_type: EventType,
-    event_time_millisecond: TimeType,
-}
-
-/// Simulate DPS for a job based on Priority System
-/// 1) Read the priority table and get the next skill
-/// 2) Calculate the expected damage of the skill, and distribute RDPS to the applied buffs
-/// 3) After simulation is done, return the DPS and Simulation Log of the job.
-/// Simulating all 8 Jobs at once is really tough, so we're gonna only count for 1 Job first.
-pub trait SimulationBoard<T, P, S>
-where
-    T: Target + Sized,
-    P: Player + Sized,
-    S: Skill + Sized,
-{
-    fn run_simulation(&self);
-    /// Gets the RDPS Profile by each buff. Raw Damage is id 0.
-    fn get_simulation_result(&self) -> HashMap<IdType, DpsType>;
-}
-
-pub struct PlayerSimulationData<P, S>
-where
-    P: Player,
-    S: Skill,
-{
-    pub player: P,
-    pub skill: S,
-    pub rdps_table: HashMap<IdType, DpsType>,
-}
 
 /// The main party combat simluation board for FFXIV. Think of this simulation of one instance of combat.
 /// The DpsSimulator does the following:
@@ -281,7 +233,7 @@ impl FfxivSimulationBoard {
             .borrow()
             .keys()
             .min()
-            .unwrap_or(&INFINITE_TIME);
+            .unwrap_or(&crate::simulator::INFINITE_TIME);
 
         if next_damage_time < next_turn_time_millisecond {
             info!("next turn: damage tick");

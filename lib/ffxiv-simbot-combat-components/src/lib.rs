@@ -3,6 +3,8 @@ use crate::status::Status;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display, Formatter};
 
+pub(crate) mod combat_resources;
+pub mod event;
 pub mod id_entity;
 pub mod live_objects;
 pub mod owner_tracker;
@@ -28,8 +30,9 @@ pub type BuffIncreasePercentType = usize;
 pub(crate) type TurnCount = usize;
 
 pub(crate) type BuffTable<S> = HashMap<IdType, S>;
-pub(crate) type Party<P> = Vec<P>;
+pub(crate) type ComboType = Option<IdType>;
 
+pub static COMBAT_START_TIME: TimeType = -10000;
 pub enum CombatComponentsError {
     DebuffNotFoundError(String),
     BuffNotFoundError(String),

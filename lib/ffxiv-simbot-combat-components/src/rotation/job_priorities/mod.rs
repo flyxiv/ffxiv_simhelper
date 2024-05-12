@@ -2,8 +2,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::IdType;
 use std::collections::HashMap;
 
-pub(crate) mod dragoon;
-pub(crate) mod job_abilities;
+//pub(crate) mod dragoon;
 pub(crate) mod ninja;
 pub(crate) mod sage;
 

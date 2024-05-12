@@ -4,16 +4,11 @@ use crate::rotation::job_priorities::sage::SagePriorityTable;
 use crate::rotation::priority_table::SkillPrerequisite;
 use crate::IdType;
 
-pub mod cooldown_timer;
-mod ffxiv_priority_table;
+pub(crate) mod cooldown_timer;
 pub(crate) mod job_priorities;
 pub mod priority_table;
-
-#[derive(Clone)]
-pub(crate) enum FfxivPriorityTable {
-    Sage(SagePriorityTable),
-    Ninja(NinjaPriorityTable),
-}
+mod simulate_status;
+mod simulated_combat_resource;
 
 #[derive(Clone)]
 pub(crate) struct SkillPriorityInfo {
