@@ -1,9 +1,11 @@
-use crate::live_objects::player::Player;
-use crate::status::Status;
+use crate::live_objects::player::StatusKey;
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display, Formatter};
+use std::rc::Rc;
 
 pub(crate) mod combat_resources;
+pub mod damage_calculator;
 pub mod event;
 pub mod id_entity;
 pub mod live_objects;
@@ -30,6 +32,7 @@ pub type BuffIncreasePercentType = usize;
 pub(crate) type TurnCount = usize;
 
 pub(crate) type BuffTable<S> = HashMap<IdType, S>;
+pub type StatusTable<S> = Rc<RefCell<HashMap<StatusKey, S>>>;
 pub(crate) type ComboType = Option<IdType>;
 
 pub static COMBAT_START_TIME: TimeType = -10000;

@@ -61,7 +61,7 @@ impl CombatResource for NinjaCombatResources {
         &self,
         skill_id: IdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
-        deguff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
         player: &FfxivPlayer,
     ) -> Vec<SkillEvents> {
@@ -74,7 +74,7 @@ impl CombatResource for NinjaCombatResources {
                 let bunshin_skill = self.skills.get(&bunshin_clone_id()).unwrap();
                 triggered_skills.push(bunshin_skill.generate_skill_events(
                     buff_list.clone(),
-                    deguff_list.clone(),
+                    debuff_list.clone(),
                     current_time_millisecond,
                     player,
                 ));
@@ -82,5 +82,15 @@ impl CombatResource for NinjaCombatResources {
         }
 
         triggered_skills
+    }
+}
+
+impl NinjaCombatResources {
+    pub(crate) fn new() -> Self {
+        Self {
+            skills: Default::default(),
+            ninki: RefCell::new(0),
+            current_combo: None,
+        }
     }
 }

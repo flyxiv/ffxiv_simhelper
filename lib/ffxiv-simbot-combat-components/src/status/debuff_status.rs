@@ -1,12 +1,13 @@
 use crate::id_entity::IdEntity;
 use crate::owner_tracker::OwnerTracker;
+use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::{DamageType, IdType, ResourceType, TimeType};
+use crate::{DamageType, IdType, ResourceType, StatusTable, TimeType};
 use std::collections::HashMap;
 
 pub(crate) type SnapshotTable = HashMap<IdType, Vec<DamageType>>;
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Clone)]
 pub struct DebuffStatus {
     pub(crate) id: IdType,
     pub(crate) owner_id: IdType,
@@ -17,7 +18,8 @@ pub struct DebuffStatus {
     pub(crate) is_raidwide: bool,
     pub(crate) stacks: ResourceType,
     pub(crate) name: String,
-    pub(crate) snapshot: SnapshotTable,
+    pub(crate) snapshotted_buffs: Option<StatusTable<BuffStatus>>,
+    pub(crate) snapshotted_debuffs: Option<StatusTable<DebuffStatus>>,
 }
 
 impl Status for DebuffStatus {
@@ -41,6 +43,13 @@ impl Status for DebuffStatus {
 
     fn is_raidwide(&self) -> bool {
         self.is_raidwide
+    }
+    fn add_stack(&mut self, stack: ResourceType) {
+        self.stacks += stack;
+    }
+
+    fn get_stack(&self) -> ResourceType {
+        self.stacks
     }
 }
 

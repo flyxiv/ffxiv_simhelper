@@ -1,5 +1,5 @@
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillUsageInfo};
+use crate::rotation::job_priorities::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::skill::job_abilities::sage_abilities::{make_sage_gcd_priority_table, make_sage_opener};
 use crate::{IdType, TurnCount};
@@ -14,8 +14,6 @@ pub struct SagePriorityTable {
 }
 
 impl PriorityTable for SagePriorityTable {
-    fn add_additional_skills(&self, _: &mut Vec<SkillUsageInfo>, _: &FfxivPlayer) {}
-
     fn get_opener_len(&self) -> usize {
         self.opener.len()
     }

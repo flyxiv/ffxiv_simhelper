@@ -39,6 +39,13 @@ impl Status for BuffStatus {
     fn is_raidwide(&self) -> bool {
         self.is_raidwide
     }
+    fn add_stack(&mut self, stack: ResourceType) {
+        self.stacks += stack;
+    }
+
+    fn get_stack(&self) -> ResourceType {
+        self.stacks
+    }
 }
 
 impl IdEntity for BuffStatus {

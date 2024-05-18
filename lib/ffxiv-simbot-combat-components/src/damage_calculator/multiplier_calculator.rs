@@ -1,6 +1,6 @@
-use ffxiv_simbot_combat_components::status::status_info::StatusInfo;
-use ffxiv_simbot_combat_components::status::Status;
-use ffxiv_simbot_combat_components::BuffIncreasePercentType;
+use crate::status::status_info::StatusInfo;
+use crate::status::Status;
+use crate::BuffIncreasePercentType;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
 use lazy_static::lazy_static;
@@ -11,7 +11,7 @@ pub(crate) fn percent_to_actual_value(increase_percent: BuffIncreasePercentType)
 }
 
 lazy_static! {
-    static ref DIRECT_HIT_DAMAGE_MULTIPLIER: f64 = 0.25f64;
+    static ref DIRECT_HIT_DAMAGE_MULTIPLIER: f64 = 1.25f64;
 }
 
 pub trait MultiplierCalculator {

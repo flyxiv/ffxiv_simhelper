@@ -3,6 +3,7 @@ use crate::{ComboType, IdType, ResourceType, TimeType};
 
 /// Events that happen to a player's internal status "instantly" after casting a skill
 /// Ex) Stack is raised, cooldown is started, combo is updated
+#[derive(Clone)]
 pub enum FfxivPlayerInternalEvent {
     /// stack id, increase amount
     IncreaseResource(IdType, ResourceType),

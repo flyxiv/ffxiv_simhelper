@@ -27,7 +27,9 @@ impl CombatResource for SageCombatResources {
 
     fn add_resource(&mut self, _: IdType, _: ResourceType) {}
 
-    fn get_resource(&self, _: IdType) -> ResourceType {}
+    fn get_resource(&self, _: IdType) -> ResourceType {
+        -1
+    }
 
     fn get_current_combo(&self) -> ComboType {
         None
@@ -42,7 +44,15 @@ impl CombatResource for SageCombatResources {
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         _: TimeType,
         _: &FfxivPlayer,
-    ) -> Option<SkillEvents> {
-        None
+    ) -> Vec<SkillEvents> {
+        vec![]
+    }
+}
+
+impl SageCombatResources {
+    pub(crate) fn new() -> Self {
+        Self {
+            skills: Default::default(),
+        }
     }
 }

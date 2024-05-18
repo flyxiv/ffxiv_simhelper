@@ -1,10 +1,7 @@
-use crate::live_objects::player::ffxiv_player::FfxivPlayer;
-use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillUsageInfo};
+use crate::rotation::job_priorities::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::skill::job_abilities::ninja_abilities::{
-    bunshin_clone_id, bunshin_stack_id, bunshin_trigger_gcd_ids, make_ninja_gcd_table,
-    make_ninja_ogcd_table, make_ninja_opener,
+    make_ninja_gcd_table, make_ninja_ogcd_table, make_ninja_opener,
 };
 use crate::{IdType, TurnCount};
 use std::cell::RefCell;

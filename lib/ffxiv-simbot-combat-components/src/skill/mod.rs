@@ -7,14 +7,13 @@ use crate::id_entity::IdEntity;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{IdType, ResourceType, TimeType};
-use std::cell::RefCell;
+use crate::{IdType, ResourceType, StatusTable, TimeType};
 use std::collections::HashMap;
-use std::rc::Rc;
 
 /// The normal delay time for o-GCD skills.
 /// After using 1 oGCD, the player cannot use another skill for 0.7 seconds.
 pub static NON_GCD_DELAY_MILLISECOND: i32 = 700;
+pub static GCD_DEFAULT_DELAY_MILLISECOND: i32 = 2500;
 
 /// The resource requirements for a skill.
 /// Skill might need mana, status(suiton status is needed for Trick Attack), or combo status.
@@ -36,8 +35,8 @@ pub trait Skill: Sized + Clone + IdEntity {
     fn start_cooldown(&mut self);
     fn generate_skill_events(
         &self,
-        buffs: Rc<RefCell<Vec<BuffStatus>>>,
-        debuffs: Rc<RefCell<Vec<DebuffStatus>>>,
+        buffs: StatusTable<BuffStatus>,
+        debuffs: StatusTable<DebuffStatus>,
         current_combat_time_milliseconds: TimeType,
         player: &FfxivPlayer,
     ) -> SkillEvents;

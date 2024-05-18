@@ -1,71 +1,62 @@
-use crate::damage_calculator::damage_rdps_profile::{
-    FfxivRaidDamageTable, RaidDamageTable, RaidDamageTableKey,
-};
+use crate::damage_calculator::damage_rdps_profile::{FfxivRaidDamageTable, RaidDamageTable};
 use crate::damage_calculator::multiplier_calculator::MultiplierCalculator;
-use crate::skill_simulator::SkillDamageResult;
-use ffxiv_simbot_combat_components::id_entity::IdEntity;
-use ffxiv_simbot_combat_components::owner_tracker::OwnerTracker;
-use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
-use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
-use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
-use ffxiv_simbot_combat_components::{DamageType, IdType};
+use crate::damage_calculator::{DamageRdpsProfile, RaidDamageTableKey};
+use crate::id_entity::IdEntity;
+use crate::owner_tracker::OwnerTracker;
+use crate::status::buff_status::BuffStatus;
+use crate::status::debuff_status::DebuffStatus;
+use crate::{DamageType, IdType, StatusTable};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
-use std::cell::RefCell;
-use std::rc::Rc;
 
-pub(crate) trait SkillCalculator {
+pub trait RdpsCalculator {
     /// Given the raw damage and all the list of buffs/debuffs on the player and the target,
     /// 1) Convert the buffs to a damage multiplier.
     /// 2) Calculate the RDPS contribution of each buff
     /// 3) Order each buff to update its RDPS contribution.
-    fn make_damage_profile<SHB: StatusHolder<BuffStatus>, SHD: StatusHolder<DebuffStatus>>(
+    fn make_damage_profile(
         &self,
-        buff_holder: Rc<RefCell<SHB>>,
-        debuff_holder: Rc<RefCell<SHD>>,
+        skill_id: IdType,
+        snapshotted_buffs: StatusTable<BuffStatus>,
+        snapshotted_debuffs: StatusTable<DebuffStatus>,
         skill_damage: DamageType,
         power: &CharacterPower,
         player_id: IdType,
-    ) -> SkillDamageResult;
+    ) -> DamageRdpsProfile;
 }
 
 fn apply_multiplier(damage: DamageType, multiplier: MultiplierType) -> DamageType {
     f64::floor(damage as MultiplierType * multiplier) as DamageType
 }
 
-pub(crate) struct FfxivSkillCalculator {}
+pub struct FfxivRdpsCalculator {}
 
-impl MultiplierCalculator for FfxivSkillCalculator {}
+impl MultiplierCalculator for FfxivRdpsCalculator {}
 
-impl SkillCalculator for FfxivSkillCalculator {
-    fn make_damage_profile<SHB, SHD>(
+impl RdpsCalculator for FfxivRdpsCalculator {
+    fn make_damage_profile(
         &self,
-        buff_holder: Rc<RefCell<SHB>>,
-        debuff_holder: Rc<RefCell<SHD>>,
+        skill_id: IdType,
+        snapshotted_buffs: StatusTable<BuffStatus>,
+        snapshotted_debuffs: StatusTable<DebuffStatus>,
         skill_damage: DamageType,
         power: &CharacterPower,
         player_id: IdType,
-    ) -> SkillDamageResult
-    where
-        SHB: StatusHolder<BuffStatus>,
-        SHD: StatusHolder<DebuffStatus>,
-    {
-        let mut damage_profile: SkillDamageResult = SkillDamageResult {
+    ) -> DamageRdpsProfile
+where {
+        let mut damage_profile = DamageRdpsProfile {
             raw_damage: skill_damage,
             final_damage: skill_damage,
-            raid_damage_profile: FfxivRaidDamageTable {
+            status_rdps_contribution: FfxivRaidDamageTable {
                 rdps_table: Default::default(),
             },
         };
 
-        let buff_list = buff_holder.borrow().get_status_list();
-        let debuff_list = debuff_holder.borrow().get_status_list();
-
-        for buff in buff_list.borrow().iter() {
+        for buff in snapshotted_buffs.borrow().values() {
             let buff_id = buff.get_id();
 
             let raid_damage_profile_key = RaidDamageTableKey {
-                player_id,
+                skill_id,
                 status_id: buff_id,
                 owner_id: buff.get_owner_id(),
             };
@@ -76,15 +67,15 @@ impl SkillCalculator for FfxivSkillCalculator {
             damage_profile.final_damage =
                 apply_multiplier(damage_profile.final_damage, damage_multiplier);
             damage_profile
-                .raid_damage_profile
+                .status_rdps_contribution
                 .insert(raid_damage_profile_key, contribution);
         }
 
-        for debuff in debuff_list.borrow().iter() {
+        for debuff in snapshotted_debuffs.borrow().values() {
             let buff_id = debuff.get_id();
 
             let raid_damage_profile_key = RaidDamageTableKey {
-                player_id,
+                skill_id,
                 status_id: buff_id,
                 owner_id: debuff.get_owner_id(),
             };
@@ -95,7 +86,7 @@ impl SkillCalculator for FfxivSkillCalculator {
             damage_profile.final_damage =
                 apply_multiplier(damage_profile.final_damage, damage_multiplier);
             damage_profile
-                .raid_damage_profile
+                .status_rdps_contribution
                 .insert(raid_damage_profile_key, contribution);
         }
 
@@ -103,8 +94,8 @@ impl SkillCalculator for FfxivSkillCalculator {
     }
 }
 
-impl Default for FfxivSkillCalculator {
+impl Default for FfxivRdpsCalculator {
     fn default() -> Self {
-        FfxivSkillCalculator {}
+        FfxivRdpsCalculator {}
     }
 }

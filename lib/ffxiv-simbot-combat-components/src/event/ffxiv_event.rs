@@ -4,7 +4,9 @@ use crate::live_objects::turn_type::FfxivTurnType;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{DamageType, IdType, ResourceType, TimeType};
+use std::cell::RefCell;
 use std::collections::HashMap;
+use std::rc::Rc;
 
 /// All possible damage related events in a FFXIV combat.
 /// the last TimeType element is always the time of the event.
@@ -15,15 +17,15 @@ pub enum FfxivEvent {
     /// player_id, skill ID
     UseSkill(IdType, IdType, TimeType),
 
-    /// owner_player_id, skill ID, potency, guranteed crit, guaranteed direct hit, snapshotted buffs, snapshotted debuffs,
+    /// owner_player_id, skill ID, potency, guaranteed crit, guaranteed direct hit, snapshotted buffs, snapshotted debuffs,
     Damage(
         IdType,
         IdType,
         DamageType,
         bool,
         bool,
-        HashMap<StatusKey, BuffStatus>,
-        HashMap<StatusKey, DebuffStatus>,
+        Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
+        Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         TimeType,
     ),
 
@@ -34,7 +36,7 @@ pub enum FfxivEvent {
     ApplyBuff(IdType, IdType, BuffStatus, TimeType, TimeType, TimeType),
     /// owner_player_id, target_id, status, status time, refresh duration or not
     ApplyBuffStack(IdType, IdType, BuffStatus, TimeType, bool, TimeType),
-    /// owner_player_id, target_id, duration, max refresh duration
+    /// owner_player_id, status, duration, max refresh duration
     ApplyRaidBuff(IdType, BuffStatus, TimeType, TimeType, TimeType),
 
     /// owner_player_id, time, status time, refresh duration or not
@@ -49,7 +51,8 @@ pub enum FfxivEvent {
 
     /// Raises stack of another player, for dance partners and brotherhood
     /// player_id, stack id, increase amount
-    IncreaseAnotherPlayerResource(IdType, IdType, ResourceType, TimeType),
+    IncreasePlayerResource(IdType, IdType, ResourceType, TimeType),
+    DotTick(TimeType),
 }
 
 impl FfxivEvent {
@@ -66,11 +69,12 @@ impl FfxivEvent {
             | FfxivEvent::ApplyDebuff(_, _, _, _, time)
             | FfxivEvent::RemoveTargetBuff(_, _, _, time)
             | FfxivEvent::RemoveDebuff(_, _, time)
-            | FfxivEvent::IncreaseAnotherPlayerResource(_, _, _, time) => *time,
+            | FfxivEvent::IncreasePlayerResource(_, _, _, time)
+            | FfxivEvent::DotTick(time) => *time,
         }
     }
 
-    pub fn add_time_to_event(self, time: TimeType) -> FfxivEvent {
+    pub fn add_time_to_event(self, elapsed_time: TimeType) -> FfxivEvent {
         match self {
             FfxivEvent::Damage(
                 player_id,
@@ -82,18 +86,18 @@ impl FfxivEvent {
                 debuffs,
                 time,
             ) => FfxivEvent::Damage(
-                *player_id,
-                *skill_id,
-                *potency,
-                *is_crit,
-                *is_direct_hit,
+                player_id,
+                skill_id,
+                potency,
+                is_crit,
+                is_direct_hit,
                 buffs.clone(),
                 debuffs.clone(),
-                *time + time,
+                elapsed_time + time,
             ),
-            FfxivEvent::Tick(ticker_id, time) => FfxivEvent::Tick(*ticker_id, *time + time),
+            FfxivEvent::Tick(ticker_id, time) => FfxivEvent::Tick(ticker_id, elapsed_time + time),
             FfxivEvent::UseSkill(player_id, skill_id, time) => {
-                FfxivEvent::UseSkill(*player_id, *skill_id, *time + time)
+                FfxivEvent::UseSkill(player_id, skill_id, elapsed_time + time)
             }
             FfxivEvent::ApplyBuff(
                 player_id,
@@ -103,12 +107,12 @@ impl FfxivEvent {
                 max_duration,
                 refresh_duration,
             ) => FfxivEvent::ApplyBuff(
-                *player_id,
-                *target_id,
+                player_id,
+                target_id,
                 buff.clone(),
-                *time + time,
-                *max_duration,
-                *refresh_duration,
+                elapsed_time + time,
+                max_duration,
+                refresh_duration,
             ),
             FfxivEvent::ApplyBuffStack(
                 player_id,
@@ -118,57 +122,53 @@ impl FfxivEvent {
                 is_refresh,
                 refresh_duration,
             ) => FfxivEvent::ApplyBuffStack(
-                *player_id,
-                *target_id,
+                player_id,
+                target_id,
                 buff.clone(),
-                *time + time,
-                *is_refresh,
-                *refresh_duration,
+                elapsed_time + time,
+                is_refresh,
+                refresh_duration,
             ),
             FfxivEvent::ApplyRaidBuff(player_id, buff, time, max_duration, refresh_duration) => {
                 FfxivEvent::ApplyRaidBuff(
-                    *player_id,
+                    player_id,
                     buff.clone(),
-                    *time + time,
-                    *max_duration,
-                    *refresh_duration,
+                    elapsed_time + time,
+                    max_duration,
+                    refresh_duration,
                 )
             }
             FfxivEvent::ApplyDebuffStack(player_id, debuff, time, is_refresh, refresh_duration) => {
                 FfxivEvent::ApplyDebuffStack(
-                    *player_id,
+                    player_id,
                     debuff.clone(),
-                    *time + time,
-                    *is_refresh,
-                    *refresh_duration,
+                    elapsed_time + time,
+                    is_refresh,
+                    refresh_duration,
                 )
             }
             FfxivEvent::ApplyDebuff(player_id, debuff, time, max_duration, refresh_duration) => {
                 FfxivEvent::ApplyDebuff(
-                    *player_id,
+                    player_id,
                     debuff.clone(),
-                    *time + time,
-                    *max_duration,
-                    *refresh_duration,
+                    elapsed_time + time,
+                    max_duration,
+                    refresh_duration,
                 )
             }
             FfxivEvent::RemoveTargetBuff(player_id, target_id, buff_id, time) => {
-                FfxivEvent::RemoveTargetBuff(*player_id, *target_id, *buff_id, *time + time)
+                FfxivEvent::RemoveTargetBuff(player_id, target_id, buff_id, elapsed_time + time)
             }
             FfxivEvent::RemoveDebuff(player_id, debuff_id, time) => {
-                FfxivEvent::RemoveDebuff(*player_id, *debuff_id, *time + time)
+                FfxivEvent::RemoveDebuff(player_id, debuff_id, elapsed_time + time)
             }
-            FfxivEvent::IncreaseAnotherPlayerResource(player_id, stack_id, amount, time) => {
-                FfxivEvent::IncreaseAnotherPlayerResource(
-                    *player_id,
-                    *stack_id,
-                    *amount,
-                    *time + time,
-                )
+            FfxivEvent::IncreasePlayerResource(player_id, stack_id, amount, time) => {
+                FfxivEvent::IncreasePlayerResource(player_id, stack_id, amount, elapsed_time + time)
             }
             FfxivEvent::PlayerTurn(player_id, turn_time, max_time, time) => {
-                FfxivEvent::PlayerTurn(*player_id, *turn_time, *max_time + time, *time + time)
+                FfxivEvent::PlayerTurn(player_id, turn_time, max_time + time, elapsed_time + time)
             }
+            FfxivEvent::DotTick(time) => FfxivEvent::DotTick(elapsed_time + time),
         }
     }
 
@@ -193,6 +193,11 @@ impl PartialEq<Self> for FfxivEvent {
 impl PartialOrd for FfxivEvent {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         Some(self.get_event_time().cmp(&other.get_event_time()))
+    }
+}
+impl Ord for FfxivEvent {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.get_event_time().cmp(&other.get_event_time())
     }
 }
 

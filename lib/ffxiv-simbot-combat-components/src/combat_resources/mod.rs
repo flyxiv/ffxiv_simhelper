@@ -1,3 +1,4 @@
+pub(crate) mod ffxiv_combat_resources;
 mod ninja_combat_resources;
 mod sage_combat_resources;
 
@@ -7,10 +8,9 @@ use crate::live_objects::player::StatusKey;
 use crate::rotation::cooldown_timer::CooldownTimer;
 use crate::rotation::job_priorities::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
-use crate::skill::{ResourceRequirements, ResourceTable, Skill, SkillEvents};
+use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::status_timer::StatusTimer;
 use crate::{ComboType, IdType, ResourceType, StackType, TimeType};
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -26,11 +26,12 @@ pub(crate) trait CombatResource: Clone + Sized {
         skill
     }
 
-    fn get_stack(&self, skill: &AttackSkill) -> StackType {
+    fn get_stack(&self, skill_id: IdType) -> StackType {
+        let skill = self.get_skill(skill_id);
         let skill_table = self.get_skills();
 
         let stack_skill = skill_table.get(&skill.stack_skill_id()).unwrap();
-        stack_skill.get_stacks()
+        stack_skill.stacks
     }
 
     fn handle_resource_event(
@@ -51,33 +52,29 @@ pub(crate) trait CombatResource: Clone + Sized {
                 FfxivPlayerInternalEvent::RemoveBuff(buff_id) => {
                     let key = StatusKey::new(*buff_id, player_id);
                     let mut buff_list = buff_list.borrow_mut();
-                    let mut delete = false;
+                    let mut delete = true;
 
                     if let Some(buff) = buff_list.get_mut(&key) {
                         buff.stacks -= 1;
                         delete = buff.stacks == 0;
-                    } else {
-                        delete = true;
                     }
 
                     if delete {
-                        buff_list.borrow_mut().remove(&key);
+                        buff_list.remove(&key);
                     }
                 }
                 FfxivPlayerInternalEvent::RemoveDebuff(debuff_id) => {
                     let key = StatusKey::new(*debuff_id, player_id);
                     let mut debuff_list = debuff_list.borrow_mut();
-                    let mut delete = false;
+                    let mut delete = true;
 
                     if let Some(debuff) = debuff_list.get_mut(&key) {
                         debuff.stacks -= 1;
                         delete = debuff.stacks == 0;
-                    } else {
-                        delete = true;
                     }
 
                     if delete {
-                        debuff_list.borrow_mut().remove(&key);
+                        debuff_list.remove(&key);
                     }
                 }
                 _ => {}
@@ -110,7 +107,7 @@ pub(crate) trait CombatResource: Clone + Sized {
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
         player: &FfxivPlayer,
-    ) -> Option<SkillEvents>;
+    ) -> Vec<SkillEvents>;
 
     fn update_cooldown(&mut self, elapsed_time: TimeType) {
         let skill_table = self.get_skills_mut();

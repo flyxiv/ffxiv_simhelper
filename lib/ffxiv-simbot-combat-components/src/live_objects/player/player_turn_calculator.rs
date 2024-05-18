@@ -7,9 +7,10 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 /// Stores information needed to calculate the next turn of a player.
+#[derive(Clone)]
 pub struct PlayerTurnCalculator {
     /// How many seconds passed after the most recent GCD. If delay is close to GCD, an oGCD will
-    /// clip the player's next GCD so it becomes a GCD turn.
+    /// clip the player's next GCD, so it becomes a GCD turn.
     pub player_id: IdType,
     pub total_delay_millisecond: TimeType,
     pub last_gcd_time_millisecond: TimeType,
@@ -20,17 +21,18 @@ pub struct PlayerTurnCalculator {
     ffxiv_event_queue: Rc<RefCell<SortedVec<FfxivEvent>>>,
 }
 
-struct SkillTimeInfo {
-    charge_time_millisecond: TimeType,
-    cast_time_millisecond: TimeType,
-    gcd_cooldown_millisecond: TimeType,
-    delay_millisecond: TimeType,
+#[derive(Clone)]
+pub(crate) struct SkillTimeInfo {
+    pub(crate) charge_time_millisecond: TimeType,
+    pub(crate) cast_time_millisecond: TimeType,
+    pub(crate) gcd_cooldown_millisecond: TimeType,
+    pub(crate) delay_millisecond: TimeType,
 }
 
 impl PlayerTurnCalculator {
     pub(crate) fn produce_event_to_queue(&self) {
-        let next_turn = self.calculate_next_turn();
-        self.ffxiv_event_queue.borrow_mut().push(next_turn)
+        let next_turn = self.get_next_turn();
+        self.ffxiv_event_queue.borrow_mut().push(next_turn);
     }
 
     pub(crate) fn update_internal_status(&mut self, event: &FfxivPlayerInternalEvent) {
@@ -76,7 +78,7 @@ impl PlayerTurnCalculator {
                     first_ogcd_start_time,
                 )
             }
-            /// oGCD turn: 시작/끝 시간 안에 가장 잘 맞는 두 oGCD쌍을 한번에 찾아서 등록(둘 중 highest priority로 랭킹).
+            // oGCD turn: 시작/끝 시간 안에 가장 잘 맞는 두 oGCD쌍을 한번에 찾아서 등록(둘 중 highest priority로 랭킹).
             FfxivTurnType::Ogcd => FfxivEvent::PlayerTurn(
                 self.player_id,
                 FfxivTurnType::Gcd,

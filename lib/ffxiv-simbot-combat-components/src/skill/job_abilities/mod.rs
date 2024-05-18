@@ -1,4 +1,3 @@
-use crate::id_entity::IdEntity;
 use crate::rotation::job_priorities::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::IdType;

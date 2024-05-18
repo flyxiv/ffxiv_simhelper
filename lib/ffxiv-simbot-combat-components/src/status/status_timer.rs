@@ -12,15 +12,15 @@ pub trait StatusTimer<T: Status>: StatusHolder<T> {
             return;
         }
 
-        let status_list = self.get_status_list();
+        let status_list = self.get_status_table();
         let mut status_list = status_list.borrow_mut();
 
-        for status in status_list.iter_mut() {
+        for status in status_list.values_mut() {
             status.set_duration_left_millisecond(
                 status.get_duration_left_millisecond() - elapsed_time,
             );
         }
 
-        status_list.retain(|status| status.get_duration_left_millisecond() > 0);
+        status_list.retain(|_, status| status.get_duration_left_millisecond() > 0);
     }
 }

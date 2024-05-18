@@ -1,9 +1,6 @@
 use crate::id_entity::IdEntity;
-use crate::skill::{Skill, SkillEvents};
-use crate::status::buff_status::BuffStatus;
-use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::{IdType, TimeType};
+use crate::{ResourceType, TimeType};
 
 pub mod buff_status;
 pub mod debuff_status;
@@ -26,4 +23,6 @@ pub trait Status: Sized + IdEntity {
     fn get_status_info(&self) -> StatusInfo;
     fn get_duration_millisecond(&self) -> TimeType;
     fn is_raidwide(&self) -> bool;
+    fn add_stack(&mut self, stack: ResourceType);
+    fn get_stack(&self) -> ResourceType;
 }

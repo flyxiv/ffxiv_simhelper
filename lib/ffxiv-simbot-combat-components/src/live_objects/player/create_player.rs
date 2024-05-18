@@ -2,6 +2,7 @@ use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
+use crate::rotation::job_priorities::ffxiv_priority_table::FfxivPriorityTable;
 use crate::rotation::job_priorities::ninja::NinjaPriorityTable;
 use crate::rotation::job_priorities::sage::SagePriorityTable;
 use crate::skill::job_abilities::ninja_abilities::get_huton_status;
@@ -29,7 +30,7 @@ impl FfxivPlayer {
             player_id,
             ninja_job.clone(),
             power,
-            Box::new(NinjaPriorityTable::new()),
+            FfxivPriorityTable::Ninja(NinjaPriorityTable::new()),
             HashMap::from([(
                 StatusKey::new(player_id, huton.get_id()),
                 get_huton_status(player_id),
@@ -50,7 +51,7 @@ impl FfxivPlayer {
             player_id,
             sage_job.clone(),
             power,
-            Box::new(SagePriorityTable::new()),
+            FfxivPriorityTable::Sage(SagePriorityTable::new()),
             Default::default(),
             ffxiv_event_queue,
             SAGE_START_TIME_MILLISECOND,

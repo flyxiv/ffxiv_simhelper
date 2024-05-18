@@ -1,16 +1,19 @@
+use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
+use crate::live_objects::player::player_turn_calculator::SkillTimeInfo;
 use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::rotation::cooldown_timer::CooldownTimer;
 use crate::skill::{
-    ResourceRequirements, ResourceTable, Skill, SkillEvents, NON_GCD_DELAY_MILLISECOND,
+    ResourceRequirements, ResourceTable, Skill, SkillEvents, GCD_DEFAULT_DELAY_MILLISECOND,
+    NON_GCD_DELAY_MILLISECOND,
 };
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{DamageType, IdType, ResourceType, StackType, TimeType};
+use crate::{DamageType, IdType, ResourceType, StackType, StatusTable, TimeType};
 use ffxiv_simbot_db::MultiplierType;
 use std::cell::RefCell;
 use std::cmp::max;
@@ -19,9 +22,9 @@ use std::rc::Rc;
 
 #[derive(Clone)]
 pub struct AttackSkill {
-    pub(crate) id: IdType,
+    pub id: IdType,
     pub(crate) name: String,
-    pub(crate) player_id: IdType,
+    pub player_id: IdType,
     pub(crate) potency: DamageType,
     pub(crate) trait_multiplier: MultiplierType,
 
@@ -29,14 +32,14 @@ pub struct AttackSkill {
     pub debuff_events: Vec<FfxivEvent>,
     pub combo: Option<IdType>,
 
-    pub(crate) delay_millisecond: Option<TimeType>,
-    pub(crate) casting_time_millisecond: TimeType,
-    pub(crate) gcd_cooldown_millisecond: TimeType,
-    pub(crate) charging_time_millisecond: TimeType,
-    pub(crate) is_speed_buffed: bool,
+    pub delay_millisecond: Option<TimeType>,
+    pub casting_time_millisecond: TimeType,
+    pub gcd_cooldown_millisecond: TimeType,
+    pub charging_time_millisecond: TimeType,
+    pub is_speed_buffed: bool,
 
-    pub(crate) resource_required: Vec<ResourceRequirements>,
-    pub(crate) resource_created: ResourceTable,
+    pub resource_required: Vec<ResourceRequirements>,
+    pub resource_created: ResourceTable,
 
     pub(crate) is_guaranteed_crit: bool,
     pub(crate) is_guaranteed_direct_hit: bool,
@@ -66,8 +69,8 @@ impl Skill for AttackSkill {
     /// Generate the internal and combat events for the skill
     fn generate_skill_events(
         &self,
-        buffs: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
-        debuffs: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        buffs: StatusTable<BuffStatus>,
+        debuffs: StatusTable<DebuffStatus>,
         current_combat_time_milliseconds: TimeType,
         player: &FfxivPlayer,
     ) -> SkillEvents {
@@ -90,13 +93,15 @@ impl Skill for AttackSkill {
             ffxiv_events.push(damage_event);
         }
 
-        if let Some(skill_events) = player.combat_resources.borrow().trigger_on_event(
+        let skill_events_vec = player.combat_resources.borrow().trigger_on_event(
             self.id,
             buffs.clone(),
             debuffs.clone(),
             current_combat_time_milliseconds,
             player,
-        ) {
+        );
+
+        for skill_events in skill_events_vec {
             ffxiv_events.extend(skill_events.0);
             internal_events.extend(skill_events.1);
         }
@@ -106,7 +111,7 @@ impl Skill for AttackSkill {
 }
 
 impl AttackSkill {
-    fn get_potency(&self) -> DamageType {
+    pub fn get_potency(&self) -> DamageType {
         (self.potency as MultiplierType * self.trait_multiplier) as DamageType
     }
 
@@ -170,10 +175,19 @@ impl AttackSkill {
             self.get_potency(),
             self.is_guaranteed_crit,
             self.is_guaranteed_direct_hit,
-            buffs.borrow().clone(),
-            debuffs.borrow().clone(),
+            buffs.clone(),
+            debuffs.clone(),
             current_combat_milliseconds + inflict_damage_time,
         ))
+    }
+
+    pub(crate) fn get_time_related_informations(&self, player: &FfxivPlayer) -> SkillTimeInfo {
+        SkillTimeInfo {
+            delay_millisecond: self.get_delay_millisecond(),
+            cast_time_millisecond: player.get_cast_time(self),
+            gcd_cooldown_millisecond: player.get_gcd(self),
+            charge_time_millisecond: self.charging_time_millisecond,
+        }
     }
 
     fn generate_cooldown_event(&self) -> FfxivPlayerInternalEvent {
@@ -198,7 +212,7 @@ impl AttackSkill {
     fn is_gcd(&self) -> bool {
         self.gcd_cooldown_millisecond > 0
     }
-    fn get_gcd_cast_time(&self) -> TimeType {
+    pub(crate) fn get_gcd_cast_time(&self) -> TimeType {
         self.casting_time_millisecond
     }
 
@@ -208,7 +222,7 @@ impl AttackSkill {
     pub(crate) fn get_current_cooldown_millisecond(&self) -> TimeType {
         self.current_cooldown_millisecond
     }
-    fn get_gcd_cooldown_millsecond(&self) -> TimeType {
+    fn get_gcd_cooldown_millisecond(&self) -> TimeType {
         max(self.gcd_cooldown_millisecond, self.casting_time_millisecond)
     }
 
@@ -216,7 +230,7 @@ impl AttackSkill {
         self.stacks >= 1
     }
 
-    fn is_speed_buffed(&self) -> bool {
+    pub(crate) fn is_speed_buffed(&self) -> bool {
         self.is_speed_buffed
     }
 
@@ -240,7 +254,7 @@ impl AttackSkill {
 
     #[inline]
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
-        *self.resource_created.get(&resource_id)
+        *self.resource_created.get(&resource_id).unwrap()
     }
 
     #[inline]
@@ -251,6 +265,32 @@ impl AttackSkill {
     fn get_stack(&self) -> StackType {
         f64::ceil(self.current_cooldown_millisecond as f64 / self.cooldown_millisecond as f64)
             as StackType
+    }
+
+    pub fn new(id: IdType, name: String, player_id: IdType, potency: DamageType) -> Self {
+        Self {
+            id,
+            name,
+            player_id,
+            potency,
+            trait_multiplier: 1.0,
+            buff_events: vec![],
+            debuff_events: vec![],
+            combo: None,
+            delay_millisecond: Some(0),
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: GCD_DEFAULT_DELAY_MILLISECOND,
+            charging_time_millisecond: 0,
+            is_speed_buffed: false,
+            resource_required: vec![],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 0,
+            current_cooldown_millisecond: 0,
+            stacks: 0,
+            stack_skill_id: None,
+        }
     }
 }
 

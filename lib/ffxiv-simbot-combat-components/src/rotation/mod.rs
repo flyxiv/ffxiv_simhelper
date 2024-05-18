@@ -1,12 +1,9 @@
 use crate::id_entity::IdEntity;
-use crate::rotation::job_priorities::ninja::NinjaPriorityTable;
-use crate::rotation::job_priorities::sage::SagePriorityTable;
-use crate::rotation::priority_table::SkillPrerequisite;
+use crate::rotation::job_priorities::priority_table::SkillPrerequisite;
 use crate::IdType;
 
-pub(crate) mod cooldown_timer;
+pub mod cooldown_timer;
 pub(crate) mod job_priorities;
-pub mod priority_table;
 mod simulate_status;
 mod simulated_combat_resource;
 

@@ -1,6 +1,6 @@
-use crate::status::status_apply::StatusApply;
+use crate::live_objects::player::StatusKey;
 use crate::status::Status;
-use crate::IdType;
+use crate::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -9,37 +9,55 @@ use std::rc::Rc;
 /// Implements entity that hold buff/debuff status
 /// which are characters and attack targets.
 pub trait StatusHolder<S: Status>: Sized {
-    fn get_status_list(&self) -> Rc<RefCell<HashMap<IdType, S>>>;
+    fn get_status_table(&self) -> Rc<RefCell<HashMap<StatusKey, S>>>;
 
-    fn add_status(&mut self, status: S) {
-        let status_list = self.get_status_list();
-        let mut status_list = status_list.borrow_mut();
+    fn add_status(
+        &mut self,
+        status: S,
+        duration_millisecond: TimeType,
+        max_duration_millisecond: TimeType,
+        player_id: IdType,
+    ) {
+        let key = StatusKey::new(player_id, status.get_id());
+        let status_table = self.get_status_table();
 
-        match status {
-            StatusApply::AddOrRefreshStatus(apply_info) => {
-                let mut status = apply_info.status;
-                let status_id = status.get_id();
-                let mut found = false;
-                for status in status_list.iter_mut() {
-                    if status.get_id() == status_id {
-                        let refreshed_duration = min(
-                            apply_info.refresh_duration + status.get_duration_left_millisecond(),
-                            apply_info.max_duration,
-                        );
-                        status.set_duration_left_millisecond(refreshed_duration);
-                        found = true;
-                        break;
-                    }
-                }
-                if !found {
-                    status.start_duration();
-                    status_list.push(status);
-                }
-            }
-            StatusApply::AddStatus(mut apply_info) => {
-                apply_info.status.start_duration();
-                status_list.push(apply_info.status);
-            }
+        if status_table.borrow().contains_key(&key) {
+            let mut status = status_table.borrow_mut();
+            let status = status.get_mut(&key).unwrap();
+
+            let new_duration = min(
+                status.get_duration_left_millisecond() + duration_millisecond,
+                max_duration_millisecond,
+            );
+            status.set_duration_left_millisecond(new_duration)
+        } else {
+            status_table.borrow_mut().insert(key, status);
+        }
+    }
+
+    fn add_status_stack(
+        &mut self,
+        status: S,
+        duration_millisecond: TimeType,
+        refresh: bool,
+        player_id: IdType,
+    ) {
+        let key = StatusKey::new(player_id, status.get_id());
+        let status_table = self.get_status_table();
+        if status_table.borrow().contains_key(&key) {
+            let mut live_status = status_table.borrow_mut();
+            let status = live_status.get_mut(&key).unwrap();
+            let stack = status.get_stack();
+
+            let new_duration = if refresh {
+                duration_millisecond
+            } else {
+                status.get_duration_left_millisecond()
+            };
+            status.set_duration_left_millisecond(new_duration);
+            status.add_stack(stack);
+        } else {
+            status_table.borrow_mut().insert(key, status);
         }
     }
 }

@@ -11,7 +11,7 @@ pub(crate) struct FirstSkillCombatSimulation<'a> {
     pub(crate) skill_used_resource: &'a Vec<ResourceRequirements>,
 }
 
-impl FirstSkillCombatSimulation {
+impl FirstSkillCombatSimulation<'_> {
     pub(crate) fn new(player_id: IdType, attack_skill: &AttackSkill) -> FirstSkillCombatSimulation {
         FirstSkillCombatSimulation {
             player_id,
