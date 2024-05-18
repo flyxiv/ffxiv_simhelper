@@ -8,9 +8,9 @@ use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::rc::Rc;
 
-mod auto_attack_ticker;
+pub(crate) mod auto_attack_ticker;
 pub(crate) mod global_ticker;
-mod independent_ticker;
+pub(crate) mod independent_ticker;
 
 pub(crate) static GLOBAL_TICK_INTERVAL_MILLISECOND: TimeType = 3000;
 pub(crate) type PercentType = i32;
@@ -27,7 +27,7 @@ pub(crate) type PercentType = i32;
 ///    real time GCD delay from the player every time the auto attack is activated.
 /// 3) Independent ticker: Tickers that run independently of any other events. Stack resource
 ///    ticks are usually this kind ex) bard's song ticks.
-pub(crate) trait EventTicker: IdEntity {
+pub trait EventTicker: IdEntity {
     fn run_ticker(
         &mut self,
         current_time_millisecond: TimeType,

@@ -5,7 +5,7 @@ use crate::live_objects::player::StatusKey;
 use crate::rotation::job_priorities::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::job_abilities::ninja_abilities::{
-    bunshin_clone_id, bunshin_stack_id, bunshin_trigger_gcd_ids,
+    bunshin_clone_id, bunshin_stack_id, bunshin_trigger_gcd_ids, make_ninja_skill_list,
 };
 use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;
@@ -86,9 +86,9 @@ impl CombatResource for NinjaCombatResources {
 }
 
 impl NinjaCombatResources {
-    pub(crate) fn new() -> Self {
+    pub(crate) fn new(player_id: IdType) -> Self {
         Self {
-            skills: Default::default(),
+            skills: make_ninja_skill_list(player_id),
             ninki: RefCell::new(0),
             current_combo: None,
         }

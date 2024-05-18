@@ -1,9 +1,10 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
+use crate::event::FfxivEventQueue;
 use crate::live_objects::turn_type::FfxivTurnType;
 use crate::{IdType, TimeType, COMBAT_START_TIME};
-use sorted_vec::SortedVec;
 use std::cell::RefCell;
+use std::cmp::Reverse;
 use std::rc::Rc;
 
 /// Stores information needed to calculate the next turn of a player.
@@ -18,7 +19,7 @@ pub struct PlayerTurnCalculator {
 
     latest_turn_type: FfxivTurnType,
     last_gcd_skill_time_info: SkillTimeInfo,
-    ffxiv_event_queue: Rc<RefCell<SortedVec<FfxivEvent>>>,
+    ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
 }
 
 #[derive(Clone)]
@@ -32,7 +33,7 @@ pub(crate) struct SkillTimeInfo {
 impl PlayerTurnCalculator {
     pub(crate) fn produce_event_to_queue(&self) {
         let next_turn = self.get_next_turn();
-        self.ffxiv_event_queue.borrow_mut().push(next_turn);
+        self.ffxiv_event_queue.borrow_mut().push(Reverse(next_turn));
     }
 
     pub(crate) fn update_internal_status(&mut self, event: &FfxivPlayerInternalEvent) {
@@ -88,7 +89,11 @@ impl PlayerTurnCalculator {
         }
     }
 
-    pub(crate) fn new(player_id: IdType, start_time_millisecond: TimeType) -> Self {
+    pub(crate) fn new(
+        player_id: IdType,
+        start_time_millisecond: TimeType,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> Self {
         PlayerTurnCalculator {
             player_id,
             total_delay_millisecond: 0,
@@ -101,7 +106,7 @@ impl PlayerTurnCalculator {
                 gcd_cooldown_millisecond: 0,
                 delay_millisecond: 0,
             },
-            ffxiv_event_queue: Rc::new(RefCell::new(SortedVec::new())),
+            ffxiv_event_queue,
         }
     }
 }

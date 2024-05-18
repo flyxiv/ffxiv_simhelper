@@ -17,9 +17,19 @@ version = "0.1.0"
 path = "../lib/ffxiv-simbot-engine"
 
 [dependencies.ffxiv-simbot-dps-simulator]
-version = "0.1.0"
+#version = "0.1.0"
 path = "../lib/ffxiv-simbot-dps-simulator"
 
 [dependencies.ffxiv-simbot-combat-components]
 version = "0.1.0"
 path = "../lib/ffxiv-simbot-combat-components"
+
+[dependencies.ffxiv-simbot-server]
+version = "0.1.0"
+path = "../lib/ffxiv-simbot-server"
+
+[dependencies]
+axum = "0.7"
+tokio = "1.36.0"
+serde = { version = "1.0.196", features = ["derive"] }
+log = "0.4.20"

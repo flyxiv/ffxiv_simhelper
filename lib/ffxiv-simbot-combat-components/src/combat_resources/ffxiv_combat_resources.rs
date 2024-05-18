@@ -93,11 +93,11 @@ impl CombatResource for FfxivCombatResources {
 }
 
 impl FfxivCombatResources {
-    pub(crate) fn new(job: &Job) -> Self {
+    pub(crate) fn new(job: &Job, player_id: IdType) -> Self {
         match job.abbrev.as_str() {
-            "Sage" => Self::Sage(SageCombatResources::new()),
-            "NIN" => Self::Ninja(NinjaCombatResources::new()),
-            _ => Self::Sage(SageCombatResources::new()),
+            "Sage" => Self::Sage(SageCombatResources::new(player_id)),
+            "NIN" => Self::Ninja(NinjaCombatResources::new(player_id)),
+            _ => Self::Sage(SageCombatResources::new(player_id)),
         }
     }
 }

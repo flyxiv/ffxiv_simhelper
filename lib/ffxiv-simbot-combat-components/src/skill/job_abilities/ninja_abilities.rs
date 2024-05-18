@@ -1042,6 +1042,7 @@ pub(crate) fn make_ninja_skill_list(player_id: IdType) -> SkillTable<AttackSkill
         db.meisui.clone(),
         db.bhavacakra_meisui.clone(),
         db.bunshin_stack.clone(),
+        db.mudra.clone(),
     ];
 
     make_skill_table(player_id, ninja_skill_list)

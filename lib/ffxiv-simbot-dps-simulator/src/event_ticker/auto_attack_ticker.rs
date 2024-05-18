@@ -15,7 +15,7 @@ static DEFAULT_AUTO_ATTACK_COOLDOWN_MILLISECOND: TimeType = 2500;
 static AUTO_ATTACK_ID: IdType = 10000;
 
 /// Loads Auto Attack Event for Melee Jobs
-pub(crate) struct AutoAttackTicker {
+pub struct AutoAttackTicker {
     id: IdType,
     player_id: IdType,
     event_queue: Rc<RefCell<FfxivEventQueue>>,

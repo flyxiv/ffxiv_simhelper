@@ -3,6 +3,7 @@ use crate::combat_resources::CombatResource;
 use crate::damage_calculator::damage_rdps_profile::{FfxivRaidDamageTable, RaidDamageTable};
 use crate::damage_calculator::DamageRdpsProfile;
 use crate::event::ffxiv_event::FfxivEvent;
+use crate::event::ffxiv_event::FfxivEvent::PlayerTurn;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
 use crate::event::turn_info::TurnInfo;
 use crate::event::FfxivEventQueue;
@@ -25,6 +26,7 @@ use crate::{DamageType, IdType, StatusTable, TimeType};
 use ffxiv_simbot_db::job::Job;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
+use log::info;
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::collections::HashMap;
@@ -51,6 +53,7 @@ pub struct FfxivPlayer {
     /// Saves how much % of the total damage each damage skill contributed to the total damage.
     pub skill_damage_profile_table: FfxivRaidDamageTable,
     pub skill_raw_damage_table: HashMap<IdType, DamageType>,
+    pub start_turn: FfxivEvent,
 }
 
 impl Clone for FfxivPlayer {
@@ -68,6 +71,7 @@ impl Clone for FfxivPlayer {
             mana_available: self.mana_available,
             skill_damage_profile_table: Default::default(),
             skill_raw_damage_table: Default::default(),
+            start_turn: self.start_turn.clone(),
         }
     }
 }
@@ -152,6 +156,7 @@ impl FfxivPlayer {
         debuffs: StatusTable<DebuffStatus>,
         combat_time_millisecond: TimeType,
     ) {
+        info!("Using skill: {}", skill_id);
         let (ffxiv_events, internal_events) = self
             .combat_resources
             .borrow()
@@ -365,31 +370,26 @@ impl FfxivPlayer {
         priority_table: FfxivPriorityTable,
         buff_list: HashMap<StatusKey, BuffStatus>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
-        start_time_millisecond: TimeType,
+        start_turn: FfxivEvent,
     ) -> FfxivPlayer {
-        // Add player's first turn to ffxiv event queue
-        event_queue
-            .borrow_mut()
-            .push(Reverse(FfxivEvent::PlayerTurn(
-                id,
-                FfxivTurnType::Gcd,
-                start_time_millisecond,
-                start_time_millisecond,
-            )));
-
         FfxivPlayer {
             id,
-            combat_resources: RefCell::new(FfxivCombatResources::new(&job)),
+            combat_resources: RefCell::new(FfxivCombatResources::new(&job, id)),
             job,
             power,
             priority_table,
             buff_list: Rc::new(RefCell::new(buff_list)),
             internal_event_queue: RefCell::new(vec![]),
+            turn_calculator: RefCell::new(PlayerTurnCalculator::new(
+                id,
+                start_turn.get_event_time(),
+                event_queue.clone(),
+            )),
             event_queue,
-            turn_calculator: RefCell::new(PlayerTurnCalculator::new(id, start_time_millisecond)),
             mana_available: None,
             skill_damage_profile_table: Default::default(),
             skill_raw_damage_table: Default::default(),
+            start_turn,
         }
     }
     pub fn update_skill_damage_table(
@@ -401,6 +401,14 @@ impl FfxivPlayer {
             .update_table(&damage_profile.status_rdps_contribution);
         self.skill_raw_damage_table
             .insert(skill_id, damage_profile.raw_damage);
+    }
+
+    pub fn is_melee(&self) -> bool {
+        match self.job.abbrev.as_str() {
+            "NIN" | "MNK" | "DRG" | "SAM" | "GNB" | "DRK" | "PLD" | "WAR" | "BRD" | "MCH"
+            | "DNC" => true,
+            _ => false,
+        }
     }
 }
 

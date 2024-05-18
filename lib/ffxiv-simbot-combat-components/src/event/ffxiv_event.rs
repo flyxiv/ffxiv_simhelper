@@ -32,7 +32,7 @@ pub enum FfxivEvent {
     /// ticker ID
     Tick(IdType, TimeType),
 
-    /// owner_player_id, target_id, duration, max refresh duration
+    /// owner_player_id, target_id, status, duration, max refresh duration
     ApplyBuff(IdType, IdType, BuffStatus, TimeType, TimeType, TimeType),
     /// owner_player_id, target_id, status, status time, refresh duration or not
     ApplyBuffStack(IdType, IdType, BuffStatus, TimeType, bool, TimeType),

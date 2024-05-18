@@ -1,7 +1,9 @@
+use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
+use crate::live_objects::turn_type::FfxivTurnType;
 use crate::rotation::job_priorities::ffxiv_priority_table::FfxivPriorityTable;
 use crate::rotation::job_priorities::ninja::NinjaPriorityTable;
 use crate::rotation::job_priorities::sage::SagePriorityTable;
@@ -36,7 +38,12 @@ impl FfxivPlayer {
                 get_huton_status(player_id),
             )]),
             ffxiv_event_queue,
-            NINJA_START_TIME_MILLISECOND,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Gcd,
+                NINJA_START_TIME_MILLISECOND,
+                NINJA_START_TIME_MILLISECOND,
+            ),
         )
     }
     pub fn new_sage(
@@ -54,7 +61,12 @@ impl FfxivPlayer {
             FfxivPriorityTable::Sage(SagePriorityTable::new()),
             Default::default(),
             ffxiv_event_queue,
-            SAGE_START_TIME_MILLISECOND,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Gcd,
+                SAGE_START_TIME_MILLISECOND,
+                SAGE_START_TIME_MILLISECOND,
+            ),
         )
     }
 }

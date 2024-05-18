@@ -3,7 +3,7 @@ use std::fmt::{Debug, Display, Formatter};
 type Result<T> = std::result::Result<T, SimulatorError>;
 
 pub mod combat_simulator;
-pub(crate) mod event_ticker;
+pub mod event_ticker;
 pub mod simulation_result;
 
 pub enum SimulatorError {

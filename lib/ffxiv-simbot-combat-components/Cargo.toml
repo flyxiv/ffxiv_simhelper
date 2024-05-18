@@ -12,6 +12,7 @@ project-root = "0.2.2"
 itertools = { version = "0.10.0", features = [] }
 lazy_static = "1.4.0"
 sorted-vec = "0.8"
+log = "0.4.20"
 
 [dependencies.ffxiv-simbot-db]
 version = "0.1.0"
