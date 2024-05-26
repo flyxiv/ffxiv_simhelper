@@ -17,7 +17,7 @@ use crate::rotation::job_priorities::ffxiv_priority_table::FfxivPriorityTable;
 use crate::rotation::job_priorities::priority_table::{PriorityTable, SkillUsageInfo};
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::skill_target::SkillTarget;
-use crate::skill::Skill;
+use crate::skill::{Skill, AUTO_ATTACK_ID};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
@@ -156,7 +156,6 @@ impl FfxivPlayer {
         debuffs: StatusTable<DebuffStatus>,
         combat_time_millisecond: TimeType,
     ) {
-        info!("Using skill: {}", skill_id);
         let (ffxiv_events, internal_events) = self
             .combat_resources
             .borrow()
@@ -300,6 +299,21 @@ impl FfxivPlayer {
             self.get_speed_buffed_time(gcd_cooldown_millisecond)
         } else {
             gcd_cooldown_millisecond
+        }
+    }
+
+    pub fn print_skill_debug(&self, skill_id: IdType) -> String {
+        if skill_id == AUTO_ATTACK_ID {
+            format!(
+                "skill id: {}, name: Auto Attack: player {}",
+                skill_id, self.id
+            )
+        } else {
+            format!(
+                "skill id: {}, name: {}",
+                skill_id,
+                self.combat_resources.borrow().get_skill(skill_id).name
+            )
         }
     }
 }

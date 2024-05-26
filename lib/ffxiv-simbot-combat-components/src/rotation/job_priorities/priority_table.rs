@@ -339,11 +339,6 @@ pub(crate) trait PriorityTable: Sized + Clone {
         player: &FfxivPlayer,
         combat_resource: &FfxivCombatResources,
     ) -> bool {
-        if skill_priority.prerequisite.is_none() {
-            return true;
-        }
-
-        let prerequisite = skill_priority.prerequisite.clone().unwrap();
         let skill = combat_resource.get_skill(skill_priority.skill_id);
 
         if combat_resource.get_stack(skill.get_id()) == 0
@@ -352,6 +347,11 @@ pub(crate) trait PriorityTable: Sized + Clone {
             return false;
         }
 
+        if skill_priority.prerequisite.is_none() {
+            return true;
+        }
+
+        let prerequisite = skill_priority.prerequisite.clone().unwrap();
         self.meets_prequisite(&prerequisite, &combat_resource, &combat_info, skill, player)
     }
 

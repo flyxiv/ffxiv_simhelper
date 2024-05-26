@@ -96,10 +96,15 @@ impl FfxivSimulationBoard {
                 snapshotted_debuffs,
                 time,
             ) => {
-                info!("time: {}, damage event: skill id {}", *time, *skill_id);
                 let buffs = snapshotted_buffs.clone();
                 let debuffs = snapshotted_debuffs.clone();
-                let player = self.get_player_data(*player_id);
+                let player = self.get_player_data(*player_id).clone();
+
+                info!(
+                    "time: {}, damage event: {}",
+                    *time,
+                    player.borrow().print_skill_debug(*skill_id)
+                );
 
                 self.handle_damage_event(
                     player.clone(),
@@ -164,9 +169,15 @@ impl FfxivSimulationBoard {
                 target.borrow_mut().handle_ffxiv_event(ffxiv_event);
             }
             FfxivEvent::UseSkill(player_id, skill_id, time) => {
-                info!("time: {}, use skill event: skill id {}", *time, *skill_id);
                 let player = self.get_player_data(*player_id);
                 let debuffs = self.target.borrow().get_status_table();
+
+                info!(
+                    "time: {}, use skill event: {}",
+                    *time,
+                    player.borrow().print_skill_debug(*skill_id)
+                );
+
                 player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
             }
             FfxivEvent::RemoveTargetBuff(_, player_id, status_id, time) => {

@@ -157,17 +157,7 @@ impl NinjaDatabase {
             stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let BUNSHIN_CLONE_STATUS: BuffStatus = BuffStatus {
-            id: 1009,
-            name: String::from("Bunshin Clone"),
-            owner_id: player_id,
-            duration_left_millisecond: 0,
-            status_info: StatusInfo::None,
-            duration_millisecond: 30000,
-            is_raidwide: false,
-            stacks: 5,
-            trigger_proc_event_on_gcd: vec![],
-        };
+
         let TCJ_1: BuffStatus = BuffStatus {
             id: 1009,
             name: String::from("Ten Chi Jin-1"),
@@ -188,6 +178,17 @@ impl NinjaDatabase {
             duration_millisecond: 0,
             is_raidwide: false,
             stacks: 1,
+            trigger_proc_event_on_gcd: vec![],
+        };
+        let BUNSHIN_CLONE_STATUS: BuffStatus = BuffStatus {
+            id: 1011,
+            name: String::from("Bunshin Clone"),
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: StatusInfo::None,
+            duration_millisecond: 30000,
+            is_raidwide: false,
+            stacks: 5,
             trigger_proc_event_on_gcd: vec![],
         };
         let HUTON: AttackSkill = AttackSkill {
@@ -380,7 +381,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
-            combo: None,
+            combo: Some(0),
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 2500,
@@ -663,14 +664,10 @@ impl NinjaDatabase {
             use_type: UseType::NoTarget,
             potency: 0,
             trait_multiplier: 1.0,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
-                0,
-                0,
-                BUNSHIN_STATUS.clone(),
-                45000,
-                45000,
-                0,
-            )],
+            additional_skill_events: vec![
+                FfxivEvent::ApplyBuff(0, 0, BUNSHIN_STATUS.clone(), 45000, 45000, 0),
+                FfxivEvent::ApplyBuff(0, 0, BUNSHIN_CLONE_STATUS.clone(), 30000, 30000, 0),
+            ],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -1012,7 +1009,7 @@ pub(crate) fn make_ninja_ogcd_table(player_id: IdType) -> Vec<SkillPriorityInfo>
         },
         SkillPriorityInfo {
             skill_id: db.trick_attack.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1002)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.kassatsu.get_id(),
@@ -1059,8 +1056,9 @@ pub(crate) fn make_ninja_opener(player_id: IdType) -> Vec<Opener> {
         Opener::GcdOpener(db.raiju.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.aeolian_edge.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.raiton.get_id()),
         Opener::OgcdOpener((Some(db.bhavacakra.get_id()), None)),
-        Opener::GcdOpener(db.raiju.get_id()),
     ];
 
     ninja_opener
@@ -1109,6 +1107,7 @@ pub(crate) fn bunshin_trigger_gcd_ids() -> Vec<IdType> {
         db.gust_slash.id,
         db.spinning_edge.id,
         db.armor_crush.id,
+        db.raiju.id,
     ]
 }
 
@@ -1116,13 +1115,13 @@ pub(crate) fn bunshin_trigger_gcd_ids() -> Vec<IdType> {
 pub(crate) fn bunshin_clone_id() -> IdType {
     let db = NinjaDatabase::new(0);
 
-    db.bunshin_status.id
+    db.bunshin_stack.id
 }
 
 #[inline]
 pub(crate) fn bunshin_stack_id() -> IdType {
     let db = NinjaDatabase::new(0);
-    db.bunshin_stack.id
+    db.bunshin_clone_status.id
 }
 
 pub(crate) fn get_huton_status(player_id: IdType) -> BuffStatus {

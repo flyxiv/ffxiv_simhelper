@@ -4,15 +4,12 @@ use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
 use ffxiv_simbot_combat_components::skill::attack_skill::AttackSkill;
-use ffxiv_simbot_combat_components::skill::GCD_DEFAULT_DELAY_MILLISECOND;
+use ffxiv_simbot_combat_components::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
 use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
 use ffxiv_simbot_combat_components::{IdType, StatusTable, TimeType};
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::rc::Rc;
-
-static DEFAULT_AUTO_ATTACK_COOLDOWN_MILLISECOND: TimeType = 2500;
-static AUTO_ATTACK_ID: IdType = 10000;
 
 /// Loads Auto Attack Event for Melee Jobs
 pub struct AutoAttackTicker {
@@ -78,7 +75,8 @@ impl AutoAttackTicker {
         player_id: IdType,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
-        let mut auto_attack = AttackSkill::new(100000, String::from("Auto Attack"), player_id, 100);
+        let mut auto_attack =
+            AttackSkill::new(AUTO_ATTACK_ID, String::from("Auto Attack"), player_id, 100);
         auto_attack.player_id = player_id;
 
         Self {

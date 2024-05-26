@@ -17,6 +17,9 @@ use std::collections::HashMap;
 pub static NON_GCD_DELAY_MILLISECOND: i32 = 700;
 pub static GCD_DEFAULT_DELAY_MILLISECOND: i32 = 2500;
 
+pub static DEFAULT_AUTO_ATTACK_COOLDOWN_MILLISECOND: TimeType = 2500;
+pub static AUTO_ATTACK_ID: IdType = 10000;
+
 /// The resource requirements for a skill.
 /// Skill might need mana, status(suiton status is needed for Trick Attack), or combo status.
 #[derive(Clone)]
