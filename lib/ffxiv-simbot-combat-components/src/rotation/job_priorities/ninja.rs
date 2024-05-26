@@ -42,12 +42,12 @@ impl PriorityTable for NinjaPriorityTable {
 }
 
 impl NinjaPriorityTable {
-    pub fn new() -> Self {
+    pub fn new(player_id: IdType) -> Self {
         Self {
             turn_count: RefCell::new(0),
-            opener: make_ninja_opener(),
-            gcd_priority_table: make_ninja_gcd_table(),
-            ogcd_priority_table: make_ninja_ogcd_table(),
+            opener: make_ninja_opener(player_id),
+            gcd_priority_table: make_ninja_gcd_table(player_id),
+            ogcd_priority_table: make_ninja_ogcd_table(player_id),
         }
     }
 }

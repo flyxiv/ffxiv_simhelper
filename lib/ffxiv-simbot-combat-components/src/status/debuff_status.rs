@@ -1,4 +1,5 @@
 use crate::id_entity::IdEntity;
+use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
@@ -18,8 +19,8 @@ pub struct DebuffStatus {
     pub(crate) is_raidwide: bool,
     pub(crate) stacks: ResourceType,
     pub(crate) name: String,
-    pub(crate) snapshotted_buffs: Option<StatusTable<BuffStatus>>,
-    pub(crate) snapshotted_debuffs: Option<StatusTable<DebuffStatus>>,
+    pub(crate) snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
+    pub(crate) snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
 }
 
 impl Status for DebuffStatus {

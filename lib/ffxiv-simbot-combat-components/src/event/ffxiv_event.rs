@@ -3,10 +3,8 @@ use crate::live_objects::player::StatusKey;
 use crate::live_objects::turn_type::FfxivTurnType;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{DamageType, IdType, ResourceType, TimeType};
-use std::cell::RefCell;
+use crate::{DamageType, IdType, ResourceType, StatusTable, TimeType};
 use std::collections::HashMap;
-use std::rc::Rc;
 
 /// All possible damage related events in a FFXIV combat.
 /// the last TimeType element is always the time of the event.
@@ -24,8 +22,8 @@ pub enum FfxivEvent {
         DamageType,
         bool,
         bool,
-        Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
-        Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        HashMap<StatusKey, BuffStatus>,
+        HashMap<StatusKey, DebuffStatus>,
         TimeType,
     ),
 
@@ -74,6 +72,28 @@ impl FfxivEvent {
         }
     }
 
+    pub(crate) fn set_target(&mut self, target_id: IdType) {
+        match self {
+            FfxivEvent::ApplyBuff(_, target, _, _, _, _)
+            | FfxivEvent::ApplyBuffStack(_, target, _, _, _, _) => *target = target_id,
+            _ => {}
+        }
+    }
+
+    pub(crate) fn snapshot_status(
+        &mut self,
+        snapshotted_buffs: StatusTable<BuffStatus>,
+        snapshotted_debuffs: StatusTable<DebuffStatus>,
+    ) {
+        match self {
+            FfxivEvent::ApplyDebuff(_, status, _, _, _) => {
+                status.snapshotted_buffs = snapshotted_buffs.borrow().clone();
+                status.snapshotted_debuffs = snapshotted_debuffs.borrow().clone();
+            }
+            _ => {}
+        }
+    }
+
     pub fn add_time_to_event(self, elapsed_time: TimeType) -> FfxivEvent {
         match self {
             FfxivEvent::Damage(
@@ -103,57 +123,57 @@ impl FfxivEvent {
                 player_id,
                 target_id,
                 buff,
+                duration,
+                max_refresh_duration,
                 time,
-                max_duration,
-                refresh_duration,
             ) => FfxivEvent::ApplyBuff(
                 player_id,
                 target_id,
                 buff.clone(),
+                duration,
+                max_refresh_duration,
                 elapsed_time + time,
-                max_duration,
-                refresh_duration,
             ),
             FfxivEvent::ApplyBuffStack(
                 player_id,
                 target_id,
                 buff,
-                time,
-                is_refresh,
                 refresh_duration,
+                is_refresh,
+                time,
             ) => FfxivEvent::ApplyBuffStack(
                 player_id,
                 target_id,
                 buff.clone(),
-                elapsed_time + time,
-                is_refresh,
                 refresh_duration,
+                is_refresh,
+                elapsed_time + time,
             ),
-            FfxivEvent::ApplyRaidBuff(player_id, buff, time, max_duration, refresh_duration) => {
+            FfxivEvent::ApplyRaidBuff(player_id, buff, duration, max_refresh_duration, time) => {
                 FfxivEvent::ApplyRaidBuff(
                     player_id,
                     buff.clone(),
+                    duration,
+                    max_refresh_duration,
                     elapsed_time + time,
-                    max_duration,
-                    refresh_duration,
                 )
             }
-            FfxivEvent::ApplyDebuffStack(player_id, debuff, time, is_refresh, refresh_duration) => {
+            FfxivEvent::ApplyDebuffStack(player_id, debuff, refresh_duration, is_refresh, time) => {
                 FfxivEvent::ApplyDebuffStack(
                     player_id,
                     debuff.clone(),
-                    elapsed_time + time,
-                    is_refresh,
                     refresh_duration,
+                    is_refresh,
+                    elapsed_time + time,
                 )
             }
-            FfxivEvent::ApplyDebuff(player_id, debuff, time, max_duration, refresh_duration) => {
+            FfxivEvent::ApplyDebuff(player_id, debuff, duration, max_refresh_duration, time) => {
                 FfxivEvent::ApplyDebuff(
                     player_id,
                     debuff.clone(),
+                    duration,
+                    max_refresh_duration,
                     elapsed_time + time,
-                    max_duration,
-                    refresh_duration,
                 )
             }
             FfxivEvent::RemoveTargetBuff(player_id, target_id, buff_id, time) => {
@@ -176,7 +196,7 @@ impl FfxivEvent {
         match self {
             FfxivEvent::PlayerTurn(_, turn_type, max_time, time) => TurnInfo {
                 turn_type,
-                upper_bound_millisecond: max_time,
+                next_gcd_millisecond: max_time,
                 lower_bound_millisecond: time,
             },
             _ => panic!("Cannot convert non-turn event to TurnInfo"),

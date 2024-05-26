@@ -2,12 +2,14 @@ use crate::damage_calculator::damage_rdps_profile::{FfxivRaidDamageTable, RaidDa
 use crate::damage_calculator::multiplier_calculator::MultiplierCalculator;
 use crate::damage_calculator::{DamageRdpsProfile, RaidDamageTableKey};
 use crate::id_entity::IdEntity;
+use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{DamageType, IdType, StatusTable};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
+use std::collections::HashMap;
 
 pub trait RdpsCalculator {
     /// Given the raw damage and all the list of buffs/debuffs on the player and the target,
@@ -17,8 +19,8 @@ pub trait RdpsCalculator {
     fn make_damage_profile(
         &self,
         skill_id: IdType,
-        snapshotted_buffs: StatusTable<BuffStatus>,
-        snapshotted_debuffs: StatusTable<DebuffStatus>,
+        snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
+        snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
         skill_damage: DamageType,
         power: &CharacterPower,
         player_id: IdType,
@@ -37,8 +39,8 @@ impl RdpsCalculator for FfxivRdpsCalculator {
     fn make_damage_profile(
         &self,
         skill_id: IdType,
-        snapshotted_buffs: StatusTable<BuffStatus>,
-        snapshotted_debuffs: StatusTable<DebuffStatus>,
+        snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
+        snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
         skill_damage: DamageType,
         power: &CharacterPower,
         player_id: IdType,
@@ -52,7 +54,7 @@ where {
             },
         };
 
-        for buff in snapshotted_buffs.borrow().values() {
+        for buff in snapshotted_buffs.values() {
             let buff_id = buff.get_id();
 
             let raid_damage_profile_key = RaidDamageTableKey {
@@ -71,7 +73,7 @@ where {
                 .insert(raid_damage_profile_key, contribution);
         }
 
-        for debuff in snapshotted_debuffs.borrow().values() {
+        for debuff in snapshotted_debuffs.values() {
             let buff_id = debuff.get_id();
 
             let raid_damage_profile_key = RaidDamageTableKey {

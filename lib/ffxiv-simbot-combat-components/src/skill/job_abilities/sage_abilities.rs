@@ -5,6 +5,7 @@ use crate::rotation::job_priorities::SkillTable;
 use crate::rotation::SkillPriorityInfo;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::job_abilities::make_skill_table;
+use crate::skill::use_type::UseType;
 use crate::skill::ResourceTable;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
@@ -18,10 +19,10 @@ struct SageDatabase {
 }
 
 impl SageDatabase {
-    fn new() -> Self {
+    fn new(player_id: IdType) -> Self {
         let DOT_STATUS: DebuffStatus = DebuffStatus {
-            id: 800,
-            owner_id: 0,
+            id: 700,
+            owner_id: player_id,
             potency: Some(70),
             duration_left_millisecond: 0,
             status_info: StatusInfo::None,
@@ -29,22 +30,22 @@ impl SageDatabase {
             is_raidwide: false,
             stacks: 1,
             name: String::from("Eukrasian Dosis III"),
-            snapshotted_buffs: None,
-            snapshotted_debuffs: None,
+            snapshotted_buffs: Default::default(),
+            snapshotted_debuffs: Default::default(),
         };
         let DOT: AttackSkill = AttackSkill {
             id: 700,
             name: String::from("Eukrasian Dosis III"),
-            player_id: 0,
-            potency: 750,
+            player_id,
+            potency: 0,
+            use_type: UseType::UseOnTarget,
             trait_multiplier: 1.3,
-            buff_events: vec![],
-            debuff_events: vec![FfxivEvent::ApplyDebuff(
+            additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 0,
                 DOT_STATUS.clone(),
                 30000,
                 30000,
-                0,
+                1000,
             )],
             combo: None,
             delay_millisecond: None,
@@ -52,7 +53,7 @@ impl SageDatabase {
             gcd_cooldown_millisecond: 1500,
             charging_time_millisecond: 1000,
             is_speed_buffed: true,
-            cooldown_millisecond: 30000,
+            cooldown_millisecond: 0,
             resource_required: vec![],
             resource_created: ResourceTable::new(),
             current_cooldown_millisecond: 0,
@@ -64,14 +65,14 @@ impl SageDatabase {
         let GCD: AttackSkill = AttackSkill {
             id: 701,
             name: String::from("Dosis III"),
-            player_id: 0,
+            player_id,
             potency: 330,
+            use_type: UseType::UseOnTarget,
             trait_multiplier: 1.3,
-            buff_events: vec![],
-            debuff_events: vec![],
+            additional_skill_events: vec![],
             combo: None,
             delay_millisecond: None,
-            casting_time_millisecond: 2500,
+            casting_time_millisecond: 1500,
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
@@ -87,11 +88,11 @@ impl SageDatabase {
         let PHLEGMA: AttackSkill = AttackSkill {
             id: 702,
             name: String::from("Phlegma III"),
-            player_id: 0,
+            player_id,
+            use_type: UseType::UseOnTarget,
             potency: 600,
             trait_multiplier: 1.3,
-            buff_events: vec![],
-            debuff_events: vec![],
+            additional_skill_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -117,8 +118,8 @@ impl SageDatabase {
     }
 }
 
-pub(crate) fn make_sage_gcd_priority_table() -> Vec<SkillPriorityInfo> {
-    let priority_table = SageDatabase::new();
+pub(crate) fn make_sage_gcd_priority_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
+    let priority_table = SageDatabase::new(player_id);
 
     let sage_priority_list: Vec<SkillPriorityInfo> = vec![
         SkillPriorityInfo {
@@ -130,7 +131,7 @@ pub(crate) fn make_sage_gcd_priority_table() -> Vec<SkillPriorityInfo> {
         },
         SkillPriorityInfo {
             skill_id: priority_table.dot.get_id(),
-            prerequisite: None,
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(700, 3000)),
         },
         SkillPriorityInfo {
             skill_id: priority_table.gcd.get_id(),
@@ -141,8 +142,8 @@ pub(crate) fn make_sage_gcd_priority_table() -> Vec<SkillPriorityInfo> {
     sage_priority_list
 }
 
-pub(crate) fn make_sage_opener() -> Vec<Opener> {
-    let table = SageDatabase::new();
+pub(crate) fn make_sage_opener(player_id: IdType) -> Vec<Opener> {
+    let table = SageDatabase::new(player_id);
 
     let sage_opener: Vec<Opener> = vec![
         Opener::GcdOpener(table.gcd.get_id()),
@@ -158,9 +159,8 @@ pub(crate) fn make_sage_opener() -> Vec<Opener> {
 }
 
 pub(crate) fn make_sage_skills(player_id: IdType) -> SkillTable<AttackSkill> {
-    let table = SageDatabase::new();
+    let table = SageDatabase::new(player_id);
 
-    let all_skills = vec![table.dot.clone(), table.gcd.clone(), table.phlegma.clone()];
-
-    make_skill_table(player_id, all_skills)
+    let skills = vec![table.dot.clone(), table.gcd.clone(), table.phlegma.clone()];
+    make_skill_table(skills)
 }

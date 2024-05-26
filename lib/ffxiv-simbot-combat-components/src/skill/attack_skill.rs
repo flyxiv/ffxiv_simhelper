@@ -7,6 +7,7 @@ use crate::live_objects::player::player_turn_calculator::SkillTimeInfo;
 use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::rotation::cooldown_timer::CooldownTimer;
+use crate::skill::use_type::UseType;
 use crate::skill::{
     ResourceRequirements, ResourceTable, Skill, SkillEvents, GCD_DEFAULT_DELAY_MILLISECOND,
     NON_GCD_DELAY_MILLISECOND,
@@ -28,8 +29,7 @@ pub struct AttackSkill {
     pub(crate) potency: DamageType,
     pub(crate) trait_multiplier: MultiplierType,
 
-    pub buff_events: Vec<FfxivEvent>,
-    pub debuff_events: Vec<FfxivEvent>,
+    pub additional_skill_events: Vec<FfxivEvent>,
     pub combo: Option<IdType>,
 
     pub delay_millisecond: Option<TimeType>,
@@ -48,6 +48,7 @@ pub struct AttackSkill {
     pub(crate) current_cooldown_millisecond: TimeType,
     pub(crate) stacks: StackType,
     pub(crate) stack_skill_id: Option<IdType>,
+    pub(crate) use_type: UseType,
 }
 
 impl IdEntity for AttackSkill {
@@ -88,6 +89,12 @@ impl Skill for AttackSkill {
             current_combat_time_milliseconds,
             player,
         );
+        ffxiv_events.extend(self.generate_additional_skill_events(
+            player,
+            buffs.clone(),
+            debuffs.clone(),
+            current_combat_time_milliseconds,
+        ));
 
         if let Some(damage_event) = damage_event {
             ffxiv_events.push(damage_event);
@@ -100,6 +107,12 @@ impl Skill for AttackSkill {
             current_combat_time_milliseconds,
             player,
         );
+
+        if self.is_gcd() {
+            for buffs in buffs.borrow().values() {
+                ffxiv_events.extend(buffs.generate_proc_event(current_combat_time_milliseconds));
+            }
+        }
 
         for skill_events in skill_events_vec {
             ffxiv_events.extend(skill_events.0);
@@ -175,10 +188,45 @@ impl AttackSkill {
             self.get_potency(),
             self.is_guaranteed_crit,
             self.is_guaranteed_direct_hit,
-            buffs.clone(),
-            debuffs.clone(),
+            buffs.borrow().clone(),
+            debuffs.borrow().clone(),
             current_combat_milliseconds + inflict_damage_time,
         ))
+    }
+
+    pub(crate) fn generate_additional_skill_events(
+        &self,
+        player: &FfxivPlayer,
+        buffs: StatusTable<BuffStatus>,
+        debuffs: StatusTable<DebuffStatus>,
+        combat_time_millisecond: TimeType,
+    ) -> Vec<FfxivEvent> {
+        let mut additional_skill_events = vec![];
+        let resource_table = player.combat_resources.borrow();
+
+        for additional_skill_event in self.additional_skill_events.clone() {
+            let mut event = match self.use_type {
+                UseType::UseOnPartyMember => {
+                    let mut event =
+                        additional_skill_event.add_time_to_event(combat_time_millisecond);
+                    let buff_target = resource_table.get_next_buff_target(self.get_id());
+                    event.set_target(buff_target);
+                    event
+                }
+                UseType::NoTarget => {
+                    let target_player_id = self.player_id;
+                    let mut event =
+                        additional_skill_event.add_time_to_event(combat_time_millisecond);
+                    event.set_target(target_player_id);
+                    event
+                }
+                _ => additional_skill_event.add_time_to_event(combat_time_millisecond),
+            };
+            event.snapshot_status(buffs.clone(), debuffs.clone());
+            additional_skill_events.push(event);
+        }
+
+        additional_skill_events
     }
 
     pub(crate) fn get_time_related_informations(&self, player: &FfxivPlayer) -> SkillTimeInfo {
@@ -274,14 +322,13 @@ impl AttackSkill {
             player_id,
             potency,
             trait_multiplier: 1.0,
-            buff_events: vec![],
-            debuff_events: vec![],
+            additional_skill_events: vec![],
             combo: None,
             delay_millisecond: Some(0),
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: GCD_DEFAULT_DELAY_MILLISECOND,
             charging_time_millisecond: 0,
-            is_speed_buffed: false,
+            is_speed_buffed: true,
             resource_required: vec![],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
@@ -290,6 +337,7 @@ impl AttackSkill {
             current_cooldown_millisecond: 0,
             stacks: 0,
             stack_skill_id: None,
+            use_type: UseType::UseOnTarget,
         }
     }
 }

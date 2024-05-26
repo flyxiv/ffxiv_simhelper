@@ -17,7 +17,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 /// Saves all the combat related resources for the player's job
-/// resources includle stack, combo, cooldown of each skill
+/// resources include stack, combo, cooldown of each skill
 pub(crate) trait CombatResource: Clone + Sized {
     fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill>;
     fn get_skills(&self) -> &SkillTable<AttackSkill>;
@@ -108,6 +108,8 @@ pub(crate) trait CombatResource: Clone + Sized {
         current_time_millisecond: TimeType,
         player: &FfxivPlayer,
     ) -> Vec<SkillEvents>;
+
+    fn get_next_buff_target(&self, skill_id: IdType) -> IdType;
 
     fn update_cooldown(&mut self, elapsed_time: TimeType) {
         let skill_table = self.get_skills_mut();

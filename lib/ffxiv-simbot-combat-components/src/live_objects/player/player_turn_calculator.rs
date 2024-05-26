@@ -4,7 +4,7 @@ use crate::event::FfxivEventQueue;
 use crate::live_objects::turn_type::FfxivTurnType;
 use crate::{IdType, TimeType, COMBAT_START_TIME};
 use std::cell::RefCell;
-use std::cmp::Reverse;
+use std::cmp::{max, Reverse};
 use std::rc::Rc;
 
 /// Stores information needed to calculate the next turn of a player.
@@ -15,7 +15,6 @@ pub struct PlayerTurnCalculator {
     pub player_id: IdType,
     pub total_delay_millisecond: TimeType,
     pub last_gcd_time_millisecond: TimeType,
-    pub combat_time_millisecond: TimeType,
 
     latest_turn_type: FfxivTurnType,
     last_gcd_skill_time_info: SkillTimeInfo,
@@ -68,10 +67,15 @@ impl PlayerTurnCalculator {
 
         match self.latest_turn_type {
             FfxivTurnType::Gcd => {
-                let next_delay = self.last_gcd_skill_time_info.delay_millisecond
-                    + self.last_gcd_skill_time_info.charge_time_millisecond;
-                let first_ogcd_start_time = self.last_gcd_time_millisecond + next_delay;
+                let delay = max(
+                    self.last_gcd_skill_time_info.delay_millisecond,
+                    self.last_gcd_skill_time_info.cast_time_millisecond,
+                );
+                let first_ogcd_start_time = self.last_gcd_time_millisecond
+                    + self.last_gcd_skill_time_info.charge_time_millisecond
+                    + delay;
 
+                // oGCD turn: 시작/끝 시간 안에 가장 잘 맞는 두 oGCD쌍을 한번에 찾아서 등록(둘 중 highest priority로 랭킹).
                 FfxivEvent::PlayerTurn(
                     self.player_id,
                     FfxivTurnType::Ogcd,
@@ -79,7 +83,6 @@ impl PlayerTurnCalculator {
                     first_ogcd_start_time,
                 )
             }
-            // oGCD turn: 시작/끝 시간 안에 가장 잘 맞는 두 oGCD쌍을 한번에 찾아서 등록(둘 중 highest priority로 랭킹).
             FfxivTurnType::Ogcd => FfxivEvent::PlayerTurn(
                 self.player_id,
                 FfxivTurnType::Gcd,
@@ -89,16 +92,11 @@ impl PlayerTurnCalculator {
         }
     }
 
-    pub(crate) fn new(
-        player_id: IdType,
-        start_time_millisecond: TimeType,
-        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
-    ) -> Self {
+    pub(crate) fn new(player_id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
         PlayerTurnCalculator {
             player_id,
             total_delay_millisecond: 0,
             last_gcd_time_millisecond: COMBAT_START_TIME,
-            combat_time_millisecond: start_time_millisecond,
             latest_turn_type: FfxivTurnType::Gcd,
             last_gcd_skill_time_info: SkillTimeInfo {
                 charge_time_millisecond: 0,

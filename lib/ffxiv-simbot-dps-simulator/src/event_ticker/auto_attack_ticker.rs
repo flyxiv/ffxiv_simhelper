@@ -43,8 +43,8 @@ impl EventTicker for AutoAttackTicker {
                         self.auto_attack.get_potency(),
                         false,
                         false,
-                        player.borrow().buff_list.clone(),
-                        debuff,
+                        player.borrow().buff_list.borrow().clone(),
+                        debuff.borrow().clone(),
                         current_time_millisecond,
                     )));
             }
@@ -62,7 +62,7 @@ impl EventTicker for AutoAttackTicker {
     }
 
     fn get_player_id(&self) -> Option<IdType> {
-        Some(self.id)
+        Some(self.player_id)
     }
 }
 

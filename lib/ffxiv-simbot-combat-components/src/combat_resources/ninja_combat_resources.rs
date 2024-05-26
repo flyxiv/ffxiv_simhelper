@@ -7,6 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::job_abilities::ninja_abilities::{
     bunshin_clone_id, bunshin_stack_id, bunshin_trigger_gcd_ids, make_ninja_skill_list,
 };
+use crate::skill::skill_target::SkillTarget;
 use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
@@ -82,6 +83,10 @@ impl CombatResource for NinjaCombatResources {
         }
 
         triggered_skills
+    }
+
+    fn get_next_buff_target(&self, _: IdType) -> IdType {
+        0
     }
 }
 

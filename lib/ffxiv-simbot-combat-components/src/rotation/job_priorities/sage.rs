@@ -40,11 +40,11 @@ impl PriorityTable for SagePriorityTable {
 }
 
 impl SagePriorityTable {
-    pub fn new() -> Self {
+    pub fn new(player_id: IdType) -> Self {
         Self {
             turn_count: RefCell::new(0),
-            opener: make_sage_opener(),
-            gcd_priority_list: make_sage_gcd_priority_table(),
+            opener: make_sage_opener(player_id),
+            gcd_priority_list: make_sage_gcd_priority_table(player_id),
             ogcd_priority_list: Vec::new(),
         }
     }

@@ -47,8 +47,8 @@ impl Target for FfxivTarget {
             FfxivEvent::DotTick(combat_time_millisecond) => {
                 for debuff in self.debuff_list.borrow().values() {
                     if let Some(potency) = debuff.potency {
-                        let snapshotted_buffs = debuff.snapshotted_buffs.clone().unwrap();
-                        let snapshotted_debuffs = debuff.snapshotted_debuffs.clone().unwrap();
+                        let snapshotted_buffs = debuff.snapshotted_buffs.clone();
+                        let snapshotted_debuffs = debuff.snapshotted_debuffs.clone();
 
                         self.event_queue
                             .borrow_mut()

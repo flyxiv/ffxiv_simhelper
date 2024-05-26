@@ -9,6 +9,7 @@ use crate::rotation::simulate_status::simulate_status;
 use crate::rotation::simulated_combat_resource::FirstSkillCombatSimulation;
 use crate::rotation::SkillPriorityInfo;
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::skill_target::SkillTarget;
 use crate::skill::{ResourceRequirements, NON_GCD_DELAY_MILLISECOND};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
@@ -40,6 +41,9 @@ pub(crate) enum SkillPrerequisite {
     HasStacks(IdType, StackType),
     MillisecondsBeforeBurst(TimeType),
     RelatedSkillCooldownLessThan(IdType, TimeType),
+    /// Greater resource id, Lesser resource id, Greater by how much amount
+    /// example: (1, 2, 50), then ok if resource1 >= resource2 + 50
+    ResourceGreaterOrEqualThanAnotherResourceBy(IdType, IdType, ResourceType),
 }
 
 #[derive(Clone)]
@@ -186,7 +190,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
         turn_info: &TurnInfo,
     ) -> Option<Vec<OgcdPlan>> {
         let ogcd_priority_table = self.get_ogcd_priority_table();
-        let next_gcd_millisecond = turn_info.upper_bound_millisecond;
+        let next_gcd_millisecond = turn_info.next_gcd_millisecond;
         let mut best_ogcd_pair = None;
         let mut best_one_ogcd = None;
 
@@ -286,7 +290,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
         start_time: TimeType,
         turn_info: &TurnInfo,
     ) -> Option<OgcdPlan> {
-        let next_gcd_millisecond = turn_info.upper_bound_millisecond;
+        let next_gcd_millisecond = turn_info.next_gcd_millisecond;
 
         for (priority_number, skill_priority) in ogcd_priority_table.iter().enumerate() {
             let skill = combat_resource.get_skill(skill_priority.skill_id);
@@ -343,7 +347,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
         let skill = combat_resource.get_skill(skill_priority.skill_id);
 
         if combat_resource.get_stack(skill.get_id()) == 0
-            || self.meets_requirements(combat_info, combat_resource, skill, player.get_id())
+            || !self.meets_requirements(combat_info, combat_resource, skill, player.get_id())
         {
             return false;
         }
@@ -451,6 +455,16 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 let related_skill = combat_resources.get_skills().get(related_skill_id).unwrap();
 
                 related_skill.get_current_cooldown_millisecond() <= *time_millisecond
+            }
+            SkillPrerequisite::ResourceGreaterOrEqualThanAnotherResourceBy(
+                greater_resource_id,
+                lesser_resource_id,
+                amount,
+            ) => {
+                let greater_resource = combat_resources.get_resource(*greater_resource_id);
+                let lesser_resource = combat_resources.get_resource(*lesser_resource_id);
+
+                greater_resource >= lesser_resource + *amount
             }
         }
     }

@@ -32,9 +32,9 @@ impl FfxivPlayer {
             player_id,
             ninja_job.clone(),
             power,
-            FfxivPriorityTable::Ninja(NinjaPriorityTable::new()),
+            FfxivPriorityTable::Ninja(NinjaPriorityTable::new(player_id)),
             HashMap::from([(
-                StatusKey::new(player_id, huton.get_id()),
+                StatusKey::new(huton.get_id(), player_id),
                 get_huton_status(player_id),
             )]),
             ffxiv_event_queue,
@@ -58,7 +58,7 @@ impl FfxivPlayer {
             player_id,
             sage_job.clone(),
             power,
-            FfxivPriorityTable::Sage(SagePriorityTable::new()),
+            FfxivPriorityTable::Sage(SagePriorityTable::new(player_id)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(

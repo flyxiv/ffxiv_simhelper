@@ -5,6 +5,7 @@ use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::job_priorities::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::skill_target::SkillTarget;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
@@ -88,6 +89,13 @@ impl CombatResource for FfxivCombatResources {
                 current_time_millisecond,
                 player,
             ),
+        }
+    }
+
+    fn get_next_buff_target(&self, skill_id: IdType) -> IdType {
+        match self {
+            Self::Sage(sage_resources) => sage_resources.get_next_buff_target(skill_id),
+            Self::Ninja(ninja_resources) => ninja_resources.get_next_buff_target(skill_id),
         }
     }
 }

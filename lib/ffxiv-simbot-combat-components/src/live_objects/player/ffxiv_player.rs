@@ -16,6 +16,7 @@ use crate::rotation::cooldown_timer::CooldownTimer;
 use crate::rotation::job_priorities::ffxiv_priority_table::FfxivPriorityTable;
 use crate::rotation::job_priorities::priority_table::{PriorityTable, SkillUsageInfo};
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::skill_target::SkillTarget;
 use crate::skill::Skill;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
@@ -84,16 +85,13 @@ impl Player for FfxivPlayer {
         self.internal_event_queue.borrow_mut().clear();
     }
 
-    fn handle_ffxiv_event(
-        &mut self,
-        event: FfxivEvent,
-        debuffs: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
-    ) {
+    fn handle_ffxiv_event(&mut self, mut event: FfxivEvent, debuffs: StatusTable<DebuffStatus>) {
+        let debuffs_table = debuffs.clone();
         match event {
             FfxivEvent::PlayerTurn(_, turn_type, max_time, event_time) => {
                 let turn_info = TurnInfo {
                     turn_type,
-                    upper_bound_millisecond: max_time,
+                    next_gcd_millisecond: max_time,
                     lower_bound_millisecond: event_time,
                 };
                 self.use_turn(turn_info, debuffs, event_time)
@@ -120,6 +118,8 @@ impl Player for FfxivPlayer {
                 .add_resource(stack_id, increase_amount),
             _ => {}
         }
+
+        self.consume_internal_events(debuffs_table);
     }
 }
 
@@ -176,8 +176,6 @@ impl FfxivPlayer {
             // extend doesn't insert and sort, so we need to push one by one.
             self.event_queue.borrow_mut().push(Reverse(ffxiv_event));
         }
-
-        self.consume_internal_events(debuffs);
     }
 
     fn insert_turn_update_internal_event(
@@ -264,6 +262,10 @@ impl FfxivPlayer {
                     debuff_list.remove(&key);
                 }
             }
+            FfxivPlayerInternalEvent::UseResource(resource_id, resource_amount) => self
+                .combat_resources
+                .borrow_mut()
+                .use_resource(*resource_id, *resource_amount),
             _ => {}
         }
     }
@@ -380,11 +382,7 @@ impl FfxivPlayer {
             priority_table,
             buff_list: Rc::new(RefCell::new(buff_list)),
             internal_event_queue: RefCell::new(vec![]),
-            turn_calculator: RefCell::new(PlayerTurnCalculator::new(
-                id,
-                start_turn.get_event_time(),
-                event_queue.clone(),
-            )),
+            turn_calculator: RefCell::new(PlayerTurnCalculator::new(id, event_queue.clone())),
             event_queue,
             mana_available: None,
             skill_damage_profile_table: Default::default(),

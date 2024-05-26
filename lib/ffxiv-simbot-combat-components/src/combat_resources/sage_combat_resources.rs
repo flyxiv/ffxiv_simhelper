@@ -48,6 +48,10 @@ impl CombatResource for SageCombatResources {
     ) -> Vec<SkillEvents> {
         vec![]
     }
+
+    fn get_next_buff_target(&self, _: IdType) -> IdType {
+        0
+    }
 }
 
 impl SageCombatResources {

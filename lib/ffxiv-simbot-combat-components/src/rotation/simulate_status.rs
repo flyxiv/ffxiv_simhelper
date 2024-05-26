@@ -51,7 +51,7 @@ pub(crate) fn simulate_status(
         }
     }
 
-    for event in simulation.skill_buffs {
+    for event in simulation.skill_events {
         match event {
             FfxivEvent::ApplyBuff(_, target_player_id, buff_status, duration, max_duration, _) => {
                 let key = StatusKey::new(buff_status.get_id(), simulation.player_id);
@@ -108,12 +108,6 @@ pub(crate) fn simulate_status(
                 buff_status.duration_left_millisecond = refreshed_duration;
                 combat_info.buff_list.borrow_mut().insert(key, buff_status);
             }
-            _ => {}
-        }
-    }
-
-    for event in simulation.skill_debuffs {
-        match event {
             FfxivEvent::ApplyDebuff(_, debuff_status, duration, max_duration, _) => {
                 let key = StatusKey::new(debuff_status.get_id(), simulation.player_id);
                 let mut debuff_status = debuff_status.clone();

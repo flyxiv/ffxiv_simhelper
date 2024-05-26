@@ -1,5 +1,7 @@
 pub mod attack_skill;
 pub(crate) mod job_abilities;
+pub(crate) mod skill_target;
+pub(crate) mod use_type;
 
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;

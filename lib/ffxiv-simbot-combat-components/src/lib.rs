@@ -34,6 +34,7 @@ pub(crate) type TurnCount = usize;
 pub(crate) type BuffTable<S> = HashMap<IdType, S>;
 pub type StatusTable<S> = Rc<RefCell<HashMap<StatusKey, S>>>;
 pub(crate) type ComboType = Option<IdType>;
+pub(crate) type PercentType = usize;
 
 pub static COMBAT_START_TIME: TimeType = -10000;
 pub enum CombatComponentsError {

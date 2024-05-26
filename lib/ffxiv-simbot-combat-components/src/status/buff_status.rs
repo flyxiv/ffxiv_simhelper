@@ -1,10 +1,12 @@
+use crate::event::ffxiv_event::FfxivEvent;
 use crate::id_entity::IdEntity;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::{IdType, ResourceType, TimeType};
+use crate::{IdType, PercentType, ResourceType, TimeType};
+use rand::{random, thread_rng, Rng};
 
-#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(PartialEq, Eq, Clone)]
 pub struct BuffStatus {
     pub(crate) id: IdType,
     pub(crate) owner_id: IdType,
@@ -14,6 +16,7 @@ pub struct BuffStatus {
     pub is_raidwide: bool,
     pub(crate) name: String,
     pub(crate) stacks: ResourceType,
+    pub(crate) trigger_proc_event_on_gcd: Vec<(FfxivEvent, PercentType)>,
 }
 
 impl Status for BuffStatus {
@@ -45,6 +48,25 @@ impl Status for BuffStatus {
 
     fn get_stack(&self) -> ResourceType {
         self.stacks
+    }
+}
+
+impl BuffStatus {
+    pub(crate) fn generate_proc_event(
+        &self,
+        current_time_millisecond: TimeType,
+    ) -> Vec<FfxivEvent> {
+        let proc_value = thread_rng().gen_range(0..100);
+        let mut proc_events = vec![];
+
+        for (proc_event, proc_percent) in self.trigger_proc_event_on_gcd.iter() {
+            if proc_value <= *proc_percent {
+                let mut proc_event = proc_event.clone();
+                proc_events.push(proc_event.add_time_to_event(current_time_millisecond));
+            }
+        }
+
+        proc_events
     }
 }
 
