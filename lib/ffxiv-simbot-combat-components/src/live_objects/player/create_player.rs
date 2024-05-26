@@ -1,13 +1,13 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::ninja::abilities::get_huton_status;
+use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
+use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::live_objects::turn_type::FfxivTurnType;
-use crate::rotation::job_priorities::ffxiv_priority_table::FfxivPriorityTable;
-use crate::rotation::job_priorities::ninja::NinjaPriorityTable;
-use crate::rotation::job_priorities::sage::SagePriorityTable;
-use crate::skill::job_abilities::ninja_abilities::get_huton_status;
+use crate::rotation::ffxiv_priority_table::FfxivPriorityTable;
 use crate::{IdType, TimeType};
 use ffxiv_simbot_db::ffxiv_context::FfxivContext;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;

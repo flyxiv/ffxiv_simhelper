@@ -1,13 +1,12 @@
 use crate::combat_resources::CombatResource;
 use crate::id_entity::IdEntity;
-use crate::live_objects::player::ffxiv_player::FfxivPlayer;
-use crate::live_objects::player::StatusKey;
-use crate::rotation::job_priorities::SkillTable;
-use crate::skill::attack_skill::AttackSkill;
-use crate::skill::job_abilities::ninja_abilities::{
+use crate::jobs_skill_data::ninja::abilities::{
     bunshin_clone_id, bunshin_stack_id, bunshin_trigger_gcd_ids, make_ninja_skill_list,
 };
-use crate::skill::skill_target::SkillTarget;
+use crate::live_objects::player::ffxiv_player::FfxivPlayer;
+use crate::live_objects::player::StatusKey;
+use crate::rotation::SkillTable;
+use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;

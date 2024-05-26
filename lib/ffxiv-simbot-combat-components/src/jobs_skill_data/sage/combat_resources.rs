@@ -1,9 +1,9 @@
 use crate::combat_resources::CombatResource;
+use crate::jobs_skill_data::sage::abilities::make_sage_skills;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::job_priorities::SkillTable;
+use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
-use crate::skill::job_abilities::sage_abilities::make_sage_skills;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;

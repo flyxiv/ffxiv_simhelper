@@ -1,12 +1,10 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::id_entity::IdEntity;
-use crate::rotation::job_priorities::priority_table::{Opener, SkillPrerequisite};
-use crate::rotation::job_priorities::SkillTable;
-use crate::rotation::SkillPriorityInfo;
+use crate::rotation::priority_table::{Opener, SkillPrerequisite};
+use crate::rotation::{SkillPriorityInfo, SkillTable};
 use crate::skill::attack_skill::AttackSkill;
-use crate::skill::job_abilities::make_skill_table;
 use crate::skill::use_type::UseType;
-use crate::skill::ResourceTable;
+use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;

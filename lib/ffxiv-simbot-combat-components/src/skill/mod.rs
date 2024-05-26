@@ -1,5 +1,4 @@
 pub mod attack_skill;
-pub(crate) mod job_abilities;
 pub(crate) mod skill_target;
 pub(crate) mod use_type;
 
@@ -7,6 +6,8 @@ use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
+use crate::rotation::SkillTable;
+use crate::skill::attack_skill::AttackSkill;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{IdType, ResourceType, StatusTable, TimeType};
@@ -29,6 +30,13 @@ pub(crate) enum ResourceRequirements {
     UseDebuff(IdType),
     CheckStatus(IdType),
     Resource(IdType, ResourceType),
+}
+
+pub(crate) fn make_skill_table(mut skill_list: Vec<AttackSkill>) -> SkillTable<AttackSkill> {
+    skill_list
+        .iter()
+        .map(|skill| (skill.id, skill.clone()))
+        .collect()
 }
 
 pub(crate) type SkillEvents = (Vec<FfxivEvent>, Vec<FfxivPlayerInternalEvent>);

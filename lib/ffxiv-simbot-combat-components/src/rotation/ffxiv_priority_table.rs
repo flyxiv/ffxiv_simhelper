@@ -1,6 +1,6 @@
-use crate::rotation::job_priorities::ninja::NinjaPriorityTable;
-use crate::rotation::job_priorities::priority_table::{Opener, PriorityTable};
-use crate::rotation::job_priorities::sage::SagePriorityTable;
+use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
+use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::IdType;
 

@@ -1,11 +1,10 @@
-use crate::combat_resources::ninja_combat_resources::NinjaCombatResources;
-use crate::combat_resources::sage_combat_resources::SageCombatResources;
 use crate::combat_resources::CombatResource;
+use crate::jobs_skill_data::ninja::combat_resources::NinjaCombatResources;
+use crate::jobs_skill_data::sage::combat_resources::SageCombatResources;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::job_priorities::SkillTable;
+use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
-use crate::skill::skill_target::SkillTarget;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;

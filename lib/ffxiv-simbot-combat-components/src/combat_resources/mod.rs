@@ -1,12 +1,10 @@
 pub(crate) mod ffxiv_combat_resources;
-mod ninja_combat_resources;
-mod sage_combat_resources;
 
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::cooldown_timer::CooldownTimer;
-use crate::rotation::job_priorities::SkillTable;
+use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;

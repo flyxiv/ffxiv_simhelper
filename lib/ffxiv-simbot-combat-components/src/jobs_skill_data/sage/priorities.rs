@@ -1,7 +1,7 @@
+use crate::jobs_skill_data::sage::abilities::{make_sage_gcd_priority_table, make_sage_opener};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
-use crate::rotation::job_priorities::priority_table::{Opener, PriorityTable};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::skill::job_abilities::sage_abilities::{make_sage_gcd_priority_table, make_sage_opener};
 use crate::{IdType, TurnCount};
 use std::cell::RefCell;
 

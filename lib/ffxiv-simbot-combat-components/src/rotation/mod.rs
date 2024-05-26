@@ -1,12 +1,15 @@
 use crate::id_entity::IdEntity;
-use crate::rotation::job_priorities::priority_table::SkillPrerequisite;
+use crate::rotation::priority_table::SkillPrerequisite;
 use crate::IdType;
+use std::collections::HashMap;
 
 pub mod cooldown_timer;
-pub(crate) mod job_priorities;
+pub(crate) mod ffxiv_priority_table;
+pub(crate) mod priority_table;
 mod simulate_status;
 mod simulated_combat_resource;
 
+pub(crate) type SkillTable<S> = HashMap<IdType, S>;
 #[derive(Clone)]
 pub(crate) struct SkillPriorityInfo {
     pub(crate) skill_id: IdType,

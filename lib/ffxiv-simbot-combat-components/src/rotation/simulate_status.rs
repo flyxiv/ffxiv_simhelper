@@ -3,7 +3,7 @@ use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::job_priorities::priority_table::CombatInfo;
+use crate::rotation::priority_table::CombatInfo;
 use crate::rotation::simulated_combat_resource::FirstSkillCombatSimulation;
 use crate::skill::ResourceRequirements;
 use crate::status::Status;

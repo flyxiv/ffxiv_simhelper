@@ -1,8 +1,8 @@
-use crate::rotation::job_priorities::priority_table::{Opener, PriorityTable};
-use crate::rotation::SkillPriorityInfo;
-use crate::skill::job_abilities::ninja_abilities::{
+use crate::jobs_skill_data::ninja::abilities::{
     make_ninja_gcd_table, make_ninja_ogcd_table, make_ninja_opener,
 };
+use crate::rotation::priority_table::{Opener, PriorityTable};
+use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
 use std::cell::RefCell;
 
