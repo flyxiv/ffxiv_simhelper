@@ -5,6 +5,7 @@ use crate::status::status_info::StatusInfo;
 use crate::status::Status;
 use crate::{IdType, PercentType, ResourceType, TimeType};
 use rand::{random, thread_rng, Rng};
+use std::cmp::min;
 
 #[derive(PartialEq, Eq, Clone)]
 pub struct BuffStatus {
@@ -16,6 +17,7 @@ pub struct BuffStatus {
     pub is_raidwide: bool,
     pub(crate) name: String,
     pub(crate) stacks: ResourceType,
+    pub(crate) max_stacks: ResourceType,
     pub(crate) trigger_proc_event_on_gcd: Vec<(FfxivEvent, PercentType)>,
 }
 
@@ -31,8 +33,8 @@ impl Status for BuffStatus {
         &self.name
     }
 
-    fn get_status_info(&self) -> StatusInfo {
-        self.status_info
+    fn get_status_info(&self) -> &StatusInfo {
+        &self.status_info
     }
 
     fn get_duration_millisecond(&self) -> i32 {
@@ -43,7 +45,7 @@ impl Status for BuffStatus {
         self.is_raidwide
     }
     fn add_stack(&mut self, stack: ResourceType) {
-        self.stacks += stack;
+        self.stacks = min(self.stacks + stack, self.max_stacks);
     }
 
     fn get_stack(&self) -> ResourceType {
@@ -61,7 +63,7 @@ impl BuffStatus {
 
         for (proc_event, proc_percent) in self.trigger_proc_event_on_gcd.iter() {
             if proc_value <= *proc_percent {
-                let mut proc_event = proc_event.clone();
+                let proc_event = proc_event.clone();
                 proc_events.push(proc_event.add_time_to_event(current_time_millisecond));
             }
         }

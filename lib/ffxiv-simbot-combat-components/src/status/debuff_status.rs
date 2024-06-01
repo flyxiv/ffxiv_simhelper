@@ -4,7 +4,8 @@ use crate::owner_tracker::OwnerTracker;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::{DamageType, IdType, ResourceType, StatusTable, TimeType};
+use crate::{DamageType, IdType, ResourceType, TimeType};
+use std::cmp::min;
 use std::collections::HashMap;
 
 pub(crate) type SnapshotTable = HashMap<IdType, Vec<DamageType>>;
@@ -18,6 +19,7 @@ pub struct DebuffStatus {
     pub(crate) duration_millisecond: TimeType,
     pub(crate) is_raidwide: bool,
     pub(crate) stacks: ResourceType,
+    pub(crate) max_stacks: ResourceType,
     pub(crate) name: String,
     pub(crate) snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
     pub(crate) snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
@@ -34,8 +36,8 @@ impl Status for DebuffStatus {
         &self.name
     }
 
-    fn get_status_info(&self) -> StatusInfo {
-        self.status_info
+    fn get_status_info(&self) -> &StatusInfo {
+        &self.status_info
     }
 
     fn get_duration_millisecond(&self) -> TimeType {
@@ -46,9 +48,8 @@ impl Status for DebuffStatus {
         self.is_raidwide
     }
     fn add_stack(&mut self, stack: ResourceType) {
-        self.stacks += stack;
+        self.stacks = min(self.stacks + stack, self.max_stacks);
     }
-
     fn get_stack(&self) -> ResourceType {
         self.stacks
     }

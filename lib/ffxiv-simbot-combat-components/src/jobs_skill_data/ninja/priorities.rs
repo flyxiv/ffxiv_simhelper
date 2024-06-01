@@ -1,7 +1,6 @@
-use crate::jobs_skill_data::ninja::abilities::{
-    make_ninja_gcd_table, make_ninja_ogcd_table, make_ninja_opener,
-};
-use crate::rotation::priority_table::{Opener, PriorityTable};
+use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::ninja::abilities::NinjaDatabase;
+use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
 use std::cell::RefCell;
@@ -46,8 +45,201 @@ impl NinjaPriorityTable {
         Self {
             turn_count: RefCell::new(0),
             opener: make_ninja_opener(player_id),
-            gcd_priority_table: make_ninja_gcd_table(player_id),
-            ogcd_priority_table: make_ninja_ogcd_table(player_id),
+            gcd_priority_table: make_ninja_gcd_priority_table(player_id),
+            ogcd_priority_table: make_ninja_ogcd_priority_table(player_id),
         }
     }
+}
+
+pub(crate) fn make_ninja_opener(player_id: IdType) -> Vec<Opener> {
+    let db = NinjaDatabase::new(player_id);
+
+    let ninja_opener: Vec<Opener> = vec![
+        Opener::GcdOpener(db.suiton.get_id()),
+        Opener::OgcdOpener((Some(db.kassatsu.get_id()), None)),
+        Opener::GcdOpener(db.spinning_edge.get_id()),
+        // TODO: Potion
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.gust_slash.get_id()),
+        Opener::OgcdOpener((Some(db.mug.get_id()), Some(db.bunshin.get_id()))),
+        Opener::GcdOpener(db.phantom_kamaitachi.get_id()),
+        Opener::OgcdOpener((Some(db.trick_attack.get_id()), Some(db.dream.get_id()))),
+        Opener::GcdOpener(db.hyosho.get_id()),
+        Opener::OgcdOpener((Some(db.tenchijin.get_id()), None)),
+        Opener::GcdOpener(db.fuma_tenchijin.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.raiton_tenchijin.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.suiton_tenchijin.get_id()),
+        Opener::OgcdOpener((Some(db.meisui.get_id()), None)),
+        Opener::GcdOpener(db.raiton.get_id()),
+        Opener::OgcdOpener((Some(db.bhavacakra_meisui.get_id()), None)),
+        Opener::GcdOpener(db.raiju.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.raiju.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.aeolian_edge.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.raiton.get_id()),
+        Opener::OgcdOpener((Some(db.bhavacakra.get_id()), None)),
+    ];
+
+    ninja_opener
+}
+
+pub(crate) fn make_ninja_gcd_priority_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
+    let db = NinjaDatabase::new(player_id);
+
+    let ninja_gcd_priority_table: Vec<SkillPriorityInfo> = vec![
+        SkillPriorityInfo {
+            skill_id: db.fuma_tenchijin.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.raiton_tenchijin.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.suiton_tenchijin.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.suiton.get_id(),
+            prerequisite: Some(SkillPrerequisite::And(
+                Box::new(SkillPrerequisite::RelatedSkillCooldownLessThan(1010, 17000)),
+                Box::new(SkillPrerequisite::Not(Box::new(
+                    SkillPrerequisite::HasBufforDebuff(1002),
+                ))),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.armor_crush.get_id(),
+            prerequisite: Some(SkillPrerequisite::And(
+                Box::new(SkillPrerequisite::BufforDebuffLessThan(1000, 8000)),
+                Box::new(SkillPrerequisite::Combo(Some(2))),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.phantom_kamaitachi.get_id(),
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1007, 3000)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.hyosho.get_id(),
+            prerequisite: Some(SkillPrerequisite::And(
+                Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1005)),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.raiton.get_id(),
+            prerequisite: Some(SkillPrerequisite::HasSkillStacks(1023, 2)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.aeolian_edge.get_id(),
+            prerequisite: Some(SkillPrerequisite::And(
+                Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
+                Box::new(SkillPrerequisite::And(
+                    Box::new(SkillPrerequisite::Combo(Some(2))),
+                    Box::new(SkillPrerequisite::And(
+                        Box::new(SkillPrerequisite::HasResource(1, 1)),
+                        Box::new(SkillPrerequisite::Not(Box::new(
+                            SkillPrerequisite::HasBufforDebuff(1001),
+                        ))),
+                    )),
+                )),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.phantom_kamaitachi.get_id(),
+            prerequisite: Some(SkillPrerequisite::And(
+                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1007)),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.raiju.get_id(),
+            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1001)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.raiton.get_id(),
+            prerequisite: Some(SkillPrerequisite::Or(
+                Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
+                Box::new(SkillPrerequisite::HasBufforDebuff(1003)),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.armor_crush.get_id(),
+            prerequisite: Some(SkillPrerequisite::And(
+                Box::new(SkillPrerequisite::Not(Box::new(
+                    SkillPrerequisite::MillisecondsBeforeBurst(0),
+                ))),
+                Box::new(SkillPrerequisite::And(
+                    Box::new(SkillPrerequisite::BufforDebuffLessThan(1000, 30000)),
+                    Box::new(SkillPrerequisite::Combo(Some(2))),
+                )),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.aeolian_edge.get_id(),
+            prerequisite: Some(SkillPrerequisite::Combo(Some(2))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.gust_slash.get_id(),
+            prerequisite: Some(SkillPrerequisite::Combo(Some(1))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.spinning_edge.get_id(),
+            prerequisite: None,
+        },
+    ];
+
+    ninja_gcd_priority_table
+}
+
+pub(crate) fn make_ninja_ogcd_priority_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
+    let db = NinjaDatabase::new(player_id);
+
+    // TODO: calculate future ninki
+    let ninja_ogcd_table: Vec<SkillPriorityInfo> = vec![
+        SkillPriorityInfo {
+            skill_id: db.bunshin.get_id(),
+            prerequisite: Some(SkillPrerequisite::HasResource(0, 50)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.bhavacakra_meisui.get_id(),
+            prerequisite: Some(SkillPrerequisite::Or(
+                Box::new(SkillPrerequisite::HasBufforDebuff(1008)),
+                Box::new(SkillPrerequisite::And(
+                    Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+                    Box::new(SkillPrerequisite::HasResource(0, 50)),
+                )),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.bhavacakra.get_id(),
+            prerequisite: Some(SkillPrerequisite::HasResource(0, 80)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.mug.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.trick_attack.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.kassatsu.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.dream.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.tenchijin.get_id(),
+            prerequisite: None,
+        },
+    ];
+
+    ninja_ogcd_table
 }

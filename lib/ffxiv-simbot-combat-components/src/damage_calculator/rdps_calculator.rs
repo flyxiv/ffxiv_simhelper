@@ -6,7 +6,7 @@ use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{DamageType, IdType, StatusTable};
+use crate::{DamageType, IdType};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
 use std::collections::HashMap;
@@ -43,7 +43,7 @@ impl RdpsCalculator for FfxivRdpsCalculator {
         snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
         skill_damage: DamageType,
         power: &CharacterPower,
-        player_id: IdType,
+        _: IdType,
     ) -> DamageRdpsProfile
 where {
         let mut damage_profile = DamageRdpsProfile {

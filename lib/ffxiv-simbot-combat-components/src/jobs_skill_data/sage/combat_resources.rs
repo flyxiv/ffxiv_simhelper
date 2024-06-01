@@ -45,8 +45,8 @@ impl CombatResource for SageCombatResources {
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         _: TimeType,
         _: &FfxivPlayer,
-    ) -> Vec<SkillEvents> {
-        vec![]
+    ) -> SkillEvents {
+        (vec![], vec![])
     }
 
     fn get_next_buff_target(&self, _: IdType) -> IdType {

@@ -1,6 +1,7 @@
-use crate::jobs_skill_data::sage::abilities::{make_sage_gcd_priority_table, make_sage_opener};
+use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::sage::abilities::SageDatabase;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
-use crate::rotation::priority_table::{Opener, PriorityTable};
+use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
 use std::cell::RefCell;
@@ -48,6 +49,46 @@ impl SagePriorityTable {
             ogcd_priority_list: Vec::new(),
         }
     }
+}
+
+pub(crate) fn make_sage_opener(player_id: IdType) -> Vec<Opener> {
+    let table = SageDatabase::new(player_id);
+
+    let sage_opener: Vec<Opener> = vec![
+        Opener::GcdOpener(table.gcd.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(table.dot.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(table.gcd.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(table.gcd.get_id()),
+    ];
+
+    sage_opener
+}
+
+pub(crate) fn make_sage_gcd_priority_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
+    let priority_table = SageDatabase::new(player_id);
+
+    let sage_priority_list: Vec<SkillPriorityInfo> = vec![
+        SkillPriorityInfo {
+            skill_id: priority_table.phlegma.get_id(),
+            prerequisite: Some(SkillPrerequisite::Or(
+                Box::new(SkillPrerequisite::HasSkillStacks(702, 2)),
+                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: priority_table.dot.get_id(),
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(700, 3000)),
+        },
+        SkillPriorityInfo {
+            skill_id: priority_table.gcd.get_id(),
+            prerequisite: None,
+        },
+    ];
+
+    sage_priority_list
 }
 
 impl FfxivPlayer {}

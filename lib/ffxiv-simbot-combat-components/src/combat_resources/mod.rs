@@ -24,6 +24,11 @@ pub(crate) trait CombatResource: Clone + Sized {
         skill
     }
 
+    fn reduce_cooldown(&mut self, skill_id: IdType, reduce_amount: TimeType) {
+        let skill = self.get_skills_mut().get_mut(&skill_id).unwrap();
+        skill.update_cooldown(reduce_amount);
+    }
+
     fn get_stack(&self, skill_id: IdType) -> StackType {
         let skill = self.get_skill(skill_id);
         let skill_table = self.get_skills();
@@ -105,7 +110,7 @@ pub(crate) trait CombatResource: Clone + Sized {
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
         player: &FfxivPlayer,
-    ) -> Vec<SkillEvents>;
+    ) -> SkillEvents;
 
     fn get_next_buff_target(&self, skill_id: IdType) -> IdType;
 

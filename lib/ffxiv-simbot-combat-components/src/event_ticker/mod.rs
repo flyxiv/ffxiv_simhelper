@@ -1,19 +1,19 @@
-use ffxiv_simbot_combat_components::event::ffxiv_event::FfxivEvent;
-use ffxiv_simbot_combat_components::event::FfxivEventQueue;
-use ffxiv_simbot_combat_components::id_entity::IdEntity;
-use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
-use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
-use ffxiv_simbot_combat_components::{IdType, StatusTable, TimeType};
+use crate::event::ffxiv_event::FfxivEvent;
+use crate::event::FfxivEventQueue;
+use crate::live_objects::player::ffxiv_player::FfxivPlayer;
+use crate::status::debuff_status::DebuffStatus;
+use crate::{IdType, StatusTable, TimeType};
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::rc::Rc;
 
-pub(crate) mod auto_attack_ticker;
-pub(crate) mod global_ticker;
-pub(crate) mod independent_ticker;
+pub mod auto_attack_ticker;
+pub mod ffxiv_event_ticker;
+pub mod global_ticker;
+pub mod independent_ticker;
 
-pub(crate) static GLOBAL_TICK_INTERVAL_MILLISECOND: TimeType = 3000;
-pub(crate) type PercentType = i32;
+pub static GLOBAL_TICK_INTERVAL_MILLISECOND: TimeType = 3000;
+pub type PercentType = i32;
 
 /// Tickers that generate events based on combat's time rather than
 /// the player's turn.
@@ -27,7 +27,7 @@ pub(crate) type PercentType = i32;
 ///    real time GCD delay from the player every time the auto attack is activated.
 /// 3) Independent ticker: Tickers that run independently of any other events. Stack resource
 ///    ticks are usually this kind ex) bard's song ticks.
-pub trait EventTicker: IdEntity {
+pub trait EventTicker: Sized + Clone {
     fn run_ticker(
         &mut self,
         current_time_millisecond: TimeType,
@@ -44,6 +44,16 @@ pub trait EventTicker: IdEntity {
         debuff: StatusTable<DebuffStatus>,
     );
     fn update_remaining_time(&mut self, elapsed_time: TimeType);
+
+    fn force_tick(&self, current_time_millisecond: TimeType) {
+        self.get_event_queue()
+            .borrow_mut()
+            .push(Reverse(FfxivEvent::Tick(
+                self.get_id(),
+                current_time_millisecond,
+            )));
+    }
+
     fn add_next_event_to_queue(&self, current_time_millisecond: TimeType) {
         self.get_event_queue()
             .borrow_mut()
@@ -56,4 +66,22 @@ pub trait EventTicker: IdEntity {
     fn get_event_queue(&self) -> Rc<RefCell<FfxivEventQueue>>;
     fn get_tick_interval(&self) -> TimeType;
     fn get_player_id(&self) -> Option<IdType>;
+    fn get_id(&self) -> TickerKey;
+    fn set_event_queue(&mut self, event_queue: Rc<RefCell<FfxivEventQueue>>);
+    fn has_initial_tick(&self) -> bool;
+}
+
+#[derive(Hash, Copy, Clone, Eq, PartialEq, Debug)]
+pub struct TickerKey {
+    pub ticker_id: IdType,
+    pub player_id: IdType,
+}
+
+impl TickerKey {
+    pub fn new(ticker_id: IdType, player_id: IdType) -> Self {
+        Self {
+            player_id,
+            ticker_id,
+        }
+    }
 }

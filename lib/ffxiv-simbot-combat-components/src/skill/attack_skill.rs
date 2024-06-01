@@ -14,8 +14,9 @@ use crate::skill::{
 };
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{DamageType, IdType, ResourceType, StackType, StatusTable, TimeType};
+use crate::{DamageType, IdType, PercentType, ResourceType, StackType, StatusTable, TimeType};
 use ffxiv_simbot_db::MultiplierType;
+use rand::{thread_rng, Rng};
 use std::cell::RefCell;
 use std::cmp::max;
 use std::collections::HashMap;
@@ -30,6 +31,7 @@ pub struct AttackSkill {
     pub(crate) trait_multiplier: MultiplierType,
 
     pub additional_skill_events: Vec<FfxivEvent>,
+    pub proc_events: Vec<(FfxivEvent, PercentType)>,
     pub combo: Option<IdType>,
 
     pub delay_millisecond: Option<TimeType>,
@@ -76,7 +78,7 @@ impl Skill for AttackSkill {
         player: &FfxivPlayer,
     ) -> SkillEvents {
         let mut internal_events = vec![];
-        let resource_events = self.generate_resource_events();
+        let resource_events = self.generate_resource_events(player);
         let cooldown_event = self.generate_cooldown_event();
 
         internal_events.push(cooldown_event);
@@ -100,7 +102,7 @@ impl Skill for AttackSkill {
             ffxiv_events.push(damage_event);
         }
 
-        let skill_events_vec = player.combat_resources.borrow().trigger_on_event(
+        let skill_events = player.combat_resources.borrow().trigger_on_event(
             self.id,
             buffs.clone(),
             debuffs.clone(),
@@ -114,10 +116,8 @@ impl Skill for AttackSkill {
             }
         }
 
-        for skill_events in skill_events_vec {
-            ffxiv_events.extend(skill_events.0);
-            internal_events.extend(skill_events.1);
-        }
+        ffxiv_events.extend(skill_events.0);
+        internal_events.extend(skill_events.1);
 
         (ffxiv_events, internal_events)
     }
@@ -129,11 +129,16 @@ impl AttackSkill {
     }
 
     /// generate events that update the resource of the player.
-    pub(crate) fn generate_resource_events(&self) -> Vec<FfxivPlayerInternalEvent> {
+    pub(crate) fn generate_resource_events(
+        &self,
+        player: &FfxivPlayer,
+    ) -> Vec<FfxivPlayerInternalEvent> {
         let mut events = vec![];
 
         for resource_requirement in self.resource_required.iter() {
-            if let Some(resource_event) = self.create_resource_use_event(resource_requirement) {
+            if let Some(resource_event) =
+                self.create_resource_use_event(resource_requirement, player)
+            {
                 events.push(resource_event)
             }
         }
@@ -155,6 +160,7 @@ impl AttackSkill {
     fn create_resource_use_event(
         &self,
         resource_requirement: &ResourceRequirements,
+        player: &FfxivPlayer,
     ) -> Option<FfxivPlayerInternalEvent> {
         match resource_requirement {
             ResourceRequirements::Resource(stack_id, required_resource) => Some(
@@ -165,6 +171,13 @@ impl AttackSkill {
             }
             ResourceRequirements::UseDebuff(status_id) => {
                 Some(FfxivPlayerInternalEvent::RemoveDebuff(*status_id))
+            }
+            ResourceRequirements::UseAllResource(resource_id) => {
+                let resource_amount = player.combat_resources.borrow().get_resource(*resource_id);
+                Some(FfxivPlayerInternalEvent::UseResource(
+                    *resource_id,
+                    resource_amount,
+                ))
             }
             _ => None,
         }
@@ -181,11 +194,22 @@ impl AttackSkill {
             return None;
         }
 
+        let mut stack_multiplier = 1;
+
+        for resource_required in &self.resource_required {
+            match resource_required {
+                ResourceRequirements::UseAllResource(resource_id) => {
+                    stack_multiplier *= player.combat_resources.borrow().get_resource(*resource_id);
+                }
+                _ => {}
+            }
+        }
+
         let inflict_damage_time = player.get_damage_inflict_time_millisecond(self);
         Some(FfxivEvent::Damage(
             self.player_id,
             self.id,
-            self.get_potency(),
+            self.get_potency() * stack_multiplier as DamageType,
             self.is_guaranteed_crit,
             self.is_guaranteed_direct_hit,
             buffs.borrow().clone(),
@@ -223,6 +247,17 @@ impl AttackSkill {
                 _ => additional_skill_event.add_time_to_event(combat_time_millisecond),
             };
             event.snapshot_status(buffs.clone(), debuffs.clone());
+
+            for resource_required in &self.resource_required {
+                match resource_required {
+                    ResourceRequirements::UseAllResource(resource_id) => {
+                        let resource_amount = resource_table.get_resource(*resource_id);
+                        event.set_stacks(resource_amount);
+                    }
+                    _ => {}
+                }
+            }
+
             additional_skill_events.push(event);
         }
 
@@ -315,6 +350,23 @@ impl AttackSkill {
             as StackType
     }
 
+    pub(crate) fn generate_proc_event(
+        &self,
+        current_time_millisecond: TimeType,
+    ) -> Vec<FfxivEvent> {
+        let proc_value = thread_rng().gen_range(0..100);
+        let mut proc_events = vec![];
+
+        for (proc_event, proc_percent) in self.proc_events.iter() {
+            if proc_value <= *proc_percent {
+                let proc_event = proc_event.clone();
+                proc_events.push(proc_event.add_time_to_event(current_time_millisecond));
+            }
+        }
+
+        proc_events
+    }
+
     pub fn new(id: IdType, name: String, player_id: IdType, potency: DamageType) -> Self {
         Self {
             id,
@@ -323,6 +375,7 @@ impl AttackSkill {
             potency,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: Some(0),
             casting_time_millisecond: 0,

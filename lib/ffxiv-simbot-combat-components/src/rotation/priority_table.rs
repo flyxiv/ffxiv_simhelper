@@ -9,7 +9,6 @@ use crate::rotation::simulate_status::simulate_status;
 use crate::rotation::simulated_combat_resource::FirstSkillCombatSimulation;
 use crate::rotation::SkillPriorityInfo;
 use crate::skill::attack_skill::AttackSkill;
-use crate::skill::skill_target::SkillTarget;
 use crate::skill::{ResourceRequirements, NON_GCD_DELAY_MILLISECOND};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
@@ -36,9 +35,8 @@ pub(crate) enum SkillPrerequisite {
     Combo(Option<IdType>),
     HasBufforDebuff(IdType),
     BufforDebuffLessThan(IdType, TimeType),
-    HasResource1(ResourceType),
-    HasResource2(ResourceType),
-    HasStacks(IdType, StackType),
+    HasResource(IdType, ResourceType),
+    HasSkillStacks(IdType, StackType),
     MillisecondsBeforeBurst(TimeType),
     RelatedSkillCooldownLessThan(IdType, TimeType),
     /// Greater resource id, Lesser resource id, Greater by how much amount
@@ -438,17 +436,14 @@ pub(crate) trait PriorityTable: Sized + Clone {
                     false
                 }
             }
-            SkillPrerequisite::HasResource1(resource) => {
-                combat_resources.get_resource(0) >= *resource
-            }
-            SkillPrerequisite::HasResource2(resource) => {
-                combat_resources.get_resource(1) >= *resource
+            SkillPrerequisite::HasResource(resource_id, resource) => {
+                combat_resources.get_resource(*resource_id) >= *resource
             }
 
             SkillPrerequisite::MillisecondsBeforeBurst(milliseconds) => {
                 *milliseconds >= combat_info.milliseconds_before_burst
             }
-            SkillPrerequisite::HasStacks(skill_id, stacks) => {
+            SkillPrerequisite::HasSkillStacks(skill_id, stacks) => {
                 combat_resources.get_stack(*skill_id) >= *stacks
             }
             SkillPrerequisite::RelatedSkillCooldownLessThan(related_skill_id, time_millisecond) => {

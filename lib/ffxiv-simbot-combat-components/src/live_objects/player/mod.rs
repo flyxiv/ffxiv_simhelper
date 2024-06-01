@@ -23,9 +23,9 @@ pub struct StatusKey {
 }
 
 impl StatusKey {
-    pub fn new(skill_id: IdType, player_id: IdType) -> StatusKey {
+    pub fn new(status_id: IdType, player_id: IdType) -> StatusKey {
         StatusKey {
-            skill_id,
+            skill_id: status_id,
             player_id,
         }
     }

@@ -7,6 +7,7 @@ use std::rc::Rc;
 pub(crate) mod combat_resources;
 pub mod damage_calculator;
 pub mod event;
+pub mod event_ticker;
 pub mod id_entity;
 pub(crate) mod jobs_skill_data;
 pub mod live_objects;

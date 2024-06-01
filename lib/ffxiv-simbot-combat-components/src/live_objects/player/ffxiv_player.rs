@@ -82,7 +82,7 @@ impl Player for FfxivPlayer {
         self.internal_event_queue.borrow_mut().clear();
     }
 
-    fn handle_ffxiv_event(&mut self, mut event: FfxivEvent, debuffs: StatusTable<DebuffStatus>) {
+    fn handle_ffxiv_event(&mut self, event: FfxivEvent, debuffs: StatusTable<DebuffStatus>) {
         let debuffs_table = debuffs.clone();
         match event {
             FfxivEvent::PlayerTurn(_, turn_type, max_time, event_time) => {
@@ -113,6 +113,10 @@ impl Player for FfxivPlayer {
                 .combat_resources
                 .borrow_mut()
                 .add_resource(stack_id, increase_amount),
+            FfxivEvent::ReduceSkillCooldown(_, skill_id, reduce_amount, _) => self
+                .combat_resources
+                .borrow_mut()
+                .reduce_cooldown(skill_id, reduce_amount),
             _ => {}
         }
 
@@ -262,7 +266,6 @@ impl FfxivPlayer {
                 .combat_resources
                 .borrow_mut()
                 .use_resource(*resource_id, *resource_amount),
-            _ => {}
         }
     }
 
@@ -365,10 +368,15 @@ impl FfxivPlayer {
     fn get_gcd_buff_multiplier(&self) -> MultiplierType {
         let mut gcd_buffs_multiplier = 1.0;
         for buff in self.buff_list.borrow().values() {
-            match buff.status_info {
+            match &buff.status_info {
                 StatusInfo::SpeedPercent(buff_increase_percent) => {
                     gcd_buffs_multiplier = gcd_buffs_multiplier
-                        * (1.0 + (buff_increase_percent as MultiplierType / 100.0));
+                        * (1.0 + (*buff_increase_percent as MultiplierType / 100.0));
+                }
+                StatusInfo::SpeedByStack(buff_increase_percents) => {
+                    let stack = (buff.stacks - 1) as usize;
+                    let buff_increase = buff_increase_percents[stack] as MultiplierType;
+                    gcd_buffs_multiplier = gcd_buffs_multiplier * (1.0 + (buff_increase / 100.0));
                 }
                 _ => {}
             }
@@ -387,7 +395,11 @@ impl FfxivPlayer {
     ) -> FfxivPlayer {
         FfxivPlayer {
             id,
-            combat_resources: RefCell::new(FfxivCombatResources::new(&job, id)),
+            combat_resources: RefCell::new(FfxivCombatResources::new(
+                &job,
+                id,
+                event_queue.clone(),
+            )),
             job,
             power,
             priority_table,

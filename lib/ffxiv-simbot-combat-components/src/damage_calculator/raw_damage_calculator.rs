@@ -1,5 +1,4 @@
 use crate::damage_calculator::multiplier_calculator::MultiplierCalculator;
-use crate::skill::Skill;
 use crate::{BuffIncreasePercentType, DamageType};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;

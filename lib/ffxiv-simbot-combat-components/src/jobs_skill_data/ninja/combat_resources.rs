@@ -12,8 +12,11 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{ComboType, IdType, ResourceType, TimeType};
 use std::cell::RefCell;
+use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
+
+const NINKI_MAX: ResourceType = 100;
 
 #[derive(Clone)]
 pub(crate) struct NinjaCombatResources {
@@ -33,7 +36,8 @@ impl CombatResource for NinjaCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, resource_type: ResourceType) {
         if resource_id == 0 {
-            *self.ninki.borrow_mut() += resource_type;
+            let ninki = *self.ninki.borrow();
+            self.ninki.replace(min(NINKI_MAX, ninki + resource_type));
         }
     }
 
@@ -64,24 +68,22 @@ impl CombatResource for NinjaCombatResources {
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
         player: &FfxivPlayer,
-    ) -> Vec<SkillEvents> {
-        let mut triggered_skills = vec![];
-
+    ) -> SkillEvents {
         if bunshin_trigger_gcd_ids().contains(&skill_id) {
             let key = StatusKey::new(bunshin_stack_id(), player.get_id());
 
             if buff_list.borrow().contains_key(&key) {
                 let bunshin_skill = self.skills.get(&bunshin_clone_id()).unwrap();
-                triggered_skills.push(bunshin_skill.generate_skill_events(
+                return bunshin_skill.generate_skill_events(
                     buff_list.clone(),
                     debuff_list.clone(),
                     current_time_millisecond,
                     player,
-                ));
+                );
             }
         }
 
-        triggered_skills
+        return (vec![], vec![]);
     }
 
     fn get_next_buff_target(&self, _: IdType) -> IdType {

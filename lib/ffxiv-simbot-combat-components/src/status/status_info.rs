@@ -1,11 +1,13 @@
 use crate::BuffIncreasePercentType;
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Debug)]
 pub enum StatusInfo {
     DamagePercent(BuffIncreasePercentType),
     CritHitRatePercent(BuffIncreasePercentType),
     DirectHitRatePercent(BuffIncreasePercentType),
     SpeedPercent(BuffIncreasePercentType),
+    /// increase % by stack
+    SpeedByStack(Vec<BuffIncreasePercentType>),
     None,
 }
 

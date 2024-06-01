@@ -1,4 +1,6 @@
 use crate::event::turn_info::TurnInfo;
+use crate::event_ticker::ffxiv_event_ticker::FfxivEventTicker;
+use crate::event_ticker::TickerKey;
 use crate::live_objects::player::StatusKey;
 use crate::live_objects::turn_type::FfxivTurnType;
 use crate::status::buff_status::BuffStatus;
@@ -27,8 +29,14 @@ pub enum FfxivEvent {
         TimeType,
     ),
 
-    /// ticker ID
-    Tick(IdType, TimeType),
+    /// ticker key
+    Tick(TickerKey, TimeType),
+    /// ticker
+    AddTicker(FfxivEventTicker, TimeType),
+    /// ticker key
+    RemoveTicker(TickerKey, TimeType),
+    /// ticker key
+    ForceTicker(TickerKey, TimeType),
 
     /// owner_player_id, target_id, status, duration, max refresh duration
     ApplyBuff(IdType, IdType, BuffStatus, TimeType, TimeType, TimeType),
@@ -44,12 +52,16 @@ pub enum FfxivEvent {
 
     /// owner_player_id, target_player_id, buff_id
     RemoveTargetBuff(IdType, IdType, IdType, TimeType),
+    /// owner_player_id, buff_id
+    RemoveRaidBuff(IdType, IdType, TimeType),
     /// owner_player_id, debuff_id
     RemoveDebuff(IdType, IdType, TimeType),
 
     /// Raises stack of another player, for dance partners and brotherhood
     /// player_id, stack id, increase amount
     IncreasePlayerResource(IdType, IdType, ResourceType, TimeType),
+    /// player_id, skill_id, reduce_amount
+    ReduceSkillCooldown(IdType, IdType, TimeType, TimeType),
     DotTick(TimeType),
 }
 
@@ -60,14 +72,19 @@ impl FfxivEvent {
             | FfxivEvent::UseSkill(_, _, time)
             | FfxivEvent::Damage(_, _, _, _, _, _, _, time)
             | FfxivEvent::Tick(_, time)
+            | FfxivEvent::AddTicker(_, time)
+            | FfxivEvent::RemoveTicker(_, time)
+            | FfxivEvent::ForceTicker(_, time)
             | FfxivEvent::ApplyBuff(_, _, _, _, _, time)
             | FfxivEvent::ApplyBuffStack(_, _, _, _, _, time)
             | FfxivEvent::ApplyRaidBuff(_, _, _, _, time)
             | FfxivEvent::ApplyDebuffStack(_, _, _, _, time)
             | FfxivEvent::ApplyDebuff(_, _, _, _, time)
             | FfxivEvent::RemoveTargetBuff(_, _, _, time)
+            | FfxivEvent::RemoveRaidBuff(_, _, time)
             | FfxivEvent::RemoveDebuff(_, _, time)
             | FfxivEvent::IncreasePlayerResource(_, _, _, time)
+            | FfxivEvent::ReduceSkillCooldown(_, _, _, time)
             | FfxivEvent::DotTick(time) => *time,
         }
     }
@@ -116,6 +133,15 @@ impl FfxivEvent {
                 elapsed_time + time,
             ),
             FfxivEvent::Tick(ticker_id, time) => FfxivEvent::Tick(ticker_id, elapsed_time + time),
+            FfxivEvent::AddTicker(ticker, time) => {
+                FfxivEvent::AddTicker(ticker, elapsed_time + time)
+            }
+            FfxivEvent::RemoveTicker(ticker_id, time) => {
+                FfxivEvent::RemoveTicker(ticker_id, elapsed_time + time)
+            }
+            FfxivEvent::ForceTicker(ticker_key, time) => {
+                FfxivEvent::ForceTicker(ticker_key, elapsed_time + time)
+            }
             FfxivEvent::UseSkill(player_id, skill_id, time) => {
                 FfxivEvent::UseSkill(player_id, skill_id, elapsed_time + time)
             }
@@ -179,11 +205,22 @@ impl FfxivEvent {
             FfxivEvent::RemoveTargetBuff(player_id, target_id, buff_id, time) => {
                 FfxivEvent::RemoveTargetBuff(player_id, target_id, buff_id, elapsed_time + time)
             }
+            FfxivEvent::RemoveRaidBuff(player_id, buff_id, time) => {
+                FfxivEvent::RemoveRaidBuff(player_id, buff_id, elapsed_time + time)
+            }
             FfxivEvent::RemoveDebuff(player_id, debuff_id, time) => {
                 FfxivEvent::RemoveDebuff(player_id, debuff_id, elapsed_time + time)
             }
             FfxivEvent::IncreasePlayerResource(player_id, stack_id, amount, time) => {
                 FfxivEvent::IncreasePlayerResource(player_id, stack_id, amount, elapsed_time + time)
+            }
+            FfxivEvent::ReduceSkillCooldown(player_id, skill_id, reduce_amount, time) => {
+                FfxivEvent::ReduceSkillCooldown(
+                    player_id,
+                    skill_id,
+                    reduce_amount,
+                    elapsed_time + time,
+                )
             }
             FfxivEvent::PlayerTurn(player_id, turn_time, max_time, time) => {
                 FfxivEvent::PlayerTurn(player_id, turn_time, max_time + time, elapsed_time + time)
@@ -200,6 +237,27 @@ impl FfxivEvent {
                 lower_bound_millisecond: time,
             },
             _ => panic!("Cannot convert non-turn event to TurnInfo"),
+        }
+    }
+
+    pub(crate) fn set_stacks(&mut self, stacks: ResourceType) {
+        match self {
+            FfxivEvent::ApplyBuff(_, _, buff, _, _, _) => {
+                buff.stacks = stacks;
+            }
+            FfxivEvent::ApplyBuffStack(_, _, buff, _, _, _) => {
+                buff.stacks = stacks;
+            }
+            FfxivEvent::ApplyRaidBuff(_, buff, _, _, _) => {
+                buff.stacks = stacks;
+            }
+            FfxivEvent::ApplyDebuff(_, debuff, _, _, _) => {
+                debuff.stacks = stacks;
+            }
+            FfxivEvent::ApplyDebuffStack(_, debuff, _, _, _) => {
+                debuff.stacks = stacks;
+            }
+            _ => {}
         }
     }
 }

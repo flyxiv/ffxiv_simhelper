@@ -1,17 +1,17 @@
-use crate::event_ticker::EventTicker;
-use ffxiv_simbot_combat_components::event::ffxiv_event::FfxivEvent;
-use ffxiv_simbot_combat_components::event::FfxivEventQueue;
-use ffxiv_simbot_combat_components::id_entity::IdEntity;
-use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
-use ffxiv_simbot_combat_components::skill::attack_skill::AttackSkill;
-use ffxiv_simbot_combat_components::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
-use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
-use ffxiv_simbot_combat_components::{IdType, StatusTable, TimeType};
+use crate::event::ffxiv_event::FfxivEvent;
+use crate::event::FfxivEventQueue;
+use crate::event_ticker::{EventTicker, TickerKey};
+use crate::live_objects::player::ffxiv_player::FfxivPlayer;
+use crate::skill::attack_skill::AttackSkill;
+use crate::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
+use crate::status::debuff_status::DebuffStatus;
+use crate::{IdType, StatusTable, TimeType};
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::rc::Rc;
 
 /// Loads Auto Attack Event for Melee Jobs
+#[derive(Clone)]
 pub struct AutoAttackTicker {
     id: IdType,
     player_id: IdType,
@@ -61,16 +61,22 @@ impl EventTicker for AutoAttackTicker {
     fn get_player_id(&self) -> Option<IdType> {
         Some(self.player_id)
     }
-}
 
-impl IdEntity for AutoAttackTicker {
-    fn get_id(&self) -> IdType {
-        self.id
+    fn get_id(&self) -> TickerKey {
+        TickerKey::new(self.id, self.player_id)
+    }
+
+    fn set_event_queue(&mut self, event_queue: Rc<RefCell<FfxivEventQueue>>) {
+        self.event_queue = event_queue
+    }
+
+    fn has_initial_tick(&self) -> bool {
+        false
     }
 }
 
 impl AutoAttackTicker {
-    pub(crate) fn new(
+    pub fn new(
         id: IdType,
         player_id: IdType,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,

@@ -1,7 +1,5 @@
 use crate::event::ffxiv_event::FfxivEvent;
-use crate::id_entity::IdEntity;
-use crate::rotation::priority_table::{Opener, SkillPrerequisite};
-use crate::rotation::{SkillPriorityInfo, SkillTable};
+use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
 use crate::skill::{make_skill_table, ResourceRequirements, ResourceTable};
@@ -10,46 +8,46 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
 
-struct NinjaDatabase {
-    huton: AttackSkill,
-    raiton: AttackSkill,
-    raiju: AttackSkill,
-    hyosho: AttackSkill,
-    suiton: AttackSkill,
-    spinning_edge: AttackSkill,
-    gust_slash: AttackSkill,
-    aeolian_edge: AttackSkill,
-    armor_crush: AttackSkill,
-    mug: AttackSkill,
-    trick_attack: AttackSkill,
-    kassatsu: AttackSkill,
-    bhavacakra: AttackSkill,
-    tenchijin: AttackSkill,
-    fuma_tenchijin: AttackSkill,
-    raiton_tenchijin: AttackSkill,
-    suiton_tenchijin: AttackSkill,
-    bunshin: AttackSkill,
-    dream: AttackSkill,
-    phantom_kamaitachi: AttackSkill,
-    meisui: AttackSkill,
-    bhavacakra_meisui: AttackSkill,
-    bunshin_stack: AttackSkill,
-    mudra: AttackSkill,
+pub(crate) struct NinjaDatabase {
+    pub(crate) huton: AttackSkill,
+    pub(crate) raiton: AttackSkill,
+    pub(crate) raiju: AttackSkill,
+    pub(crate) hyosho: AttackSkill,
+    pub(crate) suiton: AttackSkill,
+    pub(crate) spinning_edge: AttackSkill,
+    pub(crate) gust_slash: AttackSkill,
+    pub(crate) aeolian_edge: AttackSkill,
+    pub(crate) armor_crush: AttackSkill,
+    pub(crate) mug: AttackSkill,
+    pub(crate) trick_attack: AttackSkill,
+    pub(crate) kassatsu: AttackSkill,
+    pub(crate) bhavacakra: AttackSkill,
+    pub(crate) tenchijin: AttackSkill,
+    pub(crate) fuma_tenchijin: AttackSkill,
+    pub(crate) raiton_tenchijin: AttackSkill,
+    pub(crate) suiton_tenchijin: AttackSkill,
+    pub(crate) bunshin: AttackSkill,
+    pub(crate) dream: AttackSkill,
+    pub(crate) phantom_kamaitachi: AttackSkill,
+    pub(crate) meisui: AttackSkill,
+    pub(crate) bhavacakra_meisui: AttackSkill,
+    pub(crate) bunshin_stack: AttackSkill,
+    pub(crate) mudra: AttackSkill,
 
-    huton_status: BuffStatus,
-    raijuready: BuffStatus,
-    suiton_status: BuffStatus,
-    mug_status: DebuffStatus,
-    trick_attack_status: DebuffStatus,
-    kassatsu_status: BuffStatus,
-    tenchijin_status: BuffStatus,
-    bunshin_status: BuffStatus,
-    meisui_status: BuffStatus,
-    bunshin_clone_status: BuffStatus,
+    pub(crate) huton_status: BuffStatus,
+    pub(crate) raijuready: BuffStatus,
+    pub(crate) suiton_status: BuffStatus,
+    pub(crate) mug_status: DebuffStatus,
+    pub(crate) trick_attack_status: DebuffStatus,
+    pub(crate) kassatsu_status: BuffStatus,
+    pub(crate) tenchijin_status: BuffStatus,
+    pub(crate) bunshin_status: BuffStatus,
+    pub(crate) meisui_status: BuffStatus,
+    pub(crate) bunshin_clone_status: BuffStatus,
 }
 
 impl NinjaDatabase {
-    fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: IdType) -> Self {
         let HUTON_STATUS: BuffStatus = {
             BuffStatus {
                 id: 1000,
@@ -60,6 +58,7 @@ impl NinjaDatabase {
                 duration_millisecond: 60000,
                 is_raidwide: false,
                 stacks: 1,
+                max_stacks: 1,
                 trigger_proc_event_on_gcd: vec![],
             }
         };
@@ -72,6 +71,7 @@ impl NinjaDatabase {
             duration_millisecond: 30000,
             is_raidwide: false,
             stacks: 1,
+            max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
         let SUITON_STATUS: BuffStatus = BuffStatus {
@@ -83,6 +83,7 @@ impl NinjaDatabase {
             duration_millisecond: 20000,
             is_raidwide: false,
             stacks: 1,
+            max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
         let MUG_STATUS: DebuffStatus = DebuffStatus {
@@ -97,6 +98,7 @@ impl NinjaDatabase {
             stacks: 1,
             snapshotted_buffs: Default::default(),
             snapshotted_debuffs: Default::default(),
+            max_stacks: 1,
         };
         let TRICK_ATTACK_STATUS: DebuffStatus = DebuffStatus {
             id: 1004,
@@ -110,6 +112,7 @@ impl NinjaDatabase {
             stacks: 1,
             snapshotted_buffs: Default::default(),
             snapshotted_debuffs: Default::default(),
+            max_stacks: 1,
         };
         let KASSATSU_STATUS: BuffStatus = BuffStatus {
             id: 1005,
@@ -120,6 +123,7 @@ impl NinjaDatabase {
             duration_millisecond: 15000,
             is_raidwide: false,
             stacks: 1,
+            max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
         let TENCHIJIN_STATUS: BuffStatus = BuffStatus {
@@ -131,6 +135,7 @@ impl NinjaDatabase {
             duration_millisecond: 6000,
             is_raidwide: false,
             stacks: 1,
+            max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
         let BUNSHIN_STATUS: BuffStatus = BuffStatus {
@@ -142,6 +147,7 @@ impl NinjaDatabase {
             duration_millisecond: 45000,
             is_raidwide: false,
             stacks: 1,
+            max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
         let MEISUI_STATUS: BuffStatus = BuffStatus {
@@ -153,6 +159,7 @@ impl NinjaDatabase {
             duration_millisecond: 30000,
             is_raidwide: false,
             stacks: 1,
+            max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
 
@@ -165,6 +172,7 @@ impl NinjaDatabase {
             duration_millisecond: 6000,
             is_raidwide: false,
             stacks: 1,
+            max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
         let TCJ_2: BuffStatus = BuffStatus {
@@ -176,6 +184,7 @@ impl NinjaDatabase {
             duration_millisecond: 0,
             is_raidwide: false,
             stacks: 1,
+            max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
         let BUNSHIN_CLONE_STATUS: BuffStatus = BuffStatus {
@@ -187,6 +196,7 @@ impl NinjaDatabase {
             duration_millisecond: 30000,
             is_raidwide: false,
             stacks: 5,
+            max_stacks: 5,
             trigger_proc_event_on_gcd: vec![],
         };
         let HUTON: AttackSkill = AttackSkill {
@@ -197,13 +207,14 @@ impl NinjaDatabase {
             potency: 0,
             trait_multiplier: 1.0,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
-                0,
-                0,
+                player_id,
+                player_id,
                 HUTON_STATUS.clone(),
                 60000,
                 60000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -227,13 +238,14 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![FfxivEvent::ApplyBuffStack(
-                0,
-                0,
+                player_id,
+                player_id,
                 RAIJUREADY.clone(),
                 30000,
                 true,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -257,6 +269,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -280,6 +293,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.3,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -303,13 +317,14 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
-                0,
-                0,
+                player_id,
+                player_id,
                 SUITON_STATUS.clone(),
                 20000,
                 20000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -333,6 +348,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: Some(1),
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -356,6 +372,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: Some(2),
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -379,6 +396,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: Some(0),
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -402,13 +420,14 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
-                0,
-                0,
+                player_id,
+                player_id,
                 HUTON_STATUS.clone(),
                 30000,
                 60000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -432,12 +451,13 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
-                0,
+                player_id,
                 MUG_STATUS.clone(),
                 20000,
                 20000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -461,12 +481,13 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
-                0,
+                player_id,
                 TRICK_ATTACK_STATUS.clone(),
                 15000,
                 15000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -490,13 +511,14 @@ impl NinjaDatabase {
             use_type: UseType::NoTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
-                0,
-                0,
+                player_id,
+                player_id,
                 KASSATSU_STATUS.clone(),
                 15000,
                 15000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -520,6 +542,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -543,13 +566,14 @@ impl NinjaDatabase {
             use_type: UseType::NoTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
-                0,
-                0,
+                player_id,
+                player_id,
                 TENCHIJIN_STATUS.clone(),
                 6000,
                 6000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -580,6 +604,7 @@ impl NinjaDatabase {
                 6000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -610,6 +635,7 @@ impl NinjaDatabase {
                 6000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -633,13 +659,14 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
-                0,
-                0,
+                player_id,
+                player_id,
                 SUITON_STATUS.clone(),
                 20000,
                 20000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -663,9 +690,24 @@ impl NinjaDatabase {
             potency: 0,
             trait_multiplier: 1.0,
             additional_skill_events: vec![
-                FfxivEvent::ApplyBuff(0, 0, BUNSHIN_STATUS.clone(), 45000, 45000, 0),
-                FfxivEvent::ApplyBuff(0, 0, BUNSHIN_CLONE_STATUS.clone(), 30000, 30000, 0),
+                FfxivEvent::ApplyBuff(
+                    player_id,
+                    player_id,
+                    BUNSHIN_STATUS.clone(),
+                    45000,
+                    45000,
+                    0,
+                ),
+                FfxivEvent::ApplyBuff(
+                    player_id,
+                    player_id,
+                    BUNSHIN_CLONE_STATUS.clone(),
+                    30000,
+                    30000,
+                    0,
+                ),
             ],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -689,6 +731,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -712,6 +755,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -735,13 +779,14 @@ impl NinjaDatabase {
             use_type: UseType::NoTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
-                0,
-                0,
+                player_id,
+                player_id,
                 MEISUI_STATUS.clone(),
                 30000,
                 30000,
                 0,
             )],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -765,6 +810,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -791,6 +837,7 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -814,6 +861,7 @@ impl NinjaDatabase {
             use_type: UseType::NoTarget,
             trait_multiplier: 1.0,
             additional_skill_events: vec![],
+            proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -867,199 +915,6 @@ impl NinjaDatabase {
             bunshin_clone_status: BUNSHIN_CLONE_STATUS,
         }
     }
-}
-
-pub(crate) fn make_ninja_gcd_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
-    let db = NinjaDatabase::new(player_id);
-
-    let ninja_gcd_priority_table: Vec<SkillPriorityInfo> = vec![
-        SkillPriorityInfo {
-            skill_id: db.fuma_tenchijin.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.raiton_tenchijin.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.suiton_tenchijin.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.suiton.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
-                Box::new(SkillPrerequisite::RelatedSkillCooldownLessThan(1010, 17000)),
-                Box::new(SkillPrerequisite::Not(Box::new(
-                    SkillPrerequisite::HasBufforDebuff(1002),
-                ))),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.armor_crush.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
-                Box::new(SkillPrerequisite::BufforDebuffLessThan(1000, 8000)),
-                Box::new(SkillPrerequisite::Combo(Some(2))),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.phantom_kamaitachi.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1007, 3000)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.hyosho.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
-                Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
-                Box::new(SkillPrerequisite::HasBufforDebuff(1005)),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.raiton.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasStacks(1023, 2)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.aeolian_edge.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
-                Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
-                Box::new(SkillPrerequisite::And(
-                    Box::new(SkillPrerequisite::Combo(Some(2))),
-                    Box::new(SkillPrerequisite::And(
-                        Box::new(SkillPrerequisite::HasResource2(1)),
-                        Box::new(SkillPrerequisite::Not(Box::new(
-                            SkillPrerequisite::HasBufforDebuff(1001),
-                        ))),
-                    )),
-                )),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.phantom_kamaitachi.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
-                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
-                Box::new(SkillPrerequisite::HasBufforDebuff(1007)),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.raiju.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1001)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.raiton.get_id(),
-            prerequisite: Some(SkillPrerequisite::Or(
-                Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
-                Box::new(SkillPrerequisite::HasBufforDebuff(1003)),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.armor_crush.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
-                Box::new(SkillPrerequisite::Not(Box::new(
-                    SkillPrerequisite::MillisecondsBeforeBurst(0),
-                ))),
-                Box::new(SkillPrerequisite::And(
-                    Box::new(SkillPrerequisite::BufforDebuffLessThan(1000, 30000)),
-                    Box::new(SkillPrerequisite::Combo(Some(2))),
-                )),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.aeolian_edge.get_id(),
-            prerequisite: Some(SkillPrerequisite::Combo(Some(2))),
-        },
-        SkillPriorityInfo {
-            skill_id: db.gust_slash.get_id(),
-            prerequisite: Some(SkillPrerequisite::Combo(Some(1))),
-        },
-        SkillPriorityInfo {
-            skill_id: db.spinning_edge.get_id(),
-            prerequisite: None,
-        },
-    ];
-
-    ninja_gcd_priority_table
-}
-
-pub(crate) fn make_ninja_ogcd_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
-    let db = NinjaDatabase::new(player_id);
-
-    // TODO: calculate future ninki
-    let ninja_ogcd_table: Vec<SkillPriorityInfo> = vec![
-        SkillPriorityInfo {
-            skill_id: db.bunshin.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource1(50)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.bhavacakra_meisui.get_id(),
-            prerequisite: Some(SkillPrerequisite::Or(
-                Box::new(SkillPrerequisite::HasBufforDebuff(1008)),
-                Box::new(SkillPrerequisite::And(
-                    Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
-                    Box::new(SkillPrerequisite::HasResource1(50)),
-                )),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.bhavacakra.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource1(80)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.mug.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.trick_attack.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.kassatsu.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.dream.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.tenchijin.get_id(),
-            prerequisite: None,
-        },
-    ];
-
-    ninja_ogcd_table
-}
-
-pub(crate) fn make_ninja_opener(player_id: IdType) -> Vec<Opener> {
-    let db = NinjaDatabase::new(player_id);
-
-    let ninja_opener: Vec<Opener> = vec![
-        Opener::GcdOpener(db.suiton.get_id()),
-        Opener::OgcdOpener((Some(db.kassatsu.get_id()), None)),
-        Opener::GcdOpener(db.spinning_edge.get_id()),
-        // TODO: Potion
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.gust_slash.get_id()),
-        Opener::OgcdOpener((Some(db.mug.get_id()), Some(db.bunshin.get_id()))),
-        Opener::GcdOpener(db.phantom_kamaitachi.get_id()),
-        Opener::OgcdOpener((Some(db.trick_attack.get_id()), Some(db.dream.get_id()))),
-        Opener::GcdOpener(db.hyosho.get_id()),
-        Opener::OgcdOpener((Some(db.tenchijin.get_id()), None)),
-        Opener::GcdOpener(db.fuma_tenchijin.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.raiton_tenchijin.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.suiton_tenchijin.get_id()),
-        Opener::OgcdOpener((Some(db.meisui.get_id()), None)),
-        Opener::GcdOpener(db.raiton.get_id()),
-        Opener::OgcdOpener((Some(db.bhavacakra_meisui.get_id()), None)),
-        Opener::GcdOpener(db.raiju.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.raiju.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.aeolian_edge.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.raiton.get_id()),
-        Opener::OgcdOpener((Some(db.bhavacakra.get_id()), None)),
-    ];
-
-    ninja_opener
 }
 
 pub(crate) fn make_ninja_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {

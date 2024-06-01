@@ -1,4 +1,6 @@
 use crate::combat_resources::CombatResource;
+use crate::event::FfxivEventQueue;
+use crate::jobs_skill_data::bard::combat_resources::BardCombatResources;
 use crate::jobs_skill_data::ninja::combat_resources::NinjaCombatResources;
 use crate::jobs_skill_data::sage::combat_resources::SageCombatResources;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -18,6 +20,7 @@ use std::rc::Rc;
 pub(crate) enum FfxivCombatResources {
     Sage(SageCombatResources),
     Ninja(NinjaCombatResources),
+    Bard(BardCombatResources),
 }
 
 impl CombatResource for FfxivCombatResources {
@@ -25,6 +28,7 @@ impl CombatResource for FfxivCombatResources {
         match self {
             Self::Sage(sage_resources) => sage_resources.get_skills_mut(),
             Self::Ninja(ninja_resources) => ninja_resources.get_skills_mut(),
+            Self::Bard(bard_resources) => bard_resources.get_skills_mut(),
         }
     }
 
@@ -32,6 +36,7 @@ impl CombatResource for FfxivCombatResources {
         match self {
             Self::Sage(sage_resources) => sage_resources.get_skills(),
             Self::Ninja(ninja_resources) => ninja_resources.get_skills(),
+            Self::Bard(bard_resources) => bard_resources.get_skills(),
         }
     }
 
@@ -41,6 +46,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Ninja(ninja_resources) => {
                 ninja_resources.add_resource(resource_id, resource_type)
             }
+            Self::Bard(bard_resources) => bard_resources.add_resource(resource_id, resource_type),
         }
     }
 
@@ -48,6 +54,7 @@ impl CombatResource for FfxivCombatResources {
         match self {
             Self::Sage(sage_resources) => sage_resources.get_resource(resource_id),
             Self::Ninja(ninja_resources) => ninja_resources.get_resource(resource_id),
+            Self::Bard(bard_resources) => bard_resources.get_resource(resource_id),
         }
     }
 
@@ -55,6 +62,7 @@ impl CombatResource for FfxivCombatResources {
         match self {
             Self::Sage(sage_resources) => sage_resources.get_current_combo(),
             Self::Ninja(ninja_resources) => ninja_resources.get_current_combo(),
+            Self::Bard(bard_resources) => bard_resources.get_current_combo(),
         }
     }
 
@@ -62,6 +70,7 @@ impl CombatResource for FfxivCombatResources {
         match self {
             Self::Sage(sage_resources) => sage_resources.update_combo(combo),
             Self::Ninja(ninja_resources) => ninja_resources.update_combo(combo),
+            Self::Bard(bard_resources) => bard_resources.update_combo(combo),
         }
     }
 
@@ -72,7 +81,7 @@ impl CombatResource for FfxivCombatResources {
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
         player: &FfxivPlayer,
-    ) -> Vec<SkillEvents> {
+    ) -> SkillEvents {
         match self {
             Self::Sage(sage_resources) => sage_resources.trigger_on_event(
                 skill_id,
@@ -88,6 +97,13 @@ impl CombatResource for FfxivCombatResources {
                 current_time_millisecond,
                 player,
             ),
+            Self::Bard(bard_resources) => bard_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
         }
     }
 
@@ -95,15 +111,21 @@ impl CombatResource for FfxivCombatResources {
         match self {
             Self::Sage(sage_resources) => sage_resources.get_next_buff_target(skill_id),
             Self::Ninja(ninja_resources) => ninja_resources.get_next_buff_target(skill_id),
+            Self::Bard(bard_resources) => bard_resources.get_next_buff_target(skill_id),
         }
     }
 }
 
 impl FfxivCombatResources {
-    pub(crate) fn new(job: &Job, player_id: IdType) -> Self {
+    pub(crate) fn new(
+        job: &Job,
+        player_id: IdType,
+        event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> Self {
         match job.abbrev.as_str() {
             "Sage" => Self::Sage(SageCombatResources::new(player_id)),
             "NIN" => Self::Ninja(NinjaCombatResources::new(player_id)),
+            "BRD" => Self::Bard(BardCombatResources::new(player_id, event_queue)),
             _ => Self::Sage(SageCombatResources::new(player_id)),
         }
     }

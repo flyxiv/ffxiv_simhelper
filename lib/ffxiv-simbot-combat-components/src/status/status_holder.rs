@@ -1,6 +1,6 @@
 use crate::live_objects::player::StatusKey;
 use crate::status::Status;
-use crate::{IdType, TimeType};
+use crate::{IdType, ResourceType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
