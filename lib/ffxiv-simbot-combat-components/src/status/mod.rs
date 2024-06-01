@@ -20,7 +20,7 @@ pub trait Status: Sized + IdEntity {
     }
     /// get the type of status and amount
     /// ex) Battle Litany: 10% Crit Buff = CritHitRatePercent(10)
-    fn get_status_info(&self) -> &StatusInfo;
+    fn get_status_info(&self) -> &Vec<StatusInfo>;
     fn get_duration_millisecond(&self) -> TimeType;
     fn is_raidwide(&self) -> bool;
     fn add_stack(&mut self, stack: ResourceType);

@@ -92,9 +92,9 @@ pub(crate) trait CombatResource: Clone + Sized {
 
     fn get_current_combo(&self) -> ComboType;
     fn update_combo(&mut self, combo: &ComboType);
-    fn start_cooldown(&mut self, skill_id: IdType) {
+    fn start_cooldown(&mut self, skill_id: IdType, player: &FfxivPlayer) {
         let skill = self.get_skills_mut().get_mut(&skill_id).unwrap();
-        skill.start_cooldown();
+        skill.start_cooldown(player);
     }
 
     fn get_cooldown(&self, skill_id: IdType) -> TimeType {

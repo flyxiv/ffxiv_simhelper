@@ -50,19 +50,24 @@ pub trait MultiplierCalculator {
     where
         S: Status,
     {
-        let damage_increase = match status.get_status_info() {
-            StatusInfo::DamagePercent(damage_increase) => {
-                self.calculate_damage_multiplier(*damage_increase)
-            }
-            StatusInfo::CritHitRatePercent(crit_rate_increase) => {
-                self.calculate_crit_hit_rate_multiplier(character_power, *crit_rate_increase)
-            }
-            StatusInfo::DirectHitRatePercent(direct_hit_rate_increase) => {
-                self.calculate_direct_hit_rate_multiplier(*direct_hit_rate_increase)
-            }
-            _ => 1.0f64,
-        };
+        let mut total_multiplier = 1.0f64;
+        for status_info in status.get_status_info() {
+            let damage_increase = match status_info {
+                StatusInfo::DamagePercent(damage_increase) => {
+                    self.calculate_damage_multiplier(*damage_increase)
+                }
+                StatusInfo::CritHitRatePercent(crit_rate_increase) => {
+                    self.calculate_crit_hit_rate_multiplier(character_power, *crit_rate_increase)
+                }
+                StatusInfo::DirectHitRatePercent(direct_hit_rate_increase) => {
+                    self.calculate_direct_hit_rate_multiplier(*direct_hit_rate_increase)
+                }
+                _ => 1.0f64,
+            };
 
-        damage_increase * (status.get_stack() as MultiplierType)
+            total_multiplier *= damage_increase;
+        }
+
+        total_multiplier * (status.get_stack() as MultiplierType)
     }
 }

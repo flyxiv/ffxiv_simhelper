@@ -46,7 +46,7 @@ pub type ResourceTable = HashMap<IdType, ResourceType>;
 
 /// a single FFXIV skill.
 pub trait Skill: Sized + Clone + IdEntity {
-    fn start_cooldown(&mut self);
+    fn start_cooldown(&mut self, player: &FfxivPlayer);
     fn generate_skill_events(
         &self,
         buffs: StatusTable<BuffStatus>,

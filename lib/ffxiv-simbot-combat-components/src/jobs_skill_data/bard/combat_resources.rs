@@ -142,7 +142,7 @@ impl BardCombatResources {
                 name: String::from("Army's Muse"),
                 owner_id: player_id,
                 duration_left_millisecond: 0,
-                status_info: StatusInfo::SpeedByStack(vec![1, 2, 4, 12]),
+                status_info: vec![StatusInfo::SpeedByStack(vec![1, 2, 4, 12])],
                 duration_millisecond: 10000,
                 is_raidwide: false,
                 stacks: 1,

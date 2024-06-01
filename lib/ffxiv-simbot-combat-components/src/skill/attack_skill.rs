@@ -60,13 +60,19 @@ impl IdEntity for AttackSkill {
 }
 
 impl Skill for AttackSkill {
-    fn start_cooldown(&mut self) {
+    fn start_cooldown(&mut self, player: &FfxivPlayer) {
         if self.cooldown_millisecond == 0 {
             return;
         }
 
         self.stacks -= 1;
-        self.current_cooldown_millisecond += self.cooldown_millisecond;
+
+        let cooldown = if self.is_speed_buffed {
+            player.get_speed_buffed_time(self.cooldown_millisecond)
+        } else {
+            self.cooldown_millisecond
+        };
+        self.current_cooldown_millisecond += cooldown;
     }
 
     /// Generate the internal and combat events for the skill

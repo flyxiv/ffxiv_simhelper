@@ -15,7 +15,7 @@ pub struct DebuffStatus {
     pub(crate) owner_id: IdType,
     pub(crate) potency: Option<DamageType>,
     pub(crate) duration_left_millisecond: TimeType,
-    pub(crate) status_info: StatusInfo,
+    pub(crate) status_info: Vec<StatusInfo>,
     pub(crate) duration_millisecond: TimeType,
     pub(crate) is_raidwide: bool,
     pub(crate) stacks: ResourceType,
@@ -36,7 +36,7 @@ impl Status for DebuffStatus {
         &self.name
     }
 
-    fn get_status_info(&self) -> &StatusInfo {
+    fn get_status_info(&self) -> &Vec<StatusInfo> {
         &self.status_info
     }
 

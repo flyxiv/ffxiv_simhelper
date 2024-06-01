@@ -21,7 +21,7 @@ impl SageDatabase {
             owner_id: player_id,
             potency: Some(70),
             duration_left_millisecond: 0,
-            status_info: StatusInfo::None,
+            status_info: vec![StatusInfo::None],
             duration_millisecond: 30000,
             is_raidwide: false,
             stacks: 1,

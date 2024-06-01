@@ -2,7 +2,7 @@ use crate::TimeType;
 use ffxiv_simbot_db::MultiplierType;
 
 pub(crate) trait GcdCalculator {
-    fn calculate_gcd_millisecond(
+    fn calculate_speed_buffed_cooldown_millisecond(
         &self,
         gcd_delay: TimeType,
         speed_multiplier: MultiplierType,

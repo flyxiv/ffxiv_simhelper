@@ -227,9 +227,10 @@ impl FfxivPlayer {
             FfxivPlayerInternalEvent::UpdateCombo(combo) => {
                 self.combat_resources.borrow_mut().update_combo(&combo)
             }
-            FfxivPlayerInternalEvent::StartCooldown(skill_id) => {
-                self.combat_resources.borrow_mut().start_cooldown(*skill_id)
-            }
+            FfxivPlayerInternalEvent::StartCooldown(skill_id) => self
+                .combat_resources
+                .borrow_mut()
+                .start_cooldown(*skill_id, &self),
             FfxivPlayerInternalEvent::IncreaseResource(resource_id, resource_amount) => self
                 .combat_resources
                 .borrow_mut()
@@ -355,10 +356,10 @@ impl FfxivPlayer {
         }
     }
 
-    fn get_speed_buffed_time(&self, time_millisecond: TimeType) -> TimeType {
+    pub(crate) fn get_speed_buffed_time(&self, time_millisecond: TimeType) -> TimeType {
         let speed_buff_multiplier = self.get_gcd_buff_multiplier();
 
-        self.calculate_gcd_millisecond(
+        self.calculate_speed_buffed_cooldown_millisecond(
             time_millisecond,
             self.power.speed_multiplier,
             speed_buff_multiplier,
@@ -368,17 +369,20 @@ impl FfxivPlayer {
     fn get_gcd_buff_multiplier(&self) -> MultiplierType {
         let mut gcd_buffs_multiplier = 1.0;
         for buff in self.buff_list.borrow().values() {
-            match &buff.status_info {
-                StatusInfo::SpeedPercent(buff_increase_percent) => {
-                    gcd_buffs_multiplier = gcd_buffs_multiplier
-                        * (1.0 + (*buff_increase_percent as MultiplierType / 100.0));
+            for status_info in &buff.status_info {
+                match status_info {
+                    StatusInfo::SpeedPercent(buff_increase_percent) => {
+                        gcd_buffs_multiplier = gcd_buffs_multiplier
+                            * (1.0 + (*buff_increase_percent as MultiplierType / 100.0));
+                    }
+                    StatusInfo::SpeedByStack(buff_increase_percents) => {
+                        let stack = (buff.stacks - 1) as usize;
+                        let buff_increase = buff_increase_percents[stack] as MultiplierType;
+                        gcd_buffs_multiplier =
+                            gcd_buffs_multiplier * (1.0 + (buff_increase / 100.0));
+                    }
+                    _ => {}
                 }
-                StatusInfo::SpeedByStack(buff_increase_percents) => {
-                    let stack = (buff.stacks - 1) as usize;
-                    let buff_increase = buff_increase_percents[stack] as MultiplierType;
-                    gcd_buffs_multiplier = gcd_buffs_multiplier * (1.0 + (buff_increase / 100.0));
-                }
-                _ => {}
             }
         }
         gcd_buffs_multiplier

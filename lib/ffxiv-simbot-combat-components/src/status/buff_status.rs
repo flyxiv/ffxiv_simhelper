@@ -12,7 +12,7 @@ pub struct BuffStatus {
     pub(crate) id: IdType,
     pub(crate) owner_id: IdType,
     pub(crate) duration_left_millisecond: TimeType,
-    pub(crate) status_info: StatusInfo,
+    pub(crate) status_info: Vec<StatusInfo>,
     pub(crate) duration_millisecond: TimeType,
     pub is_raidwide: bool,
     pub(crate) name: String,
@@ -33,7 +33,7 @@ impl Status for BuffStatus {
         &self.name
     }
 
-    fn get_status_info(&self) -> &StatusInfo {
+    fn get_status_info(&self) -> &Vec<StatusInfo> {
         &self.status_info
     }
 
