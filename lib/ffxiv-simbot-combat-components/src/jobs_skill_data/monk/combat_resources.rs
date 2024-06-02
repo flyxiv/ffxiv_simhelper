@@ -9,7 +9,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{ComboType, IdType, ResourceType, TimeType};
 use std::cell::RefCell;
-use std::cmp::max;
+use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -42,27 +42,27 @@ impl CombatResource for MonkCombatResources {
         if resource_id == 0 {
             let chakra_stack = *self.chakra.borrow();
             self.chakra
-                .replace(max(CHAKRA_MAX_STACK, chakra_stack + resource_amount));
+                .replace(min(CHAKRA_MAX_STACK, chakra_stack + resource_amount));
         } else if resource_id == 1 {
             let perfect_1_stack = *self.perfect_1.borrow();
             self.perfect_1
-                .replace(max(PERFECT_MAX_STACK, perfect_1_stack + resource_amount));
+                .replace(min(PERFECT_MAX_STACK, perfect_1_stack + resource_amount));
         } else if resource_id == 2 {
             let perfect_2_stack = *self.perfect_2.borrow();
             self.perfect_2
-                .replace(max(PERFECT_MAX_STACK, perfect_2_stack + resource_amount));
+                .replace(min(PERFECT_MAX_STACK, perfect_2_stack + resource_amount));
         } else if resource_id == 3 {
             let perfect_3_stack = *self.perfect_3.borrow();
             self.perfect_3
-                .replace(max(PERFECT_MAX_STACK, perfect_3_stack + resource_amount));
+                .replace(min(PERFECT_MAX_STACK, perfect_3_stack + resource_amount));
         } else if resource_id == 4 {
             let lunar_stack = *self.lunar.borrow();
             self.lunar
-                .replace(max(PERFECT_MAX_STACK, lunar_stack + resource_amount));
+                .replace(min(PERFECT_MAX_STACK, lunar_stack + resource_amount));
         } else if resource_id == 5 {
             let solar_stack = *self.solar.borrow();
             self.solar
-                .replace(max(PERFECT_MAX_STACK, solar_stack + resource_amount));
+                .replace(min(PERFECT_MAX_STACK, solar_stack + resource_amount));
         }
     }
 
@@ -91,8 +91,6 @@ impl CombatResource for MonkCombatResources {
     fn update_combo(&mut self, combo: &Option<IdType>) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
-        } else {
-            self.current_combo = None;
         }
     }
 
@@ -111,6 +109,7 @@ impl CombatResource for MonkCombatResources {
     fn get_next_buff_target(&self, _: IdType) -> IdType {
         0
     }
+    fn update_stack_timer(&mut self, _: TimeType) {}
 }
 
 impl MonkCombatResources {

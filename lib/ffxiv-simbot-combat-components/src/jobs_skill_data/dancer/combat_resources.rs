@@ -9,7 +9,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{ComboType, IdType, ResourceType, TimeType};
 use std::cell::RefCell;
-use std::cmp::max;
+use std::cmp::{max, min};
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -39,11 +39,11 @@ impl CombatResource for DancerCombatResources {
         if resource_id == 0 {
             let esprit_stack = *self.esprit.borrow();
             self.esprit
-                .replace(max(ESPRIT_MAX_STACK, esprit_stack + resource_amount));
+                .replace(min(ESPRIT_MAX_STACK, esprit_stack + resource_amount));
         } else if resource_id == 1 {
             let feather_stack = *self.feather.borrow();
             self.feather
-                .replace(max(FEATHER_MAX_STACK, feather_stack + resource_amount));
+                .replace(min(FEATHER_MAX_STACK, feather_stack + resource_amount));
         }
     }
 
@@ -64,8 +64,6 @@ impl CombatResource for DancerCombatResources {
     fn update_combo(&mut self, combo: &Option<IdType>) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
-        } else {
-            self.current_combo = None;
         }
     }
 
@@ -83,6 +81,7 @@ impl CombatResource for DancerCombatResources {
     fn get_next_buff_target(&self, _: IdType) -> IdType {
         self.partner_player_id
     }
+    fn update_stack_timer(&mut self, _: TimeType) {}
 }
 
 impl DancerCombatResources {

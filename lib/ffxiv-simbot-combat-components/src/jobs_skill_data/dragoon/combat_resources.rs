@@ -9,7 +9,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{ComboType, IdType, ResourceType, TimeType};
 use std::cell::RefCell;
-use std::cmp::max;
+use std::cmp::{max, min};
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -38,11 +38,11 @@ impl CombatResource for DragoonCombatResources {
         if resource_id == 0 {
             let mirage_stack = *self.mirage_gauge.borrow();
             self.mirage_gauge
-                .replace(max(MIRAGE_MAX_STACK, mirage_stack + resource_amount));
+                .replace(min(MIRAGE_MAX_STACK, mirage_stack + resource_amount));
         } else if resource_id == 1 {
             let firstmind_stack = *self.firstmind_focus.borrow();
             self.firstmind_focus
-                .replace(max(FIRSTMIND_MAX_STACK, firstmind_stack + resource_amount));
+                .replace(min(FIRSTMIND_MAX_STACK, firstmind_stack + resource_amount));
         }
     }
 
@@ -63,8 +63,6 @@ impl CombatResource for DragoonCombatResources {
     fn update_combo(&mut self, combo: &Option<IdType>) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
-        } else {
-            self.current_combo = None;
         }
     }
 
@@ -83,6 +81,7 @@ impl CombatResource for DragoonCombatResources {
     fn get_next_buff_target(&self, _: IdType) -> IdType {
         0
     }
+    fn update_stack_timer(&mut self, _: TimeType) {}
 }
 
 impl DragoonCombatResources {

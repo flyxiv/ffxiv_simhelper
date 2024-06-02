@@ -1,6 +1,7 @@
 use crate::combat_resources::CombatResource;
 use crate::event::FfxivEventQueue;
 use crate::jobs_skill_data::bard::combat_resources::BardCombatResources;
+use crate::jobs_skill_data::black_mage::combat_resources::BlackmageCombatResources;
 use crate::jobs_skill_data::dancer::combat_resources::DancerCombatResources;
 use crate::jobs_skill_data::dragoon::combat_resources::DragoonCombatResources;
 use crate::jobs_skill_data::monk::combat_resources::MonkCombatResources;
@@ -27,6 +28,7 @@ pub(crate) enum FfxivCombatResources {
     Dancer(DancerCombatResources),
     Monk(MonkCombatResources),
     Dragoon(DragoonCombatResources),
+    Blackmage(BlackmageCombatResources),
 }
 
 impl CombatResource for FfxivCombatResources {
@@ -38,6 +40,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Dancer(dancer_resources) => dancer_resources.get_skills_mut(),
             Self::Monk(monk_resources) => monk_resources.get_skills_mut(),
             Self::Dragoon(dragoon_resources) => dragoon_resources.get_skills_mut(),
+            Self::Blackmage(blackmage_resources) => blackmage_resources.get_skills_mut(),
         }
     }
 
@@ -49,6 +52,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Dancer(dancer_resources) => dancer_resources.get_skills(),
             Self::Monk(monk_resources) => monk_resources.get_skills(),
             Self::Dragoon(dragoon_resources) => dragoon_resources.get_skills(),
+            Self::Blackmage(blackmage_resources) => blackmage_resources.get_skills(),
         }
     }
 
@@ -66,6 +70,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Dragoon(dragoon_resources) => {
                 dragoon_resources.add_resource(resource_id, resource_type)
             }
+            Self::Blackmage(blackmage_resources) => {
+                blackmage_resources.add_resource(resource_id, resource_type)
+            }
         }
     }
 
@@ -77,6 +84,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Dancer(dancer_resources) => dancer_resources.get_resource(resource_id),
             Self::Monk(monk_resources) => monk_resources.get_resource(resource_id),
             Self::Dragoon(dragoon_resources) => dragoon_resources.get_resource(resource_id),
+            Self::Blackmage(blackmage_resources) => blackmage_resources.get_resource(resource_id),
         }
     }
 
@@ -88,6 +96,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Dancer(dancer_resources) => dancer_resources.get_current_combo(),
             Self::Monk(monk_resources) => monk_resources.get_current_combo(),
             Self::Dragoon(dragoon_resources) => dragoon_resources.get_current_combo(),
+            Self::Blackmage(blackmage_resources) => blackmage_resources.get_current_combo(),
         }
     }
 
@@ -99,6 +108,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Dancer(dancer_resources) => dancer_resources.update_combo(combo),
             Self::Monk(monk_resources) => monk_resources.update_combo(combo),
             Self::Dragoon(dragoon_resources) => dragoon_resources.update_combo(combo),
+            Self::Blackmage(blackmage_resources) => blackmage_resources.update_combo(combo),
         }
     }
 
@@ -153,6 +163,13 @@ impl CombatResource for FfxivCombatResources {
                 current_time_millisecond,
                 player,
             ),
+            Self::Blackmage(blackmage_resources) => blackmage_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
         }
     }
 
@@ -164,6 +181,23 @@ impl CombatResource for FfxivCombatResources {
             Self::Dancer(dancer_resources) => dancer_resources.get_next_buff_target(skill_id),
             Self::Monk(monk_resources) => monk_resources.get_next_buff_target(skill_id),
             Self::Dragoon(dragoon_resources) => dragoon_resources.get_next_buff_target(skill_id),
+            Self::Blackmage(blackmage_resources) => {
+                blackmage_resources.get_next_buff_target(skill_id)
+            }
+        }
+    }
+
+    fn update_stack_timer(&mut self, elapsed_time: TimeType) {
+        match self {
+            Self::Sage(sage_resources) => sage_resources.update_stack_timer(elapsed_time),
+            Self::Ninja(ninja_resources) => ninja_resources.update_stack_timer(elapsed_time),
+            Self::Bard(bard_resources) => bard_resources.update_stack_timer(elapsed_time),
+            Self::Dancer(dancer_resources) => dancer_resources.update_stack_timer(elapsed_time),
+            Self::Monk(monk_resources) => monk_resources.update_stack_timer(elapsed_time),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.update_stack_timer(elapsed_time),
+            Self::Blackmage(blackmage_resources) => {
+                blackmage_resources.update_stack_timer(elapsed_time)
+            }
         }
     }
 }
@@ -188,6 +222,7 @@ impl FfxivCombatResources {
                 player_id,
                 partner_player_id.unwrap(),
             )),
+            "BLM" => Self::Blackmage(BlackmageCombatResources::new(player_id)),
             _ => Self::Sage(SageCombatResources::new(player_id)),
         }
     }

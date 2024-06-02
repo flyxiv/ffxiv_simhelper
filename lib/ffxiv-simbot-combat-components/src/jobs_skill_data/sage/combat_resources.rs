@@ -52,6 +52,8 @@ impl CombatResource for SageCombatResources {
     fn get_next_buff_target(&self, _: IdType) -> IdType {
         0
     }
+
+    fn update_stack_timer(&mut self, _: TimeType) {}
 }
 
 impl SageCombatResources {

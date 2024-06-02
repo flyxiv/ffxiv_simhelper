@@ -105,6 +105,14 @@ impl Player for FfxivPlayer {
             FfxivEvent::ApplyRaidBuff(player_id, buff, duration, max_duration, _) => {
                 self.add_status(buff, duration, max_duration, player_id)
             }
+            FfxivEvent::RefreshBuff(player_id, _, buff, duration, max_duration, _) => {
+                let key = StatusKey::new(buff.id, player_id);
+                let buff_search = self.buff_list.borrow().contains_key(&key);
+
+                if buff_search {
+                    self.add_status(buff, duration, max_duration, player_id)
+                }
+            }
             FfxivEvent::RemoveTargetBuff(player_id, _, buff_id, _) => {
                 let key = StatusKey::new(buff_id, player_id);
                 self.buff_list.borrow_mut().remove(&key);

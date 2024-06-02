@@ -56,8 +56,6 @@ impl CombatResource for NinjaCombatResources {
     fn update_combo(&mut self, combo: &Option<IdType>) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
-        } else {
-            self.current_combo = None;
         }
     }
 
@@ -89,6 +87,8 @@ impl CombatResource for NinjaCombatResources {
     fn get_next_buff_target(&self, _: IdType) -> IdType {
         0
     }
+
+    fn update_stack_timer(&mut self, _: TimeType) {}
 }
 
 impl NinjaCombatResources {

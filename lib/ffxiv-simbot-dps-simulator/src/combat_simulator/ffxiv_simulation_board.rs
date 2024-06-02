@@ -151,6 +151,17 @@ impl FfxivSimulationBoard {
                         .handle_ffxiv_event(ffxiv_event.clone(), debuffs.clone());
                 }
             }
+            FfxivEvent::RefreshBuff(_, player_id, status, _, _, time) => {
+                info!(
+                    "time: {}, refresh buff event: player id {}, status id {}",
+                    *time,
+                    *player_id,
+                    status.get_id()
+                );
+                let player = self.get_player_data(*player_id);
+                let debuffs = self.target.borrow().get_status_table();
+                player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
+            }
             FfxivEvent::ApplyDebuff(_, status, _, _, time) => {
                 info!(
                     "time: {}, apply debuff event: status {}",

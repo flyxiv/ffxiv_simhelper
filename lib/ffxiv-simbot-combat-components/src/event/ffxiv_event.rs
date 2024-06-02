@@ -44,6 +44,8 @@ pub enum FfxivEvent {
     ApplyBuffStack(IdType, IdType, BuffStatus, TimeType, bool, TimeType),
     /// owner_player_id, status, duration, max refresh duration
     ApplyRaidBuff(IdType, BuffStatus, TimeType, TimeType, TimeType),
+    /// owner_player_id, target_id, status, duration, max refresh duration
+    RefreshBuff(IdType, IdType, BuffStatus, TimeType, TimeType, TimeType),
 
     /// owner_player_id, time, status time, refresh duration or not
     ApplyDebuffStack(IdType, DebuffStatus, TimeType, bool, TimeType),
@@ -78,6 +80,7 @@ impl FfxivEvent {
             | FfxivEvent::ApplyBuff(_, _, _, _, _, time)
             | FfxivEvent::ApplyBuffStack(_, _, _, _, _, time)
             | FfxivEvent::ApplyRaidBuff(_, _, _, _, time)
+            | FfxivEvent::RefreshBuff(_, _, _, _, _, time)
             | FfxivEvent::ApplyDebuffStack(_, _, _, _, time)
             | FfxivEvent::ApplyDebuff(_, _, _, _, time)
             | FfxivEvent::RemoveTargetBuff(_, _, _, time)
@@ -92,7 +95,9 @@ impl FfxivEvent {
     pub(crate) fn set_target(&mut self, target_id: IdType) {
         match self {
             FfxivEvent::ApplyBuff(_, target, _, _, _, _)
-            | FfxivEvent::ApplyBuffStack(_, target, _, _, _, _) => *target = target_id,
+            | FfxivEvent::ApplyBuffStack(_, target, _, _, _, _)
+            | FfxivEvent::RemoveTargetBuff(_, target, _, _)
+            | FfxivEvent::RefreshBuff(_, target, _, _, _, _) => *target = target_id,
             _ => {}
         }
     }
@@ -184,6 +189,21 @@ impl FfxivEvent {
                     elapsed_time + time,
                 )
             }
+            FfxivEvent::RefreshBuff(
+                player_id,
+                target_id,
+                buff,
+                duration,
+                max_refresh_duration,
+                time,
+            ) => FfxivEvent::RefreshBuff(
+                player_id,
+                target_id,
+                buff.clone(),
+                duration,
+                max_refresh_duration,
+                elapsed_time + time,
+            ),
             FfxivEvent::ApplyDebuffStack(player_id, debuff, refresh_duration, is_refresh, time) => {
                 FfxivEvent::ApplyDebuffStack(
                     player_id,
@@ -249,6 +269,9 @@ impl FfxivEvent {
                 buff.stacks = stacks;
             }
             FfxivEvent::ApplyRaidBuff(_, buff, _, _, _) => {
+                buff.stacks = stacks;
+            }
+            FfxivEvent::RefreshBuff(_, _, buff, _, _, _) => {
                 buff.stacks = stacks;
             }
             FfxivEvent::ApplyDebuff(_, debuff, _, _, _) => {

@@ -2,6 +2,7 @@ use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::bard::priorities::BardPriorityTable;
+use crate::jobs_skill_data::black_mage::priorities::BlackmagePriorityTable;
 use crate::jobs_skill_data::dancer::priorities::DancerPriorityTable;
 use crate::jobs_skill_data::dragoon::priorities::DragoonPriorityTable;
 use crate::jobs_skill_data::monk::priorities::MonkPriorityTable;
@@ -21,6 +22,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+pub(crate) static BLACKMAGE_START_TIME_MILLISECOND: TimeType = -5000;
 pub(crate) static NINJA_START_TIME_MILLISECOND: TimeType = -2500;
 pub(crate) static SAGE_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static BARD_START_TIME_MILLISECOND: TimeType = 0;
@@ -172,7 +174,7 @@ impl FfxivPlayer {
         )
     }
 
-    pub fn new_dancer(
+    pub fn new_dragoon(
         player_id: IdType,
         partner_player_id: IdType,
         power: CharacterPower,
@@ -194,6 +196,31 @@ impl FfxivPlayer {
                 FfxivTurnType::Gcd,
                 DRAGOON_START_TIME_MILLISECOND,
                 DRAGOON_START_TIME_MILLISECOND,
+            ),
+        )
+    }
+
+    pub fn new_blackmage(
+        player_id: IdType,
+        power: CharacterPower,
+        context: &FfxivContext,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> FfxivPlayer {
+        let black_mage_job = context.jobs.get("BLM").unwrap();
+
+        Self::new(
+            player_id,
+            black_mage_job.clone(),
+            power,
+            None,
+            FfxivPriorityTable::Blackmage(BlackmagePriorityTable::new(player_id)),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Ogcd,
+                BLACKMAGE_START_TIME_MILLISECOND,
+                BLACKMAGE_START_TIME_MILLISECOND,
             ),
         )
     }
