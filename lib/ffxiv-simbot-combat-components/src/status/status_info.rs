@@ -8,6 +8,7 @@ pub enum StatusInfo {
     SpeedPercent(BuffIncreasePercentType),
     /// increase % by stack
     SpeedByStack(Vec<BuffIncreasePercentType>),
+    SpeedOnlyAutoAttack(BuffIncreasePercentType),
     None,
 }
 

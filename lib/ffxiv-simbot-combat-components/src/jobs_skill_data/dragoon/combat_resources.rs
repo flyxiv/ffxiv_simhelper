@@ -1,5 +1,5 @@
 use crate::combat_resources::CombatResource;
-use crate::jobs_skill_data::dancer::abilities::make_dancer_skill_list;
+use crate::jobs_skill_data::dragoon::abilities::make_dragoon_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -13,20 +13,19 @@ use std::cmp::max;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-const ESPRIT_MAX_STACK: ResourceType = 100;
-const FEATHER_MAX_STACK: ResourceType = 4;
+const MIRAGE_MAX_STACK: ResourceType = 2;
+const FIRSTMIND_MAX_STACK: ResourceType = 2;
 
 #[derive(Clone)]
-pub(crate) struct DancerCombatResources {
+pub(crate) struct DragoonCombatResources {
     skills: SkillTable<AttackSkill>,
-    current_combo: ComboType,
     player_id: IdType,
-    partner_player_id: IdType,
-    esprit: RefCell<ResourceType>,
-    feather: RefCell<ResourceType>,
+    current_combo: ComboType,
+    mirage_gauge: RefCell<ResourceType>,
+    firstmind_focus: RefCell<ResourceType>,
 }
 
-impl CombatResource for DancerCombatResources {
+impl CombatResource for DragoonCombatResources {
     fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill> {
         &mut self.skills
     }
@@ -37,21 +36,21 @@ impl CombatResource for DancerCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
         if resource_id == 0 {
-            let esprit_stack = *self.esprit.borrow();
-            self.esprit
-                .replace(max(ESPRIT_MAX_STACK, esprit_stack + resource_amount));
+            let mirage_stack = *self.mirage_gauge.borrow();
+            self.mirage_gauge
+                .replace(max(MIRAGE_MAX_STACK, mirage_stack + resource_amount));
         } else if resource_id == 1 {
-            let feather_stack = *self.feather.borrow();
-            self.feather
-                .replace(max(FEATHER_MAX_STACK, feather_stack + resource_amount));
+            let firstmind_stack = *self.firstmind_focus.borrow();
+            self.firstmind_focus
+                .replace(max(FIRSTMIND_MAX_STACK, firstmind_stack + resource_amount));
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            *self.esprit.borrow()
+            *self.mirage_gauge.borrow()
         } else if resource_id == 1 {
-            *self.feather.borrow()
+            *self.firstmind_focus.borrow()
         } else {
             -1
         }
@@ -69,6 +68,7 @@ impl CombatResource for DancerCombatResources {
         }
     }
 
+    // TODO: chakra on crit
     fn trigger_on_event(
         &self,
         _: IdType,
@@ -81,19 +81,18 @@ impl CombatResource for DancerCombatResources {
     }
 
     fn get_next_buff_target(&self, _: IdType) -> IdType {
-        self.partner_player_id
+        0
     }
 }
 
-impl DancerCombatResources {
+impl DragoonCombatResources {
     pub(crate) fn new(player_id: IdType, partner_player_id: IdType) -> Self {
         Self {
-            skills: make_dancer_skill_list(player_id, partner_player_id),
-            current_combo: None,
+            skills: make_dragoon_skill_list(player_id, partner_player_id),
             player_id,
-            partner_player_id,
-            esprit: RefCell::new(0),
-            feather: RefCell::new(0),
+            current_combo: None,
+            mirage_gauge: RefCell::new(0),
+            firstmind_focus: RefCell::new(0),
         }
     }
 }

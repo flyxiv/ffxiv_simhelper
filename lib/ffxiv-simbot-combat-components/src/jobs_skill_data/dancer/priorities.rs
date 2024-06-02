@@ -46,19 +46,18 @@ impl PriorityTable for DancerPriorityTable {
 
 impl DancerPriorityTable {
     pub fn new(player_id: IdType, partner_player_id: IdType) -> Self {
+        let db = DancerDatabase::new(player_id, partner_player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_dancer_opener(player_id, partner_player_id),
-            gcd_priority_table: make_dancer_gcd_priority_table(player_id, partner_player_id),
-            ogcd_priority_table: make_dancer_ogcd_priority_table(player_id, partner_player_id),
+            opener: make_dancer_opener(&db),
+            gcd_priority_table: make_dancer_gcd_priority_table(&db),
+            ogcd_priority_table: make_dancer_ogcd_priority_table(&db),
         }
     }
 }
 
-pub(crate) fn make_dancer_opener(player_id: IdType, partner_player_id: IdType) -> Vec<Opener> {
-    let db = DancerDatabase::new(player_id, partner_player_id);
-
-    let dancer_opener: Vec<Opener> = vec![
+pub(crate) fn make_dancer_opener(db: &DancerDatabase) -> Vec<Opener> {
+    vec![
         Opener::GcdOpener(db.standard_step.get_id()),
         Opener::OgcdOpener((Some(db.flourish.get_id()), None)),
         Opener::GcdOpener(db.technical_step.get_id()),
@@ -66,18 +65,11 @@ pub(crate) fn make_dancer_opener(player_id: IdType, partner_player_id: IdType) -
         Opener::GcdOpener(db.fountainfall_flourish.get_id()),
         Opener::OgcdOpener((Some(db.fan_dance4.get_id()), None)),
         Opener::GcdOpener(db.starfall_dance.get_id()),
-    ];
-
-    dancer_opener
+    ]
 }
 
-pub(crate) fn make_dancer_gcd_priority_table(
-    player_id: IdType,
-    partner_player_id: IdType,
-) -> Vec<SkillPriorityInfo> {
-    let db = DancerDatabase::new(player_id, partner_player_id);
-
-    let dancer_gcd_priority_table: Vec<SkillPriorityInfo> = vec![
+pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPriorityInfo> {
+    vec![
         SkillPriorityInfo {
             skill_id: db.technical_step.get_id(),
             prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(5500)),
@@ -122,18 +114,11 @@ pub(crate) fn make_dancer_gcd_priority_table(
             skill_id: db.cascade.get_id(),
             prerequisite: None,
         },
-    ];
-
-    dancer_gcd_priority_table
+    ]
 }
 
-pub(crate) fn make_dancer_ogcd_priority_table(
-    player_id: IdType,
-    partner_player_id: IdType,
-) -> Vec<SkillPriorityInfo> {
-    let db = DancerDatabase::new(player_id, partner_player_id);
-
-    let dancer_ogcd_table: Vec<SkillPriorityInfo> = vec![
+pub(crate) fn make_dancer_ogcd_priority_table(db: &DancerDatabase) -> Vec<SkillPriorityInfo> {
+    vec![
         SkillPriorityInfo {
             skill_id: db.devilment.get_id(),
             prerequisite: None,
@@ -157,7 +142,5 @@ pub(crate) fn make_dancer_ogcd_priority_table(
             skill_id: db.fan_dance4.get_id(),
             prerequisite: None,
         },
-    ];
-
-    dancer_ogcd_table
+    ]
 }

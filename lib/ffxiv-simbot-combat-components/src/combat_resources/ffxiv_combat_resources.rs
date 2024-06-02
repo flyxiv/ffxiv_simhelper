@@ -1,6 +1,9 @@
 use crate::combat_resources::CombatResource;
 use crate::event::FfxivEventQueue;
 use crate::jobs_skill_data::bard::combat_resources::BardCombatResources;
+use crate::jobs_skill_data::dancer::combat_resources::DancerCombatResources;
+use crate::jobs_skill_data::dragoon::combat_resources::DragoonCombatResources;
+use crate::jobs_skill_data::monk::combat_resources::MonkCombatResources;
 use crate::jobs_skill_data::ninja::combat_resources::NinjaCombatResources;
 use crate::jobs_skill_data::sage::combat_resources::SageCombatResources;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -21,6 +24,9 @@ pub(crate) enum FfxivCombatResources {
     Sage(SageCombatResources),
     Ninja(NinjaCombatResources),
     Bard(BardCombatResources),
+    Dancer(DancerCombatResources),
+    Monk(MonkCombatResources),
+    Dragoon(DragoonCombatResources),
 }
 
 impl CombatResource for FfxivCombatResources {
@@ -29,6 +35,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Sage(sage_resources) => sage_resources.get_skills_mut(),
             Self::Ninja(ninja_resources) => ninja_resources.get_skills_mut(),
             Self::Bard(bard_resources) => bard_resources.get_skills_mut(),
+            Self::Dancer(dancer_resources) => dancer_resources.get_skills_mut(),
+            Self::Monk(monk_resources) => monk_resources.get_skills_mut(),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.get_skills_mut(),
         }
     }
 
@@ -37,6 +46,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Sage(sage_resources) => sage_resources.get_skills(),
             Self::Ninja(ninja_resources) => ninja_resources.get_skills(),
             Self::Bard(bard_resources) => bard_resources.get_skills(),
+            Self::Dancer(dancer_resources) => dancer_resources.get_skills(),
+            Self::Monk(monk_resources) => monk_resources.get_skills(),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.get_skills(),
         }
     }
 
@@ -47,6 +59,13 @@ impl CombatResource for FfxivCombatResources {
                 ninja_resources.add_resource(resource_id, resource_type)
             }
             Self::Bard(bard_resources) => bard_resources.add_resource(resource_id, resource_type),
+            Self::Dancer(dancer_resources) => {
+                dancer_resources.add_resource(resource_id, resource_type)
+            }
+            Self::Monk(monk_resources) => monk_resources.add_resource(resource_id, resource_type),
+            Self::Dragoon(dragoon_resources) => {
+                dragoon_resources.add_resource(resource_id, resource_type)
+            }
         }
     }
 
@@ -55,6 +74,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Sage(sage_resources) => sage_resources.get_resource(resource_id),
             Self::Ninja(ninja_resources) => ninja_resources.get_resource(resource_id),
             Self::Bard(bard_resources) => bard_resources.get_resource(resource_id),
+            Self::Dancer(dancer_resources) => dancer_resources.get_resource(resource_id),
+            Self::Monk(monk_resources) => monk_resources.get_resource(resource_id),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.get_resource(resource_id),
         }
     }
 
@@ -63,6 +85,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Sage(sage_resources) => sage_resources.get_current_combo(),
             Self::Ninja(ninja_resources) => ninja_resources.get_current_combo(),
             Self::Bard(bard_resources) => bard_resources.get_current_combo(),
+            Self::Dancer(dancer_resources) => dancer_resources.get_current_combo(),
+            Self::Monk(monk_resources) => monk_resources.get_current_combo(),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.get_current_combo(),
         }
     }
 
@@ -71,6 +96,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Sage(sage_resources) => sage_resources.update_combo(combo),
             Self::Ninja(ninja_resources) => ninja_resources.update_combo(combo),
             Self::Bard(bard_resources) => bard_resources.update_combo(combo),
+            Self::Dancer(dancer_resources) => dancer_resources.update_combo(combo),
+            Self::Monk(monk_resources) => monk_resources.update_combo(combo),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.update_combo(combo),
         }
     }
 
@@ -104,6 +132,27 @@ impl CombatResource for FfxivCombatResources {
                 current_time_millisecond,
                 player,
             ),
+            Self::Dancer(dancer_resources) => dancer_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
+            Self::Monk(monk_resources) => monk_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
         }
     }
 
@@ -112,6 +161,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Sage(sage_resources) => sage_resources.get_next_buff_target(skill_id),
             Self::Ninja(ninja_resources) => ninja_resources.get_next_buff_target(skill_id),
             Self::Bard(bard_resources) => bard_resources.get_next_buff_target(skill_id),
+            Self::Dancer(dancer_resources) => dancer_resources.get_next_buff_target(skill_id),
+            Self::Monk(monk_resources) => monk_resources.get_next_buff_target(skill_id),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.get_next_buff_target(skill_id),
         }
     }
 }
@@ -120,12 +172,22 @@ impl FfxivCombatResources {
     pub(crate) fn new(
         job: &Job,
         player_id: IdType,
+        partner_player_id: Option<IdType>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
         match job.abbrev.as_str() {
             "Sage" => Self::Sage(SageCombatResources::new(player_id)),
             "NIN" => Self::Ninja(NinjaCombatResources::new(player_id)),
             "BRD" => Self::Bard(BardCombatResources::new(player_id, event_queue)),
+            "DNC" => Self::Dancer(DancerCombatResources::new(
+                player_id,
+                partner_player_id.unwrap(),
+            )),
+            "MNK" => Self::Monk(MonkCombatResources::new(player_id)),
+            "DRG" => Self::Dragoon(DragoonCombatResources::new(
+                player_id,
+                partner_player_id.unwrap(),
+            )),
             _ => Self::Sage(SageCombatResources::new(player_id)),
         }
     }

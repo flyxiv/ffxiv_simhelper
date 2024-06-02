@@ -15,7 +15,7 @@ use std::collections::HashMap;
 
 /// The normal delay time for o-GCD skills.
 /// After using 1 oGCD, the player cannot use another skill for 0.7 seconds.
-pub static NON_GCD_DELAY_MILLISECOND: i32 = 700;
+pub static NON_GCD_DELAY_MILLISECOND: i32 = 670;
 pub static GCD_DEFAULT_DELAY_MILLISECOND: i32 = 2500;
 
 pub static DEFAULT_AUTO_ATTACK_COOLDOWN_MILLISECOND: TimeType = 2500;

@@ -42,19 +42,18 @@ impl PriorityTable for NinjaPriorityTable {
 
 impl NinjaPriorityTable {
     pub fn new(player_id: IdType) -> Self {
+        let db = NinjaDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_ninja_opener(player_id),
-            gcd_priority_table: make_ninja_gcd_priority_table(player_id),
-            ogcd_priority_table: make_ninja_ogcd_priority_table(player_id),
+            opener: make_ninja_opener(&db),
+            gcd_priority_table: make_ninja_gcd_priority_table(&db),
+            ogcd_priority_table: make_ninja_ogcd_priority_table(&db),
         }
     }
 }
 
-pub(crate) fn make_ninja_opener(player_id: IdType) -> Vec<Opener> {
-    let db = NinjaDatabase::new(player_id);
-
-    let ninja_opener: Vec<Opener> = vec![
+pub(crate) fn make_ninja_opener(db: &NinjaDatabase) -> Vec<Opener> {
+    vec![
         Opener::GcdOpener(db.suiton.get_id()),
         Opener::OgcdOpener((Some(db.kassatsu.get_id()), None)),
         Opener::GcdOpener(db.spinning_edge.get_id()),
@@ -82,15 +81,11 @@ pub(crate) fn make_ninja_opener(player_id: IdType) -> Vec<Opener> {
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.raiton.get_id()),
         Opener::OgcdOpener((Some(db.bhavacakra.get_id()), None)),
-    ];
-
-    ninja_opener
+    ]
 }
 
-pub(crate) fn make_ninja_gcd_priority_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
-    let db = NinjaDatabase::new(player_id);
-
-    let ninja_gcd_priority_table: Vec<SkillPriorityInfo> = vec![
+pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPriorityInfo> {
+    vec![
         SkillPriorityInfo {
             skill_id: db.fuma_tenchijin.get_id(),
             prerequisite: None,
@@ -191,16 +186,12 @@ pub(crate) fn make_ninja_gcd_priority_table(player_id: IdType) -> Vec<SkillPrior
             skill_id: db.spinning_edge.get_id(),
             prerequisite: None,
         },
-    ];
-
-    ninja_gcd_priority_table
+    ]
 }
 
-pub(crate) fn make_ninja_ogcd_priority_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
-    let db = NinjaDatabase::new(player_id);
-
+pub(crate) fn make_ninja_ogcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPriorityInfo> {
     // TODO: calculate future ninki
-    let ninja_ogcd_table: Vec<SkillPriorityInfo> = vec![
+    vec![
         SkillPriorityInfo {
             skill_id: db.bunshin.get_id(),
             prerequisite: Some(SkillPrerequisite::HasResource(0, 50)),
@@ -239,7 +230,5 @@ pub(crate) fn make_ninja_ogcd_priority_table(player_id: IdType) -> Vec<SkillPrio
             skill_id: db.tenchijin.get_id(),
             prerequisite: None,
         },
-    ];
-
-    ninja_ogcd_table
+    ]
 }

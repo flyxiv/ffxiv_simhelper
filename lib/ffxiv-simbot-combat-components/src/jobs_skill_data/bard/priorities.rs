@@ -45,24 +45,17 @@ impl PriorityTable for BardPriorityTable {
 
 impl BardPriorityTable {
     pub fn new(player_id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+        let db = BardDatabase::new(player_id, ffxiv_event_queue);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_bard_opener(player_id, ffxiv_event_queue.clone()),
-            gcd_priority_table: make_bard_gcd_priority_table(player_id, ffxiv_event_queue.clone()),
-            ogcd_priority_table: make_bard_ogcd_priority_table(
-                player_id,
-                ffxiv_event_queue.clone(),
-            ),
+            opener: make_bard_opener(&db),
+            gcd_priority_table: make_bard_gcd_priority_table(&db),
+            ogcd_priority_table: make_bard_ogcd_priority_table(&db),
         }
     }
 }
 
-pub(crate) fn make_bard_opener(
-    player_id: IdType,
-    ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
-) -> Vec<Opener> {
-    let db = BardDatabase::new(player_id, ffxiv_event_queue);
-
+pub(crate) fn make_bard_opener(db: &BardDatabase) -> Vec<Opener> {
     let bard_opener: Vec<Opener> = vec![
         Opener::GcdOpener(db.caustic_bite.get_id()),
         Opener::OgcdOpener((Some(db.wanderers_minuet.get_id()), None)),
@@ -83,12 +76,7 @@ pub(crate) fn make_bard_opener(
     bard_opener
 }
 
-pub(crate) fn make_bard_gcd_priority_table(
-    player_id: IdType,
-    ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
-) -> Vec<SkillPriorityInfo> {
-    let db = BardDatabase::new(player_id, ffxiv_event_queue);
-
+pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriorityInfo> {
     let bard_gcd_priority_table: Vec<SkillPriorityInfo> = vec![
         SkillPriorityInfo {
             skill_id: db.iron_jaws.get_id(),
@@ -133,12 +121,7 @@ pub(crate) fn make_bard_gcd_priority_table(
     bard_gcd_priority_table
 }
 
-pub(crate) fn make_bard_ogcd_priority_table(
-    player_id: IdType,
-    ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
-) -> Vec<SkillPriorityInfo> {
-    let db = BardDatabase::new(player_id, ffxiv_event_queue);
-
+pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPriorityInfo> {
     // TODO: calculate future ninki
     let bard_ogcd_table: Vec<SkillPriorityInfo> = vec![
         SkillPriorityInfo {

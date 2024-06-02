@@ -295,12 +295,16 @@ impl FfxivPlayer {
 
     pub fn get_gcd_delay_millisecond(&self, skill: &AttackSkill) -> TimeType {
         let gcd_cooldown_millisecond = skill.gcd_cooldown_millisecond;
+        let charging_time = skill.charging_time_millisecond;
 
-        if skill.is_speed_buffed() {
-            self.get_speed_buffed_time(gcd_cooldown_millisecond)
+        let gcd_cooldown = if skill.is_speed_buffed() {
+            let is_auto_attack = skill.id == AUTO_ATTACK_ID;
+            self.get_speed_buffed_time(gcd_cooldown_millisecond, is_auto_attack)
         } else {
             gcd_cooldown_millisecond
-        }
+        };
+
+        gcd_cooldown + charging_time
     }
 
     pub fn print_skill_debug(&self, skill_id: IdType) -> String {
@@ -334,30 +338,22 @@ impl CooldownTimer for FfxivPlayer {
 }
 
 impl FfxivPlayer {
-    pub(crate) fn get_gcd(&self, skill: &AttackSkill) -> TimeType {
-        let mut gcd_cooldown_millisecond = skill.gcd_cooldown_millisecond;
-
-        let charging_time = skill.charging_time_millisecond;
-
-        if skill.is_speed_buffed() {
-            gcd_cooldown_millisecond = self.get_speed_buffed_time(gcd_cooldown_millisecond)
-        }
-
-        charging_time + gcd_cooldown_millisecond
-    }
-
     pub(crate) fn get_cast_time(&self, skill: &AttackSkill) -> TimeType {
         let cast_time = skill.get_gcd_cast_time();
 
         if skill.is_speed_buffed() {
-            self.get_speed_buffed_time(cast_time)
+            self.get_speed_buffed_time(cast_time, false)
         } else {
             cast_time
         }
     }
 
-    pub(crate) fn get_speed_buffed_time(&self, time_millisecond: TimeType) -> TimeType {
-        let speed_buff_multiplier = self.get_gcd_buff_multiplier();
+    pub(crate) fn get_speed_buffed_time(
+        &self,
+        time_millisecond: TimeType,
+        is_auto_attack: bool,
+    ) -> TimeType {
+        let speed_buff_multiplier = self.get_gcd_buff_multiplier(is_auto_attack);
 
         self.calculate_speed_buffed_cooldown_millisecond(
             time_millisecond,
@@ -366,7 +362,7 @@ impl FfxivPlayer {
         )
     }
 
-    fn get_gcd_buff_multiplier(&self) -> MultiplierType {
+    fn get_gcd_buff_multiplier(&self, is_auto_attack: bool) -> MultiplierType {
         let mut gcd_buffs_multiplier = 1.0;
         for buff in self.buff_list.borrow().values() {
             for status_info in &buff.status_info {
@@ -381,6 +377,12 @@ impl FfxivPlayer {
                         gcd_buffs_multiplier =
                             gcd_buffs_multiplier * (1.0 + (buff_increase / 100.0));
                     }
+                    StatusInfo::SpeedOnlyAutoAttack(buff_increase_percent) => {
+                        if is_auto_attack {
+                            gcd_buffs_multiplier = gcd_buffs_multiplier
+                                * (1.0 + (*buff_increase_percent as MultiplierType / 100.0));
+                        }
+                    }
                     _ => {}
                 }
             }
@@ -392,6 +394,7 @@ impl FfxivPlayer {
         id: IdType,
         job: Job,
         power: CharacterPower,
+        partner_player_id: Option<IdType>,
         priority_table: FfxivPriorityTable,
         buff_list: HashMap<StatusKey, BuffStatus>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
@@ -402,6 +405,7 @@ impl FfxivPlayer {
             combat_resources: RefCell::new(FfxivCombatResources::new(
                 &job,
                 id,
+                partner_player_id,
                 event_queue.clone(),
             )),
             job,

@@ -42,48 +42,46 @@ impl PriorityTable for SagePriorityTable {
 
 impl SagePriorityTable {
     pub fn new(player_id: IdType) -> Self {
+        let db = SageDatabase::new(player_id);
+
         Self {
             turn_count: RefCell::new(0),
-            opener: make_sage_opener(player_id),
-            gcd_priority_list: make_sage_gcd_priority_table(player_id),
+            opener: make_sage_opener(&db),
+            gcd_priority_list: make_sage_gcd_priority_db(&db),
             ogcd_priority_list: Vec::new(),
         }
     }
 }
 
-pub(crate) fn make_sage_opener(player_id: IdType) -> Vec<Opener> {
-    let table = SageDatabase::new(player_id);
-
+pub(crate) fn make_sage_opener(db: &SageDatabase) -> Vec<Opener> {
     let sage_opener: Vec<Opener> = vec![
-        Opener::GcdOpener(table.gcd.get_id()),
+        Opener::GcdOpener(db.gcd.get_id()),
         Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(table.dot.get_id()),
+        Opener::GcdOpener(db.dot.get_id()),
         Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(table.gcd.get_id()),
+        Opener::GcdOpener(db.gcd.get_id()),
         Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(table.gcd.get_id()),
+        Opener::GcdOpener(db.gcd.get_id()),
     ];
 
     sage_opener
 }
 
-pub(crate) fn make_sage_gcd_priority_table(player_id: IdType) -> Vec<SkillPriorityInfo> {
-    let priority_table = SageDatabase::new(player_id);
-
+pub(crate) fn make_sage_gcd_priority_db(db: &SageDatabase) -> Vec<SkillPriorityInfo> {
     let sage_priority_list: Vec<SkillPriorityInfo> = vec![
         SkillPriorityInfo {
-            skill_id: priority_table.phlegma.get_id(),
+            skill_id: db.phlegma.get_id(),
             prerequisite: Some(SkillPrerequisite::Or(
                 Box::new(SkillPrerequisite::HasSkillStacks(702, 2)),
                 Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
             )),
         },
         SkillPriorityInfo {
-            skill_id: priority_table.dot.get_id(),
+            skill_id: db.dot.get_id(),
             prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(700, 3000)),
         },
         SkillPriorityInfo {
-            skill_id: priority_table.gcd.get_id(),
+            skill_id: db.gcd.get_id(),
             prerequisite: None,
         },
     ];

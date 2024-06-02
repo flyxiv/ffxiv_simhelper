@@ -68,7 +68,7 @@ impl Skill for AttackSkill {
         self.stacks -= 1;
 
         let cooldown = if self.is_speed_buffed {
-            player.get_speed_buffed_time(self.cooldown_millisecond)
+            player.get_speed_buffed_time(self.cooldown_millisecond, false)
         } else {
             self.cooldown_millisecond
         };
@@ -274,7 +274,7 @@ impl AttackSkill {
         SkillTimeInfo {
             delay_millisecond: self.get_delay_millisecond(),
             cast_time_millisecond: player.get_cast_time(self),
-            gcd_cooldown_millisecond: player.get_gcd(self),
+            gcd_cooldown_millisecond: player.get_gcd_delay_millisecond(self),
             charge_time_millisecond: self.charging_time_millisecond,
         }
     }
