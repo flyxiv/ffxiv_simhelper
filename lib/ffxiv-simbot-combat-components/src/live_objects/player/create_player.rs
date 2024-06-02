@@ -9,6 +9,7 @@ use crate::jobs_skill_data::monk::priorities::MonkPriorityTable;
 use crate::jobs_skill_data::ninja::abilities::get_huton_status;
 use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
 use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
+use crate::jobs_skill_data::white_mage::priorities::WhitemagePriorityTable;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::live_objects::turn_type::FfxivTurnType;
@@ -22,6 +23,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+pub(crate) static WHITEMAGE_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static BLACKMAGE_START_TIME_MILLISECOND: TimeType = -5000;
 pub(crate) static NINJA_START_TIME_MILLISECOND: TimeType = -2500;
 pub(crate) static SAGE_START_TIME_MILLISECOND: TimeType = -1500;
@@ -221,6 +223,31 @@ impl FfxivPlayer {
                 FfxivTurnType::Ogcd,
                 BLACKMAGE_START_TIME_MILLISECOND,
                 BLACKMAGE_START_TIME_MILLISECOND,
+            ),
+        )
+    }
+
+    pub fn new_whitemage(
+        player_id: IdType,
+        power: CharacterPower,
+        context: &FfxivContext,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> FfxivPlayer {
+        let whitemage_job = context.jobs.get("WHM").unwrap();
+
+        Self::new(
+            player_id,
+            whitemage_job.clone(),
+            power,
+            None,
+            FfxivPriorityTable::Whitemage(WhitemagePriorityTable::new(player_id)),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Gcd,
+                WHITEMAGE_START_TIME_MILLISECOND,
+                WHITEMAGE_START_TIME_MILLISECOND,
             ),
         )
     }

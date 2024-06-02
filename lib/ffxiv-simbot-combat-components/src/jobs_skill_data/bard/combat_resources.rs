@@ -12,7 +12,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::{ComboType, IdType, ResourceType, TimeType};
 use std::cell::RefCell;
-use std::cmp::max;
+use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -46,19 +46,19 @@ impl CombatResource for BardCombatResources {
         if resource_id == 0 {
             let apex_stack = *self.apex_stack.borrow();
             self.apex_stack
-                .replace(max(APEX_MAX_STACK, apex_stack + resource_amount));
+                .replace(min(APEX_MAX_STACK, apex_stack + resource_amount));
         } else if resource_id == 1 {
             let wanderer_stack = *self.wanderer_stack.borrow();
             self.wanderer_stack
-                .replace(max(WANDERER_MAX_STACK, wanderer_stack + resource_amount));
+                .replace(min(WANDERER_MAX_STACK, wanderer_stack + resource_amount));
         } else if resource_id == 2 {
             let army_stack = *self.army_stack.borrow();
             self.army_stack
-                .replace(max(ARMY_MAX_STACK, army_stack + resource_amount));
+                .replace(min(ARMY_MAX_STACK, army_stack + resource_amount));
         } else if resource_id == 3 {
             let song_stack = *self.song_stack.borrow();
             self.song_stack
-                .replace(max(SONG_MAX_STACK, song_stack + resource_amount));
+                .replace(min(SONG_MAX_STACK, song_stack + resource_amount));
         }
     }
 

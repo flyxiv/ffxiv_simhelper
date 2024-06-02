@@ -9,6 +9,7 @@ pub(crate) mod dragoon;
 pub(crate) mod monk;
 pub(crate) mod ninja;
 pub(crate) mod sage;
+pub(crate) mod white_mage;
 
 const SWIFTCAST: AttackSkill = AttackSkill {
     id: 0,
@@ -33,7 +34,7 @@ const SWIFTCAST: AttackSkill = AttackSkill {
     stacks: 1,
     stack_skill_id: None,
     use_type: UseType::NoTarget,
-}
+};
 
 const SWIFTCAST_BUFF: BuffStatus = BuffStatus {
     id: 0,
