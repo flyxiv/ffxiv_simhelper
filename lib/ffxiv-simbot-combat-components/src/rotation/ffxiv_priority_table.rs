@@ -4,6 +4,7 @@ use crate::jobs_skill_data::dancer::priorities::DancerPriorityTable;
 use crate::jobs_skill_data::dragoon::priorities::DragoonPriorityTable;
 use crate::jobs_skill_data::monk::priorities::MonkPriorityTable;
 use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
+use crate::jobs_skill_data::paladin::priorities::PaladinPriorityTable;
 use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
 use crate::jobs_skill_data::white_mage::priorities::WhitemagePriorityTable;
 use crate::rotation::priority_table::{Opener, PriorityTable};
@@ -20,6 +21,7 @@ pub(crate) enum FfxivPriorityTable {
     Dragoon(DragoonPriorityTable),
     Blackmage(BlackmagePriorityTable),
     Whitemage(WhitemagePriorityTable),
+    Paladin(PaladinPriorityTable),
 }
 
 impl PriorityTable for FfxivPriorityTable {
@@ -33,6 +35,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Dragoon(dragoon) => dragoon.get_opener_len(),
             FfxivPriorityTable::Blackmage(blackmage) => blackmage.get_opener_len(),
             FfxivPriorityTable::Whitemage(whitemage) => whitemage.get_opener_len(),
+            FfxivPriorityTable::Paladin(paladin) => paladin.get_opener_len(),
         }
     }
 
@@ -46,6 +49,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Dragoon(dragoon) => dragoon.get_opener_at(index),
             FfxivPriorityTable::Blackmage(blackmage) => blackmage.get_opener_at(index),
             FfxivPriorityTable::Whitemage(whitemage) => whitemage.get_opener_at(index),
+            FfxivPriorityTable::Paladin(paladin) => paladin.get_opener_at(index),
         }
     }
 
@@ -59,6 +63,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Dragoon(dragoon) => dragoon.get_gcd_priority_table(),
             FfxivPriorityTable::Blackmage(blackmage) => blackmage.get_gcd_priority_table(),
             FfxivPriorityTable::Whitemage(whitemage) => whitemage.get_gcd_priority_table(),
+            FfxivPriorityTable::Paladin(paladin) => paladin.get_gcd_priority_table(),
         }
     }
 
@@ -72,6 +77,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Dragoon(dragoon) => dragoon.get_ogcd_priority_table(),
             FfxivPriorityTable::Blackmage(blackmage) => blackmage.get_ogcd_priority_table(),
             FfxivPriorityTable::Whitemage(whitemage) => whitemage.get_ogcd_priority_table(),
+            FfxivPriorityTable::Paladin(paladin) => paladin.get_ogcd_priority_table(),
         }
     }
 
@@ -85,6 +91,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Dragoon(dragoon) => dragoon.increment_turn(),
             FfxivPriorityTable::Blackmage(blackmage) => blackmage.increment_turn(),
             FfxivPriorityTable::Whitemage(whitemage) => whitemage.increment_turn(),
+            FfxivPriorityTable::Paladin(paladin) => paladin.increment_turn(),
         }
     }
 
@@ -98,6 +105,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Dragoon(dragoon) => dragoon.get_turn_count(),
             FfxivPriorityTable::Blackmage(blackmage) => blackmage.get_turn_count(),
             FfxivPriorityTable::Whitemage(whitemage) => whitemage.get_turn_count(),
+            FfxivPriorityTable::Paladin(paladin) => paladin.get_turn_count(),
         }
     }
 }

@@ -8,6 +8,7 @@ use crate::jobs_skill_data::dragoon::priorities::DragoonPriorityTable;
 use crate::jobs_skill_data::monk::priorities::MonkPriorityTable;
 use crate::jobs_skill_data::ninja::abilities::get_huton_status;
 use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
+use crate::jobs_skill_data::paladin::priorities::PaladinPriorityTable;
 use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
 use crate::jobs_skill_data::white_mage::priorities::WhitemagePriorityTable;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -23,6 +24,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+pub(crate) static PALADIN_START_TIME_MILLISECOND: TimeType = -2500;
 pub(crate) static WHITEMAGE_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static BLACKMAGE_START_TIME_MILLISECOND: TimeType = -5000;
 pub(crate) static NINJA_START_TIME_MILLISECOND: TimeType = -2500;
@@ -248,6 +250,31 @@ impl FfxivPlayer {
                 FfxivTurnType::Gcd,
                 WHITEMAGE_START_TIME_MILLISECOND,
                 WHITEMAGE_START_TIME_MILLISECOND,
+            ),
+        )
+    }
+
+    pub fn new_paladin(
+        player_id: IdType,
+        power: CharacterPower,
+        context: &FfxivContext,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> FfxivPlayer {
+        let paladin_job = context.jobs.get("PLD").unwrap();
+
+        Self::new(
+            player_id,
+            paladin_job.clone(),
+            power,
+            None,
+            FfxivPriorityTable::Paladin(PaladinPriorityTable::new(player_id)),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Gcd,
+                PALADIN_START_TIME_MILLISECOND,
+                PALADIN_START_TIME_MILLISECOND,
             ),
         )
     }
