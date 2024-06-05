@@ -1,11 +1,13 @@
 # API Specification
 
+## 1. Request
+
 | API route        | Request Type           | Description                                                                             |
 |------------------|------------------------|-----------------------------------------------------------------------------------------|
 | /api/quicksim    | POST(application/json) | Only customize player + party composition, and rest of the party member is default BIS. |
 | /api/advancedsim | POST(application/json) | Customize all party job + stats                                                         |
 
-## Request Body Example
+### Request Body Example
 
 * Requested in POST json body.
 
@@ -147,9 +149,60 @@
 * roles
 
   | role name |
-    |-----------|
+                              |-----------|
   | Tank      |
   | Healer    |
   | Melee     |
   | Ranged    |
   | Caster    |
+
+## 2. Response
+
+* Needed Criteria
+
+| Field              | Description                                                                     |
+|--------------------|---------------------------------------------------------------------------------|
+| RDPS               | My raw DPS + party members' contribution to my raid buffs                       |
+| ADPS               | RDPS + My contribution to other party member's buffs                            |
+| PDPS               | My raw DPS + My contribution to other party member's buffs                      |
+| Adjusted DPS       | RDPS - my buff contribution + my contribution to party member buffs             |
+| Rotation Log       | time in millisecond, skill_id, target, damage dealt(target ID 100 is for enemy) |
+| Contribution Table | RDPS contribution of each skill id, for each (playerId, raid buff Status Id)    |
+
+* Example Response
+
+```json
+{
+  "mainPlayerId": 5,
+  "partyDamageResult": [
+    {
+      "playerId": 0,
+      "job": "WAR",
+      "role": "Tank",
+      "rdps": 1000,
+      "adps": 1000,
+      "pdps": 1000,
+      "adjustedDPS": 1000,
+      "rotationLog": [
+        {
+          "time": -562,
+          "skillId": 1,
+          "target": 100,
+          "damage": 100
+        }
+        //...
+      ],
+      "contributionTable": [
+        {
+          "skillId": 1,
+          "playerId": 3,
+          "statusId": 1,
+          "rdpsContribution": 125
+        }
+        //...
+      ]
+    }
+    //...
+  ]
+}
+```
