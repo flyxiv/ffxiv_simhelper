@@ -149,7 +149,7 @@
 * roles
 
   | role name |
-                              |-----------|
+                                      |-----------|
   | Tank      |
   | Healer    |
   | Melee     |
@@ -160,14 +160,10 @@
 
 * Needed Criteria
 
-| Field              | Description                                                                     |
-|--------------------|---------------------------------------------------------------------------------|
-| RDPS               | My raw DPS + party members' contribution to my raid buffs                       |
-| ADPS               | RDPS + My contribution to other party member's buffs                            |
-| PDPS               | My raw DPS + My contribution to other party member's buffs                      |
-| Adjusted DPS       | RDPS - my buff contribution + my contribution to party member buffs             |
-| Rotation Log       | time in millisecond, skill_id, target, damage dealt(target ID 100 is for enemy) |
-| Contribution Table | RDPS contribution of each skill id, for each (playerId, raid buff Status Id)    |
+| Field | Description |
+|-------|-------------|
+
+| Rotation Log | time in millisecond, skill_id, target, damage dealt(target ID 100 is for enemy) |
 
 * Example Response
 
@@ -179,30 +175,39 @@
       "playerId": 0,
       "job": "WAR",
       "role": "Tank",
-      "rdps": 1000,
-      "adps": 1000,
-      "pdps": 1000,
-      "adjustedDPS": 1000,
       "rotationLog": [
         {
           "time": -562,
           "skillId": 1,
           "target": 100,
-          "damage": 100
+          "rawDamage": 100,
+          "rdpsContribution": [
+            {
+              "playerId": 3,
+              "raidBuffStatusId": 802,
+              "damage": 787.27
+            },
+            {
+              "playerId": 5,
+              "raidBuffStatusId": 1305,
+              "damage": 781.27
+            }
+            //...
+          ]
         }
-        //...
-      ],
-      "contributionTable": [
-        {
-          "skillId": 1,
-          "playerId": 3,
-          "statusId": 1,
-          "rdpsContribution": 125
-        }
-        //...
       ]
     }
-    //...
   ]
 }
 ```
+
+* Needed Query: From the raw data of the request, use GraphQL to query the following needed data:
+
+| Field              | Description                                                                  |
+|--------------------|------------------------------------------------------------------------------|
+| RDPS               | My raw DPS + party members' contribution to my raid buffs                    |
+| ADPS               | RDPS + My contribution to other party member's buffs                         |
+| PDPS               | My raw DPS + My contribution to other party member's buffs                   |
+| Adjusted DPS       | RDPS - my buff contribution + my contribution to party member buffs          |
+| Contribution Table | RDPS contribution of each skill id, for each (playerId, raid buff Status Id) |
+| Damage Table       | Damage Percent of each skill and their RDPS contribution                     |
