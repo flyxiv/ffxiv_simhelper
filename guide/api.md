@@ -149,7 +149,7 @@
 * roles
 
   | role name |
-                                      |-----------|
+  |-----------|
   | Tank      |
   | Healer    |
   | Melee     |
@@ -160,10 +160,11 @@
 
 * Needed Criteria
 
-| Field | Description |
-|-------|-------------|
-
-| Rotation Log | time in millisecond, skill_id, target, damage dealt(target ID 100 is for enemy) |
+| Field                | Description                                                                                                                        |
+|----------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| mainPlayerId         | The player ID of the requested user.                                                                                               |
+| rotationLog          | Time of skill use in millisecond, skill_id, target, damage dealt(target ID 100 is for enemy), damage contribution to each raidbuff |
+| fightTimeMillisecond | The requested fight time in millisecond                                                                                            |
 
 * Example Response
 
