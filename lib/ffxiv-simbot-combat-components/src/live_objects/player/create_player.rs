@@ -10,6 +10,7 @@ use crate::jobs_skill_data::ninja::abilities::get_huton_status;
 use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
 use crate::jobs_skill_data::paladin::priorities::PaladinPriorityTable;
 use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
+use crate::jobs_skill_data::warrior::priorities::WarriorPriorityTable;
 use crate::jobs_skill_data::white_mage::priorities::WhitemagePriorityTable;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -24,6 +25,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+pub(crate) static WARRIOR_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static PALADIN_START_TIME_MILLISECOND: TimeType = -2500;
 pub(crate) static WHITEMAGE_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static BLACKMAGE_START_TIME_MILLISECOND: TimeType = -5000;
@@ -275,6 +277,31 @@ impl FfxivPlayer {
                 FfxivTurnType::Gcd,
                 PALADIN_START_TIME_MILLISECOND,
                 PALADIN_START_TIME_MILLISECOND,
+            ),
+        )
+    }
+
+    pub fn new_warrior(
+        player_id: IdType,
+        power: CharacterPower,
+        context: &FfxivContext,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> FfxivPlayer {
+        let warrior_job = context.jobs.get("WAR").unwrap();
+
+        Self::new(
+            player_id,
+            warrior_job.clone(),
+            power,
+            None,
+            FfxivPriorityTable::Warrior(WarriorPriorityTable::new(player_id)),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Gcd,
+                WARRIOR_START_TIME_MILLISECOND,
+                WARRIOR_START_TIME_MILLISECOND,
             ),
         )
     }

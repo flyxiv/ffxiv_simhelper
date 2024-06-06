@@ -1,0 +1,85 @@
+use crate::response::aggregate_damage_simulation_data::{
+    PlayerDamageAggregate, SkillDamageAggregate,
+};
+use crate::response::simulation_result::RotationLog;
+use ffxiv_simbot_combat_components::{DamageType, DpsType, IdType, TimeType};
+use juniper::graphql_object;
+use serde::{Deserialize, Serialize};
+
+pub(crate) const SKILL_ENTITY_STRING: String = String::from("Skill");
+pub(crate) const STATUS_ENTITY_STRING: String = String::from("Status");
+
+/// API Response Format for quicksim/advancedsim API
+/// Given as a GraphQL response
+#[derive(Debug, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct SimulationApiResponse {
+    pub main_player_id: IdType,
+    pub combat_time_millisecond: TimeType,
+    pub simulation_data: Vec<SimulationDataResponse>,
+}
+
+#[derive(Debug, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct SimulationDataResponse {
+    pub player_id: IdType,
+    pub job: String,
+    pub role: String,
+    pub simulation_summary: SimulationSummaryResponse,
+    pub party_contribution_table: Vec<PartyContributionResponse>,
+    pub damage_profile_table: Vec<DamageProfileResponse>,
+    pub rotation_log: Vec<RotationLogResponse>,
+}
+
+/// Aggregates all the needed DPS summary data
+/// ## Terms described in the member equation:
+/// 1) Given Contribution : Total sum of all my contribution to party member's buffs.
+/// 2) Received Contribution : Total sum of all party member's contribution to my buffs.
+/// 3) Raw Damage : Raw damage that would be dealt if there wasn't any buffs.
+#[derive(Debug, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct SimulationSummaryResponse {
+    /// Raw Damage + Received Contribution
+    pub rdps: DpsType,
+    /// Raw Damage + Given Contribution - Received Contribution
+    pub adps: DpsType,
+    /// Raw Damage + Given Contribution
+    /// Which is equal to the actual DPS that is shown in the damage meters.
+    pub pdps: DpsType,
+    /// Effective Dps
+    /// The best metric for comparing how useful DPS performance was overall.
+    /// raw damage + Given Contribution + Received Contribution
+    pub edps: DpsType,
+}
+
+/// Records the damage contribution of each skill
+/// to each player's buff.
+#[derive(Debug, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct PartyContributionResponse {
+    pub skill_id: IdType,
+    pub party_member_id: IdType,
+    pub status_id: IdType,
+    pub contributed_rdps: DpsType,
+}
+
+/// Records the rdps/pdps contribution of each skill
+#[derive(Debug, Serialize, Clone)]
+pub struct DamageProfileResponse {
+    pub id: IdType,
+    /// Skill or Status
+    pub entity: String,
+    /// Sum of all raw damage
+    pub rdps_contribution: DpsType,
+    /// Sum of all raw damage + rdps contribution
+    pub pdps_contribution: DpsType,
+}
+
+/// Records the rotation log of each player
+#[derive(Debug, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct RotationLogResponse {
+    pub time: TimeType,
+    pub skill_id: IdType,
+    pub target: Option<IdType>,
+}

@@ -1,6 +1,6 @@
 use crate::combat_resources::CombatResource;
-use crate::jobs_skill_data::dragoon::abilities::make_dragoon_skill_list;
 use crate::jobs_skill_data::paladin::abilities::make_paladin_skill_list;
+use crate::jobs_skill_data::warrior::abilities::make_warrior_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -14,14 +14,17 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const BEAST_GAUGE_MAX_STACK: ResourceType = 100;
+
 #[derive(Clone)]
-pub(crate) struct PaladinCombatResources {
+pub(crate) struct WarriorCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: IdType,
     current_combo: ComboType,
+    beast_gauge: RefCell<ResourceType>,
 }
 
-impl CombatResource for PaladinCombatResources {
+impl CombatResource for WarriorCombatResources {
     fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill> {
         &mut self.skills
     }
@@ -30,10 +33,22 @@ impl CombatResource for PaladinCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, _: IdType, _: ResourceType) {}
+    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+        if resource_id == 0 {
+            let beast_gauge_stack = *self.beast_gauge.borrow();
+            self.beast_gauge.replace(min(
+                BEAST_GAUGE_MAX_STACK,
+                beast_gauge_stack + resource_amount,
+            ));
+        }
+    }
 
-    fn get_resource(&self, _: IdType) -> ResourceType {
-        -1
+    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+        if resource_id == 0 {
+            *self.beast_gauge.borrow()
+        } else {
+            -1
+        }
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -63,12 +78,13 @@ impl CombatResource for PaladinCombatResources {
     fn update_stack_timer(&mut self, _: TimeType) {}
 }
 
-impl PaladinCombatResources {
+impl WarriorCombatResources {
     pub(crate) fn new(player_id: IdType) -> Self {
         Self {
-            skills: make_paladin_skill_list(player_id),
+            skills: make_warrior_skill_list(player_id),
             player_id,
             current_combo: None,
+            beast_gauge: RefCell::new(0),
         }
     }
 }

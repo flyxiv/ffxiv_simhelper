@@ -8,6 +8,7 @@ use crate::jobs_skill_data::monk::combat_resources::MonkCombatResources;
 use crate::jobs_skill_data::ninja::combat_resources::NinjaCombatResources;
 use crate::jobs_skill_data::paladin::combat_resources::PaladinCombatResources;
 use crate::jobs_skill_data::sage::combat_resources::SageCombatResources;
+use crate::jobs_skill_data::warrior::combat_resources::WarriorCombatResources;
 use crate::jobs_skill_data::white_mage::combat_resources::WhitemageCombatResources;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -33,6 +34,7 @@ pub(crate) enum FfxivCombatResources {
     Blackmage(BlackmageCombatResources),
     Whitemage(WhitemageCombatResources),
     Paladin(PaladinCombatResources),
+    Warrior(WarriorCombatResources),
 }
 
 impl CombatResource for FfxivCombatResources {
@@ -47,6 +49,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Blackmage(blackmage_resources) => blackmage_resources.get_skills_mut(),
             Self::Whitemage(whitemage_resources) => whitemage_resources.get_skills_mut(),
             Self::Paladin(paladin_resources) => paladin_resources.get_skills_mut(),
+            Self::Warrior(warrior_resources) => warrior_resources.get_skills_mut(),
         }
     }
 
@@ -61,6 +64,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Blackmage(blackmage_resources) => blackmage_resources.get_skills(),
             Self::Whitemage(whitemage_resources) => whitemage_resources.get_skills(),
             Self::Paladin(paladin_resources) => paladin_resources.get_skills(),
+            Self::Warrior(warrior_resources) => warrior_resources.get_skills(),
         }
     }
 
@@ -87,6 +91,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Paladin(paladin_resources) => {
                 paladin_resources.add_resource(resource_id, resource_type)
             }
+            Self::Warrior(warrior_resources) => {
+                warrior_resources.add_resource(resource_id, resource_type)
+            }
         }
     }
 
@@ -101,6 +108,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Blackmage(blackmage_resources) => blackmage_resources.get_resource(resource_id),
             Self::Whitemage(whitemage_resources) => whitemage_resources.get_resource(resource_id),
             Self::Paladin(paladin_resources) => paladin_resources.get_resource(resource_id),
+            Self::Warrior(warrior_resources) => warrior_resources.get_resource(resource_id),
         }
     }
 
@@ -115,6 +123,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Blackmage(blackmage_resources) => blackmage_resources.get_current_combo(),
             Self::Whitemage(whitemage_resources) => whitemage_resources.get_current_combo(),
             Self::Paladin(paladin_resources) => paladin_resources.get_current_combo(),
+            Self::Warrior(warrior_resources) => warrior_resources.get_current_combo(),
         }
     }
 
@@ -129,6 +138,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Blackmage(blackmage_resources) => blackmage_resources.update_combo(combo),
             Self::Whitemage(whitemage_resources) => whitemage_resources.update_combo(combo),
             Self::Paladin(paladin_resources) => paladin_resources.update_combo(combo),
+            Self::Warrior(warrior_resources) => warrior_resources.update_combo(combo),
         }
     }
 
@@ -204,6 +214,13 @@ impl CombatResource for FfxivCombatResources {
                 current_time_millisecond,
                 player,
             ),
+            Self::Warrior(warrior_resources) => warrior_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
         }
     }
 
@@ -222,6 +239,7 @@ impl CombatResource for FfxivCombatResources {
                 whitemage_resources.get_next_buff_target(skill_id)
             }
             Self::Paladin(paladin_resources) => paladin_resources.get_next_buff_target(skill_id),
+            Self::Warrior(warrior_resources) => warrior_resources.get_next_buff_target(skill_id),
         }
     }
 
@@ -240,6 +258,7 @@ impl CombatResource for FfxivCombatResources {
                 whitemage_resources.update_stack_timer(elapsed_time)
             }
             Self::Paladin(paladin_resources) => paladin_resources.update_stack_timer(elapsed_time),
+            Self::Warrior(warrior_resources) => warrior_resources.update_stack_timer(elapsed_time),
         }
     }
 }
@@ -267,6 +286,7 @@ impl FfxivCombatResources {
             "BLM" => Self::Blackmage(BlackmageCombatResources::new(player_id)),
             "WHM" => Self::Whitemage(WhitemageCombatResources::new(player_id)),
             "PLD" => Self::Paladin(PaladinCombatResources::new(player_id)),
+            "WAR" => Self::Warrior(WarriorCombatResources::new(player_id)),
             _ => Self::Sage(SageCombatResources::new(player_id)),
         }
     }

@@ -1,13 +1,9 @@
-use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::bard::abilities::BardDatabase;
 use crate::jobs_skill_data::dancer::abilities::DancerDatabase;
-use crate::rotation::priority_table::SkillPrerequisite::HasSkillStacks;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
 use std::cell::RefCell;
-use std::rc::Rc;
 
 #[derive(Clone)]
 pub(crate) struct DancerPriorityTable {

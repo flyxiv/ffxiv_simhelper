@@ -18,14 +18,14 @@ static MAX_MANA: i32 = 10000;
 
 #[derive(Hash, Clone, Copy, PartialEq, Eq)]
 pub struct StatusKey {
-    skill_id: IdType,
-    player_id: IdType,
+    pub status_id: IdType,
+    pub player_id: IdType,
 }
 
 impl StatusKey {
     pub fn new(status_id: IdType, player_id: IdType) -> StatusKey {
         StatusKey {
-            skill_id: status_id,
+            status_id,
             player_id,
         }
     }
