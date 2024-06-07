@@ -9,12 +9,12 @@ use serde::Deserialize;
 pub struct SimulationApiRequest {
     pub main_player_id: IdType,
     pub combat_time_millisecond: TimeType,
-    pub party: Vec<PartyRequest>,
+    pub party: Vec<PlayerInfoRequest>,
 }
 
 #[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct PartyRequest {
+pub struct PlayerInfoRequest {
     pub player_id: IdType,
     pub job: String,
     pub role: String,

@@ -1,6 +1,5 @@
 use crate::combat_resources::ffxiv_combat_resources::FfxivCombatResources;
 use crate::combat_resources::CombatResource;
-use crate::damage_calculator::damage_rdps_profile::{FfxivRaidDamageTable, RaidDamageTable};
 use crate::damage_calculator::DamageRdpsProfile;
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
@@ -8,6 +7,7 @@ use crate::event::turn_info::TurnInfo;
 use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::gcd_calculator::GcdCalculator;
+use crate::live_objects::player::logs::{DamageLog, SkillLog};
 use crate::live_objects::player::player_turn_calculator::PlayerTurnCalculator;
 use crate::live_objects::player::{Player, StatusKey};
 use crate::live_objects::turn_type::FfxivTurnType;
@@ -15,14 +15,14 @@ use crate::rotation::cooldown_timer::CooldownTimer;
 use crate::rotation::ffxiv_priority_table::FfxivPriorityTable;
 use crate::rotation::priority_table::{PriorityTable, SkillUsageInfo};
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::use_type::UseType;
 use crate::skill::{Skill, AUTO_ATTACK_ID};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_info::StatusInfo;
 use crate::status::status_timer::StatusTimer;
-use crate::{DamageType, IdType, StatusTable, TimeType};
-use ffxiv_simbot_db::job::Job;
+use crate::{IdType, StatusTable, TimeType, TARGET_ID};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
 use std::cell::RefCell;
@@ -34,7 +34,7 @@ use std::rc::Rc;
 pub struct FfxivPlayer {
     /// Stat/Job Data about the player
     pub id: IdType,
-    pub job: Job,
+    pub job_abbrev: String,
     pub power: CharacterPower,
 
     pub priority_table: FfxivPriorityTable,
@@ -49,8 +49,8 @@ pub struct FfxivPlayer {
 
     /// profile tables. Saved and returned later on the response the show combat simulation results.
     /// Saves how much % of the total damage each damage skill contributed to the total damage.
-    pub skill_damage_profile_table: FfxivRaidDamageTable,
-    pub skill_raw_damage_table: HashMap<IdType, DamageType>,
+    pub damage_logs: Vec<DamageLog>,
+    pub skill_logs: Vec<SkillLog>,
     pub start_turn: FfxivEvent,
 }
 
@@ -58,7 +58,7 @@ impl Clone for FfxivPlayer {
     fn clone(&self) -> Self {
         FfxivPlayer {
             id: self.id,
-            job: self.job.clone(),
+            job_abbrev: self.job_abbrev.clone(),
             power: self.power.clone(),
             priority_table: self.priority_table.clone(),
             buff_list: Rc::new(RefCell::new(self.buff_list.borrow().clone())),
@@ -67,8 +67,8 @@ impl Clone for FfxivPlayer {
             event_queue: self.event_queue.clone(),
             turn_calculator: self.turn_calculator.clone(),
             mana_available: self.mana_available,
-            skill_damage_profile_table: Default::default(),
-            skill_raw_damage_table: Default::default(),
+            damage_logs: Default::default(),
+            skill_logs: Default::default(),
             start_turn: self.start_turn.clone(),
         }
     }
@@ -99,8 +99,8 @@ impl Player for FfxivPlayer {
             FfxivEvent::ApplyBuffStack(player_id, _, buff, duration, refresh, _) => {
                 self.add_status_stack(buff, duration, refresh, player_id)
             }
-            FfxivEvent::UseSkill(_, skill_id, event_time) => {
-                self.use_skill(skill_id, debuffs, event_time)
+            FfxivEvent::UseSkill(_, target_id, skill_id, event_time) => {
+                self.use_skill(skill_id, target_id, debuffs, event_time)
             }
             FfxivEvent::ApplyRaidBuff(player_id, buff, duration, max_duration, _) => {
                 self.add_status(buff, duration, max_duration, player_id)
@@ -134,7 +134,7 @@ impl Player for FfxivPlayer {
 
 impl FfxivPlayer {
     fn use_turn(
-        &self,
+        &mut self,
         turn_info: TurnInfo,
         debuffs: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         combat_time_millisecond: TimeType,
@@ -145,23 +145,42 @@ impl FfxivPlayer {
         let next_skill_ids = next_skill_ids;
 
         for use_skill in next_skill_ids.clone() {
+            let combat_resources = self.combat_resources.borrow();
+            let skill = combat_resources.get_skill(use_skill.skill_id);
+            let target_id = match skill.use_type {
+                UseType::UseOnPartyMember => {
+                    Some(combat_resources.get_next_buff_target(use_skill.skill_id))
+                }
+                UseType::UseOnTarget => Some(TARGET_ID),
+                UseType::NoTarget => None,
+            };
+
             if let Some(use_later_time) = use_skill.use_later_time {
                 self.event_queue
                     .borrow_mut()
                     .push(Reverse(FfxivEvent::UseSkill(
                         self.id,
+                        target_id,
                         use_skill.skill_id,
                         use_later_time,
                     )));
             } else {
-                self.use_skill(use_skill.skill_id, debuffs.clone(), combat_time_millisecond);
+                drop(combat_resources);
+
+                self.use_skill(
+                    use_skill.skill_id,
+                    target_id,
+                    debuffs.clone(),
+                    combat_time_millisecond,
+                );
             }
         }
     }
 
     fn use_skill(
-        &self,
+        &mut self,
         skill_id: IdType,
+        target_id: Option<IdType>,
         debuffs: StatusTable<DebuffStatus>,
         combat_time_millisecond: TimeType,
     ) {
@@ -184,6 +203,12 @@ impl FfxivPlayer {
             // extend doesn't insert and sort, so we need to push one by one.
             self.event_queue.borrow_mut().push(Reverse(ffxiv_event));
         }
+
+        self.skill_logs.push(SkillLog {
+            time: combat_time_millisecond,
+            skill_id,
+            target_id,
+        });
     }
 
     fn insert_turn_update_internal_event(
@@ -400,7 +425,7 @@ impl FfxivPlayer {
 
     pub fn new(
         id: IdType,
-        job: Job,
+        job_abbrev: String,
         power: CharacterPower,
         partner_player_id: Option<IdType>,
         priority_table: FfxivPriorityTable,
@@ -411,12 +436,12 @@ impl FfxivPlayer {
         FfxivPlayer {
             id,
             combat_resources: RefCell::new(FfxivCombatResources::new(
-                &job,
+                &job_abbrev,
                 id,
                 partner_player_id,
                 event_queue.clone(),
             )),
-            job,
+            job_abbrev,
             power,
             priority_table,
             buff_list: Rc::new(RefCell::new(buff_list)),
@@ -424,24 +449,26 @@ impl FfxivPlayer {
             turn_calculator: RefCell::new(PlayerTurnCalculator::new(id, event_queue.clone())),
             event_queue,
             mana_available: None,
-            skill_damage_profile_table: Default::default(),
-            skill_raw_damage_table: Default::default(),
+            damage_logs: vec![],
+            skill_logs: vec![],
             start_turn,
         }
     }
-    pub fn update_skill_damage_table(
+    pub fn update_damage_log(
         &mut self,
         skill_id: IdType,
         damage_profile: &DamageRdpsProfile,
+        current_time_millisecond: TimeType,
     ) {
-        self.skill_damage_profile_table
-            .update_table(&damage_profile.status_rdps_contribution);
-        self.skill_raw_damage_table
-            .insert(skill_id, damage_profile.raw_damage);
+        self.damage_logs.push(DamageLog::new(
+            skill_id,
+            damage_profile,
+            current_time_millisecond,
+        ));
     }
 
     pub fn is_melee(&self) -> bool {
-        match self.job.abbrev.as_str() {
+        match self.job_abbrev.as_str() {
             "NIN" | "MNK" | "DRG" | "SAM" | "GNB" | "DRK" | "PLD" | "WAR" | "BRD" | "MCH"
             | "DNC" => true,
             _ => false,

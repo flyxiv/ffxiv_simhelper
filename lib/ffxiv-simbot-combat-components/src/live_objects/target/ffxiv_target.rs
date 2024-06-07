@@ -7,6 +7,7 @@ use crate::owner_tracker::OwnerTracker;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_timer::StatusTimer;
+use crate::status::Status;
 use crate::TimeType;
 use std::cell::RefCell;
 use std::cmp::Reverse;
@@ -54,7 +55,7 @@ impl Target for FfxivTarget {
                             .borrow_mut()
                             .push(Reverse(FfxivEvent::Damage(
                                 debuff.get_owner_id(),
-                                debuff.get_id(),
+                                debuff.get_damage_skill_id().unwrap(),
                                 potency,
                                 false,
                                 false,

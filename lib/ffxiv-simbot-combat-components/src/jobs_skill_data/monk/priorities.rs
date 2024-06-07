@@ -98,13 +98,13 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
                 Box::new(And(
                     Box::new(HasBufforDebuff(db.leaden_fist.id)),
                     Box::new(Or(
-                        in_lunar_perfect_balance,
+                        in_lunar_perfect_balance.clone(),
                         Box::new(Or(
                             Box::new(And(
-                                in_solar_perfect_balance,
+                                in_solar_perfect_balance.clone(),
                                 Box::new(Not(Box::new(HasResource(1, 1)))),
                             )),
-                            in_last_perfect_balance,
+                            in_last_perfect_balance.clone(),
                         )),
                     )),
                 )),
@@ -117,13 +117,13 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
                 Box::new(And(
                     Box::new(Not(Box::new(HasBufforDebuff(db.leaden_fist.id)))),
                     Box::new(Or(
-                        in_lunar_perfect_balance,
+                        in_lunar_perfect_balance.clone(),
                         Box::new(Or(
                             Box::new(And(
-                                in_solar_perfect_balance,
+                                in_solar_perfect_balance.clone(),
                                 Box::new(Not(Box::new(HasResource(1, 1)))),
                             )),
-                            in_last_perfect_balance,
+                            in_last_perfect_balance.clone(),
                         )),
                     )),
                 )),
@@ -136,7 +136,7 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
                 Box::new(And(
                     Box::new(BufforDebuffLessThan(db.disciplined_fist.id, 6000)),
                     Box::new(And(
-                        in_solar_perfect_balance,
+                        in_solar_perfect_balance.clone(),
                         Box::new(Not(Box::new(HasResource(2, 1)))),
                     )),
                 )),
@@ -149,7 +149,7 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
                 Box::new(And(
                     Box::new(BufforDebuffLessThan(db.demolish_dot.id, 6000)),
                     Box::new(And(
-                        in_solar_perfect_balance,
+                        in_solar_perfect_balance.clone(),
                         Box::new(Not(Box::new(HasResource(3, 1)))),
                     )),
                 )),
@@ -160,7 +160,7 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
             prerequisite: Some(And(
                 Box::new(HasBufforDebuff(db.perfect_balance_buff.id)),
                 Box::new(And(
-                    in_solar_perfect_balance,
+                    in_solar_perfect_balance.clone(),
                     Box::new(Not(Box::new(HasResource(3, 1)))),
                 )),
             )),
@@ -170,7 +170,7 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
             prerequisite: Some(And(
                 Box::new(HasBufforDebuff(db.perfect_balance_buff.id)),
                 Box::new(And(
-                    in_solar_perfect_balance,
+                    in_solar_perfect_balance.clone(),
                     Box::new(Not(Box::new(HasResource(2, 1)))),
                 )),
             )),

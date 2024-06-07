@@ -1,3 +1,4 @@
+use crate::simulation_result::SimulationResult;
 use ffxiv_simbot_combat_components::live_objects::player::Player;
 use ffxiv_simbot_combat_components::live_objects::target::Target;
 use ffxiv_simbot_combat_components::skill::Skill;
@@ -21,7 +22,7 @@ where
 {
     fn run_simulation(&self);
     /// Gets the RDPS Profile by each buff. Raw Damage is id 0.
-    fn get_simulation_result(&self) -> HashMap<IdType, DpsType>;
+    fn create_simulation_result(&self) -> SimulationResult;
 }
 
 pub struct PlayerSimulationData<P, S>

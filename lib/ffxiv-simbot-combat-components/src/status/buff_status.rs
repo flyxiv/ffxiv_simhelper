@@ -4,7 +4,7 @@ use crate::owner_tracker::OwnerTracker;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
 use crate::{IdType, PercentType, ResourceType, TimeType};
-use rand::{random, thread_rng, Rng};
+use rand::{thread_rng, Rng};
 use std::cmp::min;
 
 #[derive(PartialEq, Eq, Clone)]
@@ -50,6 +50,10 @@ impl Status for BuffStatus {
 
     fn get_stack(&self) -> ResourceType {
         self.stacks
+    }
+
+    fn get_damage_skill_id(&self) -> Option<IdType> {
+        None
     }
 }
 

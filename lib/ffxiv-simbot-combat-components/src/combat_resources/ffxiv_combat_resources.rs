@@ -265,12 +265,12 @@ impl CombatResource for FfxivCombatResources {
 
 impl FfxivCombatResources {
     pub(crate) fn new(
-        job: &Job,
+        job_abbrev: &String,
         player_id: IdType,
         partner_player_id: Option<IdType>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
-        match job.abbrev.as_str() {
+        match job_abbrev.as_str() {
             "SGE" => Self::Sage(SageCombatResources::new(player_id)),
             "NIN" => Self::Ninja(NinjaCombatResources::new(player_id)),
             "BRD" => Self::Bard(BardCombatResources::new(player_id, event_queue)),

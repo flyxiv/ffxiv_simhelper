@@ -1,5 +1,5 @@
 use crate::event::ffxiv_event::FfxivEvent;
-use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff};
+use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
 use crate::id_entity::IdEntity;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
@@ -7,7 +7,6 @@ use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::UseBuff;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
-use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
 use std::collections::HashMap;
@@ -293,7 +292,14 @@ impl WarriorDatabase {
                     30000,
                     0,
                 ),
-                ApplyBuff(player_id, player_id, SURGING_TEMPEST.clone(), 10000, 60000),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    SURGING_TEMPEST.clone(),
+                    10000,
+                    60000,
+                    0,
+                ),
             ],
             proc_events: vec![],
             combo: None,

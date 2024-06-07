@@ -39,6 +39,8 @@ pub(crate) type ComboType = Option<IdType>;
 pub(crate) type PercentType = usize;
 
 pub static COMBAT_START_TIME: TimeType = -10000;
+pub static TARGET_ID: IdType = 100;
+
 pub enum CombatComponentsError {
     DebuffNotFoundError(String),
     BuffNotFoundError(String),

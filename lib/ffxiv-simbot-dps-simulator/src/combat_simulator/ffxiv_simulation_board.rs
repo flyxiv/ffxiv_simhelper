@@ -1,7 +1,5 @@
-use crate::combat_simulator::{
-    PlayerSimulationData, SimulationBoard, SIMULATION_START_TIME_MILLISECOND,
-};
-use crate::simulation_result::RotationLog;
+use crate::combat_simulator::{SimulationBoard, SIMULATION_START_TIME_MILLISECOND};
+use crate::simulation_result::{PartySimulationResult, SimulationResult};
 use ffxiv_simbot_combat_components::damage_calculator::raw_damage_calculator::{
     FfxivRawDamageCalculator, RawDamageCalculator,
 };
@@ -27,8 +25,9 @@ use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
 use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
 use ffxiv_simbot_combat_components::status::Status;
-use ffxiv_simbot_combat_components::{DamageType, DpsType, IdType, StatusTable, TimeType};
-use log::{debug, info};
+use ffxiv_simbot_combat_components::{DamageType, IdType, TimeType};
+use ffxiv_simbot_db::job::get_role;
+use log::info;
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::collections::HashMap;
@@ -44,9 +43,8 @@ pub struct FfxivSimulationBoard {
     raw_damage_calculator: FfxivRawDamageCalculator,
     rdps_calculator: FfxivRdpsCalculator,
 
-    pub(crate) rotation_logs: Rc<RefCell<HashMap<IdType, Vec<RotationLog>>>>,
+    pub main_player_id: IdType,
 
-    current_turn_player_id: RefCell<IdType>,
     pub party: Vec<Rc<RefCell<FfxivPlayer>>>,
     pub target: Rc<RefCell<FfxivTarget>>,
 
@@ -69,13 +67,29 @@ impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationB
         }
     }
 
-    fn get_simulation_result(&self) -> HashMap<IdType, DpsType> {
-        todo!()
+    fn create_simulation_result(&self) -> SimulationResult {
+        let mut party_simulation_results = vec![];
+
+        for player in self.party.clone() {
+            party_simulation_results.push(PartySimulationResult {
+                player_id: player.borrow().get_id(),
+                job: player.borrow().job_abbrev.clone(),
+                role: get_role(&player.borrow().job_abbrev),
+                skill_log: player.borrow().skill_logs.clone(),
+                damage_log: player.borrow().damage_logs.clone(),
+            });
+        }
+
+        SimulationResult {
+            main_player_id: self.main_player_id,
+            combat_time_millisecond: *self.current_combat_time_millisecond.borrow(),
+            party_simulation_results,
+        }
     }
 }
 
 impl FfxivSimulationBoard {
-    fn simulate_event(&self, mut ffxiv_event: FfxivEvent) {
+    fn simulate_event(&self, ffxiv_event: FfxivEvent) {
         let event_time = ffxiv_event.get_event_time();
         self.update_time_related_informations(event_time);
 
@@ -115,6 +129,7 @@ impl FfxivSimulationBoard {
                     *guaranteed_dh,
                     buffs,
                     debuffs,
+                    *time,
                 );
             }
             FfxivEvent::ApplyBuff(_, target_id, status, _, _, time) => {
@@ -180,7 +195,7 @@ impl FfxivSimulationBoard {
                 let target = self.get_target();
                 target.borrow_mut().handle_ffxiv_event(ffxiv_event);
             }
-            FfxivEvent::UseSkill(player_id, skill_id, time) => {
+            FfxivEvent::UseSkill(player_id, _, skill_id, time) => {
                 let player = self.get_player_data(*player_id);
                 let debuffs = self.target.borrow().get_status_table();
 
@@ -318,6 +333,7 @@ impl FfxivSimulationBoard {
         guaranteed_dh: bool,
         snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
         snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
+        current_combat_time_millisecond: TimeType,
     ) {
         let raw_damage = self.raw_damage_calculator.calculate_raw_damage(
             potency,
@@ -335,9 +351,11 @@ impl FfxivSimulationBoard {
             player.borrow().get_id(),
         );
 
-        player
-            .borrow_mut()
-            .update_skill_damage_table(skill_id, &damage_rdps_profile);
+        player.borrow_mut().update_damage_log(
+            skill_id,
+            &damage_rdps_profile,
+            current_combat_time_millisecond,
+        );
     }
 
     fn get_player_data(&self, player_id: IdType) -> Rc<RefCell<FfxivPlayer>> {
@@ -346,29 +364,6 @@ impl FfxivSimulationBoard {
 
     fn get_target(&self) -> Rc<RefCell<FfxivTarget>> {
         self.target.clone()
-    }
-
-    fn add_skill_to_rotation_log(&self, skill_id: IdType) {
-        let rotation_log = RotationLog {
-            casted_time_millisecond: *self.current_combat_time_millisecond.borrow(),
-            skill_id,
-        };
-
-        if self
-            .rotation_logs
-            .borrow()
-            .contains_key(&self.current_turn_player_id.borrow())
-        {
-            self.rotation_logs
-                .borrow_mut()
-                .get_mut(&self.current_turn_player_id.borrow())
-                .unwrap()
-                .push(rotation_log);
-        } else {
-            self.rotation_logs
-                .borrow_mut()
-                .insert(*self.current_turn_player_id.borrow(), vec![rotation_log]);
-        }
     }
 
     fn update_time_related_informations(&self, next_event_time: TimeType) {
@@ -405,14 +400,8 @@ impl FfxivSimulationBoard {
         self.target.borrow_mut().update_status_time(elapsed_time);
     }
 
-    fn get_final_rotation_log(&self) -> Vec<PlayerSimulationData<FfxivPlayer, AttackSkill>> {
-        todo!()
-    }
-
-    fn get_final_rdps_table(&self) -> HashMap<IdType, DpsType> {
-        todo!()
-    }
     pub fn new(
+        main_player_id: IdType,
         target: Rc<RefCell<FfxivTarget>>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
         finish_combat_time_millisecond: TimeType,
@@ -431,8 +420,7 @@ impl FfxivSimulationBoard {
         FfxivSimulationBoard {
             raw_damage_calculator: Default::default(),
             rdps_calculator: Default::default(),
-            rotation_logs: Rc::new(RefCell::new(HashMap::new())),
-            current_turn_player_id: RefCell::new(0),
+            main_player_id,
             party: vec![],
             target,
             current_combat_time_millisecond: RefCell::new(SIMULATION_START_TIME_MILLISECOND),

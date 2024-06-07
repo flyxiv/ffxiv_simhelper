@@ -24,9 +24,9 @@ path = "../lib/ffxiv-simbot-dps-simulator"
 version = "0.1.0"
 path = "../lib/ffxiv-simbot-combat-components"
 
-[dependencies.ffxiv-simbot-server]
+[dependencies.ffxiv-simbot-api]
 version = "0.1.0"
-path = "../lib/ffxiv-simbot-server"
+path = "../lib/ffxiv-simbot-api"
 
 [dependencies]
 axum = "0.7"

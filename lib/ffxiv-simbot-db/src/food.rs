@@ -1,7 +1,8 @@
+use crate::errors::Result;
 /// Saves functions needed to implement food data
 /// for FFXIV Simbot.
 use crate::stat::{MainStatTrait, StatType, SubStatTrait, SubStats};
-use crate::{item_vec_to_id_table, IdTable, JsonFileReader, Result, SearchKeyEntity};
+use crate::{item_vec_to_id_table, IdTable, JsonFileReader, SearchKeyEntity};
 use itertools::Itertools;
 use serde::Deserialize;
 use std::path::PathBuf;

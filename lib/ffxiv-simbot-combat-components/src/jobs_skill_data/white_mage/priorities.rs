@@ -1,13 +1,10 @@
-use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::bard::abilities::BardDatabase;
 use crate::jobs_skill_data::white_mage::abilities::WhitemageDatabase;
-use crate::rotation::priority_table::SkillPrerequisite::{HasSkillStacks, Not};
+use crate::rotation::priority_table::SkillPrerequisite::Not;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
 use std::cell::RefCell;
-use std::rc::Rc;
 
 #[derive(Clone)]
 pub(crate) struct WhitemagePriorityTable {
@@ -15,6 +12,7 @@ pub(crate) struct WhitemagePriorityTable {
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
+    ogcd_priority_table: Vec<SkillPriorityInfo>,
 }
 
 impl PriorityTable for WhitemagePriorityTable {
@@ -31,7 +29,7 @@ impl PriorityTable for WhitemagePriorityTable {
     }
 
     fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
-        &vec![]
+        &self.ogcd_priority_table
     }
 
     fn increment_turn(&self) {
@@ -50,6 +48,7 @@ impl WhitemagePriorityTable {
             turn_count: RefCell::new(0),
             opener: make_whitemage_opener(&db),
             gcd_priority_table: make_whitemage_gcd_priority_table(&db),
+            ogcd_priority_table: vec![],
         }
     }
 }

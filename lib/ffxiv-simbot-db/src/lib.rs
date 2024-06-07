@@ -1,14 +1,11 @@
-use crate::equipment::SlotType;
+use crate::errors::DataError;
 use crate::stat::StatType;
 use std::collections::HashMap;
-use std::error::Error;
-use std::fmt::{Debug, Display, Formatter};
 use std::hash::Hash;
 use std::path::PathBuf;
 
 /// Hash Table for fast searching by the object's Id.
 pub type IdTable<T, U> = HashMap<T, U>;
-type Result<T> = std::result::Result<T, DataError>;
 pub type StatModifierType = f64;
 pub type MultiplierType = f64;
 
@@ -16,6 +13,7 @@ pub(crate) mod character;
 pub mod clan;
 pub mod constants;
 pub mod equipment;
+pub mod errors;
 pub mod ffxiv_context;
 pub mod food;
 pub mod job;
@@ -27,92 +25,25 @@ pub mod stat_calculator;
 /// Saves Base Constants Needed for getting Job Attributes for Stats
 /// https://www.akhmorning.com/allagan-studies/modifiers/levelmods/
 #[derive(PartialEq, Copy, Clone)]
-pub(crate) struct StatModifier {
-    pub(crate) max_level_main_stat_modifier: StatModifierType,
-    pub(crate) max_level_base_vitality: StatType,
-    pub(crate) max_level_base_piety: StatType,
-    pub(crate) max_level_base_direct_hit: StatType,
-    pub(crate) max_level_base_critical_hit: StatType,
-    pub(crate) max_level_base_determination: StatType,
-    pub(crate) max_level_base_skill_speed: StatType,
-    pub(crate) max_level_base_spell_speed: StatType,
-    pub(crate) max_level_base_tenacity: StatType,
-    pub(crate) max_level_sub_stat_modifier: StatModifierType,
-    pub(crate) max_level_div: StatModifierType,
-    pub(crate) hp_per_vitality_non_tank: StatModifierType,
-    pub(crate) hp_per_vitality_tank: StatModifierType,
-    pub(crate) max_level_hp_modifier: f64,
+pub struct StatModifier {
+    pub max_level_main_stat_modifier: StatModifierType,
+    pub max_level_base_vitality: StatType,
+    pub max_level_base_piety: StatType,
+    pub max_level_base_direct_hit: StatType,
+    pub max_level_base_critical_hit: StatType,
+    pub max_level_base_determination: StatType,
+    pub max_level_base_skill_speed: StatType,
+    pub max_level_base_spell_speed: StatType,
+    pub max_level_base_tenacity: StatType,
+    pub max_level_sub_stat_modifier: StatModifierType,
+    pub max_level_div: StatModifierType,
+    pub hp_per_vitality_non_tank: StatModifierType,
+    pub hp_per_vitality_tank: StatModifierType,
+    pub max_level_hp_modifier: f64,
 }
 
-pub enum DataError {
-    FileNotFoundError(String),
-    JsonParseError(String),
-    EquipmentParseError(String),
-    JobClassParseError(String),
-    RaceParseError(String),
-    StatParseError(String),
-    EquipError(SlotType),
-    UnEquipError(SlotType),
-    MateriaEquipError(SlotType),
-    MateriaUnequipError(SlotType),
-}
-
-impl Debug for DataError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            DataError::FileNotFoundError(s) => write!(f, "File not found: {}", s),
-            DataError::JsonParseError(s) => write!(f, "Error parsing JSON: {}", s),
-            DataError::EquipmentParseError(s) => write!(f, "Error parsing equipment: {}", s),
-            DataError::JobClassParseError(s) => write!(f, "Error parsing job class: {}", s),
-            DataError::RaceParseError(s) => write!(f, "Error parsing race: {}", s),
-            DataError::StatParseError(s) => write!(f, "Error parsing stat: {}", s),
-            DataError::EquipError(slot) => write!(f, "Equip to Invalid Slot: {:?}", slot),
-            DataError::UnEquipError(slot) => write!(f, "Unequip Invalid Slot: {:?}", slot),
-            DataError::MateriaEquipError(slot) => {
-                write!(f, "Cannot Equip Materia to Slot: {:?}", slot)
-            }
-            DataError::MateriaUnequipError(slot) => {
-                write!(f, "Cannot Unequip Materia in Slot: {:?}", slot)
-            }
-        }
-    }
-}
-
-impl Display for DataError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            DataError::FileNotFoundError(s) => write!(f, "File not found: {}", s),
-            DataError::JsonParseError(s) => write!(f, "Error parsing JSON: {}", s),
-            DataError::EquipmentParseError(s) => write!(f, "Error parsing equipment: {}", s),
-            DataError::JobClassParseError(s) => write!(f, "Error parsing job class: {}", s),
-            DataError::RaceParseError(s) => write!(f, "Error parsing race: {}", s),
-            DataError::StatParseError(s) => write!(f, "Error parsing stat: {}", s),
-            DataError::EquipError(slot) => write!(f, "Equip to Invalid Slot: {:?}", slot),
-            DataError::UnEquipError(slot) => write!(f, "Unequip Invalid Slot: {:?}", slot),
-            DataError::MateriaEquipError(slot) => write!(f, "Cannot Equip to Slot: {:?}", slot),
-            DataError::MateriaUnequipError(slot) => {
-                write!(f, "Cannot Unequip Materia in Slot: {:?}", slot)
-            }
-        }
-    }
-}
-
-impl Error for DataError {}
-
-impl From<serde_json::Error> for DataError {
-    fn from(e: serde_json::Error) -> Self {
-        DataError::JsonParseError(e.to_string())
-    }
-}
-
-impl From<String> for DataError {
-    fn from(s: String) -> Self {
-        Self::FileNotFoundError(s)
-    }
-}
-
-trait JsonFileReader {
-    fn read_json_file(&self, file_path: &PathBuf) -> Result<String> {
+pub(crate) trait JsonFileReader {
+    fn read_json_file(&self, file_path: &PathBuf) -> Result<String, DataError> {
         std::fs::read_to_string(file_path).map_err(|e| format!("{:?}", e).into())
     }
 }
@@ -158,7 +89,7 @@ where
             if !table.contains_key(&key) {
                 table.insert(key, vec![item.clone()]);
             } else {
-                let mut entry = table.get_mut(&key).unwrap();
+                let entry = table.get_mut(&key).unwrap();
                 entry.push(item.clone());
             }
         }

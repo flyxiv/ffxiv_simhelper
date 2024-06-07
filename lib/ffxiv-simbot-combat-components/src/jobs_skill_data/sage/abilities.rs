@@ -20,6 +20,7 @@ impl SageDatabase {
             id: 700,
             owner_id: player_id,
             potency: Some(70),
+            damage_skill_id: Some(700),
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
             duration_millisecond: 30000,

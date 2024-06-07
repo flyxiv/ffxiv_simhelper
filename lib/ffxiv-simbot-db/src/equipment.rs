@@ -1,9 +1,11 @@
+use crate::errors::DataError;
+use crate::errors::Result;
 use crate::job::JobAbbrevType;
 /// Implements functions needed to save Equipment data
 /// in FFXIV Simbot.
 use crate::materia::Materia;
 use crate::stat::{MainStatTrait, MainStats, StatType, SubStatTrait, SubStats};
-use crate::{item_vec_to_id_vec_table, DataError, IdTable, JsonFileReader, SearchKeyEntity};
+use crate::{item_vec_to_id_vec_table, IdTable, JsonFileReader, SearchKeyEntity};
 use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
@@ -24,7 +26,6 @@ pub struct EquipmentKey {
 }
 
 pub type EquipmentTable = IdTable<EquipmentKey, Vec<Equipment>>;
-type Result<T> = std::result::Result<T, DataError>;
 
 /// Trait for Weapons
 /// give magic/weapon damage info

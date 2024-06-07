@@ -1,5 +1,4 @@
 use crate::event::ffxiv_event::FfxivEvent;
-use crate::event::FfxivEventQueue;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
@@ -7,9 +6,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
-use std::cell::RefCell;
 use std::collections::HashMap;
-use std::rc::Rc;
 
 pub(crate) struct DancerDatabase {
     pub(crate) cascade: AttackSkill,

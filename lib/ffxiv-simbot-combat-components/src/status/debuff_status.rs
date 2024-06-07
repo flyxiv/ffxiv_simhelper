@@ -13,6 +13,7 @@ pub(crate) type SnapshotTable = HashMap<IdType, Vec<DamageType>>;
 pub struct DebuffStatus {
     pub(crate) id: IdType,
     pub(crate) owner_id: IdType,
+    pub(crate) damage_skill_id: Option<IdType>,
     pub(crate) potency: Option<DamageType>,
     pub(crate) duration_left_millisecond: TimeType,
     pub(crate) status_info: Vec<StatusInfo>,
@@ -52,6 +53,10 @@ impl Status for DebuffStatus {
     }
     fn get_stack(&self) -> ResourceType {
         self.stacks
+    }
+
+    fn get_damage_skill_id(&self) -> Option<IdType> {
+        self.damage_skill_id
     }
 }
 

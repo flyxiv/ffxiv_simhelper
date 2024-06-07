@@ -1,22 +1,11 @@
 use crate::event::ffxiv_event::FfxivEvent;
-use crate::event::ffxiv_event::FfxivEvent::{
-    AddTicker, ApplyBuff, ApplyRaidBuff, RemoveRaidBuff, RemoveTargetBuff, RemoveTicker,
-};
-use crate::event::FfxivEventQueue;
-use crate::event_ticker::ffxiv_event_ticker::FfxivEventTicker;
-use crate::event_ticker::independent_ticker::IndependentTicker;
-use crate::event_ticker::TickerKey;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
 use crate::skill::{make_skill_table, ResourceRequirements};
-use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::status_info::StatusInfo;
 use crate::IdType;
-use std::cell::RefCell;
 use std::collections::HashMap;
-use std::rc::Rc;
 
 pub(crate) struct WhitemageDatabase {
     pub(crate) glare3: AttackSkill,
@@ -33,6 +22,7 @@ impl WhitemageDatabase {
             id: 400,
             owner_id: player_id,
             potency: Some(65),
+            damage_skill_id: Some(401),
             duration_left_millisecond: 0,
             status_info: vec![],
             duration_millisecond: 30000,

@@ -6,6 +6,7 @@ use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::UseBuff;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
+use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
 use std::collections::HashMap;
@@ -174,6 +175,22 @@ impl DragoonDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
+        let CHAOTIC_SPRING_DOT: DebuffStatus = DebuffStatus {
+            id: 810,
+            name: String::from("Chaotic Spring"),
+            owner_id: player_id,
+            damage_skill_id: Some(806),
+            potency: Some(45),
+            duration_left_millisecond: 0,
+            status_info: vec![StatusInfo::None],
+            duration_millisecond: 24000,
+            is_raidwide: false,
+            stacks: 1,
+            max_stacks: 1,
+            snapshotted_buffs: HashMap::new(),
+            snapshotted_debuffs: HashMap::new(),
+        };
+
         let LIFE_SURGE: AttackSkill = AttackSkill {
             id: 800,
             name: String::from("Life Surge"),
@@ -338,7 +355,13 @@ impl DragoonDatabase {
             player_id,
             potency: 660,
             trait_multiplier: 1.0,
-            additional_skill_events: vec![],
+            additional_skill_events: vec![FfxivEvent::ApplyDebuff(
+                player_id,
+                CHAOTIC_SPRING_DOT.clone(),
+                24000,
+                24000,
+                0,
+            )],
             proc_events: vec![],
             combo: Some(5),
             delay_millisecond: None,

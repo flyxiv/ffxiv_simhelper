@@ -1,9 +1,7 @@
 use crate::StatModifier;
 use crate::StatModifierType;
-use mockall::lazy_static;
+use lazy_static::lazy_static;
 use std::collections::HashMap;
-
-/// Gets all the constant values needed for simulating FFXIV players.
 
 lazy_static! {
     pub static ref EQUIPMENT_SLOTS: usize = 14;
@@ -56,7 +54,7 @@ lazy_static! {
         "GNB".to_string(),
         "DRK".to_string()
     ];
-    pub(crate) static ref FFXIV_STAT_MODIFIER: StatModifier = StatModifier {
+    pub static ref FFXIV_STAT_MODIFIER: StatModifier = StatModifier {
         max_level_main_stat_modifier: 390f64,
         max_level_base_vitality: 390,
         max_level_base_piety: 390,
@@ -83,7 +81,7 @@ lazy_static! {
     pub(crate) static ref SPEED_MULTIPLIER: StatModifierType = 130.0;
     pub(crate) static ref UNIT_BASE: StatModifierType = 1000.0;
     pub(crate) static ref SPEED_BASE: StatModifierType = 10000.0;
-    pub(crate) static ref WEAPON_ATTACK_BASE_PER_JOB: HashMap<String, usize> = HashMap::from([
+    pub(crate) static ref WEAPON_ATTACK_BASE_PER_JOB: HashMap<String, i32> = HashMap::from([
         ("PLD".to_string(), 39),
         ("WAR".to_string(), 40),
         ("GNB".to_string(), 39),

@@ -72,6 +72,7 @@ impl MonkDatabase {
             id: 902,
             owner_id: player_id,
             potency: Some(70),
+            damage_skill_id: Some(904),
             duration_left_millisecond: 0,
             status_info: vec![],
             duration_millisecond: 18000,

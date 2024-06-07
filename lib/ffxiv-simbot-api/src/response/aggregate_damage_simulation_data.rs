@@ -1,5 +1,4 @@
-use crate::response::simulation_api_response::RotationLogResponse;
-use crate::response::simulation_result::RotationLog;
+use ffxiv_simbot_combat_components::live_objects::player::logs::DamageLog;
 use ffxiv_simbot_combat_components::live_objects::player::StatusKey;
 use ffxiv_simbot_combat_components::{DamageType, IdType};
 use itertools::izip;
@@ -46,32 +45,25 @@ impl Default for SkillDamageAggregate {
     }
 }
 
-pub(crate) struct RotationLogAggregate {
-    pub(crate) rotation_log_responses: Vec<Vec<RotationLogResponse>>,
-    pub(crate) skill_damage_tables: Vec<HashMap<IdType, SkillDamageAggregate>>,
-}
-
 /// Aggregate the total number of raw damage
 /// and the total number of buff contribution for each raidbuff.
 /// for each skill unit.
 pub(crate) fn aggregate_skill_damage(
-    rotation_logs: &Vec<Vec<RotationLog>>,
-) -> RotationLogAggregate {
+    damage_logs_of_party: &Vec<Vec<DamageLog>>,
+) -> Vec<HashMap<IdType, SkillDamageAggregate>> {
     let mut skill_damage_tables = vec![];
-    let mut rotation_log_responses = vec![];
 
-    for rotation_log in rotation_logs {
+    for damage_logs_of_single_player in damage_logs_of_party {
         let mut skill_damage_table = HashMap::new();
-        let mut rotation_log_response = vec![];
 
-        for log in rotation_log.iter() {
+        for damage_log in damage_logs_of_single_player.iter() {
             let skill_damage_entry = skill_damage_table
-                .entry(log.skill_id)
+                .entry(damage_log.skill_id)
                 .or_insert(SkillDamageAggregate::default());
 
-            skill_damage_entry.total_raw_damage += log.raw_damage;
+            skill_damage_entry.total_raw_damage += damage_log.raw_damage;
 
-            for rdps_contribution in log.rdps_contribution.iter() {
+            for rdps_contribution in damage_log.rdps_contribution.iter() {
                 let status_key = StatusKey::new(
                     rdps_contribution.raid_buff_status_id,
                     rdps_contribution.player_id,
@@ -84,18 +76,12 @@ pub(crate) fn aggregate_skill_damage(
 
                 *rdps_contribution_entry += rdps_contribution.contributed_damage;
             }
-
-            rotation_log_response.push(RotationLogResponse::from(log));
         }
 
         skill_damage_tables.push(skill_damage_table);
-        rotation_log_responses.push(rotation_log_response);
     }
 
-    RotationLogAggregate {
-        skill_damage_tables,
-        rotation_log_responses,
-    }
+    skill_damage_tables
 }
 
 /// Aggregate the total number of buff contribution for each player in player units.
@@ -119,7 +105,7 @@ pub(crate) fn aggregate_player_damage_statistics(
     party_damage_contribution_table: &Vec<HashMap<StatusKey, DamageType>>,
     skill_damage_tables: &Vec<HashMap<IdType, SkillDamageAggregate>>,
 ) -> Vec<PlayerDamageAggregate> {
-    let mut party_damage_aggregate = Vec::new();
+    let mut party_damage_aggregate: Vec<PlayerDamageAggregate> = vec![];
     party_damage_aggregate.resize(party_damage_contribution_table.len(), Default::default());
 
     for (player_id, (contribution_table, skill_damage_table)) in
@@ -139,7 +125,7 @@ pub(crate) fn aggregate_player_damage_statistics(
                     .total_rdps_contributions
                     .entry(status_key.player_id)
                     .or_insert(0);
-                entry += contributed_damage;
+                *entry += contributed_damage;
             }
         }
     }

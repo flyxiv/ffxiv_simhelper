@@ -1,9 +1,10 @@
 use crate::constants::FFXIV_STAT_MODIFIER;
+use crate::errors::Result;
 /// Implements functions needed to save Job data
 /// in FFXIV Simbot.
 /// Only save combat rotation as of now.
 use crate::stat::{HpType, MainStatTrait, MainStats, SpecialStatTrait, StatType, SubStatTrait};
-use crate::{item_vec_to_id_table, IdTable, JsonFileReader, Result, SearchKeyEntity, StatModifier};
+use crate::{item_vec_to_id_table, IdTable, JsonFileReader, SearchKeyEntity};
 use itertools::Itertools;
 use serde::Deserialize;
 use std::path::PathBuf;
@@ -52,10 +53,18 @@ pub struct Job {
     pub is_tank: bool,
 }
 
-pub fn is_tank(abbrev: String) -> bool {
+pub fn is_tank(abbrev: &String) -> bool {
     match abbrev.as_str() {
         "PLD" | "WAR" | "DRK" | "GNB" => true,
         _ => false,
+    }
+}
+
+pub fn get_role(abbrev: &String) -> String {
+    match abbrev.as_str() {
+        "PLD" | "WAR" | "DRK" | "GNB" => "Tank".to_string(),
+        "WHM" | "SCH" | "AST" | "SGE" => "Healer".to_string(),
+        _ => "DPS".to_string(),
     }
 }
 

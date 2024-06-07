@@ -7,14 +7,15 @@ use ffxiv_simbot_db::food::FoodFactory;
 use ffxiv_simbot_db::job::JobFactory;
 use itertools::Itertools;
 use std::fs::File;
+use std::sync::Arc;
 
 /// The Main Engine of FFXIV Simbot.
 /// Loads Needed Data, Simulates User DPS.
 /// Singleton Entity. Only one instance of Engine is created.
 #[derive(Clone)]
 pub struct Engine {
-    config: EngineConfig,
-    pub context: FfxivContext,
+    pub config: Arc<EngineConfig>,
+    pub context: Arc<FfxivContext>,
 }
 
 impl Engine {
@@ -49,13 +50,13 @@ impl Engine {
             .expect("failed to parse food json file");
 
         Engine {
-            config: engine_config,
-            context: FfxivContext {
+            config: Arc::new(engine_config),
+            context: Arc::new(FfxivContext {
                 jobs,
                 equipments,
                 clans,
                 foods,
-            },
+            }),
         }
     }
 }

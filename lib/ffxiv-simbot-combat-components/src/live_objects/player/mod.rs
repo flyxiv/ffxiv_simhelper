@@ -11,6 +11,7 @@ mod create_player;
 /// so 1 GCD delay + 2 oGCD delay = 3 * oGCD delay.
 pub mod ffxiv_player;
 pub mod gcd_calculator;
+pub mod logs;
 mod player_damage_profile;
 pub mod player_turn_calculator;
 

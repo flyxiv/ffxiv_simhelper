@@ -4,14 +4,12 @@ use crate::{IdType, TurnCount};
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::paladin::abilities::PaladinDatabase;
 use crate::jobs_skill_data::warrior::abilities::WarriorDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
-    Or, RelatedSkillCooldownLessThan,
+    Or,
 };
-use crate::skill::ResourceRequirements::Resource;
 
 #[derive(Clone)]
 pub(crate) struct WarriorPriorityTable {

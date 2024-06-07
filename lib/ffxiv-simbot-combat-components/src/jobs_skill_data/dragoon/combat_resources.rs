@@ -9,7 +9,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{ComboType, IdType, ResourceType, TimeType};
 use std::cell::RefCell;
-use std::cmp::{max, min};
+use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 

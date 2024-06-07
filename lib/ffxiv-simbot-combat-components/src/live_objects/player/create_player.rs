@@ -19,7 +19,6 @@ use crate::rotation::ffxiv_priority_table::FfxivPriorityTable;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::{IdType, TimeType};
-use ffxiv_simbot_db::ffxiv_context::FfxivContext;
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -41,15 +40,13 @@ impl FfxivPlayer {
     pub fn new_ninja(
         player_id: IdType,
         power: CharacterPower,
-        context: &FfxivContext,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
-        let ninja_job = context.jobs.get("NIN").unwrap();
         let huton = get_huton_status(player_id);
 
         Self::new(
             player_id,
-            ninja_job.clone(),
+            String::from("NIN"),
             power,
             None,
             FfxivPriorityTable::Ninja(NinjaPriorityTable::new(player_id)),
@@ -69,14 +66,11 @@ impl FfxivPlayer {
     pub fn new_sage(
         player_id: IdType,
         power: CharacterPower,
-        context: &FfxivContext,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
-        let sage_job = context.jobs.get("SGE").unwrap();
-
         Self::new(
             player_id,
-            sage_job.clone(),
+            String::from("SGE"),
             power,
             None,
             FfxivPriorityTable::Sage(SagePriorityTable::new(player_id)),
@@ -94,14 +88,11 @@ impl FfxivPlayer {
     pub fn new_bard(
         player_id: IdType,
         power: CharacterPower,
-        context: &FfxivContext,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
-        let bard_job = context.jobs.get("BRD").unwrap();
-
         Self::new(
             player_id,
-            bard_job.clone(),
+            String::from("BRD"),
             power,
             None,
             FfxivPriorityTable::Bard(BardPriorityTable::new(player_id, ffxiv_event_queue.clone())),
@@ -120,14 +111,11 @@ impl FfxivPlayer {
         player_id: IdType,
         partner_player_id: IdType,
         power: CharacterPower,
-        context: &FfxivContext,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
-        let dancer_job = context.jobs.get("DNC").unwrap();
-
         Self::new(
             player_id,
-            dancer_job.clone(),
+            String::from("DNC"),
             power,
             Some(partner_player_id),
             FfxivPriorityTable::Dancer(DancerPriorityTable::new(player_id, partner_player_id)),
@@ -145,11 +133,8 @@ impl FfxivPlayer {
     pub fn new_monk(
         player_id: IdType,
         power: CharacterPower,
-        context: &FfxivContext,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
-        let monk_job = context.jobs.get("MNK").unwrap();
-
         let GREASED_LIGHTNING_IV: BuffStatus = BuffStatus {
             id: 909,
             owner_id: player_id,
@@ -165,7 +150,7 @@ impl FfxivPlayer {
 
         Self::new(
             player_id,
-            monk_job.clone(),
+            String::from("MNK"),
             power,
             None,
             FfxivPriorityTable::Monk(MonkPriorityTable::new(player_id)),
@@ -184,14 +169,11 @@ impl FfxivPlayer {
         player_id: IdType,
         partner_player_id: IdType,
         power: CharacterPower,
-        context: &FfxivContext,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
-        let dragoon_job = context.jobs.get("DRG").unwrap();
-
         Self::new(
             player_id,
-            dragoon_job.clone(),
+            String::from("DRG"),
             power,
             Some(partner_player_id),
             FfxivPriorityTable::Dragoon(DragoonPriorityTable::new(player_id, partner_player_id)),
@@ -209,14 +191,11 @@ impl FfxivPlayer {
     pub fn new_blackmage(
         player_id: IdType,
         power: CharacterPower,
-        context: &FfxivContext,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
-        let black_mage_job = context.jobs.get("BLM").unwrap();
-
         Self::new(
             player_id,
-            black_mage_job.clone(),
+            String::from("BLM"),
             power,
             None,
             FfxivPriorityTable::Blackmage(BlackmagePriorityTable::new(player_id)),
@@ -234,14 +213,11 @@ impl FfxivPlayer {
     pub fn new_whitemage(
         player_id: IdType,
         power: CharacterPower,
-        context: &FfxivContext,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
-        let whitemage_job = context.jobs.get("WHM").unwrap();
-
         Self::new(
             player_id,
-            whitemage_job.clone(),
+            String::from("WHM"),
             power,
             None,
             FfxivPriorityTable::Whitemage(WhitemagePriorityTable::new(player_id)),
@@ -259,14 +235,11 @@ impl FfxivPlayer {
     pub fn new_paladin(
         player_id: IdType,
         power: CharacterPower,
-        context: &FfxivContext,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
-        let paladin_job = context.jobs.get("PLD").unwrap();
-
         Self::new(
             player_id,
-            paladin_job.clone(),
+            String::from("PLD"),
             power,
             None,
             FfxivPriorityTable::Paladin(PaladinPriorityTable::new(player_id)),
@@ -284,14 +257,11 @@ impl FfxivPlayer {
     pub fn new_warrior(
         player_id: IdType,
         power: CharacterPower,
-        context: &FfxivContext,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
-        let warrior_job = context.jobs.get("WAR").unwrap();
-
         Self::new(
             player_id,
-            warrior_job.clone(),
+            String::from("WAR"),
             power,
             None,
             FfxivPriorityTable::Warrior(WarriorPriorityTable::new(player_id)),

@@ -1,13 +1,7 @@
 use crate::event::ffxiv_event::FfxivEvent;
-use crate::event::ffxiv_event::FfxivEvent::{
-    AddTicker, ApplyBuff, ApplyRaidBuff, RemoveRaidBuff, RemoveTargetBuff, RemoveTicker,
-};
-use crate::event::FfxivEventQueue;
-use crate::event_ticker::ffxiv_event_ticker::FfxivEventTicker;
-use crate::event_ticker::independent_ticker::IndependentTicker;
-use crate::event_ticker::TickerKey;
+use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::{SWIFTCAST, SWIFTCAST_BUFF};
+use crate::jobs_skill_data::CasterGlobalSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
@@ -17,9 +11,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
-use std::cell::RefCell;
 use std::collections::HashMap;
-use std::rc::Rc;
 
 pub(crate) struct BlackmageDatabase {
     pub(crate) transpose: AttackSkill,
@@ -73,6 +65,7 @@ impl BlackmageDatabase {
             name: String::from("Thunder III"),
             owner_id: player_id,
             potency: Some(35),
+            damage_skill_id: Some(1701),
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
             duration_millisecond: 30000,
@@ -709,6 +702,8 @@ impl BlackmageDatabase {
             use_type: UseType::UseOnTarget,
         };
 
+        let caster_skills = CasterGlobalSkill::new(player_id);
+
         BlackmageDatabase {
             transpose: TRANSPOSE,
             thunder3: THUNDER_III,
@@ -726,14 +721,14 @@ impl BlackmageDatabase {
             blizzard4: BLIZZARD_IV,
             triplecast: TRIPLECAST,
             leylines: LEY_LINES,
-            swiftcast: SWIFTCAST,
+            swiftcast: caster_skills.swiftcast,
             sharpcast: SHARPCAST,
             fire3_opener: FIRE_III_OPENER,
             amplifier: AMPLIFIER,
 
             triplecast_buff: TRIPLECAST_BUFF,
             thunder3_dot: THUNDER_III_DOT,
-            swiftcast_buff: SWIFTCAST_BUFF,
+            swiftcast_buff: caster_skills.swiftcast_buff,
             sharpcast_buff: SHARPCAST_BUFF,
             leylines_buff: LEYLINES_BUFF,
             astral_fire3: ASTRAL_FIRE_III,

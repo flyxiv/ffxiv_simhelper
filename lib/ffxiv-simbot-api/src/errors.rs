@@ -1,22 +1,27 @@
-use error_chain::error_chain;
+use axum::response::IntoResponse;
+use thiserror::Error;
 
-error_chain! {
-    types {
-        Error, ErrorKind, ResultExt, Result;
-    }
+pub(crate) type Result<T> = std::result::Result<T, FfxivSimbotServiceError>;
 
-    foreign_links {
-        Axum(Axum::Error);
-    }
+#[derive(Error, Debug)]
+pub(crate) enum FfxivSimbotServiceError {
+    #[error("Data Error: {0}")]
+    DataError(#[from] ffxiv_simbot_db::errors::DataError),
+    #[error("Axum Error: {0}")]
+    AxumError(#[from] axum::Error),
+    #[error("Invalid Request: {0}")]
+    InvalidRequest(String),
+    #[error("Invalid Response: {0}")]
+    InvalidResponse(String),
+    #[error("Invalid Job String: {0}")]
+    InvalidJobString(String),
+}
 
-    errors {
-        InvalidRequest {
-            description("Invalid Request")
-            display("Invalid Request")
-        }
-        InvalidResponse {
-            description("Invalid Response")
-            display("Invalid Response")
-        }
+impl IntoResponse for FfxivSimbotServiceError {
+    fn into_response(self) -> axum::http::Response<axum::body::Body> {
+        axum::http::Response::builder()
+            .status(axum::http::StatusCode::INTERNAL_SERVER_ERROR)
+            .body(axum::body::Body::from(format!("{:?}", self)))
+            .unwrap()
     }
 }

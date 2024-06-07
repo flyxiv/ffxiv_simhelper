@@ -1,17 +1,20 @@
-use crate::damage_calculator::damage_rdps_profile::FfxivRaidDamageTable;
+use crate::live_objects::player::StatusKey;
 use crate::{DamageType, IdType};
+use std::collections::HashMap;
 
-pub mod damage_rdps_profile;
 pub mod multiplier_calculator;
 pub mod raw_damage_calculator;
 pub mod rdps_calculator;
 
+pub type FfxivRaidDamageTable = HashMap<StatusKey, DamageType>;
+
 /// Implements FFXIV's damage calculation logic based on the
 /// player's stat multiplier + skill's potency + guaranteed critical hit/direct hit buff.
 pub struct DamageRdpsProfile {
+    pub skill_id: IdType,
     pub raw_damage: DamageType,
     pub final_damage: DamageType,
-    pub status_rdps_contribution: FfxivRaidDamageTable,
+    pub rdps_contribution: FfxivRaidDamageTable,
 }
 
 /// Stores all the needed keys to query the damage contribution of a specific status.

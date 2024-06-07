@@ -2,11 +2,12 @@ use crate::clan::Clan;
 use crate::constants::*;
 /// Implements features needed to represent a Character in FFXIV Simbot.
 use crate::equipment::{Equipment, SlotType, WeaponTrait};
+use crate::errors::DataError;
+use crate::errors::Result;
 use crate::food::Food;
 use crate::job::Job;
 use crate::medicine::Medicine;
 use crate::stat::{add_main_stats, add_sub_stats, MainStats, StatFrom, SubStats};
-use crate::{DataError, Result};
 
 /// Data for a single Character in FFXIV Simbot.
 /// Combat Data for Characters in FFXIV include:

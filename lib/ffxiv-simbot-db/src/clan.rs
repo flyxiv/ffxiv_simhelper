@@ -1,7 +1,8 @@
+use crate::errors::Result;
 /// Implements functions needed to save Clan data
 /// in FFXIV Simbot.
 use crate::stat::{MainStatTrait, MainStats, StatType};
-use crate::{item_vec_to_id_table, IdTable, JsonFileReader, Result, SearchKeyEntity};
+use crate::{item_vec_to_id_table, IdTable, JsonFileReader, SearchKeyEntity};
 use itertools::Itertools;
 use serde::Deserialize;
 use serde_json;

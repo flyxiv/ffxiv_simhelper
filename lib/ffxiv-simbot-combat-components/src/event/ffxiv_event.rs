@@ -14,8 +14,8 @@ use std::collections::HashMap;
 pub enum FfxivEvent {
     /// owner_player_id, turn, threshold limit time
     PlayerTurn(IdType, FfxivTurnType, TimeType, TimeType),
-    /// player_id, skill ID
-    UseSkill(IdType, IdType, TimeType),
+    /// player_id, target_id, skill_id
+    UseSkill(IdType, Option<IdType>, IdType, TimeType),
 
     /// owner_player_id, skill ID, potency, guaranteed crit, guaranteed direct hit, snapshotted buffs, snapshotted debuffs,
     Damage(
@@ -71,7 +71,7 @@ impl FfxivEvent {
     pub fn get_event_time(&self) -> TimeType {
         match self {
             FfxivEvent::PlayerTurn(_, _, _, time)
-            | FfxivEvent::UseSkill(_, _, time)
+            | FfxivEvent::UseSkill(_, _, _, time)
             | FfxivEvent::Damage(_, _, _, _, _, _, _, time)
             | FfxivEvent::Tick(_, time)
             | FfxivEvent::AddTicker(_, time)
@@ -147,8 +147,8 @@ impl FfxivEvent {
             FfxivEvent::ForceTicker(ticker_key, time) => {
                 FfxivEvent::ForceTicker(ticker_key, elapsed_time + time)
             }
-            FfxivEvent::UseSkill(player_id, skill_id, time) => {
-                FfxivEvent::UseSkill(player_id, skill_id, elapsed_time + time)
+            FfxivEvent::UseSkill(player_id, target_id, skill_id, time) => {
+                FfxivEvent::UseSkill(player_id, target_id, skill_id, elapsed_time + time)
             }
             FfxivEvent::ApplyBuff(
                 player_id,

@@ -1,5 +1,4 @@
 use crate::combat_resources::CombatResource;
-use crate::event::FfxivEventQueue;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -7,7 +6,6 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::status_info::StatusInfo;
 use crate::{ComboType, IdType, ResourceType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -68,10 +66,10 @@ impl CombatResource for WhitemageCombatResources {
 
     fn trigger_on_event(
         &self,
-        skill_id: IdType,
+        _: IdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
-        current_combat_time_millisecond: TimeType,
+        _: TimeType,
         _: &FfxivPlayer,
     ) -> SkillEvents {
         (vec![], vec![])

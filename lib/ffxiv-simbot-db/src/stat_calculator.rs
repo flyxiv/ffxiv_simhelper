@@ -1,9 +1,11 @@
 use crate::character::{get_character_main_stats, get_character_sub_stats, Character};
 use crate::constants::*;
 use crate::equipment::WeaponTrait;
+use crate::errors::DataError;
+use crate::errors::Result;
+use crate::job::is_tank;
 use crate::stat::{MainStatTrait, MainStats, StatType, SubStatTrait};
-use crate::{DataError, Result, StatModifier};
-use crate::{MultiplierType, StatModifierType};
+use crate::{MultiplierType, StatModifier, StatModifierType};
 
 #[derive(Clone)]
 pub struct CharacterPower {
@@ -49,6 +51,106 @@ fn get_job_main_stat(main_stat: &MainStats, job_abbrev: &String) -> StatType {
     } else {
         main_stat.get_mind()
     }
+}
+
+pub struct StatInfo {
+    pub main_stat: StatType,
+    pub weapon_damage: StatType,
+    pub critical_strike: StatType,
+    pub direct_hit: StatType,
+    pub determination: StatType,
+    pub speed: StatType,
+    pub tenacity: StatType,
+}
+
+pub fn convert_stat_info_to_power(
+    stat_info: &StatInfo,
+    job_abbrev: &String,
+    stat_modifier: &StatModifier,
+) -> Result<CharacterPower> {
+    let critical_stat = stat_info.critical_strike;
+    let direct_hit_stat = stat_info.direct_hit;
+    let determination_stat = stat_info.determination;
+    let speed_stat = stat_info.speed;
+    let tenacity_stat = stat_info.tenacity;
+    let main_stat = stat_info.main_stat;
+    let weapon_damage = stat_info.weapon_damage;
+
+    let critical_strike_increase = get_increase(
+        critical_stat as StatModifierType,
+        stat_modifier.max_level_base_critical_hit as StatModifierType,
+        stat_modifier.max_level_sub_stat_modifier,
+        *CRIT_MULTIPLIER,
+    );
+
+    let critical_strike_rate = *BASE_CRITICAL_RATE + critical_strike_increase;
+    let critical_strike_damage = *BASE_CRITICAL_DAMAGE + critical_strike_increase;
+
+    let direct_hit_increase = get_increase(
+        direct_hit_stat as StatModifierType,
+        stat_modifier.max_level_base_direct_hit as StatModifierType,
+        stat_modifier.max_level_sub_stat_modifier,
+        *DIRECT_HIT_MULTIPLIER,
+    );
+
+    let direct_hit_rate = direct_hit_increase;
+
+    let determination_increase = get_increase(
+        determination_stat as StatModifierType,
+        stat_modifier.max_level_base_determination as StatModifierType,
+        stat_modifier.max_level_sub_stat_modifier,
+        *DETERMINATION_MULTIPLIER,
+    );
+
+    let determination_damage_multiplier = 1.0 + determination_increase;
+
+    let tenacity_increase = get_increase(
+        tenacity_stat as StatModifierType,
+        stat_modifier.max_level_base_tenacity as StatModifierType,
+        stat_modifier.max_level_sub_stat_modifier,
+        *TENACITY_MULTIPLIER,
+    );
+    let tenacity_damage_multiplier = 1.0 + tenacity_increase;
+
+    let speed_increase = get_increase(
+        speed_stat as StatModifierType,
+        stat_modifier.max_level_base_skill_speed as StatModifierType,
+        stat_modifier.max_level_sub_stat_modifier,
+        *SPEED_MULTIPLIER,
+    );
+
+    let speed_multiplier = 1.0 + speed_increase;
+
+    let base_weapon_damage = WEAPON_ATTACK_BASE_PER_JOB.get(job_abbrev);
+    if base_weapon_damage.is_none() {
+        return Err(DataError::JobClassParseError(
+            "Job class not found".to_string(),
+        ));
+    }
+    let base_weapon_damage = base_weapon_damage.unwrap();
+
+    let final_weapon_damage = weapon_damage + base_weapon_damage;
+
+    let weapon_damage_multiplier = final_weapon_damage as f64 / 100f64;
+
+    let main_stat_slope = if is_tank(job_abbrev) {
+        *BASE_TANK_MAIN_STAT_MULTIPLIER
+    } else {
+        *BASE_NON_TANK_MAIN_STAT_MULTIPLIER
+    };
+
+    let main_stat_multiplier = 1.0f64 + ((main_stat as f64) * main_stat_slope / 100f64);
+
+    Ok(CharacterPower {
+        critical_strike_rate,
+        critical_strike_damage,
+        direct_hit_rate,
+        determination_damage_multiplier,
+        speed_multiplier,
+        weapon_damage_multiplier,
+        main_stat_multiplier,
+        tenacity_damage_multiplier,
+    })
 }
 
 pub(crate) fn convert_character_to_power(
@@ -130,7 +232,7 @@ pub(crate) fn convert_character_to_power(
         character.get_damage_mag()
     };
 
-    let final_weapon_damage = weapon_damage + base_weapon_damage;
+    let final_weapon_damage = weapon_damage + *base_weapon_damage as usize;
 
     let weapon_damage_multiplier = final_weapon_damage as f64 / 100f64;
 

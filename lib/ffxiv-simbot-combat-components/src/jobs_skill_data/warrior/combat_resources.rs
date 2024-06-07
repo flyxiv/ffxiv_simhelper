@@ -1,5 +1,4 @@
 use crate::combat_resources::CombatResource;
-use crate::jobs_skill_data::paladin::abilities::make_paladin_skill_list;
 use crate::jobs_skill_data::warrior::abilities::make_warrior_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;

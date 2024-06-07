@@ -14,6 +14,7 @@ cargo-docs = "0.1.*"
 sorted-vec = "0.8.3"
 lazy_static = "1.4.0"
 log = "0.4"
+serde = { version = "1.0.196", features = ["derive"] }
 
 [dependencies.ffxiv-simbot-db]
 version = "0.1.0"

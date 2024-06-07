@@ -1,6 +1,5 @@
-use crate::damage_calculator::damage_rdps_profile::{FfxivRaidDamageTable, RaidDamageTable};
 use crate::damage_calculator::multiplier_calculator::MultiplierCalculator;
-use crate::damage_calculator::{DamageRdpsProfile, RaidDamageTableKey};
+use crate::damage_calculator::DamageRdpsProfile;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
@@ -47,21 +46,16 @@ impl RdpsCalculator for FfxivRdpsCalculator {
     ) -> DamageRdpsProfile
 where {
         let mut damage_profile = DamageRdpsProfile {
+            skill_id,
             raw_damage: skill_damage,
             final_damage: skill_damage,
-            status_rdps_contribution: FfxivRaidDamageTable {
-                rdps_table: Default::default(),
-            },
+            rdps_contribution: Default::default(),
         };
 
         for buff in snapshotted_buffs.values() {
             let buff_id = buff.get_id();
 
-            let raid_damage_profile_key = RaidDamageTableKey {
-                skill_id,
-                status_id: buff_id,
-                owner_id: buff.get_owner_id(),
-            };
+            let raid_damage_profile_key = StatusKey::new(buff_id, buff.get_owner_id());
 
             let damage_multiplier = self.calculate_multiplier(buff, power);
             let contribution = apply_multiplier(skill_damage, damage_multiplier) - skill_damage;
@@ -69,18 +63,14 @@ where {
             damage_profile.final_damage =
                 apply_multiplier(damage_profile.final_damage, damage_multiplier);
             damage_profile
-                .status_rdps_contribution
+                .rdps_contribution
                 .insert(raid_damage_profile_key, contribution);
         }
 
         for debuff in snapshotted_debuffs.values() {
-            let buff_id = debuff.get_id();
+            let status_id = debuff.get_id();
 
-            let raid_damage_profile_key = RaidDamageTableKey {
-                skill_id,
-                status_id: buff_id,
-                owner_id: debuff.get_owner_id(),
-            };
+            let status_key = StatusKey::new(status_id, debuff.get_owner_id());
 
             let damage_multiplier = self.calculate_multiplier(debuff, power);
             let contribution = apply_multiplier(skill_damage, damage_multiplier) - skill_damage;
@@ -88,8 +78,8 @@ where {
             damage_profile.final_damage =
                 apply_multiplier(damage_profile.final_damage, damage_multiplier);
             damage_profile
-                .status_rdps_contribution
-                .insert(raid_damage_profile_key, contribution);
+                .rdps_contribution
+                .insert(status_key, contribution);
         }
 
         damage_profile

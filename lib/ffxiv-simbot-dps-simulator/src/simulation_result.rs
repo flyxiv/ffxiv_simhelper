@@ -1,25 +1,20 @@
-use ffxiv_simbot_combat_components::{DamageType, DpsType, IdType, TimeType};
-use std::collections::HashMap;
+use ffxiv_simbot_combat_components::live_objects::player::logs::{DamageLog, SkillLog};
+use ffxiv_simbot_combat_components::{IdType, TimeType};
 
-/// Shows the result of the simulation.
-/// Contains:
-/// 1. RDPS profile of each player in the party. (party member, RDPS, contributed DPS)
-/// 2. Skill usage logs of each player (time the skill was used(ms) + skill name)
-
-pub type SimulationResponse = HashMap<IdType, SimulationResult>;
-
+/// Saves all the raw data from the simulation
+/// and aggregates raw data to needed format depending on the requested query.
+#[derive(Debug, Clone)]
 pub struct SimulationResult {
-    pub job_name: String,
-    pub raw_damage_total: DamageType,
-    /// Rdps the job's buff skills earned.
-    pub rdps_earned: DpsType,
-    /// The job's Rdps contribution to the other party member's buffs
-    pub rdps_contributed: DpsType,
-    pub rotation_log: Vec<RotationLog>,
+    pub main_player_id: IdType,
+    pub combat_time_millisecond: TimeType,
+    pub party_simulation_results: Vec<PartySimulationResult>,
 }
 
-#[derive(Clone)]
-pub struct RotationLog {
-    pub casted_time_millisecond: TimeType,
-    pub skill_id: IdType,
+#[derive(Debug, Clone)]
+pub struct PartySimulationResult {
+    pub player_id: IdType,
+    pub job: String,
+    pub role: String,
+    pub skill_log: Vec<SkillLog>,
+    pub damage_log: Vec<DamageLog>,
 }

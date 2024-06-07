@@ -1,13 +1,8 @@
-use crate::response::aggregate_damage_simulation_data::{
-    PlayerDamageAggregate, SkillDamageAggregate,
-};
-use crate::response::simulation_result::RotationLog;
-use ffxiv_simbot_combat_components::{DamageType, DpsType, IdType, TimeType};
-use juniper::graphql_object;
-use serde::{Deserialize, Serialize};
+use ffxiv_simbot_combat_components::{DpsType, IdType, TimeType};
+use serde::Serialize;
 
-pub(crate) const SKILL_ENTITY_STRING: String = String::from("Skill");
-pub(crate) const STATUS_ENTITY_STRING: String = String::from("Status");
+pub(crate) const SKILL_ENTITY_STRING: &'static str = "Skill";
+pub(crate) const STATUS_ENTITY_STRING: &'static str = "Status";
 
 /// API Response Format for quicksim/advancedsim API
 /// Given as a GraphQL response
@@ -28,7 +23,7 @@ pub struct SimulationDataResponse {
     pub simulation_summary: SimulationSummaryResponse,
     pub party_contribution_table: Vec<PartyContributionResponse>,
     pub damage_profile_table: Vec<DamageProfileResponse>,
-    pub rotation_log: Vec<RotationLogResponse>,
+    pub rotation_log: Vec<SkillLogResponse>,
 }
 
 /// Aggregates all the needed DPS summary data
@@ -78,7 +73,7 @@ pub struct DamageProfileResponse {
 /// Records the rotation log of each player
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct RotationLogResponse {
+pub struct SkillLogResponse {
     pub time: TimeType,
     pub skill_id: IdType,
     pub target: Option<IdType>,
