@@ -1,8 +1,13 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-
-const button_image = process.env.PUBLIC_URL + "/images/jobicons/dps/Ninja.png";
+import { Button } from '@mui/material'
 // startIcon=<img src={button_image} alt="Ninja Icon" />>
-export default function QuickSimUIButton() {
-    return <Button variant="contained">Button</Button>;
+const buttonImagePath = process.env.PUBLIC_URL + "/images/quickstart.svg";
+
+export const QuickSimUIButton = () => {
+    return (
+        <div>
+            <Button variant='contained'>
+                <img src={buttonImagePath} alt="quicksim-button"/>
+            </Button>
+        </div>
+    )
 }

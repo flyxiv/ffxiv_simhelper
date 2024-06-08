@@ -1,15 +1,13 @@
-import QuickSimUIButton from "./components/quicksim";
-
-const logo = process.env.PUBLIC_URL + "/images/logo.svg";
-
+import { QuickSimUIButton } from "./components/quicksim";
+import { Logo } from "./components/logo"
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <QuickSimUIButton />
+        <Logo />
       </header>
+      <QuickSimUIButton />
     </div>
   );
 }
