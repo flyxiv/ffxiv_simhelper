@@ -60,6 +60,7 @@ pub struct PartyContributionResponse {
 
 /// Records the rdps/pdps contribution of each skill
 #[derive(Debug, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct DamageProfileResponse {
     pub id: IdType,
     /// Skill or Status

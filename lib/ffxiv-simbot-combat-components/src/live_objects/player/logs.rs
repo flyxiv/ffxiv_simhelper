@@ -29,6 +29,7 @@ pub struct RdpsContribution {
 fn convert_to_rdps_contribution(table: &FfxivRaidDamageTable) -> Vec<RdpsContribution> {
     table
         .iter()
+        .filter(|(_, &damage)| damage > 0)
         .map(|(key, damage)| RdpsContribution {
             player_id: key.player_id,
             raid_buff_status_id: key.status_id,

@@ -1,8 +1,16 @@
 use crate::api_handler::simulate::simulate_api_handler;
+use axum::http::header::CONTENT_TYPE;
+use axum::http::Method;
 use axum::routing::post;
 use axum::Router;
-use ffxiv_simbot_engine::engine::Engine;
+use tower_http::cors::{Any, CorsLayer};
 
 pub fn create_ffxiv_simbot_service_router() -> Router {
-    Router::new().route("/api/v1/simulate", post(simulate_api_handler))
+    let cors_layer = CorsLayer::new()
+        .allow_methods(Method::POST)
+        .allow_origin(Any)
+        .allow_headers(vec![CONTENT_TYPE]);
+    Router::new()
+        .route("/api/v1/simulate", post(simulate_api_handler))
+        .layer(cors_layer)
 }

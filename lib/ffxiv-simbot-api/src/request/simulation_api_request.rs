@@ -17,7 +17,6 @@ pub struct SimulationApiRequest {
 pub struct PlayerInfoRequest {
     pub player_id: IdType,
     pub job: String,
-    pub role: String,
     pub stats: StatsRequest,
 }
 

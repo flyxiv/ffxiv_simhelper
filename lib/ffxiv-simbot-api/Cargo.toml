@@ -16,6 +16,7 @@ itertools = "0.13"
 cargo-docs = "0.1"
 axum = "0.7"
 thiserror = "1"
+tower-http = { version = "0.5", features = ["cors"] }
 
 [dependencies.ffxiv-simbot-engine]
 version = "0.1.0"
