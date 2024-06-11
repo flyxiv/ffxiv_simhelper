@@ -19,9 +19,10 @@ const theme = createTheme({
     },
   },
   typography: {
+    fontFamily: "Arial",
     h1: {
       fontSize: "3rem",
-      fontWeight: 600
+      fontWeight: 900
     },
     h2: {
       fontSize: "1.75rem",

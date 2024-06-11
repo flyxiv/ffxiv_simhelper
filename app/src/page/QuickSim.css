@@ -1,0 +1,41 @@
+.JobSelection {
+    width: 20%;
+
+}
+
+.CustomizeBoard {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: left;
+    padding: 20px;
+    border: 1px solid black;
+}
+
+.CharacterDetailCustomizeBoard {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.QuickSimPartyInput{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.PartyJobInput {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    padding: 20px;
+    border: 1px solid black;
+}

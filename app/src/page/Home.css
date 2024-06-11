@@ -1,0 +1,17 @@
+.HomeBody {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.LeftBody {
+    padding-left: 200px;
+    width: 30vw;
+}
+
+.RightBody {
+    padding-right: 200px;
+    width: 30vw;
+}
