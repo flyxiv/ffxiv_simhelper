@@ -13,10 +13,12 @@ function jobAbbrevToJobIconName(jobAbbrev: String) {
       return "tank/Gunbreaker";
     case "WHM":
       return "healer/Whitemage";
-    case "SCH":
-      return "healer/Scholar";
     case "AST":
       return "healer/Astrologian";
+    case "SCH":
+      return "healer/Scholar";
+    case "SGE":
+      return "healer/Sage";
     case "MNK":
       return "dps/Monk";
     case "DRG":
@@ -25,14 +27,20 @@ function jobAbbrevToJobIconName(jobAbbrev: String) {
       return "dps/Ninja";
     case "SAM":
       return "dps/Samurai";
+    case "RPR":
+      return "dps/Reaper";
     case "BRD":
       return "dps/Bard";
     case "MCH":
       return "dps/Machinist";
     case "DNC":
       return "dps/Dancer";
-    case "SGE":
-      return "healer/Sage";
+    case "SMN":
+      return "dps/Summoner";
+    case "RDM":
+      return "dps/Redmage";
+    case "BLM":
+      return "dps/Blackmage";
   }
 }
 
