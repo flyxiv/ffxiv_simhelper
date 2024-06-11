@@ -3,3 +3,7 @@ rust-version = "1.72.0"
 
 [workspace]
 members = ["cmd"]
+
+[profile.release]
+lto = true
+opt-level = 1
