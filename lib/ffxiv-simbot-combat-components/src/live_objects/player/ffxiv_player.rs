@@ -327,7 +327,7 @@ impl FfxivPlayer {
     }
 
     pub fn get_gcd_delay_millisecond(&self, skill: &AttackSkill) -> TimeType {
-        let gcd_cooldown_millisecond = skill.gcd_cooldown_millisecond;
+        let gcd_cooldown_millisecond = skill.get_gcd_cooldown_millisecond();
         let charging_time = skill.charging_time_millisecond;
 
         let gcd_cooldown = if skill.is_speed_buffed() {
@@ -432,6 +432,7 @@ impl FfxivPlayer {
         buff_list: HashMap<StatusKey, BuffStatus>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
         start_turn: FfxivEvent,
+        gcd_start_time_millisecond: Option<TimeType>,
     ) -> FfxivPlayer {
         FfxivPlayer {
             id,
@@ -446,7 +447,11 @@ impl FfxivPlayer {
             priority_table,
             buff_list: Rc::new(RefCell::new(buff_list)),
             internal_event_queue: RefCell::new(vec![]),
-            turn_calculator: RefCell::new(PlayerTurnCalculator::new(id, event_queue.clone())),
+            turn_calculator: RefCell::new(PlayerTurnCalculator::new(
+                id,
+                event_queue.clone(),
+                gcd_start_time_millisecond,
+            )),
             event_queue,
             mana_available: None,
             damage_logs: vec![],

@@ -92,11 +92,22 @@ impl PlayerTurnCalculator {
         }
     }
 
-    pub(crate) fn new(player_id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+    pub(crate) fn new(
+        player_id: IdType,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        gcd_start_time_millisecond: Option<TimeType>,
+    ) -> Self {
+        let gcd_start_time_millisecond =
+            if let Some(gcd_start_time_millisecond) = gcd_start_time_millisecond {
+                gcd_start_time_millisecond
+            } else {
+                COMBAT_START_TIME
+            };
+
         PlayerTurnCalculator {
             player_id,
             total_delay_millisecond: 0,
-            last_gcd_time_millisecond: COMBAT_START_TIME,
+            last_gcd_time_millisecond: gcd_start_time_millisecond,
             latest_turn_type: FfxivTurnType::Gcd,
             last_gcd_skill_time_info: SkillTimeInfo {
                 charge_time_millisecond: 0,

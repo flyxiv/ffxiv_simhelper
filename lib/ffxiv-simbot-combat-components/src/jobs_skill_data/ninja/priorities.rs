@@ -126,6 +126,10 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
             )),
         },
         SkillPriorityInfo {
+            skill_id: db.raiju.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.raiton.get_id(),
             prerequisite: Some(SkillPrerequisite::HasSkillStacks(1023, 2)),
         },
@@ -150,10 +154,6 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
                 Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
                 Box::new(SkillPrerequisite::HasBufforDebuff(1007)),
             )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.raiju.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1001)),
         },
         SkillPriorityInfo {
             skill_id: db.raiton.get_id(),

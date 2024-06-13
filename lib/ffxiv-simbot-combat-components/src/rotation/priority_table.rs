@@ -44,11 +44,20 @@ pub(crate) enum SkillPrerequisite {
     ResourceGreaterOrEqualThanAnotherResourceBy(IdType, IdType, ResourceType),
 }
 
-#[derive(Clone)]
 pub(crate) struct CombatInfo {
     pub(crate) buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
     pub(crate) debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
     pub(crate) milliseconds_before_burst: TimeType,
+}
+
+impl Clone for CombatInfo {
+    fn clone(&self) -> Self {
+        Self {
+            buff_list: Rc::new(RefCell::new(self.buff_list.borrow().clone())),
+            debuff_list: Rc::new(RefCell::new(self.debuff_list.borrow().clone())),
+            milliseconds_before_burst: self.milliseconds_before_burst,
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -246,6 +255,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                         &ogcd_priority_table,
                         second_skill_start_time,
                         turn_info,
+                        skill.get_id(),
                     ) {
                         let first_skill_plan = OgcdPlan {
                             skill: SkillUsageInfo::new_delay(
@@ -287,11 +297,17 @@ pub(crate) trait PriorityTable: Sized + Clone {
         ogcd_priority_table: &Vec<SkillPriorityInfo>,
         start_time: TimeType,
         turn_info: &TurnInfo,
+        first_used_skill_id: IdType,
     ) -> Option<OgcdPlan> {
         let next_gcd_millisecond = turn_info.next_gcd_millisecond;
 
         for (priority_number, skill_priority) in ogcd_priority_table.iter().enumerate() {
             let skill = combat_resource.get_skill(skill_priority.skill_id);
+
+            if skill.get_id() == first_used_skill_id {
+                continue;
+            }
+
             let skill_delay_millisecond = skill.get_delay_millisecond();
             let latest_time_to_use = next_gcd_millisecond - skill_delay_millisecond;
 

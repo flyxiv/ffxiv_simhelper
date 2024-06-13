@@ -41,6 +41,8 @@ pub(crate) type PercentType = usize;
 pub static COMBAT_START_TIME: TimeType = -10000;
 pub static TARGET_ID: IdType = 100;
 
+pub static SIMULATION_START_TIME_MILLISECOND: TimeType = -5000;
+
 pub enum CombatComponentsError {
     DebuffNotFoundError(String),
     BuffNotFoundError(String),

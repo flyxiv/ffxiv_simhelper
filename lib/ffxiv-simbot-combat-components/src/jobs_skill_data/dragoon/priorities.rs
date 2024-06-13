@@ -217,10 +217,18 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
         },
         SkillPriorityInfo {
             skill_id: db.geirskogul_plus.get_id(),
-            prerequisite: Some(HasResource(1, 2)),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.geirskogul.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.high_jump.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.nastrond.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -242,7 +250,7 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
         },
         SkillPriorityInfo {
             skill_id: db.wyrmwind_thrust.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.lance_charge_buff.get_id())),
+            prerequisite: Some(HasBufforDebuff(db.battle_litany_buff.get_id())),
         },
         SkillPriorityInfo {
             skill_id: db.dragonfire_dive.get_id(),
@@ -250,10 +258,6 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
         },
         SkillPriorityInfo {
             skill_id: db.stardiver.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.nastrond.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {

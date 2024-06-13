@@ -69,6 +69,8 @@ impl CombatResource for BardCombatResources {
             *self.wanderer_stack.borrow()
         } else if resource_id == 2 {
             *self.army_stack.borrow()
+        } else if resource_id == 3 {
+            *self.song_stack.borrow()
         } else {
             -1
         }

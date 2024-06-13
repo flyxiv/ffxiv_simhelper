@@ -16,6 +16,7 @@ use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::live_objects::turn_type::FfxivTurnType;
 use crate::rotation::ffxiv_priority_table::FfxivPriorityTable;
+use crate::skill::NON_GCD_DELAY_MILLISECOND;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::{IdType, TimeType};
@@ -61,6 +62,7 @@ impl FfxivPlayer {
                 NINJA_START_TIME_MILLISECOND,
                 NINJA_START_TIME_MILLISECOND,
             ),
+            None,
         )
     }
     pub fn new_sage(
@@ -82,6 +84,7 @@ impl FfxivPlayer {
                 SAGE_START_TIME_MILLISECOND,
                 SAGE_START_TIME_MILLISECOND,
             ),
+            None,
         )
     }
 
@@ -104,6 +107,7 @@ impl FfxivPlayer {
                 BARD_START_TIME_MILLISECOND,
                 BARD_START_TIME_MILLISECOND,
             ),
+            None,
         )
     }
 
@@ -127,6 +131,7 @@ impl FfxivPlayer {
                 DANCER_START_TIME_MILLISECOND,
                 DANCER_START_TIME_MILLISECOND,
             ),
+            None,
         )
     }
 
@@ -162,6 +167,7 @@ impl FfxivPlayer {
                 DANCER_START_TIME_MILLISECOND,
                 DANCER_START_TIME_MILLISECOND,
             ),
+            None,
         )
     }
 
@@ -185,6 +191,7 @@ impl FfxivPlayer {
                 DRAGOON_START_TIME_MILLISECOND,
                 DRAGOON_START_TIME_MILLISECOND,
             ),
+            None,
         )
     }
 
@@ -193,13 +200,26 @@ impl FfxivPlayer {
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> FfxivPlayer {
+        let ENOCHIAN: BuffStatus = BuffStatus {
+            id: 1907,
+            owner_id: player_id,
+            duration_left_millisecond: 999999999,
+            status_info: vec![StatusInfo::DamagePercent(23)],
+            duration_millisecond: 999999999,
+            is_raidwide: false,
+            name: "Enochian".to_string(),
+            stacks: 1,
+            max_stacks: 1,
+            trigger_proc_event_on_gcd: vec![],
+        };
+
         Self::new(
             player_id,
             String::from("BLM"),
             power,
             None,
             FfxivPriorityTable::Blackmage(BlackmagePriorityTable::new(player_id)),
-            Default::default(),
+            HashMap::from([(StatusKey::new(1707, player_id), ENOCHIAN)]),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
                 player_id,
@@ -207,6 +227,7 @@ impl FfxivPlayer {
                 BLACKMAGE_START_TIME_MILLISECOND,
                 BLACKMAGE_START_TIME_MILLISECOND,
             ),
+            Some(BLACKMAGE_START_TIME_MILLISECOND + 2 * NON_GCD_DELAY_MILLISECOND),
         )
     }
 
@@ -229,6 +250,7 @@ impl FfxivPlayer {
                 WHITEMAGE_START_TIME_MILLISECOND,
                 WHITEMAGE_START_TIME_MILLISECOND,
             ),
+            None,
         )
     }
 
@@ -251,6 +273,7 @@ impl FfxivPlayer {
                 PALADIN_START_TIME_MILLISECOND,
                 PALADIN_START_TIME_MILLISECOND,
             ),
+            None,
         )
     }
 
@@ -273,6 +296,7 @@ impl FfxivPlayer {
                 WARRIOR_START_TIME_MILLISECOND,
                 WARRIOR_START_TIME_MILLISECOND,
             ),
+            None,
         )
     }
 }

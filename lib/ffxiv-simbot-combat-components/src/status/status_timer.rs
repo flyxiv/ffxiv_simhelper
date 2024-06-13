@@ -1,6 +1,7 @@
 use crate::status::status_holder::StatusHolder;
 use crate::status::Status;
 use crate::TimeType;
+use log::debug;
 
 /// Every time combat time updates,
 /// Update the remaining time of buffs and debuffs and remove status that has expired.
@@ -22,5 +23,13 @@ pub trait StatusTimer<T: Status>: StatusHolder<T> {
         }
 
         status_list.retain(|_, status| status.get_duration_left_millisecond() > 0);
+
+        for status in status_list.values_mut() {
+            debug!(
+                "status {} remaining time: {}",
+                status.get_id(),
+                status.get_duration_left_millisecond()
+            )
+        }
     }
 }

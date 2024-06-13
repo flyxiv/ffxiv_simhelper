@@ -81,8 +81,8 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
         SkillPriorityInfo {
             skill_id: db.iron_jaws.get_id(),
             prerequisite: Some(SkillPrerequisite::Or(
-                Box::new(SkillPrerequisite::RelatedSkillCooldownLessThan(1300, 3000)),
-                Box::new(SkillPrerequisite::RelatedSkillCooldownLessThan(1301, 3000)),
+                Box::new(SkillPrerequisite::BufforDebuffLessThan(1300, 3000)),
+                Box::new(SkillPrerequisite::BufforDebuffLessThan(1301, 3000)),
             )),
         },
         SkillPriorityInfo {
@@ -124,6 +124,18 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
 pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPriorityInfo> {
     // TODO: calculate future ninki
     let bard_ogcd_table: Vec<SkillPriorityInfo> = vec![
+        SkillPriorityInfo {
+            skill_id: db.wanderers_minuet.get_id(),
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1307, 3000)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.armys_paeon.get_id(),
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1305, 3000)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.mages_ballad.get_id(),
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1303, 3000)),
+        },
         SkillPriorityInfo {
             skill_id: db.pitch_perfect3.get_id(),
             prerequisite: Some(SkillPrerequisite::And(
@@ -176,18 +188,6 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
         SkillPriorityInfo {
             skill_id: db.side_winder.get_id(),
             prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.wanderers_minuet.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1307, 3000)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.armys_paeon.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1305, 3000)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.mages_ballad.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1303, 3000)),
         },
         SkillPriorityInfo {
             skill_id: db.blood_letter.get_id(),

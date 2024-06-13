@@ -56,7 +56,7 @@ impl BlackmagePriorityTable {
 pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase) -> Vec<Opener> {
     vec![
         Opener::OgcdOpener((Some(db.sharpcast.get_id()), None)),
-        Opener::GcdOpener(db.blizzard3.get_id()),
+        Opener::GcdOpener(db.blizzard3_opener.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.thunder3.get_id()),
         Opener::OgcdOpener((None, None)),
@@ -74,6 +74,18 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
         SkillPriorityInfo {
             skill_id: db.xenoglossy.get_id(),
             prerequisite: Some(Or(Box::new(Combo(Some(2))), Box::new(Combo(Some(3))))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.thunder3_procced.get_id(),
+            prerequisite: Some(Or(
+                Box::new(SkillPrerequisite::BufforDebuffLessThan(
+                    db.thunder3_dot.get_id(),
+                    3000,
+                )),
+                Box::new(Not(Box::new(SkillPrerequisite::HasBufforDebuff(
+                    db.thunder3_dot.get_id(),
+                )))),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.fire3_ice.get_id(),
@@ -95,29 +107,20 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
             skill_id: db.paradox.get_id(),
             prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
                 db.astral_fire3.get_id(),
-                3000,
+                6000,
             )),
         },
         SkillPriorityInfo {
             skill_id: db.despair_triplecast.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
-                db.astral_fire3.get_id(),
-                3000,
-            )),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.despair_swiftcast.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
-                db.astral_fire3.get_id(),
-                3000,
-            )),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.despair.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
-                db.astral_fire3.get_id(),
-                3000,
-            )),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.fire4_triplecast.get_id(),
@@ -126,13 +129,6 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
         SkillPriorityInfo {
             skill_id: db.fire4.get_id(),
             prerequisite: Some(SkillPrerequisite::HasBufforDebuff(db.astral_fire3.get_id())),
-        },
-        SkillPriorityInfo {
-            skill_id: db.thunder3_proc.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
-                db.thunder3_dot.get_id(),
-                3000,
-            )),
         },
     ]
 }

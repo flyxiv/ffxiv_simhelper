@@ -34,6 +34,7 @@ pub(crate) struct BlackmageDatabase {
     pub(crate) sharpcast: AttackSkill,
     pub(crate) amplifier: AttackSkill,
     pub(crate) fire3_opener: AttackSkill,
+    pub(crate) blizzard3_opener: AttackSkill,
 
     pub(crate) triplecast_buff: BuffStatus,
     pub(crate) thunder3_dot: DebuffStatus,
@@ -278,7 +279,7 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
-            resource_required: vec![],
+            resource_required: vec![ResourceRequirements::UseBuff(TRIPLECAST_BUFF.get_id())],
             resource_created: HashMap::from([(2, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -373,7 +374,7 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
-            resource_required: vec![],
+            resource_required: vec![ResourceRequirements::Resource(2, 6)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -404,7 +405,10 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
-            resource_required: vec![],
+            resource_required: vec![
+                UseBuff(TRIPLECAST_BUFF.get_id()),
+                ResourceRequirements::Resource(2, 6),
+            ],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -435,7 +439,7 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
-            resource_required: vec![],
+            resource_required: vec![ResourceRequirements::Resource(2, 6)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -701,6 +705,30 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
+        let BLIZZARD_III_OPENER: AttackSkill = AttackSkill {
+            id: 1719,
+            name: "Blizzard III".to_string(),
+            player_id,
+            potency: 260,
+            trait_multiplier: 1.0,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: Some(2),
+            delay_millisecond: None,
+            casting_time_millisecond: 3500,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            resource_required: vec![],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 0,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            use_type: UseType::UseOnTarget,
+        };
 
         let caster_skills = CasterGlobalSkill::new(player_id);
 
@@ -725,6 +753,7 @@ impl BlackmageDatabase {
             sharpcast: SHARPCAST,
             fire3_opener: FIRE_III_OPENER,
             amplifier: AMPLIFIER,
+            blizzard3_opener: BLIZZARD_III_OPENER,
 
             triplecast_buff: TRIPLECAST_BUFF,
             thunder3_dot: THUNDER_III_DOT,
@@ -762,6 +791,7 @@ pub(crate) fn make_blackmage_skill_list(player_id: IdType) -> SkillTable<AttackS
         db.sharpcast,
         db.amplifier,
         db.fire3_opener,
+        db.blizzard3_opener,
     ];
 
     make_skill_table(blackmage_skill_list)

@@ -97,4 +97,12 @@ impl EventTicker for FfxivEventTicker {
             FfxivEventTicker::IndependentTicker(ticker) => ticker.has_initial_tick(),
         }
     }
+
+    fn get_remaining_time(&self) -> TimeType {
+        match self {
+            FfxivEventTicker::AutoAttackTicker(ticker) => ticker.get_remaining_time(),
+            FfxivEventTicker::GlobalTicker(ticker) => ticker.get_remaining_time(),
+            FfxivEventTicker::IndependentTicker(ticker) => ticker.get_remaining_time(),
+        }
+    }
 }

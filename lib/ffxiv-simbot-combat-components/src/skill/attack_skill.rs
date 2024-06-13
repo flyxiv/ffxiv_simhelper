@@ -244,10 +244,8 @@ impl AttackSkill {
                     event
                 }
                 UseType::NoTarget => {
-                    let target_player_id = self.player_id;
                     let mut event =
                         additional_skill_event.add_time_to_event(combat_time_millisecond);
-                    event.set_target(target_player_id);
                     event
                 }
                 _ => additional_skill_event.add_time_to_event(combat_time_millisecond),
@@ -266,6 +264,8 @@ impl AttackSkill {
 
             additional_skill_events.push(event);
         }
+
+        additional_skill_events.extend(self.generate_proc_event(combat_time_millisecond));
 
         additional_skill_events
     }
@@ -305,13 +305,10 @@ impl AttackSkill {
         self.casting_time_millisecond
     }
 
-    fn get_gcd_time_millisecond(&self) -> TimeType {
-        self.gcd_cooldown_millisecond
-    }
     pub(crate) fn get_current_cooldown_millisecond(&self) -> TimeType {
         self.current_cooldown_millisecond
     }
-    fn get_gcd_cooldown_millisecond(&self) -> TimeType {
+    pub(crate) fn get_gcd_cooldown_millisecond(&self) -> TimeType {
         max(self.gcd_cooldown_millisecond, self.casting_time_millisecond)
     }
 

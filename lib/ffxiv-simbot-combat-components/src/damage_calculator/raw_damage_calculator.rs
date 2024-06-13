@@ -30,9 +30,13 @@ pub trait RawDamageCalculator: MultiplierCalculator {
 
         let mut raw_damage = potency as MultiplierType;
 
-        raw_damage *= self
-            .calculate_crit_hit_rate_multiplier(player_power, to_increase_rate(critical_hit_rate));
-        raw_damage *= self.calculate_direct_hit_rate_multiplier(to_increase_rate(direct_hit_rate));
+        raw_damage *= self.calculate_crit_hit_rate_multiplier(
+            player_power,
+            to_increase_rate(critical_hit_rate),
+            None,
+        );
+        raw_damage *=
+            self.calculate_direct_hit_rate_multiplier(to_increase_rate(direct_hit_rate), None);
         raw_damage *= player_power.determination_damage_multiplier;
         raw_damage *= player_power.tenacity_damage_multiplier;
         raw_damage *= player_power.main_stat_multiplier;

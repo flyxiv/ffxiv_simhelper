@@ -1,6 +1,8 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::white_mage::abilities::WhitemageDatabase;
-use crate::rotation::priority_table::SkillPrerequisite::Not;
+use crate::rotation::priority_table::SkillPrerequisite::{
+    HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessThan,
+};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
@@ -66,13 +68,19 @@ pub(crate) fn make_whitemage_gcd_priority_table(db: &WhitemageDatabase) -> Vec<S
     vec![
         SkillPriorityInfo {
             skill_id: db.afflatus_misery.get_id(),
-            prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+            prerequisite: Some(Or(
+                Box::new(HasResource(1, 1)),
+                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.dia.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
-                db.dia_dot.get_id(),
-                2500,
+            prerequisite: Some(Or(
+                Box::new(SkillPrerequisite::BufforDebuffLessThan(
+                    db.dia_dot.get_id(),
+                    1500,
+                )),
+                Box::new(Not(Box::new(HasBufforDebuff(db.dia_dot.get_id())))),
             )),
         },
         SkillPriorityInfo {

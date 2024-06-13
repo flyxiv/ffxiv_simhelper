@@ -322,7 +322,7 @@ impl DancerDatabase {
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
-            cooldown_millisecond: 0,
+            cooldown_millisecond: 30000,
             current_cooldown_millisecond: 0,
             stacks: 1,
             stack_skill_id: None,

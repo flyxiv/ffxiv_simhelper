@@ -19,7 +19,7 @@ impl TurnInfo {
         if burst_number_offset < BURST_START_TIME_MILLISECOND {
             BURST_START_TIME_MILLISECOND - burst_number_offset
         } else if burst_number_offset > BURST_END_TIME_MILLISECOND {
-            BURST_START_TIME_MILLISECOND - burst_number_offset
+            burst_number_offset - BURST_END_TIME_MILLISECOND
         } else {
             0
         }

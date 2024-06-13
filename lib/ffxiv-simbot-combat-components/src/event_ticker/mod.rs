@@ -69,6 +69,7 @@ pub trait EventTicker: Sized + Clone {
     fn get_id(&self) -> TickerKey;
     fn set_event_queue(&mut self, event_queue: Rc<RefCell<FfxivEventQueue>>);
     fn has_initial_tick(&self) -> bool;
+    fn get_remaining_time(&self) -> TimeType;
 }
 
 #[derive(Hash, Copy, Clone, Eq, PartialEq, Debug)]

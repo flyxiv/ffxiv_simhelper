@@ -39,12 +39,12 @@ impl FromWithTime<PlayerDamageAggregate> for SimulationSummaryResponse {
 
         SimulationSummaryResponse {
             rdps: damage_to_dps(
-                player_damage_aggregate.total_raw_damage,
+                player_damage_aggregate.total_raw_damage
+                    + player_damage_aggregate.total_contributions_received,
                 combat_time_millisecond,
             ),
             adps: damage_to_dps(
-                player_damage_aggregate.total_raw_damage + given_contributions
-                    - player_damage_aggregate.total_contributions_received,
+                player_damage_aggregate.total_raw_damage + given_contributions,
                 combat_time_millisecond,
             ),
             pdps: damage_to_dps(

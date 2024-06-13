@@ -6,7 +6,6 @@ use ffxiv_simbot_combat_components::{DpsType, IdType, TimeType};
 use std::collections::HashMap;
 
 pub mod ffxiv_simulation_board;
-pub static SIMULATION_START_TIME_MILLISECOND: TimeType = -5000;
 static INFINITE_TIME: TimeType = 10000000;
 
 /// Simulate DPS for a job based on Priority System

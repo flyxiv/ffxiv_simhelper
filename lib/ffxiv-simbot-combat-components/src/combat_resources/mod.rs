@@ -119,6 +119,7 @@ pub(crate) trait CombatResource: Clone + Sized {
         for skill in skill_table.values_mut() {
             skill.update_cooldown(elapsed_time);
         }
+        self.update_stack_timer(elapsed_time);
     }
 
     fn update_stack_timer(&mut self, elapsed_time: TimeType);

@@ -1,4 +1,4 @@
-use crate::combat_simulator::{SimulationBoard, SIMULATION_START_TIME_MILLISECOND};
+use crate::combat_simulator::SimulationBoard;
 use crate::simulation_result::{PartySimulationResult, SimulationResult};
 use ffxiv_simbot_combat_components::damage_calculator::raw_damage_calculator::{
     FfxivRawDamageCalculator, RawDamageCalculator,
@@ -25,7 +25,9 @@ use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
 use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
 use ffxiv_simbot_combat_components::status::Status;
-use ffxiv_simbot_combat_components::{DamageType, IdType, TimeType};
+use ffxiv_simbot_combat_components::{
+    DamageType, IdType, TimeType, SIMULATION_START_TIME_MILLISECOND,
+};
 use ffxiv_simbot_db::job::get_role;
 use log::info;
 use std::cell::RefCell;
@@ -369,6 +371,10 @@ impl FfxivSimulationBoard {
     fn update_time_related_informations(&self, next_event_time: TimeType) {
         let elapsed_time = self.get_elapsed_time(next_event_time);
 
+        if elapsed_time == 0 {
+            return;
+        }
+
         self.update_player_target_time_informations(elapsed_time);
         self.update_combat_time(elapsed_time);
         self.update_ticker_time(elapsed_time);
@@ -376,8 +382,17 @@ impl FfxivSimulationBoard {
 
     fn update_ticker_time(&self, elapsed_time: TimeType) {
         let mut tickers = self.tickers.borrow_mut();
+        let mut ticker_remaining_times = vec![];
+
         for ticker in tickers.values_mut() {
             ticker.update_remaining_time(elapsed_time);
+            ticker_remaining_times.push((ticker.get_id(), ticker.get_remaining_time()));
+        }
+
+        for (ticker_id, remaining_time) in ticker_remaining_times {
+            if remaining_time <= 0 {
+                tickers.remove(&ticker_id);
+            }
         }
     }
 

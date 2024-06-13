@@ -1,5 +1,6 @@
 use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::black_mage::abilities::make_blackmage_skill_list;
+use crate::live_objects::player::create_player::BLACKMAGE_START_TIME_MILLISECOND;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -7,7 +8,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::{ComboType, IdType, ResourceType, TimeType, SIMULATION_START_TIME_MILLISECOND};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -51,7 +52,7 @@ impl CombatResource for BlackmageCombatResources {
         } else if resource_id == 2 {
             let fire4_stack = *self.fire4_stack.borrow();
             self.fire4_stack
-                .replace(min(1, fire4_stack + resource_amount));
+                .replace(min(6, fire4_stack + resource_amount));
         }
     }
 
@@ -99,8 +100,9 @@ impl CombatResource for BlackmageCombatResources {
             let polyglot_stack = *self.polyglot_stack.borrow();
             *self.polyglot_stack.borrow_mut() = min(POLYGLOT_MAX_STACK, polyglot_stack + 1);
             *self.next_polyglot_time.borrow_mut() += POLYGLOT_STACK_INTERVAL_MILLISECOND;
-            *self.next_polyglot_time.borrow_mut() -= elapsed_time_millisecond;
         }
+
+        *self.next_polyglot_time.borrow_mut() -= elapsed_time_millisecond;
     }
 }
 
@@ -113,7 +115,10 @@ impl BlackmageCombatResources {
             polyglot_stack: RefCell::new(0),
             paradox_gauge_stack: RefCell::new(0),
             fire4_stack: RefCell::new(0),
-            next_polyglot_time: RefCell::new(POLYGLOT_STACK_INTERVAL_MILLISECOND),
+            next_polyglot_time: RefCell::new(
+                POLYGLOT_STACK_INTERVAL_MILLISECOND
+                    + TimeType::abs(SIMULATION_START_TIME_MILLISECOND),
+            ),
         }
     }
 }

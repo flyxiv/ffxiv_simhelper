@@ -5,7 +5,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::{IdType, StatusTable};
 
-mod create_player;
+pub(crate) mod create_player;
 /// If the delay is over 3 * OGCD delay, then it is turn to use a GCD skill,
 /// Since in FFXIV a player can use at most 2 OGCD skills between GCD skills.
 /// so 1 GCD delay + 2 oGCD delay = 3 * oGCD delay.

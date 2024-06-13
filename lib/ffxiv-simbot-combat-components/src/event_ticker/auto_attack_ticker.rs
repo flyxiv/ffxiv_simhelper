@@ -73,6 +73,9 @@ impl EventTicker for AutoAttackTicker {
     fn has_initial_tick(&self) -> bool {
         false
     }
+    fn get_remaining_time(&self) -> TimeType {
+        TimeType::MAX - 1
+    }
 }
 
 impl AutoAttackTicker {

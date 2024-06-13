@@ -132,7 +132,7 @@ impl WhitemageDatabase {
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
-            stacks: 0,
+            stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };

@@ -43,8 +43,7 @@ impl RdpsCalculator for FfxivRdpsCalculator {
         skill_damage: DamageType,
         power: &CharacterPower,
         _: IdType,
-    ) -> DamageRdpsProfile
-where {
+    ) -> DamageRdpsProfile {
         let mut damage_profile = DamageRdpsProfile {
             skill_id,
             raw_damage: skill_damage,
@@ -58,6 +57,11 @@ where {
             let raid_damage_profile_key = StatusKey::new(buff_id, buff.get_owner_id());
 
             let damage_multiplier = self.calculate_multiplier(buff, power);
+
+            if damage_multiplier == 1.0 {
+                continue;
+            }
+
             let contribution = apply_multiplier(skill_damage, damage_multiplier) - skill_damage;
 
             damage_profile.final_damage =
@@ -73,6 +77,11 @@ where {
             let status_key = StatusKey::new(status_id, debuff.get_owner_id());
 
             let damage_multiplier = self.calculate_multiplier(debuff, power);
+
+            if damage_multiplier == 1.0 {
+                continue;
+            }
+
             let contribution = apply_multiplier(skill_damage, damage_multiplier) - skill_damage;
 
             damage_profile.final_damage =

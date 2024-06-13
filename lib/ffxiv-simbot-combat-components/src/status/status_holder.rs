@@ -38,12 +38,12 @@ pub trait StatusHolder<S: Status>: Sized {
 
     fn add_status_stack(
         &mut self,
-        status: S,
+        mut status: S,
         duration_millisecond: TimeType,
         refresh: bool,
         player_id: IdType,
     ) {
-        let key = StatusKey::new(player_id, status.get_id());
+        let key = StatusKey::new(status.get_id(), player_id);
         let status_table = self.get_status_table();
         if status_table.borrow().contains_key(&key) {
             let mut live_status = status_table.borrow_mut();
@@ -58,6 +58,7 @@ pub trait StatusHolder<S: Status>: Sized {
             status.set_duration_left_millisecond(new_duration);
             status.add_stack(stack);
         } else {
+            status.start_duration();
             status_table.borrow_mut().insert(key, status);
         }
     }

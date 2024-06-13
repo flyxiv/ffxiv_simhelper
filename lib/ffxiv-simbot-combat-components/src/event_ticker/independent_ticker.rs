@@ -4,6 +4,7 @@ use crate::event_ticker::{EventTicker, PercentType, TickerKey, GLOBAL_TICK_INTER
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{IdType, StatusTable, TimeType};
+use log::debug;
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::rc::Rc;
@@ -43,6 +44,10 @@ impl EventTicker for IndependentTicker {
 
     fn update_remaining_time(&mut self, elapsed_time: TimeType) {
         self.time_left_millisecond -= elapsed_time;
+        debug!(
+            "ticker {} remaining time: {}",
+            self.id, self.time_left_millisecond
+        );
     }
 
     fn get_event_queue(&self) -> Rc<RefCell<FfxivEventQueue>> {
@@ -67,6 +72,9 @@ impl EventTicker for IndependentTicker {
 
     fn has_initial_tick(&self) -> bool {
         self.initial_tick
+    }
+    fn get_remaining_time(&self) -> TimeType {
+        self.time_left_millisecond
     }
 }
 
