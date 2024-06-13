@@ -17,7 +17,7 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1906:
       return actionIconDirectory + "/PLD/atonement.png";
     case 1907:
-      return actionIconDirectory + "/PLD/explacion.png";
+      return actionIconDirectory + "/PLD/expiacion.png";
     case 1908:
       return actionIconDirectory + "/PLD/blade_of_faith.png";
     case 1909:
@@ -77,7 +77,7 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 701:
       return actionIconDirectory + "/SGE/dosis_III.png";
     case 702:
-      return actionIconDirectory + "/SGE/phlegma.png";
+      return actionIconDirectory + "/SGE/phlegma_III.png";
 
     // DRG
     case 800:
