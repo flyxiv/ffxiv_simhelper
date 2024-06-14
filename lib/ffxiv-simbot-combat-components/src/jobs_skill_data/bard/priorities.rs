@@ -95,13 +95,13 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
         },
         SkillPriorityInfo {
             skill_id: db.apex_arrow.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource(0, 100)),
+            prerequisite: Some(SkillPrerequisite::HasResource(0, 16)),
         },
         SkillPriorityInfo {
             skill_id: db.iron_jaws.get_id(),
             prerequisite: Some(SkillPrerequisite::Or(
-                Box::new(SkillPrerequisite::RelatedSkillCooldownLessThan(1300, 6000)),
-                Box::new(SkillPrerequisite::RelatedSkillCooldownLessThan(1301, 6000)),
+                Box::new(SkillPrerequisite::BufforDebuffLessThan(1300, 6000)),
+                Box::new(SkillPrerequisite::BufforDebuffLessThan(1301, 6000)),
             )),
         },
         SkillPriorityInfo {

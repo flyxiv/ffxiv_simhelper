@@ -47,7 +47,7 @@ impl CombatResource for PaladinCombatResources {
     }
 
     fn trigger_on_event(
-        &self,
+        &mut self,
         _: IdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,

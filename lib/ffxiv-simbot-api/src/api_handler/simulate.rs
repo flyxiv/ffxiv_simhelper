@@ -3,13 +3,11 @@ use crate::request::convert_to_simulation_board::create_player;
 use crate::request::simulation_api_request::SimulationApiRequest;
 use crate::response::convert_simulation_result::create_response_from_simulation_result;
 use crate::response::simulation_api_response::SimulationApiResponse;
-use axum::extract::State;
 use axum::Json;
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
 use ffxiv_simbot_db::constants::FFXIV_STAT_MODIFIER;
 use ffxiv_simbot_dps_simulator::combat_simulator::ffxiv_simulation_board::FfxivSimulationBoard;
 use ffxiv_simbot_dps_simulator::combat_simulator::SimulationBoard;
-use ffxiv_simbot_engine::engine::Engine;
 use std::cell::RefCell;
 use std::rc::Rc;
 

@@ -1,4 +1,5 @@
 use crate::combat_resources::CombatResource;
+use crate::event::ffxiv_event::FfxivEvent;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::ninja::abilities::{
     bunshin_clone_id, bunshin_stack_id, bunshin_trigger_gcd_ids, make_ninja_skill_list,
@@ -21,7 +22,7 @@ const NINKI_MAX: ResourceType = 100;
 #[derive(Clone)]
 pub(crate) struct NinjaCombatResources {
     skills: SkillTable<AttackSkill>,
-    ninki: RefCell<ResourceType>,
+    ninki: ResourceType,
     current_combo: Option<IdType>,
 }
 
@@ -36,14 +37,14 @@ impl CombatResource for NinjaCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, resource_type: ResourceType) {
         if resource_id == 0 {
-            let ninki = *self.ninki.borrow();
-            self.ninki.replace(min(NINKI_MAX, ninki + resource_type));
+            let ninki = self.ninki;
+            self.ninki = min(NINKI_MAX, ninki + resource_type);
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            *self.ninki.borrow()
+            self.ninki
         } else {
             -1
         }
@@ -60,7 +61,7 @@ impl CombatResource for NinjaCombatResources {
     }
 
     fn trigger_on_event(
-        &self,
+        &mut self,
         skill_id: IdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
@@ -71,12 +72,14 @@ impl CombatResource for NinjaCombatResources {
             let key = StatusKey::new(bunshin_stack_id(), player.get_id());
 
             if buff_list.borrow().contains_key(&key) {
-                let bunshin_skill = self.skills.get(&bunshin_clone_id()).unwrap();
-                return bunshin_skill.generate_skill_events(
-                    buff_list.clone(),
-                    debuff_list.clone(),
-                    current_time_millisecond,
-                    player,
+                return (
+                    vec![FfxivEvent::UseSkill(
+                        player.get_id(),
+                        None,
+                        bunshin_clone_id(),
+                        current_time_millisecond,
+                    )],
+                    vec![],
                 );
             }
         }
@@ -95,7 +98,7 @@ impl NinjaCombatResources {
     pub(crate) fn new(player_id: IdType) -> Self {
         Self {
             skills: make_ninja_skill_list(player_id),
-            ninki: RefCell::new(0),
+            ninki: 0,
             current_combo: None,
         }
     }

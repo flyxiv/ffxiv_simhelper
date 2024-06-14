@@ -21,8 +21,8 @@ pub(crate) struct DragoonCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: IdType,
     current_combo: ComboType,
-    mirage_gauge: RefCell<ResourceType>,
-    firstmind_focus: RefCell<ResourceType>,
+    mirage_gauge: ResourceType,
+    firstmind_focus: ResourceType,
 }
 
 impl CombatResource for DragoonCombatResources {
@@ -36,21 +36,17 @@ impl CombatResource for DragoonCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
         if resource_id == 0 {
-            let mirage_stack = *self.mirage_gauge.borrow();
-            self.mirage_gauge
-                .replace(min(MIRAGE_MAX_STACK, mirage_stack + resource_amount));
+            self.mirage_gauge = min(MIRAGE_MAX_STACK, self.mirage_gauge + resource_amount);
         } else if resource_id == 1 {
-            let firstmind_stack = *self.firstmind_focus.borrow();
-            self.firstmind_focus
-                .replace(min(FIRSTMIND_MAX_STACK, firstmind_stack + resource_amount));
+            self.firstmind_focus = min(FIRSTMIND_MAX_STACK, self.firstmind_focus + resource_amount);
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            *self.mirage_gauge.borrow()
+            self.mirage_gauge
         } else if resource_id == 1 {
-            *self.firstmind_focus.borrow()
+            self.firstmind_focus
         } else {
             -1
         }
@@ -68,7 +64,7 @@ impl CombatResource for DragoonCombatResources {
 
     // TODO: chakra on crit
     fn trigger_on_event(
-        &self,
+        &mut self,
         _: IdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
@@ -90,8 +86,8 @@ impl DragoonCombatResources {
             skills: make_dragoon_skill_list(player_id, partner_player_id),
             player_id,
             current_combo: None,
-            mirage_gauge: RefCell::new(0),
-            firstmind_focus: RefCell::new(0),
+            mirage_gauge: 0,
+            firstmind_focus: 0,
         }
     }
 }

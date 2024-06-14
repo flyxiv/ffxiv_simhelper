@@ -26,10 +26,10 @@ pub(crate) struct BardCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: IdType,
     // 1-20
-    apex_stack: RefCell<ResourceType>,
-    wanderer_stack: RefCell<ResourceType>,
-    army_stack: RefCell<ResourceType>,
-    song_stack: RefCell<ResourceType>,
+    apex_stack: ResourceType,
+    wanderer_stack: ResourceType,
+    army_stack: ResourceType,
+    song_stack: ResourceType,
     armys_muse: BuffStatus,
 }
 
@@ -44,33 +44,25 @@ impl CombatResource for BardCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
         if resource_id == 0 {
-            let apex_stack = *self.apex_stack.borrow();
-            self.apex_stack
-                .replace(min(APEX_MAX_STACK, apex_stack + resource_amount));
+            self.apex_stack = min(APEX_MAX_STACK, self.apex_stack + resource_amount);
         } else if resource_id == 1 {
-            let wanderer_stack = *self.wanderer_stack.borrow();
-            self.wanderer_stack
-                .replace(min(WANDERER_MAX_STACK, wanderer_stack + resource_amount));
+            self.wanderer_stack = min(WANDERER_MAX_STACK, self.wanderer_stack + resource_amount);
         } else if resource_id == 2 {
-            let army_stack = *self.army_stack.borrow();
-            self.army_stack
-                .replace(min(ARMY_MAX_STACK, army_stack + resource_amount));
+            self.army_stack = min(ARMY_MAX_STACK, self.army_stack + resource_amount);
         } else if resource_id == 3 {
-            let song_stack = *self.song_stack.borrow();
-            self.song_stack
-                .replace(min(SONG_MAX_STACK, song_stack + resource_amount));
+            self.song_stack = min(SONG_MAX_STACK, self.song_stack + resource_amount);
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            *self.apex_stack.borrow()
+            self.apex_stack
         } else if resource_id == 1 {
-            *self.wanderer_stack.borrow()
+            self.wanderer_stack
         } else if resource_id == 2 {
-            *self.army_stack.borrow()
+            self.army_stack
         } else if resource_id == 3 {
-            *self.song_stack.borrow()
+            self.song_stack
         } else {
             -1
         }
@@ -83,7 +75,7 @@ impl CombatResource for BardCombatResources {
     fn update_combo(&mut self, _: &Option<IdType>) {}
 
     fn trigger_on_event(
-        &self,
+        &mut self,
         skill_id: IdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
@@ -125,9 +117,9 @@ impl CombatResource for BardCombatResources {
 }
 
 impl BardCombatResources {
-    fn reset_song_stacks(&self) {
-        *self.wanderer_stack.borrow_mut() = 0;
-        *self.army_stack.borrow_mut() = 0;
+    fn reset_song_stacks(&mut self) {
+        self.wanderer_stack = 0;
+        self.army_stack = 0;
     }
 }
 
@@ -136,10 +128,10 @@ impl BardCombatResources {
         Self {
             skills: make_bard_skill_list(player_id, ffxiv_event_queue),
             player_id,
-            apex_stack: RefCell::new(0),
-            wanderer_stack: RefCell::new(0),
-            army_stack: RefCell::new(0),
-            song_stack: RefCell::new(0),
+            apex_stack: 0,
+            wanderer_stack: 0,
+            army_stack: 0,
+            song_stack: 0,
             armys_muse: BuffStatus {
                 id: 1313,
                 name: String::from("Army's Muse"),

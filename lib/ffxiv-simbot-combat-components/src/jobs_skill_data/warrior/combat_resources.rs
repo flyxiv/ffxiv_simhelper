@@ -20,7 +20,7 @@ pub(crate) struct WarriorCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: IdType,
     current_combo: ComboType,
-    beast_gauge: RefCell<ResourceType>,
+    beast_gauge: ResourceType,
 }
 
 impl CombatResource for WarriorCombatResources {
@@ -34,17 +34,13 @@ impl CombatResource for WarriorCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
         if resource_id == 0 {
-            let beast_gauge_stack = *self.beast_gauge.borrow();
-            self.beast_gauge.replace(min(
-                BEAST_GAUGE_MAX_STACK,
-                beast_gauge_stack + resource_amount,
-            ));
+            self.beast_gauge = min(BEAST_GAUGE_MAX_STACK, self.beast_gauge + resource_amount);
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            *self.beast_gauge.borrow()
+            self.beast_gauge
         } else {
             -1
         }
@@ -61,7 +57,7 @@ impl CombatResource for WarriorCombatResources {
     }
 
     fn trigger_on_event(
-        &self,
+        &mut self,
         _: IdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
@@ -83,7 +79,7 @@ impl WarriorCombatResources {
             skills: make_warrior_skill_list(player_id),
             player_id,
             current_combo: None,
-            beast_gauge: RefCell::new(0),
+            beast_gauge: 0,
         }
     }
 }

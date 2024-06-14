@@ -143,7 +143,7 @@ impl CombatResource for FfxivCombatResources {
     }
 
     fn trigger_on_event(
-        &self,
+        &mut self,
         skill_id: IdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,

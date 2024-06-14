@@ -9,7 +9,7 @@ pub mod damage_calculator;
 pub mod event;
 pub mod event_ticker;
 pub mod id_entity;
-pub(crate) mod jobs_skill_data;
+pub mod jobs_skill_data;
 pub mod live_objects;
 pub mod owner_tracker;
 pub mod rotation;

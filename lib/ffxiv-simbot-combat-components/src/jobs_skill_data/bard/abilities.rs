@@ -6,6 +6,7 @@ use crate::event::FfxivEventQueue;
 use crate::event_ticker::ffxiv_event_ticker::FfxivEventTicker;
 use crate::event_ticker::independent_ticker::IndependentTicker;
 use crate::event_ticker::TickerKey;
+use crate::id_entity::IdEntity;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
@@ -341,7 +342,7 @@ impl BardDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(1310)],
+            resource_required: vec![ResourceRequirements::UseBuff(STRAIGHT_SHOT_READY.get_id())],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -783,7 +784,7 @@ impl BardDatabase {
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
             is_speed_buffed: false,
-            cooldown_millisecond: 0,
+            cooldown_millisecond: 120000,
             resource_required: vec![],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
@@ -862,7 +863,10 @@ impl BardDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(BARRAGE_STATUS.id)],
+            resource_required: vec![
+                ResourceRequirements::UseBuff(STRAIGHT_SHOT_READY.get_id()),
+                ResourceRequirements::UseBuff(BARRAGE_STATUS.id),
+            ],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,

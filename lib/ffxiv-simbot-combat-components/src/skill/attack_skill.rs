@@ -108,7 +108,7 @@ impl Skill for AttackSkill {
             ffxiv_events.push(damage_event);
         }
 
-        let skill_events = player.combat_resources.borrow().trigger_on_event(
+        let skill_events = player.combat_resources.borrow_mut().trigger_on_event(
             self.id,
             buffs.clone(),
             debuffs.clone(),

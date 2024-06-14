@@ -107,7 +107,7 @@ impl WarriorDatabase {
             use_type: UseType::NoTarget,
         };
         let MAIM: AttackSkill = AttackSkill {
-            id: 1901,
+            id: 101,
             name: String::from("Maim"),
             player_id,
             potency: 300,

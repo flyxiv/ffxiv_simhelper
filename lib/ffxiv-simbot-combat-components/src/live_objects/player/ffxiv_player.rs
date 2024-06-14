@@ -184,16 +184,13 @@ impl FfxivPlayer {
         debuffs: StatusTable<DebuffStatus>,
         combat_time_millisecond: TimeType,
     ) {
-        let (ffxiv_events, internal_events) = self
-            .combat_resources
-            .borrow()
-            .get_skill(skill_id)
-            .generate_skill_events(
-                self.buff_list.clone(),
-                debuffs.clone(),
-                combat_time_millisecond,
-                self,
-            );
+        let skill = self.combat_resources.borrow().get_skill(skill_id).clone();
+        let (ffxiv_events, internal_events) = skill.generate_skill_events(
+            self.buff_list.clone(),
+            debuffs.clone(),
+            combat_time_millisecond,
+            self,
+        );
 
         self.internal_event_queue
             .borrow_mut()

@@ -39,7 +39,7 @@ impl CombatResource for SageCombatResources {
     fn update_combo(&mut self, _: &ComboType) {}
 
     fn trigger_on_event(
-        &self,
+        &mut self,
         _: IdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,

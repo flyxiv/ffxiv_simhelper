@@ -21,12 +21,12 @@ pub(crate) struct MonkCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: IdType,
     current_combo: ComboType,
-    chakra: RefCell<ResourceType>,
-    perfect_1: RefCell<ResourceType>,
-    perfect_2: RefCell<ResourceType>,
-    perfect_3: RefCell<ResourceType>,
-    lunar: RefCell<ResourceType>,
-    solar: RefCell<ResourceType>,
+    chakra: ResourceType,
+    perfect_1: ResourceType,
+    perfect_2: ResourceType,
+    perfect_3: ResourceType,
+    lunar: ResourceType,
+    solar: ResourceType,
 }
 
 impl CombatResource for MonkCombatResources {
@@ -40,45 +40,33 @@ impl CombatResource for MonkCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
         if resource_id == 0 {
-            let chakra_stack = *self.chakra.borrow();
-            self.chakra
-                .replace(min(CHAKRA_MAX_STACK, chakra_stack + resource_amount));
+            self.chakra = min(CHAKRA_MAX_STACK, self.chakra + resource_amount);
         } else if resource_id == 1 {
-            let perfect_1_stack = *self.perfect_1.borrow();
-            self.perfect_1
-                .replace(min(PERFECT_MAX_STACK, perfect_1_stack + resource_amount));
+            self.perfect_1 = min(PERFECT_MAX_STACK, self.perfect_1 + resource_amount);
         } else if resource_id == 2 {
-            let perfect_2_stack = *self.perfect_2.borrow();
-            self.perfect_2
-                .replace(min(PERFECT_MAX_STACK, perfect_2_stack + resource_amount));
+            self.perfect_2 = min(PERFECT_MAX_STACK, self.perfect_2 + resource_amount);
         } else if resource_id == 3 {
-            let perfect_3_stack = *self.perfect_3.borrow();
-            self.perfect_3
-                .replace(min(PERFECT_MAX_STACK, perfect_3_stack + resource_amount));
+            self.perfect_3 = min(PERFECT_MAX_STACK, self.perfect_3 + resource_amount);
         } else if resource_id == 4 {
-            let lunar_stack = *self.lunar.borrow();
-            self.lunar
-                .replace(min(PERFECT_MAX_STACK, lunar_stack + resource_amount));
+            self.lunar = min(PERFECT_MAX_STACK, self.lunar + resource_amount);
         } else if resource_id == 5 {
-            let solar_stack = *self.solar.borrow();
-            self.solar
-                .replace(min(PERFECT_MAX_STACK, solar_stack + resource_amount));
+            self.solar = min(PERFECT_MAX_STACK, self.solar + resource_amount);
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            *self.chakra.borrow()
+            self.chakra
         } else if resource_id == 1 {
-            *self.perfect_1.borrow()
+            self.perfect_1
         } else if resource_id == 2 {
-            *self.perfect_2.borrow()
+            self.perfect_2
         } else if resource_id == 3 {
-            *self.perfect_3.borrow()
+            self.perfect_3
         } else if resource_id == 4 {
-            *self.lunar.borrow()
+            self.lunar
         } else if resource_id == 5 {
-            *self.solar.borrow()
+            self.solar
         } else {
             -1
         }
@@ -96,7 +84,7 @@ impl CombatResource for MonkCombatResources {
 
     // TODO: chakra on crit
     fn trigger_on_event(
-        &self,
+        &mut self,
         _: IdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
@@ -118,12 +106,12 @@ impl MonkCombatResources {
             skills: make_monk_skill_list(player_id),
             player_id,
             current_combo: None,
-            chakra: RefCell::new(5),
-            perfect_1: RefCell::new(0),
-            perfect_2: RefCell::new(0),
-            perfect_3: RefCell::new(0),
-            lunar: RefCell::new(0),
-            solar: RefCell::new(0),
+            chakra: 5,
+            perfect_1: 0,
+            perfect_2: 0,
+            perfect_3: 0,
+            lunar: 0,
+            solar: 0,
         }
     }
 }

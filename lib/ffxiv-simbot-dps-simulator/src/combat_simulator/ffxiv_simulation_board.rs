@@ -253,24 +253,21 @@ impl FfxivSimulationBoard {
                     "time: {}, ticker event: ticker key: {:?}",
                     *time, *ticker_key
                 );
-                let player = if let Some(player_id) = self
-                    .tickers
-                    .borrow_mut()
-                    .get_mut(ticker_key)
-                    .unwrap()
-                    .get_player_id()
-                {
+                let mut ticker_table = self.tickers.borrow_mut();
+                let mut ticker = ticker_table.get_mut(ticker_key);
+                if ticker.is_none() {
+                    return;
+                }
+                let mut ticker = ticker.unwrap();
+
+                let player = if let Some(player_id) = ticker.get_player_id() {
                     Some(self.get_player_data(player_id).clone())
                 } else {
                     None
                 };
 
                 let debuffs = self.target.borrow().get_status_table();
-                self.tickers
-                    .borrow_mut()
-                    .get_mut(ticker_key)
-                    .unwrap()
-                    .run_ticker(*time, player, debuffs.clone());
+                ticker.run_ticker(*time, player, debuffs.clone());
             }
             FfxivEvent::AddTicker(ticker, time) => {
                 info!("time: {}, add ticker event: {:?}", *time, ticker.get_id());

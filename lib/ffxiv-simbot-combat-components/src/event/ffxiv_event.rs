@@ -6,6 +6,7 @@ use crate::live_objects::turn_type::FfxivTurnType;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{DamageType, IdType, ResourceType, StatusTable, TimeType};
+use std::cmp::min;
 use std::collections::HashMap;
 
 /// All possible damage related events in a FFXIV combat.
@@ -263,22 +264,22 @@ impl FfxivEvent {
     pub(crate) fn set_stacks(&mut self, stacks: ResourceType) {
         match self {
             FfxivEvent::ApplyBuff(_, _, buff, _, _, _) => {
-                buff.stacks = stacks;
+                buff.stacks = min(stacks, buff.max_stacks);
             }
             FfxivEvent::ApplyBuffStack(_, _, buff, _, _, _) => {
-                buff.stacks = stacks;
+                buff.stacks = min(stacks, buff.max_stacks);
             }
             FfxivEvent::ApplyRaidBuff(_, buff, _, _, _) => {
-                buff.stacks = stacks;
+                buff.stacks = min(stacks, buff.max_stacks);
             }
             FfxivEvent::RefreshBuff(_, _, buff, _, _, _) => {
-                buff.stacks = stacks;
+                buff.stacks = min(stacks, buff.max_stacks);
             }
             FfxivEvent::ApplyDebuff(_, debuff, _, _, _) => {
-                debuff.stacks = stacks;
+                debuff.stacks = min(stacks, debuff.max_stacks);
             }
             FfxivEvent::ApplyDebuffStack(_, debuff, _, _, _) => {
-                debuff.stacks = stacks;
+                debuff.stacks = min(stacks, debuff.max_stacks);
             }
             _ => {}
         }

@@ -967,7 +967,7 @@ pub(crate) fn bunshin_trigger_gcd_ids() -> Vec<IdType> {
 }
 
 #[inline]
-pub(crate) fn bunshin_clone_id() -> IdType {
+pub fn bunshin_clone_id() -> IdType {
     let db = NinjaDatabase::new(0);
 
     db.bunshin_stack.id

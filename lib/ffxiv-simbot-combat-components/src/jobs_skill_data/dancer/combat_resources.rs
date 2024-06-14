@@ -22,8 +22,8 @@ pub(crate) struct DancerCombatResources {
     current_combo: ComboType,
     player_id: IdType,
     partner_player_id: IdType,
-    esprit: RefCell<ResourceType>,
-    feather: RefCell<ResourceType>,
+    esprit: ResourceType,
+    feather: ResourceType,
 }
 
 impl CombatResource for DancerCombatResources {
@@ -37,21 +37,17 @@ impl CombatResource for DancerCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
         if resource_id == 0 {
-            let esprit_stack = *self.esprit.borrow();
-            self.esprit
-                .replace(min(ESPRIT_MAX_STACK, esprit_stack + resource_amount));
+            self.esprit = min(ESPRIT_MAX_STACK, self.esprit + resource_amount);
         } else if resource_id == 1 {
-            let feather_stack = *self.feather.borrow();
-            self.feather
-                .replace(min(FEATHER_MAX_STACK, feather_stack + resource_amount));
+            self.feather = min(FEATHER_MAX_STACK, self.feather + resource_amount);
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            *self.esprit.borrow()
+            self.esprit
         } else if resource_id == 1 {
-            *self.feather.borrow()
+            self.feather
         } else {
             -1
         }
@@ -68,7 +64,7 @@ impl CombatResource for DancerCombatResources {
     }
 
     fn trigger_on_event(
-        &self,
+        &mut self,
         _: IdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
@@ -91,8 +87,8 @@ impl DancerCombatResources {
             current_combo: None,
             player_id,
             partner_player_id,
-            esprit: RefCell::new(0),
-            feather: RefCell::new(0),
+            esprit: 0,
+            feather: 0,
         }
     }
 }

@@ -5,6 +5,7 @@ use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{IdType, StatusTable, TimeType};
 use log::debug;
+use rand::{thread_rng, Rng};
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::rc::Rc;
@@ -31,7 +32,7 @@ impl EventTicker for IndependentTicker {
         _: StatusTable<DebuffStatus>,
     ) {
         if self.tick_millisecond <= self.time_left_millisecond {
-            let proc_value = rand::random::<PercentType>();
+            let proc_value = thread_rng().gen_range(0..100);
             if proc_value <= self.proc_percent {
                 let events = self.generate_event(current_time_millisecond);
 

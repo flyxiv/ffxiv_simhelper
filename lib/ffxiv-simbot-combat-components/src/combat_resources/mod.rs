@@ -104,7 +104,7 @@ pub(crate) trait CombatResource: Clone + Sized {
 
     /// Add conditional trigger event on skill
     fn trigger_on_event(
-        &self,
+        &mut self,
         skill_id: IdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
