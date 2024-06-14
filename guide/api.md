@@ -2,10 +2,10 @@
 
 ## 1. Request
 
-| API route        | Request Type           | Description                                                                             |
-|------------------|------------------------|-----------------------------------------------------------------------------------------|
-| /api/quicksim    | POST(application/json) | Only customize player + party composition, and rest of the party member is default BIS. |
-| /api/advancedsim | POST(application/json) | Customize all party job + stats                                                         |
+| API route           | Request Type           | Description                                                                             |
+|---------------------|------------------------|-----------------------------------------------------------------------------------------|
+| /api/v1/quicksim    | POST(application/json) | Only customize player + party composition, and rest of the party member is default BIS. |
+| /api/v1/advancedsim | POST(application/json) | Customize all party job + stats                                                         |
 
 ### Request Body Example
 
@@ -20,6 +20,7 @@
       "job": "WAR",
       "role": "Tank",
       "stats": {
+        "weaponDamage": 100,
         "mainStat": 100,
         "criticalStrike": 100,
         "directHit": 100,
@@ -33,6 +34,7 @@
       "job": "PLD",
       "role": "Tank",
       "stats": {
+        "weaponDamage": 100,
         "mainStat": 399,
         "criticalStrike": 388,
         "directHit": 390,
@@ -46,6 +48,7 @@
       "job": "WHM",
       "role": "Healer",
       "stats": {
+        "weaponDamage": 100,
         "mainStat": 2195,
         "criticalStrike": 562,
         "directHit": 291,
@@ -59,6 +62,7 @@
       "job": "SGE",
       "role": "Healer",
       "stats": {
+        "weaponDamage": 100,
         "mainStat": 500,
         "criticalStrike": 291,
         "directHit": 691,
@@ -72,6 +76,7 @@
       "job": "DRG",
       "role": "Melee",
       "stats": {
+        "weaponDamage": 100,
         "mainStat": 2911,
         "criticalStrike": 1638,
         "directHit": 1819,
@@ -85,6 +90,7 @@
       "job": "NIN",
       "role": "Melee",
       "stats": {
+        "weaponDamage": 100,
         "mainStat": 1800,
         "criticalStrike": 271,
         "directHit": 921,
@@ -98,6 +104,7 @@
       "job": "BRD",
       "role": "Ranged",
       "stats": {
+        "weaponDamage": 100,
         "mainStat": 1591,
         "criticalStrike": 1162,
         "directHit": 2781,
@@ -111,6 +118,7 @@
       "job": "BLM",
       "role": "Caster",
       "stats": {
+        "weaponDamage": 100,
         "mainStat": 119,
         "criticalStrike": 592,
         "directHit": 100,
@@ -149,7 +157,7 @@
 * roles
 
   | role name |
-  |-----------|
+        |-----------|
   | Tank      |
   | Healer    |
   | Melee     |
@@ -171,7 +179,7 @@
 ```json
 {
   "mainPlayerId": 5,
-  "partyDamageResult": [
+  "partySimulationResult": [
     {
       "playerId": 0,
       "job": "WAR",
@@ -186,12 +194,12 @@
             {
               "playerId": 3,
               "raidBuffStatusId": 802,
-              "damage": 787.27
+              "contributedDamage": 787.27
             },
             {
               "playerId": 5,
               "raidBuffStatusId": 1305,
-              "damage": 781.27
+              "contributedDamage": 781.27
             }
             //...
           ]

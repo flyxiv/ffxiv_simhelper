@@ -231,9 +231,9 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1301:
       return actionIconDirectory + "/BRD/refulgent_arrow.png";
     case 1302:
-      return actionIconDirectory + "/BRD/raging_strike.png";
+      return actionIconDirectory + "/BRD/raging_strikes.png";
     case 1303:
-      return actionIconDirectory + "/BRD/blood_letter.png";
+      return actionIconDirectory + "/BRD/bloodletter.png";
     case 1304:
       return actionIconDirectory + "/BRD/caustic_bite.png";
     case 1305:
@@ -253,9 +253,9 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1312:
       return actionIconDirectory + "/BRD/the_wanderer's_minuet.png";
     case 1313:
-      return actionIconDirectory + "/BRD/mages_ballad.png";
+      return actionIconDirectory + "/BRD/mage's_ballad.png";
     case 1314:
-      return actionIconDirectory + "/BRD/armys_paeon.png";
+      return actionIconDirectory + "/BRD/army's_paeon.png";
     case 1315:
       return actionIconDirectory + "/BRD/barrage.png";
     case 1316:

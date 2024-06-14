@@ -1,5 +1,12 @@
-import { MenuItem, FormControl, InputLabel, Select } from "@mui/material";
+import {
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import { JobItemSelectionMenu } from "./JobItemSelectionMenu";
+import React, { useEffect } from "react";
 
 export function JobSelection(
   id: number,
@@ -7,6 +14,19 @@ export function JobSelection(
   jobNameSetter: React.Dispatch<React.SetStateAction<string[]>>
 ) {
   let playerId = `Party Member ${id}`;
+  const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
+    const newJobNames = jobNames.map((jobName, i) => {
+      if (i === index) {
+        return e.target.value;
+      }
+      return jobName;
+    });
+    jobNameSetter(newJobNames);
+  };
+
+  useEffect(() => {
+    console.log(jobNames);
+  }, [jobNames]);
 
   return (
     <FormControl fullWidth>
@@ -18,11 +38,7 @@ export function JobSelection(
         key="job-select-{id}"
         label="Job Name"
         onChange={(event) => {
-          const newJobNames = [...jobNames];
-
-          newJobNames[id - 1] = event.target.value;
-
-          jobNameSetter(newJobNames);
+          updateState(id - 1)(event);
         }}
       >
         {JobItemSelectionMenu("PLD")}

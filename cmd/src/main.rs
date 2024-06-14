@@ -1,5 +1,6 @@
 use ffxiv_simbot_api::api_server::api_router::create_ffxiv_simbot_service_router;
 use ffxiv_simbot_engine::engine::Engine;
+use log::LevelFilter::{Debug, Error, Info};
 use log::{info, Level, LevelFilter, Metadata, Record, SetLoggerError};
 
 struct SimpleLogger;
@@ -19,11 +20,11 @@ impl log::Log for SimpleLogger {
 }
 
 static LOGGER: SimpleLogger = SimpleLogger;
-pub fn init() -> Result<(), SetLoggerError> {
-    log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Info))
+pub fn init(log_level: LevelFilter) -> Result<(), SetLoggerError> {
+    log::set_logger(&LOGGER).map(|()| log::set_max_level(log_level))
 }
 
-const PORT_NUMBER: i32 = 3000;
+const PORT_NUMBER: i32 = 13406;
 
 #[tokio::main]
 async fn main() {
@@ -31,7 +32,7 @@ async fn main() {
     let mut engine = Engine::new();
 
     info!("Loading Logger");
-    init().expect("failed to load logger");
+    init(Info).expect("failed to load logger");
 
     let app = create_ffxiv_simbot_service_router();
 

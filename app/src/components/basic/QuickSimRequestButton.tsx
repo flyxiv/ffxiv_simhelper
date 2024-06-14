@@ -1,9 +1,9 @@
 import { Button } from "@mui/material";
 import "./QuickSimRequestButton.css";
 import { useNavigate } from "react-router-dom";
-import { QuickSimPartyState } from "src/types/QuickSimPartyStates";
 import { CharacterStates } from "src/types/CharacterStates";
 import { MapJobAbbrevToJobDefaultStat } from "src/const/StatValue";
+import { PartyInfo } from "src/types/QuickSimRequest";
 
 export function QuickSimRequestButton(
   partyState: string[],
@@ -63,7 +63,7 @@ function createQuickSimRequest(
   combatTimeSeconds: number,
   characterState: CharacterStates
 ) {
-  let partyInfo = [
+  let partyInfo: PartyInfo[] = [
     {
       playerId: 0,
       job: characterState.jobName,
@@ -80,6 +80,7 @@ function createQuickSimRequest(
   ];
 
   let i = 0;
+  console.log(partyState);
 
   for (i = 0; i < partyState.length; i++) {
     let defaultStat = MapJobAbbrevToJobDefaultStat(partyState[i]);

@@ -19,10 +19,12 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
               style: { textAlign: "center" },
             },
           }}
+          type="number"
           value={mainCharacterState.value.weaponDamage}
-          onChange={(e) =>
-            mainCharacterState.setter.weaponAttack(e.target.value)
-          }
+          onChange={(e) => {
+            const value = e.target.value === "" ? "" : parseInt(e.target.value);
+            mainCharacterState.setter.weaponAttack(value);
+          }}
           fullWidth
         />
       </Grid>
@@ -34,8 +36,12 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
               style: { textAlign: "center" },
             },
           }}
+          type="number"
           value={mainCharacterState.value.mainStat}
-          onChange={(e) => mainCharacterState.setter.mainStat(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value === "" ? "" : parseInt(e.target.value);
+            mainCharacterState.setter.mainStat(value);
+          }}
           fullWidth
         />
       </Grid>
@@ -49,9 +55,11 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
             },
           }}
           fullWidth
-          onChange={(e) =>
-            mainCharacterState.setter.criticalStrike(e.target.value)
-          }
+          type="number"
+          onChange={(e) => {
+            const value = e.target.value === "" ? "" : parseInt(e.target.value);
+            mainCharacterState.setter.criticalStrike(value);
+          }}
         />
       </Grid>
       <Grid item xs={3}>
@@ -64,7 +72,11 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
             },
           }}
           fullWidth
-          onChange={(e) => mainCharacterState.setter.directHit(e.target.value)}
+          type="number"
+          onChange={(e) => {
+            const value = e.target.value === "" ? "" : parseInt(e.target.value);
+            mainCharacterState.setter.directHit(value);
+          }}
         />
       </Grid>
       <Grid item xs={3}>
@@ -77,9 +89,11 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
             },
           }}
           fullWidth
-          onChange={(e) =>
-            mainCharacterState.setter.determination(e.target.value)
-          }
+          type="number"
+          onChange={(e) => {
+            const value = e.target.value === "" ? "" : parseInt(e.target.value);
+            mainCharacterState.setter.determination(value);
+          }}
         />
       </Grid>
       <Grid item xs={3}>
@@ -92,7 +106,11 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
             },
           }}
           fullWidth
-          onChange={(e) => mainCharacterState.setter.speed(e.target.value)}
+          type="number"
+          onChange={(e) => {
+            const value = e.target.value === "" ? "" : parseInt(e.target.value);
+            mainCharacterState.setter.speed(value);
+          }}
         />
       </Grid>
       <Grid item xs={3}>
@@ -105,7 +123,11 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
             },
           }}
           fullWidth
-          onChange={(e) => mainCharacterState.setter.tenacity(e.target.value)}
+          type="number"
+          onChange={(e) => {
+            const value = e.target.value === "" ? "" : parseInt(e.target.value);
+            mainCharacterState.setter.tenacity(value);
+          }}
         />
       </Grid>
     </Grid>

@@ -26,6 +26,8 @@ export const MapJobAbbrevToJobDefaultStat = (jobAbbrev: string) => {
       return DNC_BIS_STATS;
     case "BLM":
       return BLM_BIS_STATS;
+    case "WHM":
+      return WHM_BIS_STATS;
     default:
       Error("Invalid job abbreviation");
   }
@@ -48,6 +50,16 @@ export const WAR_BIS_STATS = {
   determination: 2182,
   speed: 400,
   tenacity: 529,
+};
+
+export const WHM_BIS_STATS = {
+  weaponDamage: 132,
+  mainStat: 3365,
+  criticalStrike: 2502,
+  directHit: 1012,
+  determination: 2047,
+  speed: 664,
+  tenacity: 400,
 };
 
 export const AST_BIS_STATS = {
