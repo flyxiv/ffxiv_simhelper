@@ -2,6 +2,7 @@ use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyRaidBuff};
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::UseBuff;
 use crate::skill::{make_skill_table, ResourceRequirements};
@@ -180,7 +181,9 @@ impl DragoonDatabase {
             name: String::from("Chaotic Spring"),
             owner_id: player_id,
             damage_skill_id: Some(806),
+            trait_percent: Some(100),
             potency: Some(45),
+            damage_category: Some(DamageCategory::PhysicalDot),
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
             duration_millisecond: 24000,
@@ -196,7 +199,7 @@ impl DragoonDatabase {
             name: String::from("Life Surge"),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
                 player_id,
                 player_id,
@@ -227,7 +230,7 @@ impl DragoonDatabase {
             name: String::from("True Thrust"),
             player_id,
             potency: 230,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(2),
@@ -251,7 +254,7 @@ impl DragoonDatabase {
             name: String::from("Raiden Thrust"),
             player_id,
             potency: 280,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(2),
@@ -275,7 +278,7 @@ impl DragoonDatabase {
             name: String::from("Vorpal Thrust"),
             player_id,
             potency: 280,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(3),
@@ -299,7 +302,7 @@ impl DragoonDatabase {
             name: String::from("Disembowel"),
             player_id,
             potency: 250,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
                 player_id,
                 player_id,
@@ -330,7 +333,7 @@ impl DragoonDatabase {
             name: String::from("Heaven's Thrust"),
             player_id,
             potency: 480,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(6),
@@ -354,7 +357,7 @@ impl DragoonDatabase {
             name: String::from("Chaotic Spring"),
             player_id,
             potency: 660,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
                 CHAOTIC_SPRING_DOT.clone(),
@@ -384,7 +387,7 @@ impl DragoonDatabase {
             name: String::from("Fang and Claw"),
             player_id,
             potency: 300,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -415,7 +418,7 @@ impl DragoonDatabase {
             name: String::from("Wheeling Thrust"),
             player_id,
             potency: 300,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -446,7 +449,7 @@ impl DragoonDatabase {
             name: String::from("Fang and Claw+"),
             player_id,
             potency: 400,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -477,7 +480,7 @@ impl DragoonDatabase {
             name: String::from("Wheeling Thrust+"),
             player_id,
             potency: 400,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -508,7 +511,7 @@ impl DragoonDatabase {
             name: String::from("Lance Charge"),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -539,7 +542,7 @@ impl DragoonDatabase {
             name: String::from("Heaven's Thrust + Surge"),
             player_id,
             potency: 480,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(6),
@@ -563,7 +566,7 @@ impl DragoonDatabase {
             name: String::from("Fang and Claw+ + Surge"),
             player_id,
             potency: 400,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -594,7 +597,7 @@ impl DragoonDatabase {
             name: String::from("Wheeling Thrust+ + Surge"),
             player_id,
             potency: 400,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -625,7 +628,7 @@ impl DragoonDatabase {
             name: String::from("High Jump"),
             player_id,
             potency: 400,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -656,7 +659,7 @@ impl DragoonDatabase {
             name: String::from("Mirage Dive"),
             player_id,
             potency: 200,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -680,7 +683,7 @@ impl DragoonDatabase {
             name: String::from("Dragon Sight"),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![
                 ApplyBuff(
                     player_id,
@@ -721,7 +724,7 @@ impl DragoonDatabase {
             name: String::from("Spineshatter Dive"),
             player_id,
             potency: 250,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -745,7 +748,7 @@ impl DragoonDatabase {
             name: String::from("Dragonfire Dive"),
             player_id,
             potency: 300,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -769,7 +772,7 @@ impl DragoonDatabase {
             name: String::from("Battle Litany"),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyRaidBuff(
                 player_id,
                 BATTLE_LITANY_STATUS.clone(),
@@ -799,7 +802,7 @@ impl DragoonDatabase {
             name: String::from("Geirskogul"),
             player_id,
             potency: 260,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -823,7 +826,7 @@ impl DragoonDatabase {
             name: String::from("Geirskogul+"),
             player_id,
             potency: 260,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -854,7 +857,7 @@ impl DragoonDatabase {
             name: String::from("Nastrond"),
             player_id,
             potency: 360,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -878,7 +881,7 @@ impl DragoonDatabase {
             name: String::from("Stardiver"),
             player_id,
             potency: 620,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -902,7 +905,7 @@ impl DragoonDatabase {
             name: String::from("Wyrmwind Thrust"),
             player_id,
             potency: 420,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,

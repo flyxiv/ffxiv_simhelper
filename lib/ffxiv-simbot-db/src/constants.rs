@@ -1,5 +1,5 @@
-use crate::StatModifier;
 use crate::StatModifierType;
+use crate::{MultiplierType, StatModifier};
 use lazy_static::lazy_static;
 use std::collections::HashMap;
 
@@ -100,5 +100,19 @@ lazy_static! {
         ("RDM".to_string(), 44),
         ("BLM".to_string(), 44),
         ("SMN".to_string(), 44),
+    ]);
+    pub(crate) static ref AUTO_ATTACK_DELAYS: HashMap<String, MultiplierType> = HashMap::from([
+        ("PLD".to_string(), 2.24),
+        ("WAR".to_string(), 3.36),
+        ("DRK".to_string(), 2.96),
+        ("GNB".to_string(), 2.80),
+        ("DRG".to_string(), 2.80),
+        ("RPR".to_string(), 3.20),
+        ("MNK".to_string(), 2.56),
+        ("SAM".to_string(), 2.64),
+        ("NIN".to_string(), 2.56),
+        ("BRD".to_string(), 3.04),
+        ("MCH".to_string(), 2.64),
+        ("DNC".to_string(), 3.12)
     ]);
 }

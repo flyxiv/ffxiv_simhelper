@@ -9,6 +9,7 @@ use crate::{MultiplierType, StatModifier, StatModifierType};
 
 #[derive(Clone)]
 pub struct CharacterPower {
+    pub auto_attack_delays: MultiplierType,
     pub critical_strike_rate: MultiplierType,
     pub critical_strike_damage: MultiplierType,
     pub direct_hit_rate: MultiplierType,
@@ -23,6 +24,7 @@ impl Default for CharacterPower {
     #[inline]
     fn default() -> Self {
         CharacterPower {
+            auto_attack_delays: 0.0,
             critical_strike_rate: 0.0,
             critical_strike_damage: 0.0,
             direct_hit_rate: 0.0,
@@ -140,8 +142,9 @@ pub fn convert_stat_info_to_power(
     };
 
     let main_stat_multiplier = 1.0f64 + ((main_stat as f64) * main_stat_slope / 100f64);
-
+    let auto_attack_delays = AUTO_ATTACK_DELAYS.get(job_abbrev).unwrap_or(&0.0).clone();
     Ok(CharacterPower {
+        auto_attack_delays,
         critical_strike_rate,
         critical_strike_damage,
         direct_hit_rate,
@@ -247,6 +250,7 @@ pub(crate) fn convert_character_to_power(
     let main_stat_multiplier = 1.0f64 + ((main_stat as f64) * main_stat_slope / 100f64);
 
     Ok(CharacterPower {
+        auto_attack_delays: AUTO_ATTACK_DELAYS.get(job_abbrev).unwrap_or(&0.0).clone(),
         critical_strike_rate,
         critical_strike_damage,
         direct_hit_rate,

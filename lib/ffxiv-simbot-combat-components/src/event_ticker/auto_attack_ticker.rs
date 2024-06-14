@@ -3,6 +3,7 @@ use crate::event::FfxivEventQueue;
 use crate::event_ticker::{EventTicker, TickerKey};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::damage_category::DamageCategory;
 use crate::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
 use crate::status::debuff_status::DebuffStatus;
 use crate::{IdType, StatusTable, TimeType};
@@ -38,10 +39,12 @@ impl EventTicker for AutoAttackTicker {
                         self.player_id,
                         AUTO_ATTACK_ID,
                         self.auto_attack.get_potency(),
+                        100,
                         false,
                         false,
                         player.borrow().buff_list.borrow().clone(),
                         debuff.borrow().clone(),
+                        DamageCategory::AutoAttack,
                         current_time_millisecond,
                     )));
             }
@@ -82,10 +85,20 @@ impl AutoAttackTicker {
     pub fn new(
         id: IdType,
         player_id: IdType,
+        job_abbrev: &String,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
-        let mut auto_attack =
-            AttackSkill::new(AUTO_ATTACK_ID, String::from("Auto Attack"), player_id, 100);
+        let potency = match job_abbrev.as_str() {
+            "PLD" | "WAR" | "GNB" | "DRK" | "MNK" | "DRG" | "NIN" | "SAM" | "RPR" | "DNC" => 110,
+            _ => 100,
+        };
+
+        let mut auto_attack = AttackSkill::new(
+            AUTO_ATTACK_ID,
+            String::from("Auto Attack"),
+            player_id,
+            potency,
+        );
         auto_attack.player_id = player_id;
 
         Self {

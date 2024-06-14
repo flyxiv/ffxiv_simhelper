@@ -1,6 +1,5 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
-use crate::id_entity::IdEntity;
 use crate::live_objects::player::StatusKey;
 use crate::live_objects::target::Target;
 use crate::owner_tracker::OwnerTracker;
@@ -57,10 +56,12 @@ impl Target for FfxivTarget {
                                 debuff.get_owner_id(),
                                 debuff.get_damage_skill_id().unwrap(),
                                 potency,
+                                debuff.trait_percent.unwrap(),
                                 false,
                                 false,
                                 snapshotted_buffs,
                                 snapshotted_debuffs,
+                                debuff.damage_category.unwrap(),
                                 combat_time_millisecond,
                             )));
                     }

@@ -213,7 +213,7 @@ impl DancerDatabase {
             name: "Cascade".to_string(),
             player_id,
             potency: 220,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![(
                 FfxivEvent::ApplyBuff(
@@ -248,7 +248,7 @@ impl DancerDatabase {
             name: "Fountain".to_string(),
             player_id,
             potency: 280,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![(
                 FfxivEvent::ApplyBuff(player_id, player_id, SILKEN_FLOW.clone(), 30000, 30000, 0),
@@ -276,7 +276,7 @@ impl DancerDatabase {
             name: "Standard Step".to_string(),
             player_id,
             potency: 720,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![
                 FfxivEvent::ApplyBuff(
                     player_id,
@@ -334,7 +334,7 @@ impl DancerDatabase {
             name: "Technical Step".to_string(),
             player_id,
             potency: 1200,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![
                 FfxivEvent::ApplyRaidBuff(player_id, TECHNICAL_STEP_BUFF.clone(), 20000, 20000, 0),
                 FfxivEvent::ApplyRaidBuff(
@@ -376,7 +376,7 @@ impl DancerDatabase {
             name: "Devilment".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![
                 FfxivEvent::ApplyBuff(
                     player_id,
@@ -426,7 +426,7 @@ impl DancerDatabase {
             name: "Flourish".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![
                 FfxivEvent::ApplyBuff(
                     player_id,
@@ -484,7 +484,7 @@ impl DancerDatabase {
             name: "Fan Dance I".to_string(),
             player_id,
             potency: 150,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![(
                 FfxivEvent::ApplyBuff(
@@ -519,7 +519,7 @@ impl DancerDatabase {
             name: "Fan Dance III".to_string(),
             player_id,
             potency: 200,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -543,7 +543,7 @@ impl DancerDatabase {
             name: "Fan Dance IV".to_string(),
             player_id,
             potency: 300,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -568,7 +568,7 @@ impl DancerDatabase {
             name: "Reverse Cascade".to_string(),
             player_id,
             potency: 280,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![(FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0), 50)],
             combo: None,
@@ -592,7 +592,7 @@ impl DancerDatabase {
             name: "Fountainfall".to_string(),
             player_id,
             potency: 340,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![(FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0), 50)],
             combo: None,
@@ -616,7 +616,7 @@ impl DancerDatabase {
             name: "Saber Dance".to_string(),
             player_id,
             potency: 480,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -641,7 +641,7 @@ impl DancerDatabase {
             name: "Starfall Dance".to_string(),
             player_id,
             potency: 600,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -666,7 +666,7 @@ impl DancerDatabase {
             name: "Reverse Cascade Flourish".to_string(),
             player_id,
             potency: 280,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![(FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0), 50)],
             combo: None,
@@ -691,7 +691,7 @@ impl DancerDatabase {
             name: "Fountainfall Flourish".to_string(),
             player_id,
             potency: 340,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![(FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0), 50)],
             combo: None,
@@ -716,7 +716,7 @@ impl DancerDatabase {
             name: "Tillana".to_string(),
             player_id,
             potency: 360,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![
                 FfxivEvent::ApplyBuff(
                     player_id,

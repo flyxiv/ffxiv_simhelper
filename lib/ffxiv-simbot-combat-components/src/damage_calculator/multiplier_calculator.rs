@@ -10,9 +10,7 @@ pub(crate) fn percent_to_actual_value(increase_percent: BuffIncreasePercentType)
     increase_percent as MultiplierType / 100f64
 }
 
-lazy_static! {
-    static ref DIRECT_HIT_DAMAGE_MULTIPLIER: f64 = 1.25f64;
-}
+pub const DIRECT_HIT_DAMAGE_MULTIPLIER: f64 = 1.25f64;
 
 pub trait MultiplierCalculator {
     fn calculate_damage_multiplier(
@@ -52,9 +50,9 @@ pub trait MultiplierCalculator {
     ) -> MultiplierType {
         let increase_value = percent_to_actual_value(direct_hit_rate_increase);
         let expected_damage_increase = if let Some(stack) = stacks {
-            *DIRECT_HIT_DAMAGE_MULTIPLIER * increase_value * (stack as MultiplierType)
+            DIRECT_HIT_DAMAGE_MULTIPLIER * increase_value * (stack as MultiplierType)
         } else {
-            *DIRECT_HIT_DAMAGE_MULTIPLIER * increase_value
+            DIRECT_HIT_DAMAGE_MULTIPLIER * increase_value
         };
 
         1.0f64 + expected_damage_increase

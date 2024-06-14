@@ -1,8 +1,9 @@
 use crate::event::turn_info::TurnInfo;
 use crate::event_ticker::ffxiv_event_ticker::FfxivEventTicker;
-use crate::event_ticker::TickerKey;
+use crate::event_ticker::{PercentType, TickerKey};
 use crate::live_objects::player::StatusKey;
 use crate::live_objects::turn_type::FfxivTurnType;
+use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::{DamageType, IdType, ResourceType, StatusTable, TimeType};
@@ -18,15 +19,17 @@ pub enum FfxivEvent {
     /// player_id, target_id, skill_id
     UseSkill(IdType, Option<IdType>, IdType, TimeType),
 
-    /// owner_player_id, skill ID, potency, guaranteed crit, guaranteed direct hit, snapshotted buffs, snapshotted debuffs,
+    /// owner_player_id, skill ID, potency, trait, guaranteed crit, guaranteed direct hit, snapshotted buffs, snapshotted debuffs, damage category
     Damage(
         IdType,
         IdType,
         DamageType,
+        PercentType,
         bool,
         bool,
         HashMap<StatusKey, BuffStatus>,
         HashMap<StatusKey, DebuffStatus>,
+        DamageCategory,
         TimeType,
     ),
 
@@ -73,7 +76,7 @@ impl FfxivEvent {
         match self {
             FfxivEvent::PlayerTurn(_, _, _, time)
             | FfxivEvent::UseSkill(_, _, _, time)
-            | FfxivEvent::Damage(_, _, _, _, _, _, _, time)
+            | FfxivEvent::Damage(_, _, _, _, _, _, _, _, _, time)
             | FfxivEvent::Tick(_, time)
             | FfxivEvent::AddTicker(_, time)
             | FfxivEvent::RemoveTicker(_, time)
@@ -123,19 +126,23 @@ impl FfxivEvent {
                 player_id,
                 skill_id,
                 potency,
+                trait_percent,
                 is_crit,
                 is_direct_hit,
                 buffs,
                 debuffs,
+                damage_category,
                 time,
             ) => FfxivEvent::Damage(
                 player_id,
                 skill_id,
                 potency,
+                trait_percent,
                 is_crit,
                 is_direct_hit,
                 buffs.clone(),
                 debuffs.clone(),
+                damage_category,
                 elapsed_time + time,
             ),
             FfxivEvent::Tick(ticker_id, time) => FfxivEvent::Tick(ticker_id, elapsed_time + time),

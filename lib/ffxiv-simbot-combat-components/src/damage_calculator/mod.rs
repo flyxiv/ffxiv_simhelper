@@ -2,6 +2,7 @@ use crate::live_objects::player::StatusKey;
 use crate::{DamageType, IdType};
 use std::collections::HashMap;
 
+mod contribution_share;
 pub mod multiplier_calculator;
 pub mod raw_damage_calculator;
 pub mod rdps_calculator;

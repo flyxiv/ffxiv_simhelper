@@ -4,6 +4,7 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::CasterGlobalSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::damage_category::DamageCategory::MagicalDot;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::UseBuff;
 use crate::skill::{make_skill_table, ResourceRequirements};
@@ -66,6 +67,8 @@ impl BlackmageDatabase {
             name: String::from("Thunder III"),
             owner_id: player_id,
             potency: Some(35),
+            trait_percent: Some(100),
+            damage_category: Some(MagicalDot),
             damage_skill_id: Some(1701),
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
@@ -142,7 +145,7 @@ impl BlackmageDatabase {
             name: "Transpose".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 0.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -174,7 +177,7 @@ impl BlackmageDatabase {
             name: "Thunder III".to_string(),
             player_id,
             potency: 50,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![
                 FfxivEvent::ApplyDebuff(player_id, THUNDER_III_DOT.clone(), 30000, 30000, 0),
                 ApplyBuff(
@@ -208,7 +211,7 @@ impl BlackmageDatabase {
             name: "Thunder III".to_string(),
             player_id,
             potency: 400,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![
                 FfxivEvent::ApplyDebuff(player_id, THUNDER_III_DOT.clone(), 30000, 30000, 0),
                 ApplyBuff(
@@ -245,7 +248,7 @@ impl BlackmageDatabase {
             name: "Fire IV".to_string(),
             player_id,
             potency: 300,
-            trait_multiplier: 1.8,
+            trait_percent: 180,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -270,7 +273,7 @@ impl BlackmageDatabase {
             name: "Fire IV".to_string(),
             player_id,
             potency: 300,
-            trait_multiplier: 1.8,
+            trait_percent: 180,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -295,7 +298,7 @@ impl BlackmageDatabase {
             name: "Fire III Ice".to_string(),
             player_id,
             potency: 260,
-            trait_multiplier: 0.7,
+            trait_percent: 70,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -326,7 +329,7 @@ impl BlackmageDatabase {
             name: "Fire III Astral Fire I".to_string(),
             player_id,
             potency: 260,
-            trait_multiplier: 1.2,
+            trait_percent: 70,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -358,7 +361,7 @@ impl BlackmageDatabase {
             name: "Despair".to_string(),
             player_id,
             potency: 340,
-            trait_multiplier: 1.8,
+            trait_percent: 180,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -389,7 +392,7 @@ impl BlackmageDatabase {
             name: "Despair".to_string(),
             player_id,
             potency: 340,
-            trait_multiplier: 1.8,
+            trait_percent: 180,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -423,7 +426,7 @@ impl BlackmageDatabase {
             name: "Despair".to_string(),
             player_id,
             potency: 340,
-            trait_multiplier: 1.8,
+            trait_percent: 180,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -455,7 +458,7 @@ impl BlackmageDatabase {
             name: "Xenoglossy".to_string(),
             player_id,
             potency: 880,
-            trait_multiplier: 1.8,
+            trait_percent: 180,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -480,7 +483,7 @@ impl BlackmageDatabase {
             name: "Paradox".to_string(),
             player_id,
             potency: 500,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::RefreshBuff(
                 player_id,
                 player_id,
@@ -511,7 +514,7 @@ impl BlackmageDatabase {
             name: "Blizzard III".to_string(),
             player_id,
             potency: 260,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(2),
@@ -535,7 +538,7 @@ impl BlackmageDatabase {
             name: "Blizzard IV".to_string(),
             player_id,
             potency: 310,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(3),
@@ -559,7 +562,7 @@ impl BlackmageDatabase {
             name: "Triplecast".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 0.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -591,7 +594,7 @@ impl BlackmageDatabase {
             name: "Ley Lines".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 0.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -623,7 +626,7 @@ impl BlackmageDatabase {
             name: "Sharpcast".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 0.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -654,7 +657,7 @@ impl BlackmageDatabase {
             name: "Amplifier".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 0.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -679,7 +682,7 @@ impl BlackmageDatabase {
             name: "Fire III".to_string(),
             player_id,
             potency: 260,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -710,7 +713,7 @@ impl BlackmageDatabase {
             name: "Blizzard III".to_string(),
             player_id,
             potency: 260,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(2),

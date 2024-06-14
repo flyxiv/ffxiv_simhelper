@@ -1,10 +1,15 @@
+use crate::damage_calculator::multiplier_calculator::DIRECT_HIT_DAMAGE_MULTIPLIER;
+use crate::damage_calculator::raw_damage_calculator::ONE_HUNDRED_PERCENT;
+use crate::event_ticker::PercentType;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
+use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
 use crate::{DamageType, IdType, ResourceType, TimeType};
+use ffxiv_simbot_db::MultiplierType;
 use std::cmp::min;
 use std::collections::HashMap;
 
@@ -15,6 +20,8 @@ pub struct DebuffStatus {
     pub(crate) owner_id: IdType,
     pub(crate) damage_skill_id: Option<IdType>,
     pub(crate) potency: Option<DamageType>,
+    pub(crate) trait_percent: Option<PercentType>,
+    pub(crate) damage_category: Option<DamageCategory>,
     pub(crate) duration_left_millisecond: TimeType,
     pub(crate) status_info: Vec<StatusInfo>,
     pub(crate) duration_millisecond: TimeType,

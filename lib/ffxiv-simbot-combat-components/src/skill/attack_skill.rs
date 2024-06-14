@@ -1,12 +1,14 @@
 use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
+use crate::event_ticker::PercentType;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::player_turn_calculator::SkillTimeInfo;
 use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::rotation::cooldown_timer::CooldownTimer;
+use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::{
     ResourceRequirements, ResourceTable, Skill, SkillEvents, GCD_DEFAULT_DELAY_MILLISECOND,
@@ -14,8 +16,7 @@ use crate::skill::{
 };
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{DamageType, IdType, PercentType, ResourceType, StackType, StatusTable, TimeType};
-use ffxiv_simbot_db::MultiplierType;
+use crate::{DamageType, IdType, ResourceType, StackType, StatusTable, TimeType};
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
 use std::cmp::max;
@@ -28,7 +29,7 @@ pub struct AttackSkill {
     pub(crate) name: String,
     pub player_id: IdType,
     pub(crate) potency: DamageType,
-    pub(crate) trait_multiplier: MultiplierType,
+    pub(crate) trait_percent: PercentType,
 
     pub additional_skill_events: Vec<FfxivEvent>,
     pub proc_events: Vec<(FfxivEvent, PercentType)>,
@@ -131,7 +132,7 @@ impl Skill for AttackSkill {
 
 impl AttackSkill {
     pub fn get_potency(&self) -> DamageType {
-        (self.potency as MultiplierType * self.trait_multiplier) as DamageType
+        self.potency
     }
 
     /// generate events that update the resource of the player.
@@ -216,10 +217,12 @@ impl AttackSkill {
             self.player_id,
             self.id,
             self.get_potency() * stack_multiplier as DamageType,
+            self.trait_percent,
             self.is_guaranteed_crit,
             self.is_guaranteed_direct_hit,
             buffs.borrow().clone(),
             debuffs.borrow().clone(),
+            DamageCategory::Direct,
             current_combat_milliseconds + inflict_damage_time,
         ))
     }
@@ -376,7 +379,7 @@ impl AttackSkill {
             name,
             player_id,
             potency,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,

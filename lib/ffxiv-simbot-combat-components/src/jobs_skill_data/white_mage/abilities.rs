@@ -1,6 +1,7 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::debuff_status::DebuffStatus;
@@ -22,6 +23,8 @@ impl WhitemageDatabase {
             id: 400,
             owner_id: player_id,
             potency: Some(65),
+            trait_percent: Some(100),
+            damage_category: Some(DamageCategory::MagicalDot),
             damage_skill_id: Some(401),
             duration_left_millisecond: 0,
             status_info: vec![],
@@ -39,7 +42,7 @@ impl WhitemageDatabase {
             name: "Glare III".to_string(),
             player_id,
             potency: 310,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -63,7 +66,7 @@ impl WhitemageDatabase {
             name: "Dia".to_string(),
             player_id,
             potency: 65,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
                 DIA_DOT.clone(),
@@ -93,7 +96,7 @@ impl WhitemageDatabase {
             name: "Afflatus Misery".to_string(),
             player_id,
             potency: 1240,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -117,7 +120,7 @@ impl WhitemageDatabase {
             name: "Afflatus Rapture".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,

@@ -1,4 +1,5 @@
 pub mod attack_skill;
+pub mod damage_category;
 pub(crate) mod skill_target;
 pub(crate) mod use_type;
 

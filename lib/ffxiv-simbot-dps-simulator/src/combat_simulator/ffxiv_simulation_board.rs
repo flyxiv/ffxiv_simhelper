@@ -11,7 +11,7 @@ use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::event_ticker::auto_attack_ticker::AutoAttackTicker;
 use ffxiv_simbot_combat_components::event_ticker::ffxiv_event_ticker::FfxivEventTicker;
 use ffxiv_simbot_combat_components::event_ticker::global_ticker::GlobalTicker;
-use ffxiv_simbot_combat_components::event_ticker::{EventTicker, TickerKey};
+use ffxiv_simbot_combat_components::event_ticker::{EventTicker, PercentType, TickerKey};
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
 use ffxiv_simbot_combat_components::live_objects::player::{Player, StatusKey};
@@ -19,6 +19,7 @@ use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTar
 use ffxiv_simbot_combat_components::live_objects::target::Target;
 use ffxiv_simbot_combat_components::rotation::cooldown_timer::CooldownTimer;
 use ffxiv_simbot_combat_components::skill::attack_skill::AttackSkill;
+use ffxiv_simbot_combat_components::skill::damage_category::DamageCategory;
 use ffxiv_simbot_combat_components::skill::AUTO_ATTACK_ID;
 use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
 use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
@@ -107,10 +108,12 @@ impl FfxivSimulationBoard {
                 player_id,
                 skill_id,
                 potency,
+                trait_percent,
                 guaranteed_crit,
                 guaranteed_dh,
                 snapshotted_buffs,
                 snapshotted_debuffs,
+                damage_category,
                 time,
             ) => {
                 let buffs = snapshotted_buffs.clone();
@@ -127,10 +130,12 @@ impl FfxivSimulationBoard {
                     player.clone(),
                     *skill_id,
                     *potency,
+                    *trait_percent,
                     *guaranteed_crit,
                     *guaranteed_dh,
                     buffs,
                     debuffs,
+                    damage_category,
                     *time,
                 );
             }
@@ -328,27 +333,25 @@ impl FfxivSimulationBoard {
         player: Rc<RefCell<FfxivPlayer>>,
         skill_id: IdType,
         potency: DamageType,
+        trait_percent: PercentType,
         guaranteed_crit: bool,
         guaranteed_dh: bool,
         snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
         snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
+        damage_category: DamageCategory,
         current_combat_time_millisecond: TimeType,
     ) {
-        let raw_damage = self.raw_damage_calculator.calculate_raw_damage(
-            potency,
-            guaranteed_crit,
-            guaranteed_dh,
-            &player.borrow().power,
-        );
-
-        let damage_rdps_profile = self.rdps_calculator.make_damage_profile(
-            skill_id,
-            snapshotted_buffs.clone(),
-            snapshotted_debuffs.clone(),
-            raw_damage,
-            &player.borrow().power,
-            player.borrow().get_id(),
-        );
+        let (raw_damage, contribution_table, is_crit) =
+            self.raw_damage_calculator.calculate_total_damage(
+                potency,
+                trait_percent,
+                guaranteed_crit,
+                guaranteed_dh,
+                &snapshotted_buffs,
+                &snapshotted_debuffs,
+                &player.borrow().power,
+                damage_category,
+            );
 
         player.borrow_mut().update_damage_log(
             skill_id,
@@ -450,16 +453,22 @@ impl FfxivSimulationBoard {
         self.party.push(player.clone());
 
         if player.borrow().is_melee() {
-            self.register_auto_attack_ticker(player.borrow().get_id(), self.event_queue.clone());
+            self.register_auto_attack_ticker(
+                player.borrow().get_id(),
+                &player.borrow().job_abbrev,
+                self.event_queue.clone(),
+            );
         }
     }
 
     fn register_auto_attack_ticker(
         &self,
         player_id: IdType,
+        job_abbrev: &String,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) {
-        let mut auto_attack_ticker = AutoAttackTicker::new(AUTO_ATTACK_ID, player_id, event_queue);
+        let mut auto_attack_ticker =
+            AutoAttackTicker::new(AUTO_ATTACK_ID, player_id, job_abbrev, event_queue);
         let player = self.get_player_data(player_id);
 
         auto_attack_ticker.run_ticker(0, Some(player.clone()), Default::default());

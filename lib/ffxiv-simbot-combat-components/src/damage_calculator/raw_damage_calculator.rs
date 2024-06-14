@@ -1,54 +1,333 @@
-use crate::damage_calculator::multiplier_calculator::MultiplierCalculator;
-use crate::{BuffIncreasePercentType, DamageType};
+use crate::damage_calculator::multiplier_calculator::{
+    MultiplierCalculator, DIRECT_HIT_DAMAGE_MULTIPLIER,
+};
+use crate::event_ticker::PercentType;
+use crate::id_entity::IdEntity;
+use crate::live_objects::player::StatusKey;
+use crate::skill::damage_category::DamageCategory;
+use crate::status::buff_status::BuffStatus;
+use crate::status::debuff_status::DebuffStatus;
+use crate::status::Status;
+use crate::{BuffIncreasePercentType, DamageType, IdType, PotencyType, StatusTable};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
+use rand::{thread_rng, Rng};
+use std::collections::HashMap;
+
+pub const ONE_HUNDRED_PERCENT: f64 = 100.0;
 
 /// Translates a player's skill potency to expected damage number.
 /// Depending on the player's power, the skill's potency, and whether there is a
 /// Guaranteed Critical Hit or Direct Hit buff + trait multiplier.
 pub trait RawDamageCalculator: MultiplierCalculator {
-    // TODO: Implement Crit/DH random number
-    // TODO: Damage itself has a natural 5% variance
-    fn calculate_raw_damage(
+    fn calculate_total_damage(
         &self,
         potency: DamageType,
+        trait_percent: PercentType,
         is_guaranteed_critical_hit: bool,
         is_guaranteed_direct_hit: bool,
+        buffs: &HashMap<StatusKey, BuffStatus>,
+        debuffs: &HashMap<StatusKey, DebuffStatus>,
         player_power: &CharacterPower,
-    ) -> DamageType {
-        let critical_hit_rate = if is_guaranteed_critical_hit {
-            1.0f64
-        } else {
-            player_power.critical_strike_rate - 1.0f64
-        };
+        damage_category: DamageCategory,
+    ) -> (DamageType, HashMap<StatusKey, MultiplierType>, bool) {
+        let potency = potency as MultiplierType;
+        let base_damage =
+            calculate_base_damage(potency, trait_percent, damage_category, player_power);
 
-        let direct_hit_rate = if is_guaranteed_direct_hit {
-            1.0f64
-        } else {
-            player_power.direct_hit_rate - 1.0f64
-        };
+        let (crit_direct_hit_calculation_result, mut contribution_table, is_crit) =
+            calculate_crit_direct_hit_damage(
+                base_damage,
+                buffs,
+                debuffs,
+                player_power,
+                damage_category,
+                is_guaranteed_critical_hit,
+                is_guaranteed_direct_hit,
+            );
 
-        let mut raw_damage = potency as MultiplierType;
-
-        raw_damage *= self.calculate_crit_hit_rate_multiplier(
+        let damage_increase = get_final_damage_increase(
+            is_guaranteed_critical_hit,
+            is_guaranteed_direct_hit,
+            buffs,
+            debuffs,
             player_power,
-            to_increase_rate(critical_hit_rate),
-            None,
         );
-        raw_damage *=
-            self.calculate_direct_hit_rate_multiplier(to_increase_rate(direct_hit_rate), None);
-        raw_damage *= player_power.determination_damage_multiplier;
-        raw_damage *= player_power.tenacity_damage_multiplier;
-        raw_damage *= player_power.main_stat_multiplier;
-        raw_damage *= player_power.weapon_damage_multiplier;
 
-        raw_damage as DamageType
+        let final_damage =
+            MultiplierType::floor(crit_direct_hit_calculation_result * damage_increase);
+
+        for buff in buffs.values() {
+            let skill_contribution = buff.get_damage_increase();
+            let mut entry = contribution_table
+                .entry(StatusKey::new(buff.get_id(), buff.owner_id))
+                .or_insert(0.0);
+
+            *entry += crit_direct_hit_calculation_result * skill_contribution;
+        }
+
+        for debuff in debuffs.values() {
+            let skill_contribution = debuff.get_damage_increase();
+            let mut entry = contribution_table
+                .entry(StatusKey::new(debuff.get_id(), debuff.owner_id))
+                .or_insert(0.0);
+
+            *entry += crit_direct_hit_calculation_result * skill_contribution;
+        }
+
+        for (value) in contribution_table.values_mut() {
+            *value = MultiplierType::floor(*value);
+        }
+
+        (final_damage as DamageType, contribution_table, is_crit)
     }
 }
 
-#[inline]
-fn to_increase_rate(multiplier: MultiplierType) -> BuffIncreasePercentType {
-    (multiplier * 100f64) as BuffIncreasePercentType
+/// https://www.akhmorning.com/allagan-studies/how-to-be-a-math-wizard/shadowbringers/damage-and-healing/#damage-over-time
+/// Variables use names from the calculations of the above link.
+fn calculate_base_damage(
+    potency: MultiplierType,
+    trait_percent: PercentType,
+    damage_category: DamageCategory,
+    player_power: &CharacterPower,
+) -> f64 {
+    match damage_category {
+        DamageCategory::Direct => {
+            let mut d1 = MultiplierType::floor(
+                potency
+                    * player_power.main_stat_multiplier
+                    * player_power.determination_damage_multiplier,
+            );
+
+            let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_damage_multiplier);
+            d2 = MultiplierType::floor(d2 * player_power.weapon_damage_multiplier);
+            d2 = MultiplierType::floor(d2 * trait_percent as MultiplierType);
+            MultiplierType::floor(d2 / 100.0)
+        }
+        DamageCategory::PhysicalDot => {
+            let mut d1 = MultiplierType::floor(
+                potency
+                    * player_power.main_stat_multiplier
+                    * player_power.determination_damage_multiplier,
+            );
+            let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_damage_multiplier);
+            d2 = MultiplierType::floor(d2 * player_power.speed_multiplier * 1000.0);
+            d2 = MultiplierType::floor(d2 * player_power.weapon_damage_multiplier);
+            d2 = MultiplierType::floor(d2 * trait_percent as MultiplierType);
+            MultiplierType::floor(d2 / 100.0) + 1.0
+        }
+        DamageCategory::MagicalDot => {
+            let mut d1 = MultiplierType::floor(potency * player_power.weapon_damage_multiplier);
+            d1 = MultiplierType::floor(d1 * player_power.main_stat_multiplier);
+            d1 = MultiplierType::floor(d1 * player_power.speed_multiplier);
+
+            let mut d2 = MultiplierType::floor(d1 * player_power.determination_damage_multiplier);
+            d2 = MultiplierType::floor(d2 * trait_percent as MultiplierType);
+            MultiplierType::floor(d2 / 100.0) + 1.0
+        }
+        DamageCategory::AutoAttack => {
+            let mut d1 = MultiplierType::floor(
+                potency
+                    * player_power.main_stat_multiplier
+                    * player_power.determination_damage_multiplier,
+            );
+
+            let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_damage_multiplier);
+            d2 = MultiplierType::floor(d2 * player_power.speed_multiplier);
+            d2 = MultiplierType::floor(d2 * player_power.auto_attack_delays / 3.0);
+            d2 = MultiplierType::floor(d2 * trait_percent as MultiplierType);
+            MultiplierType::floor(d2 / 100.0)
+        }
+    }
+}
+
+fn calculate_crit_direct_hit_damage(
+    base_damage: MultiplierType,
+    buffs: &HashMap<StatusKey, BuffStatus>,
+    debuffs: &HashMap<StatusKey, DebuffStatus>,
+    player_power: &CharacterPower,
+    damage_category: DamageCategory,
+    is_guaranteed_critical_hit: bool,
+    is_guaranteed_direct_hit: bool,
+) -> (MultiplierType, HashMap<StatusKey, MultiplierType>, bool) {
+    let damage_random = thread_rng().gen_range(95..=105) as MultiplierType / 100.0;
+    let damage_before_crit_direct_hit = match damage_category {
+        DamageCategory::Direct => base_damage,
+        DamageCategory::PhysicalDot => base_damage * damage_random,
+        DamageCategory::MagicalDot => base_damage * damage_random,
+        DamageCategory::AutoAttack => base_damage,
+    };
+
+    let mut damage_after_crit_direct_hit = damage_before_crit_direct_hit;
+
+    let critical_hit_rate =
+        get_final_critical_hit_rate(buffs, debuffs, is_guaranteed_critical_hit, player_power);
+    let direct_hit_rate =
+        get_final_direct_hit_rate(buffs, debuffs, is_guaranteed_direct_hit, player_power);
+
+    let crit_rng = thread_rng().gen_range(0..1000) as MultiplierType / 1000.0;
+    let direct_hit_rng = thread_rng().gen_range(0..1000) as MultiplierType / 1000.0;
+    let is_crit = crit_rng < critical_hit_rate;
+    let is_direct_hit = direct_hit_rng < direct_hit_rate;
+    let mut contribution_board: HashMap<StatusKey, MultiplierType> = HashMap::new();
+
+    if is_crit {
+        let crit_portion = damage_before_crit_direct_hit * player_power.critical_strike_damage
+            - damage_before_crit_direct_hit;
+
+        for buff in buffs.values() {
+            let critical_hit_multiplier =
+                buff.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
+
+            if critical_hit_multiplier > 0.0 {
+                let skill_proportion = critical_hit_multiplier / direct_hit_rate;
+                let skill_contribution = crit_portion * skill_proportion;
+                let mut entry = contribution_board
+                    .entry(StatusKey::new(buff.get_id(), buff.owner_id))
+                    .or_insert(0.0);
+
+                *entry += skill_contribution;
+            }
+        }
+
+        for debuff in debuffs.values() {
+            let critical_hit_multiplier =
+                debuff.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
+
+            if critical_hit_multiplier > 0.0 {
+                let skill_proportion = critical_hit_multiplier / direct_hit_rate;
+                let skill_contribution = crit_portion * skill_proportion;
+                let mut entry = contribution_board
+                    .entry(StatusKey::new(debuff.get_id(), debuff.owner_id))
+                    .or_insert(0.0);
+
+                *entry += skill_contribution;
+            }
+        }
+
+        damage_after_crit_direct_hit = MultiplierType::floor(
+            damage_after_crit_direct_hit * player_power.critical_strike_damage,
+        );
+    }
+
+    if is_direct_hit {
+        let direct_hit_portion = damage_before_crit_direct_hit * DIRECT_HIT_DAMAGE_MULTIPLIER
+            - damage_before_crit_direct_hit;
+
+        for buff in buffs.values() {
+            let direct_hit_multiplier = buff.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
+
+            if direct_hit_multiplier > 0.0 {
+                let skill_proportion = direct_hit_multiplier / direct_hit_rate;
+                let skill_contribution = direct_hit_portion * skill_proportion;
+                let mut entry = contribution_board
+                    .entry(StatusKey::new(buff.get_id(), buff.owner_id))
+                    .or_insert(0.0);
+
+                *entry += skill_contribution;
+            }
+        }
+
+        for debuff in debuffs.values() {
+            let direct_hit_multiplier =
+                debuff.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
+
+            if direct_hit_multiplier > 0.0 {
+                let skill_proportion = direct_hit_multiplier / direct_hit_rate;
+                let skill_contribution = direct_hit_portion * skill_proportion;
+                let mut entry = contribution_board
+                    .entry(StatusKey::new(debuff.get_id(), debuff.owner_id))
+                    .or_insert(0.0);
+
+                *entry += skill_contribution;
+            }
+        }
+
+        damage_after_crit_direct_hit =
+            MultiplierType::floor(damage_after_crit_direct_hit * DIRECT_HIT_DAMAGE_MULTIPLIER);
+    }
+
+    let final_damage = match damage_category {
+        DamageCategory::Direct => damage_after_crit_direct_hit * damage_random,
+        DamageCategory::PhysicalDot => damage_after_crit_direct_hit,
+        DamageCategory::MagicalDot => damage_after_crit_direct_hit,
+        DamageCategory::AutoAttack => damage_after_crit_direct_hit * damage_random,
+    };
+
+    (final_damage, contribution_board, is_crit)
+}
+
+fn get_final_critical_hit_rate(
+    buffs: &HashMap<StatusKey, BuffStatus>,
+    debuffs: &HashMap<StatusKey, DebuffStatus>,
+    is_guaranteed_crit: bool,
+    player_power: &CharacterPower,
+) -> f64 {
+    if is_guaranteed_crit {
+        return 1.0;
+    }
+    let mut final_critical_hit_rate = player_power.critical_strike_rate;
+
+    for buff in buffs.values() {
+        final_critical_hit_rate += buff.get_critical_strike_rate_increase(is_guaranteed_crit);
+    }
+
+    for debuff in debuffs.values() {
+        final_critical_hit_rate += debuff.get_critical_strike_rate_increase(is_guaranteed_crit);
+    }
+
+    final_critical_hit_rate
+}
+
+fn get_final_direct_hit_rate(
+    buffs: &HashMap<StatusKey, BuffStatus>,
+    debuffs: &HashMap<StatusKey, DebuffStatus>,
+    is_guaranteed_direct_hit: bool,
+    player_power: &CharacterPower,
+) -> MultiplierType {
+    if is_guaranteed_direct_hit {
+        return 1.0;
+    }
+
+    let mut final_direct_hit_rate = player_power.direct_hit_rate;
+
+    for buff in buffs.values() {
+        final_direct_hit_rate += buff.get_direct_hit_rate_increase();
+    }
+
+    for debuff in debuffs.values() {
+        final_direct_hit_rate += debuff.get_direct_hit_rate_increase();
+    }
+
+    final_direct_hit_rate
+}
+
+fn get_final_damage_increase(
+    is_guaranteed_critical_hit: bool,
+    is_guaranteed_direct_hit: bool,
+    buffs: &HashMap<StatusKey, BuffStatus>,
+    debuffs: &HashMap<StatusKey, DebuffStatus>,
+    player_power: &CharacterPower,
+) -> MultiplierType {
+    let mut multiplier = 1.0;
+
+    for buff in buffs.values() {
+        multiplier *= buff.get_damage_increase(
+            is_guaranteed_critical_hit,
+            is_guaranteed_direct_hit,
+            player_power.critical_strike_damage,
+        );
+    }
+
+    for debuff in debuffs.values() {
+        multiplier *= debuff.get_damage_increase(
+            is_guaranteed_critical_hit,
+            is_guaranteed_direct_hit,
+            player_power.critical_strike_damage,
+        );
+    }
+
+    multiplier
 }
 
 pub struct FfxivRawDamageCalculator {}
@@ -113,7 +392,7 @@ mod tests {
 
         for (potency, actual_damage) in potencies {
             let simulated_damage =
-                damage_calculator.calculate_raw_damage(potency, false, false, &power);
+                damage_calculator.calculate_total_damage(potency, false, false, &power);
 
             // With crit/dh expected damage
             let expected_actual_damage =
@@ -165,7 +444,7 @@ mod tests {
 
         for (potency, actual_damage) in potencies {
             let simulated_damage =
-                damage_calculator.calculate_raw_damage(potency, false, false, &power);
+                damage_calculator.calculate_total_damage(potency, false, false, &power);
 
             // With crit/dh expected damage
             let expected_actual_damage =

@@ -2,6 +2,7 @@ use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyRaidBuff};
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
@@ -73,6 +74,8 @@ impl MonkDatabase {
             owner_id: player_id,
             potency: Some(70),
             damage_skill_id: Some(904),
+            trait_percent: Some(100),
+            damage_category: Some(DamageCategory::PhysicalDot),
             duration_left_millisecond: 0,
             status_info: vec![],
             duration_millisecond: 18000,
@@ -167,7 +170,7 @@ impl MonkDatabase {
             name: "Bootshine".to_string(),
             player_id,
             potency: 310,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(2),
@@ -192,7 +195,7 @@ impl MonkDatabase {
             name: "True Strike".to_string(),
             player_id,
             potency: 300,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(3),
@@ -217,7 +220,7 @@ impl MonkDatabase {
             name: "Snap Punch".to_string(),
             player_id,
             potency: 310,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(1),
@@ -242,7 +245,7 @@ impl MonkDatabase {
             name: "Twin Snakes".to_string(),
             player_id,
             potency: 280,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
                 player_id,
                 player_id,
@@ -274,7 +277,7 @@ impl MonkDatabase {
             name: "Demolish".to_string(),
             player_id,
             potency: 130,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
                 DEMOLISH_DOT.clone(),
@@ -305,7 +308,7 @@ impl MonkDatabase {
             name: "Dragon Kick".to_string(),
             player_id,
             potency: 320,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
                 player_id,
                 player_id,
@@ -337,7 +340,7 @@ impl MonkDatabase {
             name: "Elixir Field".to_string(),
             player_id,
             potency: 600,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(1),
@@ -362,7 +365,7 @@ impl MonkDatabase {
             name: "Rising Pheonix".to_string(),
             player_id,
             potency: 700,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(1),
@@ -390,7 +393,7 @@ impl MonkDatabase {
             name: "Phantom Rush".to_string(),
             player_id,
             potency: 1150,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(1),
@@ -419,7 +422,7 @@ impl MonkDatabase {
             name: "Brotherhood".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![
                 ApplyRaidBuff(player_id, BROTHERHOOD_DAMAGE_BUFF.clone(), 15000, 15000, 0),
                 ApplyRaidBuff(player_id, BROTHERHOOD_RAID_PROC.clone(), 15000, 15000, 0),
@@ -455,7 +458,7 @@ impl MonkDatabase {
             name: "Riddle of Fire".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -486,7 +489,7 @@ impl MonkDatabase {
             name: "Riddle of Wind".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -518,7 +521,7 @@ impl MonkDatabase {
             name: "Perfect Balance".to_string(),
             player_id,
             potency: 0,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -550,7 +553,7 @@ impl MonkDatabase {
             name: "The Forbidden Chakra".to_string(),
             player_id,
             potency: 340,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -575,7 +578,7 @@ impl MonkDatabase {
             name: "Perfect Bootshine".to_string(),
             player_id,
             potency: 310,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -600,7 +603,7 @@ impl MonkDatabase {
             name: "Perfect True Strike".to_string(),
             player_id,
             potency: 300,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -625,7 +628,7 @@ impl MonkDatabase {
             name: "Perfect Snap Punch".to_string(),
             player_id,
             potency: 310,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -650,7 +653,7 @@ impl MonkDatabase {
             name: "Perfect Twin Snakes".to_string(),
             player_id,
             potency: 280,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -682,7 +685,7 @@ impl MonkDatabase {
             name: "Perfect Demolish".to_string(),
             player_id,
             potency: 130,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
                 DEMOLISH_DOT.clone(),
@@ -713,7 +716,7 @@ impl MonkDatabase {
             name: "Dragon Kick".to_string(),
             player_id,
             potency: 320,
-            trait_multiplier: 1.0,
+            trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
                 player_id,
                 player_id,

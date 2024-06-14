@@ -1,6 +1,7 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::debuff_status::DebuffStatus;
@@ -20,6 +21,8 @@ impl SageDatabase {
             id: 700,
             owner_id: player_id,
             potency: Some(70),
+            damage_category: Some(DamageCategory::MagicalDot),
+            trait_percent: Some(100),
             damage_skill_id: Some(700),
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
@@ -37,7 +40,7 @@ impl SageDatabase {
             player_id,
             potency: 0,
             use_type: UseType::UseOnTarget,
-            trait_multiplier: 1.3,
+            trait_percent: 130,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 0,
                 DOT_STATUS.clone(),
@@ -67,7 +70,7 @@ impl SageDatabase {
             player_id,
             potency: 330,
             use_type: UseType::UseOnTarget,
-            trait_multiplier: 1.3,
+            trait_percent: 130,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -91,7 +94,7 @@ impl SageDatabase {
             player_id,
             use_type: UseType::UseOnTarget,
             potency: 600,
-            trait_multiplier: 1.3,
+            trait_percent: 130,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
