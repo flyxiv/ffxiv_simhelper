@@ -135,7 +135,7 @@ impl FfxivSimulationBoard {
                     *guaranteed_dh,
                     buffs,
                     debuffs,
-                    damage_category,
+                    *damage_category,
                     *time,
                 );
             }
@@ -336,44 +336,41 @@ impl FfxivSimulationBoard {
         trait_percent: PercentType,
         guaranteed_crit: bool,
         guaranteed_dh: bool,
-        snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
-        snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
+        mut snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
+        mut snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
         damage_category: DamageCategory,
         current_combat_time_millisecond: TimeType,
     ) {
-        fn handle_damage_event(
-            &self,
-            player: Rc<RefCell<FfxivPlayer>>,
-            skill_id: IdType,
-            potency: DamageType,
-            guaranteed_crit: bool,
-            guaranteed_dh: bool,
-            snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
-            snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
-            current_combat_time_millisecond: TimeType,
-        ) {
-            let raw_damage = self.raw_damage_calculator.calculate_raw_damage(
-                potency,
-                guaranteed_crit,
-                guaranteed_dh,
-                &player.borrow().power,
-            );
+        let (raw_damage, is_crit) = self.raw_damage_calculator.calculate_raw_damage(
+            potency,
+            trait_percent,
+            damage_category,
+            guaranteed_crit,
+            guaranteed_dh,
+            &player.borrow().power,
+        );
 
-            let damage_rdps_profile = self.rdps_calculator.make_damage_profile(
-                skill_id,
-                snapshotted_buffs.clone(),
-                snapshotted_debuffs.clone(),
-                raw_damage,
-                &player.borrow().power,
-                player.borrow().get_id(),
-            );
-
-            player.borrow_mut().update_damage_log(
-                skill_id,
-                &damage_rdps_profile,
-                current_combat_time_millisecond,
-            );
+        if is_crit {
+            player.borrow().update_on_crit();
         }
+
+        snapshotted_buffs.retain(|_, buff| buff.is_damage_buff());
+        snapshotted_debuffs.retain(|_, debuff| debuff.is_damage_debuff(player.borrow().get_id()));
+
+        let damage_rdps_profile = self.rdps_calculator.make_damage_profile(
+            skill_id,
+            snapshotted_buffs,
+            snapshotted_debuffs,
+            raw_damage,
+            &player.borrow().power,
+            player.borrow().get_id(),
+        );
+
+        player.borrow_mut().update_damage_log(
+            skill_id,
+            &damage_rdps_profile,
+            current_combat_time_millisecond,
+        );
     }
 
     fn get_player_data(&self, player_id: IdType) -> Rc<RefCell<FfxivPlayer>> {

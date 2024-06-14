@@ -1,5 +1,8 @@
-use crate::damage_calculator::{DamageRdpsProfile, FfxivRaidDamageTable};
+use crate::damage_calculator::DamageRdpsProfile;
+use crate::live_objects::player::StatusKey;
 use crate::{DamageType, IdType, TimeType};
+use ffxiv_simbot_db::MultiplierType;
+use std::collections::HashMap;
 
 /// Records skill use events and damage events, stored for each player.
 /// This is used as raw data to create simulation summary.
@@ -14,7 +17,7 @@ pub struct SkillLog {
 pub struct DamageLog {
     pub time: TimeType,
     pub skill_id: IdType,
-    pub raw_damage: DamageType,
+    pub raw_damage: MultiplierType,
     pub rdps_contribution: Vec<RdpsContribution>,
 }
 
@@ -22,14 +25,16 @@ pub struct DamageLog {
 pub struct RdpsContribution {
     pub player_id: IdType,
     pub raid_buff_status_id: IdType,
-    pub contributed_damage: DamageType,
+    pub contributed_damage: MultiplierType,
 }
 
 #[inline]
-fn convert_to_rdps_contribution(table: &FfxivRaidDamageTable) -> Vec<RdpsContribution> {
+fn convert_to_rdps_contribution(
+    table: &HashMap<StatusKey, MultiplierType>,
+) -> Vec<RdpsContribution> {
     table
         .iter()
-        .filter(|(_, &damage)| damage > 0)
+        .filter(|(_, &damage)| damage > 0.0)
         .map(|(key, damage)| RdpsContribution {
             player_id: key.player_id,
             raid_buff_status_id: key.status_id,

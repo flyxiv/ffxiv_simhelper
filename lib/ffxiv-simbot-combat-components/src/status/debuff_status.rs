@@ -1,5 +1,3 @@
-use crate::damage_calculator::multiplier_calculator::DIRECT_HIT_DAMAGE_MULTIPLIER;
-use crate::damage_calculator::raw_damage_calculator::ONE_HUNDRED_PERCENT;
 use crate::event_ticker::PercentType;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::StatusKey;
@@ -9,7 +7,6 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
 use crate::{DamageType, IdType, ResourceType, TimeType};
-use ffxiv_simbot_db::MultiplierType;
 use std::cmp::min;
 use std::collections::HashMap;
 
@@ -64,6 +61,23 @@ impl Status for DebuffStatus {
 
     fn get_damage_skill_id(&self) -> Option<IdType> {
         self.damage_skill_id
+    }
+}
+
+impl DebuffStatus {
+    pub fn is_damage_debuff(&self, player_id: IdType) -> bool {
+        if self.owner_id != player_id && !self.is_raidwide {
+            return false;
+        }
+
+        self.status_info
+            .iter()
+            .any(|status_info| match status_info {
+                StatusInfo::DirectHitRatePercent(_)
+                | StatusInfo::CritHitRatePercent(_)
+                | StatusInfo::DamagePercent(_) => true,
+                _ => false,
+            })
     }
 }
 

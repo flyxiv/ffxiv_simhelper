@@ -98,6 +98,8 @@ impl CombatResource for BlackmageCombatResources {
 
         self.next_polyglot_time -= elapsed_time_millisecond;
     }
+
+    fn trigger_on_crit(&mut self) {}
 }
 
 impl BlackmageCombatResources {

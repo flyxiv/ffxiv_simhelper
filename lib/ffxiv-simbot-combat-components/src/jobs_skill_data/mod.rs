@@ -26,7 +26,7 @@ impl CasterGlobalSkill {
             name: String::from("Swiftcast"),
             player_id,
             potency: 0,
-            trait_multiplier: 0.0,
+            trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,

@@ -1,5 +1,4 @@
 use crate::damage_calculator::multiplier_calculator::DIRECT_HIT_DAMAGE_MULTIPLIER;
-use crate::damage_calculator::raw_damage_calculator::ONE_HUNDRED_PERCENT;
 use crate::id_entity::IdEntity;
 use crate::status::status_info::StatusInfo;
 use crate::{IdType, ResourceType, TimeType};

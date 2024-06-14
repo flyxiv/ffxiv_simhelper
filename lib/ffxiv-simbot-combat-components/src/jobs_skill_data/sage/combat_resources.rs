@@ -54,6 +54,7 @@ impl CombatResource for SageCombatResources {
     }
 
     fn update_stack_timer(&mut self, _: TimeType) {}
+    fn trigger_on_crit(&mut self) {}
 }
 
 impl SageCombatResources {

@@ -1,36 +1,37 @@
 use ffxiv_simbot_combat_components::live_objects::player::logs::DamageLog;
 use ffxiv_simbot_combat_components::live_objects::player::StatusKey;
 use ffxiv_simbot_combat_components::{DamageType, IdType};
+use ffxiv_simbot_db::MultiplierType;
 use itertools::izip;
 use std::collections::HashMap;
 
 /// Sum up all damage profile for each skill.
 #[derive(Clone)]
 pub(crate) struct SkillDamageAggregate {
-    pub(crate) total_raw_damage: DamageType,
-    pub(crate) total_rdps_contribution: HashMap<StatusKey, DamageType>,
+    pub(crate) total_raw_damage: MultiplierType,
+    pub(crate) total_rdps_contribution: HashMap<StatusKey, MultiplierType>,
 }
 
 /// Sum up all damage profile for each raidbuff.
 /// Damage buffs to self are calculated as raw damage, the rest are calculated as rdps.
 #[derive(Clone)]
 pub(crate) struct RaidbuffDamageAggregate {
-    pub(crate) total_raw_damage: DamageType,
-    pub(crate) total_raid_damage: DamageType,
+    pub(crate) total_raw_damage: MultiplierType,
+    pub(crate) total_raid_damage: MultiplierType,
 }
 
 #[derive(Clone)]
 pub(crate) struct PlayerDamageAggregate {
-    pub(crate) total_raw_damage: DamageType,
-    pub(crate) total_contributions_received: DamageType,
-    pub(crate) total_rdps_contributions: HashMap<IdType, DamageType>,
+    pub(crate) total_raw_damage: MultiplierType,
+    pub(crate) total_contributions_received: MultiplierType,
+    pub(crate) total_rdps_contributions: HashMap<IdType, MultiplierType>,
 }
 
 impl Default for PlayerDamageAggregate {
     fn default() -> Self {
         PlayerDamageAggregate {
-            total_raw_damage: 0,
-            total_contributions_received: 0,
+            total_raw_damage: 0.0,
+            total_contributions_received: 0.0,
             total_rdps_contributions: HashMap::new(),
         }
     }
@@ -39,7 +40,7 @@ impl Default for PlayerDamageAggregate {
 impl Default for SkillDamageAggregate {
     fn default() -> Self {
         SkillDamageAggregate {
-            total_raw_damage: 0,
+            total_raw_damage: 0.0,
             total_rdps_contribution: Default::default(),
         }
     }
@@ -72,7 +73,7 @@ pub(crate) fn aggregate_skill_damage(
                 let rdps_contribution_entry = skill_damage_entry
                     .total_rdps_contribution
                     .entry(status_key)
-                    .or_insert(0);
+                    .or_insert(0.0);
 
                 *rdps_contribution_entry += rdps_contribution.contributed_damage;
             }
@@ -87,12 +88,12 @@ pub(crate) fn aggregate_skill_damage(
 /// Aggregate the total number of buff contribution for each player in player units.
 pub(crate) fn aggregate_contribution(
     skill_damage_table: &HashMap<IdType, SkillDamageAggregate>,
-) -> HashMap<StatusKey, DamageType> {
+) -> HashMap<StatusKey, MultiplierType> {
     let mut contribution_table = HashMap::new();
     for skill_damage in skill_damage_table.values() {
         for (status_key, contributed_damage) in skill_damage.total_rdps_contribution.iter() {
-            let contribution_entry = contribution_table.entry(*status_key).or_insert(0);
-            *contribution_entry += contributed_damage;
+            let contribution_entry = contribution_table.entry(*status_key).or_insert(0.0);
+            *contribution_entry += *contributed_damage;
         }
     }
 
@@ -102,7 +103,7 @@ pub(crate) fn aggregate_contribution(
 /// Calculate the final damage profile statistic for each player:
 /// raw damage, given contribution and received contribution.
 pub(crate) fn aggregate_player_damage_statistics(
-    party_damage_contribution_table: &Vec<HashMap<StatusKey, DamageType>>,
+    party_damage_contribution_table: &Vec<HashMap<StatusKey, MultiplierType>>,
     skill_damage_tables: &Vec<HashMap<IdType, SkillDamageAggregate>>,
 ) -> Vec<PlayerDamageAggregate> {
     let mut party_damage_aggregate: Vec<PlayerDamageAggregate> = vec![];
@@ -124,7 +125,7 @@ pub(crate) fn aggregate_player_damage_statistics(
                 let entry = party_damage_aggregate[player_id]
                     .total_rdps_contributions
                     .entry(status_key.player_id)
-                    .or_insert(0);
+                    .or_insert(0.0);
                 *entry += contributed_damage;
             }
         }
@@ -153,8 +154,8 @@ pub(crate) fn aggregate_status_damages(
                     status_damages[player_id]
                         .entry(status_id)
                         .or_insert(RaidbuffDamageAggregate {
-                            total_raw_damage: 0,
-                            total_raid_damage: 0,
+                            total_raw_damage: 0.0,
+                            total_raid_damage: 0.0,
                         });
 
                 if affected_player_id == player_id {

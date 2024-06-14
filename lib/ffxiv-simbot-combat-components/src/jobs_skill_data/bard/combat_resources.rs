@@ -110,6 +110,8 @@ impl CombatResource for BardCombatResources {
         (skill_events, skill_internal_events)
     }
 
+    fn trigger_on_crit(&mut self) {}
+
     fn get_next_buff_target(&self, _: IdType) -> IdType {
         0
     }

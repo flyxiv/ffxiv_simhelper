@@ -20,7 +20,7 @@ pub trait RawDamageCalculator: MultiplierCalculator {
         is_guaranteed_critical_hit: bool,
         is_guaranteed_direct_hit: bool,
         player_power: &CharacterPower,
-    ) -> (DamageType, bool) {
+    ) -> (MultiplierType, bool) {
         let crit_rng = thread_rng().gen_range(0..100) as MultiplierType / 100.0;
         let critical_hit_rate = if is_guaranteed_critical_hit {
             1.0f64
@@ -63,7 +63,7 @@ pub trait RawDamageCalculator: MultiplierCalculator {
             }
         }
 
-        (raw_damage as DamageType, is_crit)
+        (MultiplierType::floor(raw_damage), is_crit)
     }
 }
 

@@ -112,6 +112,8 @@ pub(crate) trait CombatResource: Clone + Sized {
         player: &FfxivPlayer,
     ) -> SkillEvents;
 
+    fn trigger_on_crit(&mut self);
+
     fn get_next_buff_target(&self, skill_id: IdType) -> IdType;
 
     fn update_cooldown(&mut self, elapsed_time: TimeType) {

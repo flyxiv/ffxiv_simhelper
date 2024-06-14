@@ -71,6 +71,7 @@ impl CombatResource for WarriorCombatResources {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
+    fn trigger_on_crit(&mut self) {}
 }
 
 impl WarriorCombatResources {

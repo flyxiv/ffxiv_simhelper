@@ -10,7 +10,8 @@ use crate::response::simulation_api_response::{
 };
 use ffxiv_simbot_combat_components::jobs_skill_data::ninja::abilities::bunshin_clone_id;
 use ffxiv_simbot_combat_components::live_objects::player::logs::SkillLog;
-use ffxiv_simbot_combat_components::{DamageType, DpsType, IdType, TimeType};
+use ffxiv_simbot_combat_components::{DpsType, IdType, TimeType};
+use ffxiv_simbot_db::MultiplierType;
 use ffxiv_simbot_dps_simulator::simulation_result::SimulationResult;
 use itertools::{izip, Itertools};
 use std::collections::HashMap;
@@ -24,8 +25,8 @@ pub(crate) fn convert_to_skill_log_response(skill_log: &SkillLog) -> SkillLogRes
 }
 
 #[inline]
-fn damage_to_dps(damage: DamageType, time: TimeType) -> DpsType {
-    damage as DpsType / (time / 1000) as DpsType
+fn damage_to_dps(damage: DpsType, time: TimeType) -> DpsType {
+    damage / (time / 1000) as DpsType
 }
 
 impl FromWithTime<PlayerDamageAggregate> for SimulationSummaryResponse {
@@ -36,16 +37,17 @@ impl FromWithTime<PlayerDamageAggregate> for SimulationSummaryResponse {
         let given_contributions = player_damage_aggregate
             .total_rdps_contributions
             .values()
-            .sum::<DamageType>();
+            .sum::<DpsType>();
 
         SimulationSummaryResponse {
             rdps: damage_to_dps(
-                player_damage_aggregate.total_raw_damage
-                    + player_damage_aggregate.total_contributions_received,
+                (player_damage_aggregate.total_raw_damage
+                    + player_damage_aggregate.total_contributions_received)
+                    as DpsType,
                 combat_time_millisecond,
             ),
             adps: damage_to_dps(
-                player_damage_aggregate.total_raw_damage + given_contributions,
+                (player_damage_aggregate.total_raw_damage + given_contributions) as DpsType,
                 combat_time_millisecond,
             ),
             pdps: damage_to_dps(
@@ -71,7 +73,7 @@ fn create_skill_damage_profile_response(
         + skill_damage_aggregate
             .total_rdps_contribution
             .values()
-            .sum::<DamageType>();
+            .sum::<DpsType>();
 
     DamageProfileResponse {
         id: skill_id,
@@ -89,7 +91,7 @@ fn create_status_damage_profile_response(
     status_damage_aggregate: &RaidbuffDamageAggregate,
     combat_time_millisecond: TimeType,
 ) -> DamageProfileResponse {
-    let total_damage: DamageType =
+    let total_damage: MultiplierType =
         status_damage_aggregate.total_raw_damage + status_damage_aggregate.total_raid_damage;
     DamageProfileResponse {
         id: skill_id,

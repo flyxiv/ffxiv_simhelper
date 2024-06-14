@@ -98,6 +98,9 @@ impl CombatResource for MonkCombatResources {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
+    fn trigger_on_crit(&mut self) {
+        self.chakra = min(CHAKRA_MAX_STACK, self.chakra + 1);
+    }
 }
 
 impl MonkCombatResources {

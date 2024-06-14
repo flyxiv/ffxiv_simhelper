@@ -78,6 +78,7 @@ impl CombatResource for DancerCombatResources {
         self.partner_player_id
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
+    fn trigger_on_crit(&mut self) {}
 }
 
 impl DancerCombatResources {

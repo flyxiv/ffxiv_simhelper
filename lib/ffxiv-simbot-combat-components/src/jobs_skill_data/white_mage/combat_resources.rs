@@ -84,6 +84,7 @@ impl CombatResource for WhitemageCombatResources {
 
         self.next_lily_time -= elapsed_time_millisecond;
     }
+    fn trigger_on_crit(&mut self) {}
 }
 
 impl WhitemageCombatResources {

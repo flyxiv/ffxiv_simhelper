@@ -261,6 +261,21 @@ impl CombatResource for FfxivCombatResources {
             Self::Warrior(warrior_resources) => warrior_resources.update_stack_timer(elapsed_time),
         }
     }
+
+    fn trigger_on_crit(&mut self) {
+        match self {
+            Self::Sage(sage_resources) => sage_resources.trigger_on_crit(),
+            Self::Ninja(ninja_resources) => ninja_resources.trigger_on_crit(),
+            Self::Bard(bard_resources) => bard_resources.trigger_on_crit(),
+            Self::Dancer(dancer_resources) => dancer_resources.trigger_on_crit(),
+            Self::Monk(monk_resources) => monk_resources.trigger_on_crit(),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.trigger_on_crit(),
+            Self::Blackmage(blackmage_resources) => blackmage_resources.trigger_on_crit(),
+            Self::Whitemage(whitemage_resources) => whitemage_resources.trigger_on_crit(),
+            Self::Paladin(paladin_resources) => paladin_resources.trigger_on_crit(),
+            Self::Warrior(warrior_resources) => warrior_resources.trigger_on_crit(),
+        }
+    }
 }
 
 impl FfxivCombatResources {

@@ -337,6 +337,10 @@ impl FfxivPlayer {
         gcd_cooldown + charging_time
     }
 
+    pub fn update_on_crit(&self) {
+        self.combat_resources.borrow_mut().trigger_on_crit();
+    }
+
     pub fn print_skill_debug(&self, skill_id: IdType) -> String {
         if skill_id == AUTO_ATTACK_ID {
             format!(

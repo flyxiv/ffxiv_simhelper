@@ -1,5 +1,3 @@
-use crate::damage_calculator::multiplier_calculator::DIRECT_HIT_DAMAGE_MULTIPLIER;
-use crate::damage_calculator::raw_damage_calculator::ONE_HUNDRED_PERCENT;
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event_ticker::PercentType;
 use crate::id_entity::IdEntity;
@@ -7,7 +5,6 @@ use crate::owner_tracker::OwnerTracker;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
 use crate::{IdType, ResourceType, TimeType};
-use ffxiv_simbot_db::MultiplierType;
 use rand::{thread_rng, Rng};
 use std::cmp::min;
 
@@ -77,6 +74,17 @@ impl BuffStatus {
         }
 
         proc_events
+    }
+
+    pub fn is_damage_buff(&self) -> bool {
+        self.status_info
+            .iter()
+            .any(|status_info| match status_info {
+                StatusInfo::DirectHitRatePercent(_)
+                | StatusInfo::CritHitRatePercent(_)
+                | StatusInfo::DamagePercent(_) => true,
+                _ => false,
+            })
     }
 }
 
