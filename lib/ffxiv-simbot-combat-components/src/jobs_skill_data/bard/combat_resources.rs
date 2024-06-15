@@ -105,6 +105,7 @@ impl CombatResource for BardCombatResources {
             }
 
             self.reset_song_stacks();
+            self.song_stack = min(SONG_MAX_STACK, self.song_stack + 1);
         }
 
         (skill_events, skill_internal_events)

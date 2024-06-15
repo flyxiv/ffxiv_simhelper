@@ -17,6 +17,7 @@ use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPla
 use ffxiv_simbot_combat_components::live_objects::player::{Player, StatusKey};
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
 use ffxiv_simbot_combat_components::live_objects::target::Target;
+use ffxiv_simbot_combat_components::owner_tracker::OwnerTracker;
 use ffxiv_simbot_combat_components::rotation::cooldown_timer::CooldownTimer;
 use ffxiv_simbot_combat_components::skill::attack_skill::AttackSkill;
 use ffxiv_simbot_combat_components::skill::damage_category::DamageCategory;
@@ -341,21 +342,29 @@ impl FfxivSimulationBoard {
         damage_category: DamageCategory,
         current_combat_time_millisecond: TimeType,
     ) {
+        snapshotted_buffs.retain(|_, buff| buff.is_damage_buff());
+        snapshotted_debuffs.retain(|_, debuff| debuff.is_damage_debuff(player.borrow().get_id()));
+
+        let player_id = player.borrow().get_id();
+
         let (raw_damage, is_crit) = self.raw_damage_calculator.calculate_raw_damage(
+            player_id,
             potency,
             trait_percent,
             damage_category,
+            &snapshotted_buffs,
+            &snapshotted_debuffs,
             guaranteed_crit,
             guaranteed_dh,
             &player.borrow().power,
         );
 
+        snapshotted_buffs.retain(|_, buff| buff.get_owner_id() != player_id);
+        snapshotted_debuffs.retain(|_, debuff| debuff.get_owner_id() != player_id);
+
         if is_crit {
             player.borrow().update_on_crit();
         }
-
-        snapshotted_buffs.retain(|_, buff| buff.is_damage_buff());
-        snapshotted_debuffs.retain(|_, debuff| debuff.is_damage_debuff(player.borrow().get_id()));
 
         let damage_rdps_profile = self.rdps_calculator.make_damage_profile(
             skill_id,
@@ -365,6 +374,14 @@ impl FfxivSimulationBoard {
             &player.borrow().power,
             player.borrow().get_id(),
         );
+
+        if player.borrow().id == 0 {
+            info!("skill: {}", skill_id);
+            info!("raw damage: {}", raw_damage);
+            for info in &damage_rdps_profile.rdps_contribution {
+                info!("contribution: {}, {}", info.0.status_id, info.1)
+            }
+        }
 
         player.borrow_mut().update_damage_log(
             skill_id,

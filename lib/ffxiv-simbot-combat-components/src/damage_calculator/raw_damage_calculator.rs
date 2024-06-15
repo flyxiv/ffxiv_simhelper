@@ -1,10 +1,14 @@
 use crate::damage_calculator::multiplier_calculator::MultiplierCalculator;
 use crate::event_ticker::PercentType;
+use crate::live_objects::player::StatusKey;
 use crate::skill::damage_category::DamageCategory;
-use crate::{BuffIncreasePercentType, DamageType};
+use crate::status::buff_status::BuffStatus;
+use crate::status::debuff_status::DebuffStatus;
+use crate::{BuffIncreasePercentType, DamageType, IdType};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
 use rand::{thread_rng, Rng};
+use std::collections::HashMap;
 
 /// Translates a player's skill potency to expected damage number.
 /// Depending on the player's power, the skill's potency, and whether there is a
@@ -14,9 +18,12 @@ pub trait RawDamageCalculator: MultiplierCalculator {
     // TODO: Damage itself has a natural 5% variance
     fn calculate_raw_damage(
         &self,
+        player_id: IdType,
         potency: DamageType,
         trait_percent: PercentType,
         damage_category: DamageCategory,
+        snapshotted_buffs: &HashMap<StatusKey, BuffStatus>,
+        snapshotted_debuffs: &HashMap<StatusKey, DebuffStatus>,
         is_guaranteed_critical_hit: bool,
         is_guaranteed_direct_hit: bool,
         player_power: &CharacterPower,
@@ -25,14 +32,14 @@ pub trait RawDamageCalculator: MultiplierCalculator {
         let critical_hit_rate = if is_guaranteed_critical_hit {
             1.0f64
         } else {
-            player_power.critical_strike_rate - 1.0f64
+            player_power.critical_strike_rate
         };
         let is_crit = crit_rng < critical_hit_rate;
 
         let direct_hit_rate = if is_guaranteed_direct_hit {
             1.0f64
         } else {
-            player_power.direct_hit_rate - 1.0f64
+            player_power.direct_hit_rate
         };
 
         let mut raw_damage = potency as MultiplierType;
@@ -60,6 +67,18 @@ pub trait RawDamageCalculator: MultiplierCalculator {
             }
             DamageCategory::Direct => {
                 raw_damage *= player_power.weapon_damage_multiplier;
+            }
+        }
+
+        for buff in snapshotted_buffs.values() {
+            if buff.owner_id == player_id {
+                raw_damage *= self.calculate_multiplier(buff, player_power);
+            }
+        }
+
+        for debuff in snapshotted_debuffs.values() {
+            if debuff.owner_id == player_id {
+                raw_damage *= self.calculate_multiplier(debuff, player_power);
             }
         }
 

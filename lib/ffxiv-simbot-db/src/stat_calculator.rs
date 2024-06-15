@@ -141,7 +141,12 @@ pub fn convert_stat_info_to_power(
         *BASE_NON_TANK_MAIN_STAT_MULTIPLIER
     };
 
-    let main_stat_multiplier = 1.0f64 + ((main_stat as f64) * main_stat_slope / 100f64);
+    let main_stat_multiplier = 1.0f64
+        + (((main_stat as MultiplierType - FFXIV_STAT_MODIFIER.max_level_main_stat_modifier)
+            as f64)
+            * main_stat_slope
+            / 100f64);
+    let main_stat_multiplier = MultiplierType::floor(main_stat_multiplier * 100.0) / 100.0;
     let auto_attack_delays = AUTO_ATTACK_DELAYS.get(job_abbrev).unwrap_or(&0.0).clone();
     Ok(CharacterPower {
         auto_attack_delays,
