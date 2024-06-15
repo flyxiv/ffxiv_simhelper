@@ -6,6 +6,7 @@ use ffxiv_simbot_combat_components::damage_calculator::raw_damage_calculator::{
 use ffxiv_simbot_combat_components::damage_calculator::rdps_calculator::{
     FfxivRdpsCalculator, RdpsCalculator,
 };
+use ffxiv_simbot_combat_components::damage_calculator::DamageRdpsProfile;
 use ffxiv_simbot_combat_components::event::ffxiv_event::FfxivEvent;
 use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::event_ticker::auto_attack_ticker::AutoAttackTicker;
@@ -14,6 +15,7 @@ use ffxiv_simbot_combat_components::event_ticker::global_ticker::GlobalTicker;
 use ffxiv_simbot_combat_components::event_ticker::{EventTicker, PercentType, TickerKey};
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
+use ffxiv_simbot_combat_components::live_objects::player::logs::RdpsContribution;
 use ffxiv_simbot_combat_components::live_objects::player::{Player, StatusKey};
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
 use ffxiv_simbot_combat_components::live_objects::target::Target;
@@ -342,45 +344,24 @@ impl FfxivSimulationBoard {
         damage_category: DamageCategory,
         current_combat_time_millisecond: TimeType,
     ) {
-        snapshotted_buffs.retain(|_, buff| buff.is_damage_buff());
-        snapshotted_debuffs.retain(|_, debuff| debuff.is_damage_debuff(player.borrow().get_id()));
-
         let player_id = player.borrow().get_id();
+        snapshotted_buffs.retain(|_, buff| buff.is_damage_buff());
+        snapshotted_debuffs.retain(|_, debuff| debuff.is_damage_debuff(player_id));
 
-        let (raw_damage, is_crit) = self.raw_damage_calculator.calculate_raw_damage(
+        let (damage_rdps_profile, is_crit) = self.raw_damage_calculator.calculate_total_damage(
             player_id,
             potency,
-            trait_percent,
             damage_category,
-            &snapshotted_buffs,
-            &snapshotted_debuffs,
+            trait_percent,
             guaranteed_crit,
             guaranteed_dh,
+            &snapshotted_buffs,
+            &snapshotted_debuffs,
             &player.borrow().power,
         );
-
-        snapshotted_buffs.retain(|_, buff| buff.get_owner_id() != player_id);
-        snapshotted_debuffs.retain(|_, debuff| debuff.get_owner_id() != player_id);
 
         if is_crit {
-            player.borrow().update_on_crit();
-        }
-
-        let damage_rdps_profile = self.rdps_calculator.make_damage_profile(
-            skill_id,
-            snapshotted_buffs,
-            snapshotted_debuffs,
-            raw_damage,
-            &player.borrow().power,
-            player.borrow().get_id(),
-        );
-
-        if player.borrow().id == 0 {
-            info!("skill: {}", skill_id);
-            info!("raw damage: {}", raw_damage);
-            for info in &damage_rdps_profile.rdps_contribution {
-                info!("contribution: {}, {}", info.0.status_id, info.1)
-            }
+            player.borrow_mut().update_on_crit();
         }
 
         player.borrow_mut().update_damage_log(
