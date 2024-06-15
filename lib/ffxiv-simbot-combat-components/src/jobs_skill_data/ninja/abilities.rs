@@ -1,4 +1,5 @@
 use crate::event::ffxiv_event::FfxivEvent;
+use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
@@ -189,9 +190,9 @@ impl NinjaDatabase {
             id: 1010,
             name: String::from("Ten Chi Jin-2"),
             owner_id: player_id,
-            duration_left_millisecond: 6000,
+            duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
-            duration_millisecond: 0,
+            duration_millisecond: 6000,
             is_raidwide: false,
             stacks: 1,
             max_stacks: 1,
@@ -622,7 +623,7 @@ impl NinjaDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(1006)],
+            resource_required: vec![ResourceRequirements::UseBuff(TENCHIJIN_STATUS.get_id())],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -653,7 +654,7 @@ impl NinjaDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(1009)],
+            resource_required: vec![ResourceRequirements::UseBuff(TCJ_1.get_id())],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -684,7 +685,7 @@ impl NinjaDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(1010)],
+            resource_required: vec![ResourceRequirements::UseBuff(TCJ_2.get_id())],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,

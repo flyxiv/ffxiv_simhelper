@@ -1,5 +1,6 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::ninja::abilities::NinjaDatabase;
+use crate::rotation::priority_table::SkillPrerequisite::{And, Not};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
@@ -131,7 +132,12 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
         },
         SkillPriorityInfo {
             skill_id: db.raiton.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasSkillStacks(1023, 2)),
+            prerequisite: Some(And(
+                Box::new(SkillPrerequisite::HasSkillStacks(1023, 2)),
+                Box::new(Not(Box::new(SkillPrerequisite::HasBufforDebuff(
+                    db.kassatsu_status.get_id(),
+                )))),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.aeolian_edge.get_id(),

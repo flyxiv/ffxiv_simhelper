@@ -10,6 +10,7 @@ use crate::jobs_skill_data::ninja::abilities::get_huton_status;
 use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
 use crate::jobs_skill_data::paladin::priorities::PaladinPriorityTable;
 use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
+use crate::jobs_skill_data::scholar::priorities::ScholarPriorityTable;
 use crate::jobs_skill_data::warrior::priorities::WarriorPriorityTable;
 use crate::jobs_skill_data::white_mage::priorities::WhitemagePriorityTable;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -34,8 +35,8 @@ pub(crate) static SAGE_START_TIME_MILLISECOND: TimeType = -1500 - NON_GCD_DELAY_
 pub(crate) static BARD_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static DANCER_START_TIME_MILLISECOND: TimeType = -4000 - NON_GCD_DELAY_MILLISECOND;
 pub(crate) static MONK_START_TIME_MILLISECOND: TimeType = 0;
-
 pub(crate) static DRAGOON_START_TIME_MILLISECOND: TimeType = 0;
+pub(crate) static SCHOLAR_START_TIME_MILLISECOND: TimeType = -1500;
 
 impl FfxivPlayer {
     pub fn new_ninja(
@@ -295,6 +296,29 @@ impl FfxivPlayer {
                 FfxivTurnType::Gcd,
                 WARRIOR_START_TIME_MILLISECOND,
                 WARRIOR_START_TIME_MILLISECOND,
+            ),
+            None,
+        )
+    }
+
+    pub fn new_scholar(
+        player_id: IdType,
+        power: CharacterPower,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> FfxivPlayer {
+        Self::new(
+            player_id,
+            String::from("SCH"),
+            power,
+            None,
+            FfxivPriorityTable::Scholar(ScholarPriorityTable::new(player_id)),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Gcd,
+                SCHOLAR_START_TIME_MILLISECOND,
+                SCHOLAR_START_TIME_MILLISECOND,
             ),
             None,
         )

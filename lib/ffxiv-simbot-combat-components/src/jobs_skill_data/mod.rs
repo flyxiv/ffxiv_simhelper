@@ -13,6 +13,7 @@ pub(crate) mod monk;
 pub mod ninja;
 pub(crate) mod paladin;
 pub(crate) mod sage;
+pub(crate) mod scholar;
 pub(crate) mod warrior;
 pub(crate) mod white_mage;
 

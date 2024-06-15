@@ -12,7 +12,6 @@ pub(crate) mod create_player;
 pub mod ffxiv_player;
 pub mod gcd_calculator;
 pub mod logs;
-mod player_damage_profile;
 pub mod player_turn_calculator;
 
 static MAX_MANA: i32 = 10000;

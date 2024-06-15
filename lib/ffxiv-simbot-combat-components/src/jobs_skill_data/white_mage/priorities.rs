@@ -61,7 +61,7 @@ pub(crate) fn make_whitemage_opener(db: &WhitemageDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.glare3.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.dia.get_id()),
-        Opener::OgcdOpener((None, None)),
+        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
     ]
 }
 
