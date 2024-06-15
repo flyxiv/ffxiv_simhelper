@@ -198,9 +198,9 @@ impl BardDatabase {
             id: 1310,
             name: String::from("Straight Shot Ready"),
             owner_id: player_id,
-            duration_left_millisecond: 6000,
+            duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
-            duration_millisecond: 0,
+            duration_millisecond: 30000,
             is_raidwide: false,
             stacks: 1,
             max_stacks: 1,
@@ -256,7 +256,14 @@ impl BardDatabase {
         };
 
         let straight_shot_proc = (
-            ApplyBuff(0, 0, STRAIGHT_SHOT_READY.clone(), 30000, 30000, 0),
+            ApplyBuff(
+                player_id,
+                player_id,
+                STRAIGHT_SHOT_READY.clone(),
+                30000,
+                30000,
+                0,
+            ),
             35,
         );
 
@@ -312,7 +319,7 @@ impl BardDatabase {
             player_id,
             potency: 220,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![straight_shot_proc.clone()],
             combo: None,
@@ -337,7 +344,7 @@ impl BardDatabase {
             player_id,
             potency: 280,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -361,7 +368,7 @@ impl BardDatabase {
             player_id,
             potency: 0,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
                 player_id,
                 player_id,
@@ -392,7 +399,7 @@ impl BardDatabase {
             player_id,
             potency: 110,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -416,7 +423,7 @@ impl BardDatabase {
             player_id,
             potency: 150,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
                 CAUSTIC_BITE_DOT.clone(),
@@ -447,7 +454,7 @@ impl BardDatabase {
             player_id,
             potency: 100,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
                 STORM_BITE_DOT.clone(),
@@ -479,7 +486,7 @@ impl BardDatabase {
             player_id,
             potency: 25,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
                 player_id,
                 player_id,
@@ -510,7 +517,7 @@ impl BardDatabase {
             player_id,
             potency: 320,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -534,7 +541,7 @@ impl BardDatabase {
             player_id,
             potency: 100,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![
                 FfxivEvent::ApplyDebuff(player_id, CAUSTIC_BITE_DOT.clone(), 45000, 45000, 500),
                 FfxivEvent::ApplyDebuff(player_id, STORM_BITE_DOT.clone(), 45000, 45000, 500),
@@ -561,7 +568,7 @@ impl BardDatabase {
             player_id,
             potency: 240,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![
                 FfxivEvent::ForceTicker(TickerKey::new(1300, player_id), 0),
                 FfxivEvent::ForceTicker(TickerKey::new(1301, player_id), 0),
@@ -589,7 +596,7 @@ impl BardDatabase {
             player_id,
             potency: 100,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -613,7 +620,7 @@ impl BardDatabase {
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![ApplyRaidBuff(
                 player_id,
                 BATTLE_VOICE_STATUS.clone(),
@@ -644,7 +651,7 @@ impl BardDatabase {
             player_id,
             potency: 100,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![
                 ApplyRaidBuff(
                     player_id,
@@ -691,7 +698,7 @@ impl BardDatabase {
             player_id,
             potency: 100,
             use_type: UseType::NoTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![
                 ApplyRaidBuff(player_id, MAGES_BALLAD_RAIDBUFF.clone(), 45000, 45000, 0),
                 ApplyBuff(
@@ -732,7 +739,7 @@ impl BardDatabase {
             player_id,
             potency: 100,
             use_type: UseType::NoTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![
                 ApplyRaidBuff(player_id, ARMYS_PAEON_RAIDBUFF.clone(), 45000, 45000, 0),
                 ApplyBuff(
@@ -773,7 +780,7 @@ impl BardDatabase {
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -804,7 +811,7 @@ impl BardDatabase {
             player_id,
             potency: 600,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -828,7 +835,7 @@ impl BardDatabase {
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![ApplyRaidBuff(
                 player_id,
                 RADIANT_FINALE_STATUS.clone(),
@@ -858,7 +865,7 @@ impl BardDatabase {
             player_id,
             use_type: UseType::UseOnTarget,
             potency: 840,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -885,7 +892,7 @@ impl BardDatabase {
             player_id,
             potency: 220,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -909,7 +916,7 @@ impl BardDatabase {
             player_id,
             potency: 360,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,

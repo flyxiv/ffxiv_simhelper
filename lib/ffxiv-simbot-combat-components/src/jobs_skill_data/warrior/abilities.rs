@@ -1,5 +1,5 @@
 use crate::event::ffxiv_event::FfxivEvent;
-use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
+use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ReduceSkillCooldown};
 use crate::id_entity::IdEntity;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
@@ -122,7 +122,7 @@ impl WarriorDatabase {
             is_speed_buffed: true,
             cooldown_millisecond: 0,
             resource_required: vec![],
-            resource_created: Default::default(),
+            resource_created: HashMap::from([(0, 10)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -182,7 +182,7 @@ impl WarriorDatabase {
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
             is_speed_buffed: false,
-            cooldown_millisecond: 30000,
+            cooldown_millisecond: 60000,
             resource_required: vec![],
             resource_created: HashMap::from([(0, 50)]),
             is_guaranteed_crit: false,
@@ -198,7 +198,7 @@ impl WarriorDatabase {
             player_id,
             potency: 520,
             trait_percent: 100,
-            additional_skill_events: vec![FfxivEvent::ReduceSkillCooldown(
+            additional_skill_events: vec![ReduceSkillCooldown(
                 player_id,
                 INFURIATE.get_id(),
                 5000,
@@ -235,7 +235,7 @@ impl WarriorDatabase {
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
             is_speed_buffed: false,
-            cooldown_millisecond: 20000,
+            cooldown_millisecond: 30000,
             resource_required: vec![],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
@@ -372,7 +372,12 @@ impl WarriorDatabase {
             player_id,
             potency: 660,
             trait_percent: 100,
-            additional_skill_events: vec![],
+            additional_skill_events: vec![ReduceSkillCooldown(
+                player_id,
+                INFURIATE.get_id(),
+                5000,
+                0,
+            )],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -399,7 +404,12 @@ impl WarriorDatabase {
             player_id,
             potency: 520,
             trait_percent: 100,
-            additional_skill_events: vec![],
+            additional_skill_events: vec![ReduceSkillCooldown(
+                player_id,
+                INFURIATE.get_id(),
+                5000,
+                0,
+            )],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,

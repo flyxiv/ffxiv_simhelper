@@ -14,7 +14,7 @@ use crate::{BuffIncreasePercentType, DamageType, IdType, PotencyType, StatusTabl
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
 use log::info;
-use rand::{thread_rng, Rng};
+use rand::{random, thread_rng, Rng};
 use std::collections::HashMap;
 
 pub const ONE_HUNDRED_PERCENT: f64 = 100.0;
@@ -213,7 +213,8 @@ fn calculate_crit_direct_hit_damage(
     is_guaranteed_critical_hit: bool,
     is_guaranteed_direct_hit: bool,
 ) -> (MultiplierType, HashMap<StatusKey, MultiplierType>, bool) {
-    let damage_random = thread_rng().gen_range(95..=105) as MultiplierType / 100.0;
+    let mut damage_random: MultiplierType = random::<MultiplierType>() - 0.5;
+    damage_random = damage_random / 100.0 + 1.0;
     let damage_before_crit_direct_hit = match damage_category {
         DamageCategory::Direct => base_damage,
         DamageCategory::PhysicalDot => base_damage * damage_random,

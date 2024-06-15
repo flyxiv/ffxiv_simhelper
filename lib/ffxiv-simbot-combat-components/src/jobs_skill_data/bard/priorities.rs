@@ -110,7 +110,7 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
         },
         SkillPriorityInfo {
             skill_id: db.refulgent_arrow.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1310)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.burst_shot.get_id(),

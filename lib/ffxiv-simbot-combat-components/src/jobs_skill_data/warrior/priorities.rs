@@ -97,7 +97,7 @@ pub(crate) fn make_warrior_gcd_priority_table(db: &WarriorDatabase) -> Vec<Skill
         },
         SkillPriorityInfo {
             skill_id: db.fell_cleave.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.inner_release_stack.get_id())),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.storms_eye.get_id(),
