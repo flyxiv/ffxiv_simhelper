@@ -63,7 +63,7 @@ pub(crate) fn make_warrior_opener(db: &WarriorDatabase) -> Vec<Opener> {
         GcdOpener(db.heavy_swing.get_id()),
         OgcdOpener((Some(db.infuriate.get_id()), None)),
         GcdOpener(db.maim.get_id()),
-        OgcdOpener((None, None)),
+        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.storms_eye.get_id()),
         OgcdOpener((Some(db.inner_release.get_id()), None)),
         GcdOpener(db.inner_chaos.get_id()),
@@ -123,6 +123,10 @@ pub(crate) fn make_warrior_gcd_priority_table(db: &WarriorDatabase) -> Vec<Skill
 
 pub(crate) fn make_warrior_ogcd_priority_table(db: &WarriorDatabase) -> Vec<SkillPriorityInfo> {
     vec![
+        SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
         SkillPriorityInfo {
             skill_id: db.inner_release.get_id(),
             prerequisite: None,

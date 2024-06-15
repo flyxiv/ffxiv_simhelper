@@ -1,4 +1,5 @@
 use crate::BuffIncreasePercentType;
+use ffxiv_simbot_db::IncreaseType;
 
 #[derive(Clone, Debug)]
 pub enum StatusInfo {
@@ -9,6 +10,9 @@ pub enum StatusInfo {
     /// increase % by stack
     SpeedByStack(Vec<BuffIncreasePercentType>),
     SpeedOnlyAutoAttack(BuffIncreasePercentType),
+
+    /// max increase value, increase %
+    IncreaseMainStat(IncreaseType, BuffIncreasePercentType),
     None,
 }
 

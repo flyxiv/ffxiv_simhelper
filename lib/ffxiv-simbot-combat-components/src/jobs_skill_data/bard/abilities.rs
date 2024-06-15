@@ -7,6 +7,7 @@ use crate::event_ticker::ffxiv_event_ticker::FfxivEventTicker;
 use crate::event_ticker::independent_ticker::IndependentTicker;
 use crate::event_ticker::TickerKey;
 use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory::PhysicalDot;
@@ -57,6 +58,9 @@ pub(crate) struct BardDatabase {
     pub(crate) army_muse: BuffStatus,
     pub(crate) raging_strike_status: BuffStatus,
     pub(crate) radiant_finale_status: BuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl BardDatabase {
@@ -224,7 +228,7 @@ impl BardDatabase {
             owner_id: player_id,
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::DirectHitRatePercent(20)],
-            duration_millisecond: 30000,
+            duration_millisecond: 20000,
             is_raidwide: true,
             stacks: 1,
             max_stacks: 1,
@@ -935,6 +939,8 @@ impl BardDatabase {
             is_guaranteed_direct_hit: false,
         };
 
+        let potion_skill = PotionSkill::new(player_id);
+
         Self {
             burst_shot: BURST_SHOT,
             refulgent_arrow: REFULGENT_ARROW,
@@ -974,6 +980,9 @@ impl BardDatabase {
             armys_paeon_status: ARMYS_PAEON_STATUS,
             barrage_status: BARRAGE_STATUS,
             radiant_finale_status: RADIANT_FINALE_STATUS,
+
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -1006,6 +1015,7 @@ pub(crate) fn make_bard_skill_list(
         db.barrage_refulgent_arrow.clone(),
         db.pitch_perfect2.clone(),
         db.pitch_perfect3.clone(),
+        db.potion.clone(),
     ];
 
     make_skill_table(bard_skill_list)

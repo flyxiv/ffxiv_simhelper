@@ -8,6 +8,7 @@ use std::path::PathBuf;
 pub type IdTable<T, U> = HashMap<T, U>;
 pub type StatModifierType = f64;
 pub type MultiplierType = f64;
+pub type IncreaseType = i32;
 
 pub(crate) mod character;
 pub mod clan;

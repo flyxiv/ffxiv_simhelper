@@ -27,15 +27,18 @@ use ffxiv_simbot_combat_components::skill::AUTO_ATTACK_ID;
 use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
 use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
 use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
+use ffxiv_simbot_combat_components::status::status_info::StatusInfo;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
 use ffxiv_simbot_combat_components::status::Status;
 use ffxiv_simbot_combat_components::{
     DamageType, IdType, TimeType, SIMULATION_START_TIME_MILLISECOND,
 };
 use ffxiv_simbot_db::job::get_role;
+use ffxiv_simbot_db::stat_calculator::add_main_stat;
+use ffxiv_simbot_db::{IncreaseType, MultiplierType};
 use log::info;
 use std::cell::RefCell;
-use std::cmp::Reverse;
+use std::cmp::{min, Reverse};
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -345,6 +348,24 @@ impl FfxivSimulationBoard {
         current_combat_time_millisecond: TimeType,
     ) {
         let player_id = player.borrow().get_id();
+
+        let mut power = player.borrow().power.clone();
+
+        for (_, buff) in snapshotted_buffs.iter() {
+            buff.get_status_info()
+                .iter()
+                .for_each(|status_info| match status_info {
+                    StatusInfo::IncreaseMainStat(maximum_increase, increase_percent) => {
+                        let increase_percent = (power.main_stat_multiplier
+                            * (*increase_percent as MultiplierType))
+                            as IncreaseType;
+                        let increase_amount = min(*maximum_increase, increase_percent);
+                        add_main_stat(&mut power, increase_amount);
+                    }
+                    _ => {}
+                })
+        }
+
         snapshotted_buffs.retain(|_, buff| buff.is_damage_buff());
         snapshotted_debuffs.retain(|_, debuff| debuff.is_damage_debuff(player_id));
 
@@ -357,7 +378,7 @@ impl FfxivSimulationBoard {
             guaranteed_dh,
             &snapshotted_buffs,
             &snapshotted_debuffs,
-            &player.borrow().power,
+            &power,
         );
 
         if is_crit {

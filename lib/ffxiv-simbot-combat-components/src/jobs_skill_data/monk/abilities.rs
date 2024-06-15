@@ -1,5 +1,6 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyRaidBuff};
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
@@ -41,6 +42,9 @@ pub(crate) struct MonkDatabase {
     pub(crate) riddle_of_wind_buff: BuffStatus,
     pub(crate) brotherhood_damage_buff: BuffStatus,
     pub(crate) brotherhood_proc_buff: BuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl MonkDatabase {
@@ -743,6 +747,8 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
+        let potion_skill = PotionSkill::new(player_id);
+
         MonkDatabase {
             bootshine: BOOTSHINE,
             true_strike: TRUE_STRIKE,
@@ -772,6 +778,8 @@ impl MonkDatabase {
             riddle_of_wind_buff: RIDDLE_OF_WIND_BUFF,
             brotherhood_damage_buff: BROTHERHOOD_DAMAGE_BUFF,
             brotherhood_proc_buff: BROTHERHOOD_RAID_PROC,
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -800,6 +808,7 @@ pub(crate) fn make_monk_skill_list(player_id: IdType) -> SkillTable<AttackSkill>
         db.perfect_twin_snakes,
         db.perfect_demolish,
         db.perfect_dragon_kick,
+        db.potion,
     ];
 
     make_skill_table(monk_skill_list)

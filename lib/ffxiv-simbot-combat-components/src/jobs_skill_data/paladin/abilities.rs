@@ -1,5 +1,6 @@
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff};
 use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
@@ -35,6 +36,9 @@ pub(crate) struct PaladinDatabase {
     pub(crate) circle_of_scorn_dot: DebuffStatus,
     pub(crate) confiteor_ready: BuffStatus,
     pub(crate) divine_might: BuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl PaladinDatabase {
@@ -536,6 +540,8 @@ impl PaladinDatabase {
             use_type: UseType::UseOnTarget,
         };
 
+        let potion_skill = PotionSkill::new(player_id);
+
         PaladinDatabase {
             fast_blade: FAST_BLADE,
             fight_or_flight: FIGHT_OR_FLIGHT,
@@ -560,6 +566,9 @@ impl PaladinDatabase {
             circle_of_scorn_dot: CIRCLE_OF_SCORN_DOT,
             confiteor_ready: CONFITEOR_READY,
             divine_might: DIVINE_MIGHT,
+
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -584,6 +593,7 @@ pub(crate) fn make_paladin_skill_list(player_id: IdType) -> SkillTable<AttackSki
         db.blade_of_valor,
         db.intervene,
         db.weak_holy_spirit,
+        db.potion,
     ];
 
     make_skill_table(paladin_skill_list)

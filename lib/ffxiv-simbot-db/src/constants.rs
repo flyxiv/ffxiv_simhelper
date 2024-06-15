@@ -116,3 +116,22 @@ lazy_static! {
         ("DNC".to_string(), 3.12)
     ]);
 }
+
+#[derive(PartialEq, Eq, Hash)]
+pub enum Role {
+    Tank,
+    Healer,
+    MeleeDps,
+    PhysicalRangedDps,
+    MagicRangedDps,
+}
+
+pub fn job_abbrev_to_role(job_abbrev: &String) -> Role {
+    match job_abbrev.as_str() {
+        "PLD" | "WAR" | "DRK" | "GNB" => Role::Tank,
+        "WHM" | "SCH" | "AST" | "SGE" => Role::Healer,
+        "MNK" | "DRG" | "NIN" | "SAM" | "RPR" => Role::MeleeDps,
+        "BRD" | "MCH" | "DNC" => Role::PhysicalRangedDps,
+        _ => Role::MagicRangedDps,
+    }
+}

@@ -1,9 +1,11 @@
 use crate::event::ffxiv_event::FfxivEvent;
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::{make_skill_table, ResourceRequirements};
+use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::IdType;
 use std::collections::HashMap;
@@ -15,6 +17,9 @@ pub(crate) struct WhitemageDatabase {
     pub(crate) afflatus_rapture: AttackSkill,
 
     pub(crate) dia_dot: DebuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl WhitemageDatabase {
@@ -140,12 +145,16 @@ impl WhitemageDatabase {
             use_type: UseType::NoTarget,
         };
 
+        let potion_skill = PotionSkill::new(player_id);
+
         WhitemageDatabase {
             glare3: GLARE_III,
             dia: DIA,
             afflatus_misery: AFFLATUS_MISERY,
             afflatus_rapture: AFFLATUS_RAPTURE,
             dia_dot: DIA_DOT,
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -153,8 +162,13 @@ impl WhitemageDatabase {
 pub(crate) fn make_whitemage_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
     let db = WhitemageDatabase::new(player_id);
 
-    let whitemage_skill_list: Vec<AttackSkill> =
-        vec![db.glare3, db.dia, db.afflatus_misery, db.afflatus_rapture];
+    let whitemage_skill_list: Vec<AttackSkill> = vec![
+        db.glare3,
+        db.dia,
+        db.afflatus_misery,
+        db.afflatus_rapture,
+        db.potion,
+    ];
 
     make_skill_table(whitemage_skill_list)
 }

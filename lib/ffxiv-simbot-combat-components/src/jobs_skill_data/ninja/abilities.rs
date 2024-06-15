@@ -1,4 +1,5 @@
 use crate::event::ffxiv_event::FfxivEvent;
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
@@ -44,6 +45,9 @@ pub(crate) struct NinjaDatabase {
     pub(crate) bunshin_status: BuffStatus,
     pub(crate) meisui_status: BuffStatus,
     pub(crate) bunshin_clone_status: BuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl NinjaDatabase {
@@ -884,6 +888,8 @@ impl NinjaDatabase {
             is_guaranteed_direct_hit: false,
         };
 
+        let potion_skill = PotionSkill::new(player_id);
+
         Self {
             huton: HUTON,
             raiton: RAITON,
@@ -919,6 +925,9 @@ impl NinjaDatabase {
             bunshin_status: BUNSHIN_STATUS,
             meisui_status: MEISUI_STATUS,
             bunshin_clone_status: BUNSHIN_CLONE_STATUS,
+
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -952,6 +961,7 @@ pub(crate) fn make_ninja_skill_list(player_id: IdType) -> SkillTable<AttackSkill
         db.bhavacakra_meisui.clone(),
         db.bunshin_stack.clone(),
         db.mudra.clone(),
+        db.potion.clone(),
     ];
 
     make_skill_table(ninja_skill_list)

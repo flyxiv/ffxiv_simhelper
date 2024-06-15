@@ -1,6 +1,7 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ReduceSkillCooldown};
 use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
@@ -29,6 +30,9 @@ pub(crate) struct WarriorDatabase {
     pub(crate) nascent_chaos: BuffStatus,
     pub(crate) inner_release_stack: BuffStatus,
     pub(crate) primal_rend_ready: BuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl WarriorDatabase {
@@ -428,6 +432,8 @@ impl WarriorDatabase {
             use_type: UseType::UseOnTarget,
         };
 
+        let potion_skill = PotionSkill::new(player_id);
+
         WarriorDatabase {
             heavy_swing: HEAVY_SWING,
             maim: MAIM,
@@ -447,6 +453,9 @@ impl WarriorDatabase {
 
             inner_release_stack: INNER_RELEASE_STACK,
             primal_rend_ready: PRIMAL_REND_READY,
+
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -467,6 +476,7 @@ pub(crate) fn make_warrior_skill_list(player_id: IdType) -> SkillTable<AttackSki
         db.storms_path,
         db.inner_chaos,
         db.fell_cleave_inner,
+        db.potion,
     ];
 
     make_skill_table(warrior_skill_list)

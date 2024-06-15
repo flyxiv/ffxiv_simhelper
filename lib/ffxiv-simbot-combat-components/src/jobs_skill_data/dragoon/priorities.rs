@@ -62,7 +62,7 @@ impl DragoonPriorityTable {
 pub(crate) fn make_dragoon_opener(db: &DragoonDatabase) -> Vec<Opener> {
     let dragoon_opener: Vec<Opener> = vec![
         GcdOpener(db.true_thrust.get_id()),
-        OgcdOpener((None, None)),
+        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.disembowel.get_id()),
         OgcdOpener((
             Some(db.lance_charge.get_id()),
@@ -173,6 +173,10 @@ pub(crate) fn make_dragoon_gcd_priority_table(db: &DragoonDatabase) -> Vec<Skill
 
 pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<SkillPriorityInfo> {
     vec![
+        SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
         SkillPriorityInfo {
             skill_id: db.nastrond.get_id(),
             prerequisite: Some(BufforDebuffLessThan(db.battle_litany_buff.get_id(), 12000)),

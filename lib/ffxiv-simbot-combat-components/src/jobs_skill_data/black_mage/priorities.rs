@@ -66,6 +66,8 @@ pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((Some(db.triplecast.get_id()), None)),
         Opener::GcdOpener(db.fire4_triplecast.get_id()),
         Opener::OgcdOpener((Some(db.leylines.get_id()), Some(db.amplifier.get_id()))),
+        Opener::GcdOpener(db.fire4_triplecast.get_id()),
+        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
     ]
 }
 
@@ -135,6 +137,10 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
 
 pub(crate) fn make_blackmage_ogcd_priority_table(db: &BlackmageDatabase) -> Vec<SkillPriorityInfo> {
     vec![
+        SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
         SkillPriorityInfo {
             skill_id: db.leylines.get_id(),
             prerequisite: None,

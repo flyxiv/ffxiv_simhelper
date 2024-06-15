@@ -18,6 +18,8 @@ pub struct CharacterPower {
     pub speed_multiplier: MultiplierType,
     pub weapon_damage_multiplier: MultiplierType,
     pub main_stat_multiplier: MultiplierType,
+    pub main_stat: StatType,
+    pub job_abbrev: String,
 }
 
 impl Default for CharacterPower {
@@ -33,6 +35,8 @@ impl Default for CharacterPower {
             weapon_damage_multiplier: 0.0,
             main_stat_multiplier: 0.0,
             tenacity_damage_multiplier: 0.0,
+            main_stat: 0,
+            job_abbrev: "".to_string(),
         }
     }
 }
@@ -68,6 +72,7 @@ pub struct StatInfo {
 pub fn convert_stat_info_to_power(
     stat_info: &StatInfo,
     job_abbrev: &String,
+    composition_buff: MultiplierType,
     stat_modifier: &StatModifier,
 ) -> Result<CharacterPower> {
     let critical_stat = stat_info.critical_strike;
@@ -75,7 +80,7 @@ pub fn convert_stat_info_to_power(
     let determination_stat = stat_info.determination;
     let speed_stat = stat_info.speed;
     let tenacity_stat = stat_info.tenacity;
-    let main_stat = stat_info.main_stat;
+    let main_stat = (stat_info.main_stat as MultiplierType * composition_buff) as StatType;
     let weapon_damage = stat_info.weapon_damage;
 
     let critical_strike_increase = get_increase(
@@ -135,18 +140,7 @@ pub fn convert_stat_info_to_power(
 
     let weapon_damage_multiplier = final_weapon_damage as f64 / 100f64;
 
-    let main_stat_slope = if is_tank(job_abbrev) {
-        *BASE_TANK_MAIN_STAT_MULTIPLIER
-    } else {
-        *BASE_NON_TANK_MAIN_STAT_MULTIPLIER
-    };
-
-    let main_stat_multiplier = 1.0f64
-        + (((main_stat as MultiplierType - FFXIV_STAT_MODIFIER.max_level_main_stat_modifier)
-            as f64)
-            * main_stat_slope
-            / 100f64);
-    let main_stat_multiplier = MultiplierType::floor(main_stat_multiplier * 100.0) / 100.0;
+    let main_stat_multiplier = calculate_main_stat_multiplier(main_stat, job_abbrev);
     let auto_attack_delays = AUTO_ATTACK_DELAYS.get(job_abbrev).unwrap_or(&0.0).clone();
     Ok(CharacterPower {
         auto_attack_delays,
@@ -158,7 +152,30 @@ pub fn convert_stat_info_to_power(
         weapon_damage_multiplier,
         main_stat_multiplier,
         tenacity_damage_multiplier,
+        main_stat,
+        job_abbrev: job_abbrev.clone(),
     })
+}
+
+fn calculate_main_stat_multiplier(main_stat: StatType, job_abbrev: &String) -> MultiplierType {
+    let main_stat_slope = if is_tank(job_abbrev) {
+        *BASE_TANK_MAIN_STAT_MULTIPLIER
+    } else {
+        *BASE_NON_TANK_MAIN_STAT_MULTIPLIER
+    };
+
+    let main_stat_multiplier = 1.0f64
+        + (((main_stat as MultiplierType - FFXIV_STAT_MODIFIER.max_level_main_stat_modifier)
+            as f64)
+            * main_stat_slope
+            / 100f64);
+
+    MultiplierType::floor(main_stat_multiplier * 100.0) / 100.0
+}
+pub fn add_main_stat(character_power: &mut CharacterPower, main_stat: StatType) {
+    character_power.main_stat += main_stat;
+    character_power.main_stat_multiplier =
+        calculate_main_stat_multiplier(character_power.main_stat, &character_power.job_abbrev);
 }
 
 pub(crate) fn convert_character_to_power(
@@ -264,6 +281,8 @@ pub(crate) fn convert_character_to_power(
         weapon_damage_multiplier,
         main_stat_multiplier,
         tenacity_damage_multiplier,
+        main_stat,
+        job_abbrev: job_abbrev.clone(),
     })
 }
 

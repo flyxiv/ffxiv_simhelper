@@ -226,6 +226,8 @@ fn calculate_crit_direct_hit_damage(
         get_final_critical_hit_rate(buffs, debuffs, is_guaranteed_critical_hit, player_power);
     let direct_hit_rate =
         get_final_direct_hit_rate(buffs, debuffs, is_guaranteed_direct_hit, player_power);
+    let critical_rate_multiplier = 1.0 + critical_hit_rate;
+    let direct_hit_rate_multiplier = 1.0 + direct_hit_rate;
 
     let crit_rng = thread_rng().gen_range(0..1000) as MultiplierType / 1000.0;
     let direct_hit_rng = thread_rng().gen_range(0..1000) as MultiplierType / 1000.0;
@@ -267,7 +269,7 @@ fn calculate_crit_direct_hit_damage(
 
             if player_id != buff.get_owner_id() && buff_critical_rate_multiplier > 1.0 {
                 let skill_portion = MultiplierType::log10(buff_critical_rate_multiplier)
-                    / MultiplierType::log10(critical_hit_rate);
+                    / MultiplierType::log10(critical_rate_multiplier);
 
                 let entry = contribution_board
                     .entry(StatusKey::new(buff.get_id(), buff.get_owner_id()))
@@ -283,7 +285,7 @@ fn calculate_crit_direct_hit_damage(
 
             if player_id != debuff.get_owner_id() && debuff_critical_rate_multiplier > 1.0 {
                 let skill_portion = MultiplierType::log10(debuff_critical_rate_multiplier)
-                    / MultiplierType::log10(critical_hit_rate);
+                    / MultiplierType::log10(critical_rate_multiplier);
 
                 let entry = contribution_board
                     .entry(StatusKey::new(debuff.get_id(), debuff.get_owner_id()))
@@ -303,7 +305,7 @@ fn calculate_crit_direct_hit_damage(
 
             if player_id != buff.get_owner_id() && buff_critical_rate_multiplier > 1.0 {
                 let skill_portion = MultiplierType::log10(buff_critical_rate_multiplier)
-                    / MultiplierType::log10(critical_hit_rate);
+                    / MultiplierType::log10(direct_hit_rate_multiplier);
 
                 let entry = contribution_board
                     .entry(StatusKey::new(buff.get_id(), buff.get_owner_id()))
@@ -319,7 +321,7 @@ fn calculate_crit_direct_hit_damage(
 
             if player_id != debuff.get_owner_id() && debuff_critical_rate_multiplier > 1.0 {
                 let skill_portion = MultiplierType::log10(debuff_critical_rate_multiplier)
-                    / MultiplierType::log10(critical_hit_rate);
+                    / MultiplierType::log10(direct_hit_rate_multiplier);
 
                 let entry = contribution_board
                     .entry(StatusKey::new(debuff.get_id(), debuff.get_owner_id()))

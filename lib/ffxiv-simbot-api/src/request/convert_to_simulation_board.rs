@@ -3,7 +3,7 @@ use crate::request::simulation_api_request::{PlayerInfoRequest, StatsRequest};
 use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
 use ffxiv_simbot_db::stat_calculator::{convert_stat_info_to_power, StatInfo};
-use ffxiv_simbot_db::StatModifier;
+use ffxiv_simbot_db::{IncreaseType, MultiplierType, StatModifier};
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -21,11 +21,17 @@ pub(crate) fn convert_to_stats_info(stats: &StatsRequest) -> StatInfo {
 
 pub(crate) fn create_player(
     player_info: PlayerInfoRequest,
+    composition_buff: IncreaseType,
     stat_modifier: StatModifier,
     event_queue: Rc<RefCell<FfxivEventQueue>>,
 ) -> Result<FfxivPlayer> {
     let stat_info = convert_to_stats_info(&player_info.stats);
-    let character_power = convert_stat_info_to_power(&stat_info, &player_info.job, &stat_modifier)?;
+    let character_power = convert_stat_info_to_power(
+        &stat_info,
+        &player_info.job,
+        1.0 + (composition_buff as MultiplierType / 100.0),
+        &stat_modifier,
+    )?;
 
     match player_info.job.as_str() {
         "NIN" => Ok(FfxivPlayer::new_ninja(

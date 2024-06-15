@@ -60,7 +60,7 @@ pub(crate) fn make_bard_opener(db: &BardDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.caustic_bite.get_id()),
         Opener::OgcdOpener((Some(db.wanderers_minuet.get_id()), None)),
         Opener::GcdOpener(db.storm_bite.get_id()),
-        Opener::OgcdOpener((None, None)),
+        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.burst_shot.get_id()),
         Opener::OgcdOpener((Some(db.raging_strike.get_id()), None)),
         Opener::GcdOpener(db.burst_shot.get_id()),
@@ -122,8 +122,11 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
 }
 
 pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPriorityInfo> {
-    // TODO: calculate future ninki
     let bard_ogcd_table: Vec<SkillPriorityInfo> = vec![
+        SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
         SkillPriorityInfo {
             skill_id: db.wanderers_minuet.get_id(),
             prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1307, 3000)),

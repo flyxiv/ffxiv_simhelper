@@ -30,9 +30,9 @@ pub(crate) static PALADIN_START_TIME_MILLISECOND: TimeType = -2500;
 pub(crate) static WHITEMAGE_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static BLACKMAGE_START_TIME_MILLISECOND: TimeType = -5000;
 pub(crate) static NINJA_START_TIME_MILLISECOND: TimeType = -2500;
-pub(crate) static SAGE_START_TIME_MILLISECOND: TimeType = -1500;
+pub(crate) static SAGE_START_TIME_MILLISECOND: TimeType = -1500 - NON_GCD_DELAY_MILLISECOND;
 pub(crate) static BARD_START_TIME_MILLISECOND: TimeType = 0;
-pub(crate) static DANCER_START_TIME_MILLISECOND: TimeType = -4000;
+pub(crate) static DANCER_START_TIME_MILLISECOND: TimeType = -4000 - NON_GCD_DELAY_MILLISECOND;
 pub(crate) static MONK_START_TIME_MILLISECOND: TimeType = 0;
 
 pub(crate) static DRAGOON_START_TIME_MILLISECOND: TimeType = 0;
@@ -80,11 +80,11 @@ impl FfxivPlayer {
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
                 player_id,
-                FfxivTurnType::Gcd,
+                FfxivTurnType::Ogcd,
                 SAGE_START_TIME_MILLISECOND,
                 SAGE_START_TIME_MILLISECOND,
             ),
-            None,
+            Some(SAGE_START_TIME_MILLISECOND + NON_GCD_DELAY_MILLISECOND),
         )
     }
 
@@ -127,11 +127,11 @@ impl FfxivPlayer {
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
                 player_id,
-                FfxivTurnType::Gcd,
+                FfxivTurnType::Ogcd,
                 DANCER_START_TIME_MILLISECOND,
                 DANCER_START_TIME_MILLISECOND,
             ),
-            None,
+            Some(DANCER_START_TIME_MILLISECOND + NON_GCD_DELAY_MILLISECOND),
         )
     }
 

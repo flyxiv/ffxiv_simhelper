@@ -1,4 +1,5 @@
 use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::warrior::priorities::make_warrior_ogcd_priority_table;
 use crate::jobs_skill_data::white_mage::abilities::WhitemageDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
     HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessThan,
@@ -50,7 +51,7 @@ impl WhitemagePriorityTable {
             turn_count: RefCell::new(0),
             opener: make_whitemage_opener(&db),
             gcd_priority_table: make_whitemage_gcd_priority_table(&db),
-            ogcd_priority_table: vec![],
+            ogcd_priority_table: make_whitemage_ogcd_priority_table(&db),
         }
     }
 }
@@ -92,4 +93,11 @@ pub(crate) fn make_whitemage_gcd_priority_table(db: &WhitemageDatabase) -> Vec<S
             prerequisite: None,
         },
     ]
+}
+
+pub(crate) fn make_whitemage_ogcd_priority_table(db: &WhitemageDatabase) -> Vec<SkillPriorityInfo> {
+    vec![SkillPriorityInfo {
+        skill_id: db.potion.get_id(),
+        prerequisite: None,
+    }]
 }

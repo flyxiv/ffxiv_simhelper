@@ -1,5 +1,6 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyRaidBuff};
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
@@ -50,6 +51,9 @@ pub(crate) struct DragoonDatabase {
     pub(crate) battle_litany_buff: BuffStatus,
     pub(crate) life_of_the_dragon: BuffStatus,
     pub(crate) dragon_sight_partner_buff: BuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl DragoonDatabase {
@@ -925,6 +929,8 @@ impl DragoonDatabase {
             use_type: UseType::UseOnTarget,
         };
 
+        let potion_skill = PotionSkill::new(player_id);
+
         DragoonDatabase {
             life_surge: LIFE_SURGE,
             true_thrust: TRUE_THRUST,
@@ -963,6 +969,9 @@ impl DragoonDatabase {
             battle_litany_buff: BATTLE_LITANY_STATUS,
             life_of_the_dragon: LIFE_OF_THE_DRAGON,
             dragon_sight_partner_buff: DRAGON_SIGHT_STATUS_PARTNER,
+
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -1000,6 +1009,7 @@ pub(crate) fn make_dragoon_skill_list(
         db.nastrond,
         db.stardiver,
         db.wyrmwind_thrust,
+        db.potion,
     ];
 
     make_skill_table(dragoon_skill_list)

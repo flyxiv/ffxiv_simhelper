@@ -1,7 +1,7 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::CasterGlobalSkill;
+use crate::jobs_skill_data::{CasterGlobalSkill, PotionSkill};
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory::MagicalDot;
@@ -45,6 +45,9 @@ pub(crate) struct BlackmageDatabase {
     pub(crate) astral_fire3: BuffStatus,
     pub(crate) astral_fire1: BuffStatus,
     pub(crate) thunder3_proc: BuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 impl BlackmageDatabase {
     pub(crate) fn new(player_id: IdType) -> Self {
@@ -734,6 +737,7 @@ impl BlackmageDatabase {
         };
 
         let caster_skills = CasterGlobalSkill::new(player_id);
+        let potion_skills = PotionSkill::new(player_id);
 
         BlackmageDatabase {
             transpose: TRANSPOSE,
@@ -766,6 +770,9 @@ impl BlackmageDatabase {
             astral_fire3: ASTRAL_FIRE_III,
             astral_fire1: ASTRAL_FIRE_I,
             thunder3_proc: THUNDER_III_PROC,
+
+            potion: potion_skills.potion,
+            potion_buff: potion_skills.potion_buff,
         }
     }
 }
@@ -795,6 +802,7 @@ pub(crate) fn make_blackmage_skill_list(player_id: IdType) -> SkillTable<AttackS
         db.amplifier,
         db.fire3_opener,
         db.blizzard3_opener,
+        db.potion,
     ];
 
     make_skill_table(blackmage_skill_list)

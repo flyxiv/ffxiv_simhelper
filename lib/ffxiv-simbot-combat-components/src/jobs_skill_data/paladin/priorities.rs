@@ -58,7 +58,7 @@ impl PaladinPriorityTable {
 pub(crate) fn make_paladin_opener(db: &PaladinDatabase) -> Vec<Opener> {
     vec![
         GcdOpener(db.weak_holy_spirit.get_id()),
-        OgcdOpener((None, None)),
+        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.fast_blade.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.riot_blade.get_id()),
@@ -141,6 +141,10 @@ pub(crate) fn make_paladin_gcd_priority_table(db: &PaladinDatabase) -> Vec<Skill
 
 pub(crate) fn make_paladin_ogcd_priority_table(db: &PaladinDatabase) -> Vec<SkillPriorityInfo> {
     vec![
+        SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
         SkillPriorityInfo {
             skill_id: db.requiescat.get_id(),
             prerequisite: None,

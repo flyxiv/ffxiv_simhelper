@@ -60,7 +60,7 @@ impl MonkPriorityTable {
 pub(crate) fn make_monk_opener(db: &MonkDatabase) -> Vec<Opener> {
     vec![
         GcdOpener(db.dragon_kick.get_id()),
-        OgcdOpener((None, None)),
+        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.twin_snakes.get_id()),
         OgcdOpener((Some(db.riddle_of_fire.get_id()), None)),
         GcdOpener(db.demolish.get_id()),
@@ -225,6 +225,10 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
 
 pub(crate) fn make_monk_ogcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriorityInfo> {
     vec![
+        SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
         SkillPriorityInfo {
             skill_id: db.brotherhood.get_id(),
             prerequisite: None,

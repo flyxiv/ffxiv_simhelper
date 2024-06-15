@@ -1,9 +1,11 @@
 use crate::event::ffxiv_event::FfxivEvent;
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::{make_skill_table, ResourceTable};
+use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
@@ -13,6 +15,9 @@ pub(crate) struct SageDatabase {
     pub(crate) dot: AttackSkill,
     pub(crate) gcd: AttackSkill,
     pub(crate) phlegma: AttackSkill,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl SageDatabase {
@@ -113,11 +118,16 @@ impl SageDatabase {
             is_guaranteed_direct_hit: false,
         };
 
+        let potion_skill = PotionSkill::new(player_id);
+
         Self {
             dot_status: DOT_STATUS,
             dot: DOT,
             gcd: GCD,
             phlegma: PHLEGMA,
+
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -125,6 +135,11 @@ impl SageDatabase {
 pub(crate) fn make_sage_skills(player_id: IdType) -> SkillTable<AttackSkill> {
     let table = SageDatabase::new(player_id);
 
-    let skills = vec![table.dot.clone(), table.gcd.clone(), table.phlegma.clone()];
+    let skills = vec![
+        table.dot.clone(),
+        table.gcd.clone(),
+        table.phlegma.clone(),
+        table.potion,
+    ];
     make_skill_table(skills)
 }

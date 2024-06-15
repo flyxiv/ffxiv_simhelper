@@ -55,6 +55,7 @@ impl SagePriorityTable {
 
 pub(crate) fn make_sage_opener(db: &SageDatabase) -> Vec<Opener> {
     let sage_opener: Vec<Opener> = vec![
+        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.gcd.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.dot.get_id()),
@@ -89,4 +90,9 @@ pub(crate) fn make_sage_gcd_priority_db(db: &SageDatabase) -> Vec<SkillPriorityI
     sage_priority_list
 }
 
-impl FfxivPlayer {}
+pub(crate) fn make_sage_ogcd_priority_db(db: &SageDatabase) -> Vec<SkillPriorityInfo> {
+    vec![SkillPriorityInfo {
+        skill_id: db.potion.get_id(),
+        prerequisite: None,
+    }]
+}

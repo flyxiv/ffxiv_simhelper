@@ -1,4 +1,5 @@
 use crate::event::ffxiv_event::FfxivEvent;
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
@@ -37,6 +38,9 @@ pub(crate) struct DancerDatabase {
     pub(crate) silken_flow: BuffStatus,
     pub(crate) starfall_ready: BuffStatus,
     pub(crate) flourishing_finish: BuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl DancerDatabase {
@@ -769,6 +773,8 @@ impl DancerDatabase {
             use_type: UseType::NoTarget,
         };
 
+        let potion_skill = PotionSkill::new(player_id);
+
         DancerDatabase {
             cascade: CASCADE,
             fountain: FOUNTAIN,
@@ -798,6 +804,9 @@ impl DancerDatabase {
             silken_flow: SILKEN_FLOW,
             starfall_ready: FLOURSHING_STARFALL,
             flourishing_finish: FLOURISHING_FINISH,
+
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -825,6 +834,7 @@ pub(crate) fn make_dancer_skill_list(
         db.reverse_cascade_flourish,
         db.fountainfall_flourish,
         db.tillana,
+        db.potion,
     ];
 
     make_skill_table(dancer_skill_list)

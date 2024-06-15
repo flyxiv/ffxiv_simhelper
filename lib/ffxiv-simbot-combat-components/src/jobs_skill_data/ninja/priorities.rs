@@ -58,7 +58,7 @@ pub(crate) fn make_ninja_opener(db: &NinjaDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((Some(db.kassatsu.get_id()), None)),
         Opener::GcdOpener(db.spinning_edge.get_id()),
         // TODO: Potion
-        Opener::OgcdOpener((None, None)),
+        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.gust_slash.get_id()),
         Opener::OgcdOpener((Some(db.mug.get_id()), Some(db.bunshin.get_id()))),
         Opener::GcdOpener(db.phantom_kamaitachi.get_id()),
@@ -192,6 +192,10 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
 pub(crate) fn make_ninja_ogcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPriorityInfo> {
     // TODO: calculate future ninki
     vec![
+        SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
         SkillPriorityInfo {
             skill_id: db.bunshin.get_id(),
             prerequisite: Some(SkillPrerequisite::HasResource(0, 50)),
