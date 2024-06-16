@@ -12,6 +12,7 @@ pub(crate) mod dragoon;
 pub(crate) mod monk;
 pub mod ninja;
 pub(crate) mod paladin;
+pub(crate) mod red_mage;
 pub(crate) mod sage;
 pub(crate) mod scholar;
 pub(crate) mod summoner;

@@ -9,6 +9,7 @@ use crate::jobs_skill_data::monk::priorities::MonkPriorityTable;
 use crate::jobs_skill_data::ninja::abilities::get_huton_status;
 use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
 use crate::jobs_skill_data::paladin::priorities::PaladinPriorityTable;
+use crate::jobs_skill_data::red_mage::priorities::RedmagePriorityTable;
 use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
 use crate::jobs_skill_data::scholar::priorities::ScholarPriorityTable;
 use crate::jobs_skill_data::summoner::priorities::SummonerPriorityTable;
@@ -39,6 +40,7 @@ pub(crate) static MONK_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static DRAGOON_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static SCHOLAR_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static SUMMONER_START_TIME_MILLISECOND: TimeType = -1500;
+pub(crate) static REDMAGE_START_TIME_MILLISECOND: TimeType = -5500;
 
 impl FfxivPlayer {
     pub fn new_ninja(
@@ -347,6 +349,29 @@ impl FfxivPlayer {
                 FfxivTurnType::Gcd,
                 SUMMONER_START_TIME_MILLISECOND,
                 SUMMONER_START_TIME_MILLISECOND,
+            ),
+            None,
+        )
+    }
+
+    pub fn new_redmage(
+        player_id: IdType,
+        power: CharacterPower,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> FfxivPlayer {
+        Self::new(
+            player_id,
+            String::from("RDM"),
+            power,
+            None,
+            FfxivPriorityTable::Redmage(RedmagePriorityTable::new(player_id)),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Gcd,
+                REDMAGE_START_TIME_MILLISECOND,
+                REDMAGE_START_TIME_MILLISECOND,
             ),
             None,
         )

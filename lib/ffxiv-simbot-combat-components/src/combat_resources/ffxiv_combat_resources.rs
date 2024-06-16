@@ -7,6 +7,7 @@ use crate::jobs_skill_data::dragoon::combat_resources::DragoonCombatResources;
 use crate::jobs_skill_data::monk::combat_resources::MonkCombatResources;
 use crate::jobs_skill_data::ninja::combat_resources::NinjaCombatResources;
 use crate::jobs_skill_data::paladin::combat_resources::PaladinCombatResources;
+use crate::jobs_skill_data::red_mage::combat_resources::RedmageCombatResources;
 use crate::jobs_skill_data::sage::combat_resources::SageCombatResources;
 use crate::jobs_skill_data::scholar::combat_resources::ScholarCombatResources;
 use crate::jobs_skill_data::summoner::combat_resources::SummonerCombatResources;
@@ -39,6 +40,7 @@ pub(crate) enum FfxivCombatResources {
     Warrior(WarriorCombatResources),
     Scholar(ScholarCombatResources),
     Summoner(SummonerCombatResources),
+    Redmage(RedmageCombatResources),
 }
 
 impl CombatResource for FfxivCombatResources {
@@ -56,6 +58,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Warrior(warrior_resources) => warrior_resources.get_skills_mut(),
             Self::Scholar(scholar_resources) => scholar_resources.get_skills_mut(),
             Self::Summoner(summoner_resources) => summoner_resources.get_skills_mut(),
+            Self::Redmage(redmage_resources) => redmage_resources.get_skills_mut(),
         }
     }
 
@@ -73,6 +76,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Warrior(warrior_resources) => warrior_resources.get_skills(),
             Self::Scholar(scholar_resources) => scholar_resources.get_skills(),
             Self::Summoner(summoner_resources) => summoner_resources.get_skills(),
+            Self::Redmage(redmage_resources) => redmage_resources.get_skills(),
         }
     }
 
@@ -108,6 +112,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Summoner(summoner_resources) => {
                 summoner_resources.add_resource(resource_id, resource_type)
             }
+            Self::Redmage(redmage_resources) => {
+                redmage_resources.add_resource(resource_id, resource_type)
+            }
         }
     }
 
@@ -125,6 +132,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Warrior(warrior_resources) => warrior_resources.get_resource(resource_id),
             Self::Scholar(scholar_resources) => scholar_resources.get_resource(resource_id),
             Self::Summoner(summoner_resources) => summoner_resources.get_resource(resource_id),
+            Self::Redmage(redmage_resources) => redmage_resources.get_resource(resource_id),
         }
     }
 
@@ -142,6 +150,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Warrior(warrior_resources) => warrior_resources.get_current_combo(),
             Self::Scholar(scholar_resources) => scholar_resources.get_current_combo(),
             Self::Summoner(summoner_resources) => summoner_resources.get_current_combo(),
+            Self::Redmage(redmage_resources) => redmage_resources.get_current_combo(),
         }
     }
 
@@ -159,6 +168,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Warrior(warrior_resources) => warrior_resources.update_combo(combo),
             Self::Scholar(scholar_resources) => scholar_resources.update_combo(combo),
             Self::Summoner(summoner_resources) => summoner_resources.update_combo(combo),
+            Self::Redmage(redmage_resources) => redmage_resources.update_combo(combo),
         }
     }
 
@@ -255,6 +265,13 @@ impl CombatResource for FfxivCombatResources {
                 current_time_millisecond,
                 player,
             ),
+            Self::Redmage(redmage_resources) => redmage_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
         }
     }
 
@@ -276,6 +293,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Warrior(warrior_resources) => warrior_resources.get_next_buff_target(skill_id),
             Self::Scholar(scholar_resources) => scholar_resources.get_next_buff_target(skill_id),
             Self::Summoner(summoner_resources) => summoner_resources.get_next_buff_target(skill_id),
+            Self::Redmage(redmage_resources) => redmage_resources.get_next_buff_target(skill_id),
         }
     }
 
@@ -299,6 +317,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Summoner(summoner_resources) => {
                 summoner_resources.update_stack_timer(elapsed_time)
             }
+            Self::Redmage(redmage_resources) => redmage_resources.update_stack_timer(elapsed_time),
         }
     }
 
@@ -316,6 +335,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Warrior(warrior_resources) => warrior_resources.trigger_on_crit(),
             Self::Scholar(scholar_resources) => scholar_resources.trigger_on_crit(),
             Self::Summoner(summoner_resources) => summoner_resources.trigger_on_crit(),
+            Self::Redmage(redmage_resources) => redmage_resources.trigger_on_crit(),
         }
     }
 }
@@ -346,6 +366,7 @@ impl FfxivCombatResources {
             "WAR" => Self::Warrior(WarriorCombatResources::new(player_id)),
             "SCH" => Self::Scholar(ScholarCombatResources::new(player_id)),
             "SMN" => Self::Summoner(SummonerCombatResources::new(player_id, event_queue.clone())),
+            "RDM" => Self::Redmage(RedmageCombatResources::new(player_id)),
             _ => Self::Sage(SageCombatResources::new(player_id)),
         }
     }
