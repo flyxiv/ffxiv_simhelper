@@ -1,15 +1,18 @@
+use crate::event::FfxivEventQueue;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
 use std::cell::RefCell;
+use std::rc::Rc;
 
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::paladin::abilities::PaladinDatabase;
+use crate::jobs_skill_data::summoner::abilities::SummonerDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
-use crate::rotation::priority_table::SkillPrerequisite::{Combo, HasBufforDebuff};
+use crate::rotation::priority_table::SkillPrerequisite::{Combo, MillisecondsBeforeBurst};
 
 #[derive(Clone)]
-pub(crate) struct PaladinPriorityTable {
+pub(crate) struct SummonerPriorityTable {
     turn_count: RefCell<TurnCount>,
     opener: Vec<Opener>,
 
@@ -17,7 +20,7 @@ pub(crate) struct PaladinPriorityTable {
     ogcd_priority_table: Vec<SkillPriorityInfo>,
 }
 
-impl PriorityTable for PaladinPriorityTable {
+impl PriorityTable for SummonerPriorityTable {
     fn get_opener_len(&self) -> usize {
         self.opener.len()
     }
@@ -43,127 +46,138 @@ impl PriorityTable for PaladinPriorityTable {
     }
 }
 
-impl PaladinPriorityTable {
-    pub fn new(player_id: IdType) -> Self {
-        let db = PaladinDatabase::new(player_id);
+impl SummonerPriorityTable {
+    pub fn new(player_id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+        let db = SummonerDatabase::new(player_id, ffxiv_event_queue);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_paladin_opener(&db),
-            gcd_priority_table: make_paladin_gcd_priority_table(&db),
-            ogcd_priority_table: make_paladin_ogcd_priority_table(&db),
+            opener: make_summoner_opener(&db),
+            gcd_priority_table: make_summoner_gcd_priority_table(&db),
+            ogcd_priority_table: make_summoner_ogcd_priority_table(&db),
         }
     }
 }
 
-pub(crate) fn make_paladin_opener(db: &PaladinDatabase) -> Vec<Opener> {
+pub(crate) fn make_summoner_opener(db: &SummonerDatabase) -> Vec<Opener> {
     vec![
-        GcdOpener(db.weak_holy_spirit.get_id()),
+        GcdOpener(db.ruin_iii.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.ruin_iii.get_id()),
+        OgcdOpener((Some(db.searing_light.get_id()), None)),
+        GcdOpener(db.summon_bahamut.get_id()),
         OgcdOpener((Some(db.potion.get_id()), None)),
-        GcdOpener(db.fast_blade.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.riot_blade.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.royal_authority.get_id()),
-        OgcdOpener((
-            Some(db.fight_or_flight.get_id()),
-            Some(db.requiescat.get_id()),
-        )),
-        GcdOpener(db.goring_blade.get_id()),
-        OgcdOpener((
-            Some(db.circle_of_scorn.get_id()),
-            Some(db.explacion.get_id()),
-        )),
-        GcdOpener(db.confiteor.get_id()),
-        OgcdOpener((Some(db.intervene.get_id()), None)),
-        GcdOpener(db.blade_of_faith.get_id()),
-        OgcdOpener((Some(db.intervene.get_id()), None)),
-        GcdOpener(db.blade_of_truth.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.blade_of_valor.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.holy_spirit.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.atonement.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.atonement.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.atonement.get_id()),
-        OgcdOpener((None, None)),
+        GcdOpener(db.astral_impulse.get_id()),
+        OgcdOpener((Some(db.energy_drain.get_id()), None)),
+        OgcdOpener((Some(db.fester.get_id()), Some(db.enkindle_bahamut.get_id()))),
+        GcdOpener(db.astral_impulse.get_id()),
+        OgcdOpener((Some(db.fester.get_id()), Some(db.deathflare.get_id()))),
     ]
 }
 
-pub(crate) fn make_paladin_gcd_priority_table(db: &PaladinDatabase) -> Vec<SkillPriorityInfo> {
+pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<SkillPriorityInfo> {
     vec![
         SkillPriorityInfo {
-            skill_id: db.confiteor.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(
-                db.confiteor_ready.get_id(),
+            skill_id: db.summon_phoenix.get_id(),
+            prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessThan(
+                db.energy_drain.get_id(),
+                2000,
             )),
         },
         SkillPriorityInfo {
-            skill_id: db.blade_of_faith.get_id(),
-            prerequisite: Some(Combo(Some(4))),
+            skill_id: db.summon_bahamut.get_id(),
+            prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessThan(
+                db.energy_drain.get_id(),
+                2000,
+            )),
         },
         SkillPriorityInfo {
-            skill_id: db.blade_of_truth.get_id(),
-            prerequisite: Some(Combo(Some(5))),
-        },
-        SkillPriorityInfo {
-            skill_id: db.blade_of_valor.get_id(),
-            prerequisite: Some(Combo(Some(6))),
-        },
-        SkillPriorityInfo {
-            skill_id: db.goring_blade.get_id(),
-            prerequisite: Some(Combo(Some(3))),
-        },
-        SkillPriorityInfo {
-            skill_id: db.holy_spirit.get_id(),
+            skill_id: db.fountain_of_fire.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.atonement.get_id(),
+            skill_id: db.astral_impulse.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.royal_authority.get_id(),
-            prerequisite: Some(Combo(Some(3))),
+            skill_id: db.summon_ifrit_ii.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.riot_blade.get_id(),
-            prerequisite: Some(Combo(Some(2))),
+            skill_id: db.crimson_strike.get_id(),
+            prerequisite: Some(Combo(Some(1))),
         },
         SkillPriorityInfo {
-            skill_id: db.fast_blade.get_id(),
+            skill_id: db.crimson_cyclone.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.ruby_rite.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.summon_titan_ii.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.topaz_rite.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.summon_garuda_ii.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.slipstream.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.emerald_rite.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.ruin_iv.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.ruin_iii.get_id(),
             prerequisite: None,
         },
     ]
 }
 
-pub(crate) fn make_paladin_ogcd_priority_table(db: &PaladinDatabase) -> Vec<SkillPriorityInfo> {
+pub(crate) fn make_summoner_ogcd_priority_table(db: &SummonerDatabase) -> Vec<SkillPriorityInfo> {
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.requiescat.get_id(),
+            skill_id: db.searing_light.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.fight_or_flight.get_id(),
+            skill_id: db.mountain_buster.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.circle_of_scorn.get_id(),
+            skill_id: db.energy_drain.get_id(),
+            prerequisite: Some(MillisecondsBeforeBurst(0)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.fester.get_id(),
+            prerequisite: Some(MillisecondsBeforeBurst(0)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.enkindle_phoenix.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.explacion.get_id(),
+            skill_id: db.enkindle_bahamut.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.intervene.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.fight_or_flight_buff.get_id())),
+            skill_id: db.deathflare.get_id(),
+            prerequisite: None,
         },
     ]
 }

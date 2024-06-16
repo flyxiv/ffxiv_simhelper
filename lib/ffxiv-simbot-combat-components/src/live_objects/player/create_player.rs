@@ -11,6 +11,7 @@ use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
 use crate::jobs_skill_data::paladin::priorities::PaladinPriorityTable;
 use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
 use crate::jobs_skill_data::scholar::priorities::ScholarPriorityTable;
+use crate::jobs_skill_data::summoner::priorities::SummonerPriorityTable;
 use crate::jobs_skill_data::warrior::priorities::WarriorPriorityTable;
 use crate::jobs_skill_data::white_mage::priorities::WhitemagePriorityTable;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -37,6 +38,7 @@ pub(crate) static DANCER_START_TIME_MILLISECOND: TimeType = -4000 - NON_GCD_DELA
 pub(crate) static MONK_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static DRAGOON_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static SCHOLAR_START_TIME_MILLISECOND: TimeType = -1500;
+pub(crate) static SUMMONER_START_TIME_MILLISECOND: TimeType = -1500;
 
 impl FfxivPlayer {
     pub fn new_ninja(
@@ -319,6 +321,32 @@ impl FfxivPlayer {
                 FfxivTurnType::Gcd,
                 SCHOLAR_START_TIME_MILLISECOND,
                 SCHOLAR_START_TIME_MILLISECOND,
+            ),
+            None,
+        )
+    }
+
+    pub fn new_summoner(
+        player_id: IdType,
+        power: CharacterPower,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> FfxivPlayer {
+        Self::new(
+            player_id,
+            String::from("SMN"),
+            power,
+            None,
+            FfxivPriorityTable::Summoner(SummonerPriorityTable::new(
+                player_id,
+                ffxiv_event_queue.clone(),
+            )),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Gcd,
+                SUMMONER_START_TIME_MILLISECOND,
+                SUMMONER_START_TIME_MILLISECOND,
             ),
             None,
         )

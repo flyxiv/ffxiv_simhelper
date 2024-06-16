@@ -9,6 +9,7 @@ use crate::jobs_skill_data::ninja::combat_resources::NinjaCombatResources;
 use crate::jobs_skill_data::paladin::combat_resources::PaladinCombatResources;
 use crate::jobs_skill_data::sage::combat_resources::SageCombatResources;
 use crate::jobs_skill_data::scholar::combat_resources::ScholarCombatResources;
+use crate::jobs_skill_data::summoner::combat_resources::SummonerCombatResources;
 use crate::jobs_skill_data::warrior::combat_resources::WarriorCombatResources;
 use crate::jobs_skill_data::white_mage::combat_resources::WhitemageCombatResources;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -37,6 +38,7 @@ pub(crate) enum FfxivCombatResources {
     Paladin(PaladinCombatResources),
     Warrior(WarriorCombatResources),
     Scholar(ScholarCombatResources),
+    Summoner(SummonerCombatResources),
 }
 
 impl CombatResource for FfxivCombatResources {
@@ -53,6 +55,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Paladin(paladin_resources) => paladin_resources.get_skills_mut(),
             Self::Warrior(warrior_resources) => warrior_resources.get_skills_mut(),
             Self::Scholar(scholar_resources) => scholar_resources.get_skills_mut(),
+            Self::Summoner(summoner_resources) => summoner_resources.get_skills_mut(),
         }
     }
 
@@ -69,6 +72,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Paladin(paladin_resources) => paladin_resources.get_skills(),
             Self::Warrior(warrior_resources) => warrior_resources.get_skills(),
             Self::Scholar(scholar_resources) => scholar_resources.get_skills(),
+            Self::Summoner(summoner_resources) => summoner_resources.get_skills(),
         }
     }
 
@@ -101,6 +105,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Scholar(scholar_resources) => {
                 scholar_resources.add_resource(resource_id, resource_type)
             }
+            Self::Summoner(summoner_resources) => {
+                summoner_resources.add_resource(resource_id, resource_type)
+            }
         }
     }
 
@@ -117,6 +124,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Paladin(paladin_resources) => paladin_resources.get_resource(resource_id),
             Self::Warrior(warrior_resources) => warrior_resources.get_resource(resource_id),
             Self::Scholar(scholar_resources) => scholar_resources.get_resource(resource_id),
+            Self::Summoner(summoner_resources) => summoner_resources.get_resource(resource_id),
         }
     }
 
@@ -133,6 +141,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Paladin(paladin_resources) => paladin_resources.get_current_combo(),
             Self::Warrior(warrior_resources) => warrior_resources.get_current_combo(),
             Self::Scholar(scholar_resources) => scholar_resources.get_current_combo(),
+            Self::Summoner(summoner_resources) => summoner_resources.get_current_combo(),
         }
     }
 
@@ -149,6 +158,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Paladin(paladin_resources) => paladin_resources.update_combo(combo),
             Self::Warrior(warrior_resources) => warrior_resources.update_combo(combo),
             Self::Scholar(scholar_resources) => scholar_resources.update_combo(combo),
+            Self::Summoner(summoner_resources) => summoner_resources.update_combo(combo),
         }
     }
 
@@ -238,6 +248,13 @@ impl CombatResource for FfxivCombatResources {
                 current_time_millisecond,
                 player,
             ),
+            Self::Summoner(summoner_resources) => summoner_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
         }
     }
 
@@ -258,6 +275,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Paladin(paladin_resources) => paladin_resources.get_next_buff_target(skill_id),
             Self::Warrior(warrior_resources) => warrior_resources.get_next_buff_target(skill_id),
             Self::Scholar(scholar_resources) => scholar_resources.get_next_buff_target(skill_id),
+            Self::Summoner(summoner_resources) => summoner_resources.get_next_buff_target(skill_id),
         }
     }
 
@@ -278,6 +296,9 @@ impl CombatResource for FfxivCombatResources {
             Self::Paladin(paladin_resources) => paladin_resources.update_stack_timer(elapsed_time),
             Self::Warrior(warrior_resources) => warrior_resources.update_stack_timer(elapsed_time),
             Self::Scholar(scholar_resources) => scholar_resources.update_stack_timer(elapsed_time),
+            Self::Summoner(summoner_resources) => {
+                summoner_resources.update_stack_timer(elapsed_time)
+            }
         }
     }
 
@@ -294,6 +315,7 @@ impl CombatResource for FfxivCombatResources {
             Self::Paladin(paladin_resources) => paladin_resources.trigger_on_crit(),
             Self::Warrior(warrior_resources) => warrior_resources.trigger_on_crit(),
             Self::Scholar(scholar_resources) => scholar_resources.trigger_on_crit(),
+            Self::Summoner(summoner_resources) => summoner_resources.trigger_on_crit(),
         }
     }
 }
@@ -308,7 +330,7 @@ impl FfxivCombatResources {
         match job_abbrev.as_str() {
             "SGE" => Self::Sage(SageCombatResources::new(player_id)),
             "NIN" => Self::Ninja(NinjaCombatResources::new(player_id)),
-            "BRD" => Self::Bard(BardCombatResources::new(player_id, event_queue)),
+            "BRD" => Self::Bard(BardCombatResources::new(player_id, event_queue.clone())),
             "DNC" => Self::Dancer(DancerCombatResources::new(
                 player_id,
                 partner_player_id.unwrap(),
@@ -323,6 +345,7 @@ impl FfxivCombatResources {
             "PLD" => Self::Paladin(PaladinCombatResources::new(player_id)),
             "WAR" => Self::Warrior(WarriorCombatResources::new(player_id)),
             "SCH" => Self::Scholar(ScholarCombatResources::new(player_id)),
+            "SMN" => Self::Summoner(SummonerCombatResources::new(player_id, event_queue.clone())),
             _ => Self::Sage(SageCombatResources::new(player_id)),
         }
     }

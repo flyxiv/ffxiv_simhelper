@@ -7,6 +7,7 @@ use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
 use crate::jobs_skill_data::paladin::priorities::PaladinPriorityTable;
 use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
 use crate::jobs_skill_data::scholar::priorities::ScholarPriorityTable;
+use crate::jobs_skill_data::summoner::priorities::SummonerPriorityTable;
 use crate::jobs_skill_data::warrior::priorities::WarriorPriorityTable;
 use crate::jobs_skill_data::white_mage::priorities::WhitemagePriorityTable;
 use crate::rotation::priority_table::{Opener, PriorityTable};
@@ -26,6 +27,7 @@ pub(crate) enum FfxivPriorityTable {
     Paladin(PaladinPriorityTable),
     Warrior(WarriorPriorityTable),
     Scholar(ScholarPriorityTable),
+    Summoner(SummonerPriorityTable),
 }
 
 impl PriorityTable for FfxivPriorityTable {
@@ -42,6 +44,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Paladin(paladin) => paladin.get_opener_len(),
             FfxivPriorityTable::Warrior(warrior) => warrior.get_opener_len(),
             FfxivPriorityTable::Scholar(scholar) => scholar.get_opener_len(),
+            FfxivPriorityTable::Summoner(summoner) => summoner.get_opener_len(),
         }
     }
 
@@ -58,6 +61,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Paladin(paladin) => paladin.get_opener_at(index),
             FfxivPriorityTable::Warrior(warrior) => warrior.get_opener_at(index),
             FfxivPriorityTable::Scholar(scholar) => scholar.get_opener_at(index),
+            FfxivPriorityTable::Summoner(summoner) => summoner.get_opener_at(index),
         }
     }
 
@@ -74,6 +78,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Paladin(paladin) => paladin.get_gcd_priority_table(),
             FfxivPriorityTable::Warrior(warrior) => warrior.get_gcd_priority_table(),
             FfxivPriorityTable::Scholar(scholar) => scholar.get_gcd_priority_table(),
+            FfxivPriorityTable::Summoner(summoner) => summoner.get_gcd_priority_table(),
         }
     }
 
@@ -90,6 +95,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Paladin(paladin) => paladin.get_ogcd_priority_table(),
             FfxivPriorityTable::Warrior(warrior) => warrior.get_ogcd_priority_table(),
             FfxivPriorityTable::Scholar(scholar) => scholar.get_ogcd_priority_table(),
+            FfxivPriorityTable::Summoner(summoner) => summoner.get_ogcd_priority_table(),
         }
     }
 
@@ -106,6 +112,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Paladin(paladin) => paladin.increment_turn(),
             FfxivPriorityTable::Warrior(warrior) => warrior.increment_turn(),
             FfxivPriorityTable::Scholar(scholar) => scholar.increment_turn(),
+            FfxivPriorityTable::Summoner(summoner) => summoner.increment_turn(),
         }
     }
 
@@ -122,6 +129,7 @@ impl PriorityTable for FfxivPriorityTable {
             FfxivPriorityTable::Paladin(paladin) => paladin.get_turn_count(),
             FfxivPriorityTable::Warrior(warrior) => warrior.get_turn_count(),
             FfxivPriorityTable::Scholar(scholar) => scholar.get_turn_count(),
+            FfxivPriorityTable::Summoner(summoner) => summoner.get_turn_count(),
         }
     }
 }
