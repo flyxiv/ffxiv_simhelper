@@ -4,11 +4,15 @@ use crate::jobs_skill_data::bard::combat_resources::BardCombatResources;
 use crate::jobs_skill_data::black_mage::combat_resources::BlackmageCombatResources;
 use crate::jobs_skill_data::dancer::combat_resources::DancerCombatResources;
 use crate::jobs_skill_data::dragoon::combat_resources::DragoonCombatResources;
+use crate::jobs_skill_data::gunbreaker::combat_resources::GunbreakerCombatResources;
+use crate::jobs_skill_data::machinist::combat_resources::MachinistCombatResources;
 use crate::jobs_skill_data::monk::combat_resources::MonkCombatResources;
 use crate::jobs_skill_data::ninja::combat_resources::NinjaCombatResources;
 use crate::jobs_skill_data::paladin::combat_resources::PaladinCombatResources;
-use crate::jobs_skill_data::red_mage::combat_resources::RedmageCombatResources;
+use crate::jobs_skill_data::reaper::combat_resources::ReaperCombatResources;
+use crate::jobs_skill_data::redmage::combat_resources::RedmageCombatResources;
 use crate::jobs_skill_data::sage::combat_resources::SageCombatResources;
+use crate::jobs_skill_data::samurai::combat_resources::SamuraiCombatResources;
 use crate::jobs_skill_data::scholar::combat_resources::ScholarCombatResources;
 use crate::jobs_skill_data::summoner::combat_resources::SummonerCombatResources;
 use crate::jobs_skill_data::warrior::combat_resources::WarriorCombatResources;
@@ -41,6 +45,10 @@ pub(crate) enum FfxivCombatResources {
     Scholar(ScholarCombatResources),
     Summoner(SummonerCombatResources),
     Redmage(RedmageCombatResources),
+    Gunbreaker(GunbreakerCombatResources),
+    Machinist(MachinistCombatResources),
+    Samurai(SamuraiCombatResources),
+    Reaper(ReaperCombatResources),
 }
 
 impl CombatResource for FfxivCombatResources {
@@ -59,6 +67,10 @@ impl CombatResource for FfxivCombatResources {
             Self::Scholar(scholar_resources) => scholar_resources.get_skills_mut(),
             Self::Summoner(summoner_resources) => summoner_resources.get_skills_mut(),
             Self::Redmage(redmage_resources) => redmage_resources.get_skills_mut(),
+            Self::Gunbreaker(gunbreaker_resources) => gunbreaker_resources.get_skills_mut(),
+            Self::Machinist(machinist_resources) => machinist_resources.get_skills_mut(),
+            Self::Samurai(samurai_resources) => samurai_resources.get_skills_mut(),
+            Self::Reaper(reaper_resources) => reaper_resources.get_skills_mut(),
         }
     }
 
@@ -77,6 +89,10 @@ impl CombatResource for FfxivCombatResources {
             Self::Scholar(scholar_resources) => scholar_resources.get_skills(),
             Self::Summoner(summoner_resources) => summoner_resources.get_skills(),
             Self::Redmage(redmage_resources) => redmage_resources.get_skills(),
+            Self::Gunbreaker(gunbreaker_resources) => gunbreaker_resources.get_skills(),
+            Self::Machinist(machinist_resources) => machinist_resources.get_skills(),
+            Self::Samurai(samurai_resources) => samurai_resources.get_skills(),
+            Self::Reaper(reaper_resources) => reaper_resources.get_skills(),
         }
     }
 
@@ -115,6 +131,18 @@ impl CombatResource for FfxivCombatResources {
             Self::Redmage(redmage_resources) => {
                 redmage_resources.add_resource(resource_id, resource_type)
             }
+            Self::Gunbreaker(gunbreaker_resources) => {
+                gunbreaker_resources.add_resource(resource_id, resource_type)
+            }
+            Self::Machinist(machinist_resources) => {
+                machinist_resources.add_resource(resource_id, resource_type)
+            }
+            Self::Samurai(samurai_resources) => {
+                samurai_resources.add_resource(resource_id, resource_type)
+            }
+            Self::Reaper(reaper_resources) => {
+                reaper_resources.add_resource(resource_id, resource_type)
+            }
         }
     }
 
@@ -133,6 +161,12 @@ impl CombatResource for FfxivCombatResources {
             Self::Scholar(scholar_resources) => scholar_resources.get_resource(resource_id),
             Self::Summoner(summoner_resources) => summoner_resources.get_resource(resource_id),
             Self::Redmage(redmage_resources) => redmage_resources.get_resource(resource_id),
+            Self::Gunbreaker(gunbreaker_resources) => {
+                gunbreaker_resources.get_resource(resource_id)
+            }
+            Self::Machinist(machinist_resources) => machinist_resources.get_resource(resource_id),
+            Self::Samurai(samurai_resources) => samurai_resources.get_resource(resource_id),
+            Self::Reaper(reaper_resources) => reaper_resources.get_resource(resource_id),
         }
     }
 
@@ -151,6 +185,10 @@ impl CombatResource for FfxivCombatResources {
             Self::Scholar(scholar_resources) => scholar_resources.get_current_combo(),
             Self::Summoner(summoner_resources) => summoner_resources.get_current_combo(),
             Self::Redmage(redmage_resources) => redmage_resources.get_current_combo(),
+            Self::Gunbreaker(gunbreaker_resources) => gunbreaker_resources.get_current_combo(),
+            Self::Machinist(machinist_resources) => machinist_resources.get_current_combo(),
+            Self::Samurai(samurai_resources) => samurai_resources.get_current_combo(),
+            Self::Reaper(reaper_resources) => reaper_resources.get_current_combo(),
         }
     }
 
@@ -169,6 +207,10 @@ impl CombatResource for FfxivCombatResources {
             Self::Scholar(scholar_resources) => scholar_resources.update_combo(combo),
             Self::Summoner(summoner_resources) => summoner_resources.update_combo(combo),
             Self::Redmage(redmage_resources) => redmage_resources.update_combo(combo),
+            Self::Gunbreaker(gunbreaker_resources) => gunbreaker_resources.update_combo(combo),
+            Self::Machinist(machinist_resources) => machinist_resources.update_combo(combo),
+            Self::Samurai(samurai_resources) => samurai_resources.update_combo(combo),
+            Self::Reaper(reaper_resources) => reaper_resources.update_combo(combo),
         }
     }
 
@@ -272,6 +314,34 @@ impl CombatResource for FfxivCombatResources {
                 current_time_millisecond,
                 player,
             ),
+            Self::Gunbreaker(gunbreaker_resources) => gunbreaker_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
+            Self::Machinist(machinist_resources) => machinist_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
+            Self::Samurai(samurai_resources) => samurai_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
+            Self::Reaper(reaper_resources) => reaper_resources.trigger_on_event(
+                skill_id,
+                buff_list,
+                debuff_list,
+                current_time_millisecond,
+                player,
+            ),
         }
     }
 
@@ -294,6 +364,14 @@ impl CombatResource for FfxivCombatResources {
             Self::Scholar(scholar_resources) => scholar_resources.get_next_buff_target(skill_id),
             Self::Summoner(summoner_resources) => summoner_resources.get_next_buff_target(skill_id),
             Self::Redmage(redmage_resources) => redmage_resources.get_next_buff_target(skill_id),
+            Self::Gunbreaker(gunbreaker_resources) => {
+                gunbreaker_resources.get_next_buff_target(skill_id)
+            }
+            Self::Machinist(machinist_resources) => {
+                machinist_resources.get_next_buff_target(skill_id)
+            }
+            Self::Samurai(samurai_resources) => samurai_resources.get_next_buff_target(skill_id),
+            Self::Reaper(reaper_resources) => reaper_resources.get_next_buff_target(skill_id),
         }
     }
 
@@ -318,6 +396,14 @@ impl CombatResource for FfxivCombatResources {
                 summoner_resources.update_stack_timer(elapsed_time)
             }
             Self::Redmage(redmage_resources) => redmage_resources.update_stack_timer(elapsed_time),
+            Self::Gunbreaker(gunbreaker_resources) => {
+                gunbreaker_resources.update_stack_timer(elapsed_time)
+            }
+            Self::Machinist(machinist_resources) => {
+                machinist_resources.update_stack_timer(elapsed_time)
+            }
+            Self::Samurai(samurai_resources) => samurai_resources.update_stack_timer(elapsed_time),
+            Self::Reaper(reaper_resources) => reaper_resources.update_stack_timer(elapsed_time),
         }
     }
 
@@ -336,6 +422,10 @@ impl CombatResource for FfxivCombatResources {
             Self::Scholar(scholar_resources) => scholar_resources.trigger_on_crit(),
             Self::Summoner(summoner_resources) => summoner_resources.trigger_on_crit(),
             Self::Redmage(redmage_resources) => redmage_resources.trigger_on_crit(),
+            Self::Gunbreaker(gunbreaker_resources) => gunbreaker_resources.trigger_on_crit(),
+            Self::Machinist(machinist_resources) => machinist_resources.trigger_on_crit(),
+            Self::Samurai(samurai_resources) => samurai_resources.trigger_on_crit(),
+            Self::Reaper(reaper_resources) => reaper_resources.trigger_on_crit(),
         }
     }
 }
@@ -367,6 +457,10 @@ impl FfxivCombatResources {
             "SCH" => Self::Scholar(ScholarCombatResources::new(player_id)),
             "SMN" => Self::Summoner(SummonerCombatResources::new(player_id, event_queue.clone())),
             "RDM" => Self::Redmage(RedmageCombatResources::new(player_id)),
+            "GNB" => Self::Gunbreaker(GunbreakerCombatResources::new(player_id)),
+            "MCH" => Self::Machinist(MachinistCombatResources::new(player_id)),
+            "SAM" => Self::Samurai(SamuraiCombatResources::new(player_id)),
+            "RPR" => Self::Reaper(ReaperCombatResources::new(player_id)),
             _ => Self::Sage(SageCombatResources::new(player_id)),
         }
     }

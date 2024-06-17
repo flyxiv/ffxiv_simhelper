@@ -1,7 +1,7 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::scholar::abilities::ScholarDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
-    HasBufforDebuff, MillisecondsBeforeBurst, Not, Or, RelatedSkillCooldownLessThan,
+    HasBufforDebuff, MillisecondsBeforeBurst, Not, Or, RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
@@ -122,8 +122,14 @@ pub(crate) fn make_scholar_ogcd_priority_table(db: &ScholarDatabase) -> Vec<Skil
             prerequisite: Some(Or(
                 Box::new(MillisecondsBeforeBurst(0)),
                 Box::new(Or(
-                    Box::new(RelatedSkillCooldownLessThan(db.aetherflow.get_id(), 8000)),
-                    Box::new(RelatedSkillCooldownLessThan(db.aetherflow.get_id(), 8000)),
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.aetherflow.get_id(),
+                        8000,
+                    )),
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.aetherflow.get_id(),
+                        8000,
+                    )),
                 )),
             )),
         },

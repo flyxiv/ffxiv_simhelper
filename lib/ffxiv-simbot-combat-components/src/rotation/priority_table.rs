@@ -38,7 +38,7 @@ pub(crate) enum SkillPrerequisite {
     HasResource(IdType, ResourceType),
     HasSkillStacks(IdType, StackType),
     MillisecondsBeforeBurst(TimeType),
-    RelatedSkillCooldownLessThan(IdType, TimeType),
+    RelatedSkillCooldownLessOrEqualThan(IdType, TimeType),
     /// Greater resource id, Lesser resource id, Greater by how much amount
     /// example: (1, 2, 50), then ok if resource1 >= resource2 + 50
     ResourceGreaterOrEqualThanAnotherResourceBy(IdType, IdType, ResourceType),
@@ -462,7 +462,10 @@ pub(crate) trait PriorityTable: Sized + Clone {
             SkillPrerequisite::HasSkillStacks(skill_id, stacks) => {
                 combat_resources.get_stack(*skill_id) >= *stacks
             }
-            SkillPrerequisite::RelatedSkillCooldownLessThan(related_skill_id, time_millisecond) => {
+            SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
+                related_skill_id,
+                time_millisecond,
+            ) => {
                 let related_skill = combat_resources.get_skills().get(related_skill_id).unwrap();
 
                 related_skill.get_current_cooldown_millisecond() <= *time_millisecond

@@ -5,12 +5,16 @@ use crate::jobs_skill_data::bard::priorities::BardPriorityTable;
 use crate::jobs_skill_data::black_mage::priorities::BlackmagePriorityTable;
 use crate::jobs_skill_data::dancer::priorities::DancerPriorityTable;
 use crate::jobs_skill_data::dragoon::priorities::DragoonPriorityTable;
+use crate::jobs_skill_data::gunbreaker::priorities::GunbreakerPriorityTable;
+use crate::jobs_skill_data::machinist::priorities::MachinistPriorityTable;
 use crate::jobs_skill_data::monk::priorities::MonkPriorityTable;
 use crate::jobs_skill_data::ninja::abilities::get_huton_status;
 use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
 use crate::jobs_skill_data::paladin::priorities::PaladinPriorityTable;
-use crate::jobs_skill_data::red_mage::priorities::RedmagePriorityTable;
+use crate::jobs_skill_data::reaper::priorities::ReaperPriorityTable;
+use crate::jobs_skill_data::redmage::priorities::RedmagePriorityTable;
 use crate::jobs_skill_data::sage::priorities::SagePriorityTable;
+use crate::jobs_skill_data::samurai::priorities::SamuraiPriorityTable;
 use crate::jobs_skill_data::scholar::priorities::ScholarPriorityTable;
 use crate::jobs_skill_data::summoner::priorities::SummonerPriorityTable;
 use crate::jobs_skill_data::warrior::priorities::WarriorPriorityTable;
@@ -29,6 +33,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 pub(crate) static WARRIOR_START_TIME_MILLISECOND: TimeType = 0;
+pub(crate) static GUNBREAKER_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static PALADIN_START_TIME_MILLISECOND: TimeType = -2500;
 pub(crate) static WHITEMAGE_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static BLACKMAGE_START_TIME_MILLISECOND: TimeType = -5000;
@@ -41,6 +46,9 @@ pub(crate) static DRAGOON_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static SCHOLAR_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static SUMMONER_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static REDMAGE_START_TIME_MILLISECOND: TimeType = -5500;
+pub(crate) static MACHINIST_START_TIME_MILLISECOND: TimeType = -2000;
+pub(crate) static SAMURAI_START_TIME_MILLISECOND: TimeType = -3000;
+pub(crate) static REAPER_START_TIME_MILLISECOND: TimeType = 0;
 
 impl FfxivPlayer {
     pub fn new_ninja(
@@ -372,6 +380,99 @@ impl FfxivPlayer {
                 FfxivTurnType::Gcd,
                 REDMAGE_START_TIME_MILLISECOND,
                 REDMAGE_START_TIME_MILLISECOND,
+            ),
+            None,
+        )
+    }
+
+    pub fn new_gunbreaker(
+        player_id: IdType,
+        power: CharacterPower,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> FfxivPlayer {
+        Self::new(
+            player_id,
+            String::from("GNB"),
+            power,
+            None,
+            FfxivPriorityTable::Gunbreaker(GunbreakerPriorityTable::new(player_id)),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Gcd,
+                GUNBREAKER_START_TIME_MILLISECOND,
+                GUNBREAKER_START_TIME_MILLISECOND,
+            ),
+            None,
+        )
+    }
+
+    pub fn new_machinist(
+        player_id: IdType,
+        power: CharacterPower,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> FfxivPlayer {
+        Self::new(
+            player_id,
+            String::from("MCH"),
+            power,
+            None,
+            FfxivPriorityTable::Machinist(MachinistPriorityTable::new(player_id)),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Ogcd,
+                MACHINIST_START_TIME_MILLISECOND,
+                MACHINIST_START_TIME_MILLISECOND,
+            ),
+            Some(0),
+        )
+    }
+
+    pub fn new_samurai(
+        player_id: IdType,
+        power: CharacterPower,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> FfxivPlayer {
+        Self::new(
+            player_id,
+            String::from("SAM"),
+            power,
+            None,
+            FfxivPriorityTable::Samurai(SamuraiPriorityTable::new(player_id)),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Ogcd,
+                SAMURAI_START_TIME_MILLISECOND,
+                SAMURAI_START_TIME_MILLISECOND,
+            ),
+            Some(0),
+        )
+    }
+
+    pub fn new_reaper(
+        player_id: IdType,
+        power: CharacterPower,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
+    ) -> FfxivPlayer {
+        Self::new(
+            player_id,
+            String::from("RPR"),
+            power,
+            None,
+            FfxivPriorityTable::Reaper(ReaperPriorityTable::new(player_id, player_count)),
+            Default::default(),
+            ffxiv_event_queue,
+            FfxivEvent::PlayerTurn(
+                player_id,
+                FfxivTurnType::Gcd,
+                REAPER_START_TIME_MILLISECOND,
+                REAPER_START_TIME_MILLISECOND,
             ),
             None,
         )

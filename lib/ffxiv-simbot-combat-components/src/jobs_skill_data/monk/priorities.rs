@@ -3,7 +3,7 @@ use crate::jobs_skill_data::monk::abilities::MonkDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, Not, Or,
-    RelatedSkillCooldownLessThan,
+    RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
@@ -250,7 +250,7 @@ pub(crate) fn make_monk_ogcd_priority_table(db: &MonkDatabase) -> Vec<SkillPrior
             prerequisite: Some(And(
                 Box::new(Combo(Some(2))),
                 Box::new(Or(
-                    Box::new(RelatedSkillCooldownLessThan(
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
                         db.riddle_of_fire.get_id(),
                         7000,
                     )),

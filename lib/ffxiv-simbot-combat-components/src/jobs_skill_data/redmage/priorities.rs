@@ -1,6 +1,6 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::ninja::abilities::NinjaDatabase;
-use crate::jobs_skill_data::red_mage::abilities::RedmageDatabase;
+use crate::jobs_skill_data::redmage::abilities::RedmageDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{And, Combo, HasBufforDebuff, Not, Or};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;

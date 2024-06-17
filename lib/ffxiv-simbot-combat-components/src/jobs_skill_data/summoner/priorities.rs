@@ -78,14 +78,14 @@ pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<Ski
     vec![
         SkillPriorityInfo {
             skill_id: db.summon_phoenix.get_id(),
-            prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessThan(
+            prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
                 db.energy_drain.get_id(),
                 2000,
             )),
         },
         SkillPriorityInfo {
             skill_id: db.summon_bahamut.get_id(),
-            prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessThan(
+            prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
                 db.energy_drain.get_id(),
                 2000,
             )),

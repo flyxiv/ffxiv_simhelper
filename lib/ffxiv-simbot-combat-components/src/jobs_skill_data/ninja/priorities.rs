@@ -102,7 +102,9 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
         SkillPriorityInfo {
             skill_id: db.suiton.get_id(),
             prerequisite: Some(SkillPrerequisite::And(
-                Box::new(SkillPrerequisite::RelatedSkillCooldownLessThan(1010, 17000)),
+                Box::new(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
+                    1010, 17000,
+                )),
                 Box::new(SkillPrerequisite::Not(Box::new(
                     SkillPrerequisite::HasBufforDebuff(1002),
                 ))),

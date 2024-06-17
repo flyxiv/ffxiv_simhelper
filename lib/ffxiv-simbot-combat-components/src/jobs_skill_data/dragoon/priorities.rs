@@ -9,7 +9,7 @@ use crate::jobs_skill_data::dragoon::abilities::DragoonDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, Not, Or,
-    RelatedSkillCooldownLessThan,
+    RelatedSkillCooldownLessOrEqualThan,
 };
 
 #[derive(Clone)]
@@ -211,7 +211,7 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
             prerequisite: Some(Or(
                 Box::new(And(
                     Box::new(Not(Box::new(HasResource(0, 2)))),
-                    Box::new(RelatedSkillCooldownLessThan(
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
                         db.lance_charge.get_id(),
                         20000,
                     )),
@@ -247,7 +247,7 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
         },
         SkillPriorityInfo {
             skill_id: db.spineshatter_dive.get_id(),
-            prerequisite: Some(RelatedSkillCooldownLessThan(
+            prerequisite: Some(RelatedSkillCooldownLessOrEqualThan(
                 db.spineshatter_dive.get_id(),
                 3000,
             )),
@@ -267,7 +267,7 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
         SkillPriorityInfo {
             skill_id: db.life_surge.get_id(),
             prerequisite: Some(And(
-                Box::new(RelatedSkillCooldownLessThan(
+                Box::new(RelatedSkillCooldownLessOrEqualThan(
                     db.life_surge_buff.get_id(),
                     20000,
                 )),

@@ -4,7 +4,7 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::ninja::abilities::{
     bunshin_clone_id, bunshin_stack_id, bunshin_trigger_gcd_ids, make_ninja_skill_list,
 };
-use crate::jobs_skill_data::red_mage::abilities::{make_redmage_skill_list, manafication_gcd_id};
+use crate::jobs_skill_data::redmage::abilities::{make_redmage_skill_list, manafication_gcd_id};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
