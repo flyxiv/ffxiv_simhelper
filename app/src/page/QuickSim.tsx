@@ -7,10 +7,6 @@ import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
 import { PartyInfo, QuickSimRequest } from "src/types/QuickSimRequest";
 import { CharacterStates } from "src/types/CharacterStates";
 import { QuickSimPartyInput } from "../components/input/QuickSimPartyInput";
-import {
-  QuickSimPartyMemberState,
-  QuickSimPartyState,
-} from "src/types/QuickSimPartyStates";
 
 export function QuickSim() {
   let mostRecentRequestState = localStorage.getItem("mostRecentRequest");
@@ -79,12 +75,13 @@ export function QuickSim() {
   let otherPartyJobs = input.jobs;
 
   let [partyJobs, setPartyJobs] = useState(otherPartyJobs);
+  let borderRadius = 3;
 
   return (
-    <>
+    <Box className="QuickSimInputContainer">
       <Box className="CharacterDetailCustomizeBoard">
-        <Box className="SelectionTitle">
-          <Typography variant="h5">1. Input Your Info</Typography>
+        <Box className="SelectionTitle" borderRadius={borderRadius}>
+          <Typography variant="h4">1. Input Your Info</Typography>
         </Box>
         <Box className="CustomizeBoard">
           {CharacterDetailedInput(mainPlayerState)}
@@ -111,7 +108,7 @@ export function QuickSim() {
           mainPlayerState
         )}
       </Box>
-    </>
+    </Box>
   );
 }
 

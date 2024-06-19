@@ -1,34 +1,77 @@
-import { Grid, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { JobSelectionWithState } from "./JobSelectionWithState";
 import { CharacterStates } from "src/types/CharacterStates";
+import { styled, Grid } from "@mui/material";
+import { InputGridContainerStyle, InputGridItemStyle } from "./Styles";
+import { ChangeEventHandler } from "react";
+
+interface InputFormProps {
+  label: string;
+  state: number | string;
+  setState: Function;
+  handleChange: Function;
+}
+
+const InputForm: React.FC<InputFormProps> = ({
+  label,
+  state,
+  setState,
+  handleChange,
+}) => {
+  return (
+    <TextField
+      label={label}
+      InputProps={{
+        inputProps: {
+          style: { textAlign: "center" },
+        },
+      }}
+      value={state}
+      onChange={(e) => {
+        handleChange({ value: e.target.value, state, setState });
+      }}
+      fullWidth
+    />
+  );
+};
+
+interface TextForm {
+  value: string;
+  state: number | string;
+  setState: Function;
+}
 
 export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
+  let xs = 15;
+  let InputGridContainer = styled(Grid)`
+    ${InputGridContainerStyle}
+  `;
+  let InputGridItem = styled(Grid)`
+    ${InputGridItemStyle}
+  `;
+
+  function handleChange(textForm: TextForm) {
+    const value = textForm.value === "" ? "" : parseInt(textForm.value);
+    textForm.setState(value);
+  }
+
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={3}>
+    <InputGridContainer container>
+      <InputGridItem item xs={xs}>
         {JobSelectionWithState(
           mainCharacterState.jobName,
           mainCharacterState.jobNameSetter
         )}
-      </Grid>
-      <Grid item xs={3}>
-        <TextField
+      </InputGridItem>
+      <InputGridItem item xs={xs} key="Weapon Attack">
+        <InputForm
           label="Weapon Attack"
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          type="number"
-          value={mainCharacterState.value.weaponDamage}
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.weaponAttack(value);
-          }}
-          fullWidth
+          state={mainCharacterState.value.weaponDamage}
+          setState={mainCharacterState.setter.weaponAttack}
+          handleChange={handleChange}
         />
-      </Grid>
-      <Grid item xs={3}>
+      </InputGridItem>
+      <InputGridItem item xs={xs}>
         <TextField
           label="Main Stat"
           InputProps={{
@@ -36,7 +79,6 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
               style: { textAlign: "center" },
             },
           }}
-          type="number"
           value={mainCharacterState.value.mainStat}
           onChange={(e) => {
             const value = e.target.value === "" ? "" : parseInt(e.target.value);
@@ -44,8 +86,8 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
           }}
           fullWidth
         />
-      </Grid>
-      <Grid item xs={3}>
+      </InputGridItem>
+      <InputGridItem item xs={xs}>
         <TextField
           label="Critical Strike"
           value={mainCharacterState.value.criticalStrike}
@@ -55,14 +97,13 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
             },
           }}
           fullWidth
-          type="number"
           onChange={(e) => {
             const value = e.target.value === "" ? "" : parseInt(e.target.value);
             mainCharacterState.setter.criticalStrike(value);
           }}
         />
-      </Grid>
-      <Grid item xs={3}>
+      </InputGridItem>
+      <InputGridItem item xs={xs}>
         <TextField
           label="Direct Hit"
           value={mainCharacterState.value.directHit}
@@ -72,14 +113,13 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
             },
           }}
           fullWidth
-          type="number"
           onChange={(e) => {
             const value = e.target.value === "" ? "" : parseInt(e.target.value);
             mainCharacterState.setter.directHit(value);
           }}
         />
-      </Grid>
-      <Grid item xs={3}>
+      </InputGridItem>
+      <InputGridItem item xs={xs}>
         <TextField
           label="Determination"
           value={mainCharacterState.value.determination}
@@ -89,14 +129,13 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
             },
           }}
           fullWidth
-          type="number"
           onChange={(e) => {
             const value = e.target.value === "" ? "" : parseInt(e.target.value);
             mainCharacterState.setter.determination(value);
           }}
         />
-      </Grid>
-      <Grid item xs={3}>
+      </InputGridItem>
+      <InputGridItem item xs={xs}>
         <TextField
           label="Speed"
           value={mainCharacterState.value.speed}
@@ -106,14 +145,13 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
             },
           }}
           fullWidth
-          type="number"
           onChange={(e) => {
             const value = e.target.value === "" ? "" : parseInt(e.target.value);
             mainCharacterState.setter.speed(value);
           }}
         />
-      </Grid>
-      <Grid item xs={3}>
+      </InputGridItem>
+      <InputGridItem item xs={xs}>
         <TextField
           label="Tenacity"
           value={mainCharacterState.value.tenacity}
@@ -123,13 +161,12 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
             },
           }}
           fullWidth
-          type="number"
           onChange={(e) => {
             const value = e.target.value === "" ? "" : parseInt(e.target.value);
             mainCharacterState.setter.tenacity(value);
           }}
         />
-      </Grid>
-    </Grid>
+      </InputGridItem>
+    </InputGridContainer>
   );
 }

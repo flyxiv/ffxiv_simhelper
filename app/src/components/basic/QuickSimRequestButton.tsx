@@ -1,15 +1,24 @@
-import { Button } from "@mui/material";
-import "./QuickSimRequestButton.css";
+import { Button, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { CharacterStates } from "src/types/CharacterStates";
 import { MapJobAbbrevToJobDefaultStat } from "src/const/StatValue";
 import { PartyInfo } from "src/types/QuickSimRequest";
+import { ColorConfigurations } from "src/Themes";
 
 export function QuickSimRequestButton(
   partyState: string[],
   combatTimeSeconds: number,
   characterState: CharacterStates
 ) {
+  let RequestButton = styled(Button)`
+    font-size: 0.8rem;
+    padding: 20px;
+    margin: 1rem;
+    height: 8vh;
+    background-color: ${ColorConfigurations.backgroundButton};
+    color: black;
+  `;
+
   let navigate = useNavigate();
 
   const handleClick = async () => {
@@ -23,8 +32,6 @@ export function QuickSimRequestButton(
       console.error("Error: ", request.message);
       return;
     }
-
-    console.log(request);
 
     let body = JSON.stringify(request);
     localStorage.setItem("mostRecentRequest", body);
@@ -52,9 +59,9 @@ export function QuickSimRequestButton(
     }
   };
   return (
-    <Button variant="contained" className="RequestButton" onClick={handleClick}>
-      Begin Simulation
-    </Button>
+    <RequestButton variant="contained" onClick={handleClick}>
+      Simulate
+    </RequestButton>
   );
 }
 
@@ -79,22 +86,26 @@ function createQuickSimRequest(
     },
   ];
 
+  let playerCount = 0;
   let i = 0;
-  console.log(partyState);
 
   for (i = 0; i < partyState.length; i++) {
     let defaultStat = MapJobAbbrevToJobDefaultStat(partyState[i]);
 
-    if (defaultStat == undefined) {
+    if (defaultStat === undefined) {
       continue;
     }
 
     partyInfo.push({
-      playerId: i + 1,
+      playerId: playerCount + 1,
       job: partyState[i],
       stats: defaultStat,
     });
+
+    playerCount++;
   }
+
+  console.log(partyInfo);
 
   return {
     mainPlayerId: 0,

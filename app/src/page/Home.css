@@ -7,11 +7,11 @@
 }
 
 .LeftBody {
-    padding-left: 200px;
+    padding-left: 5vh;
     width: 30vw;
 }
 
 .RightBody {
-    padding-right: 200px;
+    padding-right: 5vh;
     width: 30vw;
 }

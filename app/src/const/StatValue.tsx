@@ -28,6 +28,8 @@ export const MapJobAbbrevToJobDefaultStat = (jobAbbrev: string) => {
       return BLM_BIS_STATS;
     case "WHM":
       return WHM_BIS_STATS;
+    case "MNK":
+      return MNK_BIS_STATS;
     default:
       Error("Invalid job abbreviation");
   }
@@ -132,23 +134,12 @@ export const BLM_BIS_STATS = {
   tenacity: 400,
 };
 
-export const GET_DEFAULT_BIS_STAT = (jobAbbrev: string) => {
-  switch (jobAbbrev) {
-    case "PLD":
-      return PLD_BIS_STATS;
-    case "WAR":
-      return WAR_BIS_STATS;
-    case "AST":
-      return AST_BIS_STATS;
-    case "SGE":
-      return SGE_BIS_STATS;
-    case "DRG":
-      return DRG_BIS_STATS;
-    case "NIN":
-      return NIN_BIS_STATS;
-    case "BRD":
-      return BRD_BIS_STATS;
-    case "DNC":
-      return DNC_BIS_STATS;
-  }
+export const MNK_BIS_STATS = {
+  weaponDamage: 132,
+  mainStat: 3360,
+  criticalStrike: 2647,
+  directHit: 1202,
+  determination: 1613,
+  speed: 771,
+  tenacity: 400,
 };

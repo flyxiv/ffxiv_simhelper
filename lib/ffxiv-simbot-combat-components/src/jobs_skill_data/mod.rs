@@ -5,6 +5,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
 
+pub(crate) mod astrologian;
 pub(crate) mod bard;
 pub(crate) mod black_mage;
 pub(crate) mod dancer;
