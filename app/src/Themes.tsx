@@ -3,4 +3,6 @@ export const ColorConfigurations = {
   backgroundTwo: "#201F28",
   backgroundThree: "#2F2D3C",
   backgroundButton: "#BB86FC",
+
+  primary: "#BB86FC",
 };

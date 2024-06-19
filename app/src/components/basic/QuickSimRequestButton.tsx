@@ -12,7 +12,6 @@ export function QuickSimRequestButton(
 ) {
   let RequestButton = styled(Button)`
     font-size: 0.8rem;
-    padding: 20px;
     margin: 1rem;
     height: 8vh;
     background-color: ${ColorConfigurations.backgroundButton};

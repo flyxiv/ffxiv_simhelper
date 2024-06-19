@@ -1,5 +1,23 @@
-import { Grid, TextField } from "@mui/material";
+import { Grid, TextField, Box, styled } from "@mui/material";
 import { JobSelection } from "./JobSelection";
+import { InputGridContainerStyle, InputGridItemStyle } from "./Styles";
+import { inputStyleJob, CustomInputForm } from "./InputForm";
+import { handleChange } from "./CharacterDetailedInput";
+import { TimeInput, TimeMenu } from "./TimeInput";
+
+const InputGridContainer = styled(Grid)`
+  ${InputGridContainerStyle}
+`;
+
+const InputGridItem = styled(Grid)`
+  ${InputGridItemStyle}
+`;
+const InputBox = styled(Box)`
+  ${InputGridItemStyle}
+`;
+const InputJobBox = styled(Grid)`
+  ${inputStyleJob}
+`;
 
 export function QuickSimPartyInput(
   playerIds: number[],
@@ -8,27 +26,30 @@ export function QuickSimPartyInput(
   time: number,
   timeSetter: Function
 ) {
+  let xs = 15;
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={3}>
-        <TextField
-          label="Combat Time(in seconds)"
-          value={time}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          onChange={(e) => timeSetter(e.target.value)}
-          key="time"
-          fullWidth
-        />
-      </Grid>
+    <InputGridContainer container>
+      <InputBox marginBottom={1.0}>
+        <InputJobBox item xs={xs}>
+          <TimeInput
+            state={time}
+            setState={timeSetter}
+            handleChange={handleChange}
+            label="Time"
+          />
+        </InputJobBox>
+      </InputBox>
       {playerIds.map((playerId) => (
-        <Grid item xs={3}>
-          {JobSelection(playerId, partyJobs, partySetter)}
-        </Grid>
+        <InputBox marginBottom={0.5} key={playerId}>
+          <InputGridItem item xs={xs}>
+            <InputBox marginBottom={0.5} key={playerId}>
+              <InputJobBox item xs={xs} key={`Job-${playerId}`}>
+                {JobSelection(playerId, partyJobs, partySetter)}
+              </InputJobBox>
+            </InputBox>
+          </InputGridItem>
+        </InputBox>
       ))}
-    </Grid>
+    </InputGridContainer>
   );
 }

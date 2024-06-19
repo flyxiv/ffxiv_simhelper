@@ -5,6 +5,7 @@
 
 .Footer {
   width: 100vw;
+  display: flex;
   justify-content: center;
   border: 1px solid black;
   color: White;

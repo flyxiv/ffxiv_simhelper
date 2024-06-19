@@ -4,6 +4,7 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
+import { CustomFormControl } from "./InputForm";
 import { JobItemSelectionMenu } from "./JobItemSelectionMenu";
 
 export function JobSelectionWithState(jobName: string, setJobName: Function) {
@@ -12,7 +13,7 @@ export function JobSelectionWithState(jobName: string, setJobName: Function) {
   };
 
   return (
-    <FormControl fullWidth>
+    <CustomFormControl fullWidth>
       <InputLabel id="JobSelect">Job</InputLabel>
       <Select
         labelId="job"
@@ -41,6 +42,6 @@ export function JobSelectionWithState(jobName: string, setJobName: Function) {
         {JobItemSelectionMenu("BLM")}
         {JobItemSelectionMenu("RDM")}
       </Select>
-    </FormControl>
+    </CustomFormControl>
   );
 }

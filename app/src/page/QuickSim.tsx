@@ -78,37 +78,41 @@ export function QuickSim() {
   let borderRadius = 3;
 
   return (
-    <Box className="QuickSimInputContainer">
-      <Box className="CharacterDetailCustomizeBoard">
-        <Box className="SelectionTitle" borderRadius={borderRadius}>
-          <Typography variant="h4">1. Input Your Info</Typography>
+    <>
+      <Box alignContent={"center"}>
+        <Box className="QuickSimInputContainer">
+          <Box className="CharacterDetailCustomizeBoard">
+            <Box className="SelectionTitle" borderRadius={borderRadius}>
+              <Typography variant="h5">1. Input Your Info</Typography>
+            </Box>
+            <Box className="CustomizeBoard">
+              {CharacterDetailedInput(mainPlayerState)}
+            </Box>
+          </Box>
+          <Box className="CharacterDetailCustomizeBoard">
+            <Box className="SelectionTitle" borderRadius={borderRadius}>
+              <Typography variant="h5">2. Input Combat Info</Typography>
+            </Box>
+            <Box className="CustomizeBoard">
+              {QuickSimPartyInput(
+                ids,
+                partyJobs,
+                setPartyJobs,
+                combatTimeStateSeconds,
+                setCombatTimeSeconds
+              )}
+            </Box>
+          </Box>
         </Box>
-        <Box className="CustomizeBoard">
-          {CharacterDetailedInput(mainPlayerState)}
-        </Box>
-      </Box>
-      <Box className="QuickSimPartyInput">
-        <Box className="SelectionTitle">
-          <Typography variant="h5">2. Input Combat Info</Typography>
-        </Box>
-        <Box className="PartyJobInput">
-          {QuickSimPartyInput(
-            ids,
+        <Box>
+          {QuickSimRequestButton(
             partyJobs,
-            setPartyJobs,
             combatTimeStateSeconds,
-            setCombatTimeSeconds
+            mainPlayerState
           )}
         </Box>
       </Box>
-      <Box>
-        {QuickSimRequestButton(
-          partyJobs,
-          combatTimeStateSeconds,
-          mainPlayerState
-        )}
-      </Box>
-    </Box>
+    </>
   );
 }
 

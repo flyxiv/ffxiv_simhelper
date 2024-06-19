@@ -1,14 +1,22 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { jobAbbrevToJobIconPath } from "../jobicon/JobIconFactory";
-import { Typography } from "mui-core";
 
 export function JobItem(jobAbbrev: string) {
   return (
-    <Box display="flex" justifyContent="center">
+    <Box display="flex" justifyContent="right" alignContent={"center"}>
       <Box marginRight={1}>
-        <img src={jobAbbrevToJobIconPath(jobAbbrev)} width={25} height={25} />
+        <img
+          src={jobAbbrevToJobIconPath(jobAbbrev)}
+          width={17}
+          height={17}
+          style={{ verticalAlign: "middle" }}
+        />
       </Box>
-      <Typography variant="body1">{jobAbbrev}</Typography>
+      <Box>
+        <Typography variant="body1" alignContent={"center"}>
+          {jobAbbrev}
+        </Typography>
+      </Box>
     </Box>
   );
 }

@@ -4,9 +4,12 @@ import {
   InputLabel,
   Select,
   SelectChangeEvent,
+  styled,
 } from "@mui/material";
 import { JobItemSelectionMenu } from "./JobItemSelectionMenu";
 import React, { useEffect } from "react";
+import { FormControlStyle } from "./Styles";
+import { CustomFormControl } from "./InputForm";
 
 export function JobSelection(
   id: number,
@@ -24,12 +27,8 @@ export function JobSelection(
     jobNameSetter(newJobNames);
   };
 
-  useEffect(() => {
-    console.log(jobNames);
-  }, [jobNames]);
-
   return (
-    <FormControl fullWidth>
+    <CustomFormControl fullWidth>
       <InputLabel id="JobSelect">{playerId}</InputLabel>
       <Select
         labelId={playerId}
@@ -62,6 +61,6 @@ export function JobSelection(
         {JobItemSelectionMenu("RDM")}
         <MenuItem value="Empty">Empty</MenuItem>
       </Select>
-    </FormControl>
+    </CustomFormControl>
   );
 }

@@ -7,6 +7,18 @@ export const InputGridContainerStyle = `
 `;
 
 export const InputGridItemStyle = `
-  background-color: ${ColorConfigurations.backgroundThree};
-  color: White;
+  background-color: ${ColorConfigurations.backgroundTwo};
+  color: ${ColorConfigurations.primary};
+  width: 100%;
+  display: flex;
+`;
+
+export const InputStyle = `
+  color: white;
+  width: 100%;
+  padding-right: 30px;
+`;
+
+export const FormControlStyle = `
+    height: 100%;
 `;

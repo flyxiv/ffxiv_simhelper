@@ -1,39 +1,8 @@
-import { TextField } from "@mui/material";
 import { JobSelectionWithState } from "./JobSelectionWithState";
 import { CharacterStates } from "src/types/CharacterStates";
-import { styled, Grid } from "@mui/material";
+import { styled, Box, Grid } from "@mui/material";
+import { CustomInputForm, inputStyleJob } from "./InputForm";
 import { InputGridContainerStyle, InputGridItemStyle } from "./Styles";
-import { ChangeEventHandler } from "react";
-
-interface InputFormProps {
-  label: string;
-  state: number | string;
-  setState: Function;
-  handleChange: Function;
-}
-
-const InputForm: React.FC<InputFormProps> = ({
-  label,
-  state,
-  setState,
-  handleChange,
-}) => {
-  return (
-    <TextField
-      label={label}
-      InputProps={{
-        inputProps: {
-          style: { textAlign: "center" },
-        },
-      }}
-      value={state}
-      onChange={(e) => {
-        handleChange({ value: e.target.value, state, setState });
-      }}
-      fullWidth
-    />
-  );
-};
 
 interface TextForm {
   value: string;
@@ -41,132 +10,106 @@ interface TextForm {
   setState: Function;
 }
 
+const InputGridContainer = styled(Grid)`
+  ${InputGridContainerStyle}
+`;
+
+const InputGridItem = styled(Grid)`
+  ${InputGridItemStyle}
+`;
+const InputBox = styled(Box)`
+  ${InputGridItemStyle}
+`;
+const InputJobBox = styled(Grid)`
+  ${inputStyleJob}
+`;
+export function handleChange(textForm: TextForm) {
+  const value = textForm.value === "" ? "" : parseInt(textForm.value);
+  textForm.setState(value);
+}
+
 export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
   let xs = 15;
-  let InputGridContainer = styled(Grid)`
-    ${InputGridContainerStyle}
-  `;
-  let InputGridItem = styled(Grid)`
-    ${InputGridItemStyle}
-  `;
-
-  function handleChange(textForm: TextForm) {
-    const value = textForm.value === "" ? "" : parseInt(textForm.value);
-    textForm.setState(value);
-  }
-
   return (
     <InputGridContainer container>
-      <InputGridItem item xs={xs}>
-        {JobSelectionWithState(
-          mainCharacterState.jobName,
-          mainCharacterState.jobNameSetter
-        )}
-      </InputGridItem>
-      <InputGridItem item xs={xs} key="Weapon Attack">
-        <InputForm
-          label="Weapon Attack"
-          state={mainCharacterState.value.weaponDamage}
-          setState={mainCharacterState.setter.weaponAttack}
-          handleChange={handleChange}
-        />
-      </InputGridItem>
-      <InputGridItem item xs={xs}>
-        <TextField
-          label="Main Stat"
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          value={mainCharacterState.value.mainStat}
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.mainStat(value);
-          }}
-          fullWidth
-        />
-      </InputGridItem>
-      <InputGridItem item xs={xs}>
-        <TextField
-          label="Critical Strike"
-          value={mainCharacterState.value.criticalStrike}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          fullWidth
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.criticalStrike(value);
-          }}
-        />
-      </InputGridItem>
-      <InputGridItem item xs={xs}>
-        <TextField
-          label="Direct Hit"
-          value={mainCharacterState.value.directHit}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          fullWidth
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.directHit(value);
-          }}
-        />
-      </InputGridItem>
-      <InputGridItem item xs={xs}>
-        <TextField
-          label="Determination"
-          value={mainCharacterState.value.determination}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          fullWidth
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.determination(value);
-          }}
-        />
-      </InputGridItem>
-      <InputGridItem item xs={xs}>
-        <TextField
-          label="Speed"
-          value={mainCharacterState.value.speed}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          fullWidth
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.speed(value);
-          }}
-        />
-      </InputGridItem>
-      <InputGridItem item xs={xs}>
-        <TextField
-          label="Tenacity"
-          value={mainCharacterState.value.tenacity}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          fullWidth
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.tenacity(value);
-          }}
-        />
-      </InputGridItem>
+      <InputBox marginBottom={1}>
+        <InputJobBox item xs={xs} key="Job">
+          {JobSelectionWithState(
+            mainCharacterState.jobName,
+            mainCharacterState.jobNameSetter
+          )}
+        </InputJobBox>
+      </InputBox>
+      <InputBox marginBottom={0.5}>
+        <InputGridItem item xs={xs} key="Weapon Attack">
+          <CustomInputForm
+            label="Weapon Attack"
+            state={mainCharacterState.value.weaponDamage}
+            setState={mainCharacterState.setter.weaponAttack}
+            handleChange={handleChange}
+          />
+        </InputGridItem>
+      </InputBox>
+      <InputBox marginBottom={0.5}>
+        <InputGridItem item xs={xs}>
+          <CustomInputForm
+            label="Main Stat"
+            state={mainCharacterState.value.mainStat}
+            setState={mainCharacterState.setter.mainStat}
+            handleChange={handleChange}
+          />
+        </InputGridItem>
+      </InputBox>
+      <InputBox marginBottom={0.5}>
+        <InputGridItem item xs={xs}>
+          <CustomInputForm
+            label="Critical Strike"
+            state={mainCharacterState.value.criticalStrike}
+            setState={mainCharacterState.setter.criticalStrike}
+            handleChange={handleChange}
+          />
+        </InputGridItem>
+      </InputBox>
+      <InputBox marginBottom={0.5}>
+        <InputGridItem item xs={xs}>
+          <CustomInputForm
+            label="Direct Hit"
+            state={mainCharacterState.value.directHit}
+            setState={mainCharacterState.setter.directHit}
+            handleChange={handleChange}
+          />
+        </InputGridItem>
+      </InputBox>
+      <InputBox marginBottom={0.5}>
+        <InputGridItem item xs={xs}>
+          <CustomInputForm
+            label="Determination"
+            state={mainCharacterState.value.determination}
+            setState={mainCharacterState.setter.determination}
+            handleChange={handleChange}
+          />
+        </InputGridItem>
+      </InputBox>
+      <InputBox marginBottom={0.5}>
+        <InputGridItem item xs={xs}>
+          <CustomInputForm
+            label="Speed"
+            state={mainCharacterState.value.speed}
+            setState={mainCharacterState.setter.speed}
+            handleChange={handleChange}
+          />
+        </InputGridItem>
+      </InputBox>
+      <InputBox marginBottom={0.5}>
+        <InputGridItem item xs={xs}>
+          <CustomInputForm
+            label="Tenacity"
+            state={mainCharacterState.value.tenacity}
+            setState={mainCharacterState.setter.tenacity}
+            handleChange={handleChange}
+          />
+        </InputGridItem>
+      </InputBox>
     </InputGridContainer>
   );
 }
