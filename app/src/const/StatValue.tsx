@@ -12,24 +12,40 @@ export const MapJobAbbrevToJobDefaultStat = (jobAbbrev: string) => {
       return PLD_BIS_STATS;
     case "WAR":
       return WAR_BIS_STATS;
+    case "DRK":
+      return DRK_BIS_STAT;
+    case "GNB":
+      return GNB_BIS_STATS;
     case "AST":
       return AST_BIS_STATS;
     case "SGE":
       return SGE_BIS_STATS;
+    case "WHM":
+      return WHM_BIS_STATS;
+    case "SCH":
+      return SCH_BIS_STAT;
     case "DRG":
       return DRG_BIS_STATS;
     case "NIN":
       return NIN_BIS_STATS;
+    case "MNK":
+      return MNK_BIS_STATS;
+    case "SAM":
+      return SAM_BIS_STATS;
+    case "RPR":
+      return RPR_BIS_STATS;
     case "BRD":
       return BRD_BIS_STATS;
     case "DNC":
       return DNC_BIS_STATS;
+    case "MCH":
+      return MCH_BIS_STAT;
     case "BLM":
       return BLM_BIS_STATS;
-    case "WHM":
-      return WHM_BIS_STATS;
-    case "MNK":
-      return MNK_BIS_STATS;
+    case "SMN":
+      return SMN_BIS_STAT;
+    case "RDM":
+      return RDM_BIS_STATS;
     default:
       Error("Invalid job abbreviation");
   }
@@ -142,4 +158,94 @@ export const MNK_BIS_STATS = {
   determination: 1613,
   speed: 771,
   tenacity: 400,
+};
+
+export const SAM_BIS_STATS = {
+  weaponDamage: 132,
+  mainStat: 3367,
+  criticalStrike: 2587,
+  directHit: 1458,
+  determination: 1680,
+  speed: 508,
+  tenacity: 400,
+};
+
+export const GNB_BIS_STATS = {
+  weaponDamage: 132,
+  mainStat: 3311,
+  criticalStrike: 2576,
+  directHit: 940,
+  determination: 2182,
+  speed: 400,
+  tenacity: 529,
+};
+
+export const RDM_BIS_STATS = {
+  weaponDamage: 132,
+  mainStat: 3379,
+  criticalStrike: 2514,
+  directHit: 1616,
+  determination: 1601,
+  speed: 502,
+  tenacity: 400,
+};
+
+export const RPR_BIS_STATS = {
+  weaponDamage: 132,
+  mainStat: 3379,
+  criticalStrike: 2567,
+  directHit: 1396,
+  determination: 1870,
+  speed: 400,
+  tenacity: 400,
+};
+
+export const AST_BIS_STAT = {
+  weaponDamage: 132,
+  mainStat: 3369,
+  criticalStrike: 2502,
+  directHit: 904,
+  determination: 2047,
+  speed: 774,
+  tenacity: 400,
+};
+
+export const SCH_BIS_STAT = {
+  weaponDamage: 132,
+  mainStat: 3369,
+  criticalStrike: 2301,
+  directHit: 400,
+  determination: 2047,
+  speed: 1479,
+  tenacity: 400,
+};
+
+export const MCH_BIS_STAT = {
+  weaponDamage: 132,
+  mainStat: 3547,
+  criticalStrike: 2557,
+  directHit: 1432,
+  determination: 1844,
+  speed: 400,
+  tenacity: 400,
+};
+
+export const SMN_BIS_STAT = {
+  weaponDamage: 132,
+  mainStat: 3379,
+  criticalStrike: 2514,
+  directHit: 1616,
+  determination: 1601,
+  speed: 502,
+  tenacity: 400,
+};
+
+export const DRK_BIS_STAT = {
+  weaponDamage: 132,
+  mainStat: 3330,
+  criticalStrike: 2576,
+  directHit: 940,
+  determination: 2182,
+  speed: 400,
+  tenacity: 529,
 };

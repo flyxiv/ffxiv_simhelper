@@ -1,11 +1,23 @@
-import { Summary } from "src/components/container/Summary";
-import { JobIconFactory } from "../components/jobicon/JobIconFactory";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, styled } from "@mui/material";
 import "./SimulationResult.css";
 import { QuickSimResponse } from "../types/QuickSimResponse";
 import { BestTeammateGraph } from "../components/graph/BestTeammateGraph";
 import { DamageProfileGraph } from "../components/graph/DamageProfileGraph";
 import { SkillLogResult } from "../components/container/SkillLog";
+import { DpsSummary } from "src/components/container/DpsSummaryBox";
+import {
+  SummaryBoardBoxStyle,
+  TitleBoxStyle,
+} from "src/components/container/Styles";
+import { PlayerInfo } from "src/components/container/PlayerInfo";
+
+const SummaryBoardBox = styled(Box)`
+  ${SummaryBoardBoxStyle}
+`;
+
+const TitleBox = styled(Box)`
+  ${TitleBoxStyle}
+`;
 
 export function SimulationResult() {
   let response = localStorage.getItem("simulationResult");
@@ -21,26 +33,24 @@ export function SimulationResult() {
   let responseJson = JSON.parse(response) as QuickSimResponse;
   let mainPlayerId = responseJson.mainPlayerId;
   let mainPlayerSimulationData = responseJson.simulationData[mainPlayerId];
-  let mainPlayerJob = mainPlayerSimulationData.job;
+  let mainPlayerJob = mainPlayerSimulationData.job.valueOf();
 
   return (
     <Box className="SimulationResult">
-      <Box className="Summary">
-        <Typography variant="h5" component="div">
-          Summary
-        </Typography>
-
-        <Box className="PlayerInfo">
-          {JobIconFactory(mainPlayerJob)}
+      <SummaryBoardBox>
+        <TitleBox borderRadius={4}>
           <Typography variant="h5" component="div">
-            {mainPlayerJob}
+            Summary
           </Typography>
-        </Box>
+        </TitleBox>
 
-        {Summary(mainPlayerSimulationData)}
-
-        <p></p>
-      </Box>
+        {DpsSummary(mainPlayerSimulationData)}
+        {PlayerInfo(mainPlayerJob)}
+      </SummaryBoardBox>
+    </Box>
+  );
+}
+/*
       <Box className="BestTeammateGraph">
         <Typography variant="h5" component="div">
           Best Teammate
@@ -60,6 +70,4 @@ export function SimulationResult() {
         </Typography>
         {SkillLogResult(responseJson)}
       </Box>
-    </Box>
-  );
-}
+*/

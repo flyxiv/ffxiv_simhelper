@@ -29,15 +29,15 @@ export function QuickSimPartyInput(
   let xs = 15;
   return (
     <InputGridContainer container>
-      <InputBox marginBottom={1.0}>
-        <InputJobBox item xs={xs}>
-          <TimeInput
+      <InputBox marginBottom={0.5}>
+        <InputGridItem item xs={xs}>
+          <CustomInputForm
+            label="Combat Time(Seconds)"
             state={time}
             setState={timeSetter}
             handleChange={handleChange}
-            label="Time"
           />
-        </InputJobBox>
+        </InputGridItem>
       </InputBox>
       {playerIds.map((playerId) => (
         <InputBox marginBottom={0.5} key={playerId}>

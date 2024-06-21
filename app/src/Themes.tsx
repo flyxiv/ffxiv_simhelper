@@ -5,4 +5,7 @@ export const ColorConfigurations = {
   backgroundButton: "#BB86FC",
 
   primary: "#BB86FC",
+  primaryVariant: "#3700B3",
+  secondary: "#03DAC6",
+  secondaryVariant: "#018786",
 };
