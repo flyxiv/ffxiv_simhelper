@@ -8,6 +8,11 @@ name = "ffxiv-simbot"
 path = "src/main.rs"
 doc = false
 
+[[bin]]
+name = "profile"
+path = "src/profile.rs"
+doc = false
+
 [dependencies.ffxiv-simbot-db]
 version = "0.1.0"
 path = "../lib/ffxiv-simbot-db"
@@ -33,3 +38,4 @@ axum = "0.7"
 tokio = "1.36.0"
 serde = { version = "1.0.196", features = ["derive"] }
 log = "0.4.20"
+itertools = "0.13.0"

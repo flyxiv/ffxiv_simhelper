@@ -1,3 +1,5 @@
+mod profile;
+
 use ffxiv_simbot_api::api_server::api_router::create_ffxiv_simbot_service_router;
 use ffxiv_simbot_engine::engine::Engine;
 use log::LevelFilter::{Debug, Error, Info};
