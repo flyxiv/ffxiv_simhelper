@@ -51,16 +51,17 @@ export function jobAbbrevToJobIconPath(jobAbbrev: String) {
   );
 }
 
-export const JobIconFactory = (jobAbbrev: String) => {
+export const JobIconFactory = (jobAbbrev: String, sizePixel: number) => {
   const jobIcon = jobAbbrevToJobIconPath(jobAbbrev);
+  const size = sizePixel.toString() + "px";
 
   return (
     <Box className="JobIconBox">
       <img
         src={jobIcon}
         alt="{jobIcon} icon"
-        height="50px"
-        width="50px"
+        height={size}
+        width={size}
         className="JobIcon"
       />
     </Box>

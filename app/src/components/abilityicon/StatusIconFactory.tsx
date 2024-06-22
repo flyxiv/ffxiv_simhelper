@@ -1,6 +1,29 @@
+// Only support raid/personal buff/debuff icons for now
 export const StatusIdToIconPathFactory = (statusId: number) => {
   const actionIconDirectory = process.env.PUBLIC_URL + "/images/actions";
   switch (statusId) {
+    // PLD
+    case 1900:
+      return actionIconDirectory + "/PLD/requiescat.png";
+    case 1901:
+      return actionIconDirectory + "/PLD/fight_or_flight.png";
+
+    // WAR
+    case 100:
+      return actionIconDirectory + "/WAR/storm's_eye.png";
+
+    // DRK
+    case 200:
+      return actionIconDirectory + "/DRK/edge_of_darkness.png";
+
+    // GNB
+    case 300:
+      return actionIconDirectory + "/GNB/no_mercy.png";
+
+    // WHM
+    case 401:
+      return actionIconDirectory + "/WHM/presence_of_mind.png";
+
     // AST
     case 500:
       return actionIconDirectory + "/AST/divination.png";
@@ -14,18 +37,34 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return actionIconDirectory + "/SCH/chain_stratagem.png";
 
     // DRG
+    case 800:
+      return actionIconDirectory + "/DRG/life_surge.png";
+    case 801:
+      return actionIconDirectory + "/DRG/disembowel.png";
+    case 804:
+      return actionIconDirectory + "/DRG/lance_charge.png";
     case 806:
       return actionIconDirectory + "/DRG/dragon_sight.png";
     case 807:
       return actionIconDirectory + "/DRG/battle_litany.png";
 
     // MNK
+    case 900:
+      return actionIconDirectory + "/MNK/bootshine.png";
+    case 904:
+      return actionIconDirectory + "/MNK/riddle_of_fire.png";
+    case 905:
+      return actionIconDirectory + "/MNK/riddle_of_wind.png";
     case 906:
       return actionIconDirectory + "/MNK/brotherhood.png";
 
     // NIN
     case 1003:
       return actionIconDirectory + "/NIN/mug.png";
+    case 1004:
+      return actionIconDirectory + "/NIN/trick_attack.png";
+    case 1005:
+      return actionIconDirectory + "/NIN/kassatsu.png";
 
     // RPR
     case 1203:
@@ -42,12 +81,16 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return actionIconDirectory + "/BRD/radiant_finale.png";
     case 1312:
       return actionIconDirectory + "/BRD/battle_voice.png";
+    case 1314:
+      return actionIconDirectory + "/BRD/raging_strike.png";
 
     // DNC
     case 1500:
       return actionIconDirectory + "/DNC/standard_finish.png";
     case 1502:
-      return actionIconDirectory + "/DNC/techical_finish.png";
+      return actionIconDirectory + "/DNC/technical_finish.png";
+    case 1503:
+      return actionIconDirectory + "/DNC/technical_finish.png";
     case 1504:
       return actionIconDirectory + "/DNC/devilment.png";
 
@@ -58,6 +101,8 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
     // RDM
     case 1800:
       return actionIconDirectory + "/RDM/embolden.png";
+    case 1801:
+      return actionIconDirectory + "/RDM/manafication.png";
 
     case 0:
       return actionIconDirectory + "/BLM/MagicalRangedRollAction/swiftcast.png";
@@ -67,3 +112,51 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return `unknown skill id: ${statusId}`;
   }
 };
+
+/* TODO: Add the rest of the status icons
+    // PLD
+    case 1900:
+      return actionIconDirectory + "/PLD/requiescat.png";
+    case 1901:
+      return actionIconDirectory + "/PLD/fight_or_flight.png";
+    case 1902:
+      return actionIconDirectory + "/PLD/atonement.png";
+    case 1903:
+      return actionIconDirectory + "/PLD/circle_of_scorn.png";
+    case 1904:
+      return actionIconDirectory + "/PLD/confiteor.png";
+
+    // WAR
+    case 100:
+      return actionIconDirectory + "/WAR/storm's_eye.png";
+    case 101:
+      return actionIconDirectory + "/WAR/inner_chaos.png";
+    case 102:
+      return actionIconDirectory + "/WAR/inner_release.png";
+    case 103:
+      return actionIconDirectory + "/WAR/primal_rend.png";
+
+    // DRK
+    case 200:
+      return actionIconDirectory + "/DRK/edge_of_darkness.png";
+    case 201:
+      return actionIconDirectory + "/DRK/delirium.png";
+    case 202:
+      return actionIconDirectory + "/DRK/salted_earth.png";
+
+    // GNB
+    case 300:
+      return actionIconDirectory + "/GNB/no_mercy.png";
+    case 301:
+      return actionIconDirectory + "/GNB/hypervelocity.png";
+    case 302:
+      return actionIconDirectory + "/GNB/sonic_break.png";
+    case 303:
+      return actionIconDirectory + "/GNB/bow_shock.png";
+    case 304:
+      return actionIconDirectory + "/GNB/jugular_rip.png";
+    case 305:
+      return actionIconDirectory + "/GNB/abdomen_tear.png";
+    case 306:
+      return actionIconDirectory + "/GNB/eye_gouge.png";
+*/

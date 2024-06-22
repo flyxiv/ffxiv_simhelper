@@ -1,4 +1,4 @@
-import { QuickSimRequest } from "src/types/QuickSimRequest";
+import { StatCompareRequest } from "src/types/StatCompareRequest";
 import {
   DEFAULT_WEAPON_DAMAGE,
   DEFAULT_MAIN_STAT,
@@ -7,9 +7,10 @@ import {
   DEFAULT_DETERMINATION,
   DEFAULT_SPEED,
   DEFAULT_TENACITY,
-} from "../const/StatValue";
+  NIN_BIS_STATS,
+} from "./StatValue";
 
-export function defaultQuickSimRequest(): QuickSimRequest {
+export function defaultStatCompareRequest(): StatCompareRequest {
   let defaultJobsList = [
     "NIN",
     "PLD",
@@ -20,11 +21,11 @@ export function defaultQuickSimRequest(): QuickSimRequest {
     "BRD",
     "BLM",
   ];
-  let i = 0;
+  let i = 1;
 
   let party = [];
 
-  for (i = 0; i < defaultJobsList.length; i++) {
+  for (i = 1; i < defaultJobsList.length; i++) {
     party.push({
       playerId: i,
       job: defaultJobsList[i],
@@ -42,7 +43,10 @@ export function defaultQuickSimRequest(): QuickSimRequest {
   }
   return {
     mainPlayerId: 0,
+    mainPlayerJob: defaultJobsList[0],
     combatTimeMillisecond: 120000,
+    mainPlayerStat1: NIN_BIS_STATS,
+    mainPlayerStat2: NIN_BIS_STATS,
     party: party,
   };
 }

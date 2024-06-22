@@ -1,26 +1,45 @@
-import { Box, Typography, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import "./SimulationResult.css";
+import { useState } from "react";
 import { QuickSimResponse } from "../types/QuickSimResponse";
 import { BestTeammateGraph } from "../components/graph/BestTeammateGraph";
-import { DamageProfileGraph } from "../components/graph/DamageProfileGraph";
-import { SkillLogResult } from "../components/container/SkillLog";
 import { DpsSummary } from "src/components/container/DpsSummaryBox";
-import {
-  SummaryBoardBoxStyle,
-  TitleBoxStyle,
-} from "src/components/container/Styles";
+import { ResultBoardBoxStyle } from "src/components/container/Styles";
 import { PlayerInfo } from "src/components/container/PlayerInfo";
+import { SimulationTitle } from "src/components/basic/SimulationTitle";
+import { DamageProfileGraph } from "src/components/graph/DamageProfileGraph";
+import { SkillLogResult } from "src/components/container/SkillLog";
+import { ResultPageButtonGroup } from "src/components/container/ResultPageButtonGroup";
+import { QuickSimResponseSaveName } from "src/App";
+import { QuickSimRequest } from "src/types/QuickSimRequest";
 
-const SummaryBoardBox = styled(Box)`
-  ${SummaryBoardBoxStyle}
+const ResultBoardBox = styled(Box)`
+  ${ResultBoardBoxStyle}
 `;
 
-const TitleBox = styled(Box)`
-  ${TitleBoxStyle}
-`;
+export function isNotValid(request: QuickSimRequest) {
+  if (request.mainPlayerId === null || request.mainPlayerId === undefined) {
+    return true;
+  }
+
+  if (
+    request.combatTimeMillisecond === null ||
+    request.combatTimeMillisecond === undefined
+  ) {
+    return true;
+  }
+
+  if (request.party === null || request.party === undefined) {
+    return true;
+  }
+
+  return false;
+}
 
 export function SimulationResult() {
-  let response = localStorage.getItem("simulationResult");
+  let [currentlyToggledView, setCurrentlyToggledView] =
+    useState("Damage Profile");
+  let response = localStorage.getItem(QuickSimResponseSaveName);
 
   if (response == null) {
     return (
@@ -37,37 +56,47 @@ export function SimulationResult() {
 
   return (
     <Box className="SimulationResult">
-      <SummaryBoardBox>
-        <TitleBox borderRadius={4}>
-          <Typography variant="h5" component="div">
-            Summary
-          </Typography>
-        </TitleBox>
-
+      <ResultBoardBox>
+        {SimulationTitle("Simulation Result")}
         {DpsSummary(mainPlayerSimulationData)}
         {PlayerInfo(mainPlayerJob)}
-      </SummaryBoardBox>
+      </ResultBoardBox>
+      {ResultPageButtonGroup(
+        currentlyToggledView,
+        setCurrentlyToggledView,
+        mainPlayerJob
+      )}
+      {renderTableBasedOnSelectedButton(currentlyToggledView, responseJson)}
     </Box>
   );
 }
-/*
-      <Box className="BestTeammateGraph">
-        <Typography variant="h5" component="div">
-          Best Teammate
-        </Typography>
 
+function renderTableBasedOnSelectedButton(
+  currentlyToggledView: string,
+  responseJson: QuickSimResponse
+) {
+  if (currentlyToggledView === "Best Teammate") {
+    return (
+      <ResultBoardBox>
+        {SimulationTitle("Best Teammate")}
         {BestTeammateGraph(responseJson)}
-      </Box>
-      <Box className="DamageProfileGraph">
-        <Typography variant="h5" component="div">
-          Damage Profile
-        </Typography>
+      </ResultBoardBox>
+    );
+  } else if (currentlyToggledView === "Damage Profile") {
+    return (
+      <ResultBoardBox>
+        {SimulationTitle("Damage Profile")}
         {DamageProfileGraph(responseJson)}
-      </Box>
-      <Box className="RotationLog">
-        <Typography variant="h5" component="div">
-          Rotation Log
-        </Typography>
+      </ResultBoardBox>
+    );
+  } else if (currentlyToggledView === "Rotation Log") {
+    return (
+      <ResultBoardBox>
+        {SimulationTitle("Rotation Log")}
         {SkillLogResult(responseJson)}
-      </Box>
-*/
+      </ResultBoardBox>
+    );
+  } else {
+    return <div></div>;
+  }
+}

@@ -18,7 +18,7 @@ export interface InputTimeFormProps {
   handleChange: Function;
 }
 
-export const inputStyle = {
+export const inputStyleOutLabel = {
   "& .MuiInputBase-input": {
     color: "white",
     backgroundColor: ColorConfigurations.backgroundThree,
@@ -34,12 +34,11 @@ export const inputStyle = {
     notched: false,
   },
   label: {
-    padding: "0 16px", // padding을 통해 하이라이트 된 레이블을 조정합니다.
-    transform: "translate(14px, 2.5vh) scale(1)", // 레이블이 Input 내에 위치하도록 합니다.
+    transform: "translate(5px, 5px) scale(0.8)", // 레이블이 Input 내에 위치하도록 합니다.
   },
 };
 
-export const inputStyleJob = {
+export const inputStyleJobOutLabel = {
   "& .MuiInputBase-input": {
     color: "white",
     backgroundColor: ColorConfigurations.backgroundThree,
@@ -50,20 +49,21 @@ export const inputStyleJob = {
     color: ColorConfigurations.primary,
   },
   label: {
-    padding: "0 16px", // padding을 통해 하이라이트 된 레이블을 조정합니다.
-    transform: "translate(14px, 3vh) scale(1)", // 레이블이 Input 내에 위치하도록 합니다.
+    transform: "translate(5px, 5px) scale(0.8)", // 레이블이 Input 내에 위치하도록 합니다.
   },
 };
 
-export const Input = styled(TextField)(({ theme }) => inputStyle);
+export const Input = styled(TextField)(({ theme }) => inputStyleOutLabel);
 
-export const CustomFormControl = styled(FormControl)(({ theme }) => inputStyle);
+export const CustomFormControl = styled(FormControl)(
+  ({ theme }) => inputStyleOutLabel
+);
 
 const InputBox = styled(Box)`
   ${InputGridItemStyle}
 `;
 
-export const CustomInputForm: React.FC<InputFormProps> = ({
+export const CustomInputFormOutLabel: React.FC<InputFormProps> = ({
   label,
   field,
   state,
@@ -84,7 +84,7 @@ export const CustomInputForm: React.FC<InputFormProps> = ({
   );
 };
 
-export const CustomTimeInputForm: React.FC<InputTimeFormProps> = ({
+export const CustomTimeInputFormOutLabel: React.FC<InputTimeFormProps> = ({
   label,
   state,
   setState,

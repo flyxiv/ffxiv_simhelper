@@ -1,9 +1,4 @@
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
+import { InputLabel, Select, SelectChangeEvent } from "@mui/material";
 import { CustomFormControl } from "./InputForm";
 import { JobItemSelectionMenu } from "./JobItemSelectionMenu";
 

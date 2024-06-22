@@ -6,13 +6,13 @@ import { Box, Typography } from "@mui/material";
 import "@fontsource/roboto/700.css";
 import "./App.css";
 import { SimulationResult } from "./page/SimulationResult";
+import { StatCompare } from "./page/StatCompare";
+import { StatCompareResult } from "./page/StatCompareResult";
 
-export const ColorConfigurations = {
-  backgroundOne: "#121212",
-  backgroundTwo: "#201F28",
-  backgroundThree: "#2F2D3C",
-  backgroundButton: "#BB86FC",
-};
+export const QuickSimRequestSaveName = "mostRecentRequest";
+export const QuickSimResponseSaveName = "mostRecentQuickSimResponse";
+export const StatCompareRequestSaveName = "mostRecentStatCompareRequest";
+export const StatCompareResponseSaveName = "mostRecentStatCompareResponse";
 
 function App() {
   return (
@@ -29,6 +29,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/quicksim" element={<QuickSim />} />
             <Route path="/simulationresult" element={<SimulationResult />} />
+            <Route path="/statcompare" element={<StatCompare />} />
+            <Route path="/statcompareresult" element={<StatCompareResult />} />
           </Routes>
         </main>
         <Box className="Footer" component="footer">

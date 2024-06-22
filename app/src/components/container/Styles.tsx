@@ -1,6 +1,11 @@
 import { ColorConfigurations } from "src/Themes";
+export const plusBackgroundColor = "#7B9FD3";
+export const minusBackgroundColor = "#CF6679";
+export const plusTextColor = "#00476F";
+export const minusTextColor = "#850B21";
 
-export const SummaryBoardBoxStyle = `
+export const statusBoxWidth = "22vw";
+export const ResultBoardBoxStyle = `
   background-color: ${ColorConfigurations.backgroundTwo};
   width: 45vw;
   align-items: center;
@@ -78,4 +83,82 @@ export const StatTextBoxStyle = `
   width: 100%;
   background-color: white;
   color: black;
+`;
+
+export const SkillLogTableStyle = `
+  background-color: ${ColorConfigurations.backgroundThree};
+  display: flex;
+  width: 45vw;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  max-height: 100vh;
+  overflow: auto;
+  margin-top: 20px;
+`;
+
+export const SkillLogRowStyle = `
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 45vw;
+`;
+
+export const SkillLogCombatTimeBoxStyle = `
+  color: white;
+  width: 5vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: right;
+`;
+
+export const SkillEntityBoxStyle = `
+  color: white;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  display: flex;
+  width: 100%;
+  border: 1px solid white;
+`;
+
+export const SkillIconBoxStyle = `
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  width: 12vw;
+  margin: 10px;
+`;
+
+export const StatusIconBoxStyle = (widthVw: string) => `
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  width: ${widthVw};
+`;
+
+export const SkillLogCombatTimeTitleBoxStyle = `
+  width: 5vw;
+  color: white;
+  justify-content: left;
+`;
+
+export const SkillIconBoxTitleStyle = `
+  width: 12vw;
+  color: white;
+  display: flex;
+  justify-content: center;
+`;
+
+export const StatusIconTitleBoxStyle = (widthVw: string) => `
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  width: ${widthVw};
+  color: white;
 `;

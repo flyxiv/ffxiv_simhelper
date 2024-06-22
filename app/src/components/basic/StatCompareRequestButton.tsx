@@ -4,12 +4,17 @@ import { CharacterStates } from "src/types/CharacterStates";
 import { MapJobAbbrevToJobDefaultStat } from "src/const/StatValue";
 import { PartyInfo } from "src/types/PartyStates";
 import { ColorConfigurations } from "src/Themes";
-import { QuickSimRequestSaveName, QuickSimResponseSaveName } from "src/App";
+import {
+  StatCompareRequestSaveName,
+  StatCompareResponseSaveName,
+} from "src/App";
+import { StatCompareRequest } from "src/types/StatCompareRequest";
 
-export function QuickSimRequestButton(
+export function StatCompareRequestButton(
   partyState: string[],
   combatTimeSeconds: number,
-  characterState: CharacterStates
+  characterState1: CharacterStates,
+  characterState2: CharacterStates
 ) {
   let RequestButton = styled(Button)`
     font-size: 0.8rem;
@@ -22,10 +27,11 @@ export function QuickSimRequestButton(
   let navigate = useNavigate();
 
   const handleClick = async () => {
-    let request = createQuickSimRequest(
+    let request = createStatCompareRequest(
       partyState,
       combatTimeSeconds,
-      characterState
+      characterState1,
+      characterState2
     );
 
     if (request instanceof Error) {
@@ -35,23 +41,27 @@ export function QuickSimRequestButton(
 
     let body = JSON.stringify(request);
     console.log(body);
-    localStorage.setItem(QuickSimRequestSaveName, body);
+
+    localStorage.setItem(StatCompareRequestSaveName, body);
 
     try {
-      const response = await fetch("http://localhost:13406/api/v1/simulate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: body,
-      });
+      const response = await fetch(
+        "http://localhost:13406/api/v1/statcompare",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: body,
+        }
+      );
 
       if (response.ok) {
         console.log("POST 요청이 성공했습니다.");
         // JavaScript 객체를 key-value dictionary로 변환
         const responseString = JSON.stringify(await response.json());
-        localStorage.setItem(QuickSimResponseSaveName, responseString);
-        navigate("/simulationresult");
+        localStorage.setItem(StatCompareResponseSaveName, responseString);
+        navigate("/statcompareresult");
       } else {
         console.error("POST 요청이 실패했습니다.");
       }
@@ -66,26 +76,13 @@ export function QuickSimRequestButton(
   );
 }
 
-function createQuickSimRequest(
+function createStatCompareRequest(
   partyState: string[],
   combatTimeSeconds: number,
-  characterState: CharacterStates
-) {
-  let partyInfo: PartyInfo[] = [
-    {
-      playerId: 0,
-      job: characterState.jobName,
-      stats: {
-        weaponDamage: characterState.stats.weaponDamage,
-        mainStat: characterState.stats.mainStat,
-        criticalStrike: characterState.stats.criticalStrike,
-        directHit: characterState.stats.directHit,
-        determination: characterState.stats.determination,
-        speed: characterState.stats.speed,
-        tenacity: characterState.stats.tenacity,
-      },
-    },
-  ];
+  characterState1: CharacterStates,
+  characterState2: CharacterStates
+): StatCompareRequest {
+  let partyInfo: PartyInfo[] = [];
 
   let playerCount = 0;
   let i = 0;
@@ -108,7 +105,10 @@ function createQuickSimRequest(
 
   return {
     mainPlayerId: 0,
+    mainPlayerJob: characterState1.jobName,
     combatTimeMillisecond: combatTimeSeconds * 1000,
+    mainPlayerStat1: characterState1.stats,
+    mainPlayerStat2: characterState2.stats,
     party: partyInfo,
   };
 }

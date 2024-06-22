@@ -3,7 +3,15 @@ import { Typography, styled, Box } from "@mui/material";
 import { JobIconFactory } from "../jobicon/JobIconFactory";
 import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
 import { QuickSimRequest } from "src/types/QuickSimRequest";
-import { PlayerStatInfo } from "./PlayerStatInfo";
+import { PlayerStatInfo, StatComparePlayerStatInfo } from "./PlayerStatInfo";
+import {
+  QuickSimRequestSaveName,
+  StatCompareRequestSaveName,
+  StatCompareResponseSaveName,
+} from "src/App";
+import { StatCompareRequest } from "src/types/StatCompareRequest";
+import { StatCompareResponse } from "src/types/StatCompareResponse";
+import { CharacterStats } from "src/types/CharacterStates";
 
 const PlayerInfoBox = styled(Box)`
   ${PlayerInfoBoxStyle}
@@ -14,7 +22,7 @@ const PlayerInfoJobTitle = styled(Box)`
 `;
 
 export function PlayerInfo(job: string) {
-  let mostRecentRequestState = localStorage.getItem("mostRecentRequest");
+  let mostRecentRequestState = localStorage.getItem(QuickSimRequestSaveName);
   let mostRecentRequest = null;
   if (mostRecentRequestState == null) {
     mostRecentRequest = defaultQuickSimRequest();
@@ -28,12 +36,30 @@ export function PlayerInfo(job: string) {
   return (
     <PlayerInfoBox>
       <PlayerInfoJobTitle>
-        {JobIconFactory(job)}
+        {JobIconFactory(job, 50)}
         <Typography variant="h3" component="div" color="white">
           {job}
         </Typography>
       </PlayerInfoJobTitle>
       {PlayerStatInfo(mainPlayerStats)}
+    </PlayerInfoBox>
+  );
+}
+
+export function StatComparePlayerInfo(
+  job: string,
+  targetStat: CharacterStats,
+  compareStat: CharacterStats
+) {
+  return (
+    <PlayerInfoBox>
+      <PlayerInfoJobTitle>
+        {JobIconFactory(job, 30)}
+        <Typography variant="h3" component="div" color="white">
+          {job}
+        </Typography>
+      </PlayerInfoJobTitle>
+      {StatComparePlayerStatInfo(targetStat, compareStat)}
     </PlayerInfoBox>
   );
 }

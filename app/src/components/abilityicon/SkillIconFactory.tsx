@@ -675,6 +675,8 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
 
     case 0:
       return actionIconDirectory + "/BLM/MagicalRangedRollAction/swiftcast.png";
+    case 1:
+      return actionIconDirectory + "/pot.png";
     case 10001:
       return actionIconDirectory + "/auto-attack.png";
     default:

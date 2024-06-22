@@ -1,7 +1,34 @@
 import { QuickSimResponse } from "src/types/QuickSimResponse";
+import {
+  SkillIconBoxTitleStyle as SkillIconTitleBoxStyle,
+  SkillLogCombatTimeTitleBoxStyle,
+  SkillLogTableStyle,
+  StatusIconTitleBoxStyle,
+  SkillLogRowStyle,
+  statusBoxWidth,
+} from "./Styles";
 import { SkillLogTable } from "./SkillLogTable";
-import { Box } from "@mui/material";
-import "./SkillLogTable.css";
+import { styled, List, Box, Typography } from "@mui/material";
+
+const SkillLogTableList = styled(List)`
+  ${SkillLogTableStyle}
+`;
+
+const SkillLogRowBox = styled(Box)`
+  ${SkillLogRowStyle}
+`;
+
+const SkillLogCombatTimeTitleBox = styled(Box)`
+  ${SkillLogCombatTimeTitleBoxStyle}
+`;
+
+const SkillIconTitleBox = styled(Box)`
+  ${SkillIconTitleBoxStyle}
+`;
+
+const StatusIconTitleBox = styled(Box)`
+  ${StatusIconTitleBoxStyle("25vw")}
+`;
 
 export const SkillLogResult = (response: QuickSimResponse) => {
   const mainPlayerId = response.mainPlayerId;
@@ -26,10 +53,28 @@ export const SkillLogResult = (response: QuickSimResponse) => {
       </div>
     );
   }
+  let fontSize = 10;
 
   return (
-    <Box className="SkillLogTableContainer">
-      <SkillLogTable skilllog={mainPlayerRotationLog} />
-    </Box>
+    <SkillLogTableList>
+      <SkillLogRowBox>
+        <SkillLogCombatTimeTitleBox>
+          <Typography variant="body1" fontSize={fontSize}>
+            Combat Time
+          </Typography>
+        </SkillLogCombatTimeTitleBox>
+        <SkillIconTitleBox>
+          <Typography variant="body1" fontSize={fontSize}>
+            Ability
+          </Typography>
+        </SkillIconTitleBox>
+        <StatusIconTitleBox>
+          <Typography variant="body1" fontSize={fontSize}>
+            Important Status
+          </Typography>
+        </StatusIconTitleBox>
+      </SkillLogRowBox>
+      {SkillLogTable(mainPlayerRotationLog)}
+    </SkillLogTableList>
   );
 };

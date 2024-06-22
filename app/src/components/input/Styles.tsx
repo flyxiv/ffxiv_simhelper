@@ -22,3 +22,15 @@ export const InputStyle = `
 export const FormControlStyle = `
     height: 100%;
 `;
+
+export const HorizontalInputGridContainerStyle = `
+  background-color: ${ColorConfigurations.backgroundTwo};
+  width: 100%;
+`;
+
+export const HorizontalInputGridItemStyle = `
+  background-color: ${ColorConfigurations.backgroundTwo};
+  color: ${ColorConfigurations.primary};
+  width: 25%;
+  display: flex;
+`;

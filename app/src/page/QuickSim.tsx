@@ -4,12 +4,32 @@ import { Box, Typography } from "@mui/material";
 import "./QuickSim.css";
 import { CharacterDetailedInput } from "../components/input/CharacterDetailedInput";
 import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
-import { PartyInfo, QuickSimRequest } from "src/types/QuickSimRequest";
+import { QuickSimRequest } from "src/types/QuickSimRequest";
+import { PartyInfo } from "src/types/PartyStates";
 import { CharacterStates } from "src/types/CharacterStates";
 import { QuickSimPartyInput } from "../components/input/QuickSimPartyInput";
+import { QuickSimRequestSaveName } from "src/App";
 
+export function isNotValid(request: QuickSimRequest) {
+  if (request.mainPlayerId === null || request.mainPlayerId === undefined) {
+    return true;
+  }
+
+  if (
+    request.combatTimeMillisecond === null ||
+    request.combatTimeMillisecond === undefined
+  ) {
+    return true;
+  }
+
+  if (request.party === null || request.party === undefined) {
+    return true;
+  }
+
+  return false;
+}
 export function QuickSim() {
-  let mostRecentRequestState = localStorage.getItem("mostRecentRequest");
+  let mostRecentRequestState = localStorage.getItem(QuickSimRequestSaveName);
   let mostRecentRequest = null;
 
   if (mostRecentRequestState == null) {
@@ -18,52 +38,22 @@ export function QuickSim() {
     mostRecentRequest = JSON.parse(mostRecentRequestState) as QuickSimRequest;
   }
 
+  if (isNotValid(mostRecentRequest)) {
+    mostRecentRequest = defaultQuickSimRequest();
+  }
+
   let mainPlayerId = mostRecentRequest.mainPlayerId;
   let mainPlayerInfo = mostRecentRequest.party[mainPlayerId];
   const [mainPlayerJob, setMainPlayerJob] = useState(
     mostRecentRequest.party[mostRecentRequest.mainPlayerId].job
   );
-
-  const [mainPlayerWeaponDamageState, setMainPlayerWeaponDamageState] =
-    useState(mainPlayerInfo.stats.weaponDamage);
-  const [mainPlayerMainStatState, setMainPlayerMainStatState] = useState(
-    mainPlayerInfo.stats.mainStat
-  );
-  const [mainPlayerCriticalStrikeState, setMainPlayerCriticalStrikeState] =
-    useState(mainPlayerInfo.stats.criticalStrike);
-  const [mainPlayerDirectHitState, setMainPlayerDirectHitState] = useState(
-    mainPlayerInfo.stats.directHit
-  );
-  const [mainPlayerDeterminationState, setMainPlayerDeterminationState] =
-    useState(mainPlayerInfo.stats.determination);
-  const [mainPlayerSpeedState, setMainPlayerSpeedState] = useState(
-    mainPlayerInfo.stats.speed
-  );
-  const [mainPlayerTenacityState, setMainPlayerTenacityState] = useState(
-    mainPlayerInfo.stats.tenacity
-  );
+  const [mainPlayerStat, setMainPlayerStat] = useState(mainPlayerInfo.stats);
 
   const mainPlayerState: CharacterStates = {
     jobName: mainPlayerJob,
     jobNameSetter: setMainPlayerJob,
-    value: {
-      weaponDamage: mainPlayerWeaponDamageState,
-      mainStat: mainPlayerMainStatState,
-      criticalStrike: mainPlayerCriticalStrikeState,
-      directHit: mainPlayerDirectHitState,
-      determination: mainPlayerDeterminationState,
-      speed: mainPlayerSpeedState,
-      tenacity: mainPlayerTenacityState,
-    },
-    setter: {
-      weaponAttack: setMainPlayerWeaponDamageState,
-      mainStat: setMainPlayerMainStatState,
-      criticalStrike: setMainPlayerCriticalStrikeState,
-      directHit: setMainPlayerDirectHitState,
-      determination: setMainPlayerDeterminationState,
-      speed: setMainPlayerSpeedState,
-      tenacity: setMainPlayerTenacityState,
-    },
+    stats: mainPlayerStat,
+    setStats: setMainPlayerStat,
   };
 
   let combatTimeSeconds = mostRecentRequest.combatTimeMillisecond / 1000;

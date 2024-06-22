@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import { JobItemSelectionMenu } from "./JobItemSelectionMenu";
 import React, { useEffect } from "react";
-import { FormControlStyle } from "./Styles";
 import { CustomFormControl } from "./InputForm";
 
 export function JobSelection(

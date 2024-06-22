@@ -1,31 +1,100 @@
+import { Typography, Box, styled } from "@mui/material";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from "recharts";
-import { JobImageTick } from "./CustomBar";
-import { ResponsiveContainer } from "recharts";
+  TotalBarStyle,
+  BuffBarBoxStyle,
+  BuffBarStyle,
+  PartyMemberBuffBoxStyle,
+  PartyMemberIconBoxStyle,
+  TotalRdpsBoxStyle,
+  BuffTitleBarStyle,
+} from "./Style";
+import { StatusIdToIconPathFactory } from "../abilityicon/StatusIconFactory";
+import { JobIconFactory } from "../jobicon/JobIconFactory";
+
+export interface RdpsEntry {
+  statusId: number;
+  rdps: number;
+}
 
 export interface TeammateChartData {
-  rdps: number;
+  rdpsEntry: RdpsEntry[];
+  totalRdps: number;
   jobName: String;
 }
 
-export function JobBarChartTeammate(props: { data: TeammateChartData[] }) {
-  return (
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={props.data} layout="vertical">
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis type="number" />
-        <YAxis dataKey="jobName" type="category" tick={JobImageTick} />
-        <Tooltip />
+const PartyMemberBuffBox = styled(Box)`
+  ${PartyMemberBuffBoxStyle}
+`;
 
-        <Bar dataKey="rdps" fill="#8884d8" />
-      </BarChart>
-    </ResponsiveContainer>
+const PartyMemberIconBox = styled(Box)`
+  ${PartyMemberIconBoxStyle}
+`;
+
+const TotalBuffBox = styled(Box)`
+  ${TotalBarStyle}
+`;
+const TotalRdpsBox = styled(Box)`
+  ${TotalRdpsBoxStyle}
+`;
+const BuffTitleBar = styled(Box)`
+  ${BuffTitleBarStyle}
+`;
+
+export function JobBarChartTeammate(
+  data: TeammateChartData,
+  maxContribution: number
+) {
+  let totalRdps = 0;
+  let buffBars = data.rdpsEntry.map((entry, index) => {
+    let BuffBarBox = styled(Box)`
+      ${BuffBarBoxStyle((100 * entry.rdps) / maxContribution)}
+    `;
+
+    let Bar = styled(Box)`
+      ${BuffBarStyle(index)}
+    `;
+
+    // UI상 표시값 사이 일치를 위해 rounding한 값을 더한 거로 totalRdps를 한 번 정규화해준다.
+    let roundedRdps = Math.round(entry.rdps);
+    totalRdps += roundedRdps;
+
+    return (
+      <BuffBarBox>
+        {roundedRdps}
+        <Bar>
+          <img
+            src={StatusIdToIconPathFactory(entry.statusId)}
+            width={25}
+            height={25}
+          />
+        </Bar>
+      </BuffBarBox>
+    );
+  });
+
+  return (
+    <PartyMemberBuffBox>
+      <PartyMemberIconBox>
+        {JobIconFactory(data.jobName, 25)}
+      </PartyMemberIconBox>
+      <TotalBuffBox>{buffBars}</TotalBuffBox>
+      <TotalRdpsBox>
+        <Typography variant="h6">{totalRdps}</Typography>
+      </TotalRdpsBox>
+    </PartyMemberBuffBox>
   );
 }
+
+export const GraphTitleRow = (
+  <PartyMemberBuffBox>
+    <PartyMemberIconBox>
+      <Typography variant="h6">Member</Typography>
+    </PartyMemberIconBox>
+    <BuffTitleBar>
+      <Typography variant="h6">RDPS Contribution</Typography>
+    </BuffTitleBar>
+    <TotalRdpsBox>
+      <Typography variant="h6">Total</Typography>
+    </TotalRdpsBox>
+  </PartyMemberBuffBox>
+);

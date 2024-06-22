@@ -1,12 +1,13 @@
 import { JobSelectionWithState } from "./JobSelectionWithState";
-import { CharacterStates } from "src/types/CharacterStates";
+import { CharacterStates, CharacterStats } from "src/types/CharacterStates";
 import { styled, Box, Grid } from "@mui/material";
 import { CustomInputForm, inputStyleJob } from "./InputForm";
 import { InputGridContainerStyle, InputGridItemStyle } from "./Styles";
 
 interface TextForm {
   value: string;
-  state: number | string;
+  field: string;
+  state: CharacterStats;
   setState: Function;
 }
 
@@ -25,11 +26,22 @@ const InputJobBox = styled(Grid)`
 `;
 export function handleChange(textForm: TextForm) {
   const value = textForm.value === "" ? "" : parseInt(textForm.value);
-  textForm.setState(value);
+  const stats = { ...textForm.state, [textForm.field]: value };
+  textForm.setState(stats);
 }
 
 export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
   let xs = 15;
+  let statNameAndKeys = [
+    { name: "Weapon Damage", field: "weaponDamage" },
+    { name: "Main Stat", field: "mainStat" },
+    { name: "Critical Strike", field: "criticalStrike" },
+    { name: "Direct Hit", field: "directHit" },
+    { name: "Determination", field: "determination" },
+    { name: "Speed", field: "speed" },
+    { name: "Tenacity", field: "tenacity" },
+  ];
+
   return (
     <InputGridContainer container>
       <InputBox marginBottom={1}>
@@ -40,76 +52,21 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
           )}
         </InputJobBox>
       </InputBox>
-      <InputBox marginBottom={0.5}>
-        <InputGridItem item xs={xs} key="Weapon Attack">
-          <CustomInputForm
-            label="Weapon Attack"
-            state={mainCharacterState.value.weaponDamage}
-            setState={mainCharacterState.setter.weaponAttack}
-            handleChange={handleChange}
-          />
-        </InputGridItem>
-      </InputBox>
-      <InputBox marginBottom={0.5}>
-        <InputGridItem item xs={xs}>
-          <CustomInputForm
-            label="Main Stat"
-            state={mainCharacterState.value.mainStat}
-            setState={mainCharacterState.setter.mainStat}
-            handleChange={handleChange}
-          />
-        </InputGridItem>
-      </InputBox>
-      <InputBox marginBottom={0.5}>
-        <InputGridItem item xs={xs}>
-          <CustomInputForm
-            label="Critical Strike"
-            state={mainCharacterState.value.criticalStrike}
-            setState={mainCharacterState.setter.criticalStrike}
-            handleChange={handleChange}
-          />
-        </InputGridItem>
-      </InputBox>
-      <InputBox marginBottom={0.5}>
-        <InputGridItem item xs={xs}>
-          <CustomInputForm
-            label="Direct Hit"
-            state={mainCharacterState.value.directHit}
-            setState={mainCharacterState.setter.directHit}
-            handleChange={handleChange}
-          />
-        </InputGridItem>
-      </InputBox>
-      <InputBox marginBottom={0.5}>
-        <InputGridItem item xs={xs}>
-          <CustomInputForm
-            label="Determination"
-            state={mainCharacterState.value.determination}
-            setState={mainCharacterState.setter.determination}
-            handleChange={handleChange}
-          />
-        </InputGridItem>
-      </InputBox>
-      <InputBox marginBottom={0.5}>
-        <InputGridItem item xs={xs}>
-          <CustomInputForm
-            label="Speed"
-            state={mainCharacterState.value.speed}
-            setState={mainCharacterState.setter.speed}
-            handleChange={handleChange}
-          />
-        </InputGridItem>
-      </InputBox>
-      <InputBox marginBottom={0.5}>
-        <InputGridItem item xs={xs}>
-          <CustomInputForm
-            label="Tenacity"
-            state={mainCharacterState.value.tenacity}
-            setState={mainCharacterState.setter.tenacity}
-            handleChange={handleChange}
-          />
-        </InputGridItem>
-      </InputBox>
+      {statNameAndKeys.map((statNameAndKey) => {
+        return (
+          <InputBox marginBottom={0.5}>
+            <InputGridItem item xs={xs} key={statNameAndKey.name}>
+              <CustomInputForm
+                label={statNameAndKey.name}
+                state={mainCharacterState.stats}
+                field={statNameAndKey.field as keyof CharacterStats}
+                setState={mainCharacterState.setStats}
+                handleChange={handleChange}
+              />
+            </InputGridItem>
+          </InputBox>
+        );
+      })}
     </InputGridContainer>
   );
 }
