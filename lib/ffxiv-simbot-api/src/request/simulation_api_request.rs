@@ -2,8 +2,6 @@ use ffxiv_simbot_combat_components::{IdType, TimeType};
 use ffxiv_simbot_db::stat::StatType;
 use serde::Deserialize;
 
-/// API Request Format for quicksim/advancedsim API
-/// Given as a GraphQL request, parse from json type body
 #[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SimulationApiRequest {
@@ -20,7 +18,7 @@ pub struct PlayerInfoRequest {
     pub stats: StatsRequest,
 }
 
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, Copy)]
 #[serde(rename_all = "camelCase")]
 pub struct StatsRequest {
     pub weapon_damage: StatType,

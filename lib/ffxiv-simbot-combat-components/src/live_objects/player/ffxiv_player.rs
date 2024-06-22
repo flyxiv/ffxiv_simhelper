@@ -205,6 +205,23 @@ impl FfxivPlayer {
             time: combat_time_millisecond,
             skill_id,
             target_id,
+            buffs: self
+                .buff_list
+                .borrow()
+                .keys()
+                .map(|key| key.status_id)
+                .collect(),
+            debuffs: debuffs
+                .borrow()
+                .keys()
+                .filter_map(|key| {
+                    if key.player_id == self.id {
+                        Some(key.status_id)
+                    } else {
+                        None
+                    }
+                })
+                .collect(),
         });
     }
 

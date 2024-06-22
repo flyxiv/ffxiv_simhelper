@@ -11,6 +11,8 @@ pub struct SkillLog {
     pub time: TimeType,
     pub skill_id: IdType,
     pub target_id: Option<IdType>,
+    pub buffs: Vec<IdType>,
+    pub debuffs: Vec<IdType>,
 }
 
 #[derive(Debug, Clone)]

@@ -1,4 +1,5 @@
 use crate::api_handler::simulate::simulate_api_handler;
+use crate::api_handler::statcompare::stat_compare_api_handler;
 use axum::http::header::CONTENT_TYPE;
 use axum::http::Method;
 use axum::routing::post;
@@ -12,5 +13,6 @@ pub fn create_ffxiv_simbot_service_router() -> Router {
         .allow_headers(vec![CONTENT_TYPE]);
     Router::new()
         .route("/api/v1/simulate", post(simulate_api_handler))
+        .route("/api/v1/statcompare", post(stat_compare_api_handler))
         .layer(cors_layer)
 }

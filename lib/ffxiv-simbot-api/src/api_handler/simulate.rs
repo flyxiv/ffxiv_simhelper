@@ -1,3 +1,4 @@
+use crate::api_handler::get_composition_buff;
 use crate::errors::Result;
 use crate::request::convert_to_simulation_board::create_player;
 use crate::request::simulation_api_request::{PlayerInfoRequest, SimulationApiRequest};
@@ -53,18 +54,4 @@ pub(crate) async fn simulate_api_handler(
     Ok(Json(create_response_from_simulation_result(
         simulation_result,
     )))
-}
-
-fn get_composition_buff(party: &Vec<PlayerInfoRequest>) -> IncreaseType {
-    if party.len() == 1 {
-        return 0;
-    }
-
-    let mut roles = HashSet::new();
-
-    for player_info_request in party {
-        roles.insert(job_abbrev_to_role(&player_info_request.job));
-    }
-
-    return roles.len() as IncreaseType;
 }

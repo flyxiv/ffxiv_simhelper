@@ -21,6 +21,8 @@ pub(crate) fn convert_to_skill_log_response(skill_log: &SkillLog) -> SkillLogRes
         time: skill_log.time,
         skill_id: skill_log.skill_id,
         target: skill_log.target_id,
+        buffs: skill_log.buffs.clone(),
+        debuffs: skill_log.debuffs.clone(),
     }
 }
 
@@ -83,6 +85,7 @@ fn create_skill_damage_profile_response(
             combat_time_millisecond,
         ),
         pdps_contribution: damage_to_dps(total_damage, combat_time_millisecond),
+        cast_count: skill_damage_aggregate.cast_count,
     }
 }
 
@@ -102,6 +105,7 @@ fn create_status_damage_profile_response(
             status_damage_aggregate.total_raw_damage,
             combat_time_millisecond,
         ),
+        cast_count: 0,
     }
 }
 

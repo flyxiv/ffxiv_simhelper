@@ -49,8 +49,8 @@ impl PriorityTable for AstrologianPriorityTable {
 }
 
 impl AstrologianPriorityTable {
-    pub fn new(player_id: IdType, player_count: usize) -> Self {
-        let db = ReaperDatabase::new(player_id, player_count);
+    pub fn new(player_id: IdType) -> Self {
+        let db = AstrologianDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
             opener: make_astrologian_opener(&db),

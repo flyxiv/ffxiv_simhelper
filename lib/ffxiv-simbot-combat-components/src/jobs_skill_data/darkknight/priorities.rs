@@ -175,7 +175,7 @@ pub(crate) fn make_darkknight_ogcd_priority_table(
             prerequisite: Some(Or(
                 Box::new(MillisecondsBeforeBurst(0)),
                 Box::new(BufforDebuffLessThan(db.darkside.get_id(), 3000)),
-            ),
+            )),
         },
     ]
 }

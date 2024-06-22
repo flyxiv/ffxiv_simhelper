@@ -1,3 +1,4 @@
+use crate::response::CountType;
 use ffxiv_simbot_combat_components::{DpsType, IdType, TimeType};
 use serde::Serialize;
 
@@ -69,6 +70,7 @@ pub struct DamageProfileResponse {
     pub rdps_contribution: DpsType,
     /// Sum of all raw damage + rdps contribution
     pub pdps_contribution: DpsType,
+    pub cast_count: CountType,
 }
 
 /// Records the rotation log of each player
@@ -78,4 +80,6 @@ pub struct SkillLogResponse {
     pub time: TimeType,
     pub skill_id: IdType,
     pub target: Option<IdType>,
+    pub buffs: Vec<IdType>,
+    pub debuffs: Vec<IdType>,
 }

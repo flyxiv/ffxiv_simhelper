@@ -33,7 +33,6 @@ pub(crate) struct AstrologianDatabase {
     pub(crate) the_spire_buff: BuffStatus,
     pub(crate) lightspeed_buff: BuffStatus,
     pub(crate) lord_of_crowns_buff: BuffStatus,
-    pub(crate) astrodyne_buff: BuffStatus,
     pub(crate) combust_iii_dot: DebuffStatus,
     pub(crate) the_balance_ready: BuffStatus,
     pub(crate) the_spire_ready: BuffStatus,
