@@ -233,7 +233,13 @@ pub(crate) trait PriorityTable: Sized + Clone {
                             priority_number,
                         }]);
                     }
+
                     let second_skill_start_time = first_skill_start_time + skill_delay_millisecond;
+
+                    if second_skill_start_time > next_gcd_millisecond - NON_GCD_DELAY_MILLISECOND {
+                        continue;
+                    }
+
                     let first_skill_simulation =
                         FirstSkillCombatSimulation::new(player.get_id(), skill);
 
@@ -247,6 +253,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                         &mut combat_info_simulation,
                         &mut combat_resource_simulation,
                         &first_skill_simulation,
+                        skill.get_id(),
                     );
                     if let Some(second_skill_plan) = self.find_second_highest_ogcd_skill(
                         combat_info_simulation,
@@ -273,6 +280,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                         } else {
                             best_ogcd_pair = Some(skill_pair);
                         }
+                        break;
                     }
                 }
             }

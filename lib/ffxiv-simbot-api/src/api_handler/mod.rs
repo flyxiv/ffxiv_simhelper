@@ -7,7 +7,7 @@ use ffxiv_simbot_db::IncreaseType;
 use ffxiv_simbot_engine::engine::Engine;
 use std::collections::HashSet;
 
-pub(crate) mod simulate;
+pub mod simulate;
 pub(crate) mod statcompare;
 
 fn get_composition_buff(party: &Vec<PlayerInfoRequest>) -> IncreaseType {

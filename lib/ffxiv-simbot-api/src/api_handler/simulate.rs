@@ -17,6 +17,10 @@ use std::rc::Rc;
 pub(crate) async fn simulate_api_handler(
     Json(request): Json<SimulationApiRequest>,
 ) -> Result<Json<SimulationApiResponse>> {
+    Ok(Json(quicksim(request)?))
+}
+
+pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> {
     let combat_time_millisecond = request.combat_time_millisecond;
     let main_player_id = request.main_player_id;
 
@@ -51,7 +55,5 @@ pub(crate) async fn simulate_api_handler(
     simulation_board.run_simulation();
     let simulation_result = simulation_board.create_simulation_result();
 
-    Ok(Json(create_response_from_simulation_result(
-        simulation_result,
-    )))
+    Ok(create_response_from_simulation_result(simulation_result))
 }
