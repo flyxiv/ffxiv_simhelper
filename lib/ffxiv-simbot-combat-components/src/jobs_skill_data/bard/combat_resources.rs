@@ -87,7 +87,7 @@ impl CombatResource for BardCombatResources {
 
         if get_song_skill_ids().contains(&skill_id) {
             if skill_id == 1312 {
-                let army_paeon_stacks = self.get_resource(2);
+                let army_paeon_stacks = self.army_stack;
 
                 if army_paeon_stacks > 0 {
                     let mut muse = self.armys_muse.clone();

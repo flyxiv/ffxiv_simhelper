@@ -13,7 +13,7 @@ use crate::status::Status;
 use crate::{BuffIncreasePercentType, DamageType, IdType, PotencyType, StatusTable};
 use ffxiv_simbot_db::stat_calculator::CharacterPower;
 use ffxiv_simbot_db::MultiplierType;
-use log::info;
+use log::{debug, info};
 use rand::{random, thread_rng, Rng};
 use std::collections::HashMap;
 
@@ -137,7 +137,7 @@ pub trait RawDamageCalculator: MultiplierCalculator {
             }
         }
 
-        info!(
+        debug!(
             "Player {}'s skill {} has raw damage {} and final damage {}",
             player_id, player_id, damage_rdps_profile.raw_damage, damage_rdps_profile.final_damage,
         );
@@ -226,8 +226,6 @@ fn calculate_crit_direct_hit_damage(
         get_final_critical_hit_rate(buffs, debuffs, is_guaranteed_critical_hit, player_power);
     let direct_hit_rate =
         get_final_direct_hit_rate(buffs, debuffs, is_guaranteed_direct_hit, player_power);
-    let critical_rate_multiplier = 1.0 + critical_hit_rate;
-    let direct_hit_rate_multiplier = 1.0 + direct_hit_rate;
 
     let crit_rng = thread_rng().gen_range(0..1000) as MultiplierType / 1000.0;
     let direct_hit_rng = thread_rng().gen_range(0..1000) as MultiplierType / 1000.0;
@@ -264,12 +262,11 @@ fn calculate_crit_direct_hit_damage(
         let crit_contribution = crit_portion * crit_dh_contribution;
 
         for buff in buffs.values() {
-            let buff_critical_rate_multiplier =
-                1.0 + buff.get_critical_strike_rate_increase(is_guaranteed_direct_hit);
+            let buff_critical_rate =
+                buff.get_critical_strike_rate_increase(is_guaranteed_direct_hit);
 
-            if player_id != buff.get_owner_id() && buff_critical_rate_multiplier > 1.0 {
-                let skill_portion = MultiplierType::log10(buff_critical_rate_multiplier)
-                    / MultiplierType::log10(critical_rate_multiplier);
+            if player_id != buff.get_owner_id() && buff_critical_rate > 0.0 {
+                let skill_portion = buff_critical_rate / critical_hit_rate;
 
                 let entry = contribution_board
                     .entry(StatusKey::new(buff.get_id(), buff.get_owner_id()))
@@ -280,12 +277,11 @@ fn calculate_crit_direct_hit_damage(
         }
 
         for debuff in debuffs.values() {
-            let debuff_critical_rate_multiplier =
-                1.0 + debuff.get_critical_strike_rate_increase(is_guaranteed_direct_hit);
+            let debuff_critical_rate =
+                debuff.get_critical_strike_rate_increase(is_guaranteed_direct_hit);
 
-            if player_id != debuff.get_owner_id() && debuff_critical_rate_multiplier > 1.0 {
-                let skill_portion = MultiplierType::log10(debuff_critical_rate_multiplier)
-                    / MultiplierType::log10(critical_rate_multiplier);
+            if player_id != debuff.get_owner_id() && debuff_critical_rate > 0.0 {
+                let skill_portion = debuff_critical_rate / critical_hit_rate;
 
                 let entry = contribution_board
                     .entry(StatusKey::new(debuff.get_id(), debuff.get_owner_id()))
@@ -300,12 +296,10 @@ fn calculate_crit_direct_hit_damage(
         let dh_contribution = dh_portion * crit_dh_contribution;
 
         for buff in buffs.values() {
-            let buff_critical_rate_multiplier =
-                buff.get_critical_strike_rate_increase(is_guaranteed_direct_hit) + 1.0;
+            let buff_direct_hit_rate = buff.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
 
-            if player_id != buff.get_owner_id() && buff_critical_rate_multiplier > 1.0 {
-                let skill_portion = MultiplierType::log10(buff_critical_rate_multiplier)
-                    / MultiplierType::log10(direct_hit_rate_multiplier);
+            if player_id != buff.get_owner_id() && buff_direct_hit_rate > 0.0 {
+                let skill_portion = buff_direct_hit_rate / direct_hit_rate;
 
                 let entry = contribution_board
                     .entry(StatusKey::new(buff.get_id(), buff.get_owner_id()))
@@ -316,12 +310,11 @@ fn calculate_crit_direct_hit_damage(
         }
 
         for debuff in debuffs.values() {
-            let debuff_critical_rate_multiplier =
-                debuff.get_critical_strike_rate_increase(is_guaranteed_direct_hit) + 1.0;
+            let debuff_direct_hit_rate =
+                debuff.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
 
-            if player_id != debuff.get_owner_id() && debuff_critical_rate_multiplier > 1.0 {
-                let skill_portion = MultiplierType::log10(debuff_critical_rate_multiplier)
-                    / MultiplierType::log10(direct_hit_rate_multiplier);
+            if player_id != debuff.get_owner_id() && debuff_direct_hit_rate > 0.0 {
+                let skill_portion = debuff_direct_hit_rate / direct_hit_rate;
 
                 let entry = contribution_board
                     .entry(StatusKey::new(debuff.get_id(), debuff.get_owner_id()))

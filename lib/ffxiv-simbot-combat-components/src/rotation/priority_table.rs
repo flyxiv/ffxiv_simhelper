@@ -198,7 +198,6 @@ pub(crate) trait PriorityTable: Sized + Clone {
     ) -> Option<Vec<OgcdPlan>> {
         let ogcd_priority_table = self.get_ogcd_priority_table();
         let next_gcd_millisecond = turn_info.next_gcd_millisecond;
-        let mut best_ogcd_pair = None;
         let mut best_one_ogcd = None;
 
         for (priority_number, skill_priority) in ogcd_priority_table.iter().enumerate() {
@@ -272,29 +271,13 @@ pub(crate) trait PriorityTable: Sized + Clone {
                             priority_number,
                         };
 
-                        let skill_pair = vec![first_skill_plan, second_skill_plan];
-
-                        if let Some(current_best_pair) = best_ogcd_pair {
-                            best_ogcd_pair =
-                                Some(get_higher_priority_ogcd_set(skill_pair, current_best_pair));
-                        } else {
-                            best_ogcd_pair = Some(skill_pair);
-                        }
-                        break;
+                        return Some(vec![first_skill_plan, second_skill_plan]);
                     }
                 }
             }
         }
 
-        if let Some(best_ogcd_pair) = best_ogcd_pair {
-            if let Some(best_one_ogcd) = best_one_ogcd {
-                return Some(get_higher_priority_ogcd_set(best_ogcd_pair, best_one_ogcd));
-            } else {
-                Some(best_ogcd_pair)
-            }
-        } else {
-            best_one_ogcd
-        }
+        best_one_ogcd
     }
 
     fn find_second_highest_ogcd_skill(

@@ -2,6 +2,7 @@ use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
 use crate::jobs_skill_data::bard::abilities::{get_song_skill_ids, make_bard_skill_list};
+use crate::jobs_skill_data::summoner::abilities::make_summoner_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -105,7 +106,7 @@ impl CombatResource for SummonerCombatResources {
 impl SummonerCombatResources {
     pub(crate) fn new(player_id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
         Self {
-            skills: make_bard_skill_list(player_id, ffxiv_event_queue),
+            skills: make_summoner_skill_list(player_id, ffxiv_event_queue),
             player_id,
             current_combo: None,
             energy_stack: 0,

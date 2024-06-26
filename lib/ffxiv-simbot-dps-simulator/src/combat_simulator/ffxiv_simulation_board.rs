@@ -36,7 +36,7 @@ use ffxiv_simbot_combat_components::{
 use ffxiv_simbot_db::job::get_role;
 use ffxiv_simbot_db::stat_calculator::add_main_stat;
 use ffxiv_simbot_db::{IncreaseType, MultiplierType};
-use log::info;
+use log::{debug, info};
 use std::cell::RefCell;
 use std::cmp::{min, Reverse};
 use std::collections::HashMap;
@@ -67,7 +67,7 @@ impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationB
     fn run_simulation(&self) {
         loop {
             if self.combat_time_exceeded_finish_time(self.finish_combat_time_millisecond) {
-                info!("combat finished");
+                debug!("combat finished");
                 break;
             }
 
@@ -104,7 +104,7 @@ impl FfxivSimulationBoard {
 
         match &ffxiv_event {
             FfxivEvent::PlayerTurn(player_id, _, _, time) => {
-                info!("time: {}, player turn event: player {}", *time, *player_id);
+                debug!("time: {}, player turn event: player {}", *time, *player_id);
                 let player = self.get_player_data(*player_id);
                 let debuffs = self.target.borrow().get_status_table();
 
@@ -126,7 +126,7 @@ impl FfxivSimulationBoard {
                 let debuffs = snapshotted_debuffs.clone();
                 let player = self.get_player_data(*player_id).clone();
 
-                info!(
+                debug!(
                     "time: {}, damage event: {}",
                     *time,
                     player.borrow().print_skill_debug(*skill_id)
@@ -146,7 +146,7 @@ impl FfxivSimulationBoard {
                 );
             }
             FfxivEvent::ApplyBuff(_, target_id, status, _, _, time) => {
-                info!(
+                debug!(
                     "time: {}, apply buff event: status id {}",
                     *time,
                     status.get_name().as_str(),
@@ -156,7 +156,7 @@ impl FfxivSimulationBoard {
                 player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
             }
             FfxivEvent::ApplyBuffStack(_, target_id, status, _, _, time) => {
-                info!(
+                debug!(
                     "time: {}, apply buff stack event: status {}",
                     *time,
                     status.get_name().as_str()
@@ -166,7 +166,7 @@ impl FfxivSimulationBoard {
                 player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
             }
             FfxivEvent::ApplyRaidBuff(_, status, _, _, time) => {
-                info!(
+                debug!(
                     "time: {}, : raid buff event: status {}",
                     *time,
                     status.get_name().as_str()
@@ -180,7 +180,7 @@ impl FfxivSimulationBoard {
                 }
             }
             FfxivEvent::RefreshBuff(_, player_id, status, _, _, time) => {
-                info!(
+                debug!(
                     "time: {}, refresh buff event: player id {}, status id {}",
                     *time,
                     *player_id,
@@ -191,7 +191,7 @@ impl FfxivSimulationBoard {
                 player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
             }
             FfxivEvent::ApplyDebuff(_, status, _, _, time) => {
-                info!(
+                debug!(
                     "time: {}, apply debuff event: status {}",
                     *time,
                     status.get_name().as_str()
@@ -200,7 +200,7 @@ impl FfxivSimulationBoard {
                 target.borrow_mut().handle_ffxiv_event(ffxiv_event);
             }
             FfxivEvent::ApplyDebuffStack(_, status, _, _, time) => {
-                info!(
+                debug!(
                     "time: {}, apply debuff stack event: status {}",
                     *time,
                     status.get_name().as_str()
@@ -221,7 +221,7 @@ impl FfxivSimulationBoard {
                 player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
             }
             FfxivEvent::RemoveTargetBuff(_, player_id, status_id, time) => {
-                info!(
+                debug!(
                     "time: {}, remove target buff event: skill id {}",
                     *time, *status_id
                 );
@@ -229,21 +229,27 @@ impl FfxivSimulationBoard {
                 let debuffs = self.target.borrow().get_status_table();
                 player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
             }
-            FfxivEvent::RemoveRaidBuff(_, status_id, time) => {
-                info!(
+            FfxivEvent::RemoveRaidBuff(owner_player_id, status_id, time) => {
+                debug!(
                     "time: {}, remove raid buff event: status id {}",
                     *time, *status_id
                 );
 
                 for player in self.party.clone() {
+                    let single_event = FfxivEvent::RemoveTargetBuff(
+                        *owner_player_id,
+                        player.borrow().get_id(),
+                        *status_id,
+                        *time,
+                    );
                     let debuffs = self.target.borrow().get_status_table();
                     player
                         .borrow_mut()
-                        .handle_ffxiv_event(ffxiv_event.clone(), debuffs.clone());
+                        .handle_ffxiv_event(single_event.clone(), debuffs.clone());
                 }
             }
             FfxivEvent::IncreasePlayerResource(player_id, resource_id, amount, time) => {
-                info!(
+                debug!(
                     "time: {}, increase resource event: player: {}, resource id: {}, amount: {}",
                     *time, *player_id, *resource_id, *amount
                 );
@@ -252,7 +258,7 @@ impl FfxivSimulationBoard {
                 player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
             }
             FfxivEvent::RemoveDebuff(_, status_id, time) => {
-                info!(
+                debug!(
                     "time: {}, remove debuff event: status id: {}",
                     *time, *status_id
                 );
@@ -260,7 +266,7 @@ impl FfxivSimulationBoard {
                 target.borrow_mut().handle_ffxiv_event(ffxiv_event);
             }
             FfxivEvent::Tick(ticker_key, time) => {
-                info!(
+                debug!(
                     "time: {}, ticker event: ticker key: {:?}",
                     *time, *ticker_key
                 );
@@ -281,7 +287,7 @@ impl FfxivSimulationBoard {
                 ticker.run_ticker(*time, player, debuffs.clone());
             }
             FfxivEvent::AddTicker(ticker, time) => {
-                info!("time: {}, add ticker event: {:?}", *time, ticker.get_id());
+                debug!("time: {}, add ticker event: {:?}", *time, ticker.get_id());
                 let mut ticker = ticker.clone();
                 ticker.set_event_queue(self.event_queue.clone());
                 let player = if let Some(player_id) = ticker.get_player_id() {
@@ -299,11 +305,11 @@ impl FfxivSimulationBoard {
                 self.register_ticker(ticker);
             }
             FfxivEvent::RemoveTicker(ticker_key, time) => {
-                info!("time: {}, remove ticker event: {:?}", *time, *ticker_key);
+                debug!("time: {}, remove ticker event: {:?}", *time, *ticker_key);
                 self.tickers.borrow_mut().remove(ticker_key);
             }
             FfxivEvent::ForceTicker(ticker_key, time) => {
-                info!(
+                debug!(
                     "time: {}, force ticker event: ticker id: {:?}",
                     *time, *ticker_key
                 );
@@ -313,7 +319,7 @@ impl FfxivSimulationBoard {
                 }
             }
             FfxivEvent::ReduceSkillCooldown(player_id, skill_id, _, time) => {
-                info!(
+                debug!(
                     "reduce skill cooldown event: player_id {}, skill_id {}, {}",
                     *player_id, *skill_id, *time
                 );
@@ -322,7 +328,7 @@ impl FfxivSimulationBoard {
                 player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
             }
             FfxivEvent::DotTick(time) => {
-                info!("time: {}, dot tick event", *time);
+                debug!("time: {}, dot tick event", *time);
                 let target = self.get_target();
                 target.borrow_mut().handle_ffxiv_event(ffxiv_event);
             }

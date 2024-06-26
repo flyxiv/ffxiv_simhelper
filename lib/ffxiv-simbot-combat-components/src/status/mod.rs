@@ -83,7 +83,8 @@ pub trait Status: Sized + IdEntity {
         for status_info in status_infos {
             match status_info {
                 StatusInfo::DamagePercent(percent) => {
-                    total_damage_increase += (*percent as MultiplierType) / 100.0
+                    total_damage_increase +=
+                        self.get_stack() as MultiplierType * (*percent as MultiplierType) / 100.0
                 }
                 StatusInfo::CritHitRatePercent(percent) => {
                     let damage_increase = if is_guaranteed_crit {

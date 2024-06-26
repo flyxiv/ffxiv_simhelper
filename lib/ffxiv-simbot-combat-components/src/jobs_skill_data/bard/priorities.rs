@@ -62,12 +62,12 @@ pub(crate) fn make_bard_opener(db: &BardDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.storm_bite.get_id()),
         Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.burst_shot.get_id()),
-        Opener::OgcdOpener((Some(db.raging_strike.get_id()), None)),
-        Opener::GcdOpener(db.burst_shot.get_id()),
         Opener::OgcdOpener((
-            Some(db.radiant_finale.get_id()),
+            Some(db.raging_strike.get_id()),
             Some(db.battle_voice.get_id()),
         )),
+        Opener::GcdOpener(db.burst_shot.get_id()),
+        Opener::OgcdOpener((Some(db.radiant_finale.get_id()), None)),
         Opener::GcdOpener(db.iron_jaws.get_id()),
         Opener::OgcdOpener((Some(db.barrage.get_id()), Some(db.blood_letter.get_id()))),
         Opener::GcdOpener(db.refulgent_arrow.get_id()),
@@ -87,11 +87,11 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
         },
         SkillPriorityInfo {
             skill_id: db.blast_arrow.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1311)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.barrage_refulgent_arrow.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1308)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.apex_arrow.get_id(),
@@ -129,15 +129,24 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
         },
         SkillPriorityInfo {
             skill_id: db.wanderers_minuet.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1307, 3000)),
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
+                db.armys_paeon_status.get_id(),
+                3000,
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.armys_paeon.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1305, 3000)),
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
+                db.mages_ballad_status.get_id(),
+                12000,
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.mages_ballad.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1303, 3000)),
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
+                db.wanderers_minuet_status.get_id(),
+                3000,
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.pitch_perfect3.get_id(),

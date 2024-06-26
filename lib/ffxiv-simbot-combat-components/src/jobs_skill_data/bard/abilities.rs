@@ -170,7 +170,7 @@ impl BardDatabase {
             duration_millisecond: 45000,
             is_raidwide: false,
             stacks: 1,
-            max_stacks: 1,
+            max_stacks: 4,
             trigger_proc_event_on_gcd: vec![],
         };
         let BARRAGE_STATUS: BuffStatus = BuffStatus {
@@ -195,7 +195,7 @@ impl BardDatabase {
             duration_millisecond: 15000,
             is_raidwide: true,
             stacks: 1,
-            max_stacks: 1,
+            max_stacks: 3,
             trigger_proc_event_on_gcd: vec![],
         };
         let STRAIGHT_SHOT_READY: BuffStatus = BuffStatus {
@@ -311,6 +311,7 @@ impl BardDatabase {
                     0,
                 ),
                 FfxivEvent::IncreasePlayerResource(player_id, 0, 1, 0),
+                FfxivEvent::IncreasePlayerResource(player_id, 2, 1, 0),
             ],
             ffxiv_event_queue.clone(),
             player_id,
@@ -785,14 +786,24 @@ impl BardDatabase {
             potency: 0,
             use_type: UseType::NoTarget,
             trait_percent: 120,
-            additional_skill_events: vec![ApplyBuff(
-                player_id,
-                player_id,
-                BARRAGE_STATUS.clone(),
-                10000,
-                10000,
-                0,
-            )],
+            additional_skill_events: vec![
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    BARRAGE_STATUS.clone(),
+                    10000,
+                    10000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    STRAIGHT_SHOT_READY.clone(),
+                    30000,
+                    30000,
+                    0,
+                ),
+            ],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,

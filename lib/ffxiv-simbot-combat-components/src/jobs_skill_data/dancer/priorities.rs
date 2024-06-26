@@ -126,7 +126,7 @@ pub(crate) fn make_dancer_ogcd_priority_table(db: &DancerDatabase) -> Vec<SkillP
         },
         SkillPriorityInfo {
             skill_id: db.fan_dance3.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource(1, 3)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.flourish.get_id(),

@@ -7,6 +7,7 @@ use crate::skill::use_type::UseType;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
+use crate::status::status_info::StatusInfo;
 use crate::IdType;
 use std::collections::HashMap;
 
@@ -15,8 +16,11 @@ pub(crate) struct WhitemageDatabase {
     pub(crate) dia: AttackSkill,
     pub(crate) afflatus_misery: AttackSkill,
     pub(crate) afflatus_rapture: AttackSkill,
+    pub(crate) assize: AttackSkill,
+    pub(crate) presence_of_mind: AttackSkill,
 
     pub(crate) dia_dot: DebuffStatus,
+    pub(crate) presence_of_mind_buff: BuffStatus,
 
     pub(crate) potion: AttackSkill,
     pub(crate) potion_buff: BuffStatus,
@@ -40,6 +44,19 @@ impl WhitemageDatabase {
             name: String::from("Dia"),
             snapshotted_buffs: Default::default(),
             snapshotted_debuffs: Default::default(),
+        };
+
+        let PRESENCE_OF_MIND_BUFF: BuffStatus = BuffStatus {
+            id: 401,
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: vec![StatusInfo::SpeedPercent(20)],
+            duration_millisecond: 15000,
+            is_raidwide: false,
+            stacks: 1,
+            max_stacks: 1,
+            name: String::from("Presence of Mind"),
+            trigger_proc_event_on_gcd: vec![],
         };
 
         let GLARE_III: AttackSkill = AttackSkill {
@@ -144,6 +161,61 @@ impl WhitemageDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
+        let ASSIZE: AttackSkill = AttackSkill {
+            id: 404,
+            name: "Assize".to_string(),
+            player_id,
+            potency: 400,
+            trait_percent: 130,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 0,
+            charging_time_millisecond: 0,
+            is_speed_buffed: false,
+            resource_required: vec![],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 40000,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            use_type: UseType::NoTarget,
+        };
+        let PRESENCE_OF_MIND: AttackSkill = AttackSkill {
+            id: 405,
+            name: String::from("Presence of Mind"),
+            player_id,
+            potency: 0,
+            trait_percent: 130,
+            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+                player_id,
+                player_id,
+                PRESENCE_OF_MIND_BUFF.clone(),
+                15000,
+                15000,
+                0,
+            )],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 0,
+            charging_time_millisecond: 0,
+            is_speed_buffed: false,
+            resource_required: vec![],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 120000,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            use_type: UseType::NoTarget,
+        };
 
         let potion_skill = PotionSkill::new(player_id);
 
@@ -152,7 +224,10 @@ impl WhitemageDatabase {
             dia: DIA,
             afflatus_misery: AFFLATUS_MISERY,
             afflatus_rapture: AFFLATUS_RAPTURE,
+            assize: ASSIZE,
+            presence_of_mind: PRESENCE_OF_MIND,
             dia_dot: DIA_DOT,
+            presence_of_mind_buff: PRESENCE_OF_MIND_BUFF,
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,
         }
@@ -167,6 +242,8 @@ pub(crate) fn make_whitemage_skill_list(player_id: IdType) -> SkillTable<AttackS
         db.dia,
         db.afflatus_misery,
         db.afflatus_rapture,
+        db.assize,
+        db.presence_of_mind,
         db.potion,
     ];
 

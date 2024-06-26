@@ -15,7 +15,6 @@ use std::sync::Arc;
 #[derive(Clone)]
 pub struct Engine {
     pub config: Arc<EngineConfig>,
-    pub context: Arc<FfxivContext>,
 }
 
 impl Engine {
@@ -31,32 +30,8 @@ impl Engine {
         let engine_config =
             EngineConfig::load(config_file_path.to_str().unwrap()).expect("failed to get config");
 
-        let data_dir = root.join("data");
-
-        let jobs = JobFactory::new()
-            .parse_jobs_json_file(&data_dir, &engine_config.jobs_json_file_name)
-            .expect("failed to parse rotation json file");
-
-        let equipments = EquipmentFactory::new()
-            .parse_equipment_json_file(&data_dir, &engine_config.equipment_json_file_name)
-            .expect("failed to parse equipment json file");
-
-        let clans = ClanFactory::new()
-            .parse_clans_json_file(&data_dir, &engine_config.clans_json_file_name)
-            .expect("failed to parse clans json file");
-
-        let foods = FoodFactory::new()
-            .parse_food_json_file(&data_dir, &engine_config.food_json_file_name)
-            .expect("failed to parse food json file");
-
         Engine {
             config: Arc::new(engine_config),
-            context: Arc::new(FfxivContext {
-                jobs,
-                equipments,
-                clans,
-                foods,
-            }),
         }
     }
 }

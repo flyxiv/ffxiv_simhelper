@@ -18,6 +18,7 @@ axum = "0.7"
 thiserror = "1"
 tower-http = { version = "0.5", features = ["cors"] }
 log = "0.4.20"
+lazy_static = "1.4.0"
 
 [dependencies.ffxiv-simbot-engine]
 version = "0.1.0"

@@ -10,6 +10,7 @@ use ffxiv_simbot_db::constants::{job_abbrev_to_role, FFXIV_STAT_MODIFIER};
 use ffxiv_simbot_db::IncreaseType;
 use ffxiv_simbot_dps_simulator::combat_simulator::ffxiv_simulation_board::FfxivSimulationBoard;
 use ffxiv_simbot_dps_simulator::combat_simulator::SimulationBoard;
+use itertools::Itertools;
 use std::cell::RefCell;
 use std::collections::HashSet;
 use std::rc::Rc;
@@ -40,11 +41,22 @@ pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> 
     );
 
     let composition_buff = get_composition_buff(&request.party);
+    let player_jobs = request
+        .party
+        .iter()
+        .map(|player_info_request| {
+            (
+                player_info_request.player_id,
+                player_info_request.job.clone(),
+            )
+        })
+        .collect_vec();
 
     for player_info_request in request.party {
         let player = create_player(
             player_info_request,
             composition_buff,
+            &player_jobs,
             FFXIV_STAT_MODIFIER.clone(),
             event_queue.clone(),
         )?;

@@ -14,6 +14,8 @@ pub struct SimulationApiRequest {
 #[serde(rename_all = "camelCase")]
 pub struct PlayerInfoRequest {
     pub player_id: IdType,
+    pub partner1_id: Option<IdType>,
+    pub partner2_id: Option<IdType>,
     pub job: String,
     pub stats: StatsRequest,
 }
