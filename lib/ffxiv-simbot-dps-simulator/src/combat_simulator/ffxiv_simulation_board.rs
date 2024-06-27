@@ -126,7 +126,7 @@ impl FfxivSimulationBoard {
                 let debuffs = snapshotted_debuffs.clone();
                 let player = self.get_player_data(*player_id).clone();
 
-                debug!(
+                info!(
                     "time: {}, damage event: {}",
                     *time,
                     player.borrow().print_skill_debug(*skill_id)

@@ -94,6 +94,7 @@ lazy_static! {
         ("DRG".to_string(), 44),
         ("NIN".to_string(), 42),
         ("SAM".to_string(), 43),
+        ("RPR".to_string(), 44),
         ("BRD".to_string(), 44),
         ("MCH".to_string(), 44),
         ("DNC".to_string(), 44),

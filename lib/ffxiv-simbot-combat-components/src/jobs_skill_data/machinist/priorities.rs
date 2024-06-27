@@ -2,7 +2,7 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::machinist::abilities::MachinistDatabase;
 use crate::jobs_skill_data::ninja::abilities::NinjaDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasSkillStacks, MillisecondsBeforeBurst, Not, Or,
+    And, Combo, HasResource, HasSkillStacks, MillisecondsBeforeBurst, Not, Or,
     RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
@@ -104,7 +104,7 @@ pub(crate) fn make_machinist_gcd_priority_table(db: &MachinistDatabase) -> Vec<S
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.hypercharge.get_id(),
+            skill_id: db.heat_blast.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -214,7 +214,13 @@ pub(crate) fn make_machinist_ogcd_priority_table(db: &MachinistDatabase) -> Vec<
         },
         SkillPriorityInfo {
             skill_id: db.automaton_queen.get_id(),
-            prerequisite: Some(MillisecondsBeforeBurst(3000)),
+            prerequisite: Some(Or(
+                Box::new(And(
+                    Box::new(MillisecondsBeforeBurst(3000)),
+                    Box::new(HasResource(1, 5)),
+                )),
+                Box::new(HasResource(1, 8)),
+            )),
         },
     ]
 }

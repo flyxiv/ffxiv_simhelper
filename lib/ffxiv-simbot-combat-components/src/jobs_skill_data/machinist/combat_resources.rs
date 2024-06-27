@@ -1,11 +1,7 @@
 use crate::combat_resources::CombatResource;
-use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::Damage;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::machinist::abilities::make_machinist_skill_list;
-use crate::jobs_skill_data::ninja::abilities::{
-    bunshin_clone_id, bunshin_stack_id, bunshin_trigger_gcd_ids, make_ninja_skill_list,
-};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -91,7 +87,7 @@ impl CombatResource for MachinistCombatResources {
             if delay == 0 {
                 ffxiv_events.push(Damage(
                     player.get_id(),
-                    player.get_id(),
+                    1410,
                     potency,
                     120,
                     false,
@@ -113,7 +109,7 @@ impl CombatResource for MachinistCombatResources {
             if delay == 0 {
                 ffxiv_events.push(Damage(
                     player.get_id(),
-                    player.get_id(),
+                    1413,
                     potency,
                     120,
                     false,

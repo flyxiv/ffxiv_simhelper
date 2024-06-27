@@ -1,4 +1,4 @@
-use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff};
+use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff, ApplyRaidBuff};
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
@@ -381,7 +381,7 @@ impl ReaperDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![Resource(2, 1)],
+            resource_required: vec![Resource(2, 1), UseBuff(ENHANCED_GIBBET_BUFF.get_id())],
             resource_created: HashMap::from([(1, 10)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -421,14 +421,7 @@ impl ReaperDatabase {
             potency: 0,
             trait_percent: 100,
             additional_skill_events: vec![
-                ApplyBuff(
-                    player_id,
-                    player_id,
-                    ARCANE_CIRCLE_BUFF.clone(),
-                    20000,
-                    20000,
-                    0,
-                ),
+                ApplyRaidBuff(player_id, ARCANE_CIRCLE_BUFF.clone(), 20000, 20000, 0),
                 ApplyBuff(
                     player_id,
                     player_id,
@@ -502,7 +495,7 @@ impl ReaperDatabase {
             is_speed_buffed: false,
             cooldown_millisecond: 15000,
             resource_required: vec![Resource(1, 50)],
-            resource_created: HashMap::from([(3, 1)]),
+            resource_created: HashMap::from([(3, 5)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -581,7 +574,7 @@ impl ReaperDatabase {
             use_type: UseType::UseOnTarget,
         };
         let LEMURES_SLICE: AttackSkill = AttackSkill {
-            id: 1116,
+            id: 1216,
             name: String::from("Lemure's Slice"),
             player_id,
             potency: 240,

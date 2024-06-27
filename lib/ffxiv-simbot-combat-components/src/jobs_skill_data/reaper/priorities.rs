@@ -92,7 +92,10 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
     vec![
         SkillPriorityInfo {
             skill_id: db.communio.get_id(),
-            prerequisite: Some(HasResource(3, 1)),
+            prerequisite: Some(And(
+                Box::new(HasResource(3, 1)),
+                Box::new(Not(Box::new(HasResource(3, 2)))),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.shadow_of_death.get_id(),
@@ -164,6 +167,13 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
         SkillPriorityInfo {
             skill_id: db.arcane_circle.get_id(),
             prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.enshroud.get_id(),
+            prerequisite: Some(Or(
+                Box::new(HasResource(1, 50)),
+                Box::new(MillisecondsBeforeBurst(15000)),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.lemures_slice.get_id(),

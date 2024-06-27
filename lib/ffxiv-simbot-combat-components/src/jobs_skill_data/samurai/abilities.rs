@@ -730,7 +730,7 @@ impl SamuraiDatabase {
         };
 
         let SHOHA: AttackSkill = AttackSkill {
-            id: 1221,
+            id: 1121,
             name: String::from("Shoha"),
             player_id,
             potency: 560,

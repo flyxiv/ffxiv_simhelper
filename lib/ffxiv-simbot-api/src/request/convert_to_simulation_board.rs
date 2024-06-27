@@ -46,95 +46,112 @@ pub(crate) fn create_player(
         1.0 + (composition_buff as MultiplierType / 100.0),
         &stat_modifier,
     )?;
+    let player_count = player_jobs.len();
 
     match player_info.job.as_str() {
         "WAR" => Ok(FfxivPlayer::new_warrior(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "PLD" => Ok(FfxivPlayer::new_paladin(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "GNB" => Ok(FfxivPlayer::new_gunbreaker(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "WHM" => Ok(FfxivPlayer::new_whitemage(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "SCH" => Ok(FfxivPlayer::new_scholar(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "SGE" => Ok(FfxivPlayer::new_sage(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "MNK" => Ok(FfxivPlayer::new_monk(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "DRG" => Ok(FfxivPlayer::new_dragoon(
             player_info.player_id,
             get_partner_id(player_info.partner1_id, player_jobs),
             character_power,
             event_queue,
+            player_count,
         )),
         "NIN" => Ok(FfxivPlayer::new_ninja(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "SAM" => Ok(FfxivPlayer::new_samurai(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "RPR" => Ok(FfxivPlayer::new_reaper(
             player_info.player_id,
             character_power,
             event_queue,
-            player_jobs.len(),
+            player_count,
         )),
         "BRD" => Ok(FfxivPlayer::new_bard(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "DNC" => Ok(FfxivPlayer::new_dancer(
             player_info.player_id,
             get_partner_id(player_info.partner1_id, player_jobs),
             character_power,
             event_queue,
+            player_count,
         )),
         "MCH" => Ok(FfxivPlayer::new_machinist(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "RDM" => Ok(FfxivPlayer::new_redmage(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "SMN" => Ok(FfxivPlayer::new_summoner(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         "BLM" => Ok(FfxivPlayer::new_blackmage(
             player_info.player_id,
             character_power,
             event_queue,
+            player_count,
         )),
         _ => Err(FfxivSimbotServiceError::InvalidJobString(player_info.job).into()),
     }

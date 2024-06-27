@@ -1,7 +1,9 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::ninja::abilities::NinjaDatabase;
 use crate::jobs_skill_data::redmage::abilities::RedmageDatabase;
-use crate::rotation::priority_table::SkillPrerequisite::{And, Combo, HasBufforDebuff, Not, Or};
+use crate::rotation::priority_table::SkillPrerequisite::{
+    And, Combo, HasBufforDebuff, HasResource, Not, Or,
+};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, ResourceType, TurnCount};
@@ -92,7 +94,19 @@ pub(crate) fn make_redmage_gcd_priority_table(db: &RedmageDatabase) -> Vec<Skill
     let mut priority = vec![
         SkillPriorityInfo {
             skill_id: db.enchanted_riposte.get_id(),
-            prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(9000)),
+            prerequisite: Some(Or(
+                Box::new(And(
+                    Box::new(SkillPrerequisite::MillisecondsBeforeBurst(9000)),
+                    Box::new(And(
+                        Box::new(HasResource(0, 50)),
+                        Box::new(And(Box::new(HasResource(1, 50)), Box::new(Combo(Some(0))))),
+                    )),
+                )),
+                Box::new(And(
+                    Box::new(HasResource(1, 80)),
+                    Box::new(And(Box::new(HasResource(0, 80)), Box::new(Combo(Some(0))))),
+                )),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.enchanted_zwerchhau.get_id(),

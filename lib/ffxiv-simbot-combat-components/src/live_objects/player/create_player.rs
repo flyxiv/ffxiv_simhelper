@@ -55,6 +55,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         let huton = get_huton_status(player_id);
 
@@ -76,12 +77,14 @@ impl FfxivPlayer {
                 NINJA_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
     pub fn new_sage(
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -98,6 +101,7 @@ impl FfxivPlayer {
                 SAGE_START_TIME_MILLISECOND,
             ),
             Some(SAGE_START_TIME_MILLISECOND + NON_GCD_DELAY_MILLISECOND),
+            player_count,
         )
     }
 
@@ -105,6 +109,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -121,6 +126,7 @@ impl FfxivPlayer {
                 BARD_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 
@@ -129,6 +135,7 @@ impl FfxivPlayer {
         partner_player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -145,6 +152,7 @@ impl FfxivPlayer {
                 DANCER_START_TIME_MILLISECOND,
             ),
             Some(DANCER_START_TIME_MILLISECOND + NON_GCD_DELAY_MILLISECOND),
+            player_count,
         )
     }
 
@@ -152,6 +160,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         let GREASED_LIGHTNING_IV: BuffStatus = BuffStatus {
             id: 909,
@@ -181,6 +190,7 @@ impl FfxivPlayer {
                 DANCER_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 
@@ -189,6 +199,7 @@ impl FfxivPlayer {
         partner_player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -205,6 +216,7 @@ impl FfxivPlayer {
                 DRAGOON_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 
@@ -212,6 +224,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         let ENOCHIAN: BuffStatus = BuffStatus {
             id: 1907,
@@ -241,6 +254,7 @@ impl FfxivPlayer {
                 BLACKMAGE_START_TIME_MILLISECOND,
             ),
             Some(BLACKMAGE_START_TIME_MILLISECOND + 2 * NON_GCD_DELAY_MILLISECOND),
+            player_count,
         )
     }
 
@@ -248,6 +262,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -264,6 +279,7 @@ impl FfxivPlayer {
                 WHITEMAGE_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 
@@ -271,6 +287,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -287,6 +304,7 @@ impl FfxivPlayer {
                 PALADIN_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 
@@ -294,6 +312,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -310,6 +329,7 @@ impl FfxivPlayer {
                 WARRIOR_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 
@@ -317,6 +337,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -333,6 +354,7 @@ impl FfxivPlayer {
                 SCHOLAR_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 
@@ -340,6 +362,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -359,6 +382,7 @@ impl FfxivPlayer {
                 SUMMONER_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 
@@ -366,6 +390,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -382,6 +407,7 @@ impl FfxivPlayer {
                 REDMAGE_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 
@@ -389,6 +415,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -405,6 +432,7 @@ impl FfxivPlayer {
                 GUNBREAKER_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 
@@ -412,6 +440,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -428,6 +457,7 @@ impl FfxivPlayer {
                 MACHINIST_START_TIME_MILLISECOND,
             ),
             Some(0),
+            player_count,
         )
     }
 
@@ -435,6 +465,7 @@ impl FfxivPlayer {
         player_id: IdType,
         power: CharacterPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -451,6 +482,7 @@ impl FfxivPlayer {
                 SAMURAI_START_TIME_MILLISECOND,
             ),
             Some(0),
+            player_count,
         )
     }
 
@@ -475,6 +507,7 @@ impl FfxivPlayer {
                 REAPER_START_TIME_MILLISECOND,
             ),
             None,
+            player_count,
         )
     }
 }

@@ -1,5 +1,6 @@
 use crate::combat_resources::CombatResource;
 use crate::event::FfxivEventQueue;
+use crate::jobs_skill_data::reaper::abilities::make_reaper_skill_list;
 use crate::jobs_skill_data::samurai::abilities::make_samurai_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -101,9 +102,9 @@ impl CombatResource for ReaperCombatResources {
 }
 
 impl ReaperCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: IdType, player_count: usize) -> Self {
         Self {
-            skills: make_samurai_skill_list(player_id),
+            skills: make_reaper_skill_list(player_id, player_count),
             player_id,
             current_combo: None,
             soul_gauge: 0,

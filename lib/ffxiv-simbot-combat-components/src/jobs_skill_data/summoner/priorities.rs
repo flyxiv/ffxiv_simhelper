@@ -99,6 +99,10 @@ pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<Ski
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.ruin_iv.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.summon_ifrit_ii.get_id(),
             prerequisite: None,
         },
@@ -108,7 +112,7 @@ pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<Ski
         },
         SkillPriorityInfo {
             skill_id: db.crimson_cyclone.get_id(),
-            prerequisite: None,
+            prerequisite: Some(Combo(Some(0))),
         },
         SkillPriorityInfo {
             skill_id: db.ruby_rite.get_id(),
@@ -128,14 +132,10 @@ pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<Ski
         },
         SkillPriorityInfo {
             skill_id: db.slipstream.get_id(),
-            prerequisite: None,
+            prerequisite: Some(Combo(Some(3))),
         },
         SkillPriorityInfo {
             skill_id: db.emerald_rite.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.ruin_iv.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {

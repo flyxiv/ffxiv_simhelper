@@ -436,6 +436,7 @@ impl FfxivCombatResources {
         player_id: IdType,
         partner_player_id: Option<IdType>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
+        player_count: usize,
     ) -> Self {
         match job_abbrev.as_str() {
             "SGE" => Self::Sage(SageCombatResources::new(player_id)),
@@ -460,7 +461,7 @@ impl FfxivCombatResources {
             "GNB" => Self::Gunbreaker(GunbreakerCombatResources::new(player_id)),
             "MCH" => Self::Machinist(MachinistCombatResources::new(player_id)),
             "SAM" => Self::Samurai(SamuraiCombatResources::new(player_id)),
-            "RPR" => Self::Reaper(ReaperCombatResources::new(player_id)),
+            "RPR" => Self::Reaper(ReaperCombatResources::new(player_id, player_count)),
             _ => Self::Sage(SageCombatResources::new(player_id)),
         }
     }

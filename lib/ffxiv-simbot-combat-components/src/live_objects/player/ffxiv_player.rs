@@ -451,6 +451,7 @@ impl FfxivPlayer {
         event_queue: Rc<RefCell<FfxivEventQueue>>,
         start_turn: FfxivEvent,
         gcd_start_time_millisecond: Option<TimeType>,
+        player_count: usize,
     ) -> FfxivPlayer {
         FfxivPlayer {
             id,
@@ -459,6 +460,7 @@ impl FfxivPlayer {
                 id,
                 partner_player_id,
                 event_queue.clone(),
+                player_count,
             )),
             job_abbrev,
             power,

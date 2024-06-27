@@ -52,7 +52,7 @@ impl CombatResource for SummonerCombatResources {
         } else if resource_id == 2 {
             self.titan_stack = min(TITAN_MAX_STACK, self.titan_stack + resource_amount);
         } else if resource_id == 3 {
-            self.garuda_stack = min(self.garuda_stack, self.garuda_stack + resource_amount);
+            self.garuda_stack = min(GARUDA_MAX_STACK, self.garuda_stack + resource_amount);
         } else if resource_id == 4 {
             self.trance_stack = min(TRANCE_MAX_STACK, self.trance_stack + resource_amount);
         }

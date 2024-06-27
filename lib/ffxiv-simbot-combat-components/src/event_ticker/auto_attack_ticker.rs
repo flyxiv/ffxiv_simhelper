@@ -22,6 +22,7 @@ pub struct AutoAttackTicker {
     auto_attack_interval: TimeType,
     trait_percent: PercentType,
     duration_millisecond: TimeType,
+    damage_category: DamageCategory,
 }
 
 impl EventTicker for AutoAttackTicker {
@@ -47,7 +48,7 @@ impl EventTicker for AutoAttackTicker {
                         false,
                         player.borrow().buff_list.borrow().clone(),
                         debuff.borrow().clone(),
-                        DamageCategory::AutoAttack,
+                        self.damage_category,
                         current_time_millisecond,
                     )));
             }
@@ -115,6 +116,7 @@ impl AutoAttackTicker {
             auto_attack_interval: GCD_DEFAULT_DELAY_MILLISECOND,
             trait_percent: 100,
             duration_millisecond: TimeType::MAX,
+            damage_category: DamageCategory::AutoAttack,
         }
     }
 
@@ -122,6 +124,7 @@ impl AutoAttackTicker {
         id: IdType,
         player_id: IdType,
         auto_attack: AttackSkill,
+        damage_category: DamageCategory,
         duration_millisecond: TimeType,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
@@ -134,6 +137,7 @@ impl AutoAttackTicker {
             auto_attack,
             auto_attack_interval: GCD_DEFAULT_DELAY_MILLISECOND,
             duration_millisecond,
+            damage_category,
         }
     }
 }
