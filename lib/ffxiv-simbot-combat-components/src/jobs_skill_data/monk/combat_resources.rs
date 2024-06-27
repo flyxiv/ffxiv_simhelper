@@ -27,6 +27,9 @@ pub(crate) struct MonkCombatResources {
     perfect_3: ResourceType,
     lunar: ResourceType,
     solar: ResourceType,
+    leaping_stack: ResourceType,
+    raptor_stack: ResourceType,
+    coeurl_stack: ResourceType,
 }
 
 impl CombatResource for MonkCombatResources {
@@ -48,9 +51,15 @@ impl CombatResource for MonkCombatResources {
         } else if resource_id == 3 {
             self.perfect_3 = min(PERFECT_MAX_STACK, self.perfect_3 + resource_amount);
         } else if resource_id == 4 {
-            self.lunar = min(PERFECT_MAX_STACK, self.lunar + resource_amount);
+            self.lunar = min(1, self.lunar + resource_amount);
         } else if resource_id == 5 {
-            self.solar = min(PERFECT_MAX_STACK, self.solar + resource_amount);
+            self.solar = min(1, self.solar + resource_amount);
+        } else if resource_id == 6 {
+            self.leaping_stack = min(1, self.leaping_stack + resource_amount);
+        } else if resource_id == 7 {
+            self.raptor_stack = min(1, self.raptor_stack + resource_amount);
+        } else if resource_id == 8 {
+            self.coeurl_stack = min(1, self.coeurl_stack + resource_amount);
         }
     }
 
@@ -67,6 +76,12 @@ impl CombatResource for MonkCombatResources {
             self.lunar
         } else if resource_id == 5 {
             self.solar
+        } else if resource_id == 6 {
+            self.leaping_stack
+        } else if resource_id == 7 {
+            self.raptor_stack
+        } else if resource_id == 8 {
+            self.coeurl_stack
         } else {
             -1
         }

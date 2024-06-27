@@ -18,11 +18,13 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 const NINKI_MAX: ResourceType = 100;
+const SHURIKEN_MAX_STACK: ResourceType = 5;
 
 #[derive(Clone)]
 pub(crate) struct NinjaCombatResources {
     skills: SkillTable<AttackSkill>,
     ninki: ResourceType,
+    shuriken: ResourceType,
     current_combo: Option<IdType>,
 }
 
@@ -39,12 +41,17 @@ impl CombatResource for NinjaCombatResources {
         if resource_id == 0 {
             let ninki = self.ninki;
             self.ninki = min(NINKI_MAX, ninki + resource_type);
+        } else if resource_id == 1 {
+            let shuriken = self.shuriken;
+            self.shuriken = min(SHURIKEN_MAX_STACK, shuriken + resource_type);
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
             self.ninki
+        } else if resource_id == 1 {
+            self.shuriken
         } else {
             -1
         }

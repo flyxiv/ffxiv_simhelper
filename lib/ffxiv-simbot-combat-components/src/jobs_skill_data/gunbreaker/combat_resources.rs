@@ -22,6 +22,8 @@ pub(crate) struct GunbreakerCombatResources {
     player_id: IdType,
     current_combo: ComboType,
     soil: ResourceType,
+    noble_blood_stack: ResourceType,
+    lion_heart_stack: ResourceType,
 }
 
 impl CombatResource for GunbreakerCombatResources {
@@ -36,12 +38,20 @@ impl CombatResource for GunbreakerCombatResources {
     fn add_resource(&mut self, resource_id: IdType, amount: ResourceType) {
         if resource_id == 0 {
             self.soil = min(self.soil + amount, SOIL_MAX);
+        } else if resource_id == 1 {
+            self.noble_blood_stack = min(self.noble_blood_stack + amount, 1);
+        } else if resource_id == 2 {
+            self.lion_heart_stack = min(self.lion_heart_stack + amount, 1);
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
             self.soil
+        } else if resource_id == 1 {
+            self.noble_blood_stack
+        } else if resource_id == 2 {
+            self.lion_heart_stack
         } else {
             -1
         }

@@ -13,7 +13,7 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-const MIRAGE_MAX_STACK: ResourceType = 2;
+const NASTROND_MAX_STACK: ResourceType = 3;
 const FIRSTMIND_MAX_STACK: ResourceType = 2;
 
 #[derive(Clone)]
@@ -21,7 +21,7 @@ pub(crate) struct DragoonCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: IdType,
     current_combo: ComboType,
-    mirage_gauge: ResourceType,
+    nastrond_stack: ResourceType,
     firstmind_focus: ResourceType,
 }
 
@@ -36,7 +36,7 @@ impl CombatResource for DragoonCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
         if resource_id == 0 {
-            self.mirage_gauge = min(MIRAGE_MAX_STACK, self.mirage_gauge + resource_amount);
+            self.nastrond_stack = min(NASTROND_MAX_STACK, self.nastrond_stack + resource_amount);
         } else if resource_id == 1 {
             self.firstmind_focus = min(FIRSTMIND_MAX_STACK, self.firstmind_focus + resource_amount);
         }
@@ -44,7 +44,7 @@ impl CombatResource for DragoonCombatResources {
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            self.mirage_gauge
+            self.nastrond_stack
         } else if resource_id == 1 {
             self.firstmind_focus
         } else {
@@ -62,7 +62,6 @@ impl CombatResource for DragoonCombatResources {
         }
     }
 
-    // TODO: chakra on crit
     fn trigger_on_event(
         &mut self,
         _: IdType,

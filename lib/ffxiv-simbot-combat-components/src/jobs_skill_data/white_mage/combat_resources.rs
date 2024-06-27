@@ -15,6 +15,7 @@ use std::rc::Rc;
 
 const LILY_STACK_INTERVAL_MILLISECOND: TimeType = 20000;
 const LILY_MAX_STACK: ResourceType = 3;
+const GLARE4_MAX_STACK: ResourceType = 3;
 const BLOOD_LILY_MAX_STACK: ResourceType = 3;
 
 #[derive(Clone)]
@@ -23,6 +24,7 @@ pub(crate) struct WhitemageCombatResources {
     player_id: IdType,
     blood_lily_stack: ResourceType,
     lily_stack: ResourceType,
+    glare4_stack: ResourceType,
     next_lily_time: TimeType,
 }
 
@@ -43,6 +45,8 @@ impl CombatResource for WhitemageCombatResources {
             );
         } else if resource_id == 1 {
             self.lily_stack = min(LILY_MAX_STACK, self.lily_stack + resource_amount);
+        } else if resource_id == 2 {
+            self.glare4_stack = min(GLARE4_MAX_STACK, self.glare4_stack + resource_amount);
         }
     }
 
@@ -51,6 +55,8 @@ impl CombatResource for WhitemageCombatResources {
             self.blood_lily_stack
         } else if resource_id == 1 {
             self.lily_stack
+        } else if resource_id == 2 {
+            self.glare4_stack
         } else {
             -1
         }

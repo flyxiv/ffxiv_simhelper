@@ -27,6 +27,7 @@ pub(crate) struct AstrologianDatabase {
     pub(crate) lord_of_crowns: AttackSkill,
     pub(crate) fall_malefic_lightspeed: AttackSkill,
     pub(crate) draw: AttackSkill,
+    pub(crate) oracle: AttackSkill,
 
     pub(crate) divination_buff: BuffStatus,
     pub(crate) the_balance_buff: BuffStatus,
@@ -36,6 +37,7 @@ pub(crate) struct AstrologianDatabase {
     pub(crate) combust_iii_dot: DebuffStatus,
     pub(crate) the_balance_ready: BuffStatus,
     pub(crate) the_spire_ready: BuffStatus,
+    pub(crate) divining: BuffStatus,
 
     pub(crate) potion: AttackSkill,
     pub(crate) potion_buff: BuffStatus,
@@ -111,7 +113,7 @@ impl AstrologianDatabase {
             max_stacks: 1,
             owner_id: player_id,
             damage_skill_id: Some(501),
-            potency: Some(55),
+            potency: Some(70),
             trait_percent: Some(130),
             damage_category: Some(DamageCategory::MagicalDot),
             duration_left_millisecond: 0,
@@ -144,12 +146,24 @@ impl AstrologianDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
+        let DIVINING: BuffStatus = BuffStatus {
+            id: 508,
+            name: String::from("Divining"),
+            stacks: 1,
+            max_stacks: 1,
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: vec![],
+            duration_millisecond: 30000,
+            is_raidwide: false,
+            trigger_proc_event_on_gcd: vec![],
+        };
 
         let FALL_MALEFIC: AttackSkill = AttackSkill {
             id: 500,
             name: String::from("Fall Malefic"),
             player_id,
-            potency: 250,
+            potency: 270,
             trait_percent: 130,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -353,14 +367,17 @@ impl AstrologianDatabase {
             player_id,
             potency: 0,
             trait_percent: 100,
-            additional_skill_events: vec![ApplyBuff(
-                player_id,
-                player_id,
-                DIVINATION_BUFF.clone(),
-                20000,
-                20000,
-                0,
-            )],
+            additional_skill_events: vec![
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    DIVINATION_BUFF.clone(),
+                    20000,
+                    20000,
+                    0,
+                ),
+                ApplyBuff(player_id, player_id, DIVINING.clone(), 30000, 30000, 0),
+            ],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -516,6 +533,31 @@ impl AstrologianDatabase {
             use_type: UseType::NoTarget,
         };
 
+        let ORACLE: AttackSkill = AttackSkill {
+            id: 513,
+            name: String::from("Oracle"),
+            player_id,
+            potency: 800,
+            trait_percent: 130,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 0,
+            charging_time_millisecond: 0,
+            is_speed_buffed: false,
+            cooldown_millisecond: 0,
+            resource_required: vec![UseBuff(DIVINING.get_id())],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: false,
+            use_type: UseType::UseOnTarget,
+        };
+
         let potion_skill = PotionSkill::new(player_id);
 
         AstrologianDatabase {
@@ -532,6 +574,7 @@ impl AstrologianDatabase {
             lord_of_crowns: LORD_OF_CROWNS,
             fall_malefic_lightspeed: FALL_MALEFIC_LIGHTSPEED,
             draw: DRAW,
+            oracle: ORACLE,
 
             divination_buff: DIVINATION_BUFF,
             the_balance_buff: THE_BALANCE_BUFF,
@@ -540,6 +583,7 @@ impl AstrologianDatabase {
             lord_of_crowns_buff: LORD_OF_CROWNS_BUFF,
             the_spire_ready: THE_SPIRE_READY,
             the_balance_ready: THE_BALANCE_READY,
+            divining: DIVINING,
 
             combust_iii_dot: COMBUST_III_DOT,
 
@@ -566,6 +610,7 @@ pub(crate) fn make_astrologian_skill_list(player_id: IdType) -> SkillTable<Attac
         db.lord_of_crowns,
         db.fall_malefic_lightspeed,
         db.draw,
+        db.oracle,
         db.potion,
     ];
 

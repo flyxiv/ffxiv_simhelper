@@ -12,9 +12,11 @@ use crate::IdType;
 
 pub(crate) struct SageDatabase {
     pub(crate) dot_status: DebuffStatus,
+    pub(crate) eukrasian_dyskrasia_dot: DebuffStatus,
     pub(crate) dot: AttackSkill,
     pub(crate) gcd: AttackSkill,
     pub(crate) phlegma: AttackSkill,
+    pub(crate) eukrasian_dyskrasia: AttackSkill,
 
     pub(crate) potion: AttackSkill,
     pub(crate) potion_buff: BuffStatus,
@@ -25,9 +27,9 @@ impl SageDatabase {
         let DOT_STATUS: DebuffStatus = DebuffStatus {
             id: 700,
             owner_id: player_id,
-            potency: Some(70),
+            potency: Some(75),
             damage_category: Some(DamageCategory::MagicalDot),
-            trait_percent: Some(100),
+            trait_percent: Some(130),
             damage_skill_id: Some(700),
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
@@ -36,6 +38,23 @@ impl SageDatabase {
             stacks: 1,
             max_stacks: 1,
             name: String::from("Eukrasian Dosis III"),
+            snapshotted_buffs: Default::default(),
+            snapshotted_debuffs: Default::default(),
+        };
+        let EUKRASIAN_DYSKRASIA_DOT: DebuffStatus = DebuffStatus {
+            id: 701,
+            owner_id: player_id,
+            potency: Some(40),
+            damage_category: Some(DamageCategory::MagicalDot),
+            trait_percent: Some(130),
+            damage_skill_id: Some(703),
+            duration_left_millisecond: 0,
+            status_info: vec![StatusInfo::None],
+            duration_millisecond: 30000,
+            is_raidwide: false,
+            stacks: 1,
+            max_stacks: 1,
+            name: String::from("Eukrasian Dyskrasia"),
             snapshotted_buffs: Default::default(),
             snapshotted_debuffs: Default::default(),
         };
@@ -73,7 +92,7 @@ impl SageDatabase {
             id: 701,
             name: String::from("Dosis III"),
             player_id,
-            potency: 330,
+            potency: 360,
             use_type: UseType::UseOnTarget,
             trait_percent: 130,
             additional_skill_events: vec![],
@@ -117,14 +136,46 @@ impl SageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
+        let EUKRASIAN_DYSKRASIA: AttackSkill = AttackSkill {
+            id: 703,
+            name: String::from("Eukrasian Dyskrasia"),
+            player_id,
+            potency: 0,
+            use_type: UseType::UseOnTarget,
+            trait_percent: 130,
+            additional_skill_events: vec![FfxivEvent::ApplyDebuff(
+                0,
+                EUKRASIAN_DYSKRASIA.clone(),
+                30000,
+                30000,
+                1000,
+            )],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 1500,
+            charging_time_millisecond: 1000,
+            is_speed_buffed: true,
+            cooldown_millisecond: 0,
+            resource_required: vec![],
+            resource_created: ResourceTable::new(),
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: false,
+            is_guaranteed_crit: false,
+        };
 
         let potion_skill = PotionSkill::new(player_id);
 
         Self {
             dot_status: DOT_STATUS,
+            eukrasian_dyskrasia_dot: EUKRASIAN_DYSKRASIA_DOT,
             dot: DOT,
             gcd: GCD,
             phlegma: PHLEGMA,
+            eukrasian_dyskrasia: EUKRASIAN_DYSKRASIA,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,
@@ -139,6 +190,7 @@ pub(crate) fn make_sage_skills(player_id: IdType) -> SkillTable<AttackSkill> {
         table.dot.clone(),
         table.gcd.clone(),
         table.phlegma.clone(),
+        table.eukrasian_dyskrasia.clone(),
         table.potion,
     ];
     make_skill_table(skills)

@@ -48,8 +48,8 @@ impl PriorityTable for DragoonPriorityTable {
 }
 
 impl DragoonPriorityTable {
-    pub fn new(player_id: IdType, partner_player_id: IdType) -> Self {
-        let db = DragoonDatabase::new(player_id, partner_player_id);
+    pub fn new(player_id: IdType) -> Self {
+        let db = DragoonDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
             opener: make_dragoon_opener(&db),
