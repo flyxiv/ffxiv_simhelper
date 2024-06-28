@@ -68,9 +68,12 @@ pub(crate) fn make_summoner_opener(db: &SummonerDatabase) -> Vec<Opener> {
         OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.astral_impulse.get_id()),
         OgcdOpener((Some(db.energy_drain.get_id()), None)),
-        OgcdOpener((Some(db.fester.get_id()), Some(db.enkindle_bahamut.get_id()))),
+        OgcdOpener((
+            Some(db.necrotize.get_id()),
+            Some(db.enkindle_bahamut.get_id()),
+        )),
         GcdOpener(db.astral_impulse.get_id()),
-        OgcdOpener((Some(db.fester.get_id()), Some(db.deathflare.get_id()))),
+        OgcdOpener((Some(db.necrotize.get_id()), Some(db.deathflare.get_id()))),
     ]
 }
 
@@ -164,7 +167,7 @@ pub(crate) fn make_summoner_ogcd_priority_table(db: &SummonerDatabase) -> Vec<Sk
             prerequisite: Some(MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {
-            skill_id: db.fester.get_id(),
+            skill_id: db.necrotize.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {

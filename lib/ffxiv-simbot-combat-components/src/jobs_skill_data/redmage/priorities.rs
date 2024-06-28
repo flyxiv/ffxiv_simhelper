@@ -66,7 +66,7 @@ pub(crate) fn make_redmage_opener(db: &RedmageDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.verthunder_iii_dual.get_id()),
         Opener::OgcdOpener((Some(db.potion.get_id()), None)),
-        Opener::GcdOpener(db.jolt_ii.get_id()),
+        Opener::GcdOpener(db.jolt_iii.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.veraero_iii_dual.get_id()),
         Opener::OgcdOpener((Some(db.acceleration.get_id()), Some(db.fleche.get_id()))),
@@ -157,7 +157,7 @@ pub(crate) fn make_redmage_gcd_priority_table(db: &RedmageDatabase) -> Vec<Skill
     ));
 
     priority.push(SkillPriorityInfo {
-        skill_id: db.jolt_ii.get_id(),
+        skill_id: db.jolt_iii.get_id(),
         prerequisite: None,
     });
 

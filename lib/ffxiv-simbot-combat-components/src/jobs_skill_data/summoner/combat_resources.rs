@@ -22,6 +22,7 @@ const IFRIT_MAX_STACK: ResourceType = 1;
 const TITAN_MAX_STACK: ResourceType = 1;
 const GARUDA_MAX_STACK: ResourceType = 1;
 const TRANCE_MAX_STACK: ResourceType = 1;
+const SOLAR_BAHAMUT_MAX_STACK: ResourceType = 1;
 
 #[derive(Clone)]
 pub(crate) struct SummonerCombatResources {
@@ -33,6 +34,7 @@ pub(crate) struct SummonerCombatResources {
     titan_stack: ResourceType,
     garuda_stack: ResourceType,
     trance_stack: ResourceType,
+    solar_bahamut_stack: ResourceType,
 }
 
 impl CombatResource for SummonerCombatResources {
@@ -55,6 +57,11 @@ impl CombatResource for SummonerCombatResources {
             self.garuda_stack = min(GARUDA_MAX_STACK, self.garuda_stack + resource_amount);
         } else if resource_id == 4 {
             self.trance_stack = min(TRANCE_MAX_STACK, self.trance_stack + resource_amount);
+        } else if resource_id == 5 {
+            self.solar_bahamut_stack = min(
+                SOLAR_BAHAMUT_MAX_STACK,
+                self.solar_bahamut_stack + resource_amount,
+            );
         }
     }
 
@@ -69,6 +76,8 @@ impl CombatResource for SummonerCombatResources {
             self.garuda_stack
         } else if resource_id == 4 {
             self.trance_stack
+        } else if resource_id == 5 {
+            self.solar_bahamut_stack
         } else {
             -1
         }

@@ -140,12 +140,14 @@ impl AttackSkill {
         &self,
         player: &FfxivPlayer,
     ) -> Vec<FfxivPlayerInternalEvent> {
+        let mut stack = 1;
         let mut events = vec![];
 
         for resource_requirement in self.resource_required.iter() {
-            if let Some(resource_event) =
+            if let Some((resource_event, stacks)) =
                 self.create_resource_use_event(resource_requirement, player)
             {
+                stack *= stacks;
                 events.push(resource_event)
             }
         }
@@ -153,7 +155,7 @@ impl AttackSkill {
         for (resource_id, resource_amount) in self.resource_created.iter() {
             events.push(FfxivPlayerInternalEvent::IncreaseResource(
                 *resource_id,
-                *resource_amount,
+                *resource_amount * stack,
             ));
         }
 
@@ -168,21 +170,22 @@ impl AttackSkill {
         &self,
         resource_requirement: &ResourceRequirements,
         player: &FfxivPlayer,
-    ) -> Option<FfxivPlayerInternalEvent> {
+    ) -> Option<(FfxivPlayerInternalEvent, ResourceType)> {
         match resource_requirement {
-            ResourceRequirements::Resource(stack_id, required_resource) => Some(
+            ResourceRequirements::Resource(stack_id, required_resource) => Some((
                 FfxivPlayerInternalEvent::UseResource(*stack_id, *required_resource),
-            ),
+                1,
+            )),
             ResourceRequirements::UseBuff(status_id) => {
-                Some(FfxivPlayerInternalEvent::RemoveBuff(*status_id))
+                Some((FfxivPlayerInternalEvent::RemoveBuff(*status_id), 1))
             }
             ResourceRequirements::UseDebuff(status_id) => {
-                Some(FfxivPlayerInternalEvent::RemoveDebuff(*status_id))
+                Some((FfxivPlayerInternalEvent::RemoveDebuff(*status_id), 1))
             }
             ResourceRequirements::UseAllResource(resource_id) => {
                 let resource_amount = player.combat_resources.borrow().get_resource(*resource_id);
-                Some(FfxivPlayerInternalEvent::UseResource(
-                    *resource_id,
+                Some((
+                    FfxivPlayerInternalEvent::UseResource(*resource_id, resource_amount),
                     resource_amount,
                 ))
             }

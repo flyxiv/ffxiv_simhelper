@@ -1,8 +1,10 @@
 use crate::event::ffxiv_event::FfxivEvent;
+use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
+use crate::skill::ResourceRequirements::Resource;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
@@ -26,6 +28,9 @@ pub(crate) struct DancerDatabase {
     pub(crate) reverse_cascade_flourish: AttackSkill,
     pub(crate) fountainfall_flourish: AttackSkill,
     pub(crate) tillana: AttackSkill,
+    pub(crate) last_dance: AttackSkill,
+    pub(crate) finishing_move: AttackSkill,
+    pub(crate) dance_of_the_dawn: AttackSkill,
 
     pub(crate) standard_step_buff: BuffStatus,
     pub(crate) standard_step_proc_buff: BuffStatus,
@@ -38,6 +43,9 @@ pub(crate) struct DancerDatabase {
     pub(crate) silken_flow: BuffStatus,
     pub(crate) starfall_ready: BuffStatus,
     pub(crate) flourishing_finish: BuffStatus,
+    pub(crate) last_dance_ready: BuffStatus,
+    pub(crate) dance_of_the_dawn_ready: BuffStatus,
+    pub(crate) finishing_move_ready: BuffStatus,
 
     pub(crate) potion: AttackSkill,
     pub(crate) potion_buff: BuffStatus,
@@ -211,6 +219,42 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
+        let LAST_DANCE_READY: BuffStatus = BuffStatus {
+            id: 1513,
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: vec![StatusInfo::None],
+            duration_millisecond: 30000,
+            is_raidwide: false,
+            name: "Last Dance Ready".to_string(),
+            stacks: 1,
+            max_stacks: 1,
+            trigger_proc_event_on_gcd: vec![],
+        };
+        let DANCE_OF_THE_DAWN_READY: BuffStatus = BuffStatus {
+            id: 1514,
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: vec![StatusInfo::None],
+            duration_millisecond: 30000,
+            is_raidwide: false,
+            name: "Dance of the Dawn".to_string(),
+            stacks: 1,
+            max_stacks: 1,
+            trigger_proc_event_on_gcd: vec![],
+        };
+        let FINISHING_MOVE_READY: BuffStatus = BuffStatus {
+            id: 1515,
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: vec![StatusInfo::None],
+            duration_millisecond: 30000,
+            is_raidwide: false,
+            name: "Finishing Move Ready".to_string(),
+            stacks: 1,
+            max_stacks: 1,
+            trigger_proc_event_on_gcd: vec![],
+        };
 
         let CASCADE: AttackSkill = AttackSkill {
             id: 1500,
@@ -279,7 +323,7 @@ impl DancerDatabase {
             id: 1502,
             name: "Standard Step".to_string(),
             player_id,
-            potency: 720,
+            potency: 850,
             trait_percent: 120,
             additional_skill_events: vec![
                 FfxivEvent::ApplyBuff(
@@ -337,7 +381,7 @@ impl DancerDatabase {
             id: 1503,
             name: "Technical Step".to_string(),
             player_id,
-            potency: 1200,
+            potency: 1300,
             trait_percent: 120,
             additional_skill_events: vec![
                 FfxivEvent::ApplyRaidBuff(player_id, TECHNICAL_STEP_BUFF.clone(), 20000, 20000, 0),
@@ -352,6 +396,14 @@ impl DancerDatabase {
                     player_id,
                     player_id,
                     FLOURISHING_FINISH.clone(),
+                    30000,
+                    30000,
+                    0,
+                ),
+                FfxivEvent::ApplyBuff(
+                    player_id,
+                    player_id,
+                    DANCE_OF_THE_DAWN_READY.clone(),
                     30000,
                     30000,
                     0,
@@ -460,6 +512,14 @@ impl DancerDatabase {
                     player_id,
                     player_id,
                     FLOURSHING_SYMMETRY.clone(),
+                    30000,
+                    30000,
+                    0,
+                ),
+                FfxivEvent::ApplyBuff(
+                    player_id,
+                    player_id,
+                    FINISHING_MOVE_READY.clone(),
                     30000,
                     30000,
                     0,
@@ -619,7 +679,7 @@ impl DancerDatabase {
             id: 1511,
             name: "Saber Dance".to_string(),
             player_id,
-            potency: 480,
+            potency: 520,
             trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -763,7 +823,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             resource_required: vec![ResourceRequirements::UseBuff(FLOURISHING_FINISH.id)],
-            resource_created: Default::default(),
+            resource_created: HashMap::from([(0, 50)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
@@ -772,7 +832,88 @@ impl DancerDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
-
+        let LAST_DANCE: AttackSkill = AttackSkill {
+            id: 1516,
+            name: "Last Dance".to_string(),
+            player_id,
+            potency: 520,
+            trait_percent: 120,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            resource_required: vec![ResourceRequirements::UseBuff(LAST_DANCE_READY.id)],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 0,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            use_type: UseType::UseOnTarget,
+        };
+        let FINISHING_MOVE: AttackSkill = AttackSkill {
+            id: 1517,
+            name: "Finishing Move".to_string(),
+            player_id,
+            potency: 850,
+            trait_percent: 120,
+            additional_skill_events: vec![ApplyBuff(
+                player_id,
+                player_id,
+                LAST_DANCE_READY.clone(),
+                30000,
+                30000,
+                0,
+            )],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            resource_required: vec![ResourceRequirements::UseBuff(LAST_DANCE_READY.id)],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 0,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            use_type: UseType::UseOnTarget,
+        };
+        let DANCE_OF_THE_DAWN: AttackSkill = AttackSkill {
+            id: 1518,
+            name: "Dance of the Dawn".to_string(),
+            player_id,
+            potency: 1000,
+            trait_percent: 120,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            resource_required: vec![
+                ResourceRequirements::UseBuff(DANCE_OF_THE_DAWN_READY.id),
+                Resource(0, 50),
+            ],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 0,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            use_type: UseType::UseOnTarget,
+        };
         let potion_skill = PotionSkill::new(player_id);
 
         DancerDatabase {
@@ -792,6 +933,9 @@ impl DancerDatabase {
             reverse_cascade_flourish: REVERSE_CASCADE_FLOURISH,
             fountainfall_flourish: FOUNTAINFALL_FLOURISH,
             tillana: TILLANA,
+            last_dance: LAST_DANCE,
+            finishing_move: FINISHING_MOVE,
+            dance_of_the_dawn: DANCE_OF_THE_DAWN,
 
             standard_step_buff: STANDARD_STEP_BUFF,
             standard_step_proc_buff: STANDARD_STEP_PROC_BUFF,
@@ -804,6 +948,9 @@ impl DancerDatabase {
             silken_flow: SILKEN_FLOW,
             starfall_ready: FLOURSHING_STARFALL,
             flourishing_finish: FLOURISHING_FINISH,
+            last_dance_ready: LAST_DANCE_READY,
+            dance_of_the_dawn_ready: DANCE_OF_THE_DAWN_READY,
+            finishing_move_ready: FINISHING_MOVE_READY,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,
@@ -834,6 +981,9 @@ pub(crate) fn make_dancer_skill_list(
         db.reverse_cascade_flourish,
         db.fountainfall_flourish,
         db.tillana,
+        db.last_dance,
+        db.finishing_move,
+        db.dance_of_the_dawn,
         db.potion,
     ];
 

@@ -58,7 +58,7 @@ pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((Some(db.sharpcast.get_id()), None)),
         Opener::GcdOpener(db.blizzard3_opener.get_id()),
         Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.thunder3.get_id()),
+        Opener::GcdOpener(db.high_thunder.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.blizzard4.get_id()),
         Opener::OgcdOpener((None, None)),
@@ -81,11 +81,11 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
             skill_id: db.thunder3_procced.get_id(),
             prerequisite: Some(Or(
                 Box::new(SkillPrerequisite::BufforDebuffLessThan(
-                    db.thunder3_dot.get_id(),
+                    db.high_thunder_dot.get_id(),
                     3000,
                 )),
                 Box::new(Not(Box::new(SkillPrerequisite::HasBufforDebuff(
-                    db.thunder3_dot.get_id(),
+                    db.high_thunder_dot.get_id(),
                 )))),
             )),
         },

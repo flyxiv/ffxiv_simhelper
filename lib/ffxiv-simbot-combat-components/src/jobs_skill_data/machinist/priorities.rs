@@ -61,13 +61,13 @@ pub(crate) fn make_machinist_opener(db: &MachinistDatabase) -> Vec<Opener> {
     vec![
         Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.heated_split_shot.get_id()),
-        Opener::OgcdOpener((Some(db.gauss_round.get_id()), Some(db.ricochet.get_id()))),
+        Opener::OgcdOpener((Some(db.double_check.get_id()), Some(db.checkmate.get_id()))),
         Opener::GcdOpener(db.drill.get_id()),
         Opener::OgcdOpener((Some(db.barrel_stabilizer.get_id()), None)),
         Opener::GcdOpener(db.heated_slug_shot.get_id()),
-        Opener::OgcdOpener((Some(db.ricochet.get_id()), None)),
+        Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
         Opener::GcdOpener(db.heated_clean_shot.get_id()),
-        Opener::OgcdOpener((Some(db.reassemble.get_id()), Some(db.gauss_round.get_id()))),
+        Opener::OgcdOpener((Some(db.reassemble.get_id()), Some(db.double_check.get_id()))),
         Opener::GcdOpener(db.air_anchor.get_id()),
         Opener::OgcdOpener((Some(db.reassemble.get_id()), Some(db.wildfire.get_id()))),
         Opener::GcdOpener(db.chainsaw.get_id()),
@@ -75,16 +75,16 @@ pub(crate) fn make_machinist_opener(db: &MachinistDatabase) -> Vec<Opener> {
             Some(db.automaton_queen.get_id()),
             Some(db.hypercharge.get_id()),
         )),
-        Opener::GcdOpener(db.heat_blast.get_id()),
-        Opener::OgcdOpener((Some(db.ricochet.get_id()), None)),
-        Opener::GcdOpener(db.heat_blast.get_id()),
-        Opener::OgcdOpener((Some(db.gauss_round.get_id()), None)),
-        Opener::GcdOpener(db.heat_blast.get_id()),
-        Opener::OgcdOpener((Some(db.ricochet.get_id()), None)),
-        Opener::GcdOpener(db.heat_blast.get_id()),
-        Opener::OgcdOpener((Some(db.gauss_round.get_id()), None)),
-        Opener::GcdOpener(db.heat_blast.get_id()),
-        Opener::OgcdOpener((Some(db.ricochet.get_id()), None)),
+        Opener::GcdOpener(db.blazing_shot.get_id()),
+        Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
+        Opener::GcdOpener(db.blazing_shot.get_id()),
+        Opener::OgcdOpener((Some(db.double_check.get_id()), None)),
+        Opener::GcdOpener(db.blazing_shot.get_id()),
+        Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
+        Opener::GcdOpener(db.blazing_shot.get_id()),
+        Opener::OgcdOpener((Some(db.double_check.get_id()), None)),
+        Opener::GcdOpener(db.blazing_shot.get_id()),
+        Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
         Opener::GcdOpener(db.drill.get_id()),
     ]
 }
@@ -104,7 +104,7 @@ pub(crate) fn make_machinist_gcd_priority_table(db: &MachinistDatabase) -> Vec<S
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.heat_blast.get_id(),
+            skill_id: db.blazing_shot.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -189,21 +189,21 @@ pub(crate) fn make_machinist_ogcd_priority_table(db: &MachinistDatabase) -> Vec<
             )),
         },
         SkillPriorityInfo {
-            skill_id: db.ricochet.get_id(),
+            skill_id: db.checkmate.get_id(),
             prerequisite: Some(Or(
                 Box::new(MillisecondsBeforeBurst(0)),
                 Box::new(RelatedSkillCooldownLessOrEqualThan(
-                    db.ricochet.get_id(),
+                    db.checkmate.get_id(),
                     60000,
                 )),
             )),
         },
         SkillPriorityInfo {
-            skill_id: db.gauss_round.get_id(),
+            skill_id: db.double_check.get_id(),
             prerequisite: Some(Or(
                 Box::new(MillisecondsBeforeBurst(0)),
                 Box::new(RelatedSkillCooldownLessOrEqualThan(
-                    db.gauss_round.get_id(),
+                    db.double_check.get_id(),
                     60000,
                 )),
             )),

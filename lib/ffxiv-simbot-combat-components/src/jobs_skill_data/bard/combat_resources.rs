@@ -1,6 +1,7 @@
 use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
+use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::bard::abilities::{get_song_skill_ids, make_bard_skill_list};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -20,6 +21,7 @@ const APEX_MAX_STACK: ResourceType = 20;
 const WANDERER_MAX_STACK: ResourceType = 3;
 const ARMY_MAX_STACK: ResourceType = 4;
 const SONG_MAX_STACK: ResourceType = 3;
+const RADIANT_MAX_STACK: ResourceType = 3;
 
 #[derive(Clone)]
 pub(crate) struct BardCombatResources {
@@ -31,6 +33,7 @@ pub(crate) struct BardCombatResources {
     army_stack: ResourceType,
     song_stack: ResourceType,
     armys_muse: BuffStatus,
+    radiant_stack: ResourceType,
 }
 
 impl CombatResource for BardCombatResources {
@@ -51,6 +54,8 @@ impl CombatResource for BardCombatResources {
             self.army_stack = min(ARMY_MAX_STACK, self.army_stack + resource_amount);
         } else if resource_id == 3 {
             self.song_stack = min(SONG_MAX_STACK, self.song_stack + resource_amount);
+        } else if resource_id == 4 {
+            self.radiant_stack = min(RADIANT_MAX_STACK, self.radiant_stack + resource_amount);
         }
     }
 
@@ -63,6 +68,8 @@ impl CombatResource for BardCombatResources {
             self.army_stack
         } else if resource_id == 3 {
             self.song_stack
+        } else if resource_id == 4 {
+            self.radiant_stack
         } else {
             -1
         }
@@ -80,7 +87,7 @@ impl CombatResource for BardCombatResources {
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_combat_time_millisecond: TimeType,
-        _: &FfxivPlayer,
+        player: &FfxivPlayer,
     ) -> SkillEvents {
         let skill_internal_events = vec![];
         let mut skill_events = vec![];

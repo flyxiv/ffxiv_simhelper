@@ -17,9 +17,10 @@ use std::rc::Rc;
 
 const SOUL_GAUGE_MAX: ResourceType = 100;
 const ENSHROUD_GAUGE_MAX: ResourceType = 50;
-const SOUL_REAVER_MAX: ResourceType = 2;
+const SOUL_REAVER_MAX: ResourceType = 1;
 const ENSHROUD_STACK_MAX: ResourceType = 5;
 const LEMURES_STACK_MAX: ResourceType = 2;
+const EXECUTIONER_STACK_MAX: ResourceType = 2;
 
 #[derive(Clone)]
 pub(crate) struct ReaperCombatResources {
@@ -31,6 +32,7 @@ pub(crate) struct ReaperCombatResources {
     soul_reaver_stack: ResourceType,
     enshroud_stack: ResourceType,
     lemures_stack: ResourceType,
+    executioner_stack: ResourceType,
 }
 
 impl CombatResource for ReaperCombatResources {
@@ -53,6 +55,11 @@ impl CombatResource for ReaperCombatResources {
             self.enshroud_stack = min(ENSHROUD_STACK_MAX, self.enshroud_stack + resource_amount);
         } else if resource_id == 4 {
             self.lemures_stack = min(LEMURES_STACK_MAX, self.lemures_stack + resource_amount);
+        } else if resource_id == 5 {
+            self.executioner_stack = min(
+                EXECUTIONER_STACK_MAX,
+                self.executioner_stack + resource_amount,
+            );
         }
     }
 
@@ -67,6 +74,8 @@ impl CombatResource for ReaperCombatResources {
             self.enshroud_stack
         } else if resource_id == 4 {
             self.lemures_stack
+        } else if resource_id == 5 {
+            self.executioner_stack
         } else {
             -1
         }

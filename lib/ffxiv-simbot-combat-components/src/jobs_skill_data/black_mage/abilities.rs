@@ -1,12 +1,12 @@
 use crate::event::ffxiv_event::FfxivEvent;
-use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
+use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, RefreshBuff};
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::{CasterGlobalSkill, PotionSkill};
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory::MagicalDot;
 use crate::skill::use_type::UseType;
-use crate::skill::ResourceRequirements::UseBuff;
+use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
@@ -16,8 +16,7 @@ use std::collections::HashMap;
 
 pub(crate) struct BlackmageDatabase {
     pub(crate) transpose: AttackSkill,
-    pub(crate) thunder3: AttackSkill,
-    pub(crate) thunder3_procced: AttackSkill,
+    pub(crate) high_thunder: AttackSkill,
     pub(crate) fire4: AttackSkill,
     pub(crate) fire4_triplecast: AttackSkill,
     pub(crate) fire3_ice: AttackSkill,
@@ -31,20 +30,20 @@ pub(crate) struct BlackmageDatabase {
     pub(crate) blizzard4: AttackSkill,
     pub(crate) triplecast: AttackSkill,
     pub(crate) leylines: AttackSkill,
-    pub(crate) swiftcast: AttackSkill,
-    pub(crate) sharpcast: AttackSkill,
+    pub(crate) manafont: AttackSkill,
     pub(crate) amplifier: AttackSkill,
     pub(crate) fire3_opener: AttackSkill,
     pub(crate) blizzard3_opener: AttackSkill,
+    pub(crate) flare_star: AttackSkill,
+    pub(crate) swiftcast: AttackSkill,
 
     pub(crate) triplecast_buff: BuffStatus,
-    pub(crate) thunder3_dot: DebuffStatus,
+    pub(crate) high_thunder_dot: DebuffStatus,
+    pub(crate) thunderhead: BuffStatus,
     pub(crate) swiftcast_buff: BuffStatus,
-    pub(crate) sharpcast_buff: BuffStatus,
     pub(crate) leylines_buff: BuffStatus,
     pub(crate) astral_fire3: BuffStatus,
     pub(crate) astral_fire1: BuffStatus,
-    pub(crate) thunder3_proc: BuffStatus,
 
     pub(crate) potion: AttackSkill,
     pub(crate) potion_buff: BuffStatus,
@@ -65,11 +64,11 @@ impl BlackmageDatabase {
                 trigger_proc_event_on_gcd: vec![],
             }
         };
-        let THUNDER_III_DOT: DebuffStatus = DebuffStatus {
+        let HIGH_THUNDER_DOT: DebuffStatus = DebuffStatus {
             id: 1701,
-            name: String::from("Thunder III"),
+            name: String::from("High Thunder"),
             owner_id: player_id,
-            potency: Some(35),
+            potency: Some(55),
             trait_percent: Some(130),
             damage_category: Some(MagicalDot),
             damage_skill_id: Some(1701),
@@ -82,9 +81,9 @@ impl BlackmageDatabase {
             snapshotted_debuffs: Default::default(),
             max_stacks: 1,
         };
-        let SHARPCAST_BUFF: BuffStatus = BuffStatus {
+        let THUNDERHEAD: BuffStatus = BuffStatus {
             id: 1702,
-            name: String::from("Sharpcast"),
+            name: String::from("Thunderhead"),
             owner_id: player_id,
             duration_left_millisecond: 0,
             status_info: vec![],
@@ -114,18 +113,6 @@ impl BlackmageDatabase {
             duration_millisecond: 15000,
             is_raidwide: false,
             name: "Astral Fire I".to_string(),
-            stacks: 1,
-            max_stacks: 1,
-            trigger_proc_event_on_gcd: vec![],
-        };
-        let THUNDER_III_PROC: BuffStatus = BuffStatus {
-            id: 1705,
-            owner_id: player_id,
-            duration_left_millisecond: 0,
-            status_info: vec![],
-            duration_millisecond: 40000,
-            is_raidwide: false,
-            name: "Thunder III Proc".to_string(),
             stacks: 1,
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
@@ -175,57 +162,19 @@ impl BlackmageDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let THUNDER_III: AttackSkill = AttackSkill {
+        let HIGH_THUNDER: AttackSkill = AttackSkill {
             id: 1701,
-            name: "Thunder III".to_string(),
+            name: "High Thunder".to_string(),
             player_id,
-            potency: 50,
+            potency: 200,
             trait_percent: 130,
-            additional_skill_events: vec![
-                FfxivEvent::ApplyDebuff(player_id, THUNDER_III_DOT.clone(), 30000, 30000, 0),
-                ApplyBuff(
-                    player_id,
-                    player_id,
-                    THUNDER_III_PROC.clone(),
-                    40000,
-                    40000,
-                    0,
-                ),
-            ],
-            proc_events: vec![],
-            combo: None,
-            delay_millisecond: None,
-            casting_time_millisecond: 2500,
-            gcd_cooldown_millisecond: 2500,
-            charging_time_millisecond: 0,
-            is_speed_buffed: true,
-            resource_required: vec![UseBuff(SHARPCAST_BUFF.get_id())],
-            resource_created: Default::default(),
-            is_guaranteed_crit: false,
-            is_guaranteed_direct_hit: false,
-            cooldown_millisecond: 0,
-            current_cooldown_millisecond: 0,
-            stacks: 1,
-            stack_skill_id: None,
-            use_type: UseType::UseOnTarget,
-        };
-        let THUNDER_III_PROCCED: AttackSkill = AttackSkill {
-            id: 1702,
-            name: "Thunder III".to_string(),
-            player_id,
-            potency: 400,
-            trait_percent: 130,
-            additional_skill_events: vec![
-                FfxivEvent::ApplyDebuff(player_id, THUNDER_III_DOT.clone(), 30000, 30000, 0),
-                ApplyBuff(
-                    player_id,
-                    player_id,
-                    THUNDER_III_PROC.clone(),
-                    40000,
-                    40000,
-                    0,
-                ),
-            ],
+            additional_skill_events: vec![FfxivEvent::ApplyDebuff(
+                player_id,
+                HIGH_THUNDER_DOT.clone(),
+                30000,
+                30000,
+                0,
+            )],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -233,10 +182,7 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
-            resource_required: vec![
-                UseBuff(THUNDER_III_PROC.get_id()),
-                UseBuff(SHARPCAST_BUFF.get_id()),
-            ],
+            resource_required: vec![UseBuff(THUNDERHEAD.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -300,7 +246,7 @@ impl BlackmageDatabase {
             id: 1705,
             name: "Fire III Ice".to_string(),
             player_id,
-            potency: 260,
+            potency: 280,
             trait_percent: 91,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -331,7 +277,7 @@ impl BlackmageDatabase {
             id: 1706,
             name: "Fire III Astral Fire I".to_string(),
             player_id,
-            potency: 260,
+            potency: 280,
             trait_percent: 91,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -516,8 +462,8 @@ impl BlackmageDatabase {
             id: 1712,
             name: "Blizzard III".to_string(),
             player_id,
-            potency: 260,
-            trait_percent: 130,
+            potency: 280,
+            trait_percent: 91,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(2),
@@ -526,7 +472,7 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
-            resource_required: vec![],
+            resource_required: vec![Resource(3, 1)],
             resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -624,20 +570,23 @@ impl BlackmageDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let SHARPCAST: AttackSkill = AttackSkill {
+        let MANAFONT: AttackSkill = AttackSkill {
             id: 1716,
-            name: "Sharpcast".to_string(),
+            name: "Manafont".to_string(),
             player_id,
             potency: 0,
             trait_percent: 130,
-            additional_skill_events: vec![ApplyBuff(
-                player_id,
-                player_id,
-                SHARPCAST_BUFF.clone(),
-                30000,
-                30000,
-                0,
-            )],
+            additional_skill_events: vec![
+                ApplyBuff(player_id, player_id, THUNDERHEAD.clone(), 30000, 30000, 0),
+                RefreshBuff(
+                    player_id,
+                    player_id,
+                    ASTRAL_FIRE_III.clone(),
+                    15000,
+                    15000,
+                    0,
+                ),
+            ],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -645,13 +594,13 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
             is_speed_buffed: false,
-            resource_required: vec![],
-            resource_created: Default::default(),
+            resource_required: vec![Resource(3, 1)],
+            resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
-            cooldown_millisecond: 30000,
+            cooldown_millisecond: 120000,
             current_cooldown_millisecond: 0,
-            stacks: 2,
+            stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -684,7 +633,7 @@ impl BlackmageDatabase {
             id: 1718,
             name: "Fire III".to_string(),
             player_id,
-            potency: 260,
+            potency: 280,
             trait_percent: 130,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -715,7 +664,7 @@ impl BlackmageDatabase {
             id: 1719,
             name: "Blizzard III".to_string(),
             player_id,
-            potency: 260,
+            potency: 280,
             trait_percent: 130,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -735,14 +684,61 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
+        let BLIZZARD_III_OPENER: AttackSkill = AttackSkill {
+            id: 1719,
+            name: "Blizzard III".to_string(),
+            player_id,
+            potency: 280,
+            trait_percent: 130,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: Some(2),
+            delay_millisecond: None,
+            casting_time_millisecond: 3500,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            resource_required: vec![],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 0,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            use_type: UseType::UseOnTarget,
+        };
+        let FLARE_STAR: AttackSkill = AttackSkill {
+            id: 1720,
+            name: "Flare Star".to_string(),
+            player_id,
+            potency: 400,
+            trait_percent: 234,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 3500,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            resource_required: vec![Resource(2, 6)],
+            resource_created: HashMap::from([(3, 1)]),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 0,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            use_type: UseType::UseOnTarget,
+        };
 
         let caster_skills = CasterGlobalSkill::new(player_id);
         let potion_skills = PotionSkill::new(player_id);
 
         BlackmageDatabase {
             transpose: TRANSPOSE,
-            thunder3: THUNDER_III,
-            thunder3_procced: THUNDER_III_PROCCED,
+            high_thunder: HIGH_THUNDER,
             fire4: FIRE_IV,
             fire4_triplecast: FIRE_IV_TRIPLECAST,
             fire3_ice: FIRE_III_ICE,
@@ -756,20 +752,20 @@ impl BlackmageDatabase {
             blizzard4: BLIZZARD_IV,
             triplecast: TRIPLECAST,
             leylines: LEY_LINES,
-            swiftcast: caster_skills.swiftcast,
-            sharpcast: SHARPCAST,
+            manafont: MANAFONT,
             fire3_opener: FIRE_III_OPENER,
             amplifier: AMPLIFIER,
             blizzard3_opener: BLIZZARD_III_OPENER,
+            flare_star: FLARE_STAR,
+            swiftcast: caster_skills.swiftcast,
 
             triplecast_buff: TRIPLECAST_BUFF,
-            thunder3_dot: THUNDER_III_DOT,
+            high_thunder_dot: HIGH_THUNDER_DOT,
+            thunderhead: THUNDERHEAD,
             swiftcast_buff: caster_skills.swiftcast_buff,
-            sharpcast_buff: SHARPCAST_BUFF,
             leylines_buff: LEYLINES_BUFF,
             astral_fire3: ASTRAL_FIRE_III,
             astral_fire1: ASTRAL_FIRE_I,
-            thunder3_proc: THUNDER_III_PROC,
 
             potion: potion_skills.potion,
             potion_buff: potion_skills.potion_buff,
@@ -782,8 +778,7 @@ pub(crate) fn make_blackmage_skill_list(player_id: IdType) -> SkillTable<AttackS
 
     let blackmage_skill_list: Vec<AttackSkill> = vec![
         db.transpose,
-        db.thunder3,
-        db.thunder3_procced,
+        db.high_thunder,
         db.fire4,
         db.fire4_triplecast,
         db.fire3_ice,
@@ -792,16 +787,17 @@ pub(crate) fn make_blackmage_skill_list(player_id: IdType) -> SkillTable<AttackS
         db.despair_triplecast,
         db.despair_swiftcast,
         db.xenoglossy,
+        db.manafont,
         db.paradox,
         db.blizzard3,
         db.blizzard4,
         db.triplecast,
         db.leylines,
         db.swiftcast,
-        db.sharpcast,
         db.amplifier,
         db.fire3_opener,
         db.blizzard3_opener,
+        db.flare_star,
         db.potion,
     ];
 
