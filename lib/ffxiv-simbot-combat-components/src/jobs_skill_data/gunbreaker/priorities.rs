@@ -63,22 +63,18 @@ pub(crate) fn make_gunbreaker_opener(db: &GunbreakerDatabase) -> Vec<Opener> {
         GcdOpener(db.keen_edge.get_id()),
         OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.brutal_shell.get_id()),
-        OgcdOpener((Some(db.no_mercy.get_id()), None)),
-        GcdOpener(db.solid_barrel.get_id()),
-        OgcdOpener((None, None)),
+        OgcdOpener((Some(db.no_mercy.get_id()), Some(db.bloodfest.get_id()))),
         GcdOpener(db.gnashing_fang.get_id()),
-        OgcdOpener((Some(db.bloodfest.get_id()), Some(db.jugular_rip.get_id()))),
+        OgcdOpener((Some(db.jugular_rip.get_id()), None)),
         GcdOpener(db.sonic_break.get_id()),
-        OgcdOpener((
-            Some(db.blasting_zone.get_id()),
-            Some(db.rough_divide.get_id()),
-        )),
+        OgcdOpener((Some(db.blasting_zone.get_id()), Some(db.bow_shock.get_id()))),
         GcdOpener(db.double_down.get_id()),
         OgcdOpener((Some(db.bow_shock.get_id()), Some(db.rough_divide.get_id()))),
         GcdOpener(db.savage_claw.get_id()),
         OgcdOpener((Some(db.abdomen_tear.get_id()), None)),
         GcdOpener(db.wicked_talon.get_id()),
         OgcdOpener((Some(db.eye_gouge.get_id()), None)),
+        GcdOpener(db.reign_of_beasts.get_id()),
     ]
 }
 
@@ -120,6 +116,18 @@ pub(crate) fn make_gunbreaker_gcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.wicked_talon.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.lion_heart.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.noble_blood.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.reign_of_beasts.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {

@@ -114,18 +114,11 @@ pub(crate) fn make_astrologian_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.the_spire.get_id(),
-            prerequisite: Some(MillisecondsBeforeBurst(1500)),
+            prerequisite: Some(MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {
             skill_id: db.the_balance.get_id(),
-            prerequisite: Some(MillisecondsBeforeBurst(1500)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.draw.get_id(),
-            prerequisite: Some(Or(
-                Box::new(HasBufforDebuff(db.the_balance.get_id())),
-                Box::new(HasBufforDebuff(db.the_spire.get_id())),
-            )),
+            prerequisite: Some(MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {
             skill_id: db.lightspeed.get_id(),
@@ -142,6 +135,24 @@ pub(crate) fn make_astrologian_ogcd_priority_table(
         SkillPriorityInfo {
             skill_id: db.minor_arcana.get_id(),
             prerequisite: Some(Not(Box::new(HasBufforDebuff(db.lord_of_crowns.get_id())))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.solar_draw.get_id(),
+            prerequisite: Some(And(
+                Box::new(Not(Box::new(HasBufforDebuff(db.the_balance.get_id())))),
+                Box::new(Not(Box::new(HasBufforDebuff(db.the_spire.get_id())))),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.lunar_draw.get_id(),
+            prerequisite: Some(And(
+                Box::new(Not(Box::new(HasBufforDebuff(db.the_balance.get_id())))),
+                Box::new(Not(Box::new(HasBufforDebuff(db.the_spire.get_id())))),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.oracle.get_id(),
+            prerequisite: None,
         },
     ]
 }

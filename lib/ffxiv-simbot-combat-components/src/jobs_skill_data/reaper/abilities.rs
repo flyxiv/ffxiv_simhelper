@@ -36,6 +36,10 @@ pub(crate) struct ReaperDatabase {
     pub(crate) executioners_gibbet: AttackSkill,
     pub(crate) sacrificium: AttackSkill,
     pub(crate) perfectio: AttackSkill,
+    pub(crate) slice_refresh_combo: AttackSkill,
+    pub(crate) waxing_slice_refresh_combo: AttackSkill,
+    pub(crate) infernal_slice_refresh_combo: AttackSkill,
+    pub(crate) enshroud_host: AttackSkill,
 
     pub(crate) enshroud_status: BuffStatus,
     pub(crate) enhanced_gallows_buff: BuffStatus,
@@ -44,6 +48,7 @@ pub(crate) struct ReaperDatabase {
     pub(crate) shadow_of_death_debuff: DebuffStatus,
     pub(crate) oblatio: BuffStatus,
     pub(crate) perfectio_parata: BuffStatus,
+    pub(crate) ideal_host: BuffStatus
 
     pub(crate) potion: AttackSkill,
     pub(crate) potion_buff: BuffStatus,
@@ -153,6 +158,20 @@ impl ReaperDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
+
+        let IDEAL_HOST: BuffStatus = BuffStatus {
+            id: 1208,
+            name: String::from("Ideal Host"),
+            stacks: 1,
+            max_stacks: 1,
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: vec![StatusInfo::None],
+            duration_millisecond: 30000,
+            is_raidwide: false,
+            trigger_proc_event_on_gcd: vec![],
+        };
+
 
         let SLICE: AttackSkill = AttackSkill {
             id: 1200,
@@ -319,7 +338,7 @@ impl ReaperDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 60000,
-            resource_required: vec![Resource(0, 50)],
+            resource_required: vec![Resource(0, 50), Resource(7, 1)],
             resource_created: HashMap::from([(5, 2)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -492,6 +511,13 @@ impl ReaperDatabase {
                 30000,
                 30000,
                 0,
+            ), ApplyBuff(
+                player_id,
+                player_id,
+                IDEAL_HOST.clone(),
+                30000,
+                30000,
+                0,
             )],
             proc_events: vec![],
             combo: None,
@@ -536,7 +562,7 @@ impl ReaperDatabase {
             is_speed_buffed: false,
             cooldown_millisecond: 15000,
             resource_required: vec![Resource(1, 50)],
-            resource_created: HashMap::from([(3, 5)]),
+            resource_created: HashMap::from([(3, 5), (6, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -775,6 +801,114 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
+        let ENSHROUD_HOST: AttackSkill = AttackSkill {
+            id: 1222,
+            name: String::from("Enshroud"),
+            player_id,
+            potency: 0,
+            trait_percent: 100,
+            additional_skill_events: vec![
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    ENSHROUD_STATUS.clone(),
+                    30000,
+                    30000,
+                    0,
+                ),
+                ApplyBuff(player_id, player_id, OBLATIO.clone(), 30000, 30000, 0),
+            ],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 0,
+            charging_time_millisecond: 0,
+            is_speed_buffed: false,
+            cooldown_millisecond: 15000,
+            resource_required: vec![UseBuff(IDEAL_HOST.get_id())],
+            resource_created: HashMap::from([(3, 5), (6, 1)]),
+            is_guaranteed_crit: false,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: false,
+            use_type: UseType::NoTarget,
+        };
+        let SLICE_REFRESH_COMBO: AttackSkill = AttackSkill {
+            id: 1223,
+            name: String::from("Slice"),
+            player_id,
+            potency: 400,
+            trait_percent: 100,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: Some(2),
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            cooldown_millisecond: 0,
+            resource_required: vec![Resource(6, 2)],
+            resource_created: HashMap::from([(0, 10), (7, 1)]),
+            is_guaranteed_crit: false,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: false,
+            use_type: UseType::UseOnTarget,
+        };
+        let WAXING_SLICE_REFRESH_COMBO: AttackSkill = AttackSkill {
+            id: 1224,
+            name: String::from("Waxing Slice"),
+            player_id,
+            potency: 500,
+            trait_percent: 100,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: Some(3),
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            cooldown_millisecond: 0,
+            resource_required: vec![Resource(6, 2)],
+            resource_created: HashMap::from([(0, 10), (7, 1)]),
+            is_guaranteed_crit: false,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: false,
+            use_type: UseType::UseOnTarget,
+        };
+        let INFERNAL_SLICE_REFRESH_COMBO: AttackSkill = AttackSkill {
+            id: 1225,
+            name: String::from("Infernal Slice"),
+            player_id,
+            potency: 600,
+            trait_percent: 100,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: Some(0),
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: false,
+            cooldown_millisecond: 0,
+            resource_required: vec![Resource(6, 2), Resource(7, 1)],
+            resource_created: HashMap::from([(0, 10)]),
+            is_guaranteed_crit: false,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: false,
+            use_type: UseType::UseOnTarget,
+        };
+
+
 
         let potion_skill = PotionSkill::new(player_id);
 
@@ -801,6 +935,10 @@ impl ReaperDatabase {
             executioners_gibbet: EXECUTIONERS_GIBBET,
             sacrificium: SACRIFICIUM,
             perfectio: PERFECTIO,
+            enshroud_host: ENSHROUD_HOST,
+            slice_refresh_combo: SLICE_REFRESH_COMBO,
+            waxing_slice_refresh_combo: WAXING_SLICE_REFRESH_COMBO,
+            infernal_slice_refresh_combo: INFERNAL_SLICE_REFRESH_COMBO,
 
             enshroud_status: ENSHROUD_STATUS,
             enhanced_gallows_buff: ENHANCED_GALLOWS_BUFF,
@@ -809,6 +947,7 @@ impl ReaperDatabase {
             shadow_of_death_debuff: SHADOW_OF_DEATH_DEBUFF,
             oblatio: OBLATIO,
             perfectio_parata: PERFECTIO_PARATA,
+            ideal_host: IDEAL_HOST,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,
@@ -845,8 +984,17 @@ pub(crate) fn make_reaper_skill_list(
         db.executioners_gibbet,
         db.sacrificium,
         db.perfectio,
+        db.enshroud_host,
+        db.slice_refresh_combo,
+        db.waxing_slice_refresh_combo,
+        db.infernal_slice_refresh_combo,
         db.potion,
     ];
 
     make_skill_table(reaper_skill_list)
+}
+
+pub(crate) fn reaper_normal_gcd_ids(player_id: IdType) -> Vec<IdType> {
+    let db = ReaperDatabase::new(player_id, 1);
+    vec![db.slice.id, db.waxing_slice.id, db.infernal_slice.id]
 }

@@ -63,26 +63,23 @@ pub(crate) fn make_dragoon_opener(db: &DragoonDatabase) -> Vec<Opener> {
     let dragoon_opener: Vec<Opener> = vec![
         GcdOpener(db.true_thrust.get_id()),
         OgcdOpener((Some(db.potion.get_id()), None)),
-        GcdOpener(db.disembowel.get_id()),
+        GcdOpener(db.spiral_blow.get_id()),
         OgcdOpener((
             Some(db.lance_charge.get_id()),
-            Some(db.dragon_sight.get_id()),
+            Some(db.battle_litany.get_id()),
         )),
         GcdOpener(db.chaotic_spring.get_id()),
-        OgcdOpener((Some(db.battle_litany.get_id()), Some(db.high_jump.get_id()))),
+        OgcdOpener((Some(db.geirskogul.get_id()), Some(db.high_jump.get_id()))),
         GcdOpener(db.wheeling_thrust.get_id()),
-        OgcdOpener((Some(db.geirskogul.get_id()), Some(db.life_surge.get_id()))),
-        GcdOpener(db.fang_and_claw_plus_surge.get_id()),
         OgcdOpener((
-            Some(db.spineshatter_dive.get_id()),
             Some(db.dragonfire_dive.get_id()),
+            Some(db.life_surge.get_id()),
         )),
+        GcdOpener(db.drakesbane_surge.get_id()),
+        OgcdOpener((Some(db.nastrond.get_id()), Some(db.mirage_dive.get_id()))),
         GcdOpener(db.raiden_thrust.get_id()),
-        OgcdOpener((
-            Some(db.spineshatter_dive.get_id()),
-            Some(db.mirage_dive.get_id()),
-        )),
-        GcdOpener(db.vorpal_thrust.get_id()),
+        OgcdOpener((Some(db.stardiver.get_id()), None)),
+        GcdOpener(db.lance_barrage.get_id()),
         OgcdOpener((Some(db.life_surge.get_id()), None)),
         GcdOpener(db.heavens_thrust.get_id()),
     ];
@@ -100,38 +97,15 @@ pub(crate) fn make_dragoon_gcd_priority_table(db: &DragoonDatabase) -> Vec<Skill
             )),
         },
         SkillPriorityInfo {
-            skill_id: db.wheeling_thrust_plus_surge.get_id(),
+            skill_id: db.drakesbane_surge.get_id(),
             prerequisite: Some(And(
-                Box::new(HasBufforDebuff(db.lance_mastery.get_id())),
-                Box::new(And(
-                    Box::new(Combo(Some(5))),
-                    Box::new(HasBufforDebuff(db.life_surge_buff.get_id())),
-                )),
+                Box::new(Combo(Some(7))),
+                Box::new(HasBufforDebuff(db.life_surge_buff.get_id())),
             )),
         },
         SkillPriorityInfo {
-            skill_id: db.fang_and_claw_plus_surge.get_id(),
-            prerequisite: Some(And(
-                Box::new(HasBufforDebuff(db.lance_mastery.get_id())),
-                Box::new(And(
-                    Box::new(Combo(Some(6))),
-                    Box::new(HasBufforDebuff(db.life_surge_buff.get_id())),
-                )),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.wheeling_thrust_plus.get_id(),
-            prerequisite: Some(And(
-                Box::new(HasBufforDebuff(db.lance_mastery.get_id())),
-                Box::new(Combo(Some(5))),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.fang_and_claw_plus.get_id(),
-            prerequisite: Some(And(
-                Box::new(HasBufforDebuff(db.lance_mastery.get_id())),
-                Box::new(Combo(Some(6))),
-            )),
+            skill_id: db.drakesbane.get_id(),
+            prerequisite: Some(Combo(Some(7))),
         },
         SkillPriorityInfo {
             skill_id: db.wheeling_thrust.get_id(),
@@ -146,7 +120,7 @@ pub(crate) fn make_dragoon_gcd_priority_table(db: &DragoonDatabase) -> Vec<Skill
             prerequisite: Some(Combo(Some(4))),
         },
         SkillPriorityInfo {
-            skill_id: db.disembowel.get_id(),
+            skill_id: db.spiral_blow.get_id(),
             prerequisite: Some(And(
                 Box::new(Combo(Some(2))),
                 Box::new(BufforDebuffLessThan(801, 10000)),
@@ -157,7 +131,7 @@ pub(crate) fn make_dragoon_gcd_priority_table(db: &DragoonDatabase) -> Vec<Skill
             prerequisite: Some(Combo(Some(3))),
         },
         SkillPriorityInfo {
-            skill_id: db.vorpal_thrust.get_id(),
+            skill_id: db.lance_barrage.get_id(),
             prerequisite: Some(Combo(Some(2))),
         },
         SkillPriorityInfo {
@@ -178,17 +152,6 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.nastrond.get_id(),
-            prerequisite: Some(BufforDebuffLessThan(db.battle_litany_buff.get_id(), 12000)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.stardiver.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
-                db.battle_litany_buff.get_id(),
-                12000,
-            )),
-        },
-        SkillPriorityInfo {
             skill_id: db.wyrmwind_thrust.get_id(),
             prerequisite: Some(SkillPrerequisite::HasBufforDebuff(
                 db.draconian_fire.get_id(),
@@ -199,28 +162,7 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.dragon_sight.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
             skill_id: db.lance_charge.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.mirage_dive.get_id(),
-            prerequisite: Some(Or(
-                Box::new(And(
-                    Box::new(Not(Box::new(HasResource(0, 2)))),
-                    Box::new(RelatedSkillCooldownLessOrEqualThan(
-                        db.lance_charge.get_id(),
-                        20000,
-                    )),
-                )),
-                Box::new(BufforDebuffLessThan(db.dive_ready.get_id(), 3000)),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.geirskogul_plus.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -236,25 +178,27 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.life_surge.get_id(),
-            prerequisite: Some(And(
-                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
-                Box::new(Or(
-                    Box::new(Combo(Some(2))),
-                    Box::new(HasBufforDebuff(db.lance_mastery.id)),
-                )),
-            )),
+            skill_id: db.mirage_dive.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.spineshatter_dive.get_id(),
-            prerequisite: Some(RelatedSkillCooldownLessOrEqualThan(
-                db.spineshatter_dive.get_id(),
-                3000,
+            skill_id: db.life_surge.get_id(),
+            prerequisite: Some(And(
+                Box::new(Or(Box::new(Combo(Some(3))), Box::new(Combo(Some(7))))),
+                Box::new(HasBufforDebuff(db.lance_charge_buff.id)),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.wyrmwind_thrust.get_id(),
             prerequisite: Some(HasBufforDebuff(db.battle_litany_buff.get_id())),
+        },
+        SkillPriorityInfo {
+            skill_id: db.starcross.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.rise_of_the_dragon.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.dragonfire_dive.get_id(),
@@ -263,16 +207,6 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
         SkillPriorityInfo {
             skill_id: db.stardiver.get_id(),
             prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.life_surge.get_id(),
-            prerequisite: Some(And(
-                Box::new(RelatedSkillCooldownLessOrEqualThan(
-                    db.life_surge_buff.get_id(),
-                    20000,
-                )),
-                Box::new(Combo(Some(2))),
-            )),
         },
     ]
 }

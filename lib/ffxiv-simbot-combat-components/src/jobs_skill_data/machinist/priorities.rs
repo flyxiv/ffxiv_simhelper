@@ -62,15 +62,15 @@ pub(crate) fn make_machinist_opener(db: &MachinistDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.heated_split_shot.get_id()),
         Opener::OgcdOpener((Some(db.double_check.get_id()), Some(db.checkmate.get_id()))),
-        Opener::GcdOpener(db.drill.get_id()),
-        Opener::OgcdOpener((Some(db.barrel_stabilizer.get_id()), None)),
         Opener::GcdOpener(db.heated_slug_shot.get_id()),
-        Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
-        Opener::GcdOpener(db.heated_clean_shot.get_id()),
+        Opener::OgcdOpener((Some(db.barrel_stabilizer.get_id()), None)),
+        Opener::GcdOpener(db.drill.get_id()),
         Opener::OgcdOpener((Some(db.reassemble.get_id()), Some(db.double_check.get_id()))),
         Opener::GcdOpener(db.air_anchor.get_id()),
         Opener::OgcdOpener((Some(db.reassemble.get_id()), Some(db.wildfire.get_id()))),
         Opener::GcdOpener(db.chainsaw.get_id()),
+        Opener::OgcdOpener((Some(db.checkmate.get_id()), Some(db.double_check.get_id()))),
+        Opener::GcdOpener(db.excavator.get_id()),
         Opener::OgcdOpener((
             Some(db.automaton_queen.get_id()),
             Some(db.hypercharge.get_id()),
@@ -85,12 +85,16 @@ pub(crate) fn make_machinist_opener(db: &MachinistDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((Some(db.double_check.get_id()), None)),
         Opener::GcdOpener(db.blazing_shot.get_id()),
         Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
-        Opener::GcdOpener(db.drill.get_id()),
+        Opener::GcdOpener(db.full_metal_field.get_id()),
     ]
 }
 
 pub(crate) fn make_machinist_gcd_priority_table(db: &MachinistDatabase) -> Vec<SkillPriorityInfo> {
     vec![
+        SkillPriorityInfo {
+            skill_id: db.excavator_reassemble.get_id(),
+            prerequisite: None,
+        },
         SkillPriorityInfo {
             skill_id: db.drill_reassemble.get_id(),
             prerequisite: None,
@@ -108,15 +112,19 @@ pub(crate) fn make_machinist_gcd_priority_table(db: &MachinistDatabase) -> Vec<S
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.drill.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
             skill_id: db.air_anchor.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.chainsaw.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.excavator.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.drill.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -143,6 +151,28 @@ pub(crate) fn make_machinist_ogcd_priority_table(db: &MachinistDatabase) -> Vec<
         SkillPriorityInfo {
             skill_id: db.wildfire.get_id(),
             prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.hypercharge_hypercharged.get_id(),
+            prerequisite: Some(Or(
+                Box::new(And(
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(db.drill.get_id(), 8000)),
+                    Box::new(And(
+                        Box::new(RelatedSkillCooldownLessOrEqualThan(
+                            db.air_anchor.get_id(),
+                            8000,
+                        )),
+                        Box::new(RelatedSkillCooldownLessOrEqualThan(
+                            db.chainsaw.get_id(),
+                            8000,
+                        )),
+                    )),
+                )),
+                Box::new(Or(
+                    Box::new(SkillPrerequisite::HasResource(0, 70)),
+                    Box::new(MillisecondsBeforeBurst(0)),
+                )),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.hypercharge.get_id(),

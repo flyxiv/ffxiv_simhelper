@@ -1,5 +1,6 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
+use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
@@ -814,6 +815,14 @@ impl DancerDatabase {
                     60000,
                     0,
                 ),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    DANCE_OF_THE_DAWN_READY.clone(),
+                    30000,
+                    30000,
+                    0,
+                ),
             ],
             proc_events: vec![],
             combo: None,
@@ -884,7 +893,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: None,
+            stack_skill_id: Some(STANDARD_STEP.get_id()),
             use_type: UseType::UseOnTarget,
         };
         let DANCE_OF_THE_DAWN: AttackSkill = AttackSkill {

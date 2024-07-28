@@ -1,22 +1,17 @@
-use crate::event::ffxiv_event::FfxivEvent::{
-    AddTicker, ApplyBuff, ApplyBuffStack, ApplyDebuff, ApplyRaidBuff,
-};
-use crate::event::FfxivEventQueue;
+use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff};
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
-use crate::skill::ResourceRequirements::{CheckStatus, Resource, UseBuff};
+use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
-use std::cell::RefCell;
 use std::collections::HashMap;
-use std::rc::Rc;
 
 pub(crate) struct SamuraiDatabase {
     pub(crate) gyofu: AttackSkill,
@@ -163,7 +158,7 @@ impl SamuraiDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let ZANSHIN_Ready: BuffStatus = BuffStatus {
+        let ZANSHIN_READY: BuffStatus = BuffStatus {
             id: 1108,
             name: String::from("Zanshin Ready"),
             stacks: 1,
@@ -448,7 +443,7 @@ impl SamuraiDatabase {
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
-            gcd_cooldown_millisecond: 3200,
+            gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_millisecond: 0,
@@ -562,7 +557,7 @@ impl SamuraiDatabase {
                     30000,
                     0,
                 ),
-                ApplyBuff(player_id, player_id, ZANSHIN_Ready.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, ZANSHIN_READY.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -817,7 +812,7 @@ impl SamuraiDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![Resource(0, 50), UseBuff(ZANSHIN_Ready.get_id())],
+            resource_required: vec![Resource(0, 50), UseBuff(ZANSHIN_READY.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -838,7 +833,7 @@ impl SamuraiDatabase {
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 800,
-            gcd_cooldown_millisecond: 3200,
+            gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_millisecond: 0,
@@ -893,6 +888,9 @@ impl SamuraiDatabase {
             higanbana_dot: HIGANBANA_DOT,
             ogi_namikiri_used: OGI_NAMIKIRI_USED,
 
+            tsubame_gaeshi_ready: TSUBAME_GAESHI_READY,
+            zanshin_ready: ZANSHIN_READY,
+            tendo: TENDO,
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,
         }

@@ -77,7 +77,8 @@ pub(crate) fn make_warrior_opener(db: &WarriorDatabase) -> Vec<Opener> {
         GcdOpener(db.fell_cleave_inner.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.fell_cleave_inner.get_id()),
-        OgcdOpener((None, None)),
+        OgcdOpener((Some(db.primal_wrath.get_id()), None)),
+        GcdOpener(db.primal_ruination.get_id()),
     ]
 }
 
@@ -89,7 +90,11 @@ pub(crate) fn make_warrior_gcd_priority_table(db: &WarriorDatabase) -> Vec<Skill
         },
         SkillPriorityInfo {
             skill_id: db.primal_rend.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.primal_rend_ready.get_id())),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.primal_ruination.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.fell_cleave_inner.get_id(),

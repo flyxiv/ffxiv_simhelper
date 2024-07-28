@@ -65,33 +65,61 @@ pub(crate) fn make_redmage_opener(db: &RedmageDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.veraero_iii.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.verthunder_iii_dual.get_id()),
-        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
-        Opener::GcdOpener(db.jolt_iii.get_id()),
+        Opener::OgcdOpener((
+            Some(db.potion.get_id()),
+            Some(db.acceleration_buff.get_id()),
+        )),
+        Opener::GcdOpener(db.grand_impact.get_id()),
         Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.veraero_iii_dual.get_id()),
+        Opener::GcdOpener(db.veraero_iii_accel.get_id()),
         Opener::OgcdOpener((Some(db.acceleration.get_id()), Some(db.fleche.get_id()))),
-        Opener::GcdOpener(db.verthunder_iii_accel.get_id()),
+        Opener::GcdOpener(db.grand_impact.get_id()),
         Opener::OgcdOpener((Some(db.manafication.get_id()), Some(db.embolden.get_id()))),
-        Opener::GcdOpener(db.enchanted_riposte.get_id()),
+        Opener::GcdOpener(db.manafication_riposte.get_id()),
         Opener::OgcdOpener((Some(db.contre_sixte.get_id()), None)),
-        Opener::GcdOpener(db.enchanted_zwerchhau.get_id()),
+        Opener::GcdOpener(db.manafication_zwerchhau.get_id()),
         Opener::OgcdOpener((Some(db.engagement.get_id()), None)),
-        Opener::GcdOpener(db.enchanted_redoublement.get_id()),
+        Opener::GcdOpener(db.manafication_redoublement.get_id()),
         Opener::OgcdOpener((
             Some(db.corps_a_corps.get_id()),
             Some(db.engagement.get_id()),
         )),
-        Opener::GcdOpener(db.verholy.get_id()),
+        Opener::GcdOpener(db.manafication_verholy.get_id()),
         Opener::OgcdOpener((Some(db.corps_a_corps.get_id()), None)),
-        Opener::GcdOpener(db.scorch.get_id()),
+        Opener::GcdOpener(db.manafication_scorch.get_id()),
         Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.resolution.get_id()),
-        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.manafication_resolution.get_id()),
+        Opener::OgcdOpener((Some(db.prefulgence.get_id()), None)),
     ]
 }
 
 pub(crate) fn make_redmage_gcd_priority_table(db: &RedmageDatabase) -> Vec<SkillPriorityInfo> {
-    let mut priority = vec![
+    let mut priority = make_magic_pair_priority(
+        11,
+        db.manafication_verholy.get_id(),
+        db.manafication_verflare.get_id(),
+    );
+    priority.extend(vec![
+        SkillPriorityInfo {
+            skill_id: db.manafication_resolution.get_id(),
+            prerequisite: Some(Combo(Some(5))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.manafication_scorch.get_id(),
+            prerequisite: Some(Combo(Some(4))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.manafication_redoublement.get_id(),
+            prerequisite: Some(Combo(Some(3))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.manafication_zwerchhau.get_id(),
+            prerequisite: Some(Combo(Some(2))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.manafication_riposte.get_id(),
+            prerequisite: None,
+        },
         SkillPriorityInfo {
             skill_id: db.enchanted_riposte.get_id(),
             prerequisite: Some(Or(
@@ -124,13 +152,18 @@ pub(crate) fn make_redmage_gcd_priority_table(db: &RedmageDatabase) -> Vec<Skill
             skill_id: db.resolution.get_id(),
             prerequisite: Some(Combo(Some(5))),
         },
-    ];
+    ]);
 
     priority.extend(make_magic_pair_priority(
         11,
         db.verholy.get_id(),
         db.verflare.get_id(),
     ));
+
+    priority.push(SkillPriorityInfo {
+        skill_id: db.grand_impact.get_id(),
+        prerequisite: None,
+    });
 
     priority.extend(make_magic_pair_priority(
         6,
@@ -203,6 +236,14 @@ pub(crate) fn make_redmage_ogcd_priority_table(db: &RedmageDatabase) -> Vec<Skil
                 Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
                 Box::new(SkillPrerequisite::HasSkillStacks(db.engagement.get_id(), 2)),
             )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.prefulgence.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.vice_of_thorns.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.acceleration.get_id(),

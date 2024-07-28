@@ -1,17 +1,16 @@
-use crate::event::FfxivEventQueue;
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::reaper::abilities::ReaperDatabase;
-use crate::jobs_skill_data::samurai::abilities::SamuraiDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
     Or, RelatedSkillCooldownLessOrEqualThan,
 };
+use crate::skill::ResourceRequirements::Resource;
 
 #[derive(Clone)]
 pub(crate) struct ReaperPriorityTable {
@@ -71,7 +70,10 @@ pub(crate) fn make_reaper_opener(db: &ReaperDatabase) -> Vec<Opener> {
         GcdOpener(db.harvest_moon.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.plentiful_harvest.get_id()),
-        OgcdOpener((Some(db.enshroud.get_id()), None)),
+        OgcdOpener((
+            Some(db.enshroud_host.get_id()),
+            Some(db.sacrificium.get_id()),
+        )),
         GcdOpener(db.void_reaping.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.cross_reaping.get_id()),
@@ -103,7 +105,7 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
                 Box::new(BufforDebuffLessThan(db.shadow_of_death.get_id(), 37000)),
                 Box::new(And(
                     Box::new(HasBufforDebuff(db.enshroud.get_id())),
-                    Box::new(MillisecondsBeforeBurst(15000)),
+                    Box::new(MillisecondsBeforeBurst(7000)),
                 )),
             )),
         },
@@ -114,6 +116,22 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
         SkillPriorityInfo {
             skill_id: db.void_reaping.get_id(),
             prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.perfectio.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.slice_refresh_combo.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.waxing_slice_refresh_combo.get_id(),
+            prerequisite: Some(Combo(Some(2))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.infernal_slice_refresh_combo.get_id(),
+            prerequisite: Some(Combo(Some(3))),
         },
         SkillPriorityInfo {
             skill_id: db.enhanced_gibbet.get_id(),
@@ -165,6 +183,10 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.sacrificium.get_id(),
+            prerequisite: Some(HasBufforDebuff(db.arcane_circle_buff.get_id())),
+        },
+        SkillPriorityInfo {
             skill_id: db.arcane_circle.get_id(),
             prerequisite: None,
         },
@@ -178,6 +200,10 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
         SkillPriorityInfo {
             skill_id: db.lemures_slice.get_id(),
             prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.sacrificium.get_id(),
+            prerequisite: Some(Not(Box::new(HasResource(3, 2)))),
         },
         SkillPriorityInfo {
             skill_id: db.gluttony.get_id(),
@@ -208,6 +234,10 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
                 )),
                 Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
             )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.sacrificium.get_id(),
+            prerequisite: None,
         },
     ]
 }

@@ -1,6 +1,6 @@
 use crate::combat_resources::CombatResource;
 use crate::event::FfxivEventQueue;
-use crate::jobs_skill_data::reaper::abilities::make_reaper_skill_list;
+use crate::jobs_skill_data::reaper::abilities::{make_reaper_skill_list, reaper_normal_gcd_ids};
 use crate::jobs_skill_data::samurai::abilities::make_samurai_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -21,7 +21,6 @@ const SOUL_REAVER_MAX: ResourceType = 1;
 const ENSHROUD_STACK_MAX: ResourceType = 5;
 const LEMURES_STACK_MAX: ResourceType = 2;
 const EXECUTIONER_STACK_MAX: ResourceType = 2;
-
 #[derive(Clone)]
 pub(crate) struct ReaperCombatResources {
     skills: SkillTable<AttackSkill>,
@@ -33,6 +32,8 @@ pub(crate) struct ReaperCombatResources {
     enshroud_stack: ResourceType,
     lemures_stack: ResourceType,
     executioner_stack: ResourceType,
+    enshroud_count: ResourceType,
+    refreshed_combo: ResourceType,
 }
 
 impl CombatResource for ReaperCombatResources {
@@ -60,6 +61,10 @@ impl CombatResource for ReaperCombatResources {
                 EXECUTIONER_STACK_MAX,
                 self.executioner_stack + resource_amount,
             );
+        } else if resource_id == 6 {
+            self.enshroud_count = self.enshroud_stack + resource_amount;
+        } else if resource_id == 7 {
+            self.refreshed_combo = min(self.refreshed_combo + resource_amount, 1);
         }
     }
 
@@ -76,6 +81,10 @@ impl CombatResource for ReaperCombatResources {
             self.lemures_stack
         } else if resource_id == 5 {
             self.executioner_stack
+        } else if resource_id == 6 {
+            self.enshroud_count
+        } else if resource_id == 7 {
+            self.refreshed_combo
         } else {
             -1
         }
@@ -93,12 +102,16 @@ impl CombatResource for ReaperCombatResources {
 
     fn trigger_on_event(
         &mut self,
-        _: IdType,
+        skill_id: IdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         _: TimeType,
         _: &FfxivPlayer,
     ) -> SkillEvents {
+        if reaper_normal_gcd_ids(self.player_id).contains(&skill_id) {
+            self.enshroud_count = 0;
+        }
+
         (vec![], vec![])
     }
 

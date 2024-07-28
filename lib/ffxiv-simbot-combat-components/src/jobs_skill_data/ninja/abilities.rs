@@ -38,6 +38,7 @@ pub(crate) struct NinjaDatabase {
     pub(crate) bunshin_stack: AttackSkill,
     pub(crate) mudra: AttackSkill,
     pub(crate) tenri_jindo: AttackSkill,
+    pub(crate) zesho_meppo_meisui: AttackSkill,
 
     pub(crate) huton_status: BuffStatus,
     pub(crate) raijuready: BuffStatus,
@@ -1037,6 +1038,7 @@ pub(crate) fn make_ninja_skill_list(player_id: IdType) -> SkillTable<AttackSkill
         db.bunshin_stack,
         db.mudra,
         db.tenri_jindo,
+        db.zesho_meppo_meisui,
     ];
 
     make_skill_table(ninja_skill_list)

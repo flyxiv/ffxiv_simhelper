@@ -84,6 +84,10 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.finishing_move.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.standard_step.get_id(),
             prerequisite: None,
         },
@@ -93,6 +97,14 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
         },
         SkillPriorityInfo {
             skill_id: db.reverse_cascade_flourish.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.dance_of_the_dawn.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.last_dance.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {

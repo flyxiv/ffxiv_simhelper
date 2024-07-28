@@ -1,20 +1,15 @@
-use crate::event::FfxivEventQueue;
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
-use rand::distributions::uniform::SampleUniform;
 use std::cell::RefCell;
-use std::rc::Rc;
 
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::samurai::abilities::SamuraiDatabase;
-use crate::jobs_skill_data::summoner::abilities::SummonerDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not, Or,
-    RelatedSkillCooldownLessOrEqualThan,
+    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
+    Or, RelatedSkillCooldownLessOrEqualThan,
 };
-use crate::skill::ResourceRequirements::Resource;
 
 #[derive(Clone)]
 pub(crate) struct SamuraiPriorityTable {
@@ -72,37 +67,37 @@ pub(crate) fn make_samurai_opener(db: &SamuraiDatabase) -> Vec<Opener> {
         OgcdOpener((None, None)),
         GcdOpener(db.yukikaze.get_id()),
         OgcdOpener((None, None)),
-        GcdOpener(db.midare_setsugekka.get_id()),
+        GcdOpener(db.tendo_setsugekka.get_id()),
         OgcdOpener((Some(db.ikishoten.get_id()), None)),
-        GcdOpener(db.kaeshi_setsugekka.get_id()),
+        GcdOpener(db.kaeshi_tendo_setsugekka.get_id()),
         OgcdOpener((
             Some(db.hissatsu_senei.get_id()),
             Some(db.meikyo_shisui.get_id()),
         )),
         GcdOpener(db.gekko_meiko.get_id()),
-        OgcdOpener((Some(db.hissatsu_shinten.get_id()), None)),
+        OgcdOpener((Some(db.zanshin.get_id()), None)),
         GcdOpener(db.higanbana.get_id()),
-        OgcdOpener((Some(db.hissatsu_shinten.get_id()), None)),
+        OgcdOpener((None, None)),
         GcdOpener(db.ogi_namikiri.get_id()),
         OgcdOpener((Some(db.shoha.get_id()), None)),
         GcdOpener(db.kasha_meiko.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.gekko_meiko.get_id()),
         OgcdOpener((Some(db.hissatsu_shinten.get_id()), None)),
-        GcdOpener(db.hakaze.get_id()),
+        GcdOpener(db.gyofu.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.yukikaze.get_id()),
         OgcdOpener((None, None)),
-        GcdOpener(db.midare_setsugekka.get_id()),
+        GcdOpener(db.tendo_setsugekka.get_id()),
         OgcdOpener((None, None)),
-        GcdOpener(db.kaeshi_setsugekka.get_id()),
+        GcdOpener(db.kaeshi_tendo_setsugekka.get_id()),
     ]
 }
 
 pub(crate) fn make_samurai_gcd_priority_table(db: &SamuraiDatabase) -> Vec<SkillPriorityInfo> {
     vec![
         SkillPriorityInfo {
-            skill_id: db.kaeshi_setsugekka.get_id(),
+            skill_id: db.kaeshi_tendo_setsugekka.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -111,10 +106,7 @@ pub(crate) fn make_samurai_gcd_priority_table(db: &SamuraiDatabase) -> Vec<Skill
         },
         SkillPriorityInfo {
             skill_id: db.midare_setsugekka.get_id(),
-            prerequisite: Some(RelatedSkillCooldownLessOrEqualThan(
-                db.kaeshi_setsugekka.get_id(),
-                0,
-            )),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.higanbana.get_id(),
@@ -182,7 +174,7 @@ pub(crate) fn make_samurai_gcd_priority_table(db: &SamuraiDatabase) -> Vec<Skill
             prerequisite: Some(Not(Box::new(HasResource(3, 1)))),
         },
         SkillPriorityInfo {
-            skill_id: db.hakaze.get_id(),
+            skill_id: db.gyofu.get_id(),
             prerequisite: None,
         },
     ]
@@ -205,10 +197,7 @@ pub(crate) fn make_samurai_ogcd_priority_table(db: &SamuraiDatabase) -> Vec<Skil
         SkillPriorityInfo {
             skill_id: db.meikyo_shisui.get_id(),
             prerequisite: Some(And(
-                Box::new(RelatedSkillCooldownLessOrEqualThan(
-                    db.kaeshi_setsugekka.get_id(),
-                    7000,
-                )),
+                Box::new(BufforDebuffLessThan(db.higanbana.get_id(), 7000)),
                 Box::new(Combo(Some(0))),
             )),
         },

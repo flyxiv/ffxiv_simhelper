@@ -4,12 +4,10 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
-use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
-use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
 use std::collections::HashMap;
@@ -270,7 +268,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             resource_required: vec![],
-            resource_created: HashMap::from([(8, 3)]),
+            resource_created: HashMap::from([(8, 2)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
@@ -658,7 +656,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             resource_required: vec![ResourceRequirements::UseBuff(PERFECT_BALANCE_BUFF.id)],
-            resource_created: HashMap::from([(3, 1), (8, 3)]),
+            resource_created: HashMap::from([(3, 1), (8, 2)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,

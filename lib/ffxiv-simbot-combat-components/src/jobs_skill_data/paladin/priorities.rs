@@ -58,15 +58,15 @@ impl PaladinPriorityTable {
 pub(crate) fn make_paladin_opener(db: &PaladinDatabase) -> Vec<Opener> {
     vec![
         GcdOpener(db.weak_holy_spirit.get_id()),
-        OgcdOpener((Some(db.potion.get_id()), None)),
-        GcdOpener(db.fast_blade.get_id()),
         OgcdOpener((None, None)),
+        GcdOpener(db.fast_blade.get_id()),
+        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.riot_blade.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.royal_authority.get_id()),
         OgcdOpener((
             Some(db.fight_or_flight.get_id()),
-            Some(db.requiescat.get_id()),
+            Some(db.imperator.get_id()),
         )),
         GcdOpener(db.goring_blade.get_id()),
         OgcdOpener((
@@ -80,15 +80,9 @@ pub(crate) fn make_paladin_opener(db: &PaladinDatabase) -> Vec<Opener> {
         GcdOpener(db.blade_of_truth.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.blade_of_valor.get_id()),
+        OgcdOpener((Some(db.blade_of_honor.get_id()), None)),
         OgcdOpener((None, None)),
-        GcdOpener(db.holy_spirit.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.atonement.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.atonement.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.atonement.get_id()),
-        OgcdOpener((None, None)),
+        GcdOpener(db.royal_authority.get_id()),
     ]
 }
 
@@ -121,6 +115,14 @@ pub(crate) fn make_paladin_gcd_priority_table(db: &PaladinDatabase) -> Vec<Skill
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.sepulchre.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.supplication.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.atonement.get_id(),
             prerequisite: None,
         },
@@ -146,7 +148,7 @@ pub(crate) fn make_paladin_ogcd_priority_table(db: &PaladinDatabase) -> Vec<Skil
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.requiescat.get_id(),
+            skill_id: db.imperator.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -164,6 +166,10 @@ pub(crate) fn make_paladin_ogcd_priority_table(db: &PaladinDatabase) -> Vec<Skil
         SkillPriorityInfo {
             skill_id: db.intervene.get_id(),
             prerequisite: Some(HasBufforDebuff(db.fight_or_flight_buff.get_id())),
+        },
+        SkillPriorityInfo {
+            skill_id: db.blade_of_honor.get_id(),
+            prerequisite: None,
         },
     ]
 }

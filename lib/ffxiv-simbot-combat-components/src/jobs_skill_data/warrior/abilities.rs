@@ -466,7 +466,7 @@ impl WarriorDatabase {
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
-            is_speed_buffed: 0,
+            is_speed_buffed: true,
             cooldown_millisecond: 0,
             resource_required: vec![ResourceRequirements::Resource(1, 3)],
             resource_created: Default::default(),

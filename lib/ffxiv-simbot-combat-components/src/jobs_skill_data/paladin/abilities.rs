@@ -672,7 +672,7 @@ impl PaladinDatabase {
             combo: Some(0),
             delay_millisecond: None,
             casting_time_millisecond: 0,
-            gcd_cooldown_millisecond: 2500,
+            gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_millisecond: 0,

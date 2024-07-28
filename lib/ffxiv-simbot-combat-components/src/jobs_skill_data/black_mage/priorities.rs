@@ -1,6 +1,8 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::black_mage::abilities::BlackmageDatabase;
-use crate::rotation::priority_table::SkillPrerequisite::{And, Combo, Not, Or};
+use crate::rotation::priority_table::SkillPrerequisite::{
+    And, Combo, HasResource, HasSkillStacks, Not, Or, RelatedSkillCooldownLessOrEqualThan,
+};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::{IdType, TurnCount};
@@ -55,7 +57,6 @@ impl BlackmagePriorityTable {
 
 pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase) -> Vec<Opener> {
     vec![
-        Opener::OgcdOpener((Some(db.sharpcast.get_id()), None)),
         Opener::GcdOpener(db.blizzard3_opener.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.high_thunder.get_id()),
@@ -78,7 +79,22 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
             prerequisite: Some(Or(Box::new(Combo(Some(2))), Box::new(Combo(Some(3))))),
         },
         SkillPriorityInfo {
-            skill_id: db.thunder3_procced.get_id(),
+            skill_id: db.xenoglossy.get_id(),
+            prerequisite: Some(And(
+                Box::new(HasResource(2, 5)),
+                Box::new(HasSkillStacks(db.triplecast.id, 1)),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.flare_star_triplecast.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.flare_star.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.high_thunder.get_id(),
             prerequisite: Some(Or(
                 Box::new(SkillPrerequisite::BufforDebuffLessThan(
                     db.high_thunder_dot.get_id(),
@@ -90,12 +106,16 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
             )),
         },
         SkillPriorityInfo {
-            skill_id: db.fire3_ice.get_id(),
-            prerequisite: Some(Combo(Some(3))),
-        },
-        SkillPriorityInfo {
             skill_id: db.fire3_f1.get_id(),
             prerequisite: Some(SkillPrerequisite::HasBufforDebuff(db.astral_fire1.get_id())),
+        },
+        SkillPriorityInfo {
+            skill_id: db.blizzard3_transpose.get_id(),
+            prerequisite: Some(Combo(Some(1))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.blizzard3_transpose_swiftcast.get_id(),
+            prerequisite: Some(Combo(Some(1))),
         },
         SkillPriorityInfo {
             skill_id: db.blizzard3.get_id(),
@@ -142,6 +162,18 @@ pub(crate) fn make_blackmage_ogcd_priority_table(db: &BlackmageDatabase) -> Vec<
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.manafont.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.transpose_fire_to_ice.get_id(),
+            prerequisite: Some(HasResource(3, 1)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.transpose_ice_to_fire.get_id(),
+            prerequisite: Some(Combo(Some(3))),
+        },
+        SkillPriorityInfo {
             skill_id: db.leylines.get_id(),
             prerequisite: None,
         },
@@ -150,14 +182,8 @@ pub(crate) fn make_blackmage_ogcd_priority_table(db: &BlackmageDatabase) -> Vec<
             prerequisite: Some(Not(Box::new(SkillPrerequisite::HasResource(0, 2)))),
         },
         SkillPriorityInfo {
-            skill_id: db.sharpcast.get_id(),
-            prerequisite: Some(Not(Box::new(SkillPrerequisite::HasBufforDebuff(
-                db.sharpcast.get_id(),
-            )))),
-        },
-        SkillPriorityInfo {
             skill_id: db.triplecast.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource(2, 4)),
+            prerequisite: Some(SkillPrerequisite::HasResource(2, 5)),
         },
         SkillPriorityInfo {
             skill_id: db.swiftcast.get_id(),

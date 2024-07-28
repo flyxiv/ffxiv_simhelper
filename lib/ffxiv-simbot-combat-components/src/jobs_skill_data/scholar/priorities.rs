@@ -62,11 +62,11 @@ pub(crate) fn make_scholar_opener(db: &ScholarDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.biolysis.get_id()),
         Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.broil_iv.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((Some(db.chain_stratagem.get_id()), None)),
+        Opener::GcdOpener(db.broil_iv.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.broil_iv.get_id()),
+        Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
@@ -81,6 +81,8 @@ pub(crate) fn make_scholar_opener(db: &ScholarDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
+        Opener::GcdOpener(db.broil_iv.get_id()),
+        Opener::OgcdOpener((Some(db.baneful_impaction.get_id()), None)),
     ]
 }
 
@@ -135,6 +137,10 @@ pub(crate) fn make_scholar_ogcd_priority_table(db: &ScholarDatabase) -> Vec<Skil
         },
         SkillPriorityInfo {
             skill_id: db.aetherflow.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.baneful_impaction.get_id(),
             prerequisite: None,
         },
     ]

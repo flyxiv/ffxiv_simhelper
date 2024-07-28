@@ -64,21 +64,32 @@ pub(crate) fn make_summoner_opener(db: &SummonerDatabase) -> Vec<Opener> {
         OgcdOpener((None, None)),
         GcdOpener(db.ruin_iii.get_id()),
         OgcdOpener((Some(db.searing_light.get_id()), None)),
-        GcdOpener(db.summon_bahamut.get_id()),
+        GcdOpener(db.summon_solar_bahamut.get_id()),
         OgcdOpener((Some(db.potion.get_id()), None)),
-        GcdOpener(db.astral_impulse.get_id()),
-        OgcdOpener((Some(db.energy_drain.get_id()), None)),
+        GcdOpener(db.umbral_impulse.get_id()),
+        OgcdOpener((
+            Some(db.energy_drain.get_id()),
+            Some(db.searing_flash.get_id()),
+        )),
+        GcdOpener(db.umbral_impulse.get_id()),
         OgcdOpener((
             Some(db.necrotize.get_id()),
-            Some(db.enkindle_bahamut.get_id()),
+            Some(db.enkindle_solar_bahamut.get_id()),
         )),
-        GcdOpener(db.astral_impulse.get_id()),
-        OgcdOpener((Some(db.necrotize.get_id()), Some(db.deathflare.get_id()))),
+        GcdOpener(db.umbral_impulse.get_id()),
+        OgcdOpener((Some(db.necrotize.get_id()), Some(db.sunflare.get_id()))),
     ]
 }
 
 pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<SkillPriorityInfo> {
     vec![
+        SkillPriorityInfo {
+            skill_id: db.summon_solar_bahamut.get_id(),
+            prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
+                db.energy_drain.get_id(),
+                2000,
+            )),
+        },
         SkillPriorityInfo {
             skill_id: db.summon_phoenix.get_id(),
             prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
@@ -92,6 +103,10 @@ pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<Ski
                 db.energy_drain.get_id(),
                 2000,
             )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.umbral_impulse.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.fountain_of_fire.get_id(),
@@ -171,11 +186,23 @@ pub(crate) fn make_summoner_ogcd_priority_table(db: &SummonerDatabase) -> Vec<Sk
             prerequisite: Some(MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {
+            skill_id: db.enkindle_solar_bahamut.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.enkindle_phoenix.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.enkindle_bahamut.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.searing_flash.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.sunflare.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {

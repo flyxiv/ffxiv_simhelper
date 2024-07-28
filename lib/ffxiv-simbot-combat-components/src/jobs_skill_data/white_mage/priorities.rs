@@ -63,9 +63,9 @@ pub(crate) fn make_whitemage_opener(db: &WhitemageDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.dia.get_id()),
         Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.glare3.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.glare3.get_id()),
         Opener::OgcdOpener((Some(db.presence_of_mind.get_id()), None)),
+        Opener::GcdOpener(db.glare3.get_id()),
+        Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.glare3.get_id()),
         Opener::OgcdOpener((Some(db.assize.get_id()), None)),
     ]
@@ -89,6 +89,10 @@ pub(crate) fn make_whitemage_gcd_priority_table(db: &WhitemageDatabase) -> Vec<S
                 )),
                 Box::new(Not(Box::new(HasBufforDebuff(db.dia_dot.get_id())))),
             )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.glare4.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.afflatus_rapture.get_id(),
