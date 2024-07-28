@@ -1,18 +1,12 @@
 export interface CharacterStates {
   jobName: string;
   jobNameSetter: Function;
+  partner1Id: number | null;
+  setPartner1Id: Function;
+  partner2Id: number | null;
+  setPartner2Id: Function;
   stats: CharacterStats;
   setStats: Function;
-}
-
-export interface CharacterSetter {
-  weaponDamage: Function;
-  mainStat: Function;
-  criticalStrike: Function;
-  directHit: Function;
-  determination: Function;
-  speed: Function;
-  tenacity: Function;
 }
 
 export interface CharacterStats {

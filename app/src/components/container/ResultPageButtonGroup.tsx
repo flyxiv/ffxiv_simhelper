@@ -1,5 +1,4 @@
 import { Box, styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { useState } from "react";
 import { ColorConfigurations } from "src/Themes";
 
 type ViewType = "Best Teammate" | "Damage Profile" | "Rotation Log"; // Define possible view types

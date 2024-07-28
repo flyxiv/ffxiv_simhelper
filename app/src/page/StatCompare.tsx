@@ -66,15 +66,21 @@ export function StatCompare() {
   let [mainPlayerJob, setMainPlayerJob] = useState(
     mostRecentRequest.mainPlayerJob
   );
-
   const [mainPlayerStat1, setMainPlayerStat1] = useState(
     mostRecentRequest.mainPlayerStat1
   );
+  let [mainPlayerPartner1Id, setMainPlayerPartner1Id] = useState(null);
+  let [mainPlayerPartner2Id, setMainPlayerPartner2Id] = useState(null);
+
   const mainPlayerState1: CharacterStates = {
     jobName: mainPlayerJob,
     jobNameSetter: setMainPlayerJob,
     stats: mainPlayerStat1,
     setStats: setMainPlayerStat1,
+    partner1Id: mainPlayerPartner1Id,
+    setPartner1Id: setMainPlayerPartner1Id,
+    partner2Id: mainPlayerPartner2Id,
+    setPartner2Id: setMainPlayerPartner2Id,
   };
 
   const [mainPlayerStat2, setMainPlayerStat2] = useState(
@@ -85,6 +91,10 @@ export function StatCompare() {
     jobNameSetter: setMainPlayerJob,
     stats: mainPlayerStat2,
     setStats: setMainPlayerStat2,
+    partner1Id: mainPlayerPartner1Id,
+    setPartner1Id: setMainPlayerPartner1Id,
+    partner2Id: mainPlayerPartner2Id,
+    setPartner2Id: setMainPlayerPartner2Id,
   };
 
   let combatTimeSeconds = mostRecentRequest.combatTimeMillisecond / 1000;
@@ -94,6 +104,7 @@ export function StatCompare() {
   let input = loadStatComparePartyJobs(mostRecentRequest.party);
   let ids = input.ids.map((id) => id + 1);
   let otherPartyJobs = input.jobs;
+  let [availablePartyIds, setAvailablePartyIds] = useState(ids);
 
   let [partyJobs, setPartyJobs] = useState(otherPartyJobs);
   let borderRadius = 3;
@@ -107,7 +118,7 @@ export function StatCompare() {
               <Typography variant="h5">1. Input Stat1</Typography>
             </Box>
             <Box className="CustomizeBoard">
-              {CharacterDetailedInput(mainPlayerState1)}
+              {CharacterDetailedInput(mainPlayerState1, availablePartyIds)}
             </Box>
           </Box>
           <Box className="CharacterDetailCustomizeBoard">
@@ -115,7 +126,7 @@ export function StatCompare() {
               <Typography variant="h5">2. Input Stat2</Typography>
             </Box>
             <Box className="CustomizeBoard">
-              {CharacterDetailedInput(mainPlayerState2)}
+              {CharacterDetailedInput(mainPlayerState2, availablePartyIds)}
             </Box>
           </Box>
         </Box>
@@ -128,6 +139,8 @@ export function StatCompare() {
               ids,
               partyJobs,
               setPartyJobs,
+              availablePartyIds,
+              setAvailablePartyIds,
               combatTimeStateSeconds,
               setCombatTimeSeconds
             )}

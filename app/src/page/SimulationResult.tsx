@@ -11,30 +11,10 @@ import { DamageProfileGraph } from "src/components/graph/DamageProfileGraph";
 import { SkillLogResult } from "src/components/container/SkillLog";
 import { ResultPageButtonGroup } from "src/components/container/ResultPageButtonGroup";
 import { QuickSimResponseSaveName } from "src/App";
-import { QuickSimRequest } from "src/types/QuickSimRequest";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
 `;
-
-export function isNotValid(request: QuickSimRequest) {
-  if (request.mainPlayerId === null || request.mainPlayerId === undefined) {
-    return true;
-  }
-
-  if (
-    request.combatTimeMillisecond === null ||
-    request.combatTimeMillisecond === undefined
-  ) {
-    return true;
-  }
-
-  if (request.party === null || request.party === undefined) {
-    return true;
-  }
-
-  return false;
-}
 
 export function SimulationResult() {
   let [currentlyToggledView, setCurrentlyToggledView] =
@@ -59,7 +39,7 @@ export function SimulationResult() {
       <ResultBoardBox>
         {SimulationTitle("Simulation Result")}
         {DpsSummary(mainPlayerSimulationData)}
-        {PlayerInfo(mainPlayerJob)}
+        {PlayerInfo(mainPlayerJob, responseJson.combatTimeMillisecond)}
       </ResultBoardBox>
       {ResultPageButtonGroup(
         currentlyToggledView,

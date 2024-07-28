@@ -7,6 +7,7 @@ export function JobItem(jobAbbrev: string) {
       <Box marginRight={1}>
         <img
           src={jobAbbrevToJobIconPath(jobAbbrev)}
+          alt={jobAbbrev}
           width={17}
           height={17}
           style={{ verticalAlign: "middle" }}

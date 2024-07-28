@@ -14,6 +14,8 @@ export interface PartyMemberState {
 }
 export interface PartyInfo {
   playerId: number;
+  partner1Id: number | null;
+  partner2Id: number | null;
   job: string;
   stats: CharacterStats;
 }

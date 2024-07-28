@@ -2,19 +2,13 @@ import { CharacterStats } from "src/types/CharacterStates";
 import { Box, Grid, styled, Typography } from "@mui/material";
 import {
   PlayerStatInfoBoxStyle,
-  plusTextColor,
   StatBoxStyle,
-  StatOneLineBoxStyle,
   StatTextBoxStyle,
   StatTitleTextBoxStyle,
 } from "./Styles";
 
 const PlayerStatInfoBox = styled(Box)`
   ${PlayerStatInfoBoxStyle}
-`;
-
-const StatOneLineBox = styled(Box)`
-  ${StatOneLineBoxStyle}
 `;
 
 const StatBox = styled(Box)`
@@ -29,7 +23,10 @@ const StatTextBox = styled(Box)`
   ${StatTextBoxStyle}
 `;
 
-export function PlayerStatInfo(statInfo: CharacterStats) {
+export function PlayerStatInfo(
+  statInfo: CharacterStats,
+  combatTimeMilliseconds: number
+) {
   return (
     <PlayerStatInfoBox>
       <Grid container spacing={0}>
@@ -40,6 +37,7 @@ export function PlayerStatInfo(statInfo: CharacterStats) {
         {StatOutput("Determination", statInfo.determination)}
         {StatOutput("Speed", statInfo.speed)}
         {StatOutput("Tenacity", statInfo.tenacity)}
+        {StatOutput("Time(Seconds)", Math.floor(combatTimeMilliseconds / 1000))}
       </Grid>
     </PlayerStatInfoBox>
   );
@@ -64,7 +62,8 @@ export function StatOutput(statName: string, statValue: number) {
 
 export function StatComparePlayerStatInfo(
   targetStat: CharacterStats,
-  compareStat: CharacterStats
+  compareStat: CharacterStats,
+  combatTimeMilliseconds: number
 ) {
   let weaponDamageColor = "black";
   let mainStatColor = "black";
@@ -142,6 +141,7 @@ export function StatComparePlayerStatInfo(
         )}
         {StatCompareStatOutput("Speed", targetStat.speed, speedColor)}
         {StatCompareStatOutput("Tenacity", targetStat.tenacity, tenacityColor)}
+        {StatOutput("Time(Seconds)", Math.floor(combatTimeMilliseconds / 1000))}
       </Grid>
     </PlayerStatInfoBox>
   );
@@ -153,7 +153,7 @@ export function StatCompareStatOutput(
   statColor: string
 ) {
   let style = { color: statColor, fontWeight: "normal" };
-  if (statColor != "black") {
+  if (statColor !== "black") {
     style = { color: statColor, fontWeight: "bold" };
   }
 

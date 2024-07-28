@@ -64,6 +64,7 @@ export function JobBarChartTeammate(
         <Bar>
           <img
             src={StatusIdToIconPathFactory(entry.statusId)}
+            alt={"rdps"}
             width={25}
             height={25}
           />

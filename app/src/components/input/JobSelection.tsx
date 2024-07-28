@@ -1,19 +1,14 @@
-import {
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
-  SelectChangeEvent,
-  styled,
-} from "@mui/material";
+import { MenuItem, InputLabel, Select, SelectChangeEvent } from "@mui/material";
 import { JobItemSelectionMenu } from "./JobItemSelectionMenu";
-import React, { useEffect } from "react";
+import React from "react";
 import { CustomFormControl } from "./InputForm";
 
 export function JobSelection(
   id: number,
   jobNames: string[],
-  jobNameSetter: React.Dispatch<React.SetStateAction<string[]>>
+  jobNameSetter: React.Dispatch<React.SetStateAction<string[]>>,
+  availablePartyIds: number[],
+  setAvailablePartyIds: Function
 ) {
   let playerId = `Party Member ${id}`;
   const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
@@ -23,6 +18,19 @@ export function JobSelection(
       }
       return jobName;
     });
+
+    let newAvailablePartyIds = availablePartyIds;
+    newAvailablePartyIds = newAvailablePartyIds.filter(
+      (partyId) => partyId !== id
+    );
+
+    if (e.target.value !== "Empty") {
+      newAvailablePartyIds.push(id);
+    }
+    newAvailablePartyIds.sort((a, b) => a - b);
+
+    setAvailablePartyIds(newAvailablePartyIds);
+
     jobNameSetter(newJobNames);
   };
 

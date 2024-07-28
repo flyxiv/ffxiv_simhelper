@@ -7,6 +7,8 @@ export function JobSelectionWithState(jobName: string, setJobName: Function) {
     setJobName(event.target.value);
   };
 
+  console.log(jobName);
+
   return (
     <CustomFormControl fullWidth>
       <InputLabel id="JobSelect">Job</InputLabel>

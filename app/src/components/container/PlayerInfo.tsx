@@ -4,13 +4,7 @@ import { JobIconFactory } from "../jobicon/JobIconFactory";
 import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
 import { QuickSimRequest } from "src/types/QuickSimRequest";
 import { PlayerStatInfo, StatComparePlayerStatInfo } from "./PlayerStatInfo";
-import {
-  QuickSimRequestSaveName,
-  StatCompareRequestSaveName,
-  StatCompareResponseSaveName,
-} from "src/App";
-import { StatCompareRequest } from "src/types/StatCompareRequest";
-import { StatCompareResponse } from "src/types/StatCompareResponse";
+import { QuickSimRequestSaveName } from "src/App";
 import { CharacterStats } from "src/types/CharacterStates";
 
 const PlayerInfoBox = styled(Box)`
@@ -21,7 +15,7 @@ const PlayerInfoJobTitle = styled(Box)`
   ${PlayerInfoJobTitleStyle}
 `;
 
-export function PlayerInfo(job: string) {
+export function PlayerInfo(job: string, combatTimeMilliseconds: number) {
   let mostRecentRequestState = localStorage.getItem(QuickSimRequestSaveName);
   let mostRecentRequest = null;
   if (mostRecentRequestState == null) {
@@ -41,7 +35,7 @@ export function PlayerInfo(job: string) {
           {job}
         </Typography>
       </PlayerInfoJobTitle>
-      {PlayerStatInfo(mainPlayerStats)}
+      {PlayerStatInfo(mainPlayerStats, combatTimeMilliseconds)}
     </PlayerInfoBox>
   );
 }
@@ -49,7 +43,8 @@ export function PlayerInfo(job: string) {
 export function StatComparePlayerInfo(
   job: string,
   targetStat: CharacterStats,
-  compareStat: CharacterStats
+  compareStat: CharacterStats,
+  combatTimeMilliseconds: number
 ) {
   return (
     <PlayerInfoBox>
@@ -59,7 +54,11 @@ export function StatComparePlayerInfo(
           {job}
         </Typography>
       </PlayerInfoJobTitle>
-      {StatComparePlayerStatInfo(targetStat, compareStat)}
+      {StatComparePlayerStatInfo(
+        targetStat,
+        compareStat,
+        combatTimeMilliseconds
+      )}
     </PlayerInfoBox>
   );
 }

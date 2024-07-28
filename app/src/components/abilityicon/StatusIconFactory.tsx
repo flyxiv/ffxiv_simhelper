@@ -82,14 +82,12 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
     case 1312:
       return actionIconDirectory + "/BRD/battle_voice.png";
     case 1314:
-      return actionIconDirectory + "/BRD/raging_strike.png";
+      return actionIconDirectory + "/BRD/raging_strikes.png";
 
     // DNC
     case 1500:
       return actionIconDirectory + "/DNC/standard_finish.png";
     case 1502:
-      return actionIconDirectory + "/DNC/technical_finish.png";
-    case 1503:
       return actionIconDirectory + "/DNC/technical_finish.png";
     case 1504:
       return actionIconDirectory + "/DNC/devilment.png";
@@ -97,6 +95,14 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
     // SMN
     case 1601:
       return actionIconDirectory + "/SMN/searing_light.png";
+
+    // BLM
+    case 1702:
+      return actionIconDirectory + "/BLM/sharpcast.png";
+    case 1703:
+      return actionIconDirectory + "/BLM/ley_lines.png";
+    case 1705:
+      return actionIconDirectory + "/BLM/thunder_III.png";
 
     // RDM
     case 1800:

@@ -29,6 +29,8 @@ export function defaultQuickSimRequest(): QuickSimRequest {
       playerId: i,
       job: defaultJobsList[i],
       role: "",
+      partner1Id: null,
+      partner2Id: null,
       stats: {
         weaponDamage: DEFAULT_WEAPON_DAMAGE,
         mainStat: DEFAULT_MAIN_STAT,

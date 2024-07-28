@@ -3,6 +3,7 @@ import { CharacterStates, CharacterStats } from "src/types/CharacterStates";
 import { styled, Box, Grid } from "@mui/material";
 import { CustomInputForm, inputStyleJob } from "./InputForm";
 import { InputGridContainerStyle, InputGridItemStyle } from "./Styles";
+import { Partner1Selection } from "./PartnerSelection";
 
 interface TextForm {
   value: string;
@@ -30,7 +31,10 @@ export function handleChange(textForm: TextForm) {
   textForm.setState(stats);
 }
 
-export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
+export function CharacterDetailedInput(
+  mainCharacterState: CharacterStates,
+  availablePartyIds: number[]
+) {
   let xs = 15;
   let statNameAndKeys = [
     { name: "Weapon Damage", field: "weaponDamage" },
@@ -67,6 +71,7 @@ export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
           </InputBox>
         );
       })}
+      {Partner1Selection(mainCharacterState, availablePartyIds)}
     </InputGridContainer>
   );
 }

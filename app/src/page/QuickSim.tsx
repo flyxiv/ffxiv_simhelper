@@ -9,6 +9,9 @@ import { PartyInfo } from "src/types/PartyStates";
 import { CharacterStates } from "src/types/CharacterStates";
 import { QuickSimPartyInput } from "../components/input/QuickSimPartyInput";
 import { QuickSimRequestSaveName } from "src/App";
+import { ItemSet } from "src/types/ffxivdatabase/ItemSet";
+import { EMPTY_EQUIPMENT_ID } from "src/types/ffxivdatabase/Equipment";
+import { ItemInputForm } from "src/components/input/ItemInputForm";
 
 export function isNotValid(request: QuickSimRequest) {
   if (request.mainPlayerId === null || request.mainPlayerId === undefined) {
@@ -48,12 +51,22 @@ export function QuickSim() {
     mostRecentRequest.party[mostRecentRequest.mainPlayerId].job
   );
   const [mainPlayerStat, setMainPlayerStat] = useState(mainPlayerInfo.stats);
+  let [mainPlayerPartner1Id, setMainPlayerPartner1Id] = useState(
+    mainPlayerInfo.partner1Id
+  );
+  let [mainPlayerPartner2Id, setMainPlayerPartner2Id] = useState(
+    mainPlayerInfo.partner2Id
+  );
 
   const mainPlayerState: CharacterStates = {
     jobName: mainPlayerJob,
     jobNameSetter: setMainPlayerJob,
     stats: mainPlayerStat,
     setStats: setMainPlayerStat,
+    partner1Id: mainPlayerPartner1Id,
+    setPartner1Id: setMainPlayerPartner1Id,
+    partner2Id: mainPlayerPartner2Id,
+    setPartner2Id: setMainPlayerPartner2Id,
   };
 
   let combatTimeSeconds = mostRecentRequest.combatTimeMillisecond / 1000;
@@ -64,7 +77,24 @@ export function QuickSim() {
   let ids = input.ids;
   let otherPartyJobs = input.jobs;
 
+  let [availablePartyIds, setAvailablePartyIds] = useState(ids);
+
   let [partyJobs, setPartyJobs] = useState(otherPartyJobs);
+  let itemSet: ItemSet = {
+    head: EMPTY_EQUIPMENT_ID,
+    body: EMPTY_EQUIPMENT_ID,
+    hands: EMPTY_EQUIPMENT_ID,
+    legs: EMPTY_EQUIPMENT_ID,
+    feet: EMPTY_EQUIPMENT_ID,
+    necklace: EMPTY_EQUIPMENT_ID,
+    earring: EMPTY_EQUIPMENT_ID,
+    bracelet: EMPTY_EQUIPMENT_ID,
+    ring1: EMPTY_EQUIPMENT_ID,
+    ring2: EMPTY_EQUIPMENT_ID,
+    weapon: EMPTY_EQUIPMENT_ID,
+    secondaryWeapon: EMPTY_EQUIPMENT_ID,
+    food: EMPTY_EQUIPMENT_ID,
+  };
   let borderRadius = 3;
 
   return (
@@ -76,7 +106,7 @@ export function QuickSim() {
               <Typography variant="h5">1. Input Your Info</Typography>
             </Box>
             <Box className="CustomizeBoard">
-              {CharacterDetailedInput(mainPlayerState)}
+              {CharacterDetailedInput(mainPlayerState, availablePartyIds)}
             </Box>
           </Box>
           <Box className="CharacterDetailCustomizeBoard">
@@ -88,6 +118,8 @@ export function QuickSim() {
                 ids,
                 partyJobs,
                 setPartyJobs,
+                availablePartyIds,
+                setAvailablePartyIds,
                 combatTimeStateSeconds,
                 setCombatTimeSeconds
               )}
@@ -101,6 +133,7 @@ export function QuickSim() {
             mainPlayerState
           )}
         </Box>
+        <Box>{ItemInputForm(mainPlayerState, availablePartyIds, itemSet)}</Box>
       </Box>
     </>
   );

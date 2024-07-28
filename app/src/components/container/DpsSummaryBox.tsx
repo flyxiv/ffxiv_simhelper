@@ -32,7 +32,7 @@ function DpsBox(
   return (
     <DpsBox>
       <Box className="DpsTitle" padding={1}>
-        <Typography variant="h5">{dpsName}</Typography>
+        <Typography variant="h6">{dpsName}</Typography>
       </Box>
       <Box className="Dps" paddingTop={1}>
         <Typography variant="h3">{Math.round(dps)}</Typography>
@@ -53,7 +53,12 @@ export const DpsSummary = (props: SimulationData) => {
         "white",
         ColorConfigurations.primaryVariant
       )}
-      {DpsBox("ADPS", summary.adps, "black", ColorConfigurations.secondary)}
+      {DpsBox(
+        "Max RDPS",
+        summary.maxRdps,
+        "black",
+        ColorConfigurations.secondary
+      )}
       {DpsBox(
         "EDPS",
         summary.edps,
@@ -104,7 +109,7 @@ export const StatCompareDpsBox = (
   return (
     <DpsBox>
       <Box className="DpsTitle" padding={1}>
-        <Typography variant="h5">{dpsName}</Typography>
+        <Typography variant="h6">{dpsName}</Typography>
       </Box>
       <Box className="Dps">
         <Typography variant="h3">{Math.round(targetDps)}</Typography>
@@ -131,6 +136,7 @@ export const StatCompareDpsSummary = (
     <DpsSummaryBox>
       {StatCompareDpsBox("DPS", target.pdps, compare.pdps)}
       {StatCompareDpsBox("RDPS", target.rdps, compare.rdps)}
+      {StatCompareDpsBox("Max RDPS", target.maxRdps, compare.maxRdps)}
       {StatCompareDpsBox("EDPS", target.edps, compare.edps)}
     </DpsSummaryBox>
   );

@@ -33,6 +33,7 @@ export function StatCompareResult() {
   let mainCharacterJob = requestJson.mainPlayerJob;
   let simulationData1 = responseJson.simulationGear1;
   let simulationData2 = responseJson.simulationGear2;
+  let combatTimeMilliseconds = requestJson.combatTimeMillisecond;
 
   return (
     <Box className="SimulationResult">
@@ -42,7 +43,8 @@ export function StatCompareResult() {
         {StatComparePlayerInfo(
           mainCharacterJob,
           requestJson.mainPlayerStat1,
-          requestJson.mainPlayerStat2
+          requestJson.mainPlayerStat2,
+          combatTimeMilliseconds
         )}
       </ResultBoardBox>
       <ResultBoardBox>
@@ -51,7 +53,8 @@ export function StatCompareResult() {
         {StatComparePlayerInfo(
           mainCharacterJob,
           requestJson.mainPlayerStat2,
-          requestJson.mainPlayerStat1
+          requestJson.mainPlayerStat1,
+          combatTimeMilliseconds
         )}
       </ResultBoardBox>
     </Box>

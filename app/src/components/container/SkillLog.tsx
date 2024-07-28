@@ -5,7 +5,6 @@ import {
   SkillLogTableStyle,
   StatusIconTitleBoxStyle,
   SkillLogRowStyle,
-  statusBoxWidth,
 } from "./Styles";
 import { SkillLogTable } from "./SkillLogTable";
 import { styled, List, Box, Typography } from "@mui/material";

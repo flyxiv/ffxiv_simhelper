@@ -9,7 +9,6 @@ import {
   inputStyleJobOutLabel,
   CustomTimeInputFormOutLabel,
 } from "./InputFormOutLabel";
-import { handleChange } from "./CharacterDetailedInput";
 
 interface TextTimeForm {
   value: string;
@@ -42,6 +41,8 @@ export function StatComparePartyInput(
   playerIds: number[],
   partyJobs: string[],
   partySetter: React.Dispatch<React.SetStateAction<string[]>>,
+  availablePartyIds: number[],
+  setAvailablePartyIds: Function,
   time: number,
   timeSetter: Function
 ) {
@@ -63,7 +64,13 @@ export function StatComparePartyInput(
           <InputGridItem item xs={xs}>
             <InputBox marginBottom={0.5} key={playerId}>
               <InputJobBox item xs={xs} key={`Job-${playerId}`}>
-                {JobSelection(playerId, partyJobs, partySetter)}
+                {JobSelection(
+                  playerId,
+                  partyJobs,
+                  partySetter,
+                  availablePartyIds,
+                  setAvailablePartyIds
+                )}
               </InputJobBox>
             </InputBox>
           </InputGridItem>

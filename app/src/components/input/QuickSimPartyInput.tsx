@@ -2,7 +2,6 @@ import { Grid, Box, styled } from "@mui/material";
 import { JobSelection } from "./JobSelection";
 import { InputGridContainerStyle, InputGridItemStyle } from "./Styles";
 import { inputStyleJob, CustomTimeInputForm } from "./InputForm";
-import { handleChange } from "./CharacterDetailedInput";
 
 interface TextTimeForm {
   value: string;
@@ -32,6 +31,8 @@ export function QuickSimPartyInput(
   playerIds: number[],
   partyJobs: string[],
   partySetter: React.Dispatch<React.SetStateAction<string[]>>,
+  availablePartyIds: number[],
+  setAvailablePartyIds: Function,
   time: number,
   timeSetter: Function
 ) {
@@ -53,7 +54,13 @@ export function QuickSimPartyInput(
           <InputGridItem item xs={xs}>
             <InputBox marginBottom={0.5} key={playerId}>
               <InputJobBox item xs={xs} key={`Job-${playerId}`}>
-                {JobSelection(playerId, partyJobs, partySetter)}
+                {JobSelection(
+                  playerId,
+                  partyJobs,
+                  partySetter,
+                  availablePartyIds,
+                  setAvailablePartyIds
+                )}
               </InputJobBox>
             </InputBox>
           </InputGridItem>

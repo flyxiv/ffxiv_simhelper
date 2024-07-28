@@ -3,6 +3,7 @@ export interface SimulationSummary {
   adps: number;
   pdps: number;
   edps: number;
+  maxRdps: number;
 }
 export interface PartyContribution {
   skillId: number;
