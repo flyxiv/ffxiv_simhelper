@@ -1,4 +1,4 @@
-import { CustomFormControl, InputFormProps } from "./InputForm";
+import { CustomFormControl, InputFormProps } from "./basicform/BasicInputForm";
 import { MenuItem, Box, FormControl, InputLabel, Select } from "@mui/material";
 
 export function TimeInput(inputFormProps: InputFormProps) {

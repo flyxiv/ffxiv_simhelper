@@ -1,4 +1,21 @@
+import { read } from "fs";
+
 let totalEquipments: Array<Equipment> = require("src/resources/equipment_data.json");
+const leftSlots = ["head", "body", "hands", "legs", "feet"];
+const rightSlots = ["wrist", "ears", "neck", "finger"];
+
+const AIMING_CATEGORY_NAME = "Aiming";
+const CASTING_CATEGORY_NAME = "Casting";
+const FENDING_CATEGORY_NAME = "Fending";
+const HEALING_CATEGORY_NAME = "Healing";
+const MAIMING_CATEGORY_NAME = "Maiming";
+const SCOUTING_CATEGORY_NAME = "Scouting";
+const STRIKING_CATEGORY_NAME = "Striking";
+const SLAYING_CATEGORY_NAME = "Slaying";
+
+const CURRENT_MIN_ITEM_LEVEL = 710;
+
+export const EQUIPMENT_DATABASE = readEquipmentData(CURRENT_MIN_ITEM_LEVEL);
 
 export interface Equipment {
   id: number;
@@ -98,4 +115,86 @@ export function equipmentStatDescriptionString(equipment: Equipment) {
   });
 
   return descriptionString.trim();
+}
+
+export function getEquipmentIconDirectory(
+  equipmentSlot: string,
+  jobAbbrev: string,
+  equipmentName: string
+) {
+  let base_directory = process.env.PUBLIC_URL + "/images/equipment";
+  let equipmentIconName = equipmentName.toLowerCase().replace(/ /g, "_");
+
+  if (equipmentSlot === "mainhand" || equipmentSlot === "offhand") {
+    return `${base_directory}/${equipmentSlot}/${jobAbbrev}/${equipmentIconName}.png`;
+  }
+  let category = getEquipmentCategory(equipmentSlot, jobAbbrev);
+
+  return `${base_directory}/${category}/${equipmentSlot}/${equipmentIconName}.png`;
+}
+
+function getEquipmentCategory(equipmentSlot: string, jobAbbrev: string) {
+  if (leftSlots.includes(equipmentSlot)) {
+    switch (jobAbbrev) {
+      case "PLD":
+      case "WAR":
+      case "DRK":
+      case "GNB":
+        return FENDING_CATEGORY_NAME;
+      case "WHM":
+      case "AST":
+      case "SCH":
+      case "SGE":
+        return HEALING_CATEGORY_NAME;
+      case "DRG":
+      case "RPR":
+        return MAIMING_CATEGORY_NAME;
+      case "MNK":
+      case "SAM":
+        return STRIKING_CATEGORY_NAME;
+      case "NIN":
+      case "VPR":
+        return SCOUTING_CATEGORY_NAME;
+      case "BRD":
+      case "MCH":
+      case "DNC":
+        return AIMING_CATEGORY_NAME;
+      case "BLM":
+      case "SMN":
+      case "RDM":
+      case "PCT":
+        return CASTING_CATEGORY_NAME;
+    }
+  } else {
+    switch (jobAbbrev) {
+      case "PLD":
+      case "WAR":
+      case "DRK":
+      case "GNB":
+        return FENDING_CATEGORY_NAME;
+      case "WHM":
+      case "AST":
+      case "SCH":
+      case "SGE":
+        return HEALING_CATEGORY_NAME;
+      case "DRG":
+      case "RPR":
+      case "MNK":
+      case "SAM":
+        return SLAYING_CATEGORY_NAME;
+      case "NIN":
+      case "VPR":
+        return SCOUTING_CATEGORY_NAME;
+      case "BRD":
+      case "MCH":
+      case "DNC":
+        return AIMING_CATEGORY_NAME;
+      case "BLM":
+      case "SMN":
+      case "RDM":
+      case "PCT":
+        return CASTING_CATEGORY_NAME;
+    }
+  }
+  return "Cannot find item category.";
 }

@@ -1,10 +1,10 @@
 export const DEFAULT_WEAPON_DAMAGE = 100;
-export const DEFAULT_MAIN_STAT = 400;
-export const DEFAULT_CRITICAL_STRIKE = 400;
-export const DEFAULT_DIRECT_HIT = 400;
-export const DEFAULT_DETERMINATION = 390;
-export const DEFAULT_SPEED = 400;
-export const DEFAULT_TENACITY = 400;
+export const DEFAULT_MAIN_STAT = 390;
+export const DEFAULT_CRITICAL_STRIKE = 420;
+export const DEFAULT_DIRECT_HIT = 420;
+export const DEFAULT_DETERMINATION = 440;
+export const DEFAULT_SPEED = 420;
+export const DEFAULT_TENACITY = 420;
 
 export const MapJobAbbrevToJobDefaultStat = (jobAbbrev: string) => {
   switch (jobAbbrev) {

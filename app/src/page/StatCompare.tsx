@@ -8,7 +8,7 @@ import { defaultStatCompareRequest } from "src/const/DefaultStatCompareRequest";
 import { StatCompareRequest } from "src/types/StatCompareRequest";
 import { CharacterStates } from "src/types/CharacterStates";
 import { StatCompareRequestButton } from "src/components/basic/StatCompareRequestButton";
-import { StatComparePartyInput } from "src/components/input/StatComparePartyInput";
+import { StatComparePartyInput } from "src/components/input/partyinput/StatComparePartyInput";
 
 function isNotValid(request: StatCompareRequest) {
   if (request.mainPlayerId === null || request.mainPlayerId === undefined) {

@@ -146,7 +146,7 @@ const RACE_MAIN_STAT = {
 };
 
 export function getMainStatBaseByJobAndRace(job: string, race: string) {
-  getMainStatByJob(job) + getJobMainStatForRace(job, race);
+  getMainStatByJob(job);
 }
 
 function getMainStatByJob(job: string) {

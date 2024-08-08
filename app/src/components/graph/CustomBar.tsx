@@ -1,4 +1,4 @@
-import { jobAbbrevToJobIconPath } from "../jobicon/JobIconFactory";
+import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 
 interface JobImageTickProps {
   payload: { value: string };

@@ -1,5 +1,5 @@
 import { MenuItem, InputLabel, Select } from "@mui/material";
-import { CustomFormControl } from "./InputForm";
+import { CustomFormControl } from "./basicform/BasicInputForm";
 import { CharacterStates } from "src/types/CharacterStates";
 import { partnerJobs } from "./Utils";
 import { styled, Box } from "@mui/material";

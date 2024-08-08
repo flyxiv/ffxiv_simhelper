@@ -8,8 +8,8 @@ import {
   TotalRdpsBoxStyle,
   BuffTitleBarStyle,
 } from "./Style";
-import { StatusIdToIconPathFactory } from "../abilityicon/StatusIconFactory";
-import { JobIconFactory } from "../jobicon/JobIconFactory";
+import { StatusIdToIconPathFactory } from "../icon/abilityicon/StatusIconFactory";
+import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
 
 export interface RdpsEntry {
   statusId: number;

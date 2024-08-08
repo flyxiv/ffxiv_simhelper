@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { SimUIIcon } from "../components/image/SimUIIcon";
 import "./Home.css";
-import { readEquipmentData } from "src/types/ffxivdatabase/Equipment";
 
 const quickSimPageName = "quicksim";
 const quickSimPagePath = `/${quickSimPageName}`;

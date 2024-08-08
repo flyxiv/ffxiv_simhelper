@@ -1,1 +1,1 @@
-export const partnerJobs = ["DRG", "DNC", "AST"];
+export const partnerJobs = ["DNC", "AST"];

@@ -7,11 +7,11 @@ import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
 import { QuickSimRequest } from "src/types/QuickSimRequest";
 import { PartyInfo } from "src/types/PartyStates";
 import { CharacterStates } from "src/types/CharacterStates";
-import { QuickSimPartyInput } from "../components/input/QuickSimPartyInput";
+import { QuickSimPartyInput } from "../components/input/partyinput/QuickSimPartyInput";
 import { QuickSimRequestSaveName } from "src/App";
 import { ItemSet } from "src/types/ffxivdatabase/ItemSet";
 import { EMPTY_EQUIPMENT_ID } from "src/types/ffxivdatabase/Equipment";
-import { ItemInputForm } from "src/components/input/ItemInputForm";
+import { ItemInputForm } from "src/components/input/basicform/ItemInputForm";
 
 export function isNotValid(request: QuickSimRequest) {
   if (request.mainPlayerId === null || request.mainPlayerId === undefined) {

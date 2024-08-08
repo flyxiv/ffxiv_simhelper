@@ -4,7 +4,7 @@ import {
   DamageChartTitle,
   SkillDamageProfile,
 } from "./DamageProfileBarChart";
-import { SkillIdToIconPathFactory } from "../abilityicon/SkillIconFactory";
+import { SkillIdToIconPathFactory } from "../icon/abilityicon/SkillIconFactory";
 import { iconPathToName } from "../Util";
 
 export const DamageProfileGraph = (response: QuickSimResponse) => {

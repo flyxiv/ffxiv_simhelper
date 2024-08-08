@@ -1,6 +1,6 @@
 import { PlayerInfoBoxStyle, PlayerInfoJobTitleStyle } from "./Styles";
 import { Typography, styled, Box } from "@mui/material";
-import { JobIconFactory } from "../jobicon/JobIconFactory";
+import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
 import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
 import { QuickSimRequest } from "src/types/QuickSimRequest";
 import { PlayerStatInfo, StatComparePlayerStatInfo } from "./PlayerStatInfo";

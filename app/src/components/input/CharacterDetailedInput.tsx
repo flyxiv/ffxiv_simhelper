@@ -1,7 +1,7 @@
-import { JobSelectionWithState } from "./JobSelectionWithState";
+import { MainPlayerJobSelection } from "./jobselection/MainPlayerJobSelection";
 import { CharacterStates, CharacterStats } from "src/types/CharacterStates";
 import { styled, Box, Grid } from "@mui/material";
-import { CustomInputForm, inputStyleJob } from "./InputForm";
+import { CustomInputForm, inputStyleJob } from "./basicform/BasicInputForm";
 import { InputGridContainerStyle, InputGridItemStyle } from "./Styles";
 import { Partner1Selection } from "./PartnerSelection";
 
@@ -25,12 +25,14 @@ const InputBox = styled(Box)`
 const InputJobBox = styled(Grid)`
   ${inputStyleJob}
 `;
+
 export function handleChange(textForm: TextForm) {
   const value = textForm.value === "" ? "" : parseInt(textForm.value);
   const stats = { ...textForm.state, [textForm.field]: value };
   textForm.setState(stats);
 }
 
+// 직업뿐만 아니라 세세한 주/부스탯까지 입력
 export function CharacterDetailedInput(
   mainCharacterState: CharacterStates,
   availablePartyIds: number[]
@@ -50,7 +52,7 @@ export function CharacterDetailedInput(
     <InputGridContainer container>
       <InputBox marginBottom={1}>
         <InputJobBox item xs={xs} key="Job">
-          {JobSelectionWithState(
+          {MainPlayerJobSelection(
             mainCharacterState.jobName,
             mainCharacterState.jobNameSetter
           )}

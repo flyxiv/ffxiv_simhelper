@@ -197,26 +197,31 @@ function sendRequestAsync(requestBody: string): Promise<Response> {
 function aggregateDamageStatisticsFromSampleRuns(
   damageSummaries: SimulationSummary[]
 ) {
-  let totalDps = 0;
+  let totalDps: Array<number> = [];
   let maxRdps = 0;
-  let totalRdps = 0;
-  let totalEdps = 0;
+  let totalRdps: Array<number> = [];
+  let totalEdps: Array<number> = [];
 
   damageSummaries.forEach((summary) => {
-    totalDps += summary.pdps;
-    totalRdps += summary.rdps;
-    totalEdps += summary.edps;
+    totalDps.push(summary.pdps);
+    totalRdps.push(summary.rdps);
+    totalEdps.push(summary.edps);
     maxRdps = Math.max(maxRdps, summary.rdps);
   });
 
-  let averageDps = totalDps / totalRequestCount;
-  let averageRdps = totalRdps / totalRequestCount;
-  let averageEdps = totalEdps / totalRequestCount;
+  let medianIndex = Math.floor(totalRequestCount / 2);
+  totalDps.sort((a, b) => a - b);
+  totalRdps.sort((a, b) => a - b);
+  totalEdps.sort((a, b) => a - b);
+
+  let medianDps = totalDps[medianIndex];
+  let medianRdps = totalRdps[medianIndex];
+  let medianEdps = totalEdps[medianIndex];
 
   return {
-    pdps: averageDps,
-    rdps: averageRdps,
-    edps: averageEdps,
+    pdps: medianDps,
+    rdps: medianRdps,
+    edps: medianEdps,
     maxRdps: maxRdps,
   };
 }

@@ -1,6 +1,6 @@
 import { SkillLog } from "src/types/CombatSimulationResult";
 import { Box, ListItem, Typography, styled } from "@mui/material";
-import { SkillIdToIconPathFactory } from "../abilityicon/SkillIconFactory";
+import { SkillIdToIconPathFactory } from "../icon/abilityicon/SkillIconFactory";
 import {
   SkillEntityBoxStyle,
   SkillIconBoxStyle,
@@ -9,7 +9,7 @@ import {
   StatusIconBoxStyle,
   statusBoxWidth,
 } from "./Styles";
-import { StatusIdToIconPathFactory } from "../abilityicon/StatusIconFactory";
+import { StatusIdToIconPathFactory } from "../icon/abilityicon/StatusIconFactory";
 import { iconPathToName } from "../Util";
 
 const SkillLogRowBox = styled(Box)`
