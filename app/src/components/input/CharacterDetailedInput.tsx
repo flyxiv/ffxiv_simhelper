@@ -53,8 +53,9 @@ export function CharacterDetailedInput(
       <InputBox marginBottom={1}>
         <InputJobBox item xs={xs} key="Job">
           {MainPlayerJobSelection(
-            mainCharacterState.jobName,
-            mainCharacterState.jobNameSetter
+            mainCharacterState.jobAbbrev,
+            mainCharacterState.jobNameSetter,
+            null
           )}
         </InputJobBox>
       </InputBox>

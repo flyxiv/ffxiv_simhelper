@@ -147,7 +147,7 @@ function createStatCompareRequest(
 
   return {
     mainPlayerId: 0,
-    mainPlayerJob: characterState1.jobName,
+    mainPlayerJob: characterState1.jobAbbrev,
     mainPlayerPartner1Id: characterState1.partner1Id,
     mainPlayerPartner2Id: characterState1.partner2Id,
     combatTimeMillisecond: combatTimeSeconds * 1000,

@@ -1,5 +1,5 @@
 export interface CharacterStates {
-  jobName: string;
+  jobAbbrev: string;
   jobNameSetter: Function;
   partner1Id: number | null;
   setPartner1Id: Function;

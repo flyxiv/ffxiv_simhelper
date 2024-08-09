@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
 import { Box, Typography } from "@mui/material";
-import "./QuickSim.css";
+import "./BasicSim.css";
 import { CharacterDetailedInput } from "../components/input/CharacterDetailedInput";
 import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
 import { QuickSimRequest } from "src/types/QuickSimRequest";
@@ -11,6 +11,7 @@ import { QuickSimPartyInput } from "../components/input/partyinput/QuickSimParty
 import { QuickSimRequestSaveName } from "src/App";
 import { EquipmentSelectionMenu } from "src/components/input/basicform/EquipmentInputForm";
 import { defaultItemSet } from "src/types/ffxivdatabase/ItemSet";
+import { StatSummary } from "src/components/container/StatSummary";
 
 export function isNotValid(request: QuickSimRequest) {
   if (request.mainPlayerId === null || request.mainPlayerId === undefined) {
@@ -30,7 +31,7 @@ export function isNotValid(request: QuickSimRequest) {
 
   return false;
 }
-export function QuickSim() {
+export function BasicSim() {
   let mostRecentRequestState = localStorage.getItem(QuickSimRequestSaveName);
   let mostRecentRequest = null;
 
@@ -91,7 +92,7 @@ export function QuickSim() {
               <Typography variant="h5">1. Input Your Info</Typography>
             </Box>
             <Box className="CustomizeBoard">
-              {CharacterDetailedInput(mainPlayerState, availablePartyIds)}
+              {EquipmentSelectionMenu(mainPlayerState, itemSet, setItemSet)}
             </Box>
           </Box>
           <Box className="CharacterDetailCustomizeBoard">
@@ -111,15 +112,15 @@ export function QuickSim() {
             </Box>
           </Box>
         </Box>
+        <Box className="QuickSimInputContainer">
+          {StatSummary(mainPlayerState.jobAbbrev, itemSet)}
+        </Box>
         <Box>
           {QuickSimRequestButton(
             partyJobs,
             combatTimeStateSeconds,
             mainPlayerState
           )}
-        </Box>
-        <Box>
-          {EquipmentSelectionMenu(mainPlayerState, itemSet, setItemSet)}
         </Box>
       </Box>
     </>

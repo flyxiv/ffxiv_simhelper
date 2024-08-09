@@ -121,7 +121,7 @@ function createQuickSimRequest(
   let partyInfo: PartyInfo[] = [
     {
       playerId: 0,
-      job: characterState.jobName,
+      job: characterState.jobAbbrev,
       partner1Id: characterState.partner1Id,
       partner2Id: characterState.partner2Id,
       stats: {

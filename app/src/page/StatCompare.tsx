@@ -73,7 +73,7 @@ export function StatCompare() {
   let [mainPlayerPartner2Id, setMainPlayerPartner2Id] = useState(null);
 
   const mainPlayerState1: CharacterStates = {
-    jobName: mainPlayerJob,
+    jobAbbrev: mainPlayerJob,
     jobNameSetter: setMainPlayerJob,
     stats: mainPlayerStat1,
     setStats: setMainPlayerStat1,
@@ -87,7 +87,7 @@ export function StatCompare() {
     mostRecentRequest.mainPlayerStat2
   );
   const mainPlayerState2: CharacterStates = {
-    jobName: mainPlayerJob,
+    jobAbbrev: mainPlayerJob,
     jobNameSetter: setMainPlayerJob,
     stats: mainPlayerStat2,
     setStats: setMainPlayerStat2,

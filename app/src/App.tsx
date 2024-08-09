@@ -8,6 +8,7 @@ import "./App.css";
 import { SimulationResult } from "./page/SimulationResult";
 import { StatCompare } from "./page/StatCompare";
 import { StatCompareResult } from "./page/StatCompareResult";
+import { BasicSim } from "./page/BasicSim";
 
 export const QuickSimRequestSaveName = "mostRecentRequest";
 export const QuickSimResponseSaveName = "mostRecentQuickSimResponse";
@@ -27,6 +28,7 @@ function App() {
         <main className="Body">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/basicsim" element={<BasicSim />} />
             <Route path="/quicksim" element={<QuickSim />} />
             <Route path="/simulationresult" element={<SimulationResult />} />
             <Route path="/statcompare" element={<StatCompare />} />

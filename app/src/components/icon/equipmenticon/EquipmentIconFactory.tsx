@@ -1,5 +1,4 @@
-const leftSlots = ["head", "body", "hands", "legs", "feet"];
-const rightSlots = ["wrist", "ears", "neck", "finger"];
+import { LEFTSLOTS } from "src/types/ffxivdatabase/Equipment";
 
 const AIMING_CATEGORY_NAME = "Aiming";
 const CASTING_CATEGORY_NAME = "Casting";
@@ -11,23 +10,23 @@ const STRIKING_CATEGORY_NAME = "Striking";
 const SLAYING_CATEGORY_NAME = "Slaying";
 
 export function getEquipmentIconDirectory(
-  equipmentSlot: string,
+  slotName: string,
   jobAbbrev: string,
   equipmentName: string
 ) {
   let base_directory = process.env.PUBLIC_URL + "/images/equipment";
   let equipmentIconName = equipmentName.toLowerCase().replace(/ /g, "_");
 
-  if (equipmentSlot === "mainhand" || equipmentSlot === "offhand") {
-    return `${base_directory}/${equipmentSlot}/${jobAbbrev}/${equipmentIconName}.png`;
+  if (slotName === "mainhand" || slotName === "offhand") {
+    return `${base_directory}/${slotName}/${jobAbbrev}/${equipmentIconName}.png`;
   }
-  let category = getEquipmentCategory(equipmentSlot, jobAbbrev);
+  let category = getEquipmentCategory(slotName, jobAbbrev);
 
-  return `${base_directory}/${category}/${equipmentSlot}/${equipmentIconName}.png`;
+  return `${base_directory}/${slotName}/${category}/${equipmentIconName}.png`;
 }
 
 function getEquipmentCategory(equipmentSlot: string, jobAbbrev: string) {
-  if (leftSlots.includes(equipmentSlot)) {
+  if (LEFTSLOTS.includes(equipmentSlot)) {
     switch (jobAbbrev) {
       case "PLD":
       case "WAR":

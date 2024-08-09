@@ -162,3 +162,20 @@ export const StatusIconTitleBoxStyle = (widthVw: string) => `
   width: ${widthVw};
   color: white;
 `;
+
+export const StatSummaryBoxStyle = `
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: ${ColorConfigurations.backgroundTwo};
+`;
+
+export const SingleStatBoxStyle = `
+  background-color: ${ColorConfigurations.backgroundThree};
+  color: white;
+  align-items: center;
+  justify-items: center;
+  width: 8vw;
+  margin: 5px 3px 5px 3px;
+`;

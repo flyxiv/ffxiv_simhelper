@@ -1,10 +1,20 @@
 import { InputLabel, Select, SelectChangeEvent } from "@mui/material";
 import { CustomFormControl } from "../basicform/BasicInputForm";
 import { JobMenuItem } from "../../items/JobMenuItem";
+import { defaultItemSet } from "src/types/ffxivdatabase/ItemSet";
 
-export function MainPlayerJobSelection(jobName: string, setJobName: Function) {
+export function MainPlayerJobSelection(
+  jobName: string,
+  setJobName: Function,
+  setItemSet: null | Function
+) {
   const handleJobChange = (event: SelectChangeEvent<string>) => {
     setJobName(event.target.value);
+
+    if (setItemSet !== null) {
+      let newItemSet = defaultItemSet();
+      setItemSet(newItemSet);
+    }
   };
 
   return (

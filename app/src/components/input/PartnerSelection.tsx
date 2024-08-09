@@ -13,7 +13,7 @@ export function Partner1Selection(
   characterState: CharacterStates,
   availablePartyIds: number[]
 ) {
-  if (!partnerJobs.includes(characterState.jobName)) {
+  if (!partnerJobs.includes(characterState.jobAbbrev)) {
     return <></>;
   }
 
