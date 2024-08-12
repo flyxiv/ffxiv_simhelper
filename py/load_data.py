@@ -12,18 +12,18 @@ import os
 import json
 
 _STAT_ID_NAME_MAP = {
-    1: 'Strength',
-    2: 'Dexterity',
-    3: 'Vitality',
-    4: 'Intelligence',
-    5: 'Mind',
-    6: 'Piety',
-    19: 'Tenacity',
-    22: 'Direct Hit Rate',
-    27: 'Critical Hit',
-    44: 'Determination',
-    45: 'Skill Speed',
-    46: 'Spell Speed',
+    1: 'STR',
+    2: 'DEX',
+    3: 'VIT',
+    4: 'INT',
+    5: 'MND',
+    6: 'piety',
+    19: 'tenacity',
+    22: 'directHit',
+    27: 'criticalStrike',
+    44: 'determination',
+    45: 'skillSpeed',
+    46: 'spellSpeed',
 }
 
 _MAIN_STAT_ABBREV_NAME_MAP = {
@@ -50,13 +50,13 @@ def initialize_all_stat_dict():
 
 def initialize_sub_stat_dict():
     return {
-        'Piety': 0,
-        'Tenacity': 0,
-        'Direct Hit Rate': 0,
-        'Critical Hit': 0,
-        'Determination': 0,
-        'Skill Speed': 0,
-        'Spell Speed': 0,
+        'piety': 0,
+        'tenacity': 0,
+        'directHit': 0,
+        'criticalStrike': 0,
+        'determination': 0,
+        'skillSpeed': 0,
+        'spellSpeed': 0,
     }
 
 
@@ -105,22 +105,23 @@ def convert_equipment(equipment):
             materiaSlotCount,
             pentameldable
     """
+
+    weapon_damage = max(equipment['damageMag'], equipment['damagePhys'])
     equipment_entity = {
         'id': equipment['id'],
         'name': equipment['name'],
         'level': equipment['level'],
+        'itemLevel': equipment['itemLevel'],
         'jobName': filter_low_jobs(equipment['jobName']),
         'slotCategory': equipment['slotCategory'],
         'weapon': equipment['weapon'],
-        'damageMag': equipment['damageMag'],
-        'damagePhys': equipment['damagePhys'],
-        'defenseMag': equipment['defenseMag'],
+        'weaponDamage': weapon_damage,
         'defensePhys': equipment['defensePhys'],
         'slotName': equipment['slotName'],
         'materiaSlotCount': equipment['materiaSlotCount']
     }
 
-    equipment_entity['pentameldable'] = 'Diadochos' in equipment['name']
+    equipment_entity['pentameldable'] = equipment['advancedMelding']
 
     stat_data = convert_stat_data(equipment)
     equipment_entity.update(stat_data)
@@ -174,7 +175,7 @@ def convert_equipments(equipments):
     """
 
     equipments_only_max_level_equipments = [
-        equipment for equipment in equipments if equipment['level'] == 90
+        equipment for equipment in equipments if equipment['level'] == 100
     ]
 
     equipments_only_combat_items = []
@@ -287,7 +288,7 @@ def convert_foods(foods):
     """
 
     combat_foods = [food for food in foods if is_combat_food(food)]
-    return [convert_food(food) for food in combat_foods]
+    return [convert_food(food) for food in combat_foods if food['itemLevel'] >= 710]
 
 
 def convert_clans(clans):
