@@ -1,12 +1,13 @@
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::IdType;
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::paladin::abilities::PaladinDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{Combo, HasBufforDebuff};
+use crate::types::TurnCount;
 
 #[derive(Clone)]
 pub(crate) struct PaladinPriorityTable {
@@ -90,9 +91,7 @@ pub(crate) fn make_paladin_gcd_priority_table(db: &PaladinDatabase) -> Vec<Skill
     vec![
         SkillPriorityInfo {
             skill_id: db.confiteor.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(
-                db.confiteor_ready.get_id(),
-            )),
+            prerequisite: Some(HasBufforDebuff(db.confiteor_ready.get_id())),
         },
         SkillPriorityInfo {
             skill_id: db.blade_of_faith.get_id(),

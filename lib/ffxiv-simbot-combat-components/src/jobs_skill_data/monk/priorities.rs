@@ -1,14 +1,13 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::monk::abilities::MonkDatabase;
-use crate::live_objects::turn_type::FfxivTurnType::Ogcd;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, Not, Or,
-    RelatedSkillCooldownLessOrEqualThan,
+    And, Combo, HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::types::TurnCount;
+use crate::IdType;
 use std::cell::RefCell;
 
 #[derive(Clone)]

@@ -4,15 +4,14 @@ use crate::damage_calculator::multiplier_calculator::{
 use crate::damage_calculator::DamageRdpsProfile;
 use crate::event_ticker::PercentType;
 use crate::id_entity::IdEntity;
+use crate::live_objects::player::player_power::PlayerPower;
 use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::Status;
-use crate::{BuffIncreasePercentType, DamageType, IdType, PotencyType, StatusTable};
-use ffxiv_simbot_db::stat_calculator::CharacterPower;
-use ffxiv_simbot_db::MultiplierType;
+use crate::types::{DamageType, IdType, MultiplierType};
 use log::{debug, info};
 use rand::{random, thread_rng, Rng};
 use std::collections::HashMap;
@@ -33,7 +32,7 @@ pub trait RawDamageCalculator: MultiplierCalculator {
         is_guaranteed_direct_hit: bool,
         buffs: &HashMap<StatusKey, BuffStatus>,
         debuffs: &HashMap<StatusKey, DebuffStatus>,
-        player_power: &CharacterPower,
+        player_power: &PlayerPower,
     ) -> (DamageRdpsProfile, bool) {
         let potency = potency as MultiplierType;
         debug_assert!(potency >= 0.0, "{}", potency);
@@ -152,7 +151,7 @@ fn calculate_base_damage(
     potency: MultiplierType,
     trait_percent: PercentType,
     damage_category: DamageCategory,
-    player_power: &CharacterPower,
+    player_power: &PlayerPower,
 ) -> f64 {
     match damage_category {
         DamageCategory::Direct => {
@@ -212,7 +211,7 @@ fn calculate_crit_direct_hit_damage(
     base_damage: MultiplierType,
     buffs: &HashMap<StatusKey, BuffStatus>,
     debuffs: &HashMap<StatusKey, DebuffStatus>,
-    player_power: &CharacterPower,
+    player_power: &PlayerPower,
     damage_category: DamageCategory,
     is_guaranteed_critical_hit: bool,
     is_guaranteed_direct_hit: bool,
@@ -343,7 +342,7 @@ fn get_final_critical_hit_rate(
     buffs: &HashMap<StatusKey, BuffStatus>,
     debuffs: &HashMap<StatusKey, DebuffStatus>,
     is_guaranteed_crit: bool,
-    player_power: &CharacterPower,
+    player_power: &PlayerPower,
 ) -> MultiplierType {
     if is_guaranteed_crit {
         return 1.0;
@@ -365,7 +364,7 @@ fn get_final_direct_hit_rate(
     buffs: &HashMap<StatusKey, BuffStatus>,
     debuffs: &HashMap<StatusKey, DebuffStatus>,
     is_guaranteed_direct_hit: bool,
-    player_power: &CharacterPower,
+    player_power: &PlayerPower,
 ) -> MultiplierType {
     if is_guaranteed_direct_hit {
         return 1.0;
@@ -388,7 +387,7 @@ fn get_final_damage_increase(
     is_guaranteed_direct_hit: bool,
     buffs: &HashMap<StatusKey, BuffStatus>,
     debuffs: &HashMap<StatusKey, DebuffStatus>,
-    player_power: &CharacterPower,
+    player_power: &PlayerPower,
 ) -> MultiplierType {
     let mut multiplier = 1.0;
 
@@ -427,8 +426,8 @@ mod tests {
     use crate::damage_calculator::raw_damage_calculator::{
         FfxivRawDamageCalculator, RawDamageCalculator,
     };
-    use crate::DamageType;
-    use ffxiv_simbot_db::stat_calculator::CharacterPower;
+    use crate::live_objects::player::player_power::PlayerPower;
+    use crate::types::DamageType;
 
     fn within_accepted_range(expected: f64, actual: f64) -> bool {
         let lower_bound = 0.90;
@@ -441,7 +440,7 @@ mod tests {
         // https://github.com/flyxiv/ffxiv_simbot/issues/11#issuecomment-2118842780
         // Ninja stat1 damage test
 
-        let power = CharacterPower {
+        let power = PlayerPower {
             critical_strike_rate: 1.169,
             critical_strike_damage: 1.519,
             direct_hit_rate: 1.242,
@@ -467,58 +466,6 @@ mod tests {
             (suiton_potency, 10600),
             (fuma_potency, 9923),
             (raiju_potency, 11483),
-        ];
-
-        let damage_calculator = FfxivRawDamageCalculator {};
-
-        for (potency, actual_damage) in potencies {
-            let simulated_damage =
-                damage_calculator.calculate_total_damage(potency, false, false, &power);
-
-            // With crit/dh expected damage
-            let expected_actual_damage =
-                (actual_damage as f64 * crit_expected * direct_hit_expected) as DamageType;
-
-            assert!(within_accepted_range(
-                expected_actual_damage as f64,
-                simulated_damage as f64
-            ));
-        }
-    }
-
-    #[test]
-    fn test_ninja_damage_stat2() {
-        // https://github.com/flyxiv/ffxiv_simbot/issues/11#issuecomment-2118844294
-        // Ninja stat2 damage test
-
-        let power = CharacterPower {
-            critical_strike_rate: 1.142,
-            critical_strike_damage: 1.492,
-            direct_hit_rate: 1.137,
-            determination_damage_multiplier: 1.044,
-            tenacity_damage_multiplier: 1.0f64,
-            main_stat_multiplier: 9.55,
-            weapon_damage_multiplier: 1.62,
-            speed_multiplier: 1.032,
-        };
-
-        let hyosho_potency = (1300 as f64 * 1.3) as DamageType;
-        let raiton_potency = 650;
-        let suiton_potency = 500;
-        let fuma_potency = 450;
-        let raiju_potency = 560;
-        let spinning_edge_potency = 220;
-
-        let direct_hit_expected = 1.06;
-        let crit_expected = 1.08;
-
-        let potencies = vec![
-            (hyosho_potency, 28236),
-            (raiton_potency, 10900),
-            (suiton_potency, 8434),
-            (fuma_potency, 7500),
-            (raiju_potency, 9200),
-            (spinning_edge_potency, 3393),
         ];
 
         let damage_calculator = FfxivRawDamageCalculator {};

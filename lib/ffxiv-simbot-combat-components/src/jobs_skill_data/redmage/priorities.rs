@@ -1,12 +1,12 @@
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::ninja::abilities::NinjaDatabase;
 use crate::jobs_skill_data::redmage::abilities::RedmageDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, Combo, HasBufforDebuff, HasResource, Not, Or,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, ResourceType, TurnCount};
+use crate::types::{ResourceType, TurnCount};
+use crate::IdType;
 use std::cell::RefCell;
 
 const MANA_DIFFERENCE_THRESHOLD: ResourceType = 30;
@@ -287,31 +287,23 @@ fn make_magic_pair_priority(
             skill_id: white_mana_skill_id,
             prerequisite: Some(And(
                 Box::new(SkillPrerequisite::ResourceGreaterOrEqualThanAnotherResourceBy(1, 0, 0)),
-                Box::new(Not(Box::new(SkillPrerequisite::HasBufforDebuff(
-                    VERSTONE_PROC_ID,
-                )))),
+                Box::new(Not(Box::new(HasBufforDebuff(VERSTONE_PROC_ID)))),
             )),
         },
         SkillPriorityInfo {
             skill_id: black_mana_skill_id,
             prerequisite: Some(And(
                 Box::new(SkillPrerequisite::ResourceGreaterOrEqualThanAnotherResourceBy(0, 1, 0)),
-                Box::new(Not(Box::new(SkillPrerequisite::HasBufforDebuff(
-                    VERFIRE_PROC_ID,
-                )))),
+                Box::new(Not(Box::new(HasBufforDebuff(VERFIRE_PROC_ID)))),
             )),
         },
         SkillPriorityInfo {
             skill_id: white_mana_skill_id,
-            prerequisite: Some(Not(Box::new(SkillPrerequisite::HasBufforDebuff(
-                VERSTONE_PROC_ID,
-            )))),
+            prerequisite: Some(Not(Box::new(HasBufforDebuff(VERSTONE_PROC_ID)))),
         },
         SkillPriorityInfo {
             skill_id: black_mana_skill_id,
-            prerequisite: Some(Not(Box::new(SkillPrerequisite::HasBufforDebuff(
-                VERFIRE_PROC_ID,
-            )))),
+            prerequisite: Some(Not(Box::new(HasBufforDebuff(VERFIRE_PROC_ID)))),
         },
         SkillPriorityInfo {
             skill_id: white_mana_skill_id,

@@ -1,5 +1,4 @@
-use crate::BuffIncreasePercentType;
-use ffxiv_simbot_db::IncreaseType;
+use crate::types::{BuffIncreasePercentType, IncreaseType};
 
 #[derive(Clone, Debug)]
 pub enum StatusInfo {

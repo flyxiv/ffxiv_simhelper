@@ -1,15 +1,11 @@
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::{BuffIncreasePercentType, ResourceType};
-use ffxiv_simbot_db::stat_calculator::CharacterPower;
-use ffxiv_simbot_db::MultiplierType;
-use lazy_static::lazy_static;
-use log::debug;
+use crate::types::{BuffIncreasePercentType, MultiplierType, ResourceType};
 
 #[inline]
 pub(crate) fn percent_to_actual_value(increase_percent: BuffIncreasePercentType) -> MultiplierType {
     debug_assert!(increase_percent >= 1, "{}", increase_percent);
-    increase_percent as MultiplierType / 100f64
+    increase_percent as MultiplierType / 100f64;
 }
 
 pub const DIRECT_HIT_DAMAGE_MULTIPLIER: f64 = 1.25f64;

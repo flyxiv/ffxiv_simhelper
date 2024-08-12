@@ -1,7 +1,5 @@
 use crate::combat_resources::CombatResource;
-use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
-use crate::jobs_skill_data::bard::abilities::{get_song_skill_ids, make_bard_skill_list};
 use crate::jobs_skill_data::summoner::abilities::make_summoner_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -10,8 +8,8 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::status_info::StatusInfo;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, ResourceType};
+use crate::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -123,6 +121,7 @@ impl SummonerCombatResources {
             titan_stack: 0,
             garuda_stack: 0,
             trance_stack: 0,
+            solar_bahamut_stack: 0,
         }
     }
 }

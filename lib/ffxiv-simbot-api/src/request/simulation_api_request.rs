@@ -1,6 +1,6 @@
+use crate::{MultiplierType, StatType};
 use ffxiv_simbot_combat_components::{IdType, TimeType};
-use ffxiv_simbot_db::stat::StatType;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -16,13 +16,14 @@ pub struct PlayerInfoRequest {
     pub player_id: IdType,
     pub partner1_id: Option<IdType>,
     pub partner2_id: Option<IdType>,
-    pub job: String,
-    pub stats: StatsRequest,
+    pub jobAbbrev: String,
+    pub stats: StatsInfo,
+    pub power: PlayerPower,
 }
 
 #[derive(Debug, Deserialize, Clone, Copy)]
 #[serde(rename_all = "camelCase")]
-pub struct StatsRequest {
+pub struct StatsInfo {
     pub weapon_damage: StatType,
     pub main_stat: StatType,
     pub critical_strike: StatType,

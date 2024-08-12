@@ -1,8 +1,5 @@
 use crate::combat_resources::CombatResource;
-use crate::jobs_skill_data::black_mage::abilities::make_blackmage_skill_list;
-use crate::jobs_skill_data::pictomancer::abilities::{
-    make_pictomancer_skill_list, PictomancerDatabase,
-};
+use crate::jobs_skill_data::pictomancer::abilities::make_pictomancer_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -10,7 +7,8 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, TimeType, SIMULATION_START_TIME_MILLISECOND};
+use crate::types::{ComboType, ResourceType};
+use crate::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;

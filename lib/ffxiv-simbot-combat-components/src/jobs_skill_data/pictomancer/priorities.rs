@@ -1,13 +1,12 @@
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::black_mage::abilities::BlackmageDatabase;
 use crate::jobs_skill_data::pictomancer::abilities::PictomancerDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasResource, HasResourceExactly, HasSkillStacks, MillisecondsBeforeBurst, Not, Or,
-    RelatedSkillCooldownLessOrEqualThan,
+    And, Combo, HasResource, HasResourceExactly, MillisecondsBeforeBurst, Not, Or,
 };
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::types::TurnCount;
+use crate::IdType;
 use std::cell::RefCell;
 
 #[derive(Clone)]

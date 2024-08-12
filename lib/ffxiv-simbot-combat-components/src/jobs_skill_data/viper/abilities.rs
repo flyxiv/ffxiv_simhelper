@@ -1,14 +1,11 @@
-use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff};
-use crate::id_entity::IdEntity;
+use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
-use crate::skill::damage_category::DamageCategory;
 use crate::skill::make_skill_table;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
-use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
 use std::collections::HashMap;
@@ -203,7 +200,7 @@ impl ViperDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
-                player_id
+                player_id,
                 HONED_STEELS.clone(),
                 60000,
                 60000,

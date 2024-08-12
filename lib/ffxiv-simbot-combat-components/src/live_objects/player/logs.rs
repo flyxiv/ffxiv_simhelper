@@ -1,7 +1,6 @@
 use crate::damage_calculator::DamageRdpsProfile;
 use crate::live_objects::player::StatusKey;
-use crate::{DamageType, IdType, TimeType};
-use ffxiv_simbot_db::MultiplierType;
+use crate::types::{IdType, MultiplierType, TimeType};
 use std::collections::HashMap;
 
 /// Records skill use events and damage events, stored for each player.

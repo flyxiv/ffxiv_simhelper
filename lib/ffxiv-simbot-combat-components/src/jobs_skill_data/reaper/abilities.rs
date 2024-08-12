@@ -3,14 +3,14 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
-use crate::skill::damage_category::DamageCategory;
+use crate::skill::make_skill_table;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{CheckStatus, Resource, UseBuff};
-use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::{IdType, PotencyType};
+use crate::types::PotencyType;
+use crate::IdType;
 use std::collections::HashMap;
 
 pub(crate) struct ReaperDatabase {
@@ -48,7 +48,7 @@ pub(crate) struct ReaperDatabase {
     pub(crate) shadow_of_death_debuff: DebuffStatus,
     pub(crate) oblatio: BuffStatus,
     pub(crate) perfectio_parata: BuffStatus,
-    pub(crate) ideal_host: BuffStatus
+    pub(crate) ideal_host: BuffStatus,
 
     pub(crate) potion: AttackSkill,
     pub(crate) potion_buff: BuffStatus,
@@ -171,7 +171,6 @@ impl ReaperDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-
 
         let SLICE: AttackSkill = AttackSkill {
             id: 1200,
@@ -504,21 +503,17 @@ impl ReaperDatabase {
             player_id,
             potency: 720 + 40 * (player_count - 1) as PotencyType,
             trait_percent: 100,
-            additional_skill_events: vec![ApplyBuff(
-                player_id,
-                player_id,
-                PERFECTIO_PARATA.clone(),
-                30000,
-                30000,
-                0,
-            ), ApplyBuff(
-                player_id,
-                player_id,
-                IDEAL_HOST.clone(),
-                30000,
-                30000,
-                0,
-            )],
+            additional_skill_events: vec![
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    PERFECTIO_PARATA.clone(),
+                    30000,
+                    30000,
+                    0,
+                ),
+                ApplyBuff(player_id, player_id, IDEAL_HOST.clone(), 30000, 30000, 0),
+            ],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -907,8 +902,6 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-
-
 
         let potion_skill = PotionSkill::new(player_id);
 

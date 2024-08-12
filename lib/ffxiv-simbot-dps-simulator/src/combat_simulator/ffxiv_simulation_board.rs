@@ -30,12 +30,7 @@ use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::status::status_info::StatusInfo;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
 use ffxiv_simbot_combat_components::status::Status;
-use ffxiv_simbot_combat_components::{
-    DamageType, IdType, TimeType, SIMULATION_START_TIME_MILLISECOND,
-};
-use ffxiv_simbot_db::job::get_role;
-use ffxiv_simbot_db::stat_calculator::add_main_stat;
-use ffxiv_simbot_db::{IncreaseType, MultiplierType};
+use ffxiv_simbot_combat_components::{IdType, TimeType, SIMULATION_START_TIME_MILLISECOND};
 use log::{debug, info};
 use std::cell::RefCell;
 use std::cmp::{min, Reverse};

@@ -1,13 +1,12 @@
 use crate::api_handler::get_composition_buff;
 use crate::errors::Result;
 use crate::request::convert_to_simulation_board::create_player;
-use crate::request::simulation_api_request::{PlayerInfoRequest, StatsRequest};
+use crate::request::simulation_api_request::{PlayerInfoRequest, StatsInfo};
 use crate::request::stat_compare_api_request::StatCompareApiRequest;
 use crate::response::convert_simulation_result::create_response_from_simulation_result;
 use crate::response::stat_compare_response::StatCompareApiResponse;
 use axum::Json;
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
-use ffxiv_simbot_db::constants::FFXIV_STAT_MODIFIER;
 use ffxiv_simbot_dps_simulator::combat_simulator::ffxiv_simulation_board::FfxivSimulationBoard;
 use ffxiv_simbot_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
@@ -40,7 +39,7 @@ pub(crate) async fn stat_compare_api_handler(
 
 fn create_stat_compare_simulation_board(
     request: &StatCompareApiRequest,
-    main_player_stats: StatsRequest,
+    main_player_stats: StatsInfo,
 ) -> Result<FfxivSimulationBoard> {
     let combat_time_millisecond = request.combat_time_millisecond;
     let main_player_id = request.main_player_id;
@@ -69,7 +68,7 @@ fn create_stat_compare_simulation_board(
             .map(|player_info_request| {
                 (
                     player_info_request.player_id,
-                    player_info_request.job.clone(),
+                    player_info_request.jobAbbrev.clone(),
                 )
             })
             .collect_vec(),
@@ -80,7 +79,7 @@ fn create_stat_compare_simulation_board(
             player_id: main_player_id,
             partner1_id: request.main_player_partner1_id,
             partner2_id: request.main_player_partner2_id,
-            job: request.main_player_job.clone(),
+            jobAbbrev: request.main_player_job.clone(),
             stats: main_player_stats,
         },
         composition_buff,

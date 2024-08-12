@@ -1,15 +1,15 @@
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::IdType;
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::gunbreaker::abilities::GunbreakerDatabase;
-use crate::jobs_skill_data::paladin::abilities::PaladinDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessOrEqualThan,
+    Combo, HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessOrEqualThan,
 };
+use crate::types::TurnCount;
 
 #[derive(Clone)]
 pub(crate) struct GunbreakerPriorityTable {

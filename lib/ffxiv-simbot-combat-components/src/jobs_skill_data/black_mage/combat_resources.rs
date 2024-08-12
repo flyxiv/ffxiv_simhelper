@@ -7,7 +7,8 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, TimeType, SIMULATION_START_TIME_MILLISECOND};
+use crate::types::{ComboType, ResourceType};
+use crate::{IdType, TimeType, SIMULATION_START_TIME_MILLISECOND};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -114,6 +115,7 @@ impl BlackmageCombatResources {
             polyglot_stack: 0,
             paradox_gauge_stack: 0,
             fire4_stack: 0,
+            flarestar_stack: 0,
             next_polyglot_time: POLYGLOT_STACK_INTERVAL_MILLISECOND
                 + TimeType::abs(SIMULATION_START_TIME_MILLISECOND),
         }

@@ -7,7 +7,8 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, ResourceType};
+use crate::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -81,12 +82,12 @@ impl CombatResource for DragoonCombatResources {
 }
 
 impl DragoonCombatResources {
-    pub(crate) fn new(player_id: IdType, partner_player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: IdType) -> Self {
         Self {
-            skills: make_dragoon_skill_list(player_id, partner_player_id),
+            skills: make_dragoon_skill_list(player_id),
             player_id,
             current_combo: None,
-            mirage_gauge: 0,
+            nastrond_stack: 0,
             firstmind_focus: 0,
         }
     }

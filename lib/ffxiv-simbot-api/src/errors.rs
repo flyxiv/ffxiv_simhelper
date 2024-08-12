@@ -6,8 +6,6 @@ pub type Result<T> = std::result::Result<T, FfxivSimbotServiceError>;
 
 #[derive(Error, Debug)]
 pub enum FfxivSimbotServiceError {
-    #[error("Data Error: {0}")]
-    DataError(#[from] ffxiv_simbot_db::errors::DataError),
     #[error("Axum Error: {0}")]
     AxumError(#[from] axum::Error),
     #[error("Invalid Request: {0}")]

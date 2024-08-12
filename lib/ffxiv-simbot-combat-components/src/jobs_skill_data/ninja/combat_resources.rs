@@ -8,10 +8,11 @@ use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
-use crate::skill::{Skill, SkillEvents};
+use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, ResourceType};
+use crate::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -71,7 +72,7 @@ impl CombatResource for NinjaCombatResources {
         &mut self,
         skill_id: IdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
-        debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
         player: &FfxivPlayer,
     ) -> SkillEvents {
@@ -107,6 +108,7 @@ impl NinjaCombatResources {
         Self {
             skills: make_ninja_skill_list(player_id),
             ninki: 0,
+            shuriken: 0,
             current_combo: None,
         }
     }

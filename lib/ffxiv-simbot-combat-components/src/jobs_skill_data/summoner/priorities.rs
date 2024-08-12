@@ -1,15 +1,15 @@
 use crate::event::FfxivEventQueue;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::IdType;
 use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::paladin::abilities::PaladinDatabase;
 use crate::jobs_skill_data::summoner::abilities::SummonerDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{Combo, MillisecondsBeforeBurst};
+use crate::types::TurnCount;
 
 #[derive(Clone)]
 pub(crate) struct SummonerPriorityTable {

@@ -99,7 +99,7 @@ impl WarriorDatabase {
             stacks: 1,
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
-        }
+        };
 
         let HEAVY_SWING: AttackSkill = AttackSkill {
             id: 100,

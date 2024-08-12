@@ -16,7 +16,8 @@ use crate::skill::{
 };
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{DamageType, IdType, ResourceType, StackType, StatusTable, TimeType};
+use crate::types::{DamageType, ResourceType, StackType, StatusTable};
+use crate::{IdType, TimeType};
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
 use std::cmp::max;

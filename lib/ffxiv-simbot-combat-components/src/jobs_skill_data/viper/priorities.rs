@@ -1,17 +1,15 @@
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::IdType;
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::gunbreaker::abilities::GunbreakerDatabase;
-use crate::jobs_skill_data::paladin::abilities::PaladinDatabase;
 use crate::jobs_skill_data::viper::abilities::ViperDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BuffGreaterDurationThan, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource,
-    HasResourceExactly, Not, Or, RelatedSkillCooldownLessOrEqualThan,
+    And, BuffGreaterDurationThan, BufforDebuffLessThan, Combo, HasResource, HasResourceExactly, Or,
 };
+use crate::types::TurnCount;
 
 #[derive(Clone)]
 pub(crate) struct ViperPriorityTable {
@@ -180,10 +178,6 @@ pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPrio
         SkillPriorityInfo {
             skill_id: db.hunters_sting.get_id(),
             prerequisite: Some(Combo(Some(2))),
-        },
-        SkillPriorityInfo {
-            skill_id: db.dread_fangs.get_id(),
-            prerequisite: Some(BufforDebuffLessThan(db.noxious_gnash.id, 20000)),
         },
         SkillPriorityInfo {
             skill_id: db.steel_fangs.get_id(),

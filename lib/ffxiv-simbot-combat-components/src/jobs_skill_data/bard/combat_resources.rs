@@ -1,7 +1,6 @@
 use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
-use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::bard::abilities::{get_song_skill_ids, make_bard_skill_list};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -11,7 +10,7 @@ use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, IdType, ResourceType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -154,6 +153,7 @@ impl BardCombatResources {
                 max_stacks: 4,
                 trigger_proc_event_on_gcd: vec![],
             },
+            radiant_stack: 0,
         }
     }
 }

@@ -3,7 +3,8 @@ use crate::jobs_skill_data::ninja::abilities::NinjaDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{And, HasResource, Not, Or};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::types::TurnCount;
+use crate::IdType;
 use std::cell::RefCell;
 
 #[derive(Clone)]
@@ -101,18 +102,16 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
         },
         SkillPriorityInfo {
             skill_id: db.suiton.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
+            prerequisite: Some(And(
                 Box::new(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
                     1010, 17000,
                 )),
-                Box::new(SkillPrerequisite::Not(Box::new(
-                    SkillPrerequisite::HasBufforDebuff(1002),
-                ))),
+                Box::new(Not(Box::new(SkillPrerequisite::HasBufforDebuff(1002)))),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.armor_crush.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
+            prerequisite: Some(And(
                 Box::new(Not(Box::new(HasResource(1, 4)))),
                 Box::new(And(
                     Box::new(Not(Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)))),
@@ -126,7 +125,7 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
         },
         SkillPriorityInfo {
             skill_id: db.hyosho.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
+            prerequisite: Some(And(
                 Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
                 Box::new(SkillPrerequisite::HasBufforDebuff(1005)),
             )),
@@ -146,14 +145,14 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
         },
         SkillPriorityInfo {
             skill_id: db.phantom_kamaitachi.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
+            prerequisite: Some(And(
                 Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
                 Box::new(SkillPrerequisite::HasBufforDebuff(1007)),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.raiton.get_id(),
-            prerequisite: Some(SkillPrerequisite::Or(
+            prerequisite: Some(Or(
                 Box::new(SkillPrerequisite::HasBufforDebuff(1004)),
                 Box::new(SkillPrerequisite::HasBufforDebuff(1003)),
             )),
@@ -182,7 +181,7 @@ pub(crate) fn make_ninja_ogcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPri
         },
         SkillPriorityInfo {
             skill_id: db.bunshin.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource(0, 50)),
+            prerequisite: Some(HasResource(0, 50)),
         },
         SkillPriorityInfo {
             skill_id: db.zesho_meppo_meisui.get_id(),

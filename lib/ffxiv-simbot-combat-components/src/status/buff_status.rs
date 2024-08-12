@@ -4,7 +4,8 @@ use crate::id_entity::IdEntity;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::{IdType, ResourceType, TimeType};
+use crate::types::ResourceType;
+use crate::{IdType, TimeType};
 use rand::{thread_rng, Rng};
 use std::cmp::min;
 

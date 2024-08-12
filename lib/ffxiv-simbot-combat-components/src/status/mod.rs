@@ -1,8 +1,7 @@
 use crate::damage_calculator::multiplier_calculator::DIRECT_HIT_DAMAGE_MULTIPLIER;
 use crate::id_entity::IdEntity;
 use crate::status::status_info::StatusInfo;
-use crate::{IdType, ResourceType, TimeType};
-use ffxiv_simbot_db::MultiplierType;
+use crate::types::{IdType, MultiplierType, ResourceType, TimeType};
 
 pub mod buff_status;
 pub mod debuff_status;

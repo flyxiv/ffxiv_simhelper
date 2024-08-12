@@ -4,7 +4,8 @@ use crate::jobs_skill_data::bard::abilities::BardDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::HasSkillStacks;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::types::TurnCount;
+use crate::IdType;
 use std::cell::RefCell;
 use std::rc::Rc;
 

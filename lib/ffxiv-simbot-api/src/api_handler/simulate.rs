@@ -6,13 +6,10 @@ use crate::response::convert_simulation_result::create_response_from_simulation_
 use crate::response::simulation_api_response::SimulationApiResponse;
 use axum::Json;
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
-use ffxiv_simbot_db::constants::{job_abbrev_to_role, FFXIV_STAT_MODIFIER};
-use ffxiv_simbot_db::IncreaseType;
 use ffxiv_simbot_dps_simulator::combat_simulator::ffxiv_simulation_board::FfxivSimulationBoard;
 use ffxiv_simbot_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
 use std::cell::RefCell;
-use std::collections::HashSet;
 use std::rc::Rc;
 
 pub(crate) async fn simulate_api_handler(
@@ -47,7 +44,7 @@ pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> 
         .map(|player_info_request| {
             (
                 player_info_request.player_id,
-                player_info_request.job.clone(),
+                player_info_request.jobAbbrev.clone(),
             )
         })
         .collect_vec();
@@ -57,7 +54,6 @@ pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> 
             player_info_request,
             composition_buff,
             &player_jobs,
-            FFXIV_STAT_MODIFIER.clone(),
             event_queue.clone(),
         )?;
 

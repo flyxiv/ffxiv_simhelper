@@ -1,17 +1,15 @@
-use crate::event::FfxivEventQueue;
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::IdType;
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::astrologian::abilities::AstrologianDatabase;
-use crate::jobs_skill_data::reaper::abilities::ReaperDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
-    Or, RelatedSkillCooldownLessOrEqualThan,
+    And, BufforDebuffLessThan, HasBufforDebuff, MillisecondsBeforeBurst, Not, Or,
 };
+use crate::types::TurnCount;
 
 #[derive(Clone)]
 pub(crate) struct AstrologianPriorityTable {

@@ -854,9 +854,8 @@ impl DragoonDatabase {
 
 pub(crate) fn make_dragoon_skill_list(
     player_id: IdType,
-    partner_player_id: IdType,
 ) -> SkillTable<AttackSkill> {
-    let db = DragoonDatabase::new(player_id, partner_player_id);
+    let db = DragoonDatabase::new(player_id);
 
     let dragoon_skill_list: Vec<AttackSkill> = vec![
         db.life_surge,

@@ -774,6 +774,9 @@ impl GunbreakerDatabase {
             burst_strike: BURST_STRIKE,
             hypervelocity: HYPERVELOCITY,
 
+            reign_of_beasts: REIGN_OF_BEASTS,
+            noble_blood: NOBLE_BLOOD,
+            lion_heart: LION_HEART,
             no_mercy_buff: NO_MERCY_BUFF,
             ready_to_blast: READY_TO_BLAST,
             sonic_break_dot: SONIC_BREAK_DOT,
@@ -783,6 +786,8 @@ impl GunbreakerDatabase {
             ready_to_gouge: READY_TO_GOUGE,
             savage_next: SAVAGE_NEXT,
             wicked_next: WICKED_NEXT,
+            ready_to_break: READY_TO_BREAK,
+            ready_to_reign: READY_TO_REIGN,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,
@@ -812,6 +817,9 @@ pub(crate) fn make_gunbreaker_skill_list(player_id: IdType) -> SkillTable<Attack
         db.bloodfest,
         db.burst_strike,
         db.hypervelocity,
+        db.reign_of_beasts,
+        db.noble_blood,
+        db.lion_heart,
         db.potion,
     ];
 

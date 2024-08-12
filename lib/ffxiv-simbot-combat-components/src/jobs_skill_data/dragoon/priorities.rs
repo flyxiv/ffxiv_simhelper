@@ -1,16 +1,15 @@
-use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TimeType, TurnCount};
+use crate::IdType;
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::dragoon::abilities::DragoonDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, Not, Or,
-    RelatedSkillCooldownLessOrEqualThan,
+    And, BufforDebuffLessThan, Combo, HasBufforDebuff, Or,
 };
+use crate::types::TurnCount;
 
 #[derive(Clone)]
 pub(crate) struct DragoonPriorityTable {

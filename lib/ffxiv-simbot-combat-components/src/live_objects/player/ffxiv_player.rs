@@ -8,6 +8,7 @@ use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::gcd_calculator::GcdCalculator;
 use crate::live_objects::player::logs::{DamageLog, SkillLog};
+use crate::live_objects::player::player_power::PlayerPower;
 use crate::live_objects::player::player_turn_calculator::PlayerTurnCalculator;
 use crate::live_objects::player::{Player, StatusKey};
 use crate::live_objects::turn_type::FfxivTurnType;
@@ -22,9 +23,8 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_info::StatusInfo;
 use crate::status::status_timer::StatusTimer;
-use crate::{IdType, StatusTable, TimeType, TARGET_ID};
-use ffxiv_simbot_db::stat_calculator::CharacterPower;
-use ffxiv_simbot_db::MultiplierType;
+use crate::types::{MultiplierType, StatusTable};
+use crate::{IdType, TimeType, TARGET_ID};
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::collections::HashMap;
@@ -35,7 +35,7 @@ pub struct FfxivPlayer {
     /// Stat/Job Data about the player
     pub id: IdType,
     pub job_abbrev: String,
-    pub power: CharacterPower,
+    pub power: PlayerPower,
 
     pub priority_table: FfxivPriorityTable,
 
@@ -444,8 +444,9 @@ impl FfxivPlayer {
     pub fn new(
         id: IdType,
         job_abbrev: String,
-        power: CharacterPower,
-        partner_player_id: Option<IdType>,
+        power: PlayerPower,
+        partner_player_id1: Option<IdType>,
+        partner_player_id2: Option<IdType>,
         priority_table: FfxivPriorityTable,
         buff_list: HashMap<StatusKey, BuffStatus>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
@@ -458,7 +459,8 @@ impl FfxivPlayer {
             combat_resources: RefCell::new(FfxivCombatResources::new(
                 &job_abbrev,
                 id,
-                partner_player_id,
+                partner_player_id1,
+                partner_player_id2,
                 event_queue.clone(),
                 player_count,
             )),

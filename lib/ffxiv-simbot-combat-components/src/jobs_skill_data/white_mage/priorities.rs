@@ -1,12 +1,10 @@
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::warrior::priorities::make_warrior_ogcd_priority_table;
 use crate::jobs_skill_data::white_mage::abilities::WhitemageDatabase;
-use crate::rotation::priority_table::SkillPrerequisite::{
-    HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessOrEqualThan,
-};
+use crate::rotation::priority_table::SkillPrerequisite::{HasBufforDebuff, HasResource, Not, Or};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::types::TurnCount;
+use crate::IdType;
 use std::cell::RefCell;
 
 #[derive(Clone)]

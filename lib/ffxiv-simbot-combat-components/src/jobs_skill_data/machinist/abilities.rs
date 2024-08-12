@@ -8,7 +8,6 @@ use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{CheckStatus, UseBuff};
 use crate::skill::{make_skill_table, ResourceRequirements, ResourceTable};
 use crate::status::buff_status::BuffStatus;
-use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
 use std::collections::HashMap;

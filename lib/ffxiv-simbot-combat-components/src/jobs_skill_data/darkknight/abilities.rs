@@ -1,4 +1,3 @@
-use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff};
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;

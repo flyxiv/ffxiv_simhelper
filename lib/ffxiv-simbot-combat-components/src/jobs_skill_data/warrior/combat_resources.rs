@@ -7,7 +7,8 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, ResourceType};
+use crate::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -90,6 +91,7 @@ impl WarriorCombatResources {
             player_id,
             current_combo: None,
             beast_gauge: 0,
+            burgeoning_fury: 0,
         }
     }
 }

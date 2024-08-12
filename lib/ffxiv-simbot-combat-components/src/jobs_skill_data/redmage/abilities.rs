@@ -5,7 +5,7 @@ use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{Resource, UseBuff};
-use crate::skill::{make_skill_table, ResourceRequirements, ResourceTable};
+use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::IdType;
@@ -57,7 +57,6 @@ pub(crate) struct RedmageDatabase {
     pub(crate) finish_ready: BuffStatus,
     pub(crate) thorned_floursh: BuffStatus,
     pub(crate) grand_impact_ready: BuffStatus,
-    pub(crate) prefulgence_ready: BuffStatus,
 
     pub(crate) swiftcast_buff: BuffStatus,
 
@@ -1135,6 +1134,8 @@ impl RedmageDatabase {
             verstone_ready: VERSTONE_READY,
             verfire_ready: VERFIRE_READY,
             finish_ready: FINISH_READY,
+            thorned_floursh: THORNED_FLOURISH,
+            grand_impact_ready: GRAND_IMPACT_READY,
             swiftcast_buff: caster_skills.swiftcast_buff,
 
             potion: potion_skill.potion,

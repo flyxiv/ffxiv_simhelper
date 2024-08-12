@@ -1,10 +1,6 @@
-use crate::request::simulation_api_request::{PlayerInfoRequest, SimulationApiRequest};
-use crate::response::simulation_api_response::SimulationApiResponse;
-use axum::extract::State;
-use axum::Json;
-use ffxiv_simbot_db::constants::job_abbrev_to_role;
-use ffxiv_simbot_db::IncreaseType;
-use ffxiv_simbot_engine::engine::Engine;
+use crate::request::simulation_api_request::PlayerInfoRequest;
+use crate::role::job_abbrev_to_role;
+use ffxiv_simbot_combat_components::types::IncreaseType;
 use std::collections::HashSet;
 
 pub mod simulate;
@@ -18,8 +14,8 @@ fn get_composition_buff(party: &Vec<PlayerInfoRequest>) -> IncreaseType {
     let mut roles = HashSet::new();
 
     for player_info_request in party {
-        roles.insert(job_abbrev_to_role(&player_info_request.job));
+        roles.insert(job_abbrev_to_role(&player_info_request.jobAbbrev));
     }
 
-    return roles.len() as IncreaseType;
+    return roles.len();
 }

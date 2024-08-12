@@ -1,9 +1,9 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::sage::abilities::SageDatabase;
-use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::types::TurnCount;
+use crate::IdType;
 use std::cell::RefCell;
 
 #[derive(Clone)]

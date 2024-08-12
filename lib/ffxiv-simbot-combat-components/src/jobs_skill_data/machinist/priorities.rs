@@ -1,13 +1,13 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::machinist::abilities::MachinistDatabase;
-use crate::jobs_skill_data::ninja::abilities::NinjaDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, Combo, HasResource, HasSkillStacks, MillisecondsBeforeBurst, Not, Or,
     RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, PotencyType, ResourceType, TimeType, TurnCount};
+use crate::types::TurnCount;
+use crate::IdType;
 use std::cell::RefCell;
 
 #[derive(Clone)]

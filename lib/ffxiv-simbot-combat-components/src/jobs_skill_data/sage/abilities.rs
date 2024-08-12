@@ -145,7 +145,7 @@ impl SageDatabase {
             trait_percent: 130,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 0,
-                EUKRASIAN_DYSKRASIA.clone(),
+                EUKRASIAN_DYSKRASIA_DOT.clone(),
                 30000,
                 30000,
                 1000,

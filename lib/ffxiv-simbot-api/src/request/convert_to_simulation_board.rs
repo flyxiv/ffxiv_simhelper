@@ -1,54 +1,34 @@
 use crate::errors::{FfxivSimbotServiceError, Result};
-use crate::request::simulation_api_request::{PlayerInfoRequest, StatsRequest};
+use crate::request::simulation_api_request::PlayerInfoRequest;
+use crate::IncreaseType;
 use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
 use ffxiv_simbot_combat_components::IdType;
-use ffxiv_simbot_db::stat_calculator::{convert_stat_info_to_power, StatInfo};
-use ffxiv_simbot_db::{IncreaseType, MultiplierType, StatModifier};
 use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::rc::Rc;
 
 lazy_static! {
     static ref PARTNER_PRIORITY: Vec<&'static str> = vec![
-        "SAM", "NIN", "MNK", "DRG", "RPR", "BLM", "SMN", "RDM", "MCH", "DNC", "BRD", "DRK", "PLD",
-        "WAR", "GNB", "WHM", "SGE", "SCH", "AST",
+        "VPR", "PCT", "SAM", "NIN", "MNK", "DRG", "RPR", "BLM", "SMN", "RDM", "MCH", "DNC", "BRD",
+        "DRK", "PLD", "WAR", "GNB", "WHM", "SGE", "SCH", "AST",
     ];
     static ref MELEE_PRIORITY: Vec<&'static str> =
-        vec!["SAM", "NIN", "MNK", "DRG", "RPR", "DRK", "PLD", "WAR", "GNB",];
+        vec!["VPR", "SAM", "NIN", "MNK", "DRG", "RPR", "DRK", "PLD", "WAR", "GNB",];
     static ref RANGED_PRIORITY: Vec<&'static str> =
-        vec!["BLM", "SMN", "DNC", "RDM", "MCH", "BRD", "WHM", "SGE", "SCH", "AST",];
-}
-
-pub(crate) fn convert_to_stats_info(stats: &StatsRequest) -> StatInfo {
-    StatInfo {
-        weapon_damage: stats.weapon_damage,
-        main_stat: stats.main_stat,
-        critical_strike: stats.critical_strike,
-        direct_hit: stats.direct_hit,
-        determination: stats.determination,
-        speed: stats.speed,
-        tenacity: stats.tenacity,
-    }
+        vec!["PCT", "BLM", "SMN", "DNC", "RDM", "MCH", "BRD", "WHM", "SGE", "SCH", "AST",];
 }
 
 pub(crate) fn create_player(
     player_info: PlayerInfoRequest,
     composition_buff: IncreaseType,
     player_jobs: &Vec<(IdType, String)>,
-    stat_modifier: StatModifier,
     event_queue: Rc<RefCell<FfxivEventQueue>>,
 ) -> Result<FfxivPlayer> {
-    let stat_info = convert_to_stats_info(&player_info.stats);
-    let character_power = convert_stat_info_to_power(
-        &stat_info,
-        &player_info.job,
-        1.0 + (composition_buff as MultiplierType / 100.0),
-        &stat_modifier,
-    )?;
+    let character_power = player_info.power;
     let player_count = player_jobs.len();
 
-    match player_info.job.as_str() {
+    match player_info.jobAbbrev.as_str() {
         "WAR" => Ok(FfxivPlayer::new_warrior(
             player_info.player_id,
             character_power,
@@ -153,7 +133,7 @@ pub(crate) fn create_player(
             event_queue,
             player_count,
         )),
-        _ => Err(FfxivSimbotServiceError::InvalidJobString(player_info.job).into()),
+        _ => Err(FfxivSimbotServiceError::InvalidJobString(player_info.jobAbbrev).into()),
     }
 }
 
