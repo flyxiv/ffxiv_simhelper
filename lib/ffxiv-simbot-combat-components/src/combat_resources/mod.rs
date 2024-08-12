@@ -9,7 +9,9 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, StackType, TimeType};
+use crate::types::{ComboType, ResourceType, StackType};
+use crate::{IdType, TimeType};
+use log::info;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -20,6 +22,7 @@ pub(crate) trait CombatResource: Clone + Sized {
     fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill>;
     fn get_skills(&self) -> &SkillTable<AttackSkill>;
     fn get_skill(&self, skill_id: IdType) -> &AttackSkill {
+        info!("get_skill: {}", skill_id);
         let skill = self.get_skills().get(&skill_id).unwrap();
         skill
     }
