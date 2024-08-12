@@ -1,7 +1,7 @@
 use ffxiv_simbot_api::api_handler::simulate::quicksim;
 use ffxiv_simbot_api::api_server::api_router::create_ffxiv_simbot_service_router;
 use ffxiv_simbot_api::request::simulation_api_request::{
-    PlayerInfoRequest, SimulationApiRequest, StatsRequest,
+    PlayerInfoRequest, SimulationApiRequest, StatsInfo,
 };
 use ffxiv_simbot_combat_components::IdType;
 use ffxiv_simbot_engine::engine::Engine;
@@ -38,8 +38,8 @@ fn main() {
         .enumerate()
         .map(|(i, job)| PlayerInfoRequest {
             player_id: i as IdType,
-            job: job.to_string(),
-            stats: StatsRequest {
+            jobAbbrev: job.to_string(),
+            stats: StatsInfo {
                 weapon_damage: 132,
                 main_stat: 3300,
                 critical_strike: 2560,
