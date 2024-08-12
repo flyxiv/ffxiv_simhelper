@@ -1,3 +1,13 @@
+import { To } from "react-router-dom";
+import { TotalStats } from "./ItemSet";
+
+interface SubStatInfo {
+  name: string;
+  value: number;
+}
+
+export const SubstatNames = ["CRT", "DET", "DH", "SKS", "SPS", "TEN"];
+
 export function getStatNames(jobAbbrev: string) {
   switch (jobAbbrev) {
     case "PLD":
@@ -29,4 +39,28 @@ export function getStatNames(jobAbbrev: string) {
     default:
       return [];
   }
+}
+
+export function convertToSubStatInfos(totalStats: TotalStats) {
+  let subStats: SubStatInfo[] = [];
+  if (totalStats.criticalStrike > 0) {
+    subStats.push({ name: "CRT", value: totalStats.criticalStrike });
+  }
+  if (totalStats.directHit > 0) {
+    subStats.push({ name: "DH", value: totalStats.directHit });
+  }
+  if (totalStats.determination > 0) {
+    subStats.push({ name: "DET", value: totalStats.determination });
+  }
+  if (totalStats.skillSpeed > 0) {
+    subStats.push({ name: "SKS", value: totalStats.skillSpeed });
+  }
+  if (totalStats.spellSpeed > 0) {
+    subStats.push({ name: "SPS", value: totalStats.spellSpeed });
+  }
+  if (totalStats.tenacity > 0) {
+    subStats.push({ name: "TEN", value: totalStats.tenacity });
+  }
+
+  return subStats;
 }

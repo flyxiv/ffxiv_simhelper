@@ -8,7 +8,7 @@ import { defaultStatCompareRequest } from "src/const/DefaultStatCompareRequest";
 import { StatCompareRequest } from "src/types/StatCompareRequest";
 import { CharacterStates } from "src/types/CharacterStates";
 import { StatCompareRequestButton } from "src/components/basic/StatCompareRequestButton";
-import { StatComparePartyInput } from "src/components/input/partyinput/StatComparePartyInput";
+import { HorizontalPartyInput } from "src/components/input/partyinput/HorizontalPartyInput";
 
 function isNotValid(request: StatCompareRequest) {
   if (request.mainPlayerId === null || request.mainPlayerId === undefined) {
@@ -135,7 +135,7 @@ export function StatCompare() {
             <Typography variant="h5">3. Additional Settings</Typography>
           </Box>
           <Box className="CustomizeBoard">
-            {StatComparePartyInput(
+            {HorizontalPartyInput(
               ids,
               partyJobs,
               setPartyJobs,

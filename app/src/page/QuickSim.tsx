@@ -2,15 +2,18 @@ import { useState } from "react";
 import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
 import { Box, Typography } from "@mui/material";
 import "./QuickSim.css";
-import { CharacterDetailedInput } from "../components/input/CharacterDetailedInput";
 import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
 import { QuickSimRequest } from "src/types/QuickSimRequest";
 import { PartyInfo } from "src/types/PartyStates";
 import { CharacterStates } from "src/types/CharacterStates";
-import { QuickSimPartyInput } from "../components/input/partyinput/QuickSimPartyInput";
+import { VerticalPartyInput } from "../components/input/partyinput/VerticalPartyInput";
 import { QuickSimRequestSaveName } from "src/App";
 import { EquipmentSelectionMenu } from "src/components/input/basicform/EquipmentInputForm";
 import { defaultItemSet } from "src/types/ffxivdatabase/ItemSet";
+import { StatSummary } from "src/components/container/StatSummary";
+import { RACES } from "src/const/StartStats";
+import { HorizontalPartyInput } from "src/components/input/partyinput/HorizontalPartyInput";
+import { Materia } from "src/types/ffxivdatabase/Materia";
 
 export function isNotValid(request: QuickSimRequest) {
   if (request.mainPlayerId === null || request.mainPlayerId === undefined) {
@@ -56,6 +59,7 @@ export function QuickSim() {
   let [mainPlayerPartner2Id, setMainPlayerPartner2Id] = useState(
     mainPlayerInfo.partner2Id
   );
+  let [race, setRace] = useState(RACES[0]);
 
   const mainPlayerState: CharacterStates = {
     jobAbbrev: mainPlayerJob,
@@ -80,35 +84,69 @@ export function QuickSim() {
 
   let [partyJobs, setPartyJobs] = useState(otherPartyJobs);
   let [itemSet, setItemSet] = useState(defaultItemSet());
+  let [foodId, setFoodId] = useState(-1);
+  let defaultMaterias = new Map<string, Materia[]>([
+    ["weapon", []],
+    ["head", []],
+    ["body", []],
+    ["hands", []],
+    ["legs", []],
+    ["feet", []],
+    ["neck", []],
+    ["ear", []],
+    ["wrist", []],
+    ["finger1", []],
+    ["finger2", []],
+  ]);
+
+  let [gearSetMaterias, setGearSetMaterias] = useState(defaultMaterias);
+
   let borderRadius = 3;
 
   return (
     <>
       <Box alignContent={"center"}>
         <Box className="QuickSimInputContainer">
-          <Box className="CharacterDetailCustomizeBoard">
-            <Box className="SelectionTitle" borderRadius={borderRadius}>
-              <Typography variant="h5">1. Input Your Info</Typography>
-            </Box>
-            <Box className="CustomizeBoard">
-              {CharacterDetailedInput(mainPlayerState, availablePartyIds)}
-            </Box>
+          <Box className="SelectionTitle" borderRadius={borderRadius}>
+            <Typography variant="h5">1. Input Your Info</Typography>
           </Box>
-          <Box className="CharacterDetailCustomizeBoard">
-            <Box className="SelectionTitle" borderRadius={borderRadius}>
-              <Typography variant="h5">2. Input Combat Info</Typography>
-            </Box>
-            <Box className="CustomizeBoard">
-              {QuickSimPartyInput(
-                ids,
-                partyJobs,
-                setPartyJobs,
-                availablePartyIds,
-                setAvailablePartyIds,
-                combatTimeStateSeconds,
-                setCombatTimeSeconds
-              )}
-            </Box>
+          <Box className="EquipmentBoard">
+            {EquipmentSelectionMenu(
+              mainPlayerState,
+              itemSet,
+              setItemSet,
+              race,
+              setRace,
+              foodId,
+              setFoodId,
+              gearSetMaterias,
+              setGearSetMaterias
+            )}
+          </Box>
+        </Box>
+        <Box className="QuickSimInputContainer">
+          {StatSummary(
+            mainPlayerState.jobAbbrev,
+            race,
+            itemSet,
+            foodId,
+            gearSetMaterias
+          )}
+        </Box>
+        <Box className="StatComparePartyInputContainer">
+          <Box className="SelectionTitle" borderRadius={borderRadius}>
+            <Typography variant="h5">2. Additional Settings</Typography>
+          </Box>
+          <Box className="CustomizeBoard">
+            {HorizontalPartyInput(
+              ids,
+              partyJobs,
+              setPartyJobs,
+              availablePartyIds,
+              setAvailablePartyIds,
+              combatTimeStateSeconds,
+              setCombatTimeSeconds
+            )}
           </Box>
         </Box>
         <Box>
@@ -117,9 +155,6 @@ export function QuickSim() {
             combatTimeStateSeconds,
             mainPlayerState
           )}
-        </Box>
-        <Box>
-          {EquipmentSelectionMenu(mainPlayerState, itemSet, setItemSet)}
         </Box>
       </Box>
     </>

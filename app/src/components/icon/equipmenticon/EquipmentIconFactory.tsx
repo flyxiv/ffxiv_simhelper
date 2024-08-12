@@ -1,4 +1,4 @@
-import { LEFTSLOTS } from "src/types/ffxivdatabase/Equipment";
+import { LEFTSLOTS, WEAPONSLOTS } from "src/types/ffxivdatabase/Equipment";
 
 const AIMING_CATEGORY_NAME = "Aiming";
 const CASTING_CATEGORY_NAME = "Casting";
@@ -17,7 +17,7 @@ export function getEquipmentIconDirectory(
   let base_directory = process.env.PUBLIC_URL + "/images/equipment";
   let equipmentIconName = equipmentName.toLowerCase().replace(/ /g, "_");
 
-  if (slotName === "mainhand" || slotName === "offhand") {
+  if (WEAPONSLOTS.includes(slotName)) {
     return `${base_directory}/${slotName}/${jobAbbrev}/${equipmentIconName}.png`;
   }
   let category = getEquipmentCategory(slotName, jobAbbrev);
@@ -76,7 +76,6 @@ function getEquipmentCategory(equipmentSlot: string, jobAbbrev: string) {
         return SLAYING_CATEGORY_NAME;
       case "NIN":
       case "VPR":
-        return SCOUTING_CATEGORY_NAME;
       case "BRD":
       case "MCH":
       case "DNC":

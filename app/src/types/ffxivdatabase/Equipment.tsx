@@ -1,8 +1,11 @@
+import { useState } from "react";
+import { Materia } from "./Materia";
+
 let totalEquipments: Array<Equipment> = require("src/resources/equipment_data.json");
 
-export const WEAPONSLOTS = ["mainhand", "offhand"];
+export const WEAPONSLOTS = ["weapon", "offHand"];
 export const LEFTSLOTS = ["head", "body", "hands", "legs", "feet"];
-export const RIGHTSLOTS = ["wrist", "ears", "neck", "finger"];
+export const RIGHTSLOTS = ["wrists", "ears", "neck", "finger1", "finger2"];
 export const TOTAL_SLOTS = WEAPONSLOTS.concat(LEFTSLOTS).concat(RIGHTSLOTS);
 
 const CURRENT_MIN_ITEM_LEVEL = 710;
@@ -20,7 +23,10 @@ export interface Equipment {
   slotName: string;
 
   weaponDamage: number;
-  mainStat: number;
+  STR: number;
+  DEX: number;
+  INT: number;
+  MND: number;
   criticalStrike: number;
   directHit: number;
   determination: number;
@@ -28,6 +34,7 @@ export interface Equipment {
   spellSpeed: number;
   tenacity: number;
   piety: number;
+  maxSubstat: number;
 
   materiaSlotCount: number;
   pentameldable: boolean;
@@ -44,7 +51,11 @@ export function toEquipmentKeyString(
   jobAbbrev: string,
   slotName: string
 ): string {
-  return `${slotName}-${jobAbbrev}`;
+  let keySlotName = slotName;
+  if (slotName === "finger1" || slotName === "finger2") {
+    keySlotName = "finger";
+  }
+  return `${keySlotName}-${jobAbbrev}`;
 }
 
 export function readEquipmentData(minItemLevel: number) {
@@ -57,6 +68,15 @@ export function readEquipmentData(minItemLevel: number) {
 
   for (let i = 0; i < equipmentDataFiltered.length; i++) {
     let equipment = equipmentDataFiltered[i];
+    equipment.maxSubstat = Math.max(
+      equipment.criticalStrike,
+      equipment.directHit,
+      equipment.determination,
+      equipment.skillSpeed,
+      equipment.spellSpeed,
+      equipment.tenacity,
+      equipment.piety
+    );
     equipmentDatabaseById.set(equipment.id, equipment);
     let key = { slotName: equipment.slotName, jobAbbrev: "" };
     for (let j = 0; j < equipment.jobName.length; j++) {
@@ -96,9 +116,31 @@ export function equipmentStatDescriptionString(equipment: Equipment) {
   if (equipment.weaponDamage > 0) {
     stats.push({ statName: "WD", value: equipment.weaponDamage });
   }
-  if (equipment.mainStat > 0) {
-    stats.push({ statName: "Main", value: equipment.mainStat });
+  if (equipment.STR > 0) {
+    stats.push({
+      statName: "STR",
+      value: equipment.STR,
+    });
   }
+  if (equipment.DEX > 0) {
+    stats.push({
+      statName: "DEX",
+      value: equipment.DEX,
+    });
+  }
+  if (equipment.INT > 0) {
+    stats.push({
+      statName: "INT",
+      value: equipment.INT,
+    });
+  }
+  if (equipment.MND > 0) {
+    stats.push({
+      statName: "MND",
+      value: equipment.MND,
+    });
+  }
+
   if (equipment.criticalStrike > 0) {
     stats.push({ statName: "CRT", value: equipment.criticalStrike });
   }
@@ -129,11 +171,35 @@ export function equipmentStatDescriptionString(equipment: Equipment) {
   return descriptionString.trim();
 }
 
-export function getLeftEquipmentSlotsOfJob(jobAbbrev: string) {
-  let weaponSlots = WEAPONSLOTS;
-  if (jobAbbrev !== "PLD") {
-    weaponSlots = [weaponSlots[0]];
+export function getEquipmentSlotsOfJob(jobAbbrev: string) {
+  if (jobAbbrev === "PLD") {
+    return [
+      "weapon",
+      "offHand",
+      "head",
+      "ears",
+      "body",
+      "neck",
+      "hands",
+      "wrists",
+      "legs",
+      "finger1",
+      "feet",
+      "finger2",
+    ];
   }
 
-  return weaponSlots.concat(LEFTSLOTS);
+  return [
+    "weapon",
+    "ears",
+    "head",
+    "neck",
+    "body",
+    "wrists",
+    "hands",
+    "finger1",
+    "legs",
+    "finger2",
+    "feet",
+  ];
 }

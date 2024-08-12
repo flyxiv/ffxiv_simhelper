@@ -169,13 +169,28 @@ export const StatSummaryBoxStyle = `
   justify-content: center;
   align-items: center;
   background-color: ${ColorConfigurations.backgroundTwo};
+  width: 50%;
+  margin: auto;
 `;
 
 export const SingleStatBoxStyle = `
   background-color: ${ColorConfigurations.backgroundThree};
   color: white;
-  align-items: center;
-  justify-items: center;
-  width: 8vw;
+  width: 4vw;
   margin: 5px 3px 5px 3px;
+`;
+
+export const EquipmentSubStatBoxStyle = `
+  width: 80%;
+  background-color: ${ColorConfigurations.backgroundThree};
+  display: flex;
+`;
+
+export const EquipmentSingleSubStatBoxStyle = (numberOfSubStats: number) => `
+  width: ${100 / numberOfSubStats}%;
+  background-color: ${ColorConfigurations.backgroundThree};
+`;
+
+export const EquipmentSingleBoxStyle = `
+  border: 1px solid ${"white"};
 `;

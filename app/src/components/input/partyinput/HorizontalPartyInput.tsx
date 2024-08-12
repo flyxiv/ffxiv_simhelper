@@ -37,7 +37,7 @@ export function handleTimeChange(textForm: TextTimeForm) {
   textForm.setState(value);
 }
 
-export function StatComparePartyInput(
+export function HorizontalPartyInput(
   playerIds: number[],
   partyJobs: string[],
   partySetter: React.Dispatch<React.SetStateAction<string[]>>,

@@ -1,12 +1,12 @@
 import { QuickSimRequest } from "src/types/QuickSimRequest";
 import {
   DEFAULT_WEAPON_DAMAGE,
-  DEFAULT_MAIN_STAT,
   DEFAULT_CRITICAL_STRIKE,
   DEFAULT_DIRECT_HIT,
   DEFAULT_DETERMINATION,
   DEFAULT_SPEED,
   DEFAULT_TENACITY,
+  DEFAULT_MAIN_STAT_NON_TANK,
 } from "../const/StatValue";
 
 export function defaultQuickSimRequest(): QuickSimRequest {
@@ -33,7 +33,7 @@ export function defaultQuickSimRequest(): QuickSimRequest {
       partner2Id: null,
       stats: {
         weaponDamage: DEFAULT_WEAPON_DAMAGE,
-        mainStat: DEFAULT_MAIN_STAT,
+        mainStat: DEFAULT_MAIN_STAT_NON_TANK,
         criticalStrike: DEFAULT_CRITICAL_STRIKE,
         directHit: DEFAULT_DIRECT_HIT,
         determination: DEFAULT_DETERMINATION,

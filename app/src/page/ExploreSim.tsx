@@ -1,17 +1,15 @@
 import { useState } from "react";
-import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
+import { QuickSimRequestButton } from "src/components/basic/QuickSimRequestButton";
 import { Box, Typography } from "@mui/material";
-import "./BasicSim.css";
-import { CharacterDetailedInput } from "../components/input/CharacterDetailedInput";
+import "./QuickSim.css";
+import { CharacterDetailedInput } from "src/components/input/CharacterDetailedInput";
 import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
 import { QuickSimRequest } from "src/types/QuickSimRequest";
 import { PartyInfo } from "src/types/PartyStates";
 import { CharacterStates } from "src/types/CharacterStates";
-import { QuickSimPartyInput } from "../components/input/partyinput/QuickSimPartyInput";
+import { VerticalPartyInput } from "src/components/input/partyinput/VerticalPartyInput";
 import { QuickSimRequestSaveName } from "src/App";
-import { EquipmentSelectionMenu } from "src/components/input/basicform/EquipmentInputForm";
 import { defaultItemSet } from "src/types/ffxivdatabase/ItemSet";
-import { StatSummary } from "src/components/container/StatSummary";
 
 export function isNotValid(request: QuickSimRequest) {
   if (request.mainPlayerId === null || request.mainPlayerId === undefined) {
@@ -31,7 +29,7 @@ export function isNotValid(request: QuickSimRequest) {
 
   return false;
 }
-export function BasicSim() {
+export function ExploreSim() {
   let mostRecentRequestState = localStorage.getItem(QuickSimRequestSaveName);
   let mostRecentRequest = null;
 
@@ -86,13 +84,13 @@ export function BasicSim() {
   return (
     <>
       <Box alignContent={"center"}>
-        <Box className="QuickSimInputContainer">
+        <Box className="ExploreSimInputContainer">
           <Box className="CharacterDetailCustomizeBoard">
             <Box className="SelectionTitle" borderRadius={borderRadius}>
               <Typography variant="h5">1. Input Your Info</Typography>
             </Box>
             <Box className="CustomizeBoard">
-              {EquipmentSelectionMenu(mainPlayerState, itemSet, setItemSet)}
+              {CharacterDetailedInput(mainPlayerState, availablePartyIds)}
             </Box>
           </Box>
           <Box className="CharacterDetailCustomizeBoard">
@@ -100,7 +98,7 @@ export function BasicSim() {
               <Typography variant="h5">2. Input Combat Info</Typography>
             </Box>
             <Box className="CustomizeBoard">
-              {QuickSimPartyInput(
+              {VerticalPartyInput(
                 ids,
                 partyJobs,
                 setPartyJobs,
@@ -111,9 +109,6 @@ export function BasicSim() {
               )}
             </Box>
           </Box>
-        </Box>
-        <Box className="QuickSimInputContainer">
-          {StatSummary(mainPlayerState.jobAbbrev, itemSet)}
         </Box>
         <Box>
           {QuickSimRequestButton(

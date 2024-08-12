@@ -1,5 +1,6 @@
 export const DEFAULT_WEAPON_DAMAGE = 100;
-export const DEFAULT_MAIN_STAT = 390;
+export const DEFAULT_MAIN_STAT_NON_TANK = 437;
+export const DEFAULT_MAIN_STAT_TANK = 440;
 export const DEFAULT_CRITICAL_STRIKE = 420;
 export const DEFAULT_DIRECT_HIT = 420;
 export const DEFAULT_DETERMINATION = 440;

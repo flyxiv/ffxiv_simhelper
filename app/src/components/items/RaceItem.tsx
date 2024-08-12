@@ -1,0 +1,16 @@
+import { Box, Typography } from "@mui/material";
+import { getMainStatOfRace, getMainStatNameByJob } from "src/const/StartStats";
+
+export function RaceItem(race: string, jobAbbrev: string) {
+  let mainStatName = getMainStatNameByJob(jobAbbrev);
+  return (
+    <Box display="flex" alignContent={"left"}>
+      <Box marginRight={1}>
+        <Typography variant="body1">{race}</Typography>
+        <Typography variant="body2">
+          {`${mainStatName} +${getMainStatOfRace(race, mainStatName)}`}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}

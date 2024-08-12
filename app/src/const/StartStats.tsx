@@ -36,6 +36,25 @@ interface RaceInfo {
   MND: number;
 }
 
+export const RACES = [
+  "Midlander Hyur",
+  "Highlander Hyur",
+  "Wildwood Elezen",
+  "Duskwight Elezen",
+  "Plainsfolk Lalafell",
+  "Dunesfolk Lalafell",
+  "Seeker of the Sun Miqo'te",
+  "Keeper of the Moon Miqo'te",
+  "Sea Wolves Roegadyn",
+  "Hellsguard Roegadyn",
+  "Raen Au Ra",
+  "Xaela Au Ra",
+  "Helions Hrothgar",
+  "The Lost Hrothgar",
+  "Rava Viera",
+  "Veena Viera",
+];
+
 export const RACE_MAIN_STAT = new Map([
   ["Midlander Hyur", { STR: 22, DEX: 19, INT: 23, MND: 19 }],
   ["Highlander Hyur", { STR: 23, DEX: 20, INT: 18, MND: 20 }],
@@ -143,19 +162,31 @@ export const RACE_MAIN_STAT = new Map([
   ],
 ]);
 
-function getMainStat(job: string, race: string): number {
-  let mainStatBase = MAIN_STAT_BASE_PER_JOB.get(job);
+export function getBaseMainStat(jobAbbrev: string, race: string): number {
+  let mainStatBase = MAIN_STAT_BASE_PER_JOB.get(jobAbbrev);
   if (mainStatBase === undefined) {
     return 0;
   }
-  let mainStat = mainStatBase * 4.4 - 20;
+  let mainStat = Math.floor(mainStatBase * 4.4 - 20);
 
   let raceMainStat = RACE_MAIN_STAT.get(race);
   if (raceMainStat === undefined) {
     return mainStat;
   }
 
-  return mainStat + getRaceMainStatByName(mainStatNameByJob(job), raceMainStat);
+  return (
+    mainStat +
+    getRaceMainStatByName(getMainStatNameByJob(jobAbbrev), raceMainStat)
+  );
+}
+
+export function getMainStatOfRace(race: string, mainStatName: string): number {
+  let stats = RACE_MAIN_STAT.get(race);
+  if (stats === undefined) {
+    return 0;
+  }
+
+  return getRaceMainStatByName(mainStatName, stats);
 }
 
 function getRaceMainStatByName(mainStatName: string, stats: RaceInfo): number {
@@ -171,7 +202,7 @@ function getRaceMainStatByName(mainStatName: string, stats: RaceInfo): number {
   }
 }
 
-function mainStatNameByJob(job: string): string {
+export function getMainStatNameByJob(job: string): string {
   switch (job) {
     case "PLD":
     case "WAR":

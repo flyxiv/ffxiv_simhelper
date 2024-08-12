@@ -1,5 +1,7 @@
-import { Equipment } from "src/types/ffxivdatabase/Equipment";
-import { ItemSet } from "src/types/ffxivdatabase/ItemSet";
+import {
+  Equipment,
+  equipmentStatDescriptionString,
+} from "src/types/ffxivdatabase/Equipment";
 import { Box, Typography } from "@mui/material";
 import { getEquipmentIconDirectory } from "../icon/equipmenticon/EquipmentIconFactory";
 
@@ -18,16 +20,22 @@ export function EquipmentItem(equipment: Equipment, jobAbbrev: string) {
             jobAbbrev,
             equipment.name
           )}
-          width={50}
-          height={50}
+          width={30}
+          height={30}
           style={{ verticalAlign: "middle" }}
         />
       </Box>
-      <Box> </Box>
-      <Box marginLeft={1}>
-        <Typography variant="body2" alignContent={"center"} fontSize={12}>
-          {equipment.name}
-        </Typography>
+      <Box>
+        <Box marginLeft={1}>
+          <Typography variant="body2" alignContent={"center"} fontSize={12}>
+            {equipment.name}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="body2" alignContent={"center"} fontSize={10}>
+            {equipmentStatDescriptionString(equipment)}
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );

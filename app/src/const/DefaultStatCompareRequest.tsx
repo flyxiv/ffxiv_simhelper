@@ -1,13 +1,13 @@
 import { StatCompareRequest } from "src/types/StatCompareRequest";
 import {
   DEFAULT_WEAPON_DAMAGE,
-  DEFAULT_MAIN_STAT,
   DEFAULT_CRITICAL_STRIKE,
   DEFAULT_DIRECT_HIT,
   DEFAULT_DETERMINATION,
   DEFAULT_SPEED,
   DEFAULT_TENACITY,
   NIN_BIS_STATS,
+  DEFAULT_MAIN_STAT_NON_TANK,
 } from "./StatValue";
 
 export function defaultStatCompareRequest(): StatCompareRequest {
@@ -34,7 +34,7 @@ export function defaultStatCompareRequest(): StatCompareRequest {
       partner2Id: null,
       stats: {
         weaponDamage: DEFAULT_WEAPON_DAMAGE,
-        mainStat: DEFAULT_MAIN_STAT,
+        mainStat: DEFAULT_MAIN_STAT_NON_TANK,
         criticalStrike: DEFAULT_CRITICAL_STRIKE,
         directHit: DEFAULT_DIRECT_HIT,
         determination: DEFAULT_DETERMINATION,

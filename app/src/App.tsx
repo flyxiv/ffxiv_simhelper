@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Home } from "./page/Home";
-import { QuickSim } from "./page/QuickSim";
+import { ExploreSim } from "./page/ExploreSim";
 import { Logo } from "./components/image/Logo";
 import { Box, Typography } from "@mui/material";
 import "@fontsource/roboto/700.css";
@@ -8,7 +8,7 @@ import "./App.css";
 import { SimulationResult } from "./page/SimulationResult";
 import { StatCompare } from "./page/StatCompare";
 import { StatCompareResult } from "./page/StatCompareResult";
-import { BasicSim } from "./page/BasicSim";
+import { QuickSim } from "./page/QuickSim";
 
 export const QuickSimRequestSaveName = "mostRecentRequest";
 export const QuickSimResponseSaveName = "mostRecentQuickSimResponse";
@@ -28,8 +28,8 @@ function App() {
         <main className="Body">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/basicsim" element={<BasicSim />} />
             <Route path="/quicksim" element={<QuickSim />} />
+            <Route path="/exploresim" element={<ExploreSim />} />
             <Route path="/simulationresult" element={<SimulationResult />} />
             <Route path="/statcompare" element={<StatCompare />} />
             <Route path="/statcompareresult" element={<StatCompareResult />} />

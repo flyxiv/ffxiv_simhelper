@@ -30,7 +30,7 @@ export function handleTimeChange(textForm: TextTimeForm) {
   textForm.setState(value);
 }
 
-export function QuickSimPartyInput(
+export function VerticalPartyInput(
   playerIds: number[],
   partyJobs: string[],
   partySetter: React.Dispatch<React.SetStateAction<string[]>>,
