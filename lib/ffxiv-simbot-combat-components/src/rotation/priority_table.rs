@@ -36,12 +36,15 @@ pub(crate) enum SkillPrerequisite {
     HasBufforDebuff(IdType),
     BufforDebuffLessThan(IdType, TimeType),
     HasResource(IdType, ResourceType),
+    HasResourceExactly(IdType, ResourceType),
     HasSkillStacks(IdType, StackType),
     MillisecondsBeforeBurst(TimeType),
     RelatedSkillCooldownLessOrEqualThan(IdType, TimeType),
     /// Greater resource id, Lesser resource id, Greater by how much amount
     /// example: (1, 2, 50), then ok if resource1 >= resource2 + 50
     ResourceGreaterOrEqualThanAnotherResourceBy(IdType, IdType, ResourceType),
+
+    BuffGreaterDurationThan(IdType, IdType),
 }
 
 pub(crate) struct CombatInfo {
@@ -446,7 +449,9 @@ pub(crate) trait PriorityTable: Sized + Clone {
             SkillPrerequisite::HasResource(resource_id, resource) => {
                 combat_resources.get_resource(*resource_id) >= *resource
             }
-
+            SkillPrerequisite::HasResourceExactly(resource_id, resource) => {
+                combat_resources.get_resource(*resource_id) == *resource
+            }
             SkillPrerequisite::MillisecondsBeforeBurst(milliseconds) => {
                 *milliseconds >= combat_info.milliseconds_before_burst
             }
@@ -470,6 +475,22 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 let lesser_resource = combat_resources.get_resource(*lesser_resource_id);
 
                 greater_resource >= lesser_resource + *amount
+            }
+            SkillPrerequisite::BuffGreaterDurationThan(buff1_id, buff2_id) => {
+                let buff1_remaining_time =
+                    self.find_status_remaining_time(combat_info, *buff1_id, player.get_id());
+                let buff2_remaining_time =
+                    self.find_status_remaining_time(combat_info, *buff2_id, player.get_id());
+
+                if let Some(buff1_remaining_time) = buff1_remaining_time {
+                    if let Some(buff2_remaining_time) = buff2_remaining_time {
+                        buff1_remaining_time > buff2_remaining_time
+                    } else {
+                        true
+                    }
+                } else {
+                    false
+                }
             }
         }
     }

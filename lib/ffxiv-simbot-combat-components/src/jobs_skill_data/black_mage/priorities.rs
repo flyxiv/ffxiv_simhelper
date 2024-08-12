@@ -122,6 +122,10 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
             prerequisite: Some(Combo(Some(1))),
         },
         SkillPriorityInfo {
+            skill_id: db.paradox.get_id(),
+            prerequisite: Some(Combo(Some(2))),
+        },
+        SkillPriorityInfo {
             skill_id: db.blizzard4.get_id(),
             prerequisite: Some(Combo(Some(2))),
         },

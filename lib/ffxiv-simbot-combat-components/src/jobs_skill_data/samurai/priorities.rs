@@ -66,17 +66,14 @@ pub(crate) fn make_samurai_opener(db: &SamuraiDatabase) -> Vec<Opener> {
         GcdOpener(db.kasha_meiko.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.yukikaze.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.tendo_setsugekka.get_id()),
         OgcdOpener((Some(db.ikishoten.get_id()), None)),
-        GcdOpener(db.kaeshi_tendo_setsugekka.get_id()),
-        OgcdOpener((
-            Some(db.hissatsu_senei.get_id()),
-            Some(db.meikyo_shisui.get_id()),
-        )),
+        GcdOpener(db.tendo_setsugekka.get_id()),
+        OgcdOpener((Some(db.meikyo_shisui.get_id()), None)),
         GcdOpener(db.gekko_meiko.get_id()),
-        OgcdOpener((Some(db.zanshin.get_id()), None)),
+        OgcdOpener((Some(db.hissatsu_senei.get_id()), None)),
         GcdOpener(db.higanbana.get_id()),
+        OgcdOpener((Some(db.zanshin.get_id()), None)),
+        GcdOpener(db.kaeshi_tendo_setsugekka.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.ogi_namikiri.get_id()),
         OgcdOpener((Some(db.shoha.get_id()), None)),
@@ -98,10 +95,32 @@ pub(crate) fn make_samurai_gcd_priority_table(db: &SamuraiDatabase) -> Vec<Skill
     vec![
         SkillPriorityInfo {
             skill_id: db.kaeshi_tendo_setsugekka.get_id(),
-            prerequisite: None,
+            prerequisite: Some(Or(
+                Box::new(MillisecondsBeforeBurst(0)),
+                Box::new(And(
+                    Box::new(HasResource(2, 1)),
+                    Box::new(And(
+                        Box::new(HasResource(3, 1)),
+                        Box::new(HasResource(4, 1)),
+                    )),
+                )),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.kaeshi_namikiri.get_id(),
+            prerequisite: Some(Or(
+                Box::new(MillisecondsBeforeBurst(0)),
+                Box::new(And(
+                    Box::new(HasResource(2, 1)),
+                    Box::new(And(
+                        Box::new(HasResource(3, 1)),
+                        Box::new(HasResource(4, 1)),
+                    )),
+                )),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.tendo_setsugekka.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {

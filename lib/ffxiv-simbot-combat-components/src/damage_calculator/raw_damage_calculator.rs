@@ -36,6 +36,7 @@ pub trait RawDamageCalculator: MultiplierCalculator {
         player_power: &CharacterPower,
     ) -> (DamageRdpsProfile, bool) {
         let potency = potency as MultiplierType;
+        debug_assert!(potency >= 0.0, "{}", potency);
         let base_damage =
             calculate_base_damage(potency, trait_percent, damage_category, player_power);
 
@@ -160,10 +161,13 @@ fn calculate_base_damage(
                     * player_power.main_stat_multiplier
                     * player_power.determination_damage_multiplier,
             );
+            debug_assert!(d1 >= potency, "{}", d1);
 
             let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_damage_multiplier);
             d2 = MultiplierType::floor(d2 * player_power.weapon_damage_multiplier);
             d2 = MultiplierType::floor(d2 * trait_percent as MultiplierType);
+
+            debug_assert!(d2 >= d1, "{}", d1);
             MultiplierType::floor(d2 / 100.0)
         }
         DamageCategory::PhysicalDot => {

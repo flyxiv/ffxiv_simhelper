@@ -32,7 +32,7 @@ impl WhitemageDatabase {
         let DIA_DOT: DebuffStatus = DebuffStatus {
             id: 400,
             owner_id: player_id,
-            potency: Some(70),
+            potency: Some(75),
             trait_percent: Some(130),
             damage_category: Some(DamageCategory::MagicalDot),
             damage_skill_id: Some(401),
@@ -88,7 +88,7 @@ impl WhitemageDatabase {
             id: 401,
             name: "Dia".to_string(),
             player_id,
-            potency: 70,
+            potency: 75,
             trait_percent: 130,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,

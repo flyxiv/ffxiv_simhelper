@@ -76,7 +76,7 @@ impl BlackmageDatabase {
             id: 1701,
             name: String::from("High Thunder"),
             owner_id: player_id,
-            potency: Some(55),
+            potency: Some(60),
             trait_percent: Some(130),
             damage_category: Some(MagicalDot),
             damage_skill_id: Some(1701),
@@ -194,7 +194,7 @@ impl BlackmageDatabase {
             id: 1701,
             name: "High Thunder".to_string(),
             player_id,
-            potency: 200,
+            potency: 150,
             trait_percent: 130,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
@@ -252,7 +252,7 @@ impl BlackmageDatabase {
             id: 1703,
             name: "Fire IV".to_string(),
             player_id,
-            potency: 310,
+            potency: 320,
             trait_percent: 234,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -368,7 +368,7 @@ impl BlackmageDatabase {
             id: 1707,
             name: "Despair".to_string(),
             player_id,
-            potency: 340,
+            potency: 350,
             trait_percent: 234,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -459,7 +459,7 @@ impl BlackmageDatabase {
             id: 1711,
             name: "Paradox".to_string(),
             player_id,
-            potency: 500,
+            potency: 520,
             trait_percent: 130,
             additional_skill_events: vec![
                 FfxivEvent::RefreshBuff(
@@ -524,7 +524,7 @@ impl BlackmageDatabase {
             id: 1713,
             name: "Blizzard IV".to_string(),
             player_id,
-            potency: 310,
+            potency: 320,
             trait_percent: 130,
             additional_skill_events: vec![],
             proc_events: vec![],

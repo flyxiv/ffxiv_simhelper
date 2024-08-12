@@ -6,13 +6,15 @@ use std::cell::RefCell;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::gunbreaker::abilities::GunbreakerDatabase;
 use crate::jobs_skill_data::paladin::abilities::PaladinDatabase;
+use crate::jobs_skill_data::viper::abilities::ViperDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessOrEqualThan,
+    And, BuffGreaterDurationThan, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource,
+    HasResourceExactly, Not, Or, RelatedSkillCooldownLessOrEqualThan,
 };
 
 #[derive(Clone)]
-pub(crate) struct GunbreakerPriorityTable {
+pub(crate) struct ViperPriorityTable {
     turn_count: RefCell<TurnCount>,
     opener: Vec<Opener>,
 
@@ -20,7 +22,7 @@ pub(crate) struct GunbreakerPriorityTable {
     ogcd_priority_table: Vec<SkillPriorityInfo>,
 }
 
-impl PriorityTable for GunbreakerPriorityTable {
+impl PriorityTable for ViperPriorityTable {
     fn get_opener_len(&self) -> usize {
         self.opener.len()
     }
@@ -46,150 +48,175 @@ impl PriorityTable for GunbreakerPriorityTable {
     }
 }
 
-impl GunbreakerPriorityTable {
+impl ViperPriorityTable {
     pub fn new(player_id: IdType) -> Self {
-        let db = GunbreakerDatabase::new(player_id);
+        let db = ViperDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_gunbreaker_opener(&db),
-            gcd_priority_table: make_gunbreaker_gcd_priority_table(&db),
-            ogcd_priority_table: make_gunbreaker_ogcd_priority_table(&db),
+            opener: make_viper_opener(&db),
+            gcd_priority_table: make_viper_gcd_priority_table(&db),
+            ogcd_priority_table: make_viper_ogcd_priority_table(&db),
         }
     }
 }
 
-pub(crate) fn make_gunbreaker_opener(db: &GunbreakerDatabase) -> Vec<Opener> {
+pub(crate) fn make_viper_opener(db: &ViperDatabase) -> Vec<Opener> {
     vec![
-        GcdOpener(db.keen_edge.get_id()),
+        GcdOpener(db.dread_fangs.get_id()),
+        OgcdOpener((Some(db.serpents_ire.get_id()), None)),
+        GcdOpener(db.swiftskins_sting.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.dreadwinder.get_id()),
         OgcdOpener((Some(db.potion.get_id()), None)),
-        GcdOpener(db.brutal_shell.get_id()),
-        OgcdOpener((Some(db.no_mercy.get_id()), Some(db.bloodfest.get_id()))),
-        GcdOpener(db.gnashing_fang.get_id()),
-        OgcdOpener((Some(db.jugular_rip.get_id()), None)),
-        GcdOpener(db.sonic_break.get_id()),
-        OgcdOpener((Some(db.blasting_zone.get_id()), Some(db.bow_shock.get_id()))),
-        GcdOpener(db.double_down.get_id()),
-        OgcdOpener((Some(db.bow_shock.get_id()), Some(db.rough_divide.get_id()))),
-        GcdOpener(db.savage_claw.get_id()),
-        OgcdOpener((Some(db.abdomen_tear.get_id()), None)),
-        GcdOpener(db.wicked_talon.get_id()),
-        OgcdOpener((Some(db.eye_gouge.get_id()), None)),
-        GcdOpener(db.reign_of_beasts.get_id()),
+        GcdOpener(db.hunters_coil.get_id()),
+        OgcdOpener((
+            Some(db.normal_filler1.get_id()),
+            Some(db.normal_filler2.get_id()),
+        )),
+        GcdOpener(db.swiftskins_coil.get_id()),
+        OgcdOpener((
+            Some(db.normal_filler1.get_id()),
+            Some(db.normal_filler2.get_id()),
+        )),
+        GcdOpener(db.reawaken_proc.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.first_generation.get_id()),
+        OgcdOpener((Some(db.reawaken_filler.get_id()), None)),
+        GcdOpener(db.second_generation.get_id()),
+        OgcdOpener((Some(db.reawaken_filler.get_id()), None)),
+        GcdOpener(db.third_generation.get_id()),
+        OgcdOpener((Some(db.reawaken_filler.get_id()), None)),
+        GcdOpener(db.fourth_generation.get_id()),
+        OgcdOpener((Some(db.reawaken_filler.get_id()), None)),
+        GcdOpener(db.ouroboros.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.hindsting_strike.get_id()),
+        OgcdOpener((Some(db.normal_filler1.get_id()), None)),
     ]
 }
 
-pub(crate) fn make_gunbreaker_gcd_priority_table(
-    db: &GunbreakerDatabase,
-) -> Vec<SkillPriorityInfo> {
+pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPriorityInfo> {
+    let combo_about_to_expire = Or(
+        Box::new(Or(
+            Box::new(BufforDebuffLessThan(db.hindsbane_venom.get_id(), 10000)),
+            Box::new(BufforDebuffLessThan(db.hindstung_venom.get_id(), 10000)),
+        )),
+        Box::new(Or(
+            Box::new(BufforDebuffLessThan(db.hindstung_venom.get_id(), 10000)),
+            Box::new(BufforDebuffLessThan(db.hindsbane_venom.get_id(), 10000)),
+        )),
+    );
     vec![
         SkillPriorityInfo {
-            skill_id: db.gnashing_fang.get_id(),
-            prerequisite: Some(Or(
-                Box::new(HasBufforDebuff(db.no_mercy.get_id())),
-                Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
-                    db.no_mercy.get_id(),
-                    29500,
-                )))),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.burst_strike.get_id(),
-            prerequisite: Some(Or(
-                Box::new(RelatedSkillCooldownLessOrEqualThan(
-                    db.bloodfest.get_id(),
-                    8000,
-                )),
-                Box::new(Or(Box::new(HasResource(0, 3)), Box::new(Combo(Some(3))))),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.double_down.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.no_mercy.get_id())),
-        },
-        SkillPriorityInfo {
-            skill_id: db.sonic_break.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.no_mercy.get_id())),
-        },
-        SkillPriorityInfo {
-            skill_id: db.savage_claw.get_id(),
+            skill_id: db.reawaken_proc.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.wicked_talon.get_id(),
+            skill_id: db.ouroboros.get_id(),
+            prerequisite: Some(HasResourceExactly(7, 1)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.fourth_generation.get_id(),
+            prerequisite: Some(HasResourceExactly(7, 2)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.third_generation.get_id(),
+            prerequisite: Some(HasResourceExactly(7, 3)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.second_generation.get_id(),
+            prerequisite: Some(HasResourceExactly(7, 4)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.first_generation.get_id(),
+            prerequisite: Some(HasResourceExactly(7, 5)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.swiftskins_coil.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.lion_heart.get_id(),
+            skill_id: db.hunters_coil.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.noble_blood.get_id(),
+            skill_id: db.reawaken.get_id(),
+            prerequisite: Some(HasResource(0, 80)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.uncoiled_fury.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.reign_of_beasts.get_id(),
+            skill_id: db.dreadwinder.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.burst_strike.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.no_mercy.get_id())),
-        },
-        SkillPriorityInfo {
-            skill_id: db.solid_barrel.get_id(),
+            skill_id: db.flankstings_strike.get_id(),
             prerequisite: Some(Combo(Some(3))),
         },
         SkillPriorityInfo {
-            skill_id: db.brutal_shell.get_id(),
+            skill_id: db.flanksbane_fang.get_id(),
+            prerequisite: Some(Combo(Some(3))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.hindsting_strike.get_id(),
+            prerequisite: Some(Combo(Some(3))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.hindsbane_fang.get_id(),
+            prerequisite: Some(Combo(Some(3))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.swiftskins_sting.get_id(),
+            prerequisite: Some(And(
+                Box::new(Combo(Some(2))),
+                Box::new(BuffGreaterDurationThan(
+                    db.hunters_instinct.id,
+                    db.swiftscaled.id,
+                )),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.hunters_sting.get_id(),
             prerequisite: Some(Combo(Some(2))),
         },
         SkillPriorityInfo {
-            skill_id: db.keen_edge.get_id(),
+            skill_id: db.dread_fangs.get_id(),
+            prerequisite: Some(BufforDebuffLessThan(db.noxious_gnash.id, 20000)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.steel_fangs.get_id(),
             prerequisite: None,
         },
     ]
 }
 
-pub(crate) fn make_gunbreaker_ogcd_priority_table(
-    db: &GunbreakerDatabase,
-) -> Vec<SkillPriorityInfo> {
+pub(crate) fn make_viper_ogcd_priority_table(db: &ViperDatabase) -> Vec<SkillPriorityInfo> {
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.no_mercy.get_id(),
+            skill_id: db.reawaken_filler.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.jugular_rip.get_id(),
+            skill_id: db.death_rattle.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.abdomen_tear.get_id(),
+            skill_id: db.normal_filler1.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.eye_gouge.get_id(),
+            skill_id: db.normal_filler2.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.hypervelocity.get_id(),
+            skill_id: db.serpents_ire.get_id(),
             prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.bloodfest.get_id(),
-            prerequisite: Some(Not(Box::new(HasResource(0, 1)))),
-        },
-        SkillPriorityInfo {
-            skill_id: db.blasting_zone.get_id(),
-            prerequisite: Some(Or(
-                Box::new(HasBufforDebuff(db.no_mercy.get_id())),
-                Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
-                    db.no_mercy.get_id(),
-                    29500,
-                )))),
-            )),
         },
     ]
 }

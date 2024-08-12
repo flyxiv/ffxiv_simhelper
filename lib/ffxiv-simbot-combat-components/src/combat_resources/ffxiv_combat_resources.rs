@@ -30,6 +30,12 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+#[cfg(debug_assertions)]
+const ALL_FFXIV_COMBAT_JOBS: [&str; 20] = [
+    "WAR", "PLD", "DRK", "WHM", "SCH", "AST", "SGE", "MNK", "DRG", "NIN", "SAM", "RPR", "VPR",
+    "BRD", "DNC", "MCH", "BLM", "SMN", "RDM", "PCT",
+];
+
 #[derive(Clone)]
 pub(crate) enum FfxivCombatResources {
     Sage(SageCombatResources),
@@ -438,6 +444,8 @@ impl FfxivCombatResources {
         event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
     ) -> Self {
+        debug_assert!(ALL_FFXIV_COMBAT_JOBS.contains(&job_abbrev.as_str()));
+
         match job_abbrev.as_str() {
             "SGE" => Self::Sage(SageCombatResources::new(player_id)),
             "NIN" => Self::Ninja(NinjaCombatResources::new(player_id)),

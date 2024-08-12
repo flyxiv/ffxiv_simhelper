@@ -91,17 +91,22 @@ pub(crate) fn make_darkknight_gcd_priority_table(
 ) -> Vec<SkillPriorityInfo> {
     vec![
         SkillPriorityInfo {
-            skill_id: db.bloodspiller_delirium.get_id(),
-            prerequisite: Some(Or(
-                Box::new(MillisecondsBeforeBurst(0)),
-                Box::new(BufforDebuffLessThan(db.delirium_buff.get_id(), 8000)),
-            )),
+            skill_id: db.torcleaver.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.comeuppance.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.scarlet_delirium.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.bloodspiller.get_id(),
             prerequisite: Some(Or(
                 Box::new(MillisecondsBeforeBurst(0)),
-                Box::new(HasResource(1, 70)),
+                Box::new(HasResource(1, 80)),
             )),
         },
         SkillPriorityInfo {
@@ -136,24 +141,20 @@ pub(crate) fn make_darkknight_ogcd_priority_table(
             prerequisite: Some(HasResource(0, 9400)),
         },
         SkillPriorityInfo {
-            skill_id: db.blood_weapon.get_id(),
+            skill_id: db.delirium.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.delirium.get_id(),
-            prerequisite: Some(Not(Box::new(HasResource(0, 70)))),
-        },
-        SkillPriorityInfo {
             skill_id: db.shadowbringer.get_id(),
-            prerequisite: Some(MillisecondsBeforeBurst(0)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.salted_earth.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.plunge.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.delirium_buff.get_id())),
+            skill_id: db.disesteem.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.salt_and_darkness.get_id(),

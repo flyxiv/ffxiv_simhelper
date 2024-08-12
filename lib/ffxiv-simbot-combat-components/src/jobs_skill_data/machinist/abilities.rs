@@ -591,7 +591,7 @@ impl MachinistDatabase {
             id: 1418,
             name: String::from("Full Metal Field"),
             player_id,
-            potency: 700,
+            potency: 900,
             use_type: UseType::UseOnTarget,
             trait_percent: 120,
             additional_skill_events: vec![],

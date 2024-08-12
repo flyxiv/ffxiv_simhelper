@@ -562,7 +562,7 @@ impl DragoonDatabase {
             id: 814,
             name: String::from("Starcross"),
             player_id,
-            potency: 700,
+            potency: 900,
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -757,7 +757,7 @@ impl DragoonDatabase {
             id: 824,
             name: String::from("Stardiver"),
             player_id,
-            potency: 620,
+            potency: 720,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,

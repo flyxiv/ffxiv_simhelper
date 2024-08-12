@@ -16,12 +16,14 @@ pub(crate) mod machinist;
 pub(crate) mod monk;
 pub mod ninja;
 pub(crate) mod paladin;
+pub(crate) mod pictomancer;
 pub(crate) mod reaper;
 pub(crate) mod redmage;
 pub(crate) mod sage;
 pub(crate) mod samurai;
 pub(crate) mod scholar;
 pub(crate) mod summoner;
+pub(crate) mod viper;
 pub(crate) mod warrior;
 pub(crate) mod white_mage;
 

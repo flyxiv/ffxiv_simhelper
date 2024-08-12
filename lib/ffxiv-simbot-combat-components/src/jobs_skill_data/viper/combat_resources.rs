@@ -1,6 +1,7 @@
 use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::gunbreaker::abilities::make_gunbreaker_skill_list;
 use crate::jobs_skill_data::paladin::abilities::make_paladin_skill_list;
+use crate::jobs_skill_data::viper::abilities::make_viper_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -14,19 +15,27 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-const SOIL_MAX: ResourceType = 3;
+const SERPENT_OFFERINGS_MAX: ResourceType = 100;
+const RATTLING_COIL_MAX: ResourceType = 3;
+const REAWAKEN_STACK_MAX: ResourceType = 5;
 
 #[derive(Clone)]
-pub(crate) struct GunbreakerCombatResources {
+pub(crate) struct ViperCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: IdType,
     current_combo: ComboType,
-    soil: ResourceType,
-    noble_blood_stack: ResourceType,
-    lion_heart_stack: ResourceType,
+
+    serpent_offering_stack: ResourceType,
+    filler_stack1: ResourceType,
+    filler_stack2: ResourceType,
+    reawaken_filler_stack: ResourceType,
+    rattling_coil_stack: ResourceType,
+    hunters_coil_stack: ResourceType,
+    swiftskin_coil_stack: ResourceType,
+    reawaken_stack: ResourceType,
 }
 
-impl CombatResource for GunbreakerCombatResources {
+impl CombatResource for ViperCombatResources {
     fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill> {
         &mut self.skills
     }
@@ -37,21 +46,42 @@ impl CombatResource for GunbreakerCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, amount: ResourceType) {
         if resource_id == 0 {
-            self.soil = min(self.soil + amount, SOIL_MAX);
+            self.serpent_offering_stack =
+                min(self.serpent_offering_stack + amount, SERPENT_OFFERINGS_MAX);
         } else if resource_id == 1 {
-            self.noble_blood_stack = min(self.noble_blood_stack + amount, 1);
+            self.filler_stack1 = min(self.filler_stack1 + amount, 1);
         } else if resource_id == 2 {
-            self.lion_heart_stack = min(self.lion_heart_stack + amount, 1);
+            self.filler_stack2 = min(self.filler_stack2 + amount, 1);
+        } else if resource_id == 3 {
+            self.reawaken_filler_stack = min(self.reawaken_filler_stack + amount, 1);
+        } else if resource_id == 4 {
+            self.rattling_coil_stack = min(self.rattling_coil_stack + amount, RATTLING_COIL_MAX);
+        } else if resource_id == 5 {
+            self.hunters_coil_stack = min(self.hunters_coil_stack + amount, 1);
+        } else if resource_id == 6 {
+            self.swiftskin_coil_stack = min(self.swiftskin_coil_stack + amount, 1);
+        } else if resource_id == 7 {
+            self.reawaken_stack = min(self.reawaken_stack + amount, REAWAKEN_STACK_MAX);
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            self.soil
+            self.serpent_offering_stack
         } else if resource_id == 1 {
-            self.noble_blood_stack
+            self.filler_stack1
         } else if resource_id == 2 {
-            self.lion_heart_stack
+            self.filler_stack2
+        } else if resource_id == 3 {
+            self.reawaken_filler_stack
+        } else if resource_id == 4 {
+            self.rattling_coil_stack
+        } else if resource_id == 5 {
+            self.hunters_coil_stack
+        } else if resource_id == 6 {
+            self.swiftskin_coil_stack
+        } else if resource_id == 7 {
+            self.reawaken_stack
         } else {
             -1
         }
@@ -85,13 +115,21 @@ impl CombatResource for GunbreakerCombatResources {
     fn trigger_on_crit(&mut self) {}
 }
 
-impl GunbreakerCombatResources {
+impl ViperCombatResources {
     pub(crate) fn new(player_id: IdType) -> Self {
         Self {
-            skills: make_gunbreaker_skill_list(player_id),
+            skills: make_viper_skill_list(player_id),
             player_id,
             current_combo: None,
-            soil: 0,
+
+            serpent_offering_stack: 0,
+            filler_stack1: 0,
+            filler_stack2: 0,
+            reawaken_filler_stack: 0,
+            rattling_coil_stack: 0,
+            hunters_coil_stack: 0,
+            swiftskin_coil_stack: 0,
+            reawaken_stack: 0,
         }
     }
 }

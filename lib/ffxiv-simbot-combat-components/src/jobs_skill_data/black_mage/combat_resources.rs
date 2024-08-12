@@ -86,9 +86,6 @@ impl CombatResource for BlackmageCombatResources {
         _: TimeType,
         _: &FfxivPlayer,
     ) -> SkillEvents {
-        if skill_id == 1712 {
-            self.fire4_stack = 0;
-        }
         (vec![], vec![])
     }
 
