@@ -17,7 +17,7 @@ use crate::skill::{
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{DamageType, ResourceType, StackType, StatusTable};
-use crate::{IdType, TimeType};
+use crate::types::{IdType, TimeType};
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
 use std::cmp::max;
@@ -251,8 +251,7 @@ impl AttackSkill {
                     event
                 }
                 UseType::NoTarget => {
-                    let mut event =
-                        additional_skill_event.add_time_to_event(combat_time_millisecond);
+                    let event = additional_skill_event.add_time_to_event(combat_time_millisecond);
                     event
                 }
                 _ => additional_skill_event.add_time_to_event(combat_time_millisecond),

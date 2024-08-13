@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::collections::HashMap;
 
 pub(crate) struct SamuraiDatabase {
@@ -827,6 +827,7 @@ impl SamuraiDatabase {
                 TENDO_SETSUGEKKA_USED.clone(),
                 30000,
                 30000,
+                0,
             )],
             proc_events: vec![],
             combo: None,

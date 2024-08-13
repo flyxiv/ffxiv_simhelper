@@ -7,7 +7,7 @@ use crate::skill::damage_category::DamageCategory;
 use crate::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::StatusTable;
-use crate::{IdType, TimeType};
+use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::rc::Rc;

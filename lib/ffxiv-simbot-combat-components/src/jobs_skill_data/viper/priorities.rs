@@ -1,13 +1,13 @@
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::viper::abilities::ViperDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BuffGreaterDurationThan, BufforDebuffLessThan, Combo, HasResource, HasResourceExactly, Or,
+    And, BuffGreaterDurationThan, Combo, HasResource, HasResourceExactly,
 };
 use crate::types::TurnCount;
 
@@ -94,16 +94,6 @@ pub(crate) fn make_viper_opener(db: &ViperDatabase) -> Vec<Opener> {
 }
 
 pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPriorityInfo> {
-    let combo_about_to_expire = Or(
-        Box::new(Or(
-            Box::new(BufforDebuffLessThan(db.hindsbane_venom.get_id(), 10000)),
-            Box::new(BufforDebuffLessThan(db.hindstung_venom.get_id(), 10000)),
-        )),
-        Box::new(Or(
-            Box::new(BufforDebuffLessThan(db.hindstung_venom.get_id(), 10000)),
-            Box::new(BufforDebuffLessThan(db.hindsbane_venom.get_id(), 10000)),
-        )),
-    );
     vec![
         SkillPriorityInfo {
             skill_id: db.reawaken_proc.get_id(),

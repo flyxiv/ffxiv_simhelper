@@ -5,8 +5,8 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
+use crate::types::IdType;
 use crate::types::{ResourceType, TurnCount};
-use crate::IdType;
 use std::cell::RefCell;
 
 const MANA_DIFFERENCE_THRESHOLD: ResourceType = 30;

@@ -2,8 +2,8 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::dancer::abilities::DancerDatabase;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
+use crate::types::IdType;
 use crate::types::TurnCount;
-use crate::IdType;
 use std::cell::RefCell;
 
 #[derive(Clone)]

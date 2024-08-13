@@ -1,7 +1,7 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{ResourceRequirements, ResourceTable};
-use crate::IdType;
+use crate::types::IdType;
 
 pub(crate) struct FirstSkillCombatSimulation<'a> {
     pub(crate) player_id: IdType,

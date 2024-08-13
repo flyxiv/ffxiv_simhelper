@@ -3,8 +3,8 @@ use crate::jobs_skill_data::white_mage::abilities::WhitemageDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{HasBufforDebuff, HasResource, Not, Or};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
+use crate::types::IdType;
 use crate::types::TurnCount;
-use crate::IdType;
 use std::cell::RefCell;
 
 #[derive(Clone)]

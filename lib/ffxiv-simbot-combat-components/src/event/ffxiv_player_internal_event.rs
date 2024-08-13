@@ -1,5 +1,6 @@
 use crate::live_objects::turn_type::FfxivTurnType;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, ResourceType};
+use crate::types::{IdType, TimeType};
 
 /// Events that happen to a player's internal status "instantly" after casting a skill
 /// Ex) Stack is raised, cooldown is started, combo is updated

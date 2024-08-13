@@ -7,7 +7,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_timer::StatusTimer;
 use crate::status::Status;
-use crate::TimeType;
+use crate::types::TimeType;
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::collections::HashMap;

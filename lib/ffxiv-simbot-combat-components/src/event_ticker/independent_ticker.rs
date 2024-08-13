@@ -4,7 +4,7 @@ use crate::event_ticker::{EventTicker, PercentType, TickerKey, GLOBAL_TICK_INTER
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::StatusTable;
-use crate::{IdType, TimeType};
+use crate::types::{IdType, TimeType};
 use log::debug;
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;

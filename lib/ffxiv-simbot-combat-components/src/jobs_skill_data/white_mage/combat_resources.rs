@@ -1,4 +1,5 @@
 use crate::combat_resources::CombatResource;
+use crate::consts::SIMULATION_START_TIME_MILLISECOND;
 use crate::jobs_skill_data::white_mage::abilities::make_whitemage_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -8,7 +9,7 @@ use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, ResourceType};
-use crate::{IdType, TimeType, SIMULATION_START_TIME_MILLISECOND};
+use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;

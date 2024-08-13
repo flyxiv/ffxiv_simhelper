@@ -1,6 +1,6 @@
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;

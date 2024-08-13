@@ -1,9 +1,9 @@
 use crate::errors::{FfxivSimbotServiceError, Result};
 use crate::request::simulation_api_request::PlayerInfoRequest;
-use crate::IncreaseType;
 use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
-use ffxiv_simbot_combat_components::IdType;
+use ffxiv_simbot_combat_components::live_objects::player::player_power::add_main_stat;
+use ffxiv_simbot_combat_components::types::{BuffIncreasePercentType, IdType, IncreaseType};
 use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -21,14 +21,19 @@ lazy_static! {
 
 pub(crate) fn create_player(
     player_info: PlayerInfoRequest,
-    composition_buff: IncreaseType,
+    composition_buff_percent: BuffIncreasePercentType,
     player_jobs: &Vec<(IdType, String)>,
     event_queue: Rc<RefCell<FfxivEventQueue>>,
 ) -> Result<FfxivPlayer> {
     let character_power = player_info.power;
+    let character_power = add_main_stat(
+        &character_power,
+        character_power.main_stat as IncreaseType,
+        composition_buff_percent,
+    );
     let player_count = player_jobs.len();
 
-    match player_info.jobAbbrev.as_str() {
+    match player_info.job_abbrev.as_str() {
         "WAR" => Ok(FfxivPlayer::new_warrior(
             player_info.player_id,
             character_power,
@@ -73,7 +78,6 @@ pub(crate) fn create_player(
         )),
         "DRG" => Ok(FfxivPlayer::new_dragoon(
             player_info.player_id,
-            get_partner_id(player_info.partner1_id, player_jobs),
             character_power,
             event_queue,
             player_count,
@@ -133,7 +137,7 @@ pub(crate) fn create_player(
             event_queue,
             player_count,
         )),
-        _ => Err(FfxivSimbotServiceError::InvalidJobString(player_info.jobAbbrev).into()),
+        _ => Err(FfxivSimbotServiceError::InvalidJobString(player_info.job_abbrev).into()),
     }
 }
 

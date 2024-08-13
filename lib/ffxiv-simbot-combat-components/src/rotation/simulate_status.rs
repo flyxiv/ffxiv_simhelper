@@ -7,7 +7,7 @@ use crate::rotation::priority_table::CombatInfo;
 use crate::rotation::simulated_combat_resource::FirstSkillCombatSimulation;
 use crate::skill::ResourceRequirements;
 use crate::status::Status;
-use crate::IdType;
+use crate::types::IdType;
 use std::cmp::min;
 
 pub(crate) fn simulate_status(
@@ -16,8 +16,8 @@ pub(crate) fn simulate_status(
     simulation: &FirstSkillCombatSimulation,
     skill_id: IdType,
 ) {
-    let mut skill_table = combat_resource.get_skills_mut();
-    let mut skill = skill_table.get_mut(&skill_id).unwrap();
+    let skill_table = combat_resource.get_skills_mut();
+    let skill = skill_table.get_mut(&skill_id).unwrap();
     skill.current_cooldown_millisecond += skill.cooldown_millisecond;
 
     for resource_required in simulation.skill_used_resource.iter() {

@@ -1,12 +1,10 @@
 use crate::combat_simulator::SimulationBoard;
 use crate::simulation_result::{PartySimulationResult, SimulationResult};
+use ffxiv_simbot_combat_components::consts::SIMULATION_START_TIME_MILLISECOND;
 use ffxiv_simbot_combat_components::damage_calculator::raw_damage_calculator::{
     FfxivRawDamageCalculator, RawDamageCalculator,
 };
-use ffxiv_simbot_combat_components::damage_calculator::rdps_calculator::{
-    FfxivRdpsCalculator, RdpsCalculator,
-};
-use ffxiv_simbot_combat_components::damage_calculator::DamageRdpsProfile;
+use ffxiv_simbot_combat_components::damage_calculator::rdps_calculator::FfxivRdpsCalculator;
 use ffxiv_simbot_combat_components::event::ffxiv_event::FfxivEvent;
 use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::event_ticker::auto_attack_ticker::AutoAttackTicker;
@@ -15,11 +13,11 @@ use ffxiv_simbot_combat_components::event_ticker::global_ticker::GlobalTicker;
 use ffxiv_simbot_combat_components::event_ticker::{EventTicker, PercentType, TickerKey};
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
-use ffxiv_simbot_combat_components::live_objects::player::logs::RdpsContribution;
+use ffxiv_simbot_combat_components::live_objects::player::player_power::add_main_stat;
+use ffxiv_simbot_combat_components::live_objects::player::role::job_abbrev_to_role;
 use ffxiv_simbot_combat_components::live_objects::player::{Player, StatusKey};
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
 use ffxiv_simbot_combat_components::live_objects::target::Target;
-use ffxiv_simbot_combat_components::owner_tracker::OwnerTracker;
 use ffxiv_simbot_combat_components::rotation::cooldown_timer::CooldownTimer;
 use ffxiv_simbot_combat_components::skill::attack_skill::AttackSkill;
 use ffxiv_simbot_combat_components::skill::damage_category::DamageCategory;
@@ -30,10 +28,11 @@ use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::status::status_info::StatusInfo;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
 use ffxiv_simbot_combat_components::status::Status;
-use ffxiv_simbot_combat_components::{IdType, TimeType, SIMULATION_START_TIME_MILLISECOND};
+use ffxiv_simbot_combat_components::types::DamageType;
+use ffxiv_simbot_combat_components::types::{IdType, TimeType};
 use log::{debug, info};
 use std::cell::RefCell;
-use std::cmp::{min, Reverse};
+use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -78,7 +77,7 @@ impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationB
             party_simulation_results.push(PartySimulationResult {
                 player_id: player.borrow().get_id(),
                 job: player.borrow().job_abbrev.clone(),
-                role: get_role(&player.borrow().job_abbrev),
+                role: job_abbrev_to_role(&player.borrow().job_abbrev).to_string(),
                 skill_log: player.borrow().skill_logs.clone(),
                 damage_log: player.borrow().damage_logs.clone(),
             });
@@ -266,11 +265,11 @@ impl FfxivSimulationBoard {
                     *time, *ticker_key
                 );
                 let mut ticker_table = self.tickers.borrow_mut();
-                let mut ticker = ticker_table.get_mut(ticker_key);
+                let ticker = ticker_table.get_mut(ticker_key);
                 if ticker.is_none() {
                     return;
                 }
-                let mut ticker = ticker.unwrap();
+                let ticker = ticker.unwrap();
 
                 let player = if let Some(player_id) = ticker.get_player_id() {
                     Some(self.get_player_data(player_id).clone())
@@ -349,7 +348,6 @@ impl FfxivSimulationBoard {
         current_combat_time_millisecond: TimeType,
     ) {
         let player_id = player.borrow().get_id();
-
         let mut power = player.borrow().power.clone();
 
         for (_, buff) in snapshotted_buffs.iter() {
@@ -357,11 +355,11 @@ impl FfxivSimulationBoard {
                 .iter()
                 .for_each(|status_info| match status_info {
                     StatusInfo::IncreaseMainStat(maximum_increase, increase_percent) => {
-                        let increase_percent = (power.main_stat_multiplier
-                            * (*increase_percent as MultiplierType))
-                            as IncreaseType;
-                        let increase_amount = min(*maximum_increase, increase_percent);
-                        add_main_stat(&mut power, increase_amount);
+                        power = add_main_stat(
+                            &player.borrow().power,
+                            *maximum_increase,
+                            *increase_percent,
+                        );
                     }
                     _ => {}
                 })

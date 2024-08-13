@@ -11,7 +11,6 @@ use crate::jobs_skill_data::machinist::combat_resources::MachinistCombatResource
 use crate::jobs_skill_data::monk::combat_resources::MonkCombatResources;
 use crate::jobs_skill_data::ninja::combat_resources::NinjaCombatResources;
 use crate::jobs_skill_data::paladin::combat_resources::PaladinCombatResources;
-use crate::jobs_skill_data::pictomancer::abilities::PictomancerDatabase;
 use crate::jobs_skill_data::pictomancer::combat_resources::PictomancerCombatResources;
 use crate::jobs_skill_data::reaper::combat_resources::ReaperCombatResources;
 use crate::jobs_skill_data::redmage::combat_resources::RedmageCombatResources;
@@ -34,7 +33,6 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-#[cfg(debug_assertions)]
 const ALL_FFXIV_COMBAT_JOBS: [&str; 20] = [
     "WAR", "PLD", "DRK", "WHM", "SCH", "AST", "SGE", "MNK", "DRG", "NIN", "SAM", "RPR", "VPR",
     "BRD", "DNC", "MCH", "BLM", "SMN", "RDM", "PCT",

@@ -11,7 +11,7 @@ use crate::response::simulation_api_response::{
 use ffxiv_simbot_combat_components::jobs_skill_data::ninja::abilities::bunshin_clone_id;
 use ffxiv_simbot_combat_components::live_objects::player::logs::SkillLog;
 use ffxiv_simbot_combat_components::types::{DpsType, MultiplierType};
-use ffxiv_simbot_combat_components::{IdType, TimeType};
+use ffxiv_simbot_combat_components::types::{IdType, TimeType};
 use ffxiv_simbot_dps_simulator::simulation_result::SimulationResult;
 use itertools::{izip, Itertools};
 use std::collections::HashMap;

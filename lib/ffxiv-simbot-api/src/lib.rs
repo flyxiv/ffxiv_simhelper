@@ -7,4 +7,3 @@ pub(crate) mod errors;
 /// * Error Struct
 pub mod request;
 pub mod response;
-mod role;

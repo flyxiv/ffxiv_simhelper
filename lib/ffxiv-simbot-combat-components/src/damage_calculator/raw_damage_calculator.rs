@@ -12,7 +12,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::Status;
 use crate::types::{DamageType, IdType, MultiplierType};
-use log::{debug, info};
+use log::debug;
 use rand::{random, thread_rng, Rng};
 use std::collections::HashMap;
 
@@ -155,7 +155,7 @@ fn calculate_base_damage(
 ) -> f64 {
     match damage_category {
         DamageCategory::Direct => {
-            let mut d1 = MultiplierType::floor(
+            let d1 = MultiplierType::floor(
                 potency
                     * player_power.main_stat_multiplier
                     * player_power.determination_damage_multiplier,
@@ -170,7 +170,7 @@ fn calculate_base_damage(
             MultiplierType::floor(d2 / 100.0)
         }
         DamageCategory::PhysicalDot => {
-            let mut d1 = MultiplierType::floor(
+            let d1 = MultiplierType::floor(
                 potency
                     * player_power.main_stat_multiplier
                     * player_power.determination_damage_multiplier,
@@ -191,7 +191,7 @@ fn calculate_base_damage(
             MultiplierType::floor(d2 / 100.0) + 1.0
         }
         DamageCategory::AutoAttack => {
-            let mut d1 = MultiplierType::floor(
+            let d1 = MultiplierType::floor(
                 potency
                     * player_power.main_stat_multiplier
                     * player_power.determination_damage_multiplier,

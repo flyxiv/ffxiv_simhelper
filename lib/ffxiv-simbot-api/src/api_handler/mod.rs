@@ -1,12 +1,12 @@
 use crate::request::simulation_api_request::PlayerInfoRequest;
-use crate::role::job_abbrev_to_role;
+use ffxiv_simbot_combat_components::live_objects::player::role::job_abbrev_to_role;
 use ffxiv_simbot_combat_components::types::IncreaseType;
 use std::collections::HashSet;
 
 pub mod simulate;
 pub(crate) mod statcompare;
 
-fn get_composition_buff(party: &Vec<PlayerInfoRequest>) -> IncreaseType {
+fn get_composition_buff_percent(party: &Vec<PlayerInfoRequest>) -> IncreaseType {
     if party.len() == 1 {
         return 0;
     }
@@ -14,7 +14,7 @@ fn get_composition_buff(party: &Vec<PlayerInfoRequest>) -> IncreaseType {
     let mut roles = HashSet::new();
 
     for player_info_request in party {
-        roles.insert(job_abbrev_to_role(&player_info_request.jobAbbrev));
+        roles.insert(job_abbrev_to_role(&player_info_request.job_abbrev));
     }
 
     return roles.len();

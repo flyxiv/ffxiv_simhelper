@@ -1,6 +1,6 @@
-use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyRaidBuff, RefreshBuff};
+use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyRaidBuff};
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::{CasterGlobalSkill, PotionSkill};
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::make_skill_table;
@@ -8,7 +8,7 @@ use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::collections::HashMap;
 
 pub(crate) struct PictomancerDatabase {
@@ -59,8 +59,6 @@ pub(crate) struct PictomancerDatabase {
 }
 impl PictomancerDatabase {
     pub(crate) fn new(player_id: IdType) -> Self {
-        let caster_skills = CasterGlobalSkill::new(player_id);
-
         let STARRY_MUSE_BUFF: BuffStatus = {
             BuffStatus {
                 id: 2000,

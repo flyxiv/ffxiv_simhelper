@@ -15,7 +15,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -912,30 +912,6 @@ impl SummonerDatabase {
             is_speed_buffed: false,
             cooldown_millisecond: 20000,
             resource_required: vec![ResourceRequirements::CheckStatus(PHOENIX_STATE.get_id())],
-            resource_created: Default::default(),
-            is_guaranteed_crit: false,
-            current_cooldown_millisecond: 0,
-            stacks: 1,
-            stack_skill_id: None,
-            is_guaranteed_direct_hit: false,
-            use_type: UseType::UseOnTarget,
-        };
-        let SEARING_FLASH: AttackSkill = AttackSkill {
-            id: 1625,
-            name: String::from("Searing Flash"),
-            player_id,
-            potency: 600,
-            trait_percent: 130,
-            additional_skill_events: vec![],
-            proc_events: vec![],
-            combo: None,
-            delay_millisecond: None,
-            casting_time_millisecond: 0,
-            gcd_cooldown_millisecond: 0,
-            charging_time_millisecond: 0,
-            is_speed_buffed: false,
-            cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(RUBYS_GLIMMER.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,

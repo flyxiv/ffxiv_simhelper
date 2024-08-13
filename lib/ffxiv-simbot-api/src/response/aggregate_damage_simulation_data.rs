@@ -1,8 +1,8 @@
 use crate::response::CountType;
 use ffxiv_simbot_combat_components::live_objects::player::logs::DamageLog;
 use ffxiv_simbot_combat_components::live_objects::player::StatusKey;
+use ffxiv_simbot_combat_components::types::IdType;
 use ffxiv_simbot_combat_components::types::MultiplierType;
-use ffxiv_simbot_combat_components::IdType;
 use itertools::izip;
 use std::collections::HashMap;
 

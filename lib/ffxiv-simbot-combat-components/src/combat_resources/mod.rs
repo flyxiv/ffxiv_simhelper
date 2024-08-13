@@ -9,12 +9,12 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{IdType, TimeType};
+use crate::types::{ComboType, ResourceType, StackType};
+use crate::types::{IdType, TimeType};
 use log::info;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
-use crate::types::{ComboType, ResourceType, StackType};
 
 /// Saves all the combat related resources for the player's job
 /// resources include stack, combo, cooldown of each skill

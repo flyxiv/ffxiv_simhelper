@@ -86,7 +86,7 @@ impl CombatResource for BardCombatResources {
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_combat_time_millisecond: TimeType,
-        player: &FfxivPlayer,
+        _: &FfxivPlayer,
     ) -> SkillEvents {
         let skill_internal_events = vec![];
         let mut skill_events = vec![];

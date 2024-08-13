@@ -23,12 +23,13 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_info::StatusInfo;
 use crate::status::status_timer::StatusTimer;
+use crate::types::{IdType, TimeType};
 use crate::types::{MultiplierType, StatusTable};
-use crate::{IdType, TimeType, TARGET_ID};
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::rc::Rc;
+pub static TARGET_ID: IdType = 100;
 
 /// The Abstraction for an actual FFXIV Player in the combat.
 pub struct FfxivPlayer {

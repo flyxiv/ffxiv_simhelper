@@ -5,8 +5,8 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
+use crate::types::IdType;
 use crate::types::TurnCount;
-use crate::IdType;
 use std::cell::RefCell;
 
 #[derive(Clone)]
@@ -139,10 +139,6 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
         },
         SkillPriorityInfo {
             skill_id: db.despair_triplecast.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.despair_swiftcast.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {

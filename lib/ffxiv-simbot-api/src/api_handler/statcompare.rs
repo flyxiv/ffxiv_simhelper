@@ -1,4 +1,4 @@
-use crate::api_handler::get_composition_buff;
+use crate::api_handler::get_composition_buff_percent;
 use crate::errors::Result;
 use crate::request::convert_to_simulation_board::create_player;
 use crate::request::simulation_api_request::{PlayerInfoRequest, StatsInfo};
@@ -59,7 +59,7 @@ fn create_stat_compare_simulation_board(
         combat_time_millisecond,
     );
 
-    let composition_buff = get_composition_buff(&request.party);
+    let composition_buff_percent = get_composition_buff_percent(&request.party);
     let mut party_jobs = vec![(main_player_id, request.main_player_job.clone())];
     party_jobs.extend(
         request
@@ -68,7 +68,7 @@ fn create_stat_compare_simulation_board(
             .map(|player_info_request| {
                 (
                     player_info_request.player_id,
-                    player_info_request.jobAbbrev.clone(),
+                    player_info_request.job_abbrev.clone(),
                 )
             })
             .collect_vec(),
@@ -79,12 +79,12 @@ fn create_stat_compare_simulation_board(
             player_id: main_player_id,
             partner1_id: request.main_player_partner1_id,
             partner2_id: request.main_player_partner2_id,
-            jobAbbrev: request.main_player_job.clone(),
+            job_abbrev: request.main_player_job.clone(),
             stats: main_player_stats,
+            power: request.party[0].power.clone(),
         },
-        composition_buff,
+        composition_buff_percent,
         &party_jobs,
-        FFXIV_STAT_MODIFIER.clone(),
         event_queue.clone(),
     )?;
 
@@ -93,9 +93,8 @@ fn create_stat_compare_simulation_board(
     for player_info_request in &request.party {
         let player = create_player(
             player_info_request.clone(),
-            composition_buff,
+            composition_buff_percent,
             &party_jobs,
-            FFXIV_STAT_MODIFIER.clone(),
             event_queue.clone(),
         )?;
 

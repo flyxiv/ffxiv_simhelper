@@ -11,7 +11,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::collections::HashMap;
 
 pub(crate) struct BlackmageDatabase {
@@ -24,7 +24,6 @@ pub(crate) struct BlackmageDatabase {
     pub(crate) fire3_f1: AttackSkill,
     pub(crate) despair: AttackSkill,
     pub(crate) despair_triplecast: AttackSkill,
-    pub(crate) despair_swiftcast: AttackSkill,
     pub(crate) xenoglossy: AttackSkill,
     pub(crate) paradox: AttackSkill,
     pub(crate) blizzard3: AttackSkill,
@@ -894,7 +893,6 @@ pub(crate) fn make_blackmage_skill_list(player_id: IdType) -> SkillTable<AttackS
         db.fire3_f1,
         db.despair,
         db.despair_triplecast,
-        db.despair_swiftcast,
         db.xenoglossy,
         db.manafont,
         db.paradox,

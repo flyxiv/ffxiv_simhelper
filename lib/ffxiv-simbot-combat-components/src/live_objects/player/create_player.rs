@@ -1,6 +1,7 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::astrologian::priorities::AstrologianPriorityTable;
 use crate::jobs_skill_data::bard::priorities::BardPriorityTable;
 use crate::jobs_skill_data::black_mage::priorities::BlackmagePriorityTable;
 use crate::jobs_skill_data::dancer::priorities::DancerPriorityTable;
@@ -30,7 +31,7 @@ use crate::rotation::ffxiv_priority_table::FfxivPriorityTable;
 use crate::skill::NON_GCD_DELAY_MILLISECOND;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::{IdType, TimeType};
+use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -122,7 +123,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::DarkKnight(DarkknightPriorityTable::new(player_id)),
+            FfxivPriorityTable::Darkknight(DarkknightPriorityTable::new(player_id)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -226,7 +227,7 @@ impl FfxivPlayer {
             power,
             Some(partner_id1),
             Some(partner_id2),
-            FfxivPriorityTable::Astrologian(Default::default()),
+            FfxivPriorityTable::Astrologian(AstrologianPriorityTable::new(player_id)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(

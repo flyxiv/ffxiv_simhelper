@@ -1,5 +1,5 @@
 use crate::response::CountType;
-use ffxiv_simbot_combat_components::{DpsType, IdType, TimeType};
+use ffxiv_simbot_combat_components::types::{DpsType, IdType, TimeType};
 use serde::Serialize;
 
 pub(crate) const SKILL_ENTITY_STRING: &'static str = "Skill";

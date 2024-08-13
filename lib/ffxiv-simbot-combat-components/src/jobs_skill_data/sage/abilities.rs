@@ -8,7 +8,7 @@ use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 
 pub(crate) struct SageDatabase {
     pub(crate) dot_status: DebuffStatus,

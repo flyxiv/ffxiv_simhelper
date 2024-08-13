@@ -64,7 +64,7 @@ impl RdpsCalculator for FfxivRdpsCalculator {
 
             total_multiplier *= damage_multiplier;
 
-            let mut entry = damage_profile
+            let entry = damage_profile
                 .rdps_contribution
                 .entry(status_key)
                 .or_insert(1.0);
@@ -86,7 +86,7 @@ impl RdpsCalculator for FfxivRdpsCalculator {
 
             total_multiplier *= damage_multiplier;
 
-            let mut entry = damage_profile
+            let entry = damage_profile
                 .rdps_contribution
                 .entry(status_key)
                 .or_insert(1.0);

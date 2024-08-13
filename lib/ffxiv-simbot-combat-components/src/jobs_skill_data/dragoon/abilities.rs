@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::collections::HashMap;
 
 pub(crate) struct DragoonDatabase {
@@ -852,9 +852,7 @@ impl DragoonDatabase {
     }
 }
 
-pub(crate) fn make_dragoon_skill_list(
-    player_id: IdType,
-) -> SkillTable<AttackSkill> {
+pub(crate) fn make_dragoon_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
     let db = DragoonDatabase::new(player_id);
 
     let dragoon_skill_list: Vec<AttackSkill> = vec![

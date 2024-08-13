@@ -1,7 +1,7 @@
 use crate::event::FfxivEventQueue;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::cell::RefCell;
 use std::rc::Rc;
 

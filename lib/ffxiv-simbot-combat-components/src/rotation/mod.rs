@@ -1,6 +1,6 @@
 use crate::id_entity::IdEntity;
 use crate::rotation::priority_table::SkillPrerequisite;
-use crate::IdType;
+use crate::types::IdType;
 use std::collections::HashMap;
 
 pub mod cooldown_timer;

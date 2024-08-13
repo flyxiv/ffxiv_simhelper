@@ -8,7 +8,7 @@ use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, ResourceType};
-use crate::{IdType, TimeType};
+use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -131,6 +131,9 @@ impl MonkCombatResources {
             perfect_3: 0,
             lunar: 0,
             solar: 0,
+            leaping_stack: 0,
+            raptor_stack: 0,
+            coeurl_stack: 0,
         }
     }
 }

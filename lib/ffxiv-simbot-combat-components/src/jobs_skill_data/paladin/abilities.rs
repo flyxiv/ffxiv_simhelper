@@ -10,7 +10,7 @@ use crate::skill::ResourceRequirements::UseBuff;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 
 pub(crate) struct PaladinDatabase {
     pub(crate) fast_blade: AttackSkill,

@@ -1,4 +1,3 @@
-use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ReduceSkillCooldown};
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
@@ -9,7 +8,7 @@ use crate::skill::ResourceRequirements::UseBuff;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::collections::HashMap;
 
 pub(crate) struct WarriorDatabase {

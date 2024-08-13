@@ -1,7 +1,7 @@
-use crate::api_handler::get_composition_buff;
+use crate::api_handler::get_composition_buff_percent;
 use crate::errors::Result;
 use crate::request::convert_to_simulation_board::create_player;
-use crate::request::simulation_api_request::{PlayerInfoRequest, SimulationApiRequest};
+use crate::request::simulation_api_request::SimulationApiRequest;
 use crate::response::convert_simulation_result::create_response_from_simulation_result;
 use crate::response::simulation_api_response::SimulationApiResponse;
 use axum::Json;
@@ -37,14 +37,14 @@ pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> 
         combat_time_millisecond,
     );
 
-    let composition_buff = get_composition_buff(&request.party);
+    let composition_buff_percent = get_composition_buff_percent(&request.party);
     let player_jobs = request
         .party
         .iter()
         .map(|player_info_request| {
             (
                 player_info_request.player_id,
-                player_info_request.jobAbbrev.clone(),
+                player_info_request.job_abbrev.clone(),
             )
         })
         .collect_vec();
@@ -52,7 +52,7 @@ pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> 
     for player_info_request in request.party {
         let player = create_player(
             player_info_request,
-            composition_buff,
+            composition_buff_percent,
             &player_jobs,
             event_queue.clone(),
         )?;

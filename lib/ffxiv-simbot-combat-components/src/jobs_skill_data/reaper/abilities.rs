@@ -9,8 +9,8 @@ use crate::skill::ResourceRequirements::{CheckStatus, Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
+use crate::types::IdType;
 use crate::types::PotencyType;
-use crate::IdType;
 use std::collections::HashMap;
 
 pub(crate) struct ReaperDatabase {

@@ -7,7 +7,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
 use crate::types::{DamageType, ResourceType};
-use crate::{IdType, TimeType};
+use crate::types::{IdType, TimeType};
 use std::cmp::min;
 use std::collections::HashMap;
 

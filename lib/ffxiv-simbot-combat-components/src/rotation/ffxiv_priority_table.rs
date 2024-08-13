@@ -21,7 +21,7 @@ use crate::jobs_skill_data::warrior::priorities::WarriorPriorityTable;
 use crate::jobs_skill_data::white_mage::priorities::WhitemagePriorityTable;
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::IdType;
+use crate::types::IdType;
 
 #[derive(Clone)]
 pub(crate) enum FfxivPriorityTable {

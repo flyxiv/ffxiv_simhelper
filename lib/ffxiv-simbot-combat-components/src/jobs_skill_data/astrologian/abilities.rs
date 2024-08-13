@@ -1,4 +1,4 @@
-use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff, Damage};
+use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff};
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::collections::HashMap;
 
 pub(crate) struct AstrologianDatabase {

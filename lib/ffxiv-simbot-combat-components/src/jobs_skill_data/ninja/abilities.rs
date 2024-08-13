@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 
 pub(crate) struct NinjaDatabase {
     pub(crate) zesho_meppo: AttackSkill,

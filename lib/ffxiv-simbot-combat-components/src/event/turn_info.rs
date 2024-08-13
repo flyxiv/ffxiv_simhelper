@@ -1,9 +1,9 @@
 use crate::live_objects::turn_type::FfxivTurnType;
-use crate::TimeType;
+use crate::types::TimeType;
 
 static TWO_MINUTES_IN_MILLISECOND: TimeType = 120000;
 static BURST_START_TIME_MILLISECOND: TimeType = 7000;
-static BURST_END_TIME_MILLISECOND: TimeType = 23000;
+static BURST_END_TIME_MILLISECOND: TimeType = 27000;
 
 /// Extracts needed information from the player turn event.
 pub(crate) struct TurnInfo {

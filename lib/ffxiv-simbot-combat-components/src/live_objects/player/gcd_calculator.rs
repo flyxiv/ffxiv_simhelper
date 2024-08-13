@@ -1,5 +1,5 @@
 use crate::types::MultiplierType;
-use crate::TimeType;
+use crate::types::TimeType;
 
 pub(crate) trait GcdCalculator {
     fn calculate_speed_buffed_cooldown_millisecond(
