@@ -6,11 +6,12 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::make_skill_table;
 use crate::skill::use_type::UseType;
-use crate::skill::ResourceRequirements::UseBuff;
+use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::types::IdType;
+use std::collections::HashMap;
 
 pub(crate) struct PaladinDatabase {
     pub(crate) fast_blade: AttackSkill,
@@ -451,7 +452,7 @@ impl PaladinDatabase {
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
-            combo: Some(7),
+            combo: Some(0),
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 2500,
@@ -459,7 +460,7 @@ impl PaladinDatabase {
             is_speed_buffed: true,
             cooldown_millisecond: 0,
             resource_required: vec![],
-            resource_created: Default::default(),
+            resource_created: HashMap::from([(0, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -651,7 +652,7 @@ impl PaladinDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![],
+            resource_required: vec![UseBuff(SEPULCHRE_READY.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -676,7 +677,7 @@ impl PaladinDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![],
+            resource_required: vec![Resource(0, 1)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,

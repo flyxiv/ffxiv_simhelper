@@ -1,4 +1,3 @@
-import { StatCompareRequest } from "src/types/StatCompareRequest";
 import {
   DEFAULT_WEAPON_DAMAGE,
   DEFAULT_CRITICAL_STRIKE,
@@ -10,7 +9,8 @@ import {
   DEFAULT_MAIN_STAT_NON_TANK,
 } from "./StatValue";
 
-export function defaultStatCompareRequest(): StatCompareRequest {
+export function defaultStatCompareRequest() {
+  /*
   let defaultJobsList = [
     "NIN",
     "PLD",
@@ -53,4 +53,5 @@ export function defaultStatCompareRequest(): StatCompareRequest {
     mainPlayerStat2: NIN_BIS_STATS,
     party: party,
   };
+  */
 }

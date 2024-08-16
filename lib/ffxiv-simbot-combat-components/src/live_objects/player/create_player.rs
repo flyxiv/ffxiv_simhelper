@@ -51,7 +51,7 @@ pub(crate) static SAMURAI_START_TIME_MILLISECOND: TimeType = -3000;
 pub(crate) static REAPER_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static VIPER_START_TIME_MILLISECOND: TimeType = -700;
 pub(crate) static BARD_START_TIME_MILLISECOND: TimeType = -700;
-pub(crate) static DANCER_START_TIME_MILLISECOND: TimeType = -4000 - NON_GCD_DELAY_MILLISECOND;
+pub(crate) static DANCER_START_TIME_MILLISECOND: TimeType = -15000;
 pub(crate) static MACHINIST_START_TIME_MILLISECOND: TimeType = -2000;
 pub(crate) static BLACKMAGE_START_TIME_MILLISECOND: TimeType = -5000;
 pub(crate) static SUMMONER_START_TIME_MILLISECOND: TimeType = -1500;
@@ -258,7 +258,7 @@ impl FfxivPlayer {
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
                 player_id,
-                FfxivTurnType::Ogcd,
+                FfxivTurnType::Gcd,
                 SAGE_START_TIME_MILLISECOND,
                 SAGE_START_TIME_MILLISECOND,
             ),
@@ -509,7 +509,7 @@ impl FfxivPlayer {
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
                 player_id,
-                FfxivTurnType::Ogcd,
+                FfxivTurnType::Gcd,
                 DANCER_START_TIME_MILLISECOND,
                 DANCER_START_TIME_MILLISECOND,
             ),

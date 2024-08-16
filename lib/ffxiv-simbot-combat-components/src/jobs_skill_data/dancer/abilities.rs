@@ -32,6 +32,7 @@ pub(crate) struct DancerDatabase {
     pub(crate) last_dance: AttackSkill,
     pub(crate) finishing_move: AttackSkill,
     pub(crate) dance_of_the_dawn: AttackSkill,
+    pub(crate) standard_opener: AttackSkill,
 
     pub(crate) standard_step_buff: BuffStatus,
     pub(crate) standard_step_proc_buff: BuffStatus,
@@ -357,6 +358,14 @@ impl DancerDatabase {
                     STANDARD_STEP_PROC_BUFF.clone(),
                     60000,
                     60000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    LAST_DANCE_READY.clone(),
+                    30000,
+                    30000,
                     0,
                 ),
             ],
@@ -886,7 +895,7 @@ impl DancerDatabase {
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(LAST_DANCE_READY.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(FINISHING_MOVE_READY.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -923,6 +932,72 @@ impl DancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
+
+        let STANDARD_STEP_OPENER: AttackSkill = AttackSkill {
+            id: 1519,
+            name: "Standard Step".to_string(),
+            player_id,
+            potency: 850,
+            trait_percent: 120,
+            additional_skill_events: vec![
+                FfxivEvent::ApplyBuff(
+                    player_id,
+                    player_id,
+                    STANDARD_STEP_BUFF.clone(),
+                    60000,
+                    60000,
+                    0,
+                ),
+                FfxivEvent::ApplyBuff(
+                    player_id,
+                    player_id,
+                    STANDARD_STEP_PROC_BUFF.clone(),
+                    60000,
+                    60000,
+                    0,
+                ),
+                FfxivEvent::ApplyBuff(
+                    player_id,
+                    partner_player_id,
+                    STANDARD_STEP_BUFF.clone(),
+                    60000,
+                    60000,
+                    0,
+                ),
+                FfxivEvent::ApplyBuff(
+                    player_id,
+                    partner_player_id,
+                    STANDARD_STEP_PROC_BUFF.clone(),
+                    60000,
+                    60000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    LAST_DANCE_READY.clone(),
+                    30000,
+                    30000,
+                    0,
+                ),
+            ],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 1500,
+            charging_time_millisecond: 14000,
+            is_speed_buffed: true,
+            resource_required: vec![],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 0,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: Some(STANDARD_STEP.get_id()),
+            use_type: UseType::NoTarget,
+        };
         let potion_skill = PotionSkill::new(player_id);
 
         DancerDatabase {
@@ -945,6 +1020,7 @@ impl DancerDatabase {
             last_dance: LAST_DANCE,
             finishing_move: FINISHING_MOVE,
             dance_of_the_dawn: DANCE_OF_THE_DAWN,
+            standard_opener: STANDARD_STEP_OPENER,
 
             standard_step_buff: STANDARD_STEP_BUFF,
             standard_step_proc_buff: STANDARD_STEP_PROC_BUFF,
@@ -993,6 +1069,7 @@ pub(crate) fn make_dancer_skill_list(
         db.last_dance,
         db.finishing_move,
         db.dance_of_the_dawn,
+        db.standard_opener,
         db.potion,
     ];
 

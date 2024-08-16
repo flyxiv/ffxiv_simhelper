@@ -25,7 +25,7 @@ export const BestTeammateGraph = (response: QuickSimResponse) => {
     }
 
     let teammateChartData: TeammateChartData = {
-      jobName: simulationDatas[i].job,
+      jobName: simulationDatas[i].jobAbbrev,
       totalRdps: 0,
       rdpsEntry: [],
     };

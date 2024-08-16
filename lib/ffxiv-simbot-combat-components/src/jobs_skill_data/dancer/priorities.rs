@@ -55,13 +55,12 @@ impl DancerPriorityTable {
 
 pub(crate) fn make_dancer_opener(db: &DancerDatabase) -> Vec<Opener> {
     vec![
+        Opener::GcdOpener(db.standard_opener.get_id()),
         Opener::OgcdOpener((Some(db.potion.get_id()), None)),
-        Opener::GcdOpener(db.standard_step.get_id()),
-        Opener::OgcdOpener((Some(db.flourish.get_id()), None)),
         Opener::GcdOpener(db.technical_step.get_id()),
         Opener::OgcdOpener((Some(db.devilment.get_id()), None)),
-        Opener::GcdOpener(db.fountainfall_flourish.get_id()),
-        Opener::OgcdOpener((Some(db.fan_dance4.get_id()), None)),
+        Opener::GcdOpener(db.tillana.get_id()),
+        Opener::OgcdOpener((Some(db.flourish.get_id()), None)),
         Opener::GcdOpener(db.starfall_dance.get_id()),
     ]
 }
@@ -89,6 +88,10 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.last_dance.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.standard_step.get_id(),
             prerequisite: None,
         },
@@ -102,10 +105,6 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
         },
         SkillPriorityInfo {
             skill_id: db.dance_of_the_dawn.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.last_dance.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {

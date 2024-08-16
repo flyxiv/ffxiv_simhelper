@@ -14,14 +14,20 @@ export function MateriaItem(
   let isNotFullyUsed =
     isSelected &&
     currentlyEquippedMateria.effectiveValue < currentlyEquippedMateria.maxValue;
+
   return (
-    <Box display="flex" justifyContent="left" alignContent={"center"}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="left"
+      alignContent={"center"}
+    >
       <Box marginRight={1}>
         <img
           src={getMateriaIconPath(materiaKey)}
           alt={getMateriaIconPath(materiaKey)}
-          width={30}
-          height={30}
+          width={20}
+          height={20}
           style={{ verticalAlign: "middle" }}
         />
       </Box>
@@ -30,7 +36,7 @@ export function MateriaItem(
           variant="body2"
           alignContent={"center"}
           fontSize={10}
-          color={isNotFullyUsed ? "red" : isSelected ? "white" : "black"}
+          color={isNotFullyUsed ? "red" : "white"}
         >
           {isSelected
             ? toMateriaDescription(currentlyEquippedMateria)

@@ -1,5 +1,6 @@
 use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent::Damage;
+use crate::jobs_skill_data::astrologian::abilities::make_astrologian_skill_list;
 use crate::jobs_skill_data::samurai::abilities::make_samurai_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -72,13 +73,16 @@ impl CombatResource for AstrologianCombatResources {
         _: &FfxivPlayer,
     ) -> SkillEvents {
         let mut ffxiv_event = vec![];
+        if skill_id == 502 {
+            self.stellar_timer = Some(STELLAR_TIMER);
+        }
+
         if let Some(timer) = self.stellar_timer {
             if timer <= 0 {
-                self.lunar_stack = 0;
                 self.stellar_timer = None;
                 ffxiv_event.push(Damage(
                     self.player_id,
-                    self.player_id,
+                    502,
                     310,
                     130,
                     false,
@@ -89,10 +93,6 @@ impl CombatResource for AstrologianCombatResources {
                     combat_time_millisecond,
                 ))
             }
-        }
-
-        if skill_id == 502 {
-            self.stellar_timer = Some(STELLAR_TIMER);
         }
 
         (ffxiv_event, vec![])
@@ -119,10 +119,10 @@ impl CombatResource for AstrologianCombatResources {
 impl AstrologianCombatResources {
     pub(crate) fn new(player_id: IdType, melee_partner: IdType, ranged_partner: IdType) -> Self {
         Self {
-            skills: make_samurai_skill_list(player_id),
+            skills: make_astrologian_skill_list(player_id),
             player_id,
             current_combo: None,
-            lunar_stack: 0,
+            lunar_stack: 1,
             stellar_timer: None,
             melee_partner,
             ranged_partner,

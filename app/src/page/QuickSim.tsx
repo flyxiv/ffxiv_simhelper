@@ -2,104 +2,97 @@ import { useState } from "react";
 import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
 import { Box, Typography } from "@mui/material";
 import "./QuickSim.css";
-import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
-import { QuickSimRequest } from "src/types/QuickSimRequest";
-import { PartyInfo } from "src/types/PartyStates";
-import { CharacterStates } from "src/types/CharacterStates";
-import { VerticalPartyInput } from "../components/input/partyinput/VerticalPartyInput";
-import { QuickSimRequestSaveName } from "src/App";
+import { EquipmentSimCharacterStates } from "src/types/CharacterStates";
+import { QuickSimInputSaveName } from "src/App";
+import { calculatePlayerPowerFromInputs } from "src/types/ffxivdatabase/ItemSet";
 import { EquipmentSelectionMenu } from "src/components/input/basicform/EquipmentInputForm";
-import { defaultItemSet } from "src/types/ffxivdatabase/ItemSet";
 import { StatSummary } from "src/components/container/StatSummary";
-import { RACES } from "src/const/StartStats";
 import { HorizontalPartyInput } from "src/components/input/partyinput/HorizontalPartyInput";
-import { Materia } from "src/types/ffxivdatabase/Materia";
+import { QuickSimInputSaveState } from "src/types/QuickSimInput";
+import { defaultQuickSimInput } from "src/const/DefaultQuickSimInput";
 
-export function isNotValid(request: QuickSimRequest) {
-  if (request.mainPlayerId === null || request.mainPlayerId === undefined) {
+export function isNotValid(input: QuickSimInputSaveState) {
+  if (input.mainPlayerJob === null || input.mainPlayerJob === undefined) {
     return true;
   }
 
   if (
-    request.combatTimeMillisecond === null ||
-    request.combatTimeMillisecond === undefined
+    input.combatTimeMillisecond === null ||
+    input.combatTimeMillisecond === undefined
   ) {
     return true;
   }
 
-  if (request.party === null || request.party === undefined) {
+  if (
+    input.combatTimeMillisecond === null ||
+    input.combatTimeMillisecond === undefined
+  ) {
     return true;
   }
 
   return false;
 }
+
 export function QuickSim() {
-  let mostRecentRequestState = localStorage.getItem(QuickSimRequestSaveName);
-  let mostRecentRequest = null;
+  let mostRecentInputState = localStorage.getItem(QuickSimInputSaveName);
+  let mostRecentInput = null;
 
-  if (mostRecentRequestState == null) {
-    mostRecentRequest = defaultQuickSimRequest();
+  if (mostRecentInputState == null) {
+    mostRecentInput = defaultQuickSimInput();
   } else {
-    mostRecentRequest = JSON.parse(mostRecentRequestState) as QuickSimRequest;
+    mostRecentInput = JSON.parse(
+      mostRecentInputState
+    ) as QuickSimInputSaveState;
   }
 
-  if (isNotValid(mostRecentRequest)) {
-    mostRecentRequest = defaultQuickSimRequest();
+  if (isNotValid(mostRecentInput)) {
+    mostRecentInput = defaultQuickSimInput();
   }
 
-  let mainPlayerId = mostRecentRequest.mainPlayerId;
-  let mainPlayerInfo = mostRecentRequest.party[mainPlayerId];
-  const [mainPlayerJob, setMainPlayerJob] = useState(
-    mostRecentRequest.party[mostRecentRequest.mainPlayerId].job
+  const [mainPlayerJobAbbrev, setMainPlayerJobAbbrev] = useState(
+    mostRecentInput.mainPlayerJob
   );
-  const [mainPlayerStat, setMainPlayerStat] = useState(mainPlayerInfo.stats);
   let [mainPlayerPartner1Id, setMainPlayerPartner1Id] = useState(
-    mainPlayerInfo.partner1Id
+    mostRecentInput.mainPlayerPartner1Id
   );
   let [mainPlayerPartner2Id, setMainPlayerPartner2Id] = useState(
-    mainPlayerInfo.partner2Id
+    mostRecentInput.mainPlayerPartner2Id
   );
-  let [race, setRace] = useState(RACES[0]);
-
-  const mainPlayerState: CharacterStates = {
-    jobAbbrev: mainPlayerJob,
-    jobNameSetter: setMainPlayerJob,
-    stats: mainPlayerStat,
-    setStats: setMainPlayerStat,
+  const mainPlayerState: EquipmentSimCharacterStates = {
+    jobAbbrev: mainPlayerJobAbbrev,
+    jobNameSetter: setMainPlayerJobAbbrev,
     partner1Id: mainPlayerPartner1Id,
     setPartner1Id: setMainPlayerPartner1Id,
     partner2Id: mainPlayerPartner2Id,
     setPartner2Id: setMainPlayerPartner2Id,
   };
 
-  let combatTimeSeconds = mostRecentRequest.combatTimeMillisecond / 1000;
+  let combatTimeSeconds = mostRecentInput.combatTimeMillisecond / 1000;
   let [combatTimeStateSeconds, setCombatTimeSeconds] =
     useState(combatTimeSeconds);
 
-  let input = loadPartyJobs(mostRecentRequest.party);
-  let ids = input.ids;
-  let otherPartyJobs = input.jobs;
+  let partyJobAbbrevs = mostRecentInput.partyMemberJobAbbrevs;
+  let ids = [1, 2, 3, 4, 5, 6, 7];
 
   let [availablePartyIds, setAvailablePartyIds] = useState(ids);
 
-  let [partyJobs, setPartyJobs] = useState(otherPartyJobs);
-  let [itemSet, setItemSet] = useState(defaultItemSet());
-  let [foodId, setFoodId] = useState(-1);
-  let defaultMaterias = new Map<string, Materia[]>([
-    ["weapon", []],
-    ["head", []],
-    ["body", []],
-    ["hands", []],
-    ["legs", []],
-    ["feet", []],
-    ["neck", []],
-    ["ear", []],
-    ["wrist", []],
-    ["finger1", []],
-    ["finger2", []],
-  ]);
+  let [partyJobs, setPartyJobs] = useState(partyJobAbbrevs);
+  let initialPower = calculatePlayerPowerFromInputs(
+    mostRecentInput.itemSet,
+    mainPlayerJobAbbrev,
+    mostRecentInput.race,
+    mostRecentInput.foodId,
+    mostRecentInput.gearSetMaterias
+  );
 
-  let [gearSetMaterias, setGearSetMaterias] = useState(defaultMaterias);
+  let [data, setData] = useState({
+    power: initialPower,
+    itemSet: mostRecentInput.itemSet,
+    foodId: mostRecentInput.foodId,
+    gearSetMaterias: mostRecentInput.gearSetMaterias,
+    jobAbbrev: mainPlayerJobAbbrev,
+    race: mostRecentInput.race,
+  });
 
   let borderRadius = 3;
 
@@ -111,27 +104,11 @@ export function QuickSim() {
             <Typography variant="h5">1. Input Your Info</Typography>
           </Box>
           <Box className="EquipmentBoard">
-            {EquipmentSelectionMenu(
-              mainPlayerState,
-              itemSet,
-              setItemSet,
-              race,
-              setRace,
-              foodId,
-              setFoodId,
-              gearSetMaterias,
-              setGearSetMaterias
-            )}
+            {EquipmentSelectionMenu(0, mainPlayerState, data, setData)}
           </Box>
         </Box>
         <Box className="QuickSimInputContainer">
-          {StatSummary(
-            mainPlayerState.jobAbbrev,
-            race,
-            itemSet,
-            foodId,
-            gearSetMaterias
-          )}
+          {StatSummary(mainPlayerState.jobAbbrev, data.power)}
         </Box>
         <Box className="StatComparePartyInputContainer">
           <Box className="SelectionTitle" borderRadius={borderRadius}>
@@ -153,30 +130,11 @@ export function QuickSim() {
           {QuickSimRequestButton(
             partyJobs,
             combatTimeStateSeconds,
-            mainPlayerState
+            mainPlayerState,
+            data
           )}
         </Box>
       </Box>
     </>
   );
-}
-
-function loadPartyJobs(partyInfo: PartyInfo[]) {
-  let jobs = [];
-  let ids = [];
-
-  let i = 0;
-  for (i = 1; i < 8; i++) {
-    ids.push(i);
-    if (partyInfo.length > i) {
-      jobs.push(partyInfo[i].job);
-    } else {
-      jobs.push("Empty");
-    }
-  }
-
-  return {
-    ids: ids,
-    jobs: jobs,
-  };
 }

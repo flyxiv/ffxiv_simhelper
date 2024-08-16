@@ -7,7 +7,7 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::gunbreaker::abilities::GunbreakerDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    Combo, HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessOrEqualThan,
+    And, Combo, HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::types::TurnCount;
 
@@ -93,18 +93,18 @@ pub(crate) fn make_gunbreaker_gcd_priority_table(
             )),
         },
         SkillPriorityInfo {
+            skill_id: db.double_down.get_id(),
+            prerequisite: Some(HasBufforDebuff(db.no_mercy.get_id())),
+        },
+        SkillPriorityInfo {
             skill_id: db.burst_strike.get_id(),
             prerequisite: Some(Or(
                 Box::new(RelatedSkillCooldownLessOrEqualThan(
                     db.bloodfest.get_id(),
                     8000,
                 )),
-                Box::new(Or(Box::new(HasResource(0, 3)), Box::new(Combo(Some(3))))),
+                Box::new(And(Box::new(HasResource(0, 3)), Box::new(Combo(Some(3))))),
             )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.double_down.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.no_mercy.get_id())),
         },
         SkillPriorityInfo {
             skill_id: db.sonic_break.get_id(),
@@ -183,13 +183,7 @@ pub(crate) fn make_gunbreaker_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.blasting_zone.get_id(),
-            prerequisite: Some(Or(
-                Box::new(HasBufforDebuff(db.no_mercy.get_id())),
-                Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
-                    db.no_mercy.get_id(),
-                    29500,
-                )))),
-            )),
+            prerequisite: None,
         },
     ]
 }

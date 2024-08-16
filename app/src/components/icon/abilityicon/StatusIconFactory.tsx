@@ -28,9 +28,9 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
     case 500:
       return actionIconDirectory + "/AST/divination.png";
     case 501:
-      return actionIconDirectory + "/AST/003110.png";
+      return actionIconDirectory + "/AST/the_balance.png";
     case 502:
-      return actionIconDirectory + "/AST/003115.png";
+      return actionIconDirectory + "/AST/the_spear.png";
 
     // SCH
     case 601:
@@ -43,8 +43,6 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return actionIconDirectory + "/DRG/disembowel.png";
     case 804:
       return actionIconDirectory + "/DRG/lance_charge.png";
-    case 806:
-      return actionIconDirectory + "/DRG/dragon_sight.png";
     case 807:
       return actionIconDirectory + "/DRG/battle_litany.png";
 
@@ -60,9 +58,9 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
 
     // NIN
     case 1003:
-      return actionIconDirectory + "/NIN/mug.png";
+      return actionIconDirectory + "/NIN/dokumori.png";
     case 1004:
-      return actionIconDirectory + "/NIN/trick_attack.png";
+      return actionIconDirectory + "/NIN/kunai's_bane.png";
     case 1005:
       return actionIconDirectory + "/NIN/kassatsu.png";
 
@@ -77,6 +75,8 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return actionIconDirectory + "/BRD/mage's_ballad.png";
     case 1306:
       return actionIconDirectory + "/BRD/army's_paeon.png";
+    case 1308:
+      return actionIconDirectory + "/BRD/barrage.png";
     case 1309:
       return actionIconDirectory + "/BRD/radiant_finale.png";
     case 1312:

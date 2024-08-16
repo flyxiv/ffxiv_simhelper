@@ -1,4 +1,5 @@
 use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::pictomancer::priorities::make_pictomancer_ogcd_priority_table;
 use crate::jobs_skill_data::sage::abilities::SageDatabase;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
@@ -48,16 +49,15 @@ impl SagePriorityTable {
             turn_count: RefCell::new(0),
             opener: make_sage_opener(&db),
             gcd_priority_list: make_sage_gcd_priority_db(&db),
-            ogcd_priority_list: Vec::new(),
+            ogcd_priority_list: make_sage_ogcd_priority_db(&db),
         }
     }
 }
 
 pub(crate) fn make_sage_opener(db: &SageDatabase) -> Vec<Opener> {
     let sage_opener: Vec<Opener> = vec![
-        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.gcd.get_id()),
-        Opener::OgcdOpener((None, None)),
+        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.dot.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.gcd.get_id()),
@@ -91,8 +91,14 @@ pub(crate) fn make_sage_gcd_priority_db(db: &SageDatabase) -> Vec<SkillPriorityI
 }
 
 pub(crate) fn make_sage_ogcd_priority_db(db: &SageDatabase) -> Vec<SkillPriorityInfo> {
-    vec![SkillPriorityInfo {
-        skill_id: db.potion.get_id(),
-        prerequisite: None,
-    }]
+    vec![
+        SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.psyche.get_id(),
+            prerequisite: None,
+        },
+    ]
 }

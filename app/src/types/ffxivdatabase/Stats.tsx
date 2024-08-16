@@ -1,5 +1,6 @@
-import { To } from "react-router-dom";
-import { TotalStats } from "./ItemSet";
+import { PlayerPower } from "./PlayerPower";
+export const CRIT_BASE_PERCENT = 0.05;
+export const CRIT_BASE_DAMAGE = 1.4;
 
 interface SubStatInfo {
   name: string;
@@ -41,7 +42,7 @@ export function getStatNames(jobAbbrev: string) {
   }
 }
 
-export function convertToSubStatInfos(totalStats: TotalStats) {
+export function convertToSubStatInfos(totalStats: PlayerPower) {
   let subStats: SubStatInfo[] = [];
   if (totalStats.criticalStrike > 0) {
     subStats.push({ name: "CRT", value: totalStats.criticalStrike });

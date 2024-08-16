@@ -1,4 +1,4 @@
-import { CharacterStats } from "./CharacterStates";
+import { PlayerPower } from "./ffxivdatabase/PlayerPower";
 
 export interface PartyState {
   combatTime: number;
@@ -16,6 +16,6 @@ export interface PartyInfo {
   playerId: number;
   partner1Id: number | null;
   partner2Id: number | null;
-  job: string;
-  stats: CharacterStats;
+  jobAbbrev: string;
+  power: PlayerPower;
 }

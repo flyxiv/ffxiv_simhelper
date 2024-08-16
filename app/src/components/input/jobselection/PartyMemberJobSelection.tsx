@@ -1,7 +1,14 @@
-import { MenuItem, InputLabel, Select, SelectChangeEvent } from "@mui/material";
+import {
+  MenuItem,
+  InputLabel,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 import { JobMenuItem } from "../../items/JobMenuItem";
 import React from "react";
 import { CustomFormControl } from "../basicform/BasicInputForm";
+import { ColorConfigurations } from "src/Themes";
 
 export function PartyMemberJobSelection(
   id: number,
@@ -46,6 +53,13 @@ export function PartyMemberJobSelection(
         onChange={(event) => {
           updateState(id - 1)(event);
         }}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              backgroundColor: ColorConfigurations.backgroundThree,
+            },
+          },
+        }}
       >
         {JobMenuItem("PLD")}
         {JobMenuItem("WAR")}
@@ -68,7 +82,11 @@ export function PartyMemberJobSelection(
         {JobMenuItem("BLM")}
         {JobMenuItem("RDM")}
         {JobMenuItem("PCT")}
-        <MenuItem value="Empty">Empty</MenuItem>
+        <MenuItem value="Empty">
+          <Typography variant="body1" color="white">
+            Empty
+          </Typography>
+        </MenuItem>
       </Select>
     </CustomFormControl>
   );

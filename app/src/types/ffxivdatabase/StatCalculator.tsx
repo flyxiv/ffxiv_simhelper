@@ -9,7 +9,7 @@ import {
 } from "src/const/StatValue";
 
 const DEFAULT_DIVIDEND = 2780.0;
-const DEFAULT_GCD = 250;
+export const DEFAULT_GCD = 250;
 
 const MAIN_STAT_SLOPE_NON_TANK = 0.5;
 const MAIN_STAT_SLOPE_TANK = 0.4;
@@ -70,14 +70,11 @@ export function calculateMainStatPercentMultiplier(
   if (isTank) {
     return (
       Math.floor(MAIN_STAT_SLOPE_TANK * (mainStat - DEFAULT_MAIN_STAT_TANK)) +
-      100 +
       100
     );
   }
-  return (
-    Math.floor(
-      MAIN_STAT_SLOPE_NON_TANK * (mainStat - DEFAULT_MAIN_STAT_NON_TANK)
-    ) + 100
+  return Math.floor(
+    MAIN_STAT_SLOPE_NON_TANK * (mainStat - DEFAULT_MAIN_STAT_NON_TANK)
   );
 }
 
@@ -141,12 +138,12 @@ export function getMinNeededStatForStatLadder(
 }
 
 export function getMinNeededStatForCurrentMainStat(
-  currentPercent: number,
+  currentMultiplierPercent: number,
   isTank: boolean
 ) {
   let baseValue = isTank ? DEFAULT_MAIN_STAT_TANK : DEFAULT_MAIN_STAT_NON_TANK;
   let slope = isTank ? MAIN_STAT_SLOPE_TANK : MAIN_STAT_SLOPE_NON_TANK;
-  return Math.ceil((currentPercent - 100) / slope + baseValue);
+  return Math.ceil((currentMultiplierPercent - 100) / slope + baseValue);
 }
 
 export function getMinNeededStatForCurrentCriticalStrike(
@@ -182,8 +179,8 @@ export function getMinNeededStatForCurrentDetermination(
 export function getMinNeededStatForCurrentTenacity(currentPercent: number) {
   return getMinNeededStatForStatLadder(
     currentPercent,
-    DET_SLOPE,
-    DEFAULT_DETERMINATION
+    TENACITY_SLOPE,
+    DEFAULT_TENACITY
   );
 }
 

@@ -4,18 +4,15 @@ import {
   SingleStatBoxStyle,
   StatSummaryBoxStyle,
 } from "./Styles";
-import { CharacterStates } from "src/types/CharacterStates";
 import { getStatNames } from "src/types/ffxivdatabase/Stats";
+import { ColorConfigurations } from "src/Themes";
 import {
-  calculateTotalStatsOfItemSet,
   getStatByStatName,
   getStatLostByStatName,
   getStatNeededByStatName,
   getStatPowerByStatName,
-  ItemSet,
-} from "src/types/ffxivdatabase/ItemSet";
-import { ColorConfigurations } from "src/Themes";
-import { Materia } from "src/types/ffxivdatabase/Materia";
+  PlayerPower,
+} from "src/types/ffxivdatabase/PlayerPower";
 
 let StatSummaryBox = styled(Box)`
   ${StatSummaryBoxStyle}
@@ -25,21 +22,8 @@ let SingleStatBox = styled(Box)`
   ${SingleStatBoxStyle}
 `;
 
-export function StatSummary(
-  jobAbbrev: string,
-  race: string,
-  itemSet: ItemSet,
-  foodId: number,
-  gearSetMaterias: Map<string, Materia[]>
-) {
+export function StatSummary(jobAbbrev: string, power: PlayerPower) {
   let jobStatNames = getStatNames(jobAbbrev);
-  let totalStats = calculateTotalStatsOfItemSet(
-    itemSet,
-    jobAbbrev,
-    race,
-    foodId,
-    gearSetMaterias
-  );
   return (
     <Box>
       <StatSummaryBox>
@@ -63,7 +47,7 @@ export function StatSummary(
           return (
             <SingleStatBox>
               <Typography variant="body1">
-                {getStatByStatName(totalStats, statName, jobAbbrev)}
+                {getStatByStatName(power, statName, jobAbbrev)}
               </Typography>
             </SingleStatBox>
           );
@@ -78,7 +62,7 @@ export function StatSummary(
           return (
             <SingleStatBox>
               <Typography variant="body2">
-                {getStatPowerByStatName(totalStats, statName, jobAbbrev)}
+                {getStatPowerByStatName(power, statName)}
               </Typography>
             </SingleStatBox>
           );
@@ -90,7 +74,7 @@ export function StatSummary(
           <Typography variant="body1">Prev</Typography>
         </SingleStatBox>
         {jobStatNames.map((statName) => {
-          let lostStat = getStatLostByStatName(totalStats, statName, jobAbbrev);
+          let lostStat = getStatLostByStatName(power, statName, jobAbbrev);
           let color =
             lostStat === 0
               ? ColorConfigurations.secondary
@@ -112,7 +96,7 @@ export function StatSummary(
           return (
             <SingleStatBox>
               <Typography variant="body1">
-                {getStatNeededByStatName(totalStats, statName, jobAbbrev)}
+                {getStatNeededByStatName(power, statName, jobAbbrev)}
               </Typography>
             </SingleStatBox>
           );

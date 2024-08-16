@@ -121,7 +121,7 @@ impl SummonerCombatResources {
             titan_stack: 0,
             garuda_stack: 0,
             trance_stack: 0,
-            solar_bahamut_stack: 0,
+            solar_bahamut_stack: 1,
         }
     }
 }

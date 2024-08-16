@@ -1,3 +1,4 @@
+import { Select, styled } from "@mui/material";
 import { ColorConfigurations } from "src/Themes";
 
 export const InputGridContainerStyle = `
@@ -59,7 +60,7 @@ export const MateriaInputBoxStyle = `
 
 export const EquipmentStatBoxStyle = `
   display: flex;
-  align-content: center;
+  align-conte: center;
   justify-content: center;
   background-color: ${ColorConfigurations.backgroundThree}
 `;

@@ -12,7 +12,7 @@ use ffxiv_simbot_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
 use std::cell::RefCell;
 use std::rc::Rc;
-
+/*
 pub(crate) async fn stat_compare_api_handler(
     Json(request): Json<StatCompareApiRequest>,
 ) -> Result<Json<StatCompareApiResponse>> {
@@ -80,7 +80,6 @@ fn create_stat_compare_simulation_board(
             partner1_id: request.main_player_partner1_id,
             partner2_id: request.main_player_partner2_id,
             job_abbrev: request.main_player_job.clone(),
-            stats: main_player_stats,
             power: request.party[0].power.clone(),
         },
         composition_buff_percent,
@@ -103,3 +102,4 @@ fn create_stat_compare_simulation_board(
 
     return Ok(simulation_board);
 }
+*/

@@ -16,12 +16,22 @@ export function FoodItem(food: Food) {
       </Box>
       <Box>
         <Box marginLeft={1}>
-          <Typography variant="body2" alignContent={"center"} fontSize={12}>
+          <Typography
+            variant="body2"
+            alignContent={"center"}
+            fontSize={12}
+            color="white"
+          >
             {food.name}
           </Typography>
         </Box>
         <Box>
-          <Typography variant="body2" alignContent={"center"} fontSize={10}>
+          <Typography
+            variant="body2"
+            alignContent={"center"}
+            fontSize={10}
+            color="white"
+          >
             {foodStatDescriptionString(food)}
           </Typography>
         </Box>

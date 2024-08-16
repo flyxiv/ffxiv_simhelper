@@ -8,7 +8,9 @@ use std::rc::Rc;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::summoner::abilities::SummonerDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
-use crate::rotation::priority_table::SkillPrerequisite::{Combo, MillisecondsBeforeBurst};
+use crate::rotation::priority_table::SkillPrerequisite::{
+    Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
+};
 use crate::types::TurnCount;
 
 #[derive(Clone)]
@@ -63,6 +65,8 @@ pub(crate) fn make_summoner_opener(db: &SummonerDatabase) -> Vec<Opener> {
         GcdOpener(db.ruin_iii.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.ruin_iii.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.ruin_iii.get_id()),
         OgcdOpener((Some(db.searing_light.get_id()), None)),
         GcdOpener(db.summon_solar_bahamut.get_id()),
         OgcdOpener((Some(db.potion.get_id()), None)),
@@ -85,24 +89,15 @@ pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<Ski
     vec![
         SkillPriorityInfo {
             skill_id: db.summon_solar_bahamut.get_id(),
-            prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
-                db.energy_drain.get_id(),
-                2000,
-            )),
+            prerequisite: Some(HasBufforDebuff(db.searing_light_buff.get_id())),
         },
         SkillPriorityInfo {
             skill_id: db.summon_phoenix.get_id(),
-            prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
-                db.energy_drain.get_id(),
-                2000,
-            )),
+            prerequisite: Some(Not(Box::new(HasResource(5, 1)))),
         },
         SkillPriorityInfo {
             skill_id: db.summon_bahamut.get_id(),
-            prerequisite: Some(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
-                db.energy_drain.get_id(),
-                2000,
-            )),
+            prerequisite: Some(Not(Box::new(HasResource(5, 1)))),
         },
         SkillPriorityInfo {
             skill_id: db.umbral_impulse.get_id(),

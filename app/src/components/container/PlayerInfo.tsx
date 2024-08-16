@@ -1,11 +1,10 @@
 import { PlayerInfoBoxStyle, PlayerInfoJobTitleStyle } from "./Styles";
 import { Typography, styled, Box } from "@mui/material";
 import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
-import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
-import { QuickSimRequest } from "src/types/QuickSimRequest";
 import { PlayerStatInfo, StatComparePlayerStatInfo } from "./PlayerStatInfo";
-import { QuickSimRequestSaveName } from "src/App";
+import { QuickSimResponseSaveName } from "src/App";
 import { CharacterStats } from "src/types/CharacterStates";
+import { QuickSimResponse } from "src/types/QuickSimResponse";
 
 const PlayerInfoBox = styled(Box)`
   ${PlayerInfoBoxStyle}
@@ -16,16 +15,20 @@ const PlayerInfoJobTitle = styled(Box)`
 `;
 
 export function PlayerInfo(job: string, combatTimeMilliseconds: number) {
-  let mostRecentRequestState = localStorage.getItem(QuickSimRequestSaveName);
-  let mostRecentRequest = null;
-  if (mostRecentRequestState == null) {
-    mostRecentRequest = defaultQuickSimRequest();
+  let mostRecentResponseState = localStorage.getItem(QuickSimResponseSaveName);
+  let mostRecentResponse = null;
+  if (mostRecentResponseState == null) {
+    return;
   } else {
-    mostRecentRequest = JSON.parse(mostRecentRequestState) as QuickSimRequest;
+    mostRecentResponse = JSON.parse(
+      mostRecentResponseState
+    ) as QuickSimResponse;
   }
 
-  let mainPlayerId = mostRecentRequest.mainPlayerId;
-  let mainPlayerStats = mostRecentRequest.party[mainPlayerId].stats;
+  let mainPlayerStats = mostRecentResponse.mainPlayerPower;
+  let jobAbbrev =
+    mostRecentResponse.simulationData[mostRecentResponse.mainPlayerId]
+      .jobAbbrev;
 
   return (
     <PlayerInfoBox>
@@ -35,7 +38,7 @@ export function PlayerInfo(job: string, combatTimeMilliseconds: number) {
           {job}
         </Typography>
       </PlayerInfoJobTitle>
-      {PlayerStatInfo(mainPlayerStats, combatTimeMilliseconds)}
+      {PlayerStatInfo(mainPlayerStats, jobAbbrev, combatTimeMilliseconds)}
     </PlayerInfoBox>
   );
 }

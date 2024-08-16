@@ -10,6 +10,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
+use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -18,6 +19,7 @@ pub(crate) struct PaladinCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: IdType,
     current_combo: ComboType,
+    blade_of_honor_stack: ResourceType,
 }
 
 impl CombatResource for PaladinCombatResources {
@@ -29,10 +31,18 @@ impl CombatResource for PaladinCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, _: IdType, _: ResourceType) {}
+    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+        if resource_id == 0 {
+            self.blade_of_honor_stack = min(1, resource_amount + self.blade_of_honor_stack);
+        }
+    }
 
-    fn get_resource(&self, _: IdType) -> ResourceType {
-        -1
+    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+        if resource_id == 0 {
+            self.blade_of_honor_stack
+        } else {
+            -1
+        }
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -56,11 +66,11 @@ impl CombatResource for PaladinCombatResources {
         (vec![], vec![])
     }
 
+    fn trigger_on_crit(&mut self) {}
     fn get_next_buff_target(&self, _: IdType) -> IdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
-    fn trigger_on_crit(&mut self) {}
 }
 
 impl PaladinCombatResources {
@@ -69,6 +79,7 @@ impl PaladinCombatResources {
             skills: make_paladin_skill_list(player_id),
             player_id,
             current_combo: None,
+            blade_of_honor_stack: 0,
         }
     }
 }

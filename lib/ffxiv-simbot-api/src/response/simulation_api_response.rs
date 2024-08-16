@@ -1,4 +1,5 @@
 use crate::response::CountType;
+use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
 use ffxiv_simbot_combat_components::types::{DpsType, IdType, TimeType};
 use serde::Serialize;
 
@@ -13,13 +14,15 @@ pub struct SimulationApiResponse {
     pub main_player_id: IdType,
     pub combat_time_millisecond: TimeType,
     pub simulation_data: Vec<SimulationDataResponse>,
+    pub main_player_power: PlayerPower,
+    pub main_player_job_abbrev: String,
 }
 
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SimulationDataResponse {
     pub player_id: IdType,
-    pub job: String,
+    pub job_abbrev: String,
     pub role: String,
     pub simulation_summary: SimulationSummaryResponse,
     pub party_contribution_table: Vec<PartyContributionResponse>,

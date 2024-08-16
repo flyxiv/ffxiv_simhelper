@@ -100,11 +100,6 @@ pub(crate) trait CombatResource: Clone + Sized {
         skill.start_cooldown(player);
     }
 
-    fn get_cooldown(&self, skill_id: IdType) -> TimeType {
-        let skill = self.get_skills().get(&skill_id).unwrap();
-        skill.get_current_cooldown_millisecond()
-    }
-
     /// Add conditional trigger event on skill
     fn trigger_on_event(
         &mut self,

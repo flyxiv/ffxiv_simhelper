@@ -1,7 +1,14 @@
 import { Equipment } from "src/types/ffxivdatabase/Equipment";
 import { Materia } from "src/types/ffxivdatabase/Materia";
 import { getPossibleMateriasForEquipmentSlot } from "src/types/ffxivdatabase/Materia";
-import { SelectChangeEvent, InputLabel, Select, MenuItem } from "@mui/material";
+import {
+  SelectChangeEvent,
+  InputLabel,
+  Select,
+  MenuItem,
+  styled,
+  Divider,
+} from "@mui/material";
 import { CustomFormControl } from "./BasicInputForm";
 import {
   toMateriaKey,
@@ -9,17 +16,25 @@ import {
   EMPTY_MATERIA,
 } from "src/types/ffxivdatabase/Materia";
 import { MateriaMenuItem } from "src/components/items/MateriaMenuItem";
+import { CharacterEquipmentsData } from "src/types/ffxivdatabase/PlayerPower";
+import {
+  slotNameToSlotIndex,
+  updatePlayerPower,
+} from "src/types/ffxivdatabase/ItemSet";
+import { MenuItemStyle } from "src/components/items/Styles";
+import { ColorConfigurations } from "src/Themes";
+
+const MateriaMenu = styled(MenuItem)`
+  ${MenuItemStyle}
+`;
 
 export function MateriaInputTable(
   slotName: string,
   equipment: Equipment | undefined,
-  gearSetMaterias: Map<string, Materia[]>,
-  setGearSetMaterias: Function
+  data: CharacterEquipmentsData,
+  setData: Function
 ) {
-  let materiasInSlot = gearSetMaterias.get(slotName);
-  if (materiasInSlot === undefined) {
-    return <></>;
-  }
+  let materiasInSlot = data.gearSetMaterias[slotNameToSlotIndex(slotName)];
   if (equipment === undefined) {
     return <></>;
   }
@@ -28,9 +43,10 @@ export function MateriaInputTable(
     return SingleMateriaMenu(
       equipment,
       materiasInSlot,
-      gearSetMaterias,
-      setGearSetMaterias,
-      materiaSlot
+      materiaSlot,
+      slotName,
+      data,
+      setData
     );
   });
 }
@@ -38,9 +54,10 @@ export function MateriaInputTable(
 function SingleMateriaMenu(
   equipment: Equipment,
   materias: Materia[] | undefined,
-  gearSetMaterias: Map<string, Materia[]>,
-  setGearSetMaterias: Function,
-  materiaSlot: number
+  materiaSlot: number,
+  slotName: string,
+  data: CharacterEquipmentsData,
+  setData: Function
 ) {
   if (materias === undefined) {
     return <></>;
@@ -52,16 +69,17 @@ function SingleMateriaMenu(
   let key = `${equipment.slotName}-${equipment.id}-materia-${materiaSlot}`;
 
   let updateMateria = (e: SelectChangeEvent<string>) => {
-    let materiasOfSlot = gearSetMaterias.get(equipment.slotName);
-    if (materiasOfSlot === undefined) {
-      return;
-    }
+    let materiasOfSlot =
+      data.gearSetMaterias[slotNameToSlotIndex(equipment.slotName)];
 
     updateMateriaList(e.target.value, equipment, materiasOfSlot, materiaSlot);
-    let newGearSetMaterias = new Map(gearSetMaterias);
+    let newGearSetMaterias = [...data.gearSetMaterias];
+    let newData = { ...data };
 
-    newGearSetMaterias.set(equipment.slotName, materiasOfSlot);
-    setGearSetMaterias(newGearSetMaterias);
+    newGearSetMaterias[slotNameToSlotIndex(equipment.slotName)] =
+      materiasOfSlot;
+    newData.gearSetMaterias = newGearSetMaterias;
+    updatePlayerPower(newData, setData);
   };
 
   let materiaValue = toMateriaKey(materias[materiaSlot]);
@@ -77,14 +95,27 @@ function SingleMateriaMenu(
         labelId={key}
         id={key}
         value={materiaValue}
-        key={key}
+        key={`${key}`}
         label={key}
         onChange={updateMateria}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              backgroundColor: ColorConfigurations.backgroundThree,
+            },
+          },
+        }}
       >
         {possibleMaterias.map((materiaKey) => {
-          return MateriaMenuItem(materiaKey, materias[materiaSlot]);
+          return MateriaMenuItem(
+            slotName,
+            materiaSlot,
+            materiaKey,
+            materias[materiaSlot]
+          );
         })}
-        <MenuItem value={"empty"}>Empty</MenuItem>
+        <Divider />
+        <MateriaMenu value={"empty"}> </MateriaMenu>
       </Select>
     </CustomFormControl>
   );

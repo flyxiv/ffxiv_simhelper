@@ -6,8 +6,10 @@ export function RaceItem(race: string, jobAbbrev: string) {
   return (
     <Box display="flex" alignContent={"left"}>
       <Box marginRight={1}>
-        <Typography variant="body1">{race}</Typography>
-        <Typography variant="body2">
+        <Typography variant="body1" color="white">
+          {race}
+        </Typography>
+        <Typography variant="body2" color="white">
           {`${mainStatName} +${getMainStatOfRace(race, mainStatName)}`}
         </Typography>
       </Box>

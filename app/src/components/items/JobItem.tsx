@@ -15,7 +15,7 @@ export function JobItem(jobAbbrev: string) {
         />
       </Box>
       <Box>
-        <Typography variant="body1" alignContent={"center"}>
+        <Typography variant="body1" alignContent={"center"} color="white">
           {jobAbbrev}
         </Typography>
       </Box>

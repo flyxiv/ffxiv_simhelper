@@ -8,6 +8,8 @@ const TANK_MULTIPLIER: MultiplierType = 0.4;
 const MAIN_STAT_BASE_NON_TANK: StatType = 437;
 const MAIN_STAT_BASE_TANK: StatType = 440;
 
+/// The main/sub stats of players that are converted to
+/// actual in-game power of characters
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct PlayerPower {
@@ -15,23 +17,30 @@ pub struct PlayerPower {
     pub critical_strike_rate: MultiplierType,
     pub critical_strike_damage: MultiplierType,
     pub direct_hit_rate: MultiplierType,
-    pub determination_damage_multiplier: MultiplierType,
-    pub tenacity_damage_multiplier: MultiplierType,
+    pub determination_multiplier: MultiplierType,
+    pub tenacity_multiplier: MultiplierType,
     pub speed_multiplier: MultiplierType,
     pub weapon_damage_multiplier: MultiplierType,
     pub main_stat_multiplier: MultiplierType,
+    pub weapon_damage: StatType,
     pub main_stat: StatType,
-    pub job_abbrev: String,
+    pub critical_strike: StatType,
+    pub direct_hit: StatType,
+    pub determination: StatType,
+    pub skill_speed: StatType,
+    pub spell_speed: StatType,
+    pub tenacity: StatType,
 }
 
 pub fn add_main_stat(
     power: &PlayerPower,
+    job_abbrev: &String,
     maximum_increase: IncreaseType,
     increase_percent: BuffIncreasePercentType,
 ) -> PlayerPower {
-    debug_assert!(increase_percent < 1);
+    debug_assert!(increase_percent >= 0, "{}", increase_percent);
     let mut power = power.clone();
-    let role = job_abbrev_to_role(&power.job_abbrev);
+    let role = job_abbrev_to_role(job_abbrev);
 
     let increase_percent_amount =
         (power.main_stat_multiplier * (increase_percent as MultiplierType / 100.0)) as IncreaseType;

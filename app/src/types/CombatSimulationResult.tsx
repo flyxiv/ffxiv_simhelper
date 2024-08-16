@@ -29,8 +29,8 @@ export interface SkillLog {
 }
 export interface SimulationData {
   playerId: number;
-  job: String;
-  role: String;
+  jobAbbrev: string;
+  role: string;
   simulationSummary: SimulationSummary;
   partyContributionTable: Array<PartyContribution>;
   damageProfileTable: Array<DamageProfile>;

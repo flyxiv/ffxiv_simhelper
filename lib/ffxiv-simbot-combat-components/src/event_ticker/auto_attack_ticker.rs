@@ -9,7 +9,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::types::StatusTable;
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
-use std::cmp::Reverse;
+use std::cmp::{max, Reverse};
 use std::rc::Rc;
 
 /// Loads Auto Attack Event for Melee Jobs
@@ -50,7 +50,7 @@ impl EventTicker for AutoAttackTicker {
                         player.borrow().buff_list.borrow().clone(),
                         debuff.borrow().clone(),
                         self.damage_category,
-                        current_time_millisecond,
+                        max(current_time_millisecond, 0),
                     )));
             }
         }
@@ -116,7 +116,7 @@ impl AutoAttackTicker {
             auto_attack,
             auto_attack_interval: GCD_DEFAULT_DELAY_MILLISECOND,
             trait_percent: 100,
-            duration_millisecond: TimeType::MAX,
+            duration_millisecond: 19000000,
             damage_category: DamageCategory::AutoAttack,
         }
     }

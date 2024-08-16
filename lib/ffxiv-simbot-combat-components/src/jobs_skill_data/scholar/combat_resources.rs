@@ -1,4 +1,5 @@
 use crate::combat_resources::CombatResource;
+use crate::jobs_skill_data::scholar::abilities::make_scholar_skill_list;
 use crate::jobs_skill_data::white_mage::abilities::make_whitemage_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -73,7 +74,7 @@ impl CombatResource for ScholarCombatResources {
 impl ScholarCombatResources {
     pub(crate) fn new(player_id: IdType) -> Self {
         Self {
-            skills: make_whitemage_skill_list(player_id),
+            skills: make_scholar_skill_list(player_id),
             player_id,
             aether_stack: 0,
         }

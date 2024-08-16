@@ -82,8 +82,7 @@ pub(crate) fn make_paladin_opener(db: &PaladinDatabase) -> Vec<Opener> {
         OgcdOpener((None, None)),
         GcdOpener(db.blade_of_valor.get_id()),
         OgcdOpener((Some(db.blade_of_honor.get_id()), None)),
-        OgcdOpener((None, None)),
-        GcdOpener(db.royal_authority.get_id()),
+        GcdOpener(db.holy_spirit.get_id()),
     ]
 }
 
@@ -107,7 +106,7 @@ pub(crate) fn make_paladin_gcd_priority_table(db: &PaladinDatabase) -> Vec<Skill
         },
         SkillPriorityInfo {
             skill_id: db.goring_blade.get_id(),
-            prerequisite: Some(Combo(Some(3))),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.holy_spirit.get_id(),

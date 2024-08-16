@@ -1,7 +1,7 @@
 import { styled, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { CharacterStates } from "src/types/CharacterStates";
-import { MapJobAbbrevToJobDefaultStat } from "src/const/StatValue";
+import { mapJobAbbrevToJobDefaultStat } from "src/const/StatValue";
 import { PartyInfo } from "src/types/PartyStates";
 import { useState } from "react";
 import {
@@ -21,6 +21,9 @@ export function StatCompareRequestButton(
   characterState1: CharacterStates,
   characterState2: CharacterStates
 ) {
+  return <></>;
+}
+/*
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
   `;
@@ -128,7 +131,7 @@ function createStatCompareRequest(
   let playerCount = 0;
 
   for (let i = 0; i < partyState.length; i++) {
-    let defaultStat = MapJobAbbrevToJobDefaultStat(partyState[i]);
+    let defaultStat = mapJobAbbrevToJobDefaultStat(partyState[i]);
 
     if (defaultStat === undefined) {
       continue;
@@ -224,4 +227,4 @@ function aggregateDamageStatisticsFromSampleRuns(
     edps: medianEdps,
     maxRdps: maxRdps,
   };
-}
+} */

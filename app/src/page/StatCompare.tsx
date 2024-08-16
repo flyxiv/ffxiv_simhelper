@@ -48,6 +48,7 @@ function isNotValid(request: StatCompareRequest) {
 }
 
 export function StatCompare() {
+  /*
   let mostRecentRequestState = localStorage.getItem(StatCompareRequestSaveName);
   let mostRecentRequest = null;
 
@@ -157,6 +158,8 @@ export function StatCompare() {
       </Box>
     </>
   );
+  */
+  return <></>;
 }
 
 function loadStatComparePartyJobs(partyInfo: PartyInfo[]) {
@@ -167,7 +170,7 @@ function loadStatComparePartyJobs(partyInfo: PartyInfo[]) {
   for (i = 0; i < 7; i++) {
     ids.push(i);
     if (partyInfo.length > i) {
-      jobs.push(partyInfo[i].job);
+      jobs.push(partyInfo[i].jobAbbrev);
     } else {
       jobs.push("Empty");
     }

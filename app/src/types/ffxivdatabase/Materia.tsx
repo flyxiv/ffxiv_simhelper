@@ -3,7 +3,9 @@ import {
   convertEquipmentToFinalStat,
   FinalEquipmentStat,
 } from "./FinalEquipmentStat";
-import { TotalStats } from "./ItemSet";
+import { PlayerPower } from "./PlayerPower";
+
+export type GearSetMaterias = Materia[][];
 
 export const EMPTY_MATERIA = {
   statName: "",
@@ -33,23 +35,6 @@ export interface Materia {
   statName: string;
   maxValue: number;
   effectiveValue: number;
-}
-
-function getStatByStatName(equipment: Equipment, statName: string) {
-  switch (statName) {
-    case "CRT":
-      return equipment.criticalStrike;
-    case "DH":
-      return equipment.directHit;
-    case "DET":
-      return equipment.determination;
-    case "SKS":
-      return equipment.skillSpeed;
-    case "SPS":
-      return equipment.spellSpeed;
-    default:
-      return equipment.tenacity;
-  }
 }
 
 export function updateMateriaValueStatToFinalStat(
@@ -168,7 +153,7 @@ export function getPossibleMateriasForEquipmentSlot(
 }
 
 export function toMateriaKey(materia: Materia | null) {
-  if (materia === null) {
+  if (materia === null || materia.statName === "") {
     return "empty";
   }
   return `${materia.statName}+${materia.maxValue}`;
@@ -179,7 +164,7 @@ export function toMateriaDescription(materia: Materia) {
 }
 
 export function addMateriaStatToTotalStat(
-  totalStats: TotalStats,
+  totalStats: PlayerPower,
   materia: Materia
 ) {
   switch (materia.statName) {

@@ -5,7 +5,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::types::StatusTable;
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
-use std::cmp::Reverse;
+use std::cmp::{max, Reverse};
 use std::rc::Rc;
 
 pub mod auto_attack_ticker;
@@ -60,7 +60,7 @@ pub trait EventTicker: Sized + Clone {
             .borrow_mut()
             .push(Reverse(FfxivEvent::Tick(
                 self.get_id(),
-                current_time_millisecond + self.get_tick_interval(),
+                max(current_time_millisecond + self.get_tick_interval(), 0),
             )));
     }
 

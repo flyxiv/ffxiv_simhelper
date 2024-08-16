@@ -156,13 +156,11 @@ fn calculate_base_damage(
     match damage_category {
         DamageCategory::Direct => {
             let d1 = MultiplierType::floor(
-                potency
-                    * player_power.main_stat_multiplier
-                    * player_power.determination_damage_multiplier,
+                potency * player_power.main_stat_multiplier * player_power.determination_multiplier,
             );
             debug_assert!(d1 >= potency, "{}", d1);
 
-            let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_damage_multiplier);
+            let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_multiplier);
             d2 = MultiplierType::floor(d2 * player_power.weapon_damage_multiplier);
             d2 = MultiplierType::floor(d2 * trait_percent as MultiplierType);
 
@@ -171,11 +169,9 @@ fn calculate_base_damage(
         }
         DamageCategory::PhysicalDot => {
             let d1 = MultiplierType::floor(
-                potency
-                    * player_power.main_stat_multiplier
-                    * player_power.determination_damage_multiplier,
+                potency * player_power.main_stat_multiplier * player_power.determination_multiplier,
             );
-            let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_damage_multiplier);
+            let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_multiplier);
             d2 = MultiplierType::floor(d2 * player_power.speed_multiplier);
             d2 = MultiplierType::floor(d2 * player_power.weapon_damage_multiplier);
             d2 = MultiplierType::floor(d2 * trait_percent as MultiplierType);
@@ -186,18 +182,16 @@ fn calculate_base_damage(
             d1 = MultiplierType::floor(d1 * player_power.main_stat_multiplier);
             d1 = MultiplierType::floor(d1 * player_power.speed_multiplier);
 
-            let mut d2 = MultiplierType::floor(d1 * player_power.determination_damage_multiplier);
+            let mut d2 = MultiplierType::floor(d1 * player_power.determination_multiplier);
             d2 = MultiplierType::floor(d2 * trait_percent as MultiplierType);
             MultiplierType::floor(d2 / 100.0) + 1.0
         }
         DamageCategory::AutoAttack => {
             let d1 = MultiplierType::floor(
-                potency
-                    * player_power.main_stat_multiplier
-                    * player_power.determination_damage_multiplier,
+                potency * player_power.main_stat_multiplier * player_power.determination_multiplier,
             );
 
-            let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_damage_multiplier);
+            let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_multiplier);
             d2 = MultiplierType::floor(d2 * player_power.speed_multiplier);
             d2 = MultiplierType::floor(d2 * player_power.auto_attack_delays / 3.0);
             d2 = MultiplierType::floor(d2 * trait_percent as MultiplierType);
@@ -444,7 +438,7 @@ mod tests {
             critical_strike_rate: 1.169,
             critical_strike_damage: 1.519,
             direct_hit_rate: 1.242,
-            determination_damage_multiplier: 1.063,
+            determination_multiplier: 1.063,
             tenacity_damage_multiplier: 1.0f64,
             main_stat_multiplier: 12.52,
             weapon_damage_multiplier: 1.62,

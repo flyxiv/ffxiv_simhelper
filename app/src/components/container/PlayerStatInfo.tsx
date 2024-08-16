@@ -6,6 +6,8 @@ import {
   StatTextBoxStyle,
   StatTitleTextBoxStyle,
 } from "./Styles";
+import { PlayerPower } from "src/types/ffxivdatabase/PlayerPower";
+import { isCaster } from "src/types/ffxivdatabase/ItemSet";
 
 const PlayerStatInfoBox = styled(Box)`
   ${PlayerStatInfoBoxStyle}
@@ -24,9 +26,12 @@ const StatTextBox = styled(Box)`
 `;
 
 export function PlayerStatInfo(
-  statInfo: CharacterStats,
+  statInfo: PlayerPower,
+  jobAbbrev: string,
   combatTimeMilliseconds: number
 ) {
+  let speed = isCaster(jobAbbrev) ? statInfo.spellSpeed : statInfo.skillSpeed;
+
   return (
     <PlayerStatInfoBox>
       <Grid container spacing={0}>
@@ -35,7 +40,7 @@ export function PlayerStatInfo(
         {StatOutput("Critical Strike", statInfo.criticalStrike)}
         {StatOutput("Direct Hit", statInfo.directHit)}
         {StatOutput("Determination", statInfo.determination)}
-        {StatOutput("Speed", statInfo.speed)}
+        {StatOutput("Speed", speed)}
         {StatOutput("Tenacity", statInfo.tenacity)}
         {StatOutput("Time(Seconds)", Math.floor(combatTimeMilliseconds / 1000))}
       </Grid>

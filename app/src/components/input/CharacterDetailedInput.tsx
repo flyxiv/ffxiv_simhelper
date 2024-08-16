@@ -1,9 +1,7 @@
-import { MainPlayerJobSelection } from "./jobselection/MainPlayerJobSelection";
 import { CharacterStates, CharacterStats } from "src/types/CharacterStates";
 import { styled, Box, Grid } from "@mui/material";
-import { CustomInputForm, inputStyleJob } from "./basicform/BasicInputForm";
+import { inputStyleJob } from "./basicform/BasicInputForm";
 import { InputGridContainerStyle, InputGridItemStyle } from "./Styles";
-import { Partner1Selection } from "./PartnerSelection";
 
 interface TextForm {
   value: string;
@@ -37,6 +35,7 @@ export function CharacterDetailedInput(
   mainCharacterState: CharacterStates,
   availablePartyIds: number[]
 ) {
+  /*
   let xs = 15;
   let statNameAndKeys = [
     { name: "Weapon Damage", field: "weaponDamage" },
@@ -53,12 +52,13 @@ export function CharacterDetailedInput(
       <InputBox marginBottom={1}>
         <InputJobBox item xs={xs} key="Job">
           {MainPlayerJobSelection(
+            0,
             mainCharacterState.jobAbbrev,
             mainCharacterState.jobNameSetter,
             null
           )}
         </InputJobBox>
-      </InputBox>
+      </InputBox> 
       {statNameAndKeys.map((statNameAndKey) => {
         return (
           <InputBox marginBottom={0.5}>
@@ -77,4 +77,7 @@ export function CharacterDetailedInput(
       {Partner1Selection(mainCharacterState, availablePartyIds)}
     </InputGridContainer>
   );
+}
+*/
+  return <></>;
 }

@@ -1,5 +1,6 @@
 use crate::errors::{FfxivSimbotServiceError, Result};
 use crate::request::simulation_api_request::PlayerInfoRequest;
+use axum::routing::get;
 use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
 use ffxiv_simbot_combat_components::live_objects::player::player_power::add_main_stat;
@@ -28,6 +29,7 @@ pub(crate) fn create_player(
     let character_power = player_info.power;
     let character_power = add_main_stat(
         &character_power,
+        &player_info.job_abbrev,
         character_power.main_stat as IncreaseType,
         composition_buff_percent,
     );
@@ -41,6 +43,12 @@ pub(crate) fn create_player(
             player_count,
         )),
         "PLD" => Ok(FfxivPlayer::new_paladin(
+            player_info.player_id,
+            character_power,
+            event_queue,
+            player_count,
+        )),
+        "DRK" => Ok(FfxivPlayer::new_darkknight(
             player_info.player_id,
             character_power,
             event_queue,
@@ -61,6 +69,14 @@ pub(crate) fn create_player(
         "SCH" => Ok(FfxivPlayer::new_scholar(
             player_info.player_id,
             character_power,
+            event_queue,
+            player_count,
+        )),
+        "AST" => Ok(FfxivPlayer::new_astrologian(
+            player_info.player_id,
+            character_power,
+            get_partner_id(player_info.partner1_id, player_jobs),
+            get_partner_id(player_info.partner2_id, player_jobs),
             event_queue,
             player_count,
         )),
@@ -100,6 +116,12 @@ pub(crate) fn create_player(
             event_queue,
             player_count,
         )),
+        "VPR" => Ok(FfxivPlayer::new_viper(
+            player_info.player_id,
+            character_power,
+            event_queue,
+            player_count,
+        )),
         "BRD" => Ok(FfxivPlayer::new_bard(
             player_info.player_id,
             character_power,
@@ -132,6 +154,12 @@ pub(crate) fn create_player(
             player_count,
         )),
         "BLM" => Ok(FfxivPlayer::new_blackmage(
+            player_info.player_id,
+            character_power,
+            event_queue,
+            player_count,
+        )),
+        "PCT" => Ok(FfxivPlayer::new_pictomancer(
             player_info.player_id,
             character_power,
             event_queue,

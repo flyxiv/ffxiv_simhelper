@@ -1,7 +1,9 @@
 use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent::Damage;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
-use crate::jobs_skill_data::darkknight::abilities::darkknight_gcd_ids;
+use crate::jobs_skill_data::darkknight::abilities::{
+    darkknight_gcd_ids, make_darkknight_skill_list,
+};
 use crate::jobs_skill_data::gunbreaker::abilities::make_gunbreaker_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -85,6 +87,10 @@ impl CombatResource for DarkknightCombatResources {
         let mut ffxiv_events = vec![];
         let mut ffxiv_internal_events = vec![];
 
+        if skill_id == 211 {
+            self.living_shadow_delay = Some(5000);
+        }
+
         if matches!(self.living_shadow_delay, Some(0)) {
             ffxiv_events.push(Damage(
                 self.player_id,
@@ -125,7 +131,7 @@ impl CombatResource for DarkknightCombatResources {
 impl DarkknightCombatResources {
     pub(crate) fn new(player_id: IdType) -> Self {
         Self {
-            skills: make_gunbreaker_skill_list(player_id),
+            skills: make_darkknight_skill_list(player_id),
             player_id,
             current_combo: None,
             mana: MANA_MAX,

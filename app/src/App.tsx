@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import { Home } from "./page/Home";
 import { ExploreSim } from "./page/ExploreSim";
 import { Logo } from "./components/image/Logo";
 import { Box, Typography } from "@mui/material";
@@ -9,8 +8,9 @@ import { SimulationResult } from "./page/SimulationResult";
 import { StatCompare } from "./page/StatCompare";
 import { StatCompareResult } from "./page/StatCompareResult";
 import { QuickSim } from "./page/QuickSim";
+import { Home } from "./page/home";
 
-export const QuickSimRequestSaveName = "mostRecentRequest";
+export const QuickSimInputSaveName = "mostRecentQuickSimInput";
 export const QuickSimResponseSaveName = "mostRecentQuickSimResponse";
 export const StatCompareRequestSaveName = "mostRecentStatCompareRequest";
 export const StatCompareResponseSaveName = "mostRecentStatCompareResponse";

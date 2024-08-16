@@ -101,7 +101,7 @@ pub(crate) fn make_scholar_gcd_priority_table(db: &ScholarDatabase) -> Vec<Skill
         },
         SkillPriorityInfo {
             skill_id: db.broil_iv.get_id(),
-            prerequisite: Some(Not(Box::new(MillisecondsBeforeBurst(0)))),
+            prerequisite: None,
         },
     ]
 }

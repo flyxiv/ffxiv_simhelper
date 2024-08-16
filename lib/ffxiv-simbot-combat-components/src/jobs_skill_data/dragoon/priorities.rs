@@ -152,8 +152,9 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
         },
         SkillPriorityInfo {
             skill_id: db.wyrmwind_thrust.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(
-                db.draconian_fire.get_id(),
+            prerequisite: Some(Or(
+                Box::new(HasBufforDebuff(db.draconian_fire.get_id())),
+                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
             )),
         },
         SkillPriorityInfo {

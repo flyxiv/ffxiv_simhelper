@@ -21,6 +21,8 @@ pub(crate) async fn simulate_api_handler(
 pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> {
     let combat_time_millisecond = request.combat_time_millisecond;
     let main_player_id = request.main_player_id;
+    let main_player_power = request.party[main_player_id].power.clone();
+    let main_player_job_abbrev = request.party[main_player_id].job_abbrev.clone();
 
     let event_queue = Rc::new(RefCell::new(Default::default()));
 
@@ -63,5 +65,9 @@ pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> 
     simulation_board.run_simulation();
     let simulation_result = simulation_board.create_simulation_result();
 
-    Ok(create_response_from_simulation_result(simulation_result))
+    Ok(create_response_from_simulation_result(
+        simulation_result,
+        main_player_power,
+        main_player_job_abbrev,
+    ))
 }

@@ -357,6 +357,7 @@ impl FfxivSimulationBoard {
                     StatusInfo::IncreaseMainStat(maximum_increase, increase_percent) => {
                         power = add_main_stat(
                             &player.borrow().power,
+                            &player.borrow().job_abbrev,
                             *maximum_increase,
                             *increase_percent,
                         );
@@ -379,6 +380,7 @@ impl FfxivSimulationBoard {
             &snapshotted_debuffs,
             &power,
         );
+        info!("raw damage: {}", damage_rdps_profile.raw_damage);
 
         if is_crit {
             player.borrow_mut().update_on_crit();

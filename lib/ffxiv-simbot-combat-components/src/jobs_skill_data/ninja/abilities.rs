@@ -1041,6 +1041,7 @@ pub(crate) fn make_ninja_skill_list(player_id: IdType) -> SkillTable<AttackSkill
         db.mudra,
         db.tenri_jindo,
         db.zesho_meppo_meisui,
+        db.potion,
     ];
 
     make_skill_table(ninja_skill_list)

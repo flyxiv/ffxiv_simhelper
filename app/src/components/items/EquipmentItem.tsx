@@ -27,12 +27,22 @@ export function EquipmentItem(equipment: Equipment, jobAbbrev: string) {
       </Box>
       <Box>
         <Box marginLeft={1}>
-          <Typography variant="body2" alignContent={"center"} fontSize={12}>
+          <Typography
+            variant="body2"
+            alignContent={"center"}
+            fontSize={12}
+            color="white"
+          >
             {equipment.name}
           </Typography>
         </Box>
         <Box>
-          <Typography variant="body2" alignContent={"center"} fontSize={10}>
+          <Typography
+            variant="body2"
+            alignContent={"center"}
+            fontSize={10}
+            color="white"
+          >
             {equipmentStatDescriptionString(equipment)}
           </Typography>
         </Box>

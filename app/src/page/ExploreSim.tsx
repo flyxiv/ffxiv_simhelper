@@ -3,15 +3,23 @@ import { QuickSimRequestButton } from "src/components/basic/QuickSimRequestButto
 import { Box, Typography } from "@mui/material";
 import "./QuickSim.css";
 import { CharacterDetailedInput } from "src/components/input/CharacterDetailedInput";
-import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
 import { QuickSimRequest } from "src/types/QuickSimRequest";
 import { PartyInfo } from "src/types/PartyStates";
-import { CharacterStates } from "src/types/CharacterStates";
+import {
+  CharacterStates,
+  powerToCharacterStats,
+} from "src/types/CharacterStates";
 import { VerticalPartyInput } from "src/components/input/partyinput/VerticalPartyInput";
-import { QuickSimRequestSaveName } from "src/App";
+import { QuickSimInputSaveName } from "src/App";
 import { defaultItemSet } from "src/types/ffxivdatabase/ItemSet";
+import { PlayerPower } from "src/types/ffxivdatabase/PlayerPower";
+import { defaultQuickSimInput } from "src/const/DefaultQuickSimInput";
 
-export function isNotValid(request: QuickSimRequest) {
+export function isNotValid(request: QuickSimRequest | null) {
+  if (request === null) {
+    return false;
+  }
+
   if (request.mainPlayerId === null || request.mainPlayerId === undefined) {
     return true;
   }
@@ -30,17 +38,16 @@ export function isNotValid(request: QuickSimRequest) {
   return false;
 }
 export function ExploreSim() {
-  let mostRecentRequestState = localStorage.getItem(QuickSimRequestSaveName);
+  /*
+  let mostRecentRequestState = localStorage.getItem(QuickSimInputSaveName);
   let mostRecentRequest = null;
 
-  if (mostRecentRequestState == null) {
-    mostRecentRequest = defaultQuickSimRequest();
-  } else {
+  if (mostRecentRequestState !== null) { 
     mostRecentRequest = JSON.parse(mostRecentRequestState) as QuickSimRequest;
   }
 
   if (isNotValid(mostRecentRequest)) {
-    mostRecentRequest = defaultQuickSimRequest();
+    mostRecentRequest = defaultQuickSimInput();
   }
 
   let mainPlayerId = mostRecentRequest.mainPlayerId;
@@ -48,13 +55,15 @@ export function ExploreSim() {
   const [mainPlayerJob, setMainPlayerJob] = useState(
     mostRecentRequest.party[mostRecentRequest.mainPlayerId].job
   );
-  const [mainPlayerStat, setMainPlayerStat] = useState(mainPlayerInfo.stats);
   let [mainPlayerPartner1Id, setMainPlayerPartner1Id] = useState(
     mainPlayerInfo.partner1Id
   );
   let [mainPlayerPartner2Id, setMainPlayerPartner2Id] = useState(
     mainPlayerInfo.partner2Id
   );
+  let power: PlayerPower = mostRecentRequest.power;
+  let playerStat = powerToCharacterStats(power, mainPlayerJob);
+  let [mainPlayerStat, setMainPlayerStat] = useState(playerStat);
 
   const mainPlayerState: CharacterStates = {
     jobAbbrev: mainPlayerJob,
@@ -110,16 +119,11 @@ export function ExploreSim() {
             </Box>
           </Box>
         </Box>
-        <Box>
-          {QuickSimRequestButton(
-            partyJobs,
-            combatTimeStateSeconds,
-            mainPlayerState
-          )}
-        </Box>
       </Box>
     </>
   );
+  */
+  return <></>;
 }
 
 function loadPartyJobs(partyInfo: PartyInfo[]) {
@@ -130,7 +134,7 @@ function loadPartyJobs(partyInfo: PartyInfo[]) {
   for (i = 1; i < 8; i++) {
     ids.push(i);
     if (partyInfo.length > i) {
-      jobs.push(partyInfo[i].job);
+      jobs.push(partyInfo[i].jobAbbrev);
     } else {
       jobs.push("Empty");
     }

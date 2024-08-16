@@ -32,7 +32,7 @@ export function SimulationResult() {
   let responseJson = JSON.parse(response) as QuickSimResponse;
   let mainPlayerId = responseJson.mainPlayerId;
   let mainPlayerSimulationData = responseJson.simulationData[mainPlayerId];
-  let mainPlayerJob = mainPlayerSimulationData.job.valueOf();
+  let mainPlayerJob = mainPlayerSimulationData.jobAbbrev.valueOf();
 
   return (
     <Box className="SimulationResult">
