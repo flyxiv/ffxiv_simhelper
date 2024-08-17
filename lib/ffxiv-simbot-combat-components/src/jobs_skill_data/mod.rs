@@ -92,13 +92,33 @@ impl PotionSkill {
 
 impl CasterGlobalSkill {
     pub fn new(player_id: IdType) -> Self {
+        let SWIFTCAST_BUFF: BuffStatus = BuffStatus {
+            id: 0,
+            owner_id: player_id,
+            name: String::from("Swiftcast"),
+            duration_left_millisecond: 0,
+            status_info: vec![],
+            duration_millisecond: 10000,
+            is_raidwide: false,
+            stacks: 1,
+            max_stacks: 1,
+            trigger_proc_event_on_gcd: vec![],
+        };
+
         let SWIFTCAST = AttackSkill {
             id: 0,
             name: String::from("Swiftcast"),
             player_id,
             potency: 0,
             trait_percent: 100,
-            additional_skill_events: vec![],
+            additional_skill_events: vec![ApplyBuff(
+                player_id,
+                player_id,
+                SWIFTCAST_BUFF.clone(),
+                10000,
+                10000,
+                0,
+            )],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -115,19 +135,6 @@ impl CasterGlobalSkill {
             stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
-        };
-
-        let SWIFTCAST_BUFF: BuffStatus = BuffStatus {
-            id: 0,
-            owner_id: player_id,
-            name: String::from("Swiftcast"),
-            duration_left_millisecond: 0,
-            status_info: vec![],
-            duration_millisecond: 10000,
-            is_raidwide: false,
-            stacks: 1,
-            max_stacks: 1,
-            trigger_proc_event_on_gcd: vec![],
         };
 
         Self {

@@ -25,7 +25,7 @@ import {
   calculateCriticalStrikePercentIncrease,
   calculateDeterminationPercentIncrease,
   calculateDirectHitPercentIncrease,
-  calculateMainStatPercentMultiplier,
+  calculateMainStatPercentIncrease,
   calculateSpeedPercentIncrease,
   calculateTenacityPercentIncrease,
   calculateWeaponMultiplierPercent,
@@ -159,7 +159,8 @@ export function calculatePowerByStat(power: PlayerPower, jobAbbrev: string) {
     calculateWeaponMultiplierPercent(power.weaponDamage, jobAbbrev) / 100;
 
   power.mainStatMultiplier =
-    calculateMainStatPercentMultiplier(power.mainStat, isTank(jobAbbrev)) / 100;
+    1 +
+    calculateMainStatPercentIncrease(power.mainStat, isTank(jobAbbrev)) / 100;
   let criticalStrikeIncrease =
     calculateCriticalStrikePercentIncrease(power.criticalStrike) / 100;
   power.criticalStrikeRate = CRIT_BASE_PERCENT + criticalStrikeIncrease;

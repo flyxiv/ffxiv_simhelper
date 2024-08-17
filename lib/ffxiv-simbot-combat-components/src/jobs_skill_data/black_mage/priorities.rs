@@ -1,7 +1,8 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::black_mage::abilities::BlackmageDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasResource, HasSkillStacks, Not, Or,
+    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, HasSkillStacks, Not, Or,
+    RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
@@ -70,20 +71,63 @@ pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((Some(db.leylines.get_id()), Some(db.amplifier.get_id()))),
         Opener::GcdOpener(db.fire4_triplecast.get_id()),
         Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+        Opener::GcdOpener(db.fire4_triplecast.get_id()),
     ]
 }
 
 pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<SkillPriorityInfo> {
+    let timing_for_triplecast = And(
+        Box::new(HasResource(2, 6)),
+        Box::new(And(
+            Box::new(HasSkillStacks(db.triplecast.get_id(), 1)),
+            Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                db.manafont.get_id(),
+                1000,
+            )))),
+        )),
+    );
+
     vec![
         SkillPriorityInfo {
             skill_id: db.xenoglossy.get_id(),
-            prerequisite: Some(Or(Box::new(Combo(Some(2))), Box::new(Combo(Some(3))))),
+            prerequisite: Some(Or(
+                Box::new(HasResource(4, 1)),
+                Box::new(timing_for_triplecast),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.despair_triplecast.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.despair.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.fire_iii_proc.get_id(),
+            prerequisite: Some(And(
+                Box::new(HasResource(3, 1)),
+                Box::new(RelatedSkillCooldownLessOrEqualThan(
+                    db.manafont.get_id(),
+                    2000,
+                )),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.paradox.get_id(),
+            prerequisite: Some(Or(
+                Box::new(Combo(Some(3))),
+                Box::new(And(
+                    Box::new(HasBufforDebuff(db.astral_fire3.get_id())),
+                    Box::new(BufforDebuffLessThan(db.astral_fire3.get_id(), 3500)),
+                )),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.xenoglossy.get_id(),
-            prerequisite: Some(And(
-                Box::new(HasResource(2, 5)),
-                Box::new(HasSkillStacks(db.triplecast.id, 1)),
+            prerequisite: Some(RelatedSkillCooldownLessOrEqualThan(
+                db.leylines.get_id(),
+                500,
             )),
         },
         SkillPriorityInfo {
@@ -111,11 +155,11 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
             prerequisite: Some(SkillPrerequisite::HasBufforDebuff(db.astral_fire1.get_id())),
         },
         SkillPriorityInfo {
-            skill_id: db.blizzard3_transpose.get_id(),
+            skill_id: db.blizzard3_transpose_swift.get_id(),
             prerequisite: Some(Combo(Some(1))),
         },
         SkillPriorityInfo {
-            skill_id: db.blizzard3_transpose_swiftcast.get_id(),
+            skill_id: db.blizzard3_transpose_triplecast.get_id(),
             prerequisite: Some(Combo(Some(1))),
         },
         SkillPriorityInfo {
@@ -123,31 +167,15 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
             prerequisite: Some(Combo(Some(1))),
         },
         SkillPriorityInfo {
-            skill_id: db.paradox.get_id(),
-            prerequisite: Some(Combo(Some(2))),
-        },
-        SkillPriorityInfo {
             skill_id: db.blizzard4.get_id(),
             prerequisite: Some(Combo(Some(2))),
         },
         SkillPriorityInfo {
-            skill_id: db.paradox.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
-                db.astral_fire3.get_id(),
-                6000,
+            skill_id: db.xenoglossy.get_id(),
+            prerequisite: Some(And(
+                Box::new(HasResource(0, 2)),
+                Box::new(Or(Box::new(Combo(Some(2))), Box::new(Combo(Some(3))))),
             )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.despair_triplecast.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.despair.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.fire4_triplecast.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(db.astral_fire3.get_id())),
         },
         SkillPriorityInfo {
             skill_id: db.fire4.get_id(),
@@ -167,8 +195,21 @@ pub(crate) fn make_blackmage_ogcd_priority_table(db: &BlackmageDatabase) -> Vec<
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.triplecast.get_id(),
+            prerequisite: Some(And(
+                Box::new(SkillPrerequisite::HasResource(2, 6)),
+                Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                    db.manafont.get_id(),
+                    1000,
+                )))),
+            )),
+        },
+        SkillPriorityInfo {
             skill_id: db.transpose_fire_to_ice.get_id(),
-            prerequisite: Some(HasResource(3, 1)),
+            prerequisite: Some(Or(
+                Box::new(HasBufforDebuff(db.triplecast.get_id())),
+                Box::new(HasSkillStacks(db.swiftcast.get_id(), 1)),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.transpose_ice_to_fire.get_id(),
@@ -183,17 +224,10 @@ pub(crate) fn make_blackmage_ogcd_priority_table(db: &BlackmageDatabase) -> Vec<
             prerequisite: Some(Not(Box::new(SkillPrerequisite::HasResource(0, 2)))),
         },
         SkillPriorityInfo {
-            skill_id: db.triplecast.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource(2, 5)),
-        },
-        SkillPriorityInfo {
             skill_id: db.swiftcast.get_id(),
             prerequisite: Some(And(
-                Box::new(SkillPrerequisite::HasResource(2, 6)),
-                Box::new(SkillPrerequisite::BufforDebuffLessThan(
-                    db.astral_fire3.get_id(),
-                    3000,
-                )),
+                Box::new(HasBufforDebuff(db.umbral_ice1.get_id())),
+                Box::new(Not(Box::new(HasBufforDebuff(db.triplecast_buff.get_id())))),
             )),
         },
     ]

@@ -271,11 +271,11 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
 
     // MNK
     case 900:
-      return actionIconDirectory + "/MNK/bootshine.png";
+      return actionIconDirectory + "/MNK/leaping_opo.png";
     case 901:
-      return actionIconDirectory + "/MNK/true_strike.png";
+      return actionIconDirectory + "/MNK/rising_raptor.png";
     case 902:
-      return actionIconDirectory + "/MNK/snap_punch.png";
+      return actionIconDirectory + "/MNK/pouncing_coeurl.png";
     case 903:
       return actionIconDirectory + "/MNK/twin_snakes.png";
     case 904:
@@ -283,9 +283,9 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 905:
       return actionIconDirectory + "/MNK/dragon_kick.png";
     case 906:
-      return actionIconDirectory + "/MNK/elixir_field.png";
+      return actionIconDirectory + "/MNK/elixir_burst.png";
     case 907:
-      return actionIconDirectory + "/MNK/rising_pheonix.png";
+      return actionIconDirectory + "/MNK/rising_phoenix.png";
     case 908:
       return actionIconDirectory + "/MNK/phantom_rush.png";
     case 909:
@@ -299,17 +299,21 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 913:
       return actionIconDirectory + "/MNK/the_forbidden_chakra.png";
     case 914:
-      return actionIconDirectory + "/MNK/bootshine.png";
+      return actionIconDirectory + "/MNK/leaping_opo.png";
     case 915:
-      return actionIconDirectory + "/MNK/true_strike.png";
+      return actionIconDirectory + "/MNK/rising_raptor.png";
     case 916:
-      return actionIconDirectory + "/MNK/snap_punch.png";
+      return actionIconDirectory + "/MNK/pouncing_coeurl.png";
     case 917:
       return actionIconDirectory + "/MNK/twin_snakes.png";
     case 918:
       return actionIconDirectory + "/MNK/demolish.png";
     case 919:
       return actionIconDirectory + "/MNK/dragon_kick.png";
+    case 920:
+      return actionIconDirectory + "/MNK/wind's_reply.png";
+    case 921:
+      return actionIconDirectory + "/MNK/fire's_reply.png";
 
     // NIN
     case 1000:
@@ -367,7 +371,7 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
 
     // SAM
     case 1100:
-      return actionIconDirectory + "/SAM/hakaze.png";
+      return actionIconDirectory + "/SAM/gyofu.png";
     case 1101:
       return actionIconDirectory + "/SAM/jinpu.png";
     case 1102:
@@ -385,7 +389,7 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1108:
       return actionIconDirectory + "/SAM/meikyo_shisui.png";
     case 1109:
-      return actionIconDirectory + "/SAM/kaeshi_setsugekka.png";
+      return actionIconDirectory + "/SAM/tendo_kaeshi_setsugekka.png";
     case 1110:
       return actionIconDirectory + "/SAM/gekko.png";
     case 1111:
@@ -410,6 +414,12 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
       return actionIconDirectory + "/SAM/higanbana.png";
     case 1121:
       return actionIconDirectory + "/SAM/shoha.png";
+    case 1122:
+      return actionIconDirectory + "/SAM/zanshin.png";
+    case 1123:
+      return actionIconDirectory + "/SAM/tendo_setsugekka.png";
+    case 1124:
+      return actionIconDirectory + "/SAM/kaeshi_setsugekka.png";
 
     // RPR
     case 1200:
@@ -448,6 +458,22 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
       return actionIconDirectory + "/RPR/lemure's_slice.png";
     case 1217:
       return actionIconDirectory + "/RPR/communio.png";
+    case 1218:
+      return actionIconDirectory + "/RPR/executioner's_gallows.png";
+    case 1219:
+      return actionIconDirectory + "/RPR/executioner's_gibbet.png";
+    case 1220:
+      return actionIconDirectory + "/RPR/sacrificium.png";
+    case 1221:
+      return actionIconDirectory + "/RPR/perfectio.png";
+    case 1222:
+      return actionIconDirectory + "/RPR/enshroud.png";
+    case 1223:
+      return actionIconDirectory + "/RPR/slice.png";
+    case 1223:
+      return actionIconDirectory + "/RPR/waxing_slice.png";
+    case 1224:
+      return actionIconDirectory + "/RPR/infernal_slice.png";
 
     // BRD
     case 1300:
@@ -651,9 +677,9 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1700:
       return actionIconDirectory + "/BLM/transpose.png";
     case 1701:
-      return actionIconDirectory + "/BLM/thunder_III.png";
+      return actionIconDirectory + "/BLM/high_thunder.png";
     case 1702:
-      return actionIconDirectory + "/BLM/thunder.png";
+      return actionIconDirectory + "/BLM/transpose.png";
     case 1703:
       return actionIconDirectory + "/BLM/fire_IV.png";
     case 1704:
@@ -681,13 +707,23 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1715:
       return actionIconDirectory + "/BLM/ley_lines.png";
     case 1716:
-      return actionIconDirectory + "/BLM/sharpcast.png";
+      return actionIconDirectory + "/BLM/manafont.png";
     case 1717:
       return actionIconDirectory + "/BLM/amplifier.png";
     case 1718:
       return actionIconDirectory + "/BLM/fire_III.png";
     case 1719:
       return actionIconDirectory + "/BLM/blizzard_III.png";
+    case 1720:
+      return actionIconDirectory + "/BLM/flare_star.png";
+    case 1721:
+      return actionIconDirectory + "/BLM/blizzard_III.png";
+    case 1722:
+      return actionIconDirectory + "/BLM/flare_star.png";
+    case 1723:
+      return actionIconDirectory + "/BLM/blizzard_III.png";
+    case 1724:
+      return actionIconDirectory + "/BLM/fire_III.png";
 
     // RDM
     case 1800:
@@ -737,6 +773,26 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1822:
       return actionIconDirectory + "/RDM/scorch.png";
     case 1823:
+      return actionIconDirectory + "/RDM/resolution.png";
+    case 1824:
+      return actionIconDirectory + "/RDM/vice_of_thorns.png";
+    case 1825:
+      return actionIconDirectory + "/RDM/grand_impact.png";
+    case 1826:
+      return actionIconDirectory + "/RDM/prefulgence.png";
+    case 1827:
+      return actionIconDirectory + "/RDM/enchanted_riposte.png";
+    case 1828:
+      return actionIconDirectory + "/RDM/enchanted_zwerchhau.png";
+    case 1829:
+      return actionIconDirectory + "/RDM/enchanted_redoublement.png";
+    case 1830:
+      return actionIconDirectory + "/RDM/verflare.png";
+    case 1831:
+      return actionIconDirectory + "/RDM/verholy.png";
+    case 1832:
+      return actionIconDirectory + "/RDM/scorch.png";
+    case 1833:
       return actionIconDirectory + "/RDM/resolution.png";
 
     case 0:

@@ -65,6 +65,8 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return actionIconDirectory + "/NIN/kassatsu.png";
 
     // RPR
+    case 1200:
+      return actionIconDirectory + "/RPR/enshroud.png";
     case 1203:
       return actionIconDirectory + "/RPR/arcane_circle.png";
 
@@ -97,18 +99,20 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return actionIconDirectory + "/SMN/searing_light.png";
 
     // BLM
-    case 1702:
-      return actionIconDirectory + "/BLM/sharpcast.png";
+    case 0:
+      return actionIconDirectory + "/BLM/MagicalRangedRollAction/swiftcast.png";
+    case 1700:
+      return actionIconDirectory + "/BLM/triplecast.png";
     case 1703:
       return actionIconDirectory + "/BLM/ley_lines.png";
-    case 1705:
-      return actionIconDirectory + "/BLM/thunder_III.png";
 
     // RDM
     case 1800:
       return actionIconDirectory + "/RDM/embolden.png";
     case 1801:
       return actionIconDirectory + "/RDM/manafication.png";
+    case 1802:
+      return actionIconDirectory + "/RDM/acceleration.png";
 
     case 0:
       return actionIconDirectory + "/BLM/MagicalRangedRollAction/swiftcast.png";

@@ -62,6 +62,7 @@ export function QuickSimRequestButton(
     }
 
     let body = JSON.stringify(request);
+    console.log(body);
 
     let responsePromises = [];
     let responses: Array<Response> = [];
@@ -194,7 +195,7 @@ function createQuickSimRequest(
     let power = playerStatToPlayerPower(defaultStat, jobAbbrev);
     let autoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
     if (autoAttackDelays === undefined) {
-      return (autoAttackDelays = 0);
+      autoAttackDelays = 0;
     }
     power.autoAttackDelays = autoAttackDelays;
 

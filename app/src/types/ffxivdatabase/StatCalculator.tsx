@@ -63,7 +63,7 @@ export function calculateWeaponMultiplierPercent(
   return baseWeaponDamage + weaponDamage;
 }
 
-export function calculateMainStatPercentMultiplier(
+export function calculateMainStatPercentIncrease(
   mainStat: number,
   isTank: boolean
 ) {

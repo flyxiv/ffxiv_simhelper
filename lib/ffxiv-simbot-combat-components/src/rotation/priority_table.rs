@@ -41,6 +41,7 @@ pub(crate) enum SkillPrerequisite {
     HasSkillStacks(IdType, StackType),
     MillisecondsBeforeBurst(TimeType),
     RelatedSkillCooldownLessOrEqualThan(IdType, TimeType),
+
     /// Greater resource id, Lesser resource id, Greater by how much amount
     /// example: (1, 2, 50), then ok if resource1 >= resource2 + 50
     ResourceGreaterOrEqualThanAnotherResourceBy(IdType, IdType, ResourceType),
@@ -208,9 +209,13 @@ pub(crate) trait PriorityTable: Sized + Clone {
             let skill = combat_resource.get_skill(skill_priority.skill_id);
             let skill_delay_millisecond = skill.get_delay_millisecond();
             let latest_time_to_use = next_gcd_millisecond - skill_delay_millisecond;
+            let skill_cooldown = if skill.stacks >= 1 {
+                0
+            } else {
+                skill.current_cooldown_millisecond
+            };
 
-            let first_skill_start_time =
-                turn_info.lower_bound_millisecond + skill.current_cooldown_millisecond;
+            let first_skill_start_time = turn_info.lower_bound_millisecond + skill_cooldown;
 
             if first_skill_start_time <= latest_time_to_use {
                 let mut combat_info_simulation = combat_info.clone();
@@ -218,7 +223,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 advance_time(
                     &mut combat_info_simulation,
                     &mut combat_resource_simulation,
-                    skill.current_cooldown_millisecond,
+                    skill_cooldown,
                 );
 
                 if self.can_use_skill(
@@ -275,7 +280,15 @@ pub(crate) trait PriorityTable: Sized + Clone {
                             priority_number,
                         };
 
-                        return Some(vec![first_skill_plan, second_skill_plan]);
+                        let double_weave_plan = Some(vec![first_skill_plan, second_skill_plan]);
+
+                        if has_important_skill(&best_one_ogcd)
+                            && !has_important_skill(&double_weave_plan)
+                        {
+                            return best_one_ogcd;
+                        } else {
+                            return double_weave_plan;
+                        }
                     }
                 }
             }
@@ -306,7 +319,13 @@ pub(crate) trait PriorityTable: Sized + Clone {
             let skill_delay_millisecond = skill.get_delay_millisecond();
             let latest_time_to_use = next_gcd_millisecond - skill_delay_millisecond;
 
-            let skill_start_time = start_time + skill.current_cooldown_millisecond;
+            let skill_cooldown = if skill.stacks >= 1 {
+                0
+            } else {
+                skill.current_cooldown_millisecond
+            };
+
+            let skill_start_time = start_time + skill_cooldown;
 
             if skill_start_time <= latest_time_to_use {
                 if self.can_use_skill(skill_priority, &combat_info, &player, &combat_resource) {
@@ -444,7 +463,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 if let Some(remaining_time) = status_remaining_time {
                     remaining_time <= *time_millisecond
                 } else {
-                    false
+                    true
                 }
             }
             SkillPrerequisite::HasResource(resource_id, resource) => {
@@ -557,6 +576,18 @@ fn advance_time(
         max(combat_info.milliseconds_before_burst - elapsed_time, 0);
 
     combat_resources.update_cooldown(elapsed_time);
+}
+
+fn has_important_skill(ogcd_plans: &Option<Vec<OgcdPlan>>) -> bool {
+    if let Some(ogcd_plans) = ogcd_plans {
+        for plan in ogcd_plans {
+            if plan.skill.skill_id == 1716 {
+                return true;
+            }
+        }
+    }
+
+    false
 }
 
 /// first_set must have the bigger ogcd count.

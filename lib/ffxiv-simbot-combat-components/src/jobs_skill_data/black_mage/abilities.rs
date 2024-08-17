@@ -1,5 +1,6 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, RefreshBuff};
+use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent::RemoveBuff;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::{CasterGlobalSkill, PotionSkill};
 use crate::rotation::SkillTable;
@@ -36,9 +37,10 @@ pub(crate) struct BlackmageDatabase {
     pub(crate) blizzard3_opener: AttackSkill,
     pub(crate) flare_star: AttackSkill,
     pub(crate) swiftcast: AttackSkill,
-    pub(crate) blizzard3_transpose: AttackSkill,
+    pub(crate) blizzard3_transpose_swift: AttackSkill,
     pub(crate) flare_star_triplecast: AttackSkill,
-    pub(crate) blizzard3_transpose_swiftcast: AttackSkill,
+    pub(crate) blizzard3_transpose_triplecast: AttackSkill,
+    pub(crate) fire_iii_proc: AttackSkill,
 
     pub(crate) triplecast_buff: BuffStatus,
     pub(crate) high_thunder_dot: DebuffStatus,
@@ -172,7 +174,7 @@ impl BlackmageDatabase {
                 ApplyBuff(player_id, player_id, THUNDERHEAD.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
-            combo: None,
+            combo: Some(0),
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 0,
@@ -184,7 +186,7 @@ impl BlackmageDatabase {
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 5000,
             current_cooldown_millisecond: 0,
-            stacks: 0,
+            stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -231,19 +233,19 @@ impl BlackmageDatabase {
                 ApplyBuff(player_id, player_id, THUNDERHEAD.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
-            combo: None,
+            combo: Some(1),
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
             is_speed_buffed: false,
-            resource_required: vec![UseBuff(ASTRAL_FIRE_III.get_id())],
+            resource_required: vec![UseBuff(ASTRAL_FIRE_III.get_id()), Resource(4, 1)],
             resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 5000,
             current_cooldown_millisecond: 0,
-            stacks: 0,
+            stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -293,7 +295,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: None,
+            stack_skill_id: Some(FIRE_IV.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
@@ -359,7 +361,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: None,
+            stack_skill_id: Some(FIRE_III_ICE.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
@@ -378,14 +380,14 @@ impl BlackmageDatabase {
                 0,
             )],
             proc_events: vec![],
-            combo: Some(1),
+            combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 3000,
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             resource_required: vec![ResourceRequirements::Resource(2, 6)],
-            resource_created: Default::default(),
+            resource_created: HashMap::from([(3, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
@@ -409,7 +411,7 @@ impl BlackmageDatabase {
                 0,
             )],
             proc_events: vec![],
-            combo: Some(1),
+            combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 2500,
@@ -419,13 +421,13 @@ impl BlackmageDatabase {
                 UseBuff(TRIPLECAST_BUFF.get_id()),
                 ResourceRequirements::Resource(2, 6),
             ],
-            resource_created: Default::default(),
+            resource_created: HashMap::from([(3, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: None,
+            stack_skill_id: Some(DESPAIR.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
@@ -509,7 +511,7 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
-            resource_required: vec![Resource(3, 1), UseBuff(ASTRAL_FIRE_III.get_id())],
+            resource_required: vec![Resource(4, 1), UseBuff(ASTRAL_FIRE_III.get_id())],
             resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -631,11 +633,11 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
             is_speed_buffed: false,
-            resource_required: vec![Resource(3, 1)],
+            resource_required: vec![Resource(4, 1)],
             resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
-            cooldown_millisecond: 100000,
+            cooldown_millisecond: 90000,
             current_cooldown_millisecond: 0,
             stacks: 1,
             stack_skill_id: None,
@@ -694,7 +696,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: None,
+            stack_skill_id: Some(FIRE_III_ICE.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
@@ -726,7 +728,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: None,
+            stack_skill_id: Some(BLIZZARD_III.get_id()),
             use_type: UseType::UseOnTarget,
         };
         let FLARE_STAR: AttackSkill = AttackSkill {
@@ -743,8 +745,8 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
-            resource_required: vec![Resource(2, 6)],
-            resource_created: HashMap::from([(3, 1)]),
+            resource_required: vec![Resource(3, 1)],
+            resource_created: HashMap::from([(4, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
@@ -753,7 +755,7 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let BLIZZARD_III_TRANSPOSE: AttackSkill = AttackSkill {
+        let BLIZZARD_III_TRANSPOSE_SWIFT: AttackSkill = AttackSkill {
             id: 1721,
             name: "Blizzard III".to_string(),
             player_id,
@@ -770,7 +772,6 @@ impl BlackmageDatabase {
             resource_required: vec![
                 UseBuff(UMBRAL_ICE_I.get_id()),
                 UseBuff(caster_skills.swiftcast.get_id()),
-                Resource(3, 1),
             ],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
@@ -778,7 +779,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: None,
+            stack_skill_id: Some(BLIZZARD_III.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
@@ -796,17 +797,18 @@ impl BlackmageDatabase {
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
-            resource_required: vec![UseBuff(TRIPLECAST_BUFF.get_id()), Resource(2, 6)],
-            resource_created: HashMap::from([(3, 1)]),
+            resource_required: vec![UseBuff(TRIPLECAST_BUFF.get_id()), Resource(3, 1)],
+            resource_created: HashMap::from([(4, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: None,
+            stack_skill_id: Some(FLARE_STAR.get_id()),
             use_type: UseType::UseOnTarget,
         };
-        let BLIZZARD_III_TRANSPOSE_SWIFTCAST: AttackSkill = AttackSkill {
+
+        let BLIZZARD_III_TRANSPOSE_TRIPLECAST: AttackSkill = AttackSkill {
             id: 1723,
             name: "Blizzard III".to_string(),
             player_id,
@@ -823,7 +825,6 @@ impl BlackmageDatabase {
             resource_required: vec![
                 UseBuff(UMBRAL_ICE_I.get_id()),
                 UseBuff(TRIPLECAST_BUFF.get_id()),
-                Resource(3, 1),
             ],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
@@ -831,7 +832,38 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: None,
+            stack_skill_id: Some(BLIZZARD_III.get_id()),
+            use_type: UseType::UseOnTarget,
+        };
+        let FIRE_III_PROC: AttackSkill = AttackSkill {
+            id: 1724,
+            name: "Fire III Proc".to_string(),
+            player_id,
+            potency: 280,
+            trait_percent: 234,
+            additional_skill_events: vec![ApplyBuff(
+                player_id,
+                player_id,
+                ASTRAL_FIRE_III.clone(),
+                15000,
+                15000,
+                0,
+            )],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            resource_required: vec![UseBuff(FIRESTARTER.get_id())],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+            cooldown_millisecond: 0,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: Some(FIRE_III_ICE.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
@@ -858,9 +890,10 @@ impl BlackmageDatabase {
             amplifier: AMPLIFIER,
             blizzard3_opener: BLIZZARD_III_OPENER,
             flare_star: FLARE_STAR,
-            blizzard3_transpose: BLIZZARD_III_TRANSPOSE,
+            blizzard3_transpose_swift: BLIZZARD_III_TRANSPOSE_SWIFT,
             flare_star_triplecast: FLARE_STAR_TRIPLECAST,
-            blizzard3_transpose_swiftcast: BLIZZARD_III_TRANSPOSE_SWIFTCAST,
+            blizzard3_transpose_triplecast: BLIZZARD_III_TRANSPOSE_TRIPLECAST,
+            fire_iii_proc: FIRE_III_PROC,
 
             swiftcast: caster_skills.swiftcast,
 
@@ -905,9 +938,10 @@ pub(crate) fn make_blackmage_skill_list(player_id: IdType) -> SkillTable<AttackS
         db.fire3_opener,
         db.blizzard3_opener,
         db.flare_star,
-        db.blizzard3_transpose,
+        db.blizzard3_transpose_swift,
         db.flare_star_triplecast,
-        db.blizzard3_transpose_swiftcast,
+        db.blizzard3_transpose_triplecast,
+        db.fire_iii_proc,
         db.potion,
     ];
 

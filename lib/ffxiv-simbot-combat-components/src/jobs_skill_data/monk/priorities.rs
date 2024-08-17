@@ -2,7 +2,8 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::monk::abilities::MonkDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessOrEqualThan,
+    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, Not, Or,
+    RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
@@ -60,9 +61,9 @@ impl MonkPriorityTable {
 pub(crate) fn make_monk_opener(db: &MonkDatabase) -> Vec<Opener> {
     vec![
         GcdOpener(db.dragon_kick.get_id()),
-        OgcdOpener((Some(db.perfect_balance.get_id()), Some(db.potion.get_id()))),
+        OgcdOpener((Some(db.perfect_balance.get_id()), None)),
         GcdOpener(db.perfect_leaping_opo.get_id()),
-        OgcdOpener((Some(db.riddle_of_fire.get_id()), None)),
+        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.perfect_dragon_kick.get_id()),
         OgcdOpener((
             Some(db.brotherhood.get_id()),
@@ -77,10 +78,7 @@ pub(crate) fn make_monk_opener(db: &MonkDatabase) -> Vec<Opener> {
 }
 
 pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriorityInfo> {
-    let in_lunar_perfect_balance = Box::new(And(
-        Box::new(Not(Box::new(HasResource(4, 1)))),
-        Box::new(Not(Box::new(HasResource(5, 1)))),
-    ));
+    let in_lunar_perfect_balance = Box::new(Not(Box::new(HasResource(4, 1))));
     let in_solar_perfect_balance = Box::new(And(
         Box::new(HasResource(4, 1)),
         Box::new(Not(Box::new(HasResource(5, 1)))),
@@ -159,7 +157,10 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
         },
         SkillPriorityInfo {
             skill_id: db.fires_reply.get_id(),
-            prerequisite: Some(Combo(Some(2))),
+            prerequisite: Some(And(
+                Box::new(Not(Box::new(HasBufforDebuff(db.perfect_balance.get_id())))),
+                Box::new(Combo(Some(2))),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.winds_reply.get_id(),
@@ -175,7 +176,7 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
         },
         SkillPriorityInfo {
             skill_id: db.leaping_opo.get_id(),
-            prerequisite: None,
+            prerequisite: Some(Combo(Some(1))),
         },
         SkillPriorityInfo {
             skill_id: db.demolish.get_id(),
@@ -195,6 +196,25 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
 pub(crate) fn make_monk_ogcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriorityInfo> {
     vec![
         SkillPriorityInfo {
+            skill_id: db.perfect_balance.get_id(),
+            prerequisite: Some(And(
+                Box::new(And(
+                    Box::new(Not(Box::new(HasResource(9, 1)))),
+                    Box::new(Combo(Some(2))),
+                )),
+                Box::new(Or(
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.riddle_of_fire.get_id(),
+                        7000,
+                    )),
+                    Box::new(Not(Box::new(BufforDebuffLessThan(
+                        db.riddle_of_fire_buff.get_id(),
+                        6000,
+                    )))),
+                )),
+            )),
+        },
+        SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: None,
         },
@@ -213,19 +233,6 @@ pub(crate) fn make_monk_ogcd_priority_table(db: &MonkDatabase) -> Vec<SkillPrior
         SkillPriorityInfo {
             skill_id: db.the_forbidden_chakra.get_id(),
             prerequisite: Some(HasResource(0, 5)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.perfect_balance.get_id(),
-            prerequisite: Some(And(
-                Box::new(Combo(Some(2))),
-                Box::new(Or(
-                    Box::new(RelatedSkillCooldownLessOrEqualThan(
-                        db.riddle_of_fire.get_id(),
-                        7000,
-                    )),
-                    Box::new(HasBufforDebuff(db.riddle_of_fire.get_id())),
-                )),
-            )),
         },
     ]
 }

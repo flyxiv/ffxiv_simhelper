@@ -1,5 +1,5 @@
 use crate::combat_resources::CombatResource;
-use crate::jobs_skill_data::monk::abilities::make_monk_skill_list;
+use crate::jobs_skill_data::monk::abilities::{get_combo2_combo3_skill_ids, make_monk_skill_list};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -31,6 +31,7 @@ pub(crate) struct MonkCombatResources {
     leaping_stack: ResourceType,
     raptor_stack: ResourceType,
     coeurl_stack: ResourceType,
+    fires_reply_flag: ResourceType,
 }
 
 impl CombatResource for MonkCombatResources {
@@ -61,6 +62,8 @@ impl CombatResource for MonkCombatResources {
             self.raptor_stack = min(1, self.raptor_stack + resource_amount);
         } else if resource_id == 8 {
             self.coeurl_stack = min(1, self.coeurl_stack + resource_amount);
+        } else if resource_id == 9 {
+            self.fires_reply_flag = min(1, self.fires_reply_flag + resource_amount);
         }
     }
 
@@ -83,6 +86,8 @@ impl CombatResource for MonkCombatResources {
             self.raptor_stack
         } else if resource_id == 8 {
             self.coeurl_stack
+        } else if resource_id == 9 {
+            self.fires_reply_flag
         } else {
             -1
         }
@@ -98,15 +103,18 @@ impl CombatResource for MonkCombatResources {
         }
     }
 
-    // TODO: chakra on crit
     fn trigger_on_event(
         &mut self,
-        _: IdType,
+        skill_id: IdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         _: TimeType,
         _: &FfxivPlayer,
     ) -> SkillEvents {
+        if get_combo2_combo3_skill_ids().contains(&skill_id) {
+            self.fires_reply_flag = 0;
+        }
+
         (vec![], vec![])
     }
 
@@ -129,11 +137,12 @@ impl MonkCombatResources {
             perfect_1: 0,
             perfect_2: 0,
             perfect_3: 0,
-            lunar: 0,
+            lunar: -1,
             solar: 0,
             leaping_stack: 0,
             raptor_stack: 0,
             coeurl_stack: 0,
+            fires_reply_flag: 1,
         }
     }
 }

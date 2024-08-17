@@ -15,7 +15,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 const SOUL_GAUGE_MAX: ResourceType = 100;
-const ENSHROUD_GAUGE_MAX: ResourceType = 50;
+const ENSHROUD_GAUGE_MAX: ResourceType = 100;
 const SOUL_REAVER_MAX: ResourceType = 1;
 const ENSHROUD_STACK_MAX: ResourceType = 5;
 const LEMURES_STACK_MAX: ResourceType = 2;
@@ -62,8 +62,6 @@ impl CombatResource for ReaperCombatResources {
             );
         } else if resource_id == 6 {
             self.enshroud_count = self.enshroud_stack + resource_amount;
-        } else if resource_id == 7 {
-            self.refreshed_combo = min(self.refreshed_combo + resource_amount, 1);
         }
     }
 
@@ -82,8 +80,6 @@ impl CombatResource for ReaperCombatResources {
             self.executioner_stack
         } else if resource_id == 6 {
             self.enshroud_count
-        } else if resource_id == 7 {
-            self.refreshed_combo
         } else {
             -1
         }

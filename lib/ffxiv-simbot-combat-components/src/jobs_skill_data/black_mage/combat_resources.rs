@@ -19,6 +19,7 @@ const POLYGLOT_STACK_INTERVAL_MILLISECOND: TimeType = 30000;
 const POLYGLOT_MAX_STACK: ResourceType = 3;
 const PARADOX_GAUGE_MAX_STACK: ResourceType = 1;
 const FLARESTAR_MAX_STACK: ResourceType = 1;
+const USED_FIRE_III_STACK: ResourceType = 1;
 
 #[derive(Clone)]
 pub(crate) struct BlackmageCombatResources {
@@ -29,6 +30,7 @@ pub(crate) struct BlackmageCombatResources {
     paradox_gauge_stack: ResourceType,
     fire4_stack: ResourceType,
     flarestar_stack: ResourceType,
+    conversion_to_blizzard_check: ResourceType,
     next_polyglot_time: TimeType,
 }
 
@@ -53,6 +55,9 @@ impl CombatResource for BlackmageCombatResources {
             self.fire4_stack = min(6, self.fire4_stack + resource_amount);
         } else if resource_id == 3 {
             self.flarestar_stack = min(FLARESTAR_MAX_STACK, self.flarestar_stack + resource_amount);
+        } else if resource_id == 4 {
+            self.conversion_to_blizzard_check =
+                min(1, self.conversion_to_blizzard_check + resource_amount);
         }
     }
 
@@ -65,6 +70,8 @@ impl CombatResource for BlackmageCombatResources {
             self.fire4_stack
         } else if resource_id == 3 {
             self.flarestar_stack
+        } else if resource_id == 4 {
+            self.conversion_to_blizzard_check
         } else {
             -1
         }
@@ -117,6 +124,7 @@ impl BlackmageCombatResources {
             paradox_gauge_stack: 0,
             fire4_stack: 0,
             flarestar_stack: 0,
+            conversion_to_blizzard_check: 0,
             next_polyglot_time: POLYGLOT_STACK_INTERVAL_MILLISECOND
                 + TimeType::abs(SIMULATION_START_TIME_MILLISECOND),
         }

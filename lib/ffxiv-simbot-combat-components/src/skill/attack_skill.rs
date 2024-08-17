@@ -412,7 +412,7 @@ impl OwnerTracker for AttackSkill {
 
 impl CooldownTimer for AttackSkill {
     fn update_cooldown(&mut self, elapsed_time: TimeType) {
-        if self.current_cooldown_millisecond <= 0 {
+        if self.current_cooldown_millisecond <= 0 || elapsed_time == 0 {
             return;
         }
 

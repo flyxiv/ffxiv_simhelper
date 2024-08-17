@@ -66,8 +66,8 @@ pub(crate) fn make_reaper_opener(db: &ReaperDatabase) -> Vec<Opener> {
         GcdOpener(db.soul_slice.get_id()),
         OgcdOpener((Some(db.arcane_circle.get_id()), None)),
         GcdOpener(db.soul_slice.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.harvest_moon.get_id()),
+        OgcdOpener((Some(db.blood_stalk.get_id()), None)),
+        GcdOpener(db.enhanced_gallows.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.plentiful_harvest.get_id()),
         OgcdOpener((
@@ -83,10 +83,14 @@ pub(crate) fn make_reaper_opener(db: &ReaperDatabase) -> Vec<Opener> {
         GcdOpener(db.cross_reaping.get_id()),
         OgcdOpener((Some(db.lemures_slice.get_id()), None)),
         GcdOpener(db.communio.get_id()),
-        OgcdOpener((Some(db.gluttony.get_id()), None)),
-        GcdOpener(db.gallows.get_id()),
         OgcdOpener((None, None)),
-        GcdOpener(db.enhanced_gibbet.get_id()),
+        GcdOpener(db.perfectio.get_id()),
+        OgcdOpener((Some(db.gluttony.get_id()), None)),
+        GcdOpener(db.executioners_gallows.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.executioners_gibbet.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.harvest_moon.get_id()),
     ]
 }
 
@@ -102,10 +106,16 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
         SkillPriorityInfo {
             skill_id: db.shadow_of_death.get_id(),
             prerequisite: Some(And(
-                Box::new(BufforDebuffLessThan(db.shadow_of_death.get_id(), 37000)),
+                Box::new(Or(
+                    Box::new(BufforDebuffLessThan(db.shadow_of_death.get_id(), 37000)),
+                    Box::new(Not(Box::new(HasBufforDebuff(db.shadow_of_death.get_id())))),
+                )),
                 Box::new(And(
-                    Box::new(HasBufforDebuff(db.enshroud.get_id())),
-                    Box::new(MillisecondsBeforeBurst(7000)),
+                    Box::new(HasBufforDebuff(db.enshroud_status.get_id())),
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.arcane_circle.get_id(),
+                        6500,
+                    )),
                 )),
             )),
         },
@@ -134,6 +144,18 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
             prerequisite: Some(Combo(Some(3))),
         },
         SkillPriorityInfo {
+            skill_id: db.executioners_gibbet.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.executioners_gallows.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.plentiful_harvest.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.enhanced_gibbet.get_id(),
             prerequisite: None,
         },
@@ -146,16 +168,12 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
             prerequisite: Some(Or(
                 Box::new(BufforDebuffLessThan(
                     db.shadow_of_death_debuff.get_id(),
-                    5000,
+                    2600,
                 )),
                 Box::new(Not(Box::new(HasBufforDebuff(
                     db.shadow_of_death_debuff.get_id(),
                 )))),
             )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.plentiful_harvest.get_id(),
-            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.soul_slice.get_id(),
@@ -191,10 +209,20 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.enshroud_host.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.enshroud.get_id(),
             prerequisite: Some(Or(
-                Box::new(HasResource(1, 50)),
-                Box::new(MillisecondsBeforeBurst(15000)),
+                Box::new(RelatedSkillCooldownLessOrEqualThan(
+                    db.gluttony.get_id(),
+                    11000,
+                )),
+                Box::new(RelatedSkillCooldownLessOrEqualThan(
+                    db.arcane_circle.get_id(),
+                    6500,
+                )),
             )),
         },
         SkillPriorityInfo {
@@ -203,13 +231,13 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
         },
         SkillPriorityInfo {
             skill_id: db.sacrificium.get_id(),
-            prerequisite: Some(Not(Box::new(HasResource(3, 2)))),
+            prerequisite: Some(Not(Box::new(HasResource(3, 5)))),
         },
         SkillPriorityInfo {
             skill_id: db.gluttony.get_id(),
             prerequisite: Some(And(
                 Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
-                Box::new(Not(Box::new(HasResource(2, 1)))),
+                Box::new(Not(Box::new(HasResource(6, 2)))),
             )),
         },
         SkillPriorityInfo {
@@ -220,24 +248,13 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
                         db.soul_slice.get_id(),
                         30000,
                     )),
-                    Box::new(HasResource(0, 90)),
+                    Box::new(HasResource(0, 80)),
                 )),
-                Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.blood_stalk.get_id(),
-            prerequisite: Some(And(
-                Box::new(RelatedSkillCooldownLessOrEqualThan(
-                    db.soul_slice.get_id(),
-                    30000,
+                Box::new(And(
+                    Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
+                    Box::new(Not(Box::new(MillisecondsBeforeBurst(0)))),
                 )),
-                Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
             )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.sacrificium.get_id(),
-            prerequisite: None,
         },
     ]
 }

@@ -47,13 +47,13 @@ pub(crate) static SAGE_START_TIME_MILLISECOND: TimeType = -1500 - NON_GCD_DELAY_
 pub(crate) static NINJA_START_TIME_MILLISECOND: TimeType = -2500;
 pub(crate) static MONK_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static DRAGOON_START_TIME_MILLISECOND: TimeType = 0;
-pub(crate) static SAMURAI_START_TIME_MILLISECOND: TimeType = -3000;
+pub(crate) static SAMURAI_START_TIME_MILLISECOND: TimeType = -13000;
 pub(crate) static REAPER_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static VIPER_START_TIME_MILLISECOND: TimeType = -700;
 pub(crate) static BARD_START_TIME_MILLISECOND: TimeType = -700;
 pub(crate) static DANCER_START_TIME_MILLISECOND: TimeType = -15000;
 pub(crate) static MACHINIST_START_TIME_MILLISECOND: TimeType = -2000;
-pub(crate) static BLACKMAGE_START_TIME_MILLISECOND: TimeType = -5000;
+pub(crate) static BLACKMAGE_START_TIME_MILLISECOND: TimeType = -4000;
 pub(crate) static SUMMONER_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static REDMAGE_START_TIME_MILLISECOND: TimeType = -5500;
 pub(crate) static PICTOMANCER_START_TIME_MILLISECOND: TimeType = -4000;
@@ -324,8 +324,8 @@ impl FfxivPlayer {
             FfxivEvent::PlayerTurn(
                 player_id,
                 FfxivTurnType::Gcd,
-                DANCER_START_TIME_MILLISECOND,
-                DANCER_START_TIME_MILLISECOND,
+                MONK_START_TIME_MILLISECOND,
+                MONK_START_TIME_MILLISECOND,
             ),
             None,
             player_count,
@@ -380,7 +380,7 @@ impl FfxivPlayer {
             FfxivEvent::PlayerTurn(
                 player_id,
                 FfxivTurnType::Ogcd,
-                SAMURAI_START_TIME_MILLISECOND,
+                0,
                 SAMURAI_START_TIME_MILLISECOND,
             ),
             Some(0),
@@ -548,7 +548,7 @@ impl FfxivPlayer {
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
                 player_id,
-                FfxivTurnType::Ogcd,
+                FfxivTurnType::Gcd,
                 BLACKMAGE_START_TIME_MILLISECOND,
                 BLACKMAGE_START_TIME_MILLISECOND,
             ),

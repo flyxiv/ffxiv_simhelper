@@ -35,6 +35,7 @@ use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::rc::Rc;
+use std::time::SystemTime;
 
 static GLOBAL_TICKER_ID: IdType = 10000;
 
@@ -59,6 +60,7 @@ pub struct FfxivSimulationBoard {
 
 impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationBoard {
     fn run_simulation(&self) {
+        let start_time = SystemTime::now();
         loop {
             if self.combat_time_exceeded_finish_time(self.finish_combat_time_millisecond) {
                 debug!("combat finished");
@@ -68,6 +70,9 @@ impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationB
             let next_event = self.event_queue.borrow_mut().pop().unwrap().0;
             self.simulate_event(next_event);
         }
+        let end_time = SystemTime::now();
+        let elapsed_time = end_time.duration_since(start_time).unwrap();
+        info!("elapsed time: {:?}", elapsed_time);
     }
 
     fn create_simulation_result(&self) -> SimulationResult {
