@@ -6,6 +6,12 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
+    "baseUrl": ".",
+
+    "paths": {
+      "@/images/*": ["public/images"]
+    },
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

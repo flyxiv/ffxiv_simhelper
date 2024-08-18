@@ -1,0 +1,10 @@
+.LogoImage {
+    align-self: center;
+}
+
+.TitleDiv {
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
