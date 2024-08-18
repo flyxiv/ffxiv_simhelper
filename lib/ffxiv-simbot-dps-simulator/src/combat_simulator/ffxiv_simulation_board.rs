@@ -28,7 +28,7 @@ use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::status::status_info::StatusInfo;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
 use ffxiv_simbot_combat_components::status::Status;
-use ffxiv_simbot_combat_components::types::DamageType;
+use ffxiv_simbot_combat_components::types::PotencyType;
 use ffxiv_simbot_combat_components::types::{IdType, TimeType};
 use log::{debug, info};
 use std::cell::RefCell;
@@ -343,7 +343,7 @@ impl FfxivSimulationBoard {
         &self,
         player: Rc<RefCell<FfxivPlayer>>,
         skill_id: IdType,
-        potency: DamageType,
+        potency: PotencyType,
         trait_percent: PercentType,
         guaranteed_crit: bool,
         guaranteed_dh: bool,

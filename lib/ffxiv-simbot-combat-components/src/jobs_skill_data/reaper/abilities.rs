@@ -9,8 +9,7 @@ use crate::skill::ResourceRequirements::{CheckStatus, Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
-use crate::types::PotencyType;
+use crate::types::{IdType, PotencyType};
 use std::collections::HashMap;
 
 pub(crate) struct ReaperDatabase {
@@ -502,7 +501,7 @@ impl ReaperDatabase {
             id: 1212,
             name: String::from("Plentiful Harvest"),
             player_id,
-            potency: 720 + 40 * (player_count - 1) as PotencyType,
+            potency: (720 + 40 * (player_count - 1) as PotencyType),
             trait_percent: 100,
             additional_skill_events: vec![
                 ApplyBuff(

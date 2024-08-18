@@ -16,8 +16,8 @@ use crate::skill::{
 };
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{DamageType, ResourceType, StackType, StatusTable};
-use crate::types::{IdType, TimeType};
+use crate::types::{IdType, PotencyType, TimeType};
+use crate::types::{ResourceType, StackType, StatusTable};
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
 use std::cmp::max;
@@ -29,7 +29,7 @@ pub struct AttackSkill {
     pub id: IdType,
     pub(crate) name: String,
     pub player_id: IdType,
-    pub(crate) potency: DamageType,
+    pub(crate) potency: PotencyType,
     pub(crate) trait_percent: PercentType,
 
     pub additional_skill_events: Vec<FfxivEvent>,
@@ -132,7 +132,7 @@ impl Skill for AttackSkill {
 }
 
 impl AttackSkill {
-    pub fn get_potency(&self) -> DamageType {
+    pub fn get_potency(&self) -> PotencyType {
         self.potency
     }
 
@@ -220,7 +220,7 @@ impl AttackSkill {
         Some(FfxivEvent::Damage(
             self.player_id,
             self.id,
-            self.get_potency() * stack_multiplier as DamageType,
+            self.get_potency() * (stack_multiplier as PotencyType),
             self.trait_percent,
             self.is_guaranteed_crit,
             self.is_guaranteed_direct_hit,
@@ -376,7 +376,7 @@ impl AttackSkill {
         proc_events
     }
 
-    pub fn new(id: IdType, name: String, player_id: IdType, potency: DamageType) -> Self {
+    pub fn new(id: IdType, name: String, player_id: IdType, potency: PotencyType) -> Self {
         Self {
             id,
             name,

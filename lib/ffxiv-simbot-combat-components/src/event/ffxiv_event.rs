@@ -6,8 +6,8 @@ use crate::live_objects::turn_type::FfxivTurnType;
 use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{DamageType, ResourceType, StatusTable};
 use crate::types::{IdType, TimeType};
+use crate::types::{PotencyType, ResourceType, StatusTable};
 use std::cmp::min;
 use std::collections::HashMap;
 
@@ -24,7 +24,7 @@ pub enum FfxivEvent {
     Damage(
         IdType,
         IdType,
-        DamageType,
+        PotencyType,
         PercentType,
         bool,
         bool,

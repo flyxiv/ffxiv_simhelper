@@ -6,18 +6,18 @@ use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::types::{DamageType, ResourceType};
 use crate::types::{IdType, TimeType};
+use crate::types::{PotencyType, ResourceType};
 use std::cmp::min;
 use std::collections::HashMap;
 
-pub(crate) type SnapshotTable = HashMap<IdType, Vec<DamageType>>;
+pub(crate) type SnapshotTable = HashMap<IdType, Vec<PotencyType>>;
 #[derive(PartialEq, Eq, Clone)]
 pub struct DebuffStatus {
     pub(crate) id: IdType,
     pub(crate) owner_id: IdType,
     pub(crate) damage_skill_id: Option<IdType>,
-    pub(crate) potency: Option<DamageType>,
+    pub(crate) potency: Option<PotencyType>,
     pub(crate) trait_percent: Option<PercentType>,
     pub(crate) damage_category: Option<DamageCategory>,
     pub(crate) duration_left_millisecond: TimeType,

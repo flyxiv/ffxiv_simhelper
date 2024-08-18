@@ -11,7 +11,7 @@ use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::Status;
-use crate::types::{DamageType, IdType, MultiplierType};
+use crate::types::{IdType, MultiplierType, PotencyType};
 use log::debug;
 use rand::{random, thread_rng, Rng};
 use std::collections::HashMap;
@@ -25,7 +25,7 @@ pub trait RawDamageCalculator: MultiplierCalculator {
     fn calculate_total_damage(
         &self,
         player_id: IdType,
-        potency: DamageType,
+        potency: PotencyType,
         damage_category: DamageCategory,
         trait_percent: PercentType,
         is_guaranteed_critical_hit: bool,
@@ -421,7 +421,7 @@ mod tests {
         FfxivRawDamageCalculator, RawDamageCalculator,
     };
     use crate::live_objects::player::player_power::PlayerPower;
-    use crate::types::DamageType;
+    use crate::types::PotencyType;
 
     fn within_accepted_range(expected: f64, actual: f64) -> bool {
         let lower_bound = 0.90;
@@ -445,7 +445,7 @@ mod tests {
             speed_multiplier: 1.032,
         };
 
-        let hyosho_potency = (1300 as f64 * 1.3) as DamageType;
+        let hyosho_potency = (1300 as f64 * 1.3) as PotencyType;
         let raiton_potency = 650;
         let suiton_potency = 500;
         let fuma_potency = 450;
@@ -470,7 +470,7 @@ mod tests {
 
             // With crit/dh expected damage
             let expected_actual_damage =
-                (actual_damage as f64 * crit_expected * direct_hit_expected) as DamageType;
+                (actual_damage as f64 * crit_expected * direct_hit_expected) as PotencyType;
 
             assert!(within_accepted_range(
                 expected_actual_damage as f64,

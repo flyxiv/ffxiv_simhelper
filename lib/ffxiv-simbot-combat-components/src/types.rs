@@ -10,16 +10,15 @@ pub type IncreaseType = usize;
 type Result<T> = std::result::Result<T, CombatComponentsError>;
 
 /// Shows the damage profile: Damage contribution of each buff/skill.
-pub type DamageProfileTable = HashMap<IdType, DamageType>;
+pub type DamageProfileTable = HashMap<IdType, PotencyType>;
 pub(crate) type ResourceType = i32;
 pub(crate) type StackType = usize;
 
 pub type TimeType = i32;
-pub(crate) type StatusIdType = usize;
+pub(crate) type StatusIdType = u16;
 pub type DpsType = f64;
-pub type DamageType = usize;
+pub type PotencyType = u16;
 pub type IdType = usize;
-pub(crate) type PotencyType = usize;
 pub(crate) type ManaType = i32;
 pub type BuffIncreasePercentType = usize;
 pub(crate) type TurnCount = usize;
