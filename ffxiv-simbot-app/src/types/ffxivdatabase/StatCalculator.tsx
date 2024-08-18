@@ -69,8 +69,7 @@ export function calculateMainStatPercentIncrease(
 ) {
   if (isTank) {
     return (
-      Math.floor(MAIN_STAT_SLOPE_TANK * (mainStat - DEFAULT_MAIN_STAT_TANK)) +
-      100
+      Math.floor(MAIN_STAT_SLOPE_TANK * (mainStat - DEFAULT_MAIN_STAT_TANK)) 
     );
   }
   return Math.floor(
