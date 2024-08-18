@@ -1,14 +1,9 @@
 use ffxiv_simbot_api::api_handler::simulate::quicksim;
-use ffxiv_simbot_api::api_server::api_router::create_ffxiv_simbot_service_router;
-use ffxiv_simbot_api::request::simulation_api_request::{
-    PlayerInfoRequest, SimulationApiRequest, StatsInfo,
-};
-use ffxiv_simbot_combat_components::IdType;
-use ffxiv_simbot_engine::engine::Engine;
+use ffxiv_simbot_api::request::simulation_api_request::{PlayerInfoRequest, SimulationApiRequest};
+use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
+use ffxiv_simbot_combat_components::types::IdType;
 use itertools::Itertools;
-use log::LevelFilter::{Debug, Error, Info};
-use log::{info, Level, LevelFilter, Metadata, Record, SetLoggerError};
-use serde::__private::de::Content::String;
+use log::{Level, LevelFilter, Metadata, Record, SetLoggerError};
 
 struct SimpleLogger;
 
@@ -38,15 +33,28 @@ fn main() {
         .enumerate()
         .map(|(i, job)| PlayerInfoRequest {
             player_id: i as IdType,
-            jobAbbrev: job.to_string(),
-            stats: StatsInfo {
+            partner1_id: None,
+            partner2_id: None,
+            job_abbrev: "".to_string(),
+            power: PlayerPower {
+                auto_attack_delays: 3.0,
+                critical_strike_rate: 3.0,
+                critical_strike_damage: 3.0,
+                direct_hit_rate: 3.0,
+                determination_multiplier: 3.0,
+                tenacity_multiplier: 3.0,
+                speed_multiplier: 3.0,
+                weapon_damage_multiplier: 3.0,
+                main_stat_multiplier: 3.0,
                 weapon_damage: 132,
                 main_stat: 3300,
                 critical_strike: 2560,
                 direct_hit: 2500,
                 determination: 2500,
-                speed: 400,
+                skill_speed: 0,
+
                 tenacity: 400,
+                spell_speed: 0,
             },
         })
         .collect_vec();

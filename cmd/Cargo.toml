@@ -13,16 +13,8 @@ name = "profile"
 path = "src/profile.rs"
 doc = false
 
-[dependencies.ffxiv-simbot-db]
-version = "0.1.0"
-path = "../lib/ffxiv-simbot-db"
-
-[dependencies.ffxiv-simbot-engine]
-version = "0.1.0"
-path = "../lib/ffxiv-simbot-engine"
-
 [dependencies.ffxiv-simbot-dps-simulator]
-#version = "0.1.0"
+version = "0.1.0"
 path = "../lib/ffxiv-simbot-dps-simulator"
 
 [dependencies.ffxiv-simbot-combat-components]
