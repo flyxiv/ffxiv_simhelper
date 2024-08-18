@@ -7,13 +7,15 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, ResourceType};
+use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
 const BEAST_GAUGE_MAX_STACK: ResourceType = 100;
+const BURGEONING_FURY_MAX_STACK: ResourceType = 3;
 
 #[derive(Clone)]
 pub(crate) struct WarriorCombatResources {
@@ -21,6 +23,7 @@ pub(crate) struct WarriorCombatResources {
     player_id: IdType,
     current_combo: ComboType,
     beast_gauge: ResourceType,
+    burgeoning_fury: ResourceType,
 }
 
 impl CombatResource for WarriorCombatResources {
@@ -35,12 +38,19 @@ impl CombatResource for WarriorCombatResources {
     fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
         if resource_id == 0 {
             self.beast_gauge = min(BEAST_GAUGE_MAX_STACK, self.beast_gauge + resource_amount);
+        } else if resource_id == 1 {
+            self.burgeoning_fury = min(
+                BURGEONING_FURY_MAX_STACK,
+                self.burgeoning_fury + resource_amount,
+            );
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
             self.beast_gauge
+        } else if resource_id == 1 {
+            self.burgeoning_fury
         } else {
             -1
         }
@@ -81,6 +91,7 @@ impl WarriorCombatResources {
             player_id,
             current_combo: None,
             beast_gauge: 0,
+            burgeoning_fury: 0,
         }
     }
 }

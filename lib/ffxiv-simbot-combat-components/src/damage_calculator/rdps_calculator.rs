@@ -1,13 +1,12 @@
 use crate::damage_calculator::multiplier_calculator::MultiplierCalculator;
 use crate::damage_calculator::DamageRdpsProfile;
 use crate::id_entity::IdEntity;
+use crate::live_objects::player::player_power::PlayerPower;
 use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{DamageType, IdType};
-use ffxiv_simbot_db::stat_calculator::CharacterPower;
-use ffxiv_simbot_db::MultiplierType;
+use crate::types::{IdType, MultiplierType};
 use std::collections::HashMap;
 
 pub trait RdpsCalculator {
@@ -21,7 +20,7 @@ pub trait RdpsCalculator {
         snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
         snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
         skill_damage: MultiplierType,
-        power: &CharacterPower,
+        power: &PlayerPower,
         player_id: IdType,
     ) -> DamageRdpsProfile;
 }
@@ -41,7 +40,7 @@ impl RdpsCalculator for FfxivRdpsCalculator {
         snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
         snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
         skill_damage: MultiplierType,
-        power: &CharacterPower,
+        power: &PlayerPower,
         _: IdType,
     ) -> DamageRdpsProfile {
         let mut damage_profile = DamageRdpsProfile {
@@ -65,7 +64,7 @@ impl RdpsCalculator for FfxivRdpsCalculator {
 
             total_multiplier *= damage_multiplier;
 
-            let mut entry = damage_profile
+            let entry = damage_profile
                 .rdps_contribution
                 .entry(status_key)
                 .or_insert(1.0);
@@ -87,7 +86,7 @@ impl RdpsCalculator for FfxivRdpsCalculator {
 
             total_multiplier *= damage_multiplier;
 
-            let mut entry = damage_profile
+            let entry = damage_profile
                 .rdps_contribution
                 .entry(status_key)
                 .or_insert(1.0);

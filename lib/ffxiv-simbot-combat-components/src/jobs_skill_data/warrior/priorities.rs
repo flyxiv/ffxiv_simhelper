@@ -1,6 +1,6 @@
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::types::IdType;
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
@@ -10,6 +10,7 @@ use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
     Or,
 };
+use crate::types::TurnCount;
 
 #[derive(Clone)]
 pub(crate) struct WarriorPriorityTable {
@@ -63,7 +64,7 @@ pub(crate) fn make_warrior_opener(db: &WarriorDatabase) -> Vec<Opener> {
         GcdOpener(db.heavy_swing.get_id()),
         OgcdOpener((Some(db.infuriate.get_id()), None)),
         GcdOpener(db.maim.get_id()),
-        OgcdOpener((None, None)),
+        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.storms_eye.get_id()),
         OgcdOpener((Some(db.inner_release.get_id()), None)),
         GcdOpener(db.inner_chaos.get_id()),
@@ -77,7 +78,8 @@ pub(crate) fn make_warrior_opener(db: &WarriorDatabase) -> Vec<Opener> {
         GcdOpener(db.fell_cleave_inner.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.fell_cleave_inner.get_id()),
-        OgcdOpener((None, None)),
+        OgcdOpener((Some(db.primal_wrath.get_id()), None)),
+        GcdOpener(db.primal_ruination.get_id()),
     ]
 }
 
@@ -89,7 +91,11 @@ pub(crate) fn make_warrior_gcd_priority_table(db: &WarriorDatabase) -> Vec<Skill
         },
         SkillPriorityInfo {
             skill_id: db.primal_rend.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.primal_rend_ready.get_id())),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.primal_ruination.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.fell_cleave_inner.get_id(),
@@ -97,7 +103,7 @@ pub(crate) fn make_warrior_gcd_priority_table(db: &WarriorDatabase) -> Vec<Skill
         },
         SkillPriorityInfo {
             skill_id: db.fell_cleave.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.inner_release_stack.get_id())),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.storms_eye.get_id(),
@@ -124,6 +130,10 @@ pub(crate) fn make_warrior_gcd_priority_table(db: &WarriorDatabase) -> Vec<Skill
 pub(crate) fn make_warrior_ogcd_priority_table(db: &WarriorDatabase) -> Vec<SkillPriorityInfo> {
     vec![
         SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.inner_release.get_id(),
             prerequisite: None,
         },
@@ -142,8 +152,8 @@ pub(crate) fn make_warrior_ogcd_priority_table(db: &WarriorDatabase) -> Vec<Skil
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.onslaught.get_id(),
-            prerequisite: Some(MillisecondsBeforeBurst(0)),
+            skill_id: db.primal_wrath.get_id(),
+            prerequisite: None,
         },
     ]
 }

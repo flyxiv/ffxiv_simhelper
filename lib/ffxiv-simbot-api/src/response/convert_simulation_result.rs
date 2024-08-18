@@ -10,8 +10,9 @@ use crate::response::simulation_api_response::{
 };
 use ffxiv_simbot_combat_components::jobs_skill_data::ninja::abilities::bunshin_clone_id;
 use ffxiv_simbot_combat_components::live_objects::player::logs::SkillLog;
-use ffxiv_simbot_combat_components::{DpsType, IdType, TimeType};
-use ffxiv_simbot_db::MultiplierType;
+use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
+use ffxiv_simbot_combat_components::types::{DpsType, MultiplierType};
+use ffxiv_simbot_combat_components::types::{IdType, TimeType};
 use ffxiv_simbot_dps_simulator::simulation_result::SimulationResult;
 use itertools::{izip, Itertools};
 use std::collections::HashMap;
@@ -21,6 +22,8 @@ pub(crate) fn convert_to_skill_log_response(skill_log: &SkillLog) -> SkillLogRes
         time: skill_log.time,
         skill_id: skill_log.skill_id,
         target: skill_log.target_id,
+        buffs: skill_log.buffs.clone(),
+        debuffs: skill_log.debuffs.clone(),
     }
 }
 
@@ -83,6 +86,7 @@ fn create_skill_damage_profile_response(
             combat_time_millisecond,
         ),
         pdps_contribution: damage_to_dps(total_damage, combat_time_millisecond),
+        cast_count: skill_damage_aggregate.cast_count,
     }
 }
 
@@ -102,6 +106,7 @@ fn create_status_damage_profile_response(
             status_damage_aggregate.total_raw_damage,
             combat_time_millisecond,
         ),
+        cast_count: 0,
     }
 }
 
@@ -163,6 +168,8 @@ fn create_party_contribution_response(
 
 pub(crate) fn create_response_from_simulation_result(
     simulation_result: SimulationResult,
+    main_player_power: PlayerPower,
+    main_player_job_abbrev: String,
 ) -> SimulationApiResponse {
     let combat_time_millisecond = simulation_result.combat_time_millisecond;
 
@@ -245,7 +252,7 @@ pub(crate) fn create_response_from_simulation_result(
     ) {
         simulation_data_responses.push(SimulationDataResponse {
             player_id: party_simulation_result.player_id,
-            job: party_simulation_result.job.clone(),
+            job_abbrev: party_simulation_result.job.clone(),
             role: party_simulation_result.role.clone(),
             simulation_summary: summary,
             party_contribution_table: party_contribution_response,
@@ -258,5 +265,7 @@ pub(crate) fn create_response_from_simulation_result(
         main_player_id: simulation_result.main_player_id,
         combat_time_millisecond,
         simulation_data: simulation_data_responses,
+        main_player_power,
+        main_player_job_abbrev,
     }
 }

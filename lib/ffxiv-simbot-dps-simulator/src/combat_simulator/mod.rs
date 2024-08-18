@@ -2,7 +2,7 @@ use crate::simulation_result::SimulationResult;
 use ffxiv_simbot_combat_components::live_objects::player::Player;
 use ffxiv_simbot_combat_components::live_objects::target::Target;
 use ffxiv_simbot_combat_components::skill::Skill;
-use ffxiv_simbot_combat_components::{DpsType, IdType, TimeType};
+use ffxiv_simbot_combat_components::types::{DpsType, IdType, TimeType};
 use std::collections::HashMap;
 
 pub mod ffxiv_simulation_board;

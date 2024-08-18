@@ -1,7 +1,8 @@
+use crate::response::CountType;
 use ffxiv_simbot_combat_components::live_objects::player::logs::DamageLog;
 use ffxiv_simbot_combat_components::live_objects::player::StatusKey;
-use ffxiv_simbot_combat_components::{DamageType, IdType};
-use ffxiv_simbot_db::MultiplierType;
+use ffxiv_simbot_combat_components::types::IdType;
+use ffxiv_simbot_combat_components::types::MultiplierType;
 use itertools::izip;
 use std::collections::HashMap;
 
@@ -10,6 +11,7 @@ use std::collections::HashMap;
 pub(crate) struct SkillDamageAggregate {
     pub(crate) total_raw_damage: MultiplierType,
     pub(crate) total_rdps_contribution: HashMap<StatusKey, MultiplierType>,
+    pub(crate) cast_count: CountType,
 }
 
 /// Sum up all damage profile for each raidbuff.
@@ -42,6 +44,7 @@ impl Default for SkillDamageAggregate {
         SkillDamageAggregate {
             total_raw_damage: 0.0,
             total_rdps_contribution: Default::default(),
+            cast_count: 0,
         }
     }
 }
@@ -63,6 +66,7 @@ pub(crate) fn aggregate_skill_damage(
                 .or_insert(SkillDamageAggregate::default());
 
             skill_damage_entry.total_raw_damage += damage_log.raw_damage;
+            skill_damage_entry.cast_count += 1;
 
             for rdps_contribution in damage_log.rdps_contribution.iter() {
                 let status_key = StatusKey::new(

@@ -10,7 +10,7 @@ use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, ResourceType, StackType};
-use crate::{IdType, TimeType};
+use crate::types::{IdType, TimeType};
 use log::info;
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -98,11 +98,6 @@ pub(crate) trait CombatResource: Clone + Sized {
     fn start_cooldown(&mut self, skill_id: IdType, player: &FfxivPlayer) {
         let skill = self.get_skills_mut().get_mut(&skill_id).unwrap();
         skill.start_cooldown(player);
-    }
-
-    fn get_cooldown(&self, skill_id: IdType) -> TimeType {
-        let skill = self.get_skills().get(&skill_id).unwrap();
-        skill.get_current_cooldown_millisecond()
     }
 
     /// Add conditional trigger event on skill

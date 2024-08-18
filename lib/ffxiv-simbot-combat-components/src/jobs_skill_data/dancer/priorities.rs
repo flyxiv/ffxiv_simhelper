@@ -2,7 +2,8 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::dancer::abilities::DancerDatabase;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::types::IdType;
+use crate::types::TurnCount;
 use std::cell::RefCell;
 
 #[derive(Clone)]
@@ -54,12 +55,12 @@ impl DancerPriorityTable {
 
 pub(crate) fn make_dancer_opener(db: &DancerDatabase) -> Vec<Opener> {
     vec![
-        Opener::GcdOpener(db.standard_step.get_id()),
-        Opener::OgcdOpener((Some(db.flourish.get_id()), None)),
+        Opener::GcdOpener(db.standard_opener.get_id()),
+        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.technical_step.get_id()),
         Opener::OgcdOpener((Some(db.devilment.get_id()), None)),
-        Opener::GcdOpener(db.fountainfall_flourish.get_id()),
-        Opener::OgcdOpener((Some(db.fan_dance4.get_id()), None)),
+        Opener::GcdOpener(db.tillana.get_id()),
+        Opener::OgcdOpener((Some(db.flourish.get_id()), None)),
         Opener::GcdOpener(db.starfall_dance.get_id()),
     ]
 }
@@ -83,6 +84,14 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.finishing_move.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.last_dance.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.standard_step.get_id(),
             prerequisite: None,
         },
@@ -92,6 +101,10 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
         },
         SkillPriorityInfo {
             skill_id: db.reverse_cascade_flourish.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.dance_of_the_dawn.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -116,12 +129,16 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
 pub(crate) fn make_dancer_ogcd_priority_table(db: &DancerDatabase) -> Vec<SkillPriorityInfo> {
     vec![
         SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.devilment.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.fan_dance3.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource(1, 3)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.flourish.get_id(),

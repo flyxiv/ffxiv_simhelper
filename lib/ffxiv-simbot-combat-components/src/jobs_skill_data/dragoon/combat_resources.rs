@@ -7,13 +7,14 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, ResourceType};
+use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-const MIRAGE_MAX_STACK: ResourceType = 2;
+const NASTROND_MAX_STACK: ResourceType = 3;
 const FIRSTMIND_MAX_STACK: ResourceType = 2;
 
 #[derive(Clone)]
@@ -21,7 +22,7 @@ pub(crate) struct DragoonCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: IdType,
     current_combo: ComboType,
-    mirage_gauge: ResourceType,
+    nastrond_stack: ResourceType,
     firstmind_focus: ResourceType,
 }
 
@@ -36,7 +37,7 @@ impl CombatResource for DragoonCombatResources {
 
     fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
         if resource_id == 0 {
-            self.mirage_gauge = min(MIRAGE_MAX_STACK, self.mirage_gauge + resource_amount);
+            self.nastrond_stack = min(NASTROND_MAX_STACK, self.nastrond_stack + resource_amount);
         } else if resource_id == 1 {
             self.firstmind_focus = min(FIRSTMIND_MAX_STACK, self.firstmind_focus + resource_amount);
         }
@@ -44,7 +45,7 @@ impl CombatResource for DragoonCombatResources {
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
-            self.mirage_gauge
+            self.nastrond_stack
         } else if resource_id == 1 {
             self.firstmind_focus
         } else {
@@ -62,7 +63,6 @@ impl CombatResource for DragoonCombatResources {
         }
     }
 
-    // TODO: chakra on crit
     fn trigger_on_event(
         &mut self,
         _: IdType,
@@ -82,12 +82,12 @@ impl CombatResource for DragoonCombatResources {
 }
 
 impl DragoonCombatResources {
-    pub(crate) fn new(player_id: IdType, partner_player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: IdType) -> Self {
         Self {
-            skills: make_dragoon_skill_list(player_id, partner_player_id),
+            skills: make_dragoon_skill_list(player_id),
             player_id,
             current_combo: None,
-            mirage_gauge: 0,
+            nastrond_stack: 0,
             firstmind_focus: 0,
         }
     }

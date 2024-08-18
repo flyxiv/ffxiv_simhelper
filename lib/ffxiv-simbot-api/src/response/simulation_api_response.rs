@@ -1,4 +1,6 @@
-use ffxiv_simbot_combat_components::{DpsType, IdType, TimeType};
+use crate::response::CountType;
+use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
+use ffxiv_simbot_combat_components::types::{DpsType, IdType, TimeType};
 use serde::Serialize;
 
 pub(crate) const SKILL_ENTITY_STRING: &'static str = "Skill";
@@ -12,13 +14,15 @@ pub struct SimulationApiResponse {
     pub main_player_id: IdType,
     pub combat_time_millisecond: TimeType,
     pub simulation_data: Vec<SimulationDataResponse>,
+    pub main_player_power: PlayerPower,
+    pub main_player_job_abbrev: String,
 }
 
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SimulationDataResponse {
     pub player_id: IdType,
-    pub job: String,
+    pub job_abbrev: String,
     pub role: String,
     pub simulation_summary: SimulationSummaryResponse,
     pub party_contribution_table: Vec<PartyContributionResponse>,
@@ -69,6 +73,7 @@ pub struct DamageProfileResponse {
     pub rdps_contribution: DpsType,
     /// Sum of all raw damage + rdps contribution
     pub pdps_contribution: DpsType,
+    pub cast_count: CountType,
 }
 
 /// Records the rotation log of each player
@@ -78,4 +83,6 @@ pub struct SkillLogResponse {
     pub time: TimeType,
     pub skill_id: IdType,
     pub target: Option<IdType>,
+    pub buffs: Vec<IdType>,
+    pub debuffs: Vec<IdType>,
 }

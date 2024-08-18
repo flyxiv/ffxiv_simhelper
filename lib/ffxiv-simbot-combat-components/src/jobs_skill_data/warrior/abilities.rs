@@ -1,6 +1,6 @@
-use crate::event::ffxiv_event::FfxivEvent;
-use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
+use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ReduceSkillCooldown};
 use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
@@ -8,7 +8,7 @@ use crate::skill::ResourceRequirements::UseBuff;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::collections::HashMap;
 
 pub(crate) struct WarriorDatabase {
@@ -24,11 +24,17 @@ pub(crate) struct WarriorDatabase {
     pub(crate) storms_path: AttackSkill,
     pub(crate) inner_chaos: AttackSkill,
     pub(crate) fell_cleave_inner: AttackSkill,
+    pub(crate) primal_wrath: AttackSkill,
+    pub(crate) primal_ruination: AttackSkill,
 
     pub(crate) surging_tempest: BuffStatus,
     pub(crate) nascent_chaos: BuffStatus,
     pub(crate) inner_release_stack: BuffStatus,
     pub(crate) primal_rend_ready: BuffStatus,
+    pub(crate) primal_ruination_ready: BuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl WarriorDatabase {
@@ -81,12 +87,24 @@ impl WarriorDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
+        let PRIMAL_RUINATION_READY: BuffStatus = BuffStatus {
+            id: 104,
+            name: String::from("Primal Ruination Ready"),
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: vec![StatusInfo::None],
+            duration_millisecond: 30000,
+            is_raidwide: false,
+            stacks: 1,
+            max_stacks: 1,
+            trigger_proc_event_on_gcd: vec![],
+        };
 
         let HEAVY_SWING: AttackSkill = AttackSkill {
             id: 100,
             name: String::from("Heavy Swing"),
             player_id,
-            potency: 200,
+            potency: 220,
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -110,7 +128,7 @@ impl WarriorDatabase {
             id: 101,
             name: String::from("Maim"),
             player_id,
-            potency: 300,
+            potency: 340,
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -122,7 +140,7 @@ impl WarriorDatabase {
             is_speed_buffed: true,
             cooldown_millisecond: 0,
             resource_required: vec![],
-            resource_created: Default::default(),
+            resource_created: HashMap::from([(0, 10)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -134,7 +152,7 @@ impl WarriorDatabase {
             id: 102,
             name: String::from("Storm's Eye"),
             player_id,
-            potency: 440,
+            potency: 480,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -182,7 +200,7 @@ impl WarriorDatabase {
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
             is_speed_buffed: false,
-            cooldown_millisecond: 30000,
+            cooldown_millisecond: 60000,
             resource_required: vec![],
             resource_created: HashMap::from([(0, 50)]),
             is_guaranteed_crit: false,
@@ -196,9 +214,9 @@ impl WarriorDatabase {
             id: 104,
             name: String::from("Fell Cleave"),
             player_id,
-            potency: 520,
+            potency: 580,
             trait_percent: 100,
-            additional_skill_events: vec![FfxivEvent::ReduceSkillCooldown(
+            additional_skill_events: vec![ReduceSkillCooldown(
                 player_id,
                 INFURIATE.get_id(),
                 5000,
@@ -235,7 +253,7 @@ impl WarriorDatabase {
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
             is_speed_buffed: false,
-            cooldown_millisecond: 20000,
+            cooldown_millisecond: 30000,
             resource_required: vec![],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
@@ -324,7 +342,14 @@ impl WarriorDatabase {
             player_id,
             potency: 700,
             trait_percent: 100,
-            additional_skill_events: vec![],
+            additional_skill_events: vec![ApplyBuff(
+                player_id,
+                player_id,
+                PRIMAL_RUINATION_READY.clone(),
+                30000,
+                30000,
+                0,
+            )],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -346,7 +371,7 @@ impl WarriorDatabase {
             id: 109,
             name: String::from("Storm's Path"),
             player_id,
-            potency: 440,
+            potency: 480,
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -372,7 +397,12 @@ impl WarriorDatabase {
             player_id,
             potency: 660,
             trait_percent: 100,
-            additional_skill_events: vec![],
+            additional_skill_events: vec![ReduceSkillCooldown(
+                player_id,
+                INFURIATE.get_id(),
+                5000,
+                0,
+            )],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -397,7 +427,60 @@ impl WarriorDatabase {
             id: 111,
             name: String::from("Fell Cleave"),
             player_id,
-            potency: 520,
+            potency: 580,
+            trait_percent: 100,
+            additional_skill_events: vec![ReduceSkillCooldown(
+                player_id,
+                INFURIATE.get_id(),
+                5000,
+                0,
+            )],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            cooldown_millisecond: 0,
+            resource_required: vec![UseBuff(INNER_RELEASE_STACK.get_id())],
+            resource_created: HashMap::from([(2, 1)]),
+            is_guaranteed_crit: true,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: true,
+            use_type: UseType::UseOnTarget,
+        };
+        let PRIMAL_WRATH: AttackSkill = AttackSkill {
+            id: 112,
+            name: String::from("Primal Wrath"),
+            player_id,
+            potency: 700,
+            trait_percent: 100,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 0,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            cooldown_millisecond: 0,
+            resource_required: vec![ResourceRequirements::Resource(1, 3)],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: false,
+            use_type: UseType::UseOnTarget,
+        };
+        let PRIMAL_RUINATION: AttackSkill = AttackSkill {
+            id: 113,
+            name: String::from("Primal Ruination"),
+            player_id,
+            potency: 740,
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -408,7 +491,7 @@ impl WarriorDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(INNER_RELEASE_STACK.get_id())],
+            resource_required: vec![UseBuff(PRIMAL_RUINATION_READY.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -417,6 +500,8 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: true,
             use_type: UseType::UseOnTarget,
         };
+
+        let potion_skill = PotionSkill::new(player_id);
 
         WarriorDatabase {
             heavy_swing: HEAVY_SWING,
@@ -431,12 +516,18 @@ impl WarriorDatabase {
             storms_path: STORMS_PATH,
             inner_chaos: INNER_CHAOS,
             fell_cleave_inner: FELL_CLEAVE_INNER,
+            primal_wrath: PRIMAL_WRATH,
+            primal_ruination: PRIMAL_RUINATION,
 
             surging_tempest: SURGING_TEMPEST,
             nascent_chaos: NASCENT_CHAOS,
 
             inner_release_stack: INNER_RELEASE_STACK,
             primal_rend_ready: PRIMAL_REND_READY,
+            primal_ruination_ready: PRIMAL_RUINATION_READY,
+
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -457,6 +548,9 @@ pub(crate) fn make_warrior_skill_list(player_id: IdType) -> SkillTable<AttackSki
         db.storms_path,
         db.inner_chaos,
         db.fell_cleave_inner,
+        db.primal_wrath,
+        db.primal_ruination,
+        db.potion,
     ];
 
     make_skill_table(warrior_skill_list)

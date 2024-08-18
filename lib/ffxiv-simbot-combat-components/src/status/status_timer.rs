@@ -1,6 +1,6 @@
 use crate::status::status_holder::StatusHolder;
 use crate::status::Status;
-use crate::TimeType;
+use crate::types::TimeType;
 use log::debug;
 
 /// Every time combat time updates,

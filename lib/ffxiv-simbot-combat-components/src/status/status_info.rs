@@ -1,4 +1,4 @@
-use crate::BuffIncreasePercentType;
+use crate::types::{BuffIncreasePercentType, IncreaseType};
 
 #[derive(Clone, Debug)]
 pub enum StatusInfo {
@@ -9,6 +9,9 @@ pub enum StatusInfo {
     /// increase % by stack
     SpeedByStack(Vec<BuffIncreasePercentType>),
     SpeedOnlyAutoAttack(BuffIncreasePercentType),
+
+    /// max increase value, increase %
+    IncreaseMainStat(IncreaseType, BuffIncreasePercentType),
     None,
 }
 

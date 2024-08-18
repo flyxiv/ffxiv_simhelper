@@ -1,39 +1,53 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { ThemeProvider, createTheme } from '@mui/material';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { ThemeProvider, createTheme } from "@mui/material";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#013e87"
+      main: "#BB86FC",
     },
+
     secondary: {
-      main: "#2e74c9"
+      main: "#03DAC6",
     },
   },
   typography: {
     fontFamily: "Arial",
     h1: {
       fontSize: "3rem",
-      fontWeight: 900
+      fontWeight: 900,
     },
     h2: {
       fontSize: "1.75rem",
-      fontWeight: 600
+      fontWeight: 600,
     },
     h3: {
       fontSize: "1.5rem",
-      fontWeight: 600
-    }
-  }
-})
+      fontWeight: 600,
+    },
+  },
+
+  components: {
+    MuiOutlinedInput: {
+      defaultProps: {
+        notched: false,
+      },
+    },
+    MuiInputLabel: {
+      defaultProps: {
+        shrink: false,
+      },
+    },
+  },
+});
 
 root.render(
   <React.StrictMode>

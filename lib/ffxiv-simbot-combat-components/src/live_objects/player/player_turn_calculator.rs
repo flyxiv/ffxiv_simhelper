@@ -2,10 +2,12 @@ use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
 use crate::event::FfxivEventQueue;
 use crate::live_objects::turn_type::FfxivTurnType;
-use crate::{IdType, TimeType, COMBAT_START_TIME};
+use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::{max, Reverse};
 use std::rc::Rc;
+
+pub static COMBAT_START_TIME: TimeType = -10000;
 
 /// Stores information needed to calculate the next turn of a player.
 #[derive(Clone)]

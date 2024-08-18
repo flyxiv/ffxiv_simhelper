@@ -11,7 +11,8 @@ use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{IdType, ResourceType, StatusTable, TimeType};
+use crate::types::{IdType, TimeType};
+use crate::types::{ResourceType, StatusTable};
 use std::collections::HashMap;
 
 /// The normal delay time for o-GCD skills.

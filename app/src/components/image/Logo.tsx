@@ -1,6 +1,6 @@
 import "./Logo.css";
 import { Link } from "react-router-dom";
-const logo = process.env.PUBLIC_URL + "/images/logo_light.svg";
+const logo = process.env.PUBLIC_URL + "/images/logo_dark.svg";
 
 export const Logo = () => {
   return (

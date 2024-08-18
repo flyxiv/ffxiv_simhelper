@@ -3,7 +3,8 @@ use crate::id_entity::IdEntity;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
-use crate::{IdType, StatusTable};
+use crate::types::IdType;
+use crate::types::StatusTable;
 
 pub(crate) mod create_player;
 /// If the delay is over 3 * OGCD delay, then it is turn to use a GCD skill,
@@ -12,8 +13,9 @@ pub(crate) mod create_player;
 pub mod ffxiv_player;
 pub mod gcd_calculator;
 pub mod logs;
-mod player_damage_profile;
+pub mod player_power;
 pub mod player_turn_calculator;
+pub mod role;
 
 static MAX_MANA: i32 = 10000;
 

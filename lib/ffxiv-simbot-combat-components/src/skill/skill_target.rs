@@ -1,4 +1,4 @@
-use crate::IdType;
+use crate::types::IdType;
 
 #[derive(Clone, Debug)]
 pub enum SkillTarget {

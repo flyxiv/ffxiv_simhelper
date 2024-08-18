@@ -1,4 +1,5 @@
 use crate::combat_resources::CombatResource;
+use crate::consts::SIMULATION_START_TIME_MILLISECOND;
 use crate::jobs_skill_data::white_mage::abilities::make_whitemage_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -7,7 +8,8 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, TimeType, SIMULATION_START_TIME_MILLISECOND};
+use crate::types::{ComboType, ResourceType};
+use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -15,6 +17,7 @@ use std::rc::Rc;
 
 const LILY_STACK_INTERVAL_MILLISECOND: TimeType = 20000;
 const LILY_MAX_STACK: ResourceType = 3;
+const GLARE4_MAX_STACK: ResourceType = 3;
 const BLOOD_LILY_MAX_STACK: ResourceType = 3;
 
 #[derive(Clone)]
@@ -23,6 +26,7 @@ pub(crate) struct WhitemageCombatResources {
     player_id: IdType,
     blood_lily_stack: ResourceType,
     lily_stack: ResourceType,
+    glare4_stack: ResourceType,
     next_lily_time: TimeType,
 }
 
@@ -43,6 +47,8 @@ impl CombatResource for WhitemageCombatResources {
             );
         } else if resource_id == 1 {
             self.lily_stack = min(LILY_MAX_STACK, self.lily_stack + resource_amount);
+        } else if resource_id == 2 {
+            self.glare4_stack = min(GLARE4_MAX_STACK, self.glare4_stack + resource_amount);
         }
     }
 
@@ -51,6 +57,8 @@ impl CombatResource for WhitemageCombatResources {
             self.blood_lily_stack
         } else if resource_id == 1 {
             self.lily_stack
+        } else if resource_id == 2 {
+            self.glare4_stack
         } else {
             -1
         }
@@ -94,6 +102,7 @@ impl WhitemageCombatResources {
             player_id,
             blood_lily_stack: 0,
             lily_stack: 0,
+            glare4_stack: 0,
             next_lily_time: LILY_STACK_INTERVAL_MILLISECOND
                 + TimeType::abs(SIMULATION_START_TIME_MILLISECOND),
         }

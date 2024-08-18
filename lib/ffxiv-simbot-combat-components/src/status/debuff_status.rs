@@ -6,7 +6,8 @@ use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::{DamageType, IdType, ResourceType, TimeType};
+use crate::types::{DamageType, ResourceType};
+use crate::types::{IdType, TimeType};
 use std::cmp::min;
 use std::collections::HashMap;
 

@@ -12,7 +12,8 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{ResourceRequirements, NON_GCD_DELAY_MILLISECOND};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{IdType, ResourceType, StackType, TimeType};
+use crate::types::{IdType, TimeType};
+use crate::types::{ResourceType, StackType};
 use itertools::Itertools;
 use std::cell::RefCell;
 use std::cmp::max;
@@ -36,12 +37,16 @@ pub(crate) enum SkillPrerequisite {
     HasBufforDebuff(IdType),
     BufforDebuffLessThan(IdType, TimeType),
     HasResource(IdType, ResourceType),
+    HasResourceExactly(IdType, ResourceType),
     HasSkillStacks(IdType, StackType),
     MillisecondsBeforeBurst(TimeType),
-    RelatedSkillCooldownLessThan(IdType, TimeType),
+    RelatedSkillCooldownLessOrEqualThan(IdType, TimeType),
+
     /// Greater resource id, Lesser resource id, Greater by how much amount
     /// example: (1, 2, 50), then ok if resource1 >= resource2 + 50
     ResourceGreaterOrEqualThanAnotherResourceBy(IdType, IdType, ResourceType),
+
+    BuffGreaterDurationThan(IdType, IdType),
 }
 
 pub(crate) struct CombatInfo {
@@ -198,16 +203,19 @@ pub(crate) trait PriorityTable: Sized + Clone {
     ) -> Option<Vec<OgcdPlan>> {
         let ogcd_priority_table = self.get_ogcd_priority_table();
         let next_gcd_millisecond = turn_info.next_gcd_millisecond;
-        let mut best_ogcd_pair = None;
         let mut best_one_ogcd = None;
 
         for (priority_number, skill_priority) in ogcd_priority_table.iter().enumerate() {
             let skill = combat_resource.get_skill(skill_priority.skill_id);
             let skill_delay_millisecond = skill.get_delay_millisecond();
             let latest_time_to_use = next_gcd_millisecond - skill_delay_millisecond;
+            let skill_cooldown = if skill.stacks >= 1 {
+                0
+            } else {
+                skill.current_cooldown_millisecond
+            };
 
-            let first_skill_start_time =
-                turn_info.lower_bound_millisecond + skill.current_cooldown_millisecond;
+            let first_skill_start_time = turn_info.lower_bound_millisecond + skill_cooldown;
 
             if first_skill_start_time <= latest_time_to_use {
                 let mut combat_info_simulation = combat_info.clone();
@@ -215,7 +223,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 advance_time(
                     &mut combat_info_simulation,
                     &mut combat_resource_simulation,
-                    skill.current_cooldown_millisecond,
+                    skill_cooldown,
                 );
 
                 if self.can_use_skill(
@@ -233,7 +241,13 @@ pub(crate) trait PriorityTable: Sized + Clone {
                             priority_number,
                         }]);
                     }
+
                     let second_skill_start_time = first_skill_start_time + skill_delay_millisecond;
+
+                    if second_skill_start_time > next_gcd_millisecond - NON_GCD_DELAY_MILLISECOND {
+                        continue;
+                    }
+
                     let first_skill_simulation =
                         FirstSkillCombatSimulation::new(player.get_id(), skill);
 
@@ -247,6 +261,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                         &mut combat_info_simulation,
                         &mut combat_resource_simulation,
                         &first_skill_simulation,
+                        skill.get_id(),
                     );
                     if let Some(second_skill_plan) = self.find_second_highest_ogcd_skill(
                         combat_info_simulation,
@@ -265,28 +280,23 @@ pub(crate) trait PriorityTable: Sized + Clone {
                             priority_number,
                         };
 
-                        let skill_pair = vec![first_skill_plan, second_skill_plan];
+                        let double_weave_plan = Some(vec![first_skill_plan, second_skill_plan]);
 
-                        if let Some(current_best_pair) = best_ogcd_pair {
-                            best_ogcd_pair =
-                                Some(get_higher_priority_ogcd_set(skill_pair, current_best_pair));
+                        if has_important_skill(&best_one_ogcd)
+                            && !has_important_skill(&double_weave_plan)
+                        {
+                            return best_one_ogcd;
                         } else {
-                            best_ogcd_pair = Some(skill_pair);
+                            return double_weave_plan;
                         }
+                    } else {
+                        return best_one_ogcd;
                     }
                 }
             }
         }
 
-        if let Some(best_ogcd_pair) = best_ogcd_pair {
-            if let Some(best_one_ogcd) = best_one_ogcd {
-                return Some(get_higher_priority_ogcd_set(best_ogcd_pair, best_one_ogcd));
-            } else {
-                Some(best_ogcd_pair)
-            }
-        } else {
-            best_one_ogcd
-        }
+        best_one_ogcd
     }
 
     fn find_second_highest_ogcd_skill(
@@ -311,7 +321,13 @@ pub(crate) trait PriorityTable: Sized + Clone {
             let skill_delay_millisecond = skill.get_delay_millisecond();
             let latest_time_to_use = next_gcd_millisecond - skill_delay_millisecond;
 
-            let skill_start_time = start_time + skill.current_cooldown_millisecond;
+            let skill_cooldown = if skill.stacks >= 1 {
+                0
+            } else {
+                skill.current_cooldown_millisecond
+            };
+
+            let skill_start_time = start_time + skill_cooldown;
 
             if skill_start_time <= latest_time_to_use {
                 if self.can_use_skill(skill_priority, &combat_info, &player, &combat_resource) {
@@ -449,20 +465,25 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 if let Some(remaining_time) = status_remaining_time {
                     remaining_time <= *time_millisecond
                 } else {
-                    false
+                    true
                 }
             }
             SkillPrerequisite::HasResource(resource_id, resource) => {
                 combat_resources.get_resource(*resource_id) >= *resource
             }
-
+            SkillPrerequisite::HasResourceExactly(resource_id, resource) => {
+                combat_resources.get_resource(*resource_id) == *resource
+            }
             SkillPrerequisite::MillisecondsBeforeBurst(milliseconds) => {
                 *milliseconds >= combat_info.milliseconds_before_burst
             }
             SkillPrerequisite::HasSkillStacks(skill_id, stacks) => {
                 combat_resources.get_stack(*skill_id) >= *stacks
             }
-            SkillPrerequisite::RelatedSkillCooldownLessThan(related_skill_id, time_millisecond) => {
+            SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
+                related_skill_id,
+                time_millisecond,
+            ) => {
                 let related_skill = combat_resources.get_skills().get(related_skill_id).unwrap();
 
                 related_skill.get_current_cooldown_millisecond() <= *time_millisecond
@@ -476,6 +497,22 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 let lesser_resource = combat_resources.get_resource(*lesser_resource_id);
 
                 greater_resource >= lesser_resource + *amount
+            }
+            SkillPrerequisite::BuffGreaterDurationThan(buff1_id, buff2_id) => {
+                let buff1_remaining_time =
+                    self.find_status_remaining_time(combat_info, *buff1_id, player.get_id());
+                let buff2_remaining_time =
+                    self.find_status_remaining_time(combat_info, *buff2_id, player.get_id());
+
+                if let Some(buff1_remaining_time) = buff1_remaining_time {
+                    if let Some(buff2_remaining_time) = buff2_remaining_time {
+                        buff1_remaining_time > buff2_remaining_time
+                    } else {
+                        true
+                    }
+                } else {
+                    false
+                }
             }
         }
     }
@@ -543,31 +580,14 @@ fn advance_time(
     combat_resources.update_cooldown(elapsed_time);
 }
 
-/// first_set must have the bigger ogcd count.
-fn get_higher_priority_ogcd_set(
-    first_set: Vec<OgcdPlan>,
-    second_set: Vec<OgcdPlan>,
-) -> Vec<OgcdPlan> {
-    let penalty = if first_set.len() > second_set.len() {
-        OGCD_PENALTY
-    } else {
-        0
-    };
-
-    let first_set_priority = first_set
-        .iter()
-        .map(|plan| plan.priority_number)
-        .sum::<IdType>();
-    let second_set_priority = second_set
-        .iter()
-        .map(|plan| plan.priority_number)
-        .sum::<IdType>();
-
-    let first_set_better = first_set_priority <= second_set_priority + penalty;
-
-    if first_set_better {
-        first_set
-    } else {
-        second_set
+fn has_important_skill(ogcd_plans: &Option<Vec<OgcdPlan>>) -> bool {
+    if let Some(ogcd_plans) = ogcd_plans {
+        for plan in ogcd_plans {
+            if plan.skill.skill_id == 1716 {
+                return true;
+            }
+        }
     }
+
+    false
 }

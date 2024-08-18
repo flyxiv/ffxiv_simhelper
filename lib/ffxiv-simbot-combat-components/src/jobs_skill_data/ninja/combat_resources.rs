@@ -8,21 +8,24 @@ use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
-use crate::skill::{Skill, SkillEvents};
+use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, ResourceType};
+use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
 const NINKI_MAX: ResourceType = 100;
+const SHURIKEN_MAX_STACK: ResourceType = 5;
 
 #[derive(Clone)]
 pub(crate) struct NinjaCombatResources {
     skills: SkillTable<AttackSkill>,
     ninki: ResourceType,
+    shuriken: ResourceType,
     current_combo: Option<IdType>,
 }
 
@@ -39,12 +42,17 @@ impl CombatResource for NinjaCombatResources {
         if resource_id == 0 {
             let ninki = self.ninki;
             self.ninki = min(NINKI_MAX, ninki + resource_type);
+        } else if resource_id == 1 {
+            let shuriken = self.shuriken;
+            self.shuriken = min(SHURIKEN_MAX_STACK, shuriken + resource_type);
         }
     }
 
     fn get_resource(&self, resource_id: IdType) -> ResourceType {
         if resource_id == 0 {
             self.ninki
+        } else if resource_id == 1 {
+            self.shuriken
         } else {
             -1
         }
@@ -64,7 +72,7 @@ impl CombatResource for NinjaCombatResources {
         &mut self,
         skill_id: IdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
-        debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
+        _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
         player: &FfxivPlayer,
     ) -> SkillEvents {
@@ -100,6 +108,7 @@ impl NinjaCombatResources {
         Self {
             skills: make_ninja_skill_list(player_id),
             ninki: 0,
+            shuriken: 0,
             current_combo: None,
         }
     }

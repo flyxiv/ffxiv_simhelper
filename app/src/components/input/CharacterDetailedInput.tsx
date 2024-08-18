@@ -1,135 +1,83 @@
-import { Grid, TextField } from "@mui/material";
-import { JobSelectionWithState } from "./JobSelectionWithState";
-import { CharacterStates } from "src/types/CharacterStates";
+import { CharacterStates, CharacterStats } from "src/types/CharacterStates";
+import { styled, Box, Grid } from "@mui/material";
+import { inputStyleJob } from "./basicform/BasicInputForm";
+import { InputGridContainerStyle, InputGridItemStyle } from "./Styles";
 
-export function CharacterDetailedInput(mainCharacterState: CharacterStates) {
+interface TextForm {
+  value: string;
+  field: string;
+  state: CharacterStats;
+  setState: Function;
+}
+
+const InputGridContainer = styled(Grid)`
+  ${InputGridContainerStyle}
+`;
+
+const InputGridItem = styled(Grid)`
+  ${InputGridItemStyle}
+`;
+const InputBox = styled(Box)`
+  ${InputGridItemStyle}
+`;
+const InputJobBox = styled(Grid)`
+  ${inputStyleJob}
+`;
+
+export function handleChange(textForm: TextForm) {
+  const value = textForm.value === "" ? "" : parseInt(textForm.value);
+  const stats = { ...textForm.state, [textForm.field]: value };
+  textForm.setState(stats);
+}
+
+// 직업뿐만 아니라 세세한 주/부스탯까지 입력
+export function CharacterDetailedInput(
+  mainCharacterState: CharacterStates,
+  availablePartyIds: number[]
+) {
+  /*
+  let xs = 15;
+  let statNameAndKeys = [
+    { name: "Weapon Damage", field: "weaponDamage" },
+    { name: "Main Stat", field: "mainStat" },
+    { name: "Critical Strike", field: "criticalStrike" },
+    { name: "Direct Hit", field: "directHit" },
+    { name: "Determination", field: "determination" },
+    { name: "Speed", field: "speed" },
+    { name: "Tenacity", field: "tenacity" },
+  ];
+
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={3}>
-        {JobSelectionWithState(
-          mainCharacterState.jobName,
-          mainCharacterState.jobNameSetter
-        )}
-      </Grid>
-      <Grid item xs={3}>
-        <TextField
-          label="Weapon Attack"
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          type="number"
-          value={mainCharacterState.value.weaponDamage}
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.weaponAttack(value);
-          }}
-          fullWidth
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <TextField
-          label="Main Stat"
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          type="number"
-          value={mainCharacterState.value.mainStat}
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.mainStat(value);
-          }}
-          fullWidth
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <TextField
-          label="Critical Strike"
-          value={mainCharacterState.value.criticalStrike}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          fullWidth
-          type="number"
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.criticalStrike(value);
-          }}
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <TextField
-          label="Direct Hit"
-          value={mainCharacterState.value.directHit}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          fullWidth
-          type="number"
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.directHit(value);
-          }}
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <TextField
-          label="Determination"
-          value={mainCharacterState.value.determination}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          fullWidth
-          type="number"
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.determination(value);
-          }}
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <TextField
-          label="Speed"
-          value={mainCharacterState.value.speed}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          fullWidth
-          type="number"
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.speed(value);
-          }}
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <TextField
-          label="Tenacity"
-          value={mainCharacterState.value.tenacity}
-          InputProps={{
-            inputProps: {
-              style: { textAlign: "center" },
-            },
-          }}
-          fullWidth
-          type="number"
-          onChange={(e) => {
-            const value = e.target.value === "" ? "" : parseInt(e.target.value);
-            mainCharacterState.setter.tenacity(value);
-          }}
-        />
-      </Grid>
-    </Grid>
+    <InputGridContainer container>
+      <InputBox marginBottom={1}>
+        <InputJobBox item xs={xs} key="Job">
+          {MainPlayerJobSelection(
+            0,
+            mainCharacterState.jobAbbrev,
+            mainCharacterState.jobNameSetter,
+            null
+          )}
+        </InputJobBox>
+      </InputBox> 
+      {statNameAndKeys.map((statNameAndKey) => {
+        return (
+          <InputBox marginBottom={0.5}>
+            <InputGridItem item xs={xs} key={statNameAndKey.name}>
+              <CustomInputForm
+                label={statNameAndKey.name}
+                state={mainCharacterState.stats}
+                field={statNameAndKey.field as keyof CharacterStats}
+                setState={mainCharacterState.setStats}
+                handleChange={handleChange}
+              />
+            </InputGridItem>
+          </InputBox>
+        );
+      })}
+      {Partner1Selection(mainCharacterState, availablePartyIds)}
+    </InputGridContainer>
   );
+}
+*/
+  return <></>;
 }

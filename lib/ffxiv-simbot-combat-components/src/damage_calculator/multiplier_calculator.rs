@@ -1,12 +1,11 @@
+use crate::live_objects::player::player_power::PlayerPower;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::{BuffIncreasePercentType, ResourceType};
-use ffxiv_simbot_db::stat_calculator::CharacterPower;
-use ffxiv_simbot_db::MultiplierType;
-use lazy_static::lazy_static;
+use crate::types::{BuffIncreasePercentType, MultiplierType, ResourceType};
 
 #[inline]
 pub(crate) fn percent_to_actual_value(increase_percent: BuffIncreasePercentType) -> MultiplierType {
+    debug_assert!(increase_percent >= 1, "{}", increase_percent);
     increase_percent as MultiplierType / 100f64
 }
 
@@ -19,27 +18,41 @@ pub trait MultiplierCalculator {
         stacks: Option<ResourceType>,
     ) -> MultiplierType {
         let increase_value = percent_to_actual_value(damage_increase);
+        debug_assert!(increase_value >= 0.0f64, "{}", increase_value);
 
-        if let Some(stack) = stacks {
-            return 1.0f64 + (increase_value * stack as MultiplierType);
+        return if let Some(stack) = stacks {
+            1.0f64 + (increase_value * stack as MultiplierType)
         } else {
-            return 1.0f64 + increase_value;
-        }
+            1.0f64 + increase_value
+        };
     }
 
     fn calculate_crit_hit_rate_multiplier(
         &self,
-        character_power: &CharacterPower,
+        character_power: &PlayerPower,
         crit_rate_increase: BuffIncreasePercentType,
         stacks: Option<ResourceType>,
     ) -> MultiplierType {
         let critical_percent_damage = character_power.critical_strike_damage - 1.0f64;
+        debug_assert!(
+            critical_percent_damage >= 0.0f64,
+            "{}",
+            critical_percent_damage
+        );
+
         let increase_value = percent_to_actual_value(crit_rate_increase);
+        debug_assert!(increase_value >= 0.0f64, "{}", increase_value);
+
         let expected_damage_increase = if let Some(stack) = stacks {
             critical_percent_damage * increase_value * (stack as MultiplierType)
         } else {
             critical_percent_damage * increase_value
         };
+        debug_assert!(
+            expected_damage_increase >= 0.0f64,
+            "{}",
+            expected_damage_increase
+        );
 
         1.0f64 + expected_damage_increase
     }
@@ -54,15 +67,16 @@ pub trait MultiplierCalculator {
         } else {
             DIRECT_HIT_DAMAGE_MULTIPLIER * increase_value
         };
+        debug_assert!(
+            expected_damage_increase >= 0.0f64,
+            "{}",
+            expected_damage_increase
+        );
 
         1.0f64 + expected_damage_increase
     }
 
-    fn calculate_multiplier<S>(
-        &self,
-        status: &S,
-        character_power: &CharacterPower,
-    ) -> MultiplierType
+    fn calculate_multiplier<S>(&self, status: &S, character_power: &PlayerPower) -> MultiplierType
     where
         S: Status,
     {
@@ -84,6 +98,12 @@ pub trait MultiplierCalculator {
                     .calculate_direct_hit_rate_multiplier(*direct_hit_rate_increase, Some(stacks)),
                 _ => 1.0f64,
             };
+
+            debug_assert!(
+                damage_increase >= 0.0f64,
+                "damage_increase: {}",
+                damage_increase
+            );
 
             total_multiplier *= damage_increase;
         }

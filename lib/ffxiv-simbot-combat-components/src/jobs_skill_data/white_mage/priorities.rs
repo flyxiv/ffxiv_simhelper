@@ -1,11 +1,10 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::white_mage::abilities::WhitemageDatabase;
-use crate::rotation::priority_table::SkillPrerequisite::{
-    HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessThan,
-};
+use crate::rotation::priority_table::SkillPrerequisite::{HasBufforDebuff, HasResource, Not, Or};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::types::IdType;
+use crate::types::TurnCount;
 use std::cell::RefCell;
 
 #[derive(Clone)]
@@ -50,7 +49,7 @@ impl WhitemagePriorityTable {
             turn_count: RefCell::new(0),
             opener: make_whitemage_opener(&db),
             gcd_priority_table: make_whitemage_gcd_priority_table(&db),
-            ogcd_priority_table: vec![],
+            ogcd_priority_table: make_whitemage_ogcd_priority_table(&db),
         }
     }
 }
@@ -60,7 +59,13 @@ pub(crate) fn make_whitemage_opener(db: &WhitemageDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.glare3.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.dia.get_id()),
+        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+        Opener::GcdOpener(db.glare3.get_id()),
+        Opener::OgcdOpener((Some(db.presence_of_mind.get_id()), None)),
+        Opener::GcdOpener(db.glare3.get_id()),
         Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.glare3.get_id()),
+        Opener::OgcdOpener((Some(db.assize.get_id()), None)),
     ]
 }
 
@@ -84,11 +89,32 @@ pub(crate) fn make_whitemage_gcd_priority_table(db: &WhitemageDatabase) -> Vec<S
             )),
         },
         SkillPriorityInfo {
+            skill_id: db.glare4.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.afflatus_rapture.get_id(),
             prerequisite: Some(Not(Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)))),
         },
         SkillPriorityInfo {
             skill_id: db.glare3.get_id(),
+            prerequisite: None,
+        },
+    ]
+}
+
+pub(crate) fn make_whitemage_ogcd_priority_table(db: &WhitemageDatabase) -> Vec<SkillPriorityInfo> {
+    vec![
+        SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.presence_of_mind.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.assize.get_id(),
             prerequisite: None,
         },
     ]

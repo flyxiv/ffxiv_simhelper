@@ -1,20 +1,19 @@
 import { QuickSimResponse } from "src/types/QuickSimResponse";
 import {
   DamageChartData,
-  DamageProfileBarChart,
+  DamageChartTitle,
+  SkillDamageProfile,
 } from "./DamageProfileBarChart";
-import { SkillIdToIconPathFactory } from "../abilityicon/SkillIconFactory";
-import { Box } from "@mui/material";
+import { SkillIdToIconPathFactory } from "../icon/abilityicon/SkillIconFactory";
+import { iconPathToName } from "../Util";
 
 export const DamageProfileGraph = (response: QuickSimResponse) => {
   const mainPlayerId = response.mainPlayerId;
   const simulationDatas = response.simulationData;
 
-  let rdpsProfileMap = new Map<String, number>();
-  let pdpsProfileMap = new Map<String, number>();
-  let totalSkills = new Set<String>();
   let damageProfileData: Array<DamageChartData> = [];
   let mainPlayerSimulationData = null;
+  let totalDps = 0;
 
   let i = 0;
   for (i = 0; i < simulationDatas.length; i++) {
@@ -37,52 +36,37 @@ export const DamageProfileGraph = (response: QuickSimResponse) => {
 
   for (i = 0; i < mainPlayerSimulationData.damageProfileTable.length; i++) {
     let profile = mainPlayerSimulationData.damageProfileTable[i];
+    if (profile.entity === "Status") {
+      continue;
+    }
+
     let iconPath = SkillIdToIconPathFactory(profile.id);
-
-    let currentSkillRdps = rdpsProfileMap.get(iconPath);
-    let currentSkillPdps = pdpsProfileMap.get(iconPath);
-
-    totalSkills.add(iconPath);
-
-    if (currentSkillRdps === undefined) {
-      rdpsProfileMap.set(iconPath, profile.rdpsContribution);
-    } else {
-      rdpsProfileMap.set(iconPath, currentSkillRdps + profile.rdpsContribution);
-    }
-
-    if (currentSkillPdps === undefined) {
-      pdpsProfileMap.set(iconPath, profile.pdpsContribution);
-    } else {
-      pdpsProfileMap.set(iconPath, currentSkillPdps + profile.pdpsContribution);
-    }
-  }
-
-  let totalSkillsArray = Array.from(totalSkills);
-
-  for (i = 0; i < totalSkillsArray.length; i++) {
-    let iconPath = totalSkillsArray[i];
-    let rdps = rdpsProfileMap.get(iconPath);
-    let pdps = pdpsProfileMap.get(iconPath);
-
-    if (rdps === undefined) {
-      rdps = 0;
-    }
-    if (pdps === undefined) {
-      pdps = 0;
-    }
+    let skillName = iconPathToName(iconPath);
+    totalDps += profile.pdpsContribution;
 
     damageProfileData.push({
+      name: skillName,
+      pdps: profile.pdpsContribution,
+      rdps: profile.rdpsContribution,
       icon: iconPath,
-      rdps: rdps,
-      pdps: pdps,
+      castCount: profile.castCount,
     });
   }
 
   damageProfileData.sort((a, b) => b.pdps - a.pdps);
+  let highestDamageOfSingleSkill = damageProfileData[0].pdps;
 
   return (
-    <Box width={500} height={80 + damageProfileData.length * 40}>
-      <DamageProfileBarChart data={damageProfileData} />
-    </Box>
+    <>
+      {DamageChartTitle}
+      {damageProfileData.map((data) => {
+        return SkillDamageProfile(
+          data,
+          totalDps,
+          highestDamageOfSingleSkill,
+          response.combatTimeMillisecond
+        );
+      })}
+    </>
   );
 };

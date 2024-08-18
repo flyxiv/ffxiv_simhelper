@@ -1,14 +1,15 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
-use crate::event_ticker::{EventTicker, TickerKey};
+use crate::event_ticker::{EventTicker, PercentType, TickerKey};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
 use crate::status::debuff_status::DebuffStatus;
-use crate::{IdType, StatusTable, TimeType};
+use crate::types::StatusTable;
+use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
-use std::cmp::Reverse;
+use std::cmp::{max, Reverse};
 use std::rc::Rc;
 
 /// Loads Auto Attack Event for Melee Jobs
@@ -17,8 +18,12 @@ pub struct AutoAttackTicker {
     id: IdType,
     player_id: IdType,
     event_queue: Rc<RefCell<FfxivEventQueue>>,
+    auto_attack_id: IdType,
     auto_attack: AttackSkill,
     auto_attack_interval: TimeType,
+    trait_percent: PercentType,
+    duration_millisecond: TimeType,
+    damage_category: DamageCategory,
 }
 
 impl EventTicker for AutoAttackTicker {
@@ -37,21 +42,23 @@ impl EventTicker for AutoAttackTicker {
                     .borrow_mut()
                     .push(Reverse(FfxivEvent::Damage(
                         self.player_id,
-                        AUTO_ATTACK_ID,
+                        self.auto_attack_id,
                         self.auto_attack.get_potency(),
-                        100,
+                        self.trait_percent,
                         false,
                         false,
                         player.borrow().buff_list.borrow().clone(),
                         debuff.borrow().clone(),
-                        DamageCategory::AutoAttack,
-                        current_time_millisecond,
+                        self.damage_category,
+                        max(current_time_millisecond, 0),
                     )));
             }
         }
     }
 
-    fn update_remaining_time(&mut self, _: TimeType) {}
+    fn update_remaining_time(&mut self, elapsed_time_millisecond: TimeType) {
+        self.duration_millisecond -= elapsed_time_millisecond;
+    }
 
     fn get_event_queue(&self) -> Rc<RefCell<FfxivEventQueue>> {
         self.event_queue.clone()
@@ -77,7 +84,7 @@ impl EventTicker for AutoAttackTicker {
         false
     }
     fn get_remaining_time(&self) -> TimeType {
-        TimeType::MAX - 1
+        self.duration_millisecond
     }
 }
 
@@ -105,8 +112,33 @@ impl AutoAttackTicker {
             id,
             player_id,
             event_queue: ffxiv_event_queue,
+            auto_attack_id: AUTO_ATTACK_ID,
             auto_attack,
             auto_attack_interval: GCD_DEFAULT_DELAY_MILLISECOND,
+            trait_percent: 100,
+            duration_millisecond: 19000000,
+            damage_category: DamageCategory::AutoAttack,
+        }
+    }
+
+    pub fn new_with_auto_attack(
+        id: IdType,
+        player_id: IdType,
+        auto_attack: AttackSkill,
+        damage_category: DamageCategory,
+        duration_millisecond: TimeType,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> Self {
+        Self {
+            id,
+            player_id,
+            event_queue: ffxiv_event_queue,
+            auto_attack_id: auto_attack.id,
+            trait_percent: auto_attack.trait_percent,
+            auto_attack,
+            auto_attack_interval: GCD_DEFAULT_DELAY_MILLISECOND,
+            duration_millisecond,
+            damage_category,
         }
     }
 }

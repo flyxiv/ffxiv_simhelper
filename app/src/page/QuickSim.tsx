@@ -2,135 +2,139 @@ import { useState } from "react";
 import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
 import { Box, Typography } from "@mui/material";
 import "./QuickSim.css";
-import { CharacterDetailedInput } from "../components/input/CharacterDetailedInput";
-import { defaultQuickSimRequest } from "src/const/DefaultQuickSimRequest";
-import { PartyInfo, QuickSimRequest } from "src/types/QuickSimRequest";
-import { CharacterStates } from "src/types/CharacterStates";
-import { QuickSimPartyInput } from "../components/input/QuickSimPartyInput";
-import {
-  QuickSimPartyMemberState,
-  QuickSimPartyState,
-} from "src/types/QuickSimPartyStates";
+import { EquipmentSimCharacterStates } from "src/types/CharacterStates";
+import { QuickSimInputSaveName } from "src/App";
+import { calculatePlayerPowerFromInputs } from "src/types/ffxivdatabase/ItemSet";
+import { EquipmentSelectionMenu } from "src/components/input/basicform/EquipmentInputForm";
+import { StatSummary } from "src/components/container/StatSummary";
+import { HorizontalPartyInput } from "src/components/input/partyinput/HorizontalPartyInput";
+import { QuickSimInputSaveState } from "src/types/QuickSimInput";
+import { defaultQuickSimInput } from "src/const/DefaultQuickSimInput";
 
-export function QuickSim() {
-  let mostRecentRequestState = localStorage.getItem("mostRecentRequest");
-  let mostRecentRequest = null;
-
-  if (mostRecentRequestState == null) {
-    mostRecentRequest = defaultQuickSimRequest();
-  } else {
-    mostRecentRequest = JSON.parse(mostRecentRequestState) as QuickSimRequest;
+export function isNotValid(input: QuickSimInputSaveState) {
+  if (input.mainPlayerJob === null || input.mainPlayerJob === undefined) {
+    return true;
   }
 
-  let mainPlayerId = mostRecentRequest.mainPlayerId;
-  let mainPlayerInfo = mostRecentRequest.party[mainPlayerId];
-  const [mainPlayerJob, setMainPlayerJob] = useState(
-    mostRecentRequest.party[mostRecentRequest.mainPlayerId].job
-  );
+  if (
+    input.combatTimeMillisecond === null ||
+    input.combatTimeMillisecond === undefined
+  ) {
+    return true;
+  }
 
-  const [mainPlayerWeaponDamageState, setMainPlayerWeaponDamageState] =
-    useState(mainPlayerInfo.stats.weaponDamage);
-  const [mainPlayerMainStatState, setMainPlayerMainStatState] = useState(
-    mainPlayerInfo.stats.mainStat
-  );
-  const [mainPlayerCriticalStrikeState, setMainPlayerCriticalStrikeState] =
-    useState(mainPlayerInfo.stats.criticalStrike);
-  const [mainPlayerDirectHitState, setMainPlayerDirectHitState] = useState(
-    mainPlayerInfo.stats.directHit
-  );
-  const [mainPlayerDeterminationState, setMainPlayerDeterminationState] =
-    useState(mainPlayerInfo.stats.determination);
-  const [mainPlayerSpeedState, setMainPlayerSpeedState] = useState(
-    mainPlayerInfo.stats.speed
-  );
-  const [mainPlayerTenacityState, setMainPlayerTenacityState] = useState(
-    mainPlayerInfo.stats.tenacity
-  );
+  if (
+    input.combatTimeMillisecond === null ||
+    input.combatTimeMillisecond === undefined
+  ) {
+    return true;
+  }
 
-  const mainPlayerState: CharacterStates = {
-    jobName: mainPlayerJob,
-    jobNameSetter: setMainPlayerJob,
-    value: {
-      weaponDamage: mainPlayerWeaponDamageState,
-      mainStat: mainPlayerMainStatState,
-      criticalStrike: mainPlayerCriticalStrikeState,
-      directHit: mainPlayerDirectHitState,
-      determination: mainPlayerDeterminationState,
-      speed: mainPlayerSpeedState,
-      tenacity: mainPlayerTenacityState,
-    },
-    setter: {
-      weaponAttack: setMainPlayerWeaponDamageState,
-      mainStat: setMainPlayerMainStatState,
-      criticalStrike: setMainPlayerCriticalStrikeState,
-      directHit: setMainPlayerDirectHitState,
-      determination: setMainPlayerDeterminationState,
-      speed: setMainPlayerSpeedState,
-      tenacity: setMainPlayerTenacityState,
-    },
+  return false;
+}
+
+export function QuickSim() {
+  let mostRecentInputState = localStorage.getItem(QuickSimInputSaveName);
+  let mostRecentInput = null;
+
+  if (mostRecentInputState == null) {
+    mostRecentInput = defaultQuickSimInput();
+  } else {
+    mostRecentInput = JSON.parse(
+      mostRecentInputState
+    ) as QuickSimInputSaveState;
+  }
+
+  if (isNotValid(mostRecentInput)) {
+    mostRecentInput = defaultQuickSimInput();
+  }
+
+  const [mainPlayerJobAbbrev, setMainPlayerJobAbbrev] = useState(
+    mostRecentInput.mainPlayerJob
+  );
+  let [mainPlayerPartner1Id, setMainPlayerPartner1Id] = useState(
+    mostRecentInput.mainPlayerPartner1Id
+  );
+  let [mainPlayerPartner2Id, setMainPlayerPartner2Id] = useState(
+    mostRecentInput.mainPlayerPartner2Id
+  );
+  const mainPlayerState: EquipmentSimCharacterStates = {
+    jobAbbrev: mainPlayerJobAbbrev,
+    jobNameSetter: setMainPlayerJobAbbrev,
+    partner1Id: mainPlayerPartner1Id,
+    setPartner1Id: setMainPlayerPartner1Id,
+    partner2Id: mainPlayerPartner2Id,
+    setPartner2Id: setMainPlayerPartner2Id,
   };
 
-  let combatTimeSeconds = mostRecentRequest.combatTimeMillisecond / 1000;
+  let combatTimeSeconds = mostRecentInput.combatTimeMillisecond / 1000;
   let [combatTimeStateSeconds, setCombatTimeSeconds] =
     useState(combatTimeSeconds);
 
-  let input = loadPartyJobs(mostRecentRequest.party);
-  let ids = input.ids;
-  let otherPartyJobs = input.jobs;
+  let partyJobAbbrevs = mostRecentInput.partyMemberJobAbbrevs;
+  let ids = [1, 2, 3, 4, 5, 6, 7];
 
-  let [partyJobs, setPartyJobs] = useState(otherPartyJobs);
+  let [availablePartyIds, setAvailablePartyIds] = useState(ids);
+
+  let [partyJobs, setPartyJobs] = useState(partyJobAbbrevs);
+  let initialPower = calculatePlayerPowerFromInputs(
+    mostRecentInput.itemSet,
+    mainPlayerJobAbbrev,
+    mostRecentInput.race,
+    mostRecentInput.foodId,
+    mostRecentInput.gearSetMaterias
+  );
+
+  let [data, setData] = useState({
+    power: initialPower,
+    itemSet: mostRecentInput.itemSet,
+    foodId: mostRecentInput.foodId,
+    gearSetMaterias: mostRecentInput.gearSetMaterias,
+    jobAbbrev: mainPlayerJobAbbrev,
+    race: mostRecentInput.race,
+  });
+
+  let borderRadius = 3;
 
   return (
     <>
-      <Box className="CharacterDetailCustomizeBoard">
-        <Box className="SelectionTitle">
-          <Typography variant="h5">1. Input Your Info</Typography>
+      <Box alignContent={"center"}>
+        <Box className="QuickSimInputContainer">
+          <Box className="SelectionTitle" borderRadius={borderRadius}>
+            <Typography variant="h5">1. Input Your Info</Typography>
+          </Box>
+          <Box className="EquipmentBoard">
+            {EquipmentSelectionMenu(0, mainPlayerState, data, setData)}
+          </Box>
         </Box>
-        <Box className="CustomizeBoard">
-          {CharacterDetailedInput(mainPlayerState)}
+        <Box className="QuickSimInputContainer">
+          {StatSummary(mainPlayerState.jobAbbrev, data.power)}
         </Box>
-      </Box>
-      <Box className="QuickSimPartyInput">
-        <Box className="SelectionTitle">
-          <Typography variant="h5">2. Input Combat Info</Typography>
+        <Box className="StatComparePartyInputContainer">
+          <Box className="SelectionTitle" borderRadius={borderRadius}>
+            <Typography variant="h5">2. Additional Settings</Typography>
+          </Box>
+          <Box className="CustomizeBoard">
+            {HorizontalPartyInput(
+              ids,
+              partyJobs,
+              setPartyJobs,
+              availablePartyIds,
+              setAvailablePartyIds,
+              combatTimeStateSeconds,
+              setCombatTimeSeconds
+            )}
+          </Box>
         </Box>
-        <Box className="PartyJobInput">
-          {QuickSimPartyInput(
-            ids,
+        <Box>
+          {QuickSimRequestButton(
             partyJobs,
-            setPartyJobs,
             combatTimeStateSeconds,
-            setCombatTimeSeconds
+            mainPlayerState,
+            data
           )}
         </Box>
       </Box>
-      <Box>
-        {QuickSimRequestButton(
-          partyJobs,
-          combatTimeStateSeconds,
-          mainPlayerState
-        )}
-      </Box>
     </>
   );
-}
-
-function loadPartyJobs(partyInfo: PartyInfo[]) {
-  let jobs = [];
-  let ids = [];
-
-  let i = 0;
-  for (i = 1; i < 8; i++) {
-    ids.push(i);
-    if (partyInfo.length > i) {
-      jobs.push(partyInfo[i].job);
-    } else {
-      jobs.push("Empty");
-    }
-  }
-
-  return {
-    ids: ids,
-    jobs: jobs,
-  };
 }

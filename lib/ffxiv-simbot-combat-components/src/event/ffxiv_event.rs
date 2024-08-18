@@ -6,7 +6,8 @@ use crate::live_objects::turn_type::FfxivTurnType;
 use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::{DamageType, IdType, ResourceType, StatusTable, TimeType};
+use crate::types::{DamageType, ResourceType, StatusTable};
+use crate::types::{IdType, TimeType};
 use std::cmp::min;
 use std::collections::HashMap;
 

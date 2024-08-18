@@ -1,22 +1,59 @@
-import { Button } from "@mui/material";
-import "./QuickSimRequestButton.css";
+import { styled, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { CharacterStates } from "src/types/CharacterStates";
-import { MapJobAbbrevToJobDefaultStat } from "src/const/StatValue";
-import { PartyInfo } from "src/types/QuickSimRequest";
+import { EquipmentSimCharacterStates } from "src/types/CharacterStates";
+import {
+  mapJobAbbrevToJobDefaultStat,
+  playerStatToPlayerPower,
+} from "src/const/StatValue";
+import { PartyInfo } from "src/types/PartyStates";
+import { QuickSimInputSaveName, QuickSimResponseSaveName } from "src/App";
+import { useState } from "react";
+import { QuickSimResponse } from "src/types/QuickSimResponse";
+import { requestButtonStyle } from "./Style";
+import {
+  CharacterEquipmentsData,
+  PlayerPower,
+} from "src/types/ffxivdatabase/PlayerPower";
+import { QuickSimInputSaveState } from "src/types/QuickSimInput";
+import { AUTO_ATTACK_DELAYS } from "src/types/ffxivdatabase/Job";
+
+const totalRequestCount = 1;
 
 export function QuickSimRequestButton(
-  partyState: string[],
+  partyMemberJobAbbrevs: string[],
   combatTimeSeconds: number,
-  characterState: CharacterStates
+  characterState: EquipmentSimCharacterStates,
+  data: CharacterEquipmentsData
 ) {
+  let RequestButton = styled(Button)`
+    ${requestButtonStyle}
+  `;
+
+  let [buttonText, setButtonText] = useState("Simulate");
+  let [requestCount, setRequestCount] = useState(0);
+  const loadingButtonText = (requestCount: number) => {
+    return `Simulating... ${requestCount}/${totalRequestCount}`;
+  };
+
   let navigate = useNavigate();
+  let count = 0;
 
   const handleClick = async () => {
-    let request = createQuickSimRequest(
-      partyState,
+    setButtonText(loadingButtonText(requestCount));
+    let input = createQuickSimInputSaveState(
+      partyMemberJobAbbrevs,
+      characterState,
       combatTimeSeconds,
-      characterState
+      data
+    );
+    let inputJson = JSON.stringify(input);
+    localStorage.setItem(QuickSimInputSaveName, inputJson);
+
+    let request = createQuickSimRequest(
+      partyMemberJobAbbrevs,
+      combatTimeSeconds,
+      characterState,
+      data.power
     );
 
     if (request instanceof Error) {
@@ -24,76 +61,153 @@ export function QuickSimRequestButton(
       return;
     }
 
-    console.log(request);
-
     let body = JSON.stringify(request);
-    localStorage.setItem("mostRecentRequest", body);
+    console.log(body);
 
-    try {
-      const response = await fetch("http://localhost:13406/api/v1/simulate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: body,
-      });
+    let responsePromises = [];
+    let responses: Array<Response> = [];
+    const incrementState = (count: number) => {
+      setRequestCount(count);
+      setButtonText(loadingButtonText(count));
+    };
 
-      if (response.ok) {
-        console.log("POST 요청이 성공했습니다.");
-        // JavaScript 객체를 key-value dictionary로 변환
-        const responseString = JSON.stringify(await response.json());
-        localStorage.setItem("simulationResult", responseString);
-        navigate("/simulationresult");
-      } else {
-        console.error("POST 요청이 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("오류 발생: ", error);
+    for (let i = 0; i < totalRequestCount; i++) {
+      responsePromises.push(
+        sendRequestAsync(body)
+          .then((response) => {
+            responses.push(response);
+            count = count + 1;
+            incrementState(count);
+          })
+          .catch((error) => {
+            console.error("Error: ", error.message);
+          })
+      );
     }
+
+    await Promise.all(responsePromises);
+    const formattedResponses: Array<Promise<QuickSimResponse>> = responses.map(
+      async (response) => {
+        const data = await response.json();
+        return data;
+      }
+    );
+
+    const finalResponses = await Promise.all(formattedResponses);
+    // Use mean/max for the summary and the very first request for the other results.
+    let response = finalResponses[0];
+    let mainPlayerId = response.mainPlayerId;
+    let damageSummaries = finalResponses.map(
+      (response) => response.simulationData[mainPlayerId].simulationSummary
+    );
+
+    let totalDps = 0;
+    let maxRdps = 0;
+    let totalRdps = 0;
+    let totalEdps = 0;
+
+    damageSummaries.forEach((summary) => {
+      totalDps += summary.pdps;
+      totalRdps += summary.rdps;
+      totalEdps += summary.edps;
+      maxRdps = Math.max(maxRdps, summary.rdps);
+    });
+
+    let averageDps = totalDps / totalRequestCount;
+    let averageRdps = totalRdps / totalRequestCount;
+    let averageEdps = totalEdps / totalRequestCount;
+
+    response.simulationData[mainPlayerId].simulationSummary.pdps = averageDps;
+    response.simulationData[mainPlayerId].simulationSummary.rdps = averageRdps;
+    response.simulationData[mainPlayerId].simulationSummary.edps = averageEdps;
+    response.simulationData[mainPlayerId].simulationSummary.maxRdps = maxRdps;
+
+    const responseString = JSON.stringify(response);
+    localStorage.setItem(QuickSimResponseSaveName, responseString);
+
+    navigate("/simulationresult");
   };
   return (
-    <Button variant="contained" className="RequestButton" onClick={handleClick}>
-      Begin Simulation
-    </Button>
+    <RequestButton variant="contained" onClick={handleClick}>
+      {buttonText}
+    </RequestButton>
   );
+}
+
+function createQuickSimInputSaveState(
+  partyMemberJobAbbrevs: string[],
+  mainCharacterState: EquipmentSimCharacterStates,
+  combatTimeSeconds: number,
+  data: CharacterEquipmentsData
+): QuickSimInputSaveState {
+  let partyMemberIds: number[] = [];
+  partyMemberJobAbbrevs.forEach((jobAbbrev, index) => {
+    if (jobAbbrev !== "Empty") {
+      partyMemberIds.push(index + 1);
+    }
+  });
+
+  return {
+    partyMemberJobAbbrevs: partyMemberJobAbbrevs,
+    itemSet: data.itemSet,
+    gearSetMaterias: data.gearSetMaterias,
+    mainPlayerJob: mainCharacterState.jobAbbrev,
+    race: data.race,
+    mainPlayerPartner1Id: mainCharacterState.partner1Id,
+    mainPlayerPartner2Id: mainCharacterState.partner2Id,
+    combatTimeMillisecond: combatTimeSeconds * 1000,
+    partyMemberIds: partyMemberIds,
+    foodId: data.foodId,
+  };
 }
 
 function createQuickSimRequest(
   partyState: string[],
   combatTimeSeconds: number,
-  characterState: CharacterStates
+  characterState: EquipmentSimCharacterStates,
+  power: PlayerPower
 ) {
+  let autoAttackDelays = AUTO_ATTACK_DELAYS.get(characterState.jobAbbrev);
+  if (autoAttackDelays === undefined) {
+    autoAttackDelays = 0;
+  }
+  power.autoAttackDelays = autoAttackDelays;
+
   let partyInfo: PartyInfo[] = [
     {
       playerId: 0,
-      job: characterState.jobName,
-      stats: {
-        weaponDamage: characterState.value.weaponDamage,
-        mainStat: characterState.value.mainStat,
-        criticalStrike: characterState.value.criticalStrike,
-        directHit: characterState.value.directHit,
-        determination: characterState.value.determination,
-        speed: characterState.value.speed,
-        tenacity: characterState.value.tenacity,
-      },
+      jobAbbrev: characterState.jobAbbrev,
+      partner1Id: characterState.partner1Id,
+      partner2Id: characterState.partner2Id,
+      power: power,
     },
   ];
 
-  let i = 0;
-  console.log(partyState);
+  let playerCount = 0;
+  for (let i = 0; i < partyState.length; i++) {
+    let jobAbbrev = partyState[i];
+    let defaultStat = mapJobAbbrevToJobDefaultStat(jobAbbrev);
 
-  for (i = 0; i < partyState.length; i++) {
-    let defaultStat = MapJobAbbrevToJobDefaultStat(partyState[i]);
-
-    if (defaultStat == undefined) {
+    if (defaultStat === undefined) {
       continue;
     }
 
+    let power = playerStatToPlayerPower(defaultStat, jobAbbrev);
+    let autoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
+    if (autoAttackDelays === undefined) {
+      autoAttackDelays = 0;
+    }
+    power.autoAttackDelays = autoAttackDelays;
+
     partyInfo.push({
-      playerId: i + 1,
-      job: partyState[i],
-      stats: defaultStat,
+      playerId: playerCount + 1,
+      partner1Id: null,
+      partner2Id: null,
+      jobAbbrev: jobAbbrev,
+      power: power,
     });
+
+    playerCount++;
   }
 
   return {
@@ -101,4 +215,46 @@ function createQuickSimRequest(
     combatTimeMillisecond: combatTimeSeconds * 1000,
     party: partyInfo,
   };
+}
+
+function sendRequestAsync(requestBody: string): Promise<Response> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+        reject(new Error("Request timeout"));
+      }, 300000);
+
+      const response = await fetch("http://localhost:13406/api/v1/simulate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: requestBody,
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        console.log("POST request successful");
+        resolve(response);
+      } else {
+        // Read the response body for error details
+        const errorText = await response.text(); // Or use response.json() if you expect JSON
+        console.error("POST request failed", {
+          status: response.status,
+          body: errorText,
+        });
+        reject(
+          new Error(
+            `Request failed with status ${response.status}: ${errorText}`
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error occurred: ", error);
+    }
+  });
 }

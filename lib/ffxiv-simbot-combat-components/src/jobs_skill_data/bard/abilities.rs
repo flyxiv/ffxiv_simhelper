@@ -7,6 +7,7 @@ use crate::event_ticker::ffxiv_event_ticker::FfxivEventTicker;
 use crate::event_ticker::independent_ticker::IndependentTicker;
 use crate::event_ticker::TickerKey;
 use crate::id_entity::IdEntity;
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory::PhysicalDot;
@@ -15,15 +16,16 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 use std::cell::RefCell;
+use std::collections::HashMap;
 use std::rc::Rc;
 
 pub(crate) struct BardDatabase {
     pub(crate) burst_shot: AttackSkill,
     pub(crate) refulgent_arrow: AttackSkill,
     pub(crate) raging_strike: AttackSkill,
-    pub(crate) blood_letter: AttackSkill,
+    pub(crate) heartbreak_shot: AttackSkill,
     pub(crate) caustic_bite: AttackSkill,
     pub(crate) storm_bite: AttackSkill,
     pub(crate) apex_arrow: AttackSkill,
@@ -38,9 +40,12 @@ pub(crate) struct BardDatabase {
     pub(crate) barrage: AttackSkill,
     pub(crate) blast_arrow: AttackSkill,
     pub(crate) radiant_finale: AttackSkill,
-    pub(crate) barrage_refulgent_arrow: AttackSkill,
+    pub(crate) resonant_arrow: AttackSkill,
     pub(crate) pitch_perfect2: AttackSkill,
     pub(crate) pitch_perfect3: AttackSkill,
+    pub(crate) radiant_encore1: AttackSkill,
+    pub(crate) radiant_encore3: AttackSkill,
+    pub(crate) refulgent_arrow_barrage: AttackSkill,
 
     pub(crate) caustic_bite_dot: DebuffStatus,
     pub(crate) storm_bite_dot: DebuffStatus,
@@ -57,6 +62,10 @@ pub(crate) struct BardDatabase {
     pub(crate) army_muse: BuffStatus,
     pub(crate) raging_strike_status: BuffStatus,
     pub(crate) radiant_finale_status: BuffStatus,
+    pub(crate) resonant_arrow_ready: BuffStatus,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl BardDatabase {
@@ -166,7 +175,7 @@ impl BardDatabase {
             duration_millisecond: 45000,
             is_raidwide: false,
             stacks: 1,
-            max_stacks: 1,
+            max_stacks: 4,
             trigger_proc_event_on_gcd: vec![],
         };
         let BARRAGE_STATUS: BuffStatus = BuffStatus {
@@ -191,16 +200,16 @@ impl BardDatabase {
             duration_millisecond: 15000,
             is_raidwide: true,
             stacks: 1,
-            max_stacks: 1,
+            max_stacks: 3,
             trigger_proc_event_on_gcd: vec![],
         };
         let STRAIGHT_SHOT_READY: BuffStatus = BuffStatus {
             id: 1310,
             name: String::from("Straight Shot Ready"),
             owner_id: player_id,
-            duration_left_millisecond: 6000,
+            duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
-            duration_millisecond: 0,
+            duration_millisecond: 30000,
             is_raidwide: false,
             stacks: 1,
             max_stacks: 1,
@@ -224,7 +233,7 @@ impl BardDatabase {
             owner_id: player_id,
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::DirectHitRatePercent(20)],
-            duration_millisecond: 30000,
+            duration_millisecond: 20000,
             is_raidwide: true,
             stacks: 1,
             max_stacks: 1,
@@ -254,9 +263,28 @@ impl BardDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
+        let RESONANT_ARROW_READY: BuffStatus = BuffStatus {
+            id: 1315,
+            name: String::from("Resonant Arrow Ready"),
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: vec![],
+            duration_millisecond: 30000,
+            is_raidwide: false,
+            stacks: 1,
+            max_stacks: 1,
+            trigger_proc_event_on_gcd: vec![],
+        };
 
         let straight_shot_proc = (
-            ApplyBuff(0, 0, STRAIGHT_SHOT_READY.clone(), 30000, 30000, 0),
+            ApplyBuff(
+                player_id,
+                player_id,
+                STRAIGHT_SHOT_READY.clone(),
+                30000,
+                30000,
+                0,
+            ),
             35,
         );
 
@@ -300,6 +328,7 @@ impl BardDatabase {
                     0,
                 ),
                 FfxivEvent::IncreasePlayerResource(player_id, 0, 1, 0),
+                FfxivEvent::IncreasePlayerResource(player_id, 2, 1, 0),
             ],
             ffxiv_event_queue.clone(),
             player_id,
@@ -310,9 +339,9 @@ impl BardDatabase {
             id: 1300,
             name: String::from("Burst Shot"),
             player_id,
-            potency: 220,
+            potency: 160,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![straight_shot_proc.clone()],
             combo: None,
@@ -337,7 +366,7 @@ impl BardDatabase {
             player_id,
             potency: 280,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -361,7 +390,7 @@ impl BardDatabase {
             player_id,
             potency: 0,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
                 player_id,
                 player_id,
@@ -386,13 +415,13 @@ impl BardDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let BLOOD_LETTER: AttackSkill = AttackSkill {
+        let HEARTBREAK_SHOT: AttackSkill = AttackSkill {
             id: 1303,
-            name: String::from("Blood Letter"),
+            name: String::from("Heartbreak Shot"),
             player_id,
-            potency: 110,
+            potency: 180,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -416,7 +445,7 @@ impl BardDatabase {
             player_id,
             potency: 150,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
                 CAUSTIC_BITE_DOT.clone(),
@@ -447,7 +476,7 @@ impl BardDatabase {
             player_id,
             potency: 100,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
                 STORM_BITE_DOT.clone(),
@@ -477,9 +506,9 @@ impl BardDatabase {
             id: 1306,
             name: String::from("Apex Arrow"),
             player_id,
-            potency: 25,
+            potency: 30,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
                 player_id,
                 player_id,
@@ -508,9 +537,9 @@ impl BardDatabase {
             id: 1307,
             name: String::from("Side Winder"),
             player_id,
-            potency: 320,
+            potency: 400,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -534,7 +563,7 @@ impl BardDatabase {
             player_id,
             potency: 100,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![
                 FfxivEvent::ApplyDebuff(player_id, CAUSTIC_BITE_DOT.clone(), 45000, 45000, 500),
                 FfxivEvent::ApplyDebuff(player_id, STORM_BITE_DOT.clone(), 45000, 45000, 500),
@@ -559,9 +588,9 @@ impl BardDatabase {
             id: 1309,
             name: String::from("Empyreal Arrow"),
             player_id,
-            potency: 240,
+            potency: 260,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![
                 FfxivEvent::ForceTicker(TickerKey::new(1300, player_id), 0),
                 FfxivEvent::ForceTicker(TickerKey::new(1301, player_id), 0),
@@ -589,7 +618,7 @@ impl BardDatabase {
             player_id,
             potency: 100,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -613,7 +642,7 @@ impl BardDatabase {
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![ApplyRaidBuff(
                 player_id,
                 BATTLE_VOICE_STATUS.clone(),
@@ -642,9 +671,9 @@ impl BardDatabase {
             id: 1312,
             name: String::from("Wanderer's Minuet"),
             player_id,
-            potency: 100,
+            potency: 0,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![
                 ApplyRaidBuff(
                     player_id,
@@ -689,9 +718,9 @@ impl BardDatabase {
             id: 1313,
             name: String::from("Mage's Ballad"),
             player_id,
-            potency: 100,
+            potency: 0,
             use_type: UseType::NoTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![
                 ApplyRaidBuff(player_id, MAGES_BALLAD_RAIDBUFF.clone(), 45000, 45000, 0),
                 ApplyBuff(
@@ -730,9 +759,9 @@ impl BardDatabase {
             id: 1314,
             name: String::from("Army's Paeon"),
             player_id,
-            potency: 100,
+            potency: 0,
             use_type: UseType::NoTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![
                 ApplyRaidBuff(player_id, ARMYS_PAEON_RAIDBUFF.clone(), 45000, 45000, 0),
                 ApplyBuff(
@@ -773,15 +802,33 @@ impl BardDatabase {
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
-            trait_percent: 100,
-            additional_skill_events: vec![ApplyBuff(
-                player_id,
-                player_id,
-                BARRAGE_STATUS.clone(),
-                10000,
-                10000,
-                0,
-            )],
+            trait_percent: 120,
+            additional_skill_events: vec![
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    BARRAGE_STATUS.clone(),
+                    10000,
+                    10000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    STRAIGHT_SHOT_READY.clone(),
+                    30000,
+                    30000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    RESONANT_ARROW_READY.clone(),
+                    30000,
+                    30000,
+                    0,
+                ),
+            ],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -804,7 +851,7 @@ impl BardDatabase {
             player_id,
             potency: 600,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -828,7 +875,7 @@ impl BardDatabase {
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![ApplyRaidBuff(
                 player_id,
                 RADIANT_FINALE_STATUS.clone(),
@@ -843,22 +890,22 @@ impl BardDatabase {
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
             is_speed_buffed: false,
-            cooldown_millisecond: 119000,
+            cooldown_millisecond: 110000,
             resource_required: vec![ResourceRequirements::UseAllResource(3)],
-            resource_created: Default::default(),
+            resource_created: HashMap::from([(4, 1)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
             stack_skill_id: None,
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let BARRAGE_REFULGENT_ARROW: AttackSkill = AttackSkill {
+        let RESONANT_ARROW: AttackSkill = AttackSkill {
             id: 1318,
-            name: String::from("Barrage-Refulgent Arrow"),
+            name: String::from("Resonant Arrow"),
             player_id,
             use_type: UseType::UseOnTarget,
-            potency: 840,
-            trait_percent: 100,
+            potency: 600,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -868,10 +915,7 @@ impl BardDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![
-                ResourceRequirements::UseBuff(STRAIGHT_SHOT_READY.get_id()),
-                ResourceRequirements::UseBuff(BARRAGE_STATUS.id),
-            ],
+            resource_required: vec![ResourceRequirements::UseBuff(RESONANT_ARROW_READY.id)],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -885,7 +929,7 @@ impl BardDatabase {
             player_id,
             potency: 220,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -909,7 +953,7 @@ impl BardDatabase {
             player_id,
             potency: 360,
             use_type: UseType::UseOnTarget,
-            trait_percent: 100,
+            trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,
@@ -927,12 +971,87 @@ impl BardDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
+        let RADIANT_ENCORE1: AttackSkill = AttackSkill {
+            id: 1321,
+            name: String::from("Radiant Encore"),
+            player_id,
+            potency: 500,
+            use_type: UseType::UseOnTarget,
+            trait_percent: 120,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            cooldown_millisecond: 0,
+            resource_required: vec![ResourceRequirements::Resource(4, 1)],
+            resource_created: Default::default(),
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+        };
+        let RADIANT_ENCORE3: AttackSkill = AttackSkill {
+            id: 1322,
+            name: String::from("Radiant Encore"),
+            player_id,
+            potency: 900,
+            use_type: UseType::UseOnTarget,
+            trait_percent: 120,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            cooldown_millisecond: 0,
+            resource_required: vec![ResourceRequirements::Resource(4, 3)],
+            resource_created: Default::default(),
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+        };
+
+        let REFULGENT_ARROW_BARRAGE: AttackSkill = AttackSkill {
+            id: 1323,
+            name: String::from("Refulgent Arrow"),
+            player_id,
+            potency: 840,
+            use_type: UseType::UseOnTarget,
+            trait_percent: 120,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 0,
+            charging_time_millisecond: 0,
+            is_speed_buffed: false,
+            cooldown_millisecond: 0,
+            resource_required: vec![ResourceRequirements::UseBuff(BARRAGE_STATUS.id)],
+            resource_created: Default::default(),
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+        };
+
+        let potion_skill = PotionSkill::new(player_id);
 
         Self {
             burst_shot: BURST_SHOT,
             refulgent_arrow: REFULGENT_ARROW,
             raging_strike: RAGING_STRIKE,
-            blood_letter: BLOOD_LETTER,
+            heartbreak_shot: HEARTBREAK_SHOT,
             caustic_bite: CAUSTIC_BITE,
             storm_bite: STORM_BITE,
 
@@ -948,9 +1067,12 @@ impl BardDatabase {
             barrage: BARRAGE,
             blast_arrow: BLAST_ARROW,
             radiant_finale: RADIANT_FINALE,
-            barrage_refulgent_arrow: BARRAGE_REFULGENT_ARROW,
+            resonant_arrow: RESONANT_ARROW,
             pitch_perfect2: PITCH_PERFECT2,
             pitch_perfect3: PITCH_PERFECT3,
+            radiant_encore1: RADIANT_ENCORE1,
+            radiant_encore3: RADIANT_ENCORE3,
+            refulgent_arrow_barrage: REFULGENT_ARROW_BARRAGE,
 
             straight_shot_ready: STRAIGHT_SHOT_READY,
             blast_arrow_ready: BLAST_ARROW_READY,
@@ -967,6 +1089,10 @@ impl BardDatabase {
             armys_paeon_status: ARMYS_PAEON_STATUS,
             barrage_status: BARRAGE_STATUS,
             radiant_finale_status: RADIANT_FINALE_STATUS,
+            resonant_arrow_ready: RESONANT_ARROW_READY,
+
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -981,7 +1107,7 @@ pub(crate) fn make_bard_skill_list(
         db.burst_shot.clone(),
         db.refulgent_arrow.clone(),
         db.raging_strike.clone(),
-        db.blood_letter.clone(),
+        db.heartbreak_shot.clone(),
         db.caustic_bite.clone(),
         db.storm_bite.clone(),
         db.apex_arrow.clone(),
@@ -996,9 +1122,13 @@ pub(crate) fn make_bard_skill_list(
         db.barrage.clone(),
         db.blast_arrow.clone(),
         db.radiant_finale.clone(),
-        db.barrage_refulgent_arrow.clone(),
+        db.resonant_arrow.clone(),
         db.pitch_perfect2.clone(),
         db.pitch_perfect3.clone(),
+        db.radiant_encore1.clone(),
+        db.radiant_encore3.clone(),
+        db.refulgent_arrow_barrage.clone(),
+        db.potion.clone(),
     ];
 
     make_skill_table(bard_skill_list)

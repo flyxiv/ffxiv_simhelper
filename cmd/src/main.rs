@@ -1,5 +1,6 @@
+mod profile;
+
 use ffxiv_simbot_api::api_server::api_router::create_ffxiv_simbot_service_router;
-use ffxiv_simbot_engine::engine::Engine;
 use log::LevelFilter::{Debug, Error, Info};
 use log::{info, Level, LevelFilter, Metadata, Record, SetLoggerError};
 
@@ -28,9 +29,6 @@ const PORT_NUMBER: i32 = 13406;
 
 #[tokio::main]
 async fn main() {
-    info!("Loading Engine");
-    let mut engine = Engine::new();
-
     info!("Loading Logger");
     init(Info).expect("failed to load logger");
 

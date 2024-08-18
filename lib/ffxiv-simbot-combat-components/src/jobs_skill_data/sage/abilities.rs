@@ -1,18 +1,24 @@
 use crate::event::ffxiv_event::FfxivEvent;
+use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::{make_skill_table, ResourceTable};
+use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::IdType;
+use crate::types::IdType;
 
 pub(crate) struct SageDatabase {
     pub(crate) dot_status: DebuffStatus,
     pub(crate) dot: AttackSkill,
     pub(crate) gcd: AttackSkill,
     pub(crate) phlegma: AttackSkill,
+    pub(crate) psyche: AttackSkill,
+
+    pub(crate) potion: AttackSkill,
+    pub(crate) potion_buff: BuffStatus,
 }
 
 impl SageDatabase {
@@ -20,9 +26,9 @@ impl SageDatabase {
         let DOT_STATUS: DebuffStatus = DebuffStatus {
             id: 700,
             owner_id: player_id,
-            potency: Some(70),
+            potency: Some(75),
             damage_category: Some(DamageCategory::MagicalDot),
-            trait_percent: Some(100),
+            trait_percent: Some(130),
             damage_skill_id: Some(700),
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
@@ -68,7 +74,7 @@ impl SageDatabase {
             id: 701,
             name: String::from("Dosis III"),
             player_id,
-            potency: 330,
+            potency: 360,
             use_type: UseType::UseOnTarget,
             trait_percent: 130,
             additional_skill_events: vec![],
@@ -112,12 +118,42 @@ impl SageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
+        let PSYCHE: AttackSkill = AttackSkill {
+            id: 703,
+            name: String::from("Psyche"),
+            player_id,
+            use_type: UseType::UseOnTarget,
+            potency: 600,
+            trait_percent: 130,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 0,
+            charging_time_millisecond: 0,
+            is_speed_buffed: false,
+            cooldown_millisecond: 60000,
+            resource_required: vec![],
+            resource_created: ResourceTable::new(),
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+        };
+
+        let potion_skill = PotionSkill::new(player_id);
 
         Self {
             dot_status: DOT_STATUS,
             dot: DOT,
             gcd: GCD,
             phlegma: PHLEGMA,
+            psyche: PSYCHE,
+
+            potion: potion_skill.potion,
+            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -125,6 +161,12 @@ impl SageDatabase {
 pub(crate) fn make_sage_skills(player_id: IdType) -> SkillTable<AttackSkill> {
     let table = SageDatabase::new(player_id);
 
-    let skills = vec![table.dot.clone(), table.gcd.clone(), table.phlegma.clone()];
+    let skills = vec![
+        table.dot.clone(),
+        table.gcd.clone(),
+        table.phlegma.clone(),
+        table.psyche.clone(),
+        table.potion,
+    ];
     make_skill_table(skills)
 }

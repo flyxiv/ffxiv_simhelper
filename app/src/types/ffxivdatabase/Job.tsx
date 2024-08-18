@@ -1,0 +1,15 @@
+export const AUTO_ATTACK_DELAYS: Map<string, number> = new Map([
+  ["PLD", 2.24],
+  ["WAR", 3.36],
+  ["DRK", 2.96],
+  ["GNB", 2.8],
+  ["DRG", 2.8],
+  ["RPR", 3.2],
+  ["MNK", 2.56],
+  ["SAM", 2.64],
+  ["NIN", 2.56],
+  ["VPR", 2.64],
+  ["BRD", 3.04],
+  ["MCH", 2.64],
+  ["DNC", 3.12],
+]);

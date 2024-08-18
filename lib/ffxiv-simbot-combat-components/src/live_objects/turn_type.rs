@@ -1,4 +1,4 @@
-use crate::TimeType;
+use crate::types::TimeType;
 
 static INFINITE_DELAY: TimeType = 5000;
 

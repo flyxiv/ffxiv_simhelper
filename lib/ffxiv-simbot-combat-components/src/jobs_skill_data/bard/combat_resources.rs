@@ -10,7 +10,7 @@ use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, IdType, ResourceType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -20,6 +20,7 @@ const APEX_MAX_STACK: ResourceType = 20;
 const WANDERER_MAX_STACK: ResourceType = 3;
 const ARMY_MAX_STACK: ResourceType = 4;
 const SONG_MAX_STACK: ResourceType = 3;
+const RADIANT_MAX_STACK: ResourceType = 3;
 
 #[derive(Clone)]
 pub(crate) struct BardCombatResources {
@@ -31,6 +32,7 @@ pub(crate) struct BardCombatResources {
     army_stack: ResourceType,
     song_stack: ResourceType,
     armys_muse: BuffStatus,
+    radiant_stack: ResourceType,
 }
 
 impl CombatResource for BardCombatResources {
@@ -51,6 +53,8 @@ impl CombatResource for BardCombatResources {
             self.army_stack = min(ARMY_MAX_STACK, self.army_stack + resource_amount);
         } else if resource_id == 3 {
             self.song_stack = min(SONG_MAX_STACK, self.song_stack + resource_amount);
+        } else if resource_id == 4 {
+            self.radiant_stack = min(RADIANT_MAX_STACK, self.radiant_stack + resource_amount);
         }
     }
 
@@ -63,6 +67,8 @@ impl CombatResource for BardCombatResources {
             self.army_stack
         } else if resource_id == 3 {
             self.song_stack
+        } else if resource_id == 4 {
+            self.radiant_stack
         } else {
             -1
         }
@@ -87,7 +93,7 @@ impl CombatResource for BardCombatResources {
 
         if get_song_skill_ids().contains(&skill_id) {
             if skill_id == 1312 {
-                let army_paeon_stacks = self.get_resource(2);
+                let army_paeon_stacks = self.army_stack;
 
                 if army_paeon_stacks > 0 {
                     let mut muse = self.armys_muse.clone();
@@ -147,6 +153,7 @@ impl BardCombatResources {
                 max_stacks: 4,
                 trigger_proc_event_on_gcd: vec![],
             },
+            radiant_stack: 0,
         }
     }
 }

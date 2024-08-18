@@ -4,7 +4,8 @@ use crate::jobs_skill_data::bard::abilities::BardDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::HasSkillStacks;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::{IdType, TurnCount};
+use crate::types::IdType;
+use crate::types::TurnCount;
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -58,19 +59,19 @@ impl BardPriorityTable {
 pub(crate) fn make_bard_opener(db: &BardDatabase) -> Vec<Opener> {
     let bard_opener: Vec<Opener> = vec![
         Opener::GcdOpener(db.caustic_bite.get_id()),
-        Opener::OgcdOpener((Some(db.wanderers_minuet.get_id()), None)),
+        Opener::OgcdOpener((Some(db.wanderers_minuet.get_id()), Some(db.potion.get_id()))),
         Opener::GcdOpener(db.storm_bite.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.burst_shot.get_id()),
-        Opener::OgcdOpener((Some(db.raging_strike.get_id()), None)),
+        Opener::OgcdOpener((
+            Some(db.battle_voice.get_id()),
+            Some(db.radiant_finale.get_id()),
+        )),
         Opener::GcdOpener(db.burst_shot.get_id()),
         Opener::OgcdOpener((
-            Some(db.radiant_finale.get_id()),
-            Some(db.battle_voice.get_id()),
+            Some(db.raging_strike.get_id()),
+            Some(db.empyreal_arrow.get_id()),
         )),
-        Opener::GcdOpener(db.iron_jaws.get_id()),
-        Opener::OgcdOpener((Some(db.barrage.get_id()), Some(db.blood_letter.get_id()))),
-        Opener::GcdOpener(db.refulgent_arrow.get_id()),
+        Opener::GcdOpener(db.radiant_encore1.get_id()),
+        Opener::OgcdOpener((Some(db.barrage.get_id()), Some(db.heartbreak_shot.get_id()))),
     ];
 
     bard_opener
@@ -87,11 +88,11 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
         },
         SkillPriorityInfo {
             skill_id: db.blast_arrow.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1311)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.barrage_refulgent_arrow.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1308)),
+            skill_id: db.refulgent_arrow_barrage.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.apex_arrow.get_id(),
@@ -109,8 +110,16 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
             prerequisite: Some(SkillPrerequisite::HasResource(0, 80)),
         },
         SkillPriorityInfo {
+            skill_id: db.resonant_arrow.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.radiant_encore3.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.refulgent_arrow.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(1310)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.burst_shot.get_id(),
@@ -122,19 +131,28 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
 }
 
 pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPriorityInfo> {
-    // TODO: calculate future ninki
     let bard_ogcd_table: Vec<SkillPriorityInfo> = vec![
         SkillPriorityInfo {
+            skill_id: db.potion.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.wanderers_minuet.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1307, 3000)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.armys_paeon.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1305, 3000)),
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
+                db.mages_ballad_status.get_id(),
+                3000,
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.mages_ballad.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1303, 3000)),
+            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
+                db.wanderers_minuet_status.get_id(),
+                3000,
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.pitch_perfect3.get_id(),
@@ -182,7 +200,7 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
             prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {
-            skill_id: db.blood_letter.get_id(),
+            skill_id: db.heartbreak_shot.get_id(),
             prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {
@@ -190,7 +208,7 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.blood_letter.get_id(),
+            skill_id: db.heartbreak_shot.get_id(),
             prerequisite: Some(HasSkillStacks(1303, 2)),
         },
     ];

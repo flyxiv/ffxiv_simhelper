@@ -8,6 +8,7 @@ use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
 use crate::live_objects::player::gcd_calculator::GcdCalculator;
 use crate::live_objects::player::logs::{DamageLog, SkillLog};
+use crate::live_objects::player::player_power::PlayerPower;
 use crate::live_objects::player::player_turn_calculator::PlayerTurnCalculator;
 use crate::live_objects::player::{Player, StatusKey};
 use crate::live_objects::turn_type::FfxivTurnType;
@@ -22,20 +23,22 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_info::StatusInfo;
 use crate::status::status_timer::StatusTimer;
-use crate::{IdType, StatusTable, TimeType, TARGET_ID};
-use ffxiv_simbot_db::stat_calculator::CharacterPower;
-use ffxiv_simbot_db::MultiplierType;
+use crate::types::{IdType, TimeType};
+use crate::types::{MultiplierType, StatusTable};
+use log::info;
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::rc::Rc;
+
+pub static TARGET_ID: IdType = 100;
 
 /// The Abstraction for an actual FFXIV Player in the combat.
 pub struct FfxivPlayer {
     /// Stat/Job Data about the player
     pub id: IdType,
     pub job_abbrev: String,
-    pub power: CharacterPower,
+    pub power: PlayerPower,
 
     pub priority_table: FfxivPriorityTable,
 
@@ -100,6 +103,7 @@ impl Player for FfxivPlayer {
                 self.add_status_stack(buff, duration, refresh, player_id)
             }
             FfxivEvent::UseSkill(_, target_id, skill_id, event_time) => {
+                info!("Use skill_id: {}, {}", skill_id, event_time);
                 self.use_skill(skill_id, target_id, debuffs, event_time)
             }
             FfxivEvent::ApplyRaidBuff(player_id, buff, duration, max_duration, _) => {
@@ -205,6 +209,23 @@ impl FfxivPlayer {
             time: combat_time_millisecond,
             skill_id,
             target_id,
+            buffs: self
+                .buff_list
+                .borrow()
+                .keys()
+                .map(|key| key.status_id)
+                .collect(),
+            debuffs: debuffs
+                .borrow()
+                .keys()
+                .filter_map(|key| {
+                    if key.player_id == self.id {
+                        Some(key.status_id)
+                    } else {
+                        None
+                    }
+                })
+                .collect(),
         });
     }
 
@@ -427,21 +448,25 @@ impl FfxivPlayer {
     pub fn new(
         id: IdType,
         job_abbrev: String,
-        power: CharacterPower,
-        partner_player_id: Option<IdType>,
+        power: PlayerPower,
+        partner_player_id1: Option<IdType>,
+        partner_player_id2: Option<IdType>,
         priority_table: FfxivPriorityTable,
         buff_list: HashMap<StatusKey, BuffStatus>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
         start_turn: FfxivEvent,
         gcd_start_time_millisecond: Option<TimeType>,
+        player_count: usize,
     ) -> FfxivPlayer {
         FfxivPlayer {
             id,
             combat_resources: RefCell::new(FfxivCombatResources::new(
                 &job_abbrev,
                 id,
-                partner_player_id,
+                partner_player_id1,
+                partner_player_id2,
                 event_queue.clone(),
+                player_count,
             )),
             job_abbrev,
             power,

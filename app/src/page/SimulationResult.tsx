@@ -1,14 +1,25 @@
-import { Summary } from "src/components/container/Summary";
-import { JobIconFactory } from "../components/jobicon/JobIconFactory";
-import { Box, Typography } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import "./SimulationResult.css";
+import { useState } from "react";
 import { QuickSimResponse } from "../types/QuickSimResponse";
 import { BestTeammateGraph } from "../components/graph/BestTeammateGraph";
-import { DamageProfileGraph } from "../components/graph/DamageProfileGraph";
-import { SkillLogResult } from "../components/container/SkillLog";
+import { DpsSummary } from "src/components/container/DpsSummaryBox";
+import { ResultBoardBoxStyle } from "src/components/container/Styles";
+import { PlayerInfo } from "src/components/container/PlayerInfo";
+import { SimulationTitle } from "src/components/basic/SimulationTitle";
+import { DamageProfileGraph } from "src/components/graph/DamageProfileGraph";
+import { SkillLogResult } from "src/components/container/SkillLog";
+import { ResultPageButtonGroup } from "src/components/container/ResultPageButtonGroup";
+import { QuickSimResponseSaveName } from "src/App";
+
+const ResultBoardBox = styled(Box)`
+  ${ResultBoardBoxStyle}
+`;
 
 export function SimulationResult() {
-  let response = localStorage.getItem("simulationResult");
+  let [currentlyToggledView, setCurrentlyToggledView] =
+    useState("Damage Profile");
+  let response = localStorage.getItem(QuickSimResponseSaveName);
 
   if (response == null) {
     return (
@@ -21,45 +32,51 @@ export function SimulationResult() {
   let responseJson = JSON.parse(response) as QuickSimResponse;
   let mainPlayerId = responseJson.mainPlayerId;
   let mainPlayerSimulationData = responseJson.simulationData[mainPlayerId];
-  let mainPlayerJob = mainPlayerSimulationData.job;
+  let mainPlayerJob = mainPlayerSimulationData.jobAbbrev.valueOf();
 
   return (
     <Box className="SimulationResult">
-      <Box className="Summary">
-        <Typography variant="h5" component="div">
-          Summary
-        </Typography>
-
-        <Box className="PlayerInfo">
-          {JobIconFactory(mainPlayerJob)}
-          <Typography variant="h5" component="div">
-            {mainPlayerJob}
-          </Typography>
-        </Box>
-
-        {Summary(mainPlayerSimulationData)}
-
-        <p></p>
-      </Box>
-      <Box className="BestTeammateGraph">
-        <Typography variant="h5" component="div">
-          Best Teammate
-        </Typography>
-
-        {BestTeammateGraph(responseJson)}
-      </Box>
-      <Box className="DamageProfileGraph">
-        <Typography variant="h5" component="div">
-          Damage Profile
-        </Typography>
-        {DamageProfileGraph(responseJson)}
-      </Box>
-      <Box className="RotationLog">
-        <Typography variant="h5" component="div">
-          Rotation Log
-        </Typography>
-        {SkillLogResult(responseJson)}
-      </Box>
+      <ResultBoardBox>
+        {SimulationTitle("Simulation Result")}
+        {DpsSummary(mainPlayerSimulationData)}
+        {PlayerInfo(mainPlayerJob, responseJson.combatTimeMillisecond)}
+      </ResultBoardBox>
+      {ResultPageButtonGroup(
+        currentlyToggledView,
+        setCurrentlyToggledView,
+        mainPlayerJob
+      )}
+      {renderTableBasedOnSelectedButton(currentlyToggledView, responseJson)}
     </Box>
   );
+}
+
+function renderTableBasedOnSelectedButton(
+  currentlyToggledView: string,
+  responseJson: QuickSimResponse
+) {
+  if (currentlyToggledView === "Best Teammate") {
+    return (
+      <ResultBoardBox>
+        {SimulationTitle("Best Teammate")}
+        {BestTeammateGraph(responseJson)}
+      </ResultBoardBox>
+    );
+  } else if (currentlyToggledView === "Damage Profile") {
+    return (
+      <ResultBoardBox>
+        {SimulationTitle("Damage Profile")}
+        {DamageProfileGraph(responseJson)}
+      </ResultBoardBox>
+    );
+  } else if (currentlyToggledView === "Rotation Log") {
+    return (
+      <ResultBoardBox>
+        {SimulationTitle("Rotation Log")}
+        {SkillLogResult(responseJson)}
+      </ResultBoardBox>
+    );
+  } else {
+    return <div></div>;
+  }
 }

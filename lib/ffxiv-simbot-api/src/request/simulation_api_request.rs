@@ -1,9 +1,8 @@
-use ffxiv_simbot_combat_components::{IdType, TimeType};
-use ffxiv_simbot_db::stat::StatType;
+use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
+use ffxiv_simbot_combat_components::types::{IdType, StatType, TimeType};
 use serde::Deserialize;
 
-/// API Request Format for quicksim/advancedsim API
-/// Given as a GraphQL request, parse from json type body
+/// The main request body for the simulation API
 #[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SimulationApiRequest {
@@ -12,17 +11,20 @@ pub struct SimulationApiRequest {
     pub party: Vec<PlayerInfoRequest>,
 }
 
+/// Data of individual players needed to simulate their DPS
 #[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PlayerInfoRequest {
     pub player_id: IdType,
-    pub job: String,
-    pub stats: StatsRequest,
+    pub partner1_id: Option<IdType>,
+    pub partner2_id: Option<IdType>,
+    pub job_abbrev: String,
+    pub power: PlayerPower,
 }
 
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, Copy)]
 #[serde(rename_all = "camelCase")]
-pub struct StatsRequest {
+pub struct StatsInfo {
     pub weapon_damage: StatType,
     pub main_stat: StatType,
     pub critical_strike: StatType,

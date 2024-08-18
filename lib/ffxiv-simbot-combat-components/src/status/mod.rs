@@ -1,8 +1,7 @@
 use crate::damage_calculator::multiplier_calculator::DIRECT_HIT_DAMAGE_MULTIPLIER;
 use crate::id_entity::IdEntity;
 use crate::status::status_info::StatusInfo;
-use crate::{IdType, ResourceType, TimeType};
-use ffxiv_simbot_db::MultiplierType;
+use crate::types::{IdType, MultiplierType, ResourceType, TimeType};
 
 pub mod buff_status;
 pub mod debuff_status;
@@ -83,7 +82,8 @@ pub trait Status: Sized + IdEntity {
         for status_info in status_infos {
             match status_info {
                 StatusInfo::DamagePercent(percent) => {
-                    total_damage_increase += (*percent as MultiplierType) / 100.0
+                    total_damage_increase +=
+                        self.get_stack() as MultiplierType * (*percent as MultiplierType) / 100.0
                 }
                 StatusInfo::CritHitRatePercent(percent) => {
                     let damage_increase = if is_guaranteed_crit {
