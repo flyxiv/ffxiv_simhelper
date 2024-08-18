@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import "./JobIconFactory.css";
+import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory";
 
 function jobAbbrevToJobIconName(jobAbbrev: String) {
   switch (jobAbbrev) {
@@ -50,8 +51,7 @@ function jobAbbrevToJobIconName(jobAbbrev: String) {
 
 export function jobAbbrevToJobIconPath(jobAbbrev: String) {
   return (
-    process.env.PUBLIC_URL +
-    `/images/jobicons/${jobAbbrevToJobIconName(jobAbbrev)}.png`
+    `${IMAGES_DIRECTORY}/jobicons/${jobAbbrevToJobIconName(jobAbbrev)}.png`
   );
 }
 

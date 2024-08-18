@@ -1,3 +1,4 @@
+import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory";
 import { LEFTSLOTS, WEAPONSLOTS } from "../../../types/ffxivdatabase/Equipment";
 
 const AIMING_CATEGORY_NAME = "Aiming";
@@ -14,7 +15,7 @@ export function getEquipmentIconDirectory(
   jobAbbrev: string,
   equipmentName: string
 ) {
-  let base_directory = process.env.PUBLIC_URL + "/images/equipment";
+  let base_directory = `${IMAGES_DIRECTORY}/equipment`;
   let equipmentIconName = equipmentName.toLowerCase().replace(/ /g, "_");
 
   if (WEAPONSLOTS.includes(slotName)) {

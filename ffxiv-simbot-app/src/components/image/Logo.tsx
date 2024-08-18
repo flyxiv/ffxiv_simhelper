@@ -1,6 +1,7 @@
+import { IMAGES_DIRECTORY } from "../../const/BaseDirectory";
 import "./Logo.css";
 import { Link } from "react-router-dom";
-const logo = "src/assets/images/logo_dark.svg";
+const logo = `${IMAGES_DIRECTORY}/logo_dark.svg`;
 
 export const Logo = () => {
   return (

@@ -1,6 +1,8 @@
+import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory"
+
 // Only support raid/personal buff/debuff icons for now
 export const StatusIdToIconPathFactory = (statusId: number) => {
-  const actionIconDirectory = process.env.PUBLIC_URL + "/images/actions";
+  const actionIconDirectory = `${IMAGES_DIRECTORY}/actions`;
   switch (statusId) {
     // PLD
     case 1900:
@@ -99,8 +101,6 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return actionIconDirectory + "/SMN/searing_light.png";
 
     // BLM
-    case 0:
-      return actionIconDirectory + "/BLM/MagicalRangedRollAction/swiftcast.png";
     case 1700:
       return actionIconDirectory + "/BLM/triplecast.png";
     case 1703:
