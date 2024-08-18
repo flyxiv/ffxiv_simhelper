@@ -39,7 +39,7 @@ export function MateriaInputTable(
     return <></>;
   }
 
-  return materiasInSlot.map((materia, materiaSlot) => {
+  return materiasInSlot.map((_, materiaSlot) => {
     return SingleMateriaMenu(
       equipment,
       materiasInSlot,

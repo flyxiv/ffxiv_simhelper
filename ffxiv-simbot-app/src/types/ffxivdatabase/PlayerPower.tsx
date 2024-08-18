@@ -113,33 +113,33 @@ export function getStatByStatName(
 export function getStatPowerByStatName(power: PlayerPower, statName: string) {
   switch (statName) {
     case "WD": {
-      return `${power.weaponDamageMultiplier * 100}%`;
+      return `${(power.weaponDamageMultiplier * 100).toFixed(0)}%`;
     }
     case "STR":
     case "DEX":
     case "INT":
     case "MND": {
-      return `${power.mainStatMultiplier * 100}%`;
+      return `${(power.mainStatMultiplier * 100).toFixed(0)}%`;
     }
     case "CRT": {
       let criticalStrikeIncrease =
         calculateCriticalStrikePercentIncrease(power.criticalStrike) / 100;
-      return `+${criticalStrikeIncrease * 100}%`;
+      return `+${(criticalStrikeIncrease * 100).toFixed(1)}%`;
     }
     case "DH": {
-      return `${power.directHitRate * 100}%`;
+      return `${(power.directHitRate * 100).toFixed(1)}%`;
     }
     case "DET": {
-      return `${100 * power.determinationMultiplier}%`;
+      return `${(100 * power.determinationMultiplier).toFixed(1)}%`;
     }
     case "SKS": {
-      return `${100 * power.speedMultiplier}%`;
+      return `${(100 * power.speedMultiplier).toFixed(1)}%`;
     }
     case "SPS": {
-      return `${100 * power.speedMultiplier}%`;
+      return `${(100 * power.speedMultiplier).toFixed(1)}%`;
     }
     case "TEN": {
-      return `${power.tenacityMultiplier * 100}%`;
+      return `${(power.tenacityMultiplier * 100).toFixed(1)}%`;
     }
     case "GCD": {
       return `${power.gcd.toFixed(2)}`;
@@ -196,7 +196,7 @@ export function getStatLostByStatName(
     case "MND":
       return (
         getMinNeededStatForCurrentMainStat(
-          totalStats.mainStatMultiplier * 100,
+          (totalStats.mainStatMultiplier * 100 - 100),
           isTank(jobAbbrev)
         ) - totalStats.mainStat
       );
@@ -259,7 +259,7 @@ export function getStatNeededByStatName(
     case "MND":
       return (
         getMinNeededStatForCurrentMainStat(
-          totalStats.mainStatMultiplier * 100 + 1,
+          (totalStats.mainStatMultiplier * 100 - 100) + 1,
           isTank(jobAbbrev)
         ) - totalStats.mainStat
       );

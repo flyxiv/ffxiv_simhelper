@@ -1,4 +1,3 @@
-import { maxHeaderSize } from "http";
 import { Equipment } from "./Equipment";
 import { Materia, updateMateriaValueStatToFinalStat } from "./Materia";
 

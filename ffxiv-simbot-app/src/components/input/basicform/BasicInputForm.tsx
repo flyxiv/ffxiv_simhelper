@@ -55,9 +55,9 @@ export const inputStyleJob = {
   },
 };
 
-export const Input = styled(TextField)(({ theme }) => inputStyle);
+export const Input = styled(TextField)(({ }) => inputStyle);
 
-export const CustomFormControl = styled(FormControl)(({ theme }) => inputStyle);
+export const CustomFormControl = styled(FormControl)(({ }) => inputStyle);
 
 const InputBox = styled(Box)`
   ${InputGridItemStyle}
