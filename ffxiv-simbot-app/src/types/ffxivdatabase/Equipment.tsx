@@ -1,4 +1,4 @@
-let totalEquipments: Array<Equipment> = require("../../assets/data/equipment_data.json")
+import totalEquipmentsJson from "../../assets/data/equipment_data.json";
 
 export const WEAPONSLOTS = ["weapon", "offHand"];
 export const LEFTSLOTS = ["head", "body", "hands", "legs", "feet"];
@@ -6,6 +6,32 @@ export const RIGHTSLOTS = ["wrists", "ears", "neck", "finger1", "finger2"];
 export const TOTAL_SLOTS = WEAPONSLOTS.concat(LEFTSLOTS).concat(RIGHTSLOTS);
 
 const CURRENT_MIN_ITEM_LEVEL = 710;
+let totalEquipments: Array<Equipment> = [];
+
+totalEquipmentsJson.forEach((element) => {
+  totalEquipments.push({
+    id: element.id,
+    name: element.name,
+    jobName: element.jobName,
+    itemLevel: element.itemLevel,
+    slotName: element.slotName,
+    weaponDamage: element.weaponDamage,
+    STR: element.STR,
+    DEX: element.DEX,
+    INT: element.INT,
+    MND: element.MND,
+    criticalStrike: element.criticalStrike,
+    directHit: element.directHit,
+    determination: element.determination,
+    skillSpeed: element.skillSpeed,
+    spellSpeed: element.spellSpeed,
+    tenacity: element.tenacity,
+    piety: element.piety,
+    maxSubstat: 0,
+    materiaSlotCount: element.materiaSlotCount,
+    pentameldable: element.pentameldable,
+  });
+});
 
 export const {
   idDatabase: EQUIPMENT_DATABASE_BY_ID,
@@ -57,7 +83,7 @@ export function toEquipmentKeyString(
 
 export function readEquipmentData(minItemLevel: number) {
   let equipmentDataFiltered = totalEquipments.filter(
-    (equipment: Equipment) => equipment.itemLevel >= minItemLevel
+    (equipment) => equipment.itemLevel >= minItemLevel
   );
 
   let equipmentDatabaseById: Map<number, Equipment> = new Map();

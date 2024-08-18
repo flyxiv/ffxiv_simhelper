@@ -75,7 +75,7 @@ export const BestTeammateGraph = (response: QuickSimResponse) => {
 
   return (
     <>
-      {GraphTitleRow}
+      {GraphTitleRow()}
       <GraphBox>
         {contributionData.map((data) => {
           return JobBarChartTeammate(data, maxContribution);

@@ -1,6 +1,6 @@
 import "./Logo.css";
 import { Link } from "react-router-dom";
-const logo = "../../../assets/images/logo_dark.svg";
+const logo = "src/assets/images/logo_dark.svg";
 
 export const Logo = () => {
   return (

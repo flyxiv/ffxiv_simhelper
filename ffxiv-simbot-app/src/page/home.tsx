@@ -4,13 +4,11 @@ import "./Home.css";
 
 const quickSimPageName = "quicksim";
 const quickSimPagePath = `/${quickSimPageName}`;
-const quickSimButtonImagePath =
-  process.env.PUBLIC_URL + "/images/quickstart.png";
+const quickSimButtonImagePath = "src/assets/images/quickstart.png";
 
 const gearCompareSimPageName = "statcompare";
 const gearCompareSimPagePath = `/${gearCompareSimPageName}`;
-const gearCompareSimButtonImagePath =
-  process.env.PUBLIC_URL + "/images/statcompare.png";
+const gearCompareSimButtonImagePath = "src/assets/images/statcompare.png";
 
 export function Home() {
   return (

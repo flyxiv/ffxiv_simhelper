@@ -86,16 +86,18 @@ export function JobBarChartTeammate(
   );
 }
 
-export const GraphTitleRow = (
-  <PartyMemberBuffBox>
-    <PartyMemberIconBox>
-      <Typography variant="h6">Member</Typography>
-    </PartyMemberIconBox>
-    <BuffTitleBar>
-      <Typography variant="h6">RDPS Contribution</Typography>
-    </BuffTitleBar>
-    <TotalRdpsBox>
-      <Typography variant="h6">Total</Typography>
-    </TotalRdpsBox>
-  </PartyMemberBuffBox>
-);
+export function GraphTitleRow() {
+  return (
+    <PartyMemberBuffBox>
+      <PartyMemberIconBox>
+        <Typography variant="h6">Member</Typography>
+      </PartyMemberIconBox>
+      <BuffTitleBar>
+        <Typography variant="h6">RDPS Contribution</Typography>
+      </BuffTitleBar>
+      <TotalRdpsBox>
+        <Typography variant="h6">Total</Typography>
+      </TotalRdpsBox>
+    </PartyMemberBuffBox>
+  );
+}

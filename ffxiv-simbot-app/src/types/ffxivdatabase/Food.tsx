@@ -1,4 +1,22 @@
-const totalFood: Array<Food> = require("../../assets/data/food_data.json")
+import totalFoodJson from "../../assets/data/food_data.json";
+
+const totalFood: Array<Food> = [];
+
+totalFoodJson.forEach((element) => {
+  totalFood.push({
+    id: element.id,
+    name: element.name,
+    itemLevel: element.itemLevel,
+    criticalStrike: element.criticalStrike,
+    directHit: element.directHit,
+    determination: element.determination,
+    skillSpeed: element.skillSpeed,
+    spellSpeed: element.spellSpeed,
+    tenacity: element.tenacity,
+    piety: element.piety,
+  });
+});
+
 export const FOOD_DATABASE = readFoodData(710);
 export const ALL_FOODS = Array.from(FOOD_DATABASE.values());
 
