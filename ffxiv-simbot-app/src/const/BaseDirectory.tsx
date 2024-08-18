@@ -1,0 +1,1 @@
+export const IMAGES_DIRECTORY = `/images`

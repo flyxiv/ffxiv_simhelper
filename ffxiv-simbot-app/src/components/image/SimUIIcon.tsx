@@ -7,6 +7,7 @@ export const SimUIIcon = (
   pagePath: string
 ) => {
   let pageRelativeDirectory = `./${pagePath}`;
+  console.log(buttonImagePath);
   return (
     <Link to={pageRelativeDirectory}>
       <div className="SimIcon">

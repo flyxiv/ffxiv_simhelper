@@ -1,5 +1,7 @@
+import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory";
+
 export const SkillIdToIconPathFactory = (skillId: number) => {
-  const actionIconDirectory = "./src/assets/images/actions";
+  const actionIconDirectory = `${IMAGES_DIRECTORY}/actions`;
   switch (skillId) {
     // PLD
     case 1900:
@@ -470,9 +472,9 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
       return actionIconDirectory + "/RPR/enshroud.png";
     case 1223:
       return actionIconDirectory + "/RPR/slice.png";
-    case 1223:
-      return actionIconDirectory + "/RPR/waxing_slice.png";
     case 1224:
+      return actionIconDirectory + "/RPR/waxing_slice.png";
+    case 1225:
       return actionIconDirectory + "/RPR/infernal_slice.png";
 
     // VPR

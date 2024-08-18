@@ -39,7 +39,7 @@ export function MateriaInputTable(
     return <></>;
   }
 
-  return materiasInSlot.map((materia, materiaSlot) => {
+  return materiasInSlot.map((_, materiaSlot) => {
     return SingleMateriaMenu(
       equipment,
       materiasInSlot,
@@ -70,13 +70,13 @@ function SingleMateriaMenu(
 
   let updateMateria = (e: SelectChangeEvent<string>) => {
     let materiasOfSlot =
-      data.gearSetMaterias[slotNameToSlotIndex(equipment.slotName)];
+      data.gearSetMaterias[slotNameToSlotIndex(slotName)];
 
     updateMateriaList(e.target.value, equipment, materiasOfSlot, materiaSlot);
     let newGearSetMaterias = [...data.gearSetMaterias];
     let newData = { ...data };
 
-    newGearSetMaterias[slotNameToSlotIndex(equipment.slotName)] =
+    newGearSetMaterias[slotNameToSlotIndex(slotName)] =
       materiasOfSlot;
     newData.gearSetMaterias = newGearSetMaterias;
     updatePlayerPower(newData, setData);

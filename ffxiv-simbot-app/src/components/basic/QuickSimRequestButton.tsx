@@ -17,7 +17,7 @@ import {
 import { QuickSimInputSaveState } from "../../types/QuickSimInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 
-const totalRequestCount = 1;
+const totalRequestCount = 5;
 
 export function QuickSimRequestButton(
   partyMemberJobAbbrevs: string[],

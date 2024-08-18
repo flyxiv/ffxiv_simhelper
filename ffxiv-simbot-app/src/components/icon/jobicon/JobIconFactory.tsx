@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import "./JobIconFactory.css";
+import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory";
 
 function jobAbbrevToJobIconName(jobAbbrev: String) {
   switch (jobAbbrev) {
@@ -12,7 +13,7 @@ function jobAbbrevToJobIconName(jobAbbrev: String) {
     case "GNB":
       return "tank/Gunbreaker";
     case "WHM":
-      return "healer/Whitemage";
+      return "healer/WhiteMage";
     case "AST":
       return "healer/Astrologian";
     case "SCH":
@@ -40,9 +41,9 @@ function jobAbbrevToJobIconName(jobAbbrev: String) {
     case "SMN":
       return "dps/Summoner";
     case "RDM":
-      return "dps/Redmage";
+      return "dps/RedMage";
     case "BLM":
-      return "dps/Blackmage";
+      return "dps/BlackMage";
     case "PCT":
       return "dps/Pictomancer";
   }
@@ -50,8 +51,7 @@ function jobAbbrevToJobIconName(jobAbbrev: String) {
 
 export function jobAbbrevToJobIconPath(jobAbbrev: String) {
   return (
-    process.env.PUBLIC_URL +
-    `/images/jobicons/${jobAbbrevToJobIconName(jobAbbrev)}.png`
+    `${IMAGES_DIRECTORY}/jobicons/${jobAbbrevToJobIconName(jobAbbrev)}.png`
   );
 }
 
