@@ -431,7 +431,7 @@ impl FfxivPlayer {
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
                 player_id,
-                FfxivTurnType::Ogcd,
+                FfxivTurnType::Gcd,
                 VIPER_START_TIME_MILLISECOND,
                 VIPER_START_TIME_MILLISECOND,
             ),

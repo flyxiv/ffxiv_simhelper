@@ -52,9 +52,9 @@ pub fn add_main_stat(
 
 fn convert_main_stat_to_multiplier(main_stat: StatType, role: Role) -> MultiplierType {
     let main_stat_multiplier_increase_percent = if matches!(role, Role::Tank) {
-        f64::floor((main_stat - MAIN_STAT_BASE_NON_TANK) as MultiplierType * TANK_MULTIPLIER)
+        f64::floor((main_stat - MAIN_STAT_BASE_TANK) as MultiplierType * TANK_MULTIPLIER)
     } else {
-        f64::floor((main_stat - MAIN_STAT_BASE_TANK) as MultiplierType * NON_TANK_MULTIPLIER)
+        f64::floor((main_stat - MAIN_STAT_BASE_NON_TANK) as MultiplierType * NON_TANK_MULTIPLIER)
     };
 
     1.0 + main_stat_multiplier_increase_percent / 100.0

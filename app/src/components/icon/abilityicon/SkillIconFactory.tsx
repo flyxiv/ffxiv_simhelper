@@ -475,6 +475,56 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1224:
       return actionIconDirectory + "/RPR/infernal_slice.png";
 
+    // VPR
+    case 2100:
+      return actionIconDirectory + "/VPR/steel_fangs.png";
+    case 2101:
+      return actionIconDirectory + "/VPR/dread_fangs.png";
+    case 2102:
+      return actionIconDirectory + "/VPR/dreadwinder.png";
+    case 2103:
+      return actionIconDirectory + "/VPR/hunter's_sting.png";
+    case 2104:
+      return actionIconDirectory + "/VPR/swiftskin's_sting.png";
+    case 2105:
+      return actionIconDirectory + "/VPR/flanksting_strike.png";
+    case 2106:
+      return actionIconDirectory + "/VPR/flanksbane_fang.png";
+    case 2107:
+      return actionIconDirectory + "/VPR/hindsting_strike.png";
+    case 2108:
+      return actionIconDirectory + "/VPR/hindsbane_fang.png";
+    case 2109:
+      return actionIconDirectory + "/VPR/normal_filler1.png";
+    case 2110:
+      return actionIconDirectory + "/VPR/normal_filler2.png";
+    case 2111:
+      return actionIconDirectory + "/VPR/hunter's_coil.png";
+    case 2112:
+      return actionIconDirectory + "/VPR/swiftskin's_coil.png";
+    case 2113:
+      return actionIconDirectory + "/VPR/serpent's_ire.png";
+    case 2114:
+      return actionIconDirectory + "/VPR/reawaken.png";
+    case 2115:
+      return actionIconDirectory + "/VPR/first_generation.png";
+    case 2116:
+      return actionIconDirectory + "/VPR/second_generation.png";
+    case 2117:
+      return actionIconDirectory + "/VPR/third_generation.png";
+    case 2118:
+      return actionIconDirectory + "/VPR/fourth_generation.png";
+    case 2119:
+      return actionIconDirectory + "/VPR/ouroboros.png";
+    case 2120:
+      return actionIconDirectory + "/VPR/reawaken_filler.png";
+    case 2121:
+      return actionIconDirectory + "/VPR/reawaken.png";
+    case 2122:
+      return actionIconDirectory + "/VPR/uncoiled_fury.png";
+    case 2123:
+      return actionIconDirectory + "/VPR/death_rattle.png";
+
     // BRD
     case 1300:
       return actionIconDirectory + "/BRD/burst_shot.png";
@@ -794,6 +844,78 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
       return actionIconDirectory + "/RDM/scorch.png";
     case 1833:
       return actionIconDirectory + "/RDM/resolution.png";
+
+    // PCT
+    case 2000:
+      return actionIconDirectory + "/PCT/fire_in_red.png";
+    case 2001:
+      return actionIconDirectory + "/PCT/aero_in_green.png";
+    case 2002:
+      return actionIconDirectory + "/PCT/water_in_blue.png";
+    case 2003:
+      return actionIconDirectory + "/PCT/creature_muse.png";
+    case 2005:
+      return actionIconDirectory + "/PCT/mog_of_the_ages.png";
+    case 2006:
+      return actionIconDirectory + "/PCT/pom_motif.png";
+    case 2007:
+      return actionIconDirectory + "/PCT/pom_muse.png";
+    case 2008:
+      return actionIconDirectory + "/PCT/wing_motif.png";
+    case 2009:
+      return actionIconDirectory + "/PCT/winged_muse.png";
+    case 2010:
+      return actionIconDirectory + "/PCT/hammer_motif.png";
+    case 2011:
+      return actionIconDirectory + "/PCT/subtractive_pallete.png";
+    case 2012:
+      return actionIconDirectory + "/PCT/striking_muse.png";
+    case 2013:
+      return actionIconDirectory + "/PCT/blizzard_in_cyan.png";
+    case 2014:
+      return actionIconDirectory + "/PCT/stone_in_yellow.png";
+    case 2015:
+      return actionIconDirectory + "/PCT/thunder_in_magenta.png";
+    case 2016:
+      return actionIconDirectory + "/PCT/starry_sky_motif.png";
+    case 2017:
+      return actionIconDirectory + "/PCT/starry_muse.png";
+    case 2018:
+      return actionIconDirectory + "/PCT/holy_in_white.png";
+    case 2019:
+      return actionIconDirectory + "/PCT/hammer_stamp.png";
+    case 2020:
+      return actionIconDirectory + "/PCT/hammer_brush.png";
+    case 2021:
+      return actionIconDirectory + "/PCT/polishing_hammer.png";
+    case 2022:
+      return actionIconDirectory + "/PCT/comet_in_black.png";
+    case 2023:
+      return actionIconDirectory + "/PCT/rainbow_drip.png";
+    case 2024:
+      return actionIconDirectory + "/PCT/rainbow_drip.png";
+    case 2025:
+      return actionIconDirectory + "/PCT/claw_motif.png";
+    case 2026:
+      return actionIconDirectory + "/PCT/clawed_muse.png";
+    case 2027:
+      return actionIconDirectory + "/PCT/maw_motif.png";
+    case 2028:
+      return actionIconDirectory + "/PCT/fanged_muse.png";
+    case 2029:
+      return actionIconDirectory + "/PCT/retribution_of_the_madeem.png";
+    case 2030:
+      return actionIconDirectory + "/PCT/star_prism.png";
+    case 2031:
+      return actionIconDirectory + "/PCT/subtractive_pallete.png";
+    case 2032:
+      return actionIconDirectory + "/PCT/comet_in_black.png";
+    case 2033:
+      return actionIconDirectory + "/PCT/blizzard_in_cyan.png";
+    case 2034:
+      return actionIconDirectory + "/PCT/stone_in_yellow.png";
+    case 2035:
+      return actionIconDirectory + "/PCT/thunder_in_magenta.png";
 
     case 0:
       return actionIconDirectory + "/BLM/MagicalRangedRollAction/swiftcast.png";

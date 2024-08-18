@@ -214,7 +214,7 @@ impl ViperDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![],
+            resource_required: vec![UseBuff(HONED_REAVERS.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -355,7 +355,7 @@ impl ViperDatabase {
                 0,
             )],
             proc_events: vec![],
-            combo: None,
+            combo: Some(1),
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 2500,
@@ -386,7 +386,7 @@ impl ViperDatabase {
                 0,
             )],
             proc_events: vec![],
-            combo: None,
+            combo: Some(1),
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 2500,
@@ -417,7 +417,7 @@ impl ViperDatabase {
                 0,
             )],
             proc_events: vec![],
-            combo: None,
+            combo: Some(1),
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 2500,
@@ -483,7 +483,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
         let HUNTERS_COIL: AttackSkill = AttackSkill {
-            id: 2110,
+            id: 2111,
             name: String::from("Hunter's Coil"),
             player_id,
             potency: 620,
@@ -514,7 +514,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
         let SWIFTSKINS_COIL: AttackSkill = AttackSkill {
-            id: 2111,
+            id: 2112,
             name: String::from("Swiftskin's Coil"),
             player_id,
             potency: 620,
@@ -545,7 +545,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
         let SERPENTS_IRE: AttackSkill = AttackSkill {
-            id: 2112,
+            id: 2113,
             name: String::from("Serpent's Ire"),
             player_id,
             potency: 0,
@@ -576,7 +576,7 @@ impl ViperDatabase {
             use_type: UseType::NoTarget,
         };
         let REAWAKEN: AttackSkill = AttackSkill {
-            id: 2113,
+            id: 2114,
             name: String::from("Reawaken"),
             player_id,
             potency: 700,
@@ -600,7 +600,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
         let FIRST_GENERATION: AttackSkill = AttackSkill {
-            id: 2114,
+            id: 2115,
             name: String::from("First Generation"),
             player_id,
             potency: 680,
@@ -624,7 +624,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
         let SECOND_GENERATION: AttackSkill = AttackSkill {
-            id: 2114,
+            id: 2116,
             name: String::from("Second Generation"),
             player_id,
             potency: 680,
@@ -648,7 +648,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
         let THIRD_GENERATION: AttackSkill = AttackSkill {
-            id: 2115,
+            id: 2117,
             name: String::from("Third Generation"),
             player_id,
             potency: 680,
@@ -672,7 +672,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
         let FOURTH_GENERATION: AttackSkill = AttackSkill {
-            id: 2117,
+            id: 2118,
             name: String::from("Fourth Generation"),
             player_id,
             potency: 680,
@@ -697,7 +697,7 @@ impl ViperDatabase {
         };
 
         let OUROBOROS: AttackSkill = AttackSkill {
-            id: 2118,
+            id: 2119,
             name: String::from("Ouroboros"),
             player_id,
             potency: 1150,
@@ -722,7 +722,7 @@ impl ViperDatabase {
         };
 
         let AWAKENED_FILLER: AttackSkill = AttackSkill {
-            id: 2119,
+            id: 2120,
             name: String::from("Awakened Filler"),
             player_id,
             potency: 280,
@@ -746,7 +746,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
         let REAWAKEN_PROC: AttackSkill = AttackSkill {
-            id: 2120,
+            id: 2121,
             name: String::from("Reawaken"),
             player_id,
             potency: 700,
@@ -770,7 +770,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
         let UNCOILED_FURY: AttackSkill = AttackSkill {
-            id: 2121,
+            id: 2122,
             name: String::from("Uncoiled Fury"),
             player_id,
             potency: 600,
@@ -780,12 +780,12 @@ impl ViperDatabase {
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
-            gcd_cooldown_millisecond: 2200,
+            gcd_cooldown_millisecond: 3500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_millisecond: 0,
             resource_required: vec![Resource(4, 1)],
-            resource_created: Default::default(),
+            resource_created: HashMap::from([(1, 1), (2, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -795,7 +795,7 @@ impl ViperDatabase {
         };
 
         let DEATH_RATTLE: AttackSkill = AttackSkill {
-            id: 2122,
+            id: 2123,
             name: String::from("Death Rattle"),
             player_id,
             potency: 280,
@@ -890,6 +890,7 @@ pub(crate) fn make_viper_skill_list(player_id: IdType) -> SkillTable<AttackSkill
         db.reawaken_filler,
         db.reawaken_proc,
         db.uncoiled_fury,
+        db.death_rattle,
         db.potion,
     ];
 

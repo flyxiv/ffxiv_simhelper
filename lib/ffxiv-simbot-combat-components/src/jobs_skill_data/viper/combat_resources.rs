@@ -32,6 +32,7 @@ pub(crate) struct ViperCombatResources {
     hunters_coil_stack: ResourceType,
     swiftskin_coil_stack: ResourceType,
     reawaken_stack: ResourceType,
+    death_rattle_stack: ResourceType,
 }
 
 impl CombatResource for ViperCombatResources {
@@ -61,6 +62,8 @@ impl CombatResource for ViperCombatResources {
             self.swiftskin_coil_stack = min(self.swiftskin_coil_stack + amount, 1);
         } else if resource_id == 7 {
             self.reawaken_stack = min(self.reawaken_stack + amount, REAWAKEN_STACK_MAX);
+        } else if resource_id == 8 {
+            self.death_rattle_stack = min(self.death_rattle_stack + amount, 1);
         }
     }
 
@@ -81,6 +84,8 @@ impl CombatResource for ViperCombatResources {
             self.swiftskin_coil_stack
         } else if resource_id == 7 {
             self.reawaken_stack
+        } else if resource_id == 8 {
+            self.death_rattle_stack
         } else {
             -1
         }
@@ -129,6 +134,7 @@ impl ViperCombatResources {
             hunters_coil_stack: 0,
             swiftskin_coil_stack: 0,
             reawaken_stack: 0,
+            death_rattle_stack: 0,
         }
     }
 }

@@ -289,6 +289,8 @@ pub(crate) trait PriorityTable: Sized + Clone {
                         } else {
                             return double_weave_plan;
                         }
+                    } else {
+                        return best_one_ogcd;
                     }
                 }
             }
@@ -588,33 +590,4 @@ fn has_important_skill(ogcd_plans: &Option<Vec<OgcdPlan>>) -> bool {
     }
 
     false
-}
-
-/// first_set must have the bigger ogcd count.
-fn get_higher_priority_ogcd_set(
-    first_set: Vec<OgcdPlan>,
-    second_set: Vec<OgcdPlan>,
-) -> Vec<OgcdPlan> {
-    let penalty = if first_set.len() > second_set.len() {
-        OGCD_PENALTY
-    } else {
-        0
-    };
-
-    let first_set_priority = first_set
-        .iter()
-        .map(|plan| plan.priority_number)
-        .sum::<IdType>();
-    let second_set_priority = second_set
-        .iter()
-        .map(|plan| plan.priority_number)
-        .sum::<IdType>();
-
-    let first_set_better = first_set_priority <= second_set_priority + penalty;
-
-    if first_set_better {
-        first_set
-    } else {
-        second_set
-    }
 }

@@ -114,6 +114,12 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
     case 1802:
       return actionIconDirectory + "/RDM/acceleration.png";
 
+    // PCT
+    case 2000:
+      return actionIconDirectory + "/PCT/starry_muse.png";
+    case 2002:
+      return actionIconDirectory + "/PCT/hyperphantasia.png";
+
     case 0:
       return actionIconDirectory + "/BLM/MagicalRangedRollAction/swiftcast.png";
     case 10001:
@@ -122,51 +128,3 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return `unknown skill id: ${statusId}`;
   }
 };
-
-/* TODO: Add the rest of the status icons
-    // PLD
-    case 1900:
-      return actionIconDirectory + "/PLD/requiescat.png";
-    case 1901:
-      return actionIconDirectory + "/PLD/fight_or_flight.png";
-    case 1902:
-      return actionIconDirectory + "/PLD/atonement.png";
-    case 1903:
-      return actionIconDirectory + "/PLD/circle_of_scorn.png";
-    case 1904:
-      return actionIconDirectory + "/PLD/confiteor.png";
-
-    // WAR
-    case 100:
-      return actionIconDirectory + "/WAR/storm's_eye.png";
-    case 101:
-      return actionIconDirectory + "/WAR/inner_chaos.png";
-    case 102:
-      return actionIconDirectory + "/WAR/inner_release.png";
-    case 103:
-      return actionIconDirectory + "/WAR/primal_rend.png";
-
-    // DRK
-    case 200:
-      return actionIconDirectory + "/DRK/edge_of_darkness.png";
-    case 201:
-      return actionIconDirectory + "/DRK/delirium.png";
-    case 202:
-      return actionIconDirectory + "/DRK/salted_earth.png";
-
-    // GNB
-    case 300:
-      return actionIconDirectory + "/GNB/no_mercy.png";
-    case 301:
-      return actionIconDirectory + "/GNB/hypervelocity.png";
-    case 302:
-      return actionIconDirectory + "/GNB/sonic_break.png";
-    case 303:
-      return actionIconDirectory + "/GNB/bow_shock.png";
-    case 304:
-      return actionIconDirectory + "/GNB/jugular_rip.png";
-    case 305:
-      return actionIconDirectory + "/GNB/abdomen_tear.png";
-    case 306:
-      return actionIconDirectory + "/GNB/eye_gouge.png";
-*/
