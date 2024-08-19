@@ -100,7 +100,6 @@ impl Player for FfxivPlayer {
                 self.add_status_stack(buff, duration, refresh, player_id)
             }
             FfxivEvent::UseSkill(_, target_id, skill_id, event_time) => {
-                info!("Use skill_id: {}, {}", skill_id, event_time);
                 self.use_skill(skill_id, target_id, debuffs, event_time)
             }
             FfxivEvent::ApplyRaidBuff(player_id, buff, duration, max_duration, _) => {

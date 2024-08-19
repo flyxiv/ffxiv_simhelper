@@ -18,6 +18,7 @@ use ffxiv_simbot_combat_components::live_objects::player::role::job_abbrev_to_ro
 use ffxiv_simbot_combat_components::live_objects::player::{Player, StatusKey};
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
 use ffxiv_simbot_combat_components::live_objects::target::Target;
+use ffxiv_simbot_combat_components::live_objects::turn_type::FfxivTurnType;
 use ffxiv_simbot_combat_components::rotation::cooldown_timer::CooldownTimer;
 use ffxiv_simbot_combat_components::skill::attack_skill::AttackSkill;
 use ffxiv_simbot_combat_components::skill::damage_category::DamageCategory;
@@ -72,7 +73,7 @@ impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationB
         }
         let end_time = SystemTime::now();
         let elapsed_time = end_time.duration_since(start_time).unwrap();
-        info!("elapsed time: {:?}", elapsed_time);
+        debug!("elapsed time: {:?}", elapsed_time);
     }
 
     fn create_simulation_result(&self) -> SimulationResult {
@@ -103,7 +104,7 @@ impl FfxivSimulationBoard {
 
         match &ffxiv_event {
             FfxivEvent::PlayerTurn(player_id, _, _, time) => {
-                debug!("time: {}, player turn event: player {}", *time, *player_id);
+                info!("time: {}, player turn event: player {}", *time, *player_id);
                 let player = self.get_player_data(*player_id);
                 let debuffs = self.target.borrow().get_status_table();
 
@@ -121,15 +122,7 @@ impl FfxivSimulationBoard {
                 damage_category,
                 time,
             ) => {
-                let buffs = snapshotted_buffs.clone();
-                let debuffs = snapshotted_debuffs.clone();
                 let player = self.get_player_data(*player_id).clone();
-
-                info!(
-                    "time: {}, damage event: {}",
-                    *time,
-                    player.borrow().print_skill_debug(*skill_id)
-                );
 
                 self.handle_damage_event(
                     player.clone(),
@@ -138,8 +131,8 @@ impl FfxivSimulationBoard {
                     *trait_percent,
                     *guaranteed_crit,
                     *guaranteed_dh,
-                    buffs,
-                    debuffs,
+                    snapshotted_buffs,
+                    snapshotted_debuffs,
                     *damage_category,
                     *time,
                 );
@@ -211,7 +204,7 @@ impl FfxivSimulationBoard {
                 let player = self.get_player_data(*player_id);
                 let debuffs = self.target.borrow().get_status_table();
 
-                info!(
+                debug!(
                     "time: {}, use skill event: {}",
                     *time,
                     player.borrow().print_skill_debug(*skill_id)
@@ -347,8 +340,8 @@ impl FfxivSimulationBoard {
         trait_percent: PercentType,
         guaranteed_crit: bool,
         guaranteed_dh: bool,
-        mut snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
-        mut snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
+        snapshotted_buffs: &HashMap<StatusKey, BuffStatus>,
+        snapshotted_debuffs: &HashMap<StatusKey, DebuffStatus>,
         damage_category: DamageCategory,
         current_combat_time_millisecond: TimeType,
     ) {
@@ -371,9 +364,6 @@ impl FfxivSimulationBoard {
                 })
         }
 
-        snapshotted_buffs.retain(|_, buff| buff.is_damage_buff());
-        snapshotted_debuffs.retain(|_, debuff| debuff.is_damage_debuff(player_id as PlayerIdType));
-
         let (damage_rdps_profile, is_crit) = self.raw_damage_calculator.calculate_total_damage(
             player_id,
             potency,
@@ -381,11 +371,10 @@ impl FfxivSimulationBoard {
             trait_percent,
             guaranteed_crit,
             guaranteed_dh,
-            &snapshotted_buffs,
-            &snapshotted_debuffs,
+            snapshotted_buffs,
+            snapshotted_debuffs,
             &power,
         );
-        info!("raw damage: {}", damage_rdps_profile.raw_damage);
 
         if is_crit {
             player.borrow_mut().update_on_crit();
@@ -408,6 +397,12 @@ impl FfxivSimulationBoard {
 
     fn update_time_related_informations(&self, next_event_time: TimeType) {
         let elapsed_time = self.get_elapsed_time(next_event_time);
+        assert!(
+            elapsed_time >= 0,
+            "current time: {}, next_event_time: {}",
+            self.current_combat_time_millisecond.borrow(),
+            next_event_time
+        );
 
         if elapsed_time == 0 {
             return;
@@ -487,6 +482,22 @@ impl FfxivSimulationBoard {
         self.event_queue
             .borrow_mut()
             .push(Reverse(player.borrow().start_turn.clone()));
+
+        match &player.borrow().start_turn {
+            FfxivEvent::PlayerTurn(player_id, turn_type, next_gcd_time_millisecond, time) => {
+                if matches!(*turn_type, FfxivTurnType::Ogcd) {
+                    self.event_queue
+                        .borrow_mut()
+                        .push(Reverse(FfxivEvent::PlayerTurn(
+                            *player_id,
+                            FfxivTurnType::Gcd,
+                            *next_gcd_time_millisecond,
+                            *next_gcd_time_millisecond,
+                        )));
+                }
+            }
+            _ => {}
+        }
 
         self.party.push(player.clone());
 

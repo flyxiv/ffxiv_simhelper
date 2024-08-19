@@ -59,18 +59,22 @@ impl AstrologianPriorityTable {
 
 pub(crate) fn make_astrologian_opener(db: &AstrologianDatabase) -> Vec<Opener> {
     vec![
-        GcdOpener(db.fall_malefic.get_id()),
         OgcdOpener((Some(db.earthly_star.get_id()), None)),
-        GcdOpener(db.combust_iii.get_id()),
-        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.fall_malefic.get_id()),
+        OgcdOpener((Some(db.potion.get_id()), None)),
+        GcdOpener(db.combust_iii.get_id()),
         OgcdOpener((Some(db.lightspeed.get_id()), None)),
         GcdOpener(db.fall_malefic_lightspeed.get_id()),
-        OgcdOpener((Some(db.divination.get_id()), None)),
+        OgcdOpener((None, None)),
         GcdOpener(db.fall_malefic_lightspeed.get_id()),
-        OgcdOpener((Some(db.the_balance.get_id()), Some(db.umbral_draw.get_id()))),
+        OgcdOpener((Some(db.divination.get_id()), Some(db.the_balance.get_id()))),
         GcdOpener(db.fall_malefic_lightspeed.get_id()),
-        OgcdOpener((Some(db.the_spear.get_id()), None)),
+        OgcdOpener((
+            Some(db.lord_of_crowns.get_id()),
+            Some(db.umbral_draw.get_id()),
+        )),
+        GcdOpener(db.fall_malefic_lightspeed.get_id()),
+        OgcdOpener((Some(db.the_spear.get_id()), Some(db.oracle.get_id()))),
     ]
 }
 

@@ -42,7 +42,8 @@ pub(crate) static DARKKNIGHT_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static GUNBREAKER_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static WHITEMAGE_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static SCHOLAR_START_TIME_MILLISECOND: TimeType = -1500;
-pub(crate) static ASTROLOGIAN_START_TIME_MILLISECOND: TimeType = -1500;
+pub(crate) static ASTROLOGIAN_START_TIME_MILLISECOND: TimeType = -10000;
+pub(crate) static ASTROLOGIAN_GCD_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static SAGE_START_TIME_MILLISECOND: TimeType = -1500 - NON_GCD_DELAY_MILLISECOND;
 pub(crate) static NINJA_START_TIME_MILLISECOND: TimeType = -2500;
 pub(crate) static MONK_START_TIME_MILLISECOND: TimeType = 0;
@@ -232,11 +233,11 @@ impl FfxivPlayer {
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
                 player_id,
-                FfxivTurnType::Gcd,
-                ASTROLOGIAN_START_TIME_MILLISECOND,
+                FfxivTurnType::Ogcd,
+                ASTROLOGIAN_GCD_START_TIME_MILLISECOND,
                 ASTROLOGIAN_START_TIME_MILLISECOND,
             ),
-            None,
+            Some(ASTROLOGIAN_GCD_START_TIME_MILLISECOND),
             player_count,
         )
     }

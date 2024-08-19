@@ -15,10 +15,12 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, IdType, PlayerIdType, ResourceIdType, TimeType};
 use crate::types::{ResourceType, StackType};
 use itertools::Itertools;
+use log::info;
 use std::cell::RefCell;
 use std::cmp::max;
 use std::collections::HashMap;
 use std::rc::Rc;
+use std::time::SystemTime;
 
 #[derive(Clone)]
 pub(crate) enum Opener {
@@ -205,6 +207,25 @@ pub(crate) trait PriorityTable: Sized + Clone {
         let ogcd_priority_table = self.get_ogcd_priority_table();
         let next_gcd_millisecond = turn_info.next_gcd_millisecond;
         let mut best_one_ogcd = None;
+        let buffs_only_self = combat_info
+            .buff_list
+            .borrow()
+            .clone()
+            .into_iter()
+            .filter(|(key, _)| key.player_id == player.get_id())
+            .collect();
+        let debuffs_only_self = combat_info
+            .debuff_list
+            .borrow()
+            .clone()
+            .into_iter()
+            .filter(|(key, _)| key.player_id == player.get_id())
+            .collect();
+        let mut combat_info_only_self = CombatInfo {
+            buff_list: Rc::new(RefCell::new(buffs_only_self)),
+            debuff_list: Rc::new(RefCell::new(debuffs_only_self)),
+            milliseconds_before_burst: combat_info.milliseconds_before_burst,
+        };
 
         for (priority_number, skill_priority) in ogcd_priority_table.iter().enumerate() {
             let skill = combat_resource.get_skill(skill_priority.skill_id);
@@ -219,7 +240,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
             let first_skill_start_time = turn_info.lower_bound_millisecond + skill_cooldown;
 
             if first_skill_start_time <= latest_time_to_use {
-                let mut combat_info_simulation = combat_info.clone();
+                let mut combat_info_simulation = combat_info_only_self.clone();
                 let mut combat_resource_simulation = combat_resource.clone();
                 advance_time(
                     &mut combat_info_simulation,
@@ -337,7 +358,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                             skill_priority.skill_id,
                             Some(skill_start_time),
                         ),
-                        priority_number: priority_number.try_into().unwrap(),
+                        priority_number: priority_number as IdType,
                     });
                 }
             }

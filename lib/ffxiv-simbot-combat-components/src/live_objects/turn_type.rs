@@ -6,7 +6,7 @@ static INFINITE_DELAY: TimeType = 5000;
 /// GCD: Global Cooldown Skill
 /// oGCD1: First oGCD Skill after a GCD skill
 /// oGCD2: Second oGCD Skill after a GCD
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub enum FfxivTurnType {
     Gcd,
     Ogcd,

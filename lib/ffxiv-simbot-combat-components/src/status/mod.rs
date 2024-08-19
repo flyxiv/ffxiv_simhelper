@@ -5,6 +5,7 @@ use crate::types::{IdType, MultiplierType, ResourceType, SkillStackType, TimeTyp
 
 pub mod buff_status;
 pub mod debuff_status;
+pub(crate) mod snapshot_status;
 pub mod status_holder;
 pub mod status_info;
 pub mod status_timer;

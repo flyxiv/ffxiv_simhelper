@@ -27,7 +27,7 @@ pub fn init(log_level: LevelFilter) -> Result<(), SetLoggerError> {
 }
 
 fn main() {
-    let party_members = vec!["NIN", "BRD", "DRG", "SGE", "WHM", "PLD", "WAR", "BLM"];
+    let party_members = vec!["PLD", "NIN", "WAR", "WHM", "SGE", "DRG", "BRD", "BLM"];
     let party = party_members
         .iter()
         .enumerate()
@@ -35,35 +35,47 @@ fn main() {
             player_id: i as PlayerIdType,
             partner1_id: None,
             partner2_id: None,
-            job_abbrev: "".to_string(),
+            job_abbrev: job.to_string(),
             power: PlayerPower {
                 auto_attack_delays: 3.0,
-                critical_strike_rate: 3.0,
-                critical_strike_damage: 3.0,
-                direct_hit_rate: 3.0,
-                determination_multiplier: 3.0,
-                tenacity_multiplier: 3.0,
-                speed_multiplier: 3.0,
-                weapon_damage_multiplier: 3.0,
-                main_stat_multiplier: 3.0,
+                critical_strike_rate: 0.15,
+                critical_strike_damage: 1.5,
+                direct_hit_rate: 0.23,
+                determination_multiplier: 1.06,
+                tenacity_multiplier: 1.060,
+                speed_multiplier: 1.06,
+                weapon_damage_multiplier: 1.60,
+                main_stat_multiplier: 16.0,
                 weapon_damage: 132,
                 main_stat: 3300,
                 critical_strike: 2560,
                 direct_hit: 2500,
                 determination: 2500,
-                skill_speed: 0,
+                skill_speed: 2500,
 
                 tenacity: 400,
-                spell_speed: 0,
+                spell_speed: 2500,
             },
         })
         .collect_vec();
 
     let request = SimulationApiRequest {
         main_player_id: 0,
-        combat_time_millisecond: 150000,
+        combat_time_millisecond: 600000,
         party,
     };
 
     let response = quicksim(request);
+    println!(
+        "{:?}",
+        response
+            .unwrap()
+            .simulation_data
+            .last()
+            .unwrap()
+            .rotation_log
+            .last()
+            .unwrap()
+            .skill_id
+    );
 }

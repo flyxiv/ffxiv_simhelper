@@ -34,8 +34,11 @@ pub(crate) struct SkillTimeInfo {
 
 impl PlayerTurnCalculator {
     pub(crate) fn produce_event_to_queue(&self) {
-        let next_turn = self.get_next_turn();
-        self.ffxiv_event_queue.borrow_mut().push(Reverse(next_turn));
+        let next_turns = self.get_next_turn();
+        if let Some((ogcdTurn, gcdTurn)) = next_turns {
+            self.ffxiv_event_queue.borrow_mut().push(Reverse(ogcdTurn));
+            self.ffxiv_event_queue.borrow_mut().push(Reverse(gcdTurn));
+        }
     }
 
     pub(crate) fn update_internal_status(&mut self, event: &FfxivPlayerInternalEvent) {
@@ -64,7 +67,7 @@ impl PlayerTurnCalculator {
         }
     }
 
-    pub fn get_next_turn(&self) -> FfxivEvent {
+    pub fn get_next_turn(&self) -> Option<(FfxivEvent, FfxivEvent)> {
         let gcd_cooldown = self.last_gcd_skill_time_info.gcd_cooldown_millisecond;
         let next_gcd_time_millisecond = self.last_gcd_time_millisecond + gcd_cooldown;
 
@@ -79,19 +82,24 @@ impl PlayerTurnCalculator {
                     + delay;
 
                 // oGCD turn: 시작/끝 시간 안에 가장 잘 맞는 두 oGCD쌍을 한번에 찾아서 등록(둘 중 highest priority로 랭킹).
-                FfxivEvent::PlayerTurn(
-                    self.player_id,
-                    FfxivTurnType::Ogcd,
-                    next_gcd_time_millisecond,
-                    first_ogcd_start_time,
-                )
+                // 이미 이번 글쿨을 썼으면 다음 글쿨이 언제인지를 알 수 있으므로 미리 다음 GCD도 등록해놓는다.
+                // 그래야 A 랑 B oGCD를 같은 시각에 써도 시간이 뒤엉키지 않는다.
+                Some((
+                    FfxivEvent::PlayerTurn(
+                        self.player_id,
+                        FfxivTurnType::Ogcd,
+                        next_gcd_time_millisecond,
+                        first_ogcd_start_time,
+                    ),
+                    FfxivEvent::PlayerTurn(
+                        self.player_id,
+                        FfxivTurnType::Gcd,
+                        next_gcd_time_millisecond,
+                        next_gcd_time_millisecond,
+                    ),
+                ))
             }
-            FfxivTurnType::Ogcd => FfxivEvent::PlayerTurn(
-                self.player_id,
-                FfxivTurnType::Gcd,
-                next_gcd_time_millisecond,
-                next_gcd_time_millisecond,
-            ),
+            FfxivTurnType::Ogcd => None,
         }
     }
 

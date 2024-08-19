@@ -6,10 +6,12 @@ use crate::live_objects::turn_type::FfxivTurnType;
 use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
+use crate::status::snapshot_status::{snapshot_buff, snapshot_debuff};
 use crate::types::{IdType, PlayerIdType, ResourceIdType, SkillStackType, TimeType};
 use crate::types::{PotencyType, ResourceType, StatusTable};
 use std::cmp::min;
 use std::collections::HashMap;
+use std::fmt::{Debug, Display, Formatter, Pointer};
 
 /// All possible damage related events in a FFXIV combat.
 /// the last TimeType element is always the time of the event.
@@ -130,13 +132,13 @@ impl FfxivEvent {
 
     pub(crate) fn snapshot_status(
         &mut self,
-        snapshotted_buffs: StatusTable<BuffStatus>,
-        snapshotted_debuffs: StatusTable<DebuffStatus>,
+        snapshotted_buffs: &HashMap<StatusKey, BuffStatus>,
+        snapshotted_debuffs: &HashMap<StatusKey, DebuffStatus>,
     ) {
         match self {
-            FfxivEvent::ApplyDebuff(_, status, _, _, _) => {
-                status.snapshotted_buffs = snapshotted_buffs.borrow().clone();
-                status.snapshotted_debuffs = snapshotted_debuffs.borrow().clone();
+            FfxivEvent::ApplyDebuff(player_id, status, _, _, _) => {
+                status.snapshotted_buffs = snapshot_buff(snapshotted_buffs);
+                status.snapshotted_debuffs = snapshot_debuff(snapshotted_debuffs, *player_id);
             }
             _ => {}
         }
@@ -162,8 +164,8 @@ impl FfxivEvent {
                 trait_percent,
                 is_crit,
                 is_direct_hit,
-                buffs.clone(),
-                debuffs.clone(),
+                buffs,
+                debuffs,
                 damage_category,
                 elapsed_time + time,
             ),
@@ -334,3 +336,37 @@ impl Ord for FfxivEvent {
 }
 
 impl Eq for FfxivEvent {}
+
+impl ToString for FfxivEvent {
+    fn to_string(&self) -> String {
+        match self {
+            FfxivEvent::PlayerTurn(id, _, _, _) => {
+                format!("Event: Player Turn {}", id)
+            }
+            FfxivEvent::UseSkill(_, _, _, _) => String::from("Event: Use Skill"),
+            FfxivEvent::Damage(_, _, _, _, _, _, _, _, _, _) => String::from("Event: Damage"),
+            FfxivEvent::Tick(_, _) => String::from("Event: Tick"),
+            FfxivEvent::AddTicker(_, _) => String::from("Event: Add Ticker"),
+            FfxivEvent::RemoveTicker(_, _) => String::from("Event: Remove Ticker"),
+            FfxivEvent::ForceTicker(_, _) => String::from("Event: Force Ticker"),
+            FfxivEvent::ApplyBuff(_, _, _, _, _, _) => String::from("Event: Apply Buff"),
+            FfxivEvent::ApplyBuffStack(_, _, _, _, _, _) => String::from("Event: Apply Buff Stack"),
+            FfxivEvent::ApplyRaidBuff(_, _, _, _, _) => String::from("Event: Apply Raid Buff"),
+            FfxivEvent::RefreshBuff(_, _, _, _, _, _) => String::from("Event: Refresh Buff"),
+            FfxivEvent::ApplyDebuffStack(_, _, _, _, _) => {
+                String::from("Event: Apply Debuff Stack")
+            }
+            FfxivEvent::ApplyDebuff(_, _, _, _, _) => String::from("Event: Apply Debuff"),
+            FfxivEvent::RemoveTargetBuff(_, _, _, _) => String::from("Event: Remove Target Buff"),
+            FfxivEvent::RemoveRaidBuff(_, _, _) => String::from("Event: Remove Raid Buff"),
+            FfxivEvent::RemoveDebuff(_, _, _) => String::from("Event: Remove Debuff"),
+            FfxivEvent::IncreasePlayerResource(_, _, _, _) => {
+                String::from("Event: Increase Player Resource")
+            }
+            FfxivEvent::ReduceSkillCooldown(_, _, _, _) => {
+                String::from("Event: Reduce Skill Cooldown")
+            }
+            FfxivEvent::DotTick(_) => String::from("Event: Dot Tick"),
+        }
+    }
+}

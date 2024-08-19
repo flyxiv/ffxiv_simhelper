@@ -16,11 +16,12 @@ use crate::skill::{
 };
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
+use crate::status::snapshot_status::{snapshot_buff, snapshot_debuff};
 use crate::types::{ComboType, IdType, PlayerIdType, PotencyType, TimeType};
 use crate::types::{ResourceType, StackType, StatusTable};
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
-use std::cmp::max;
+use std::cmp::{max, min};
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -224,8 +225,8 @@ impl AttackSkill {
             self.trait_percent,
             self.is_guaranteed_crit,
             self.is_guaranteed_direct_hit,
-            buffs.borrow().clone(),
-            debuffs.borrow().clone(),
+            snapshot_buff(&buffs.borrow()),
+            snapshot_debuff(&debuffs.borrow(), self.player_id),
             DamageCategory::Direct,
             current_combat_milliseconds + inflict_damage_time,
         ))
@@ -256,7 +257,7 @@ impl AttackSkill {
                 }
                 _ => additional_skill_event.add_time_to_event(combat_time_millisecond),
             };
-            event.snapshot_status(buffs.clone(), debuffs.clone());
+            event.snapshot_status(&buffs.borrow(), &debuffs.borrow());
 
             for resource_required in &self.resource_required {
                 match resource_required {
@@ -408,7 +409,7 @@ impl OwnerTracker for AttackSkill {
 
 impl CooldownTimer for AttackSkill {
     fn update_cooldown(&mut self, elapsed_time: TimeType) {
-        if self.current_cooldown_millisecond <= 0 || elapsed_time == 0 {
+        if self.current_cooldown_millisecond <= 0 || elapsed_time <= 0 {
             return;
         }
 

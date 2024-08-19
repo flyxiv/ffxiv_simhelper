@@ -6,6 +6,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
 use crate::status::debuff_status::DebuffStatus;
+use crate::status::snapshot_status::{snapshot_buff, snapshot_debuff};
 use crate::types::{IdType, TimeType};
 use crate::types::{PlayerIdType, StatusTable};
 use std::cell::RefCell;
@@ -47,8 +48,8 @@ impl EventTicker for AutoAttackTicker {
                         self.trait_percent,
                         false,
                         false,
-                        player.borrow().buff_list.borrow().clone(),
-                        debuff.borrow().clone(),
+                        snapshot_buff(&player.borrow().buff_list.borrow()),
+                        snapshot_debuff(&debuff.borrow(), self.player_id),
                         self.damage_category,
                         max(current_time_millisecond, 0),
                     )));
