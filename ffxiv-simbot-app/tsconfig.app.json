@@ -7,10 +7,10 @@
     "skipLibCheck": true,
 
     "baseUrl": ".",
-
     "paths": {
       "@/images/*": ["public/images"]
     },
+    "resolveJsonModule": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",

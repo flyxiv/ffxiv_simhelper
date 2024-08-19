@@ -12,6 +12,8 @@
     "moduleDetection": "force",
     "noEmit": true,
 
+    "baseUrl": ".",
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
