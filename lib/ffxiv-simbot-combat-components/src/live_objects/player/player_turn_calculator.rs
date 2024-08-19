@@ -36,8 +36,8 @@ impl PlayerTurnCalculator {
     pub(crate) fn produce_event_to_queue(&self) {
         let next_turns = self.get_next_turn();
         if let Some((ogcdTurn, gcdTurn)) = next_turns {
-            self.ffxiv_event_queue.borrow_mut().push(Reverse(ogcdTurn));
             self.ffxiv_event_queue.borrow_mut().push(Reverse(gcdTurn));
+            self.ffxiv_event_queue.borrow_mut().push(Reverse(ogcdTurn));
         }
     }
 

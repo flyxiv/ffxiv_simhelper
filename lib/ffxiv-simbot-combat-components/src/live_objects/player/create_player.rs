@@ -553,7 +553,7 @@ impl FfxivPlayer {
                 BLACKMAGE_START_TIME_MILLISECOND,
                 BLACKMAGE_START_TIME_MILLISECOND,
             ),
-            Some(BLACKMAGE_START_TIME_MILLISECOND + 2 * NON_GCD_DELAY_MILLISECOND),
+            None,
             player_count,
         )
     }

@@ -316,6 +316,34 @@ impl FfxivEvent {
             _ => {}
         }
     }
+
+    /// 낮을수록 중요
+    fn importance_of_event(&self) -> i32 {
+        match self {
+            FfxivEvent::UseSkill(_, _, _, _) => 1,
+            FfxivEvent::Damage(_, _, _, _, _, _, _, _, _, _) => 2,
+            FfxivEvent::Tick(_, _) => 3,
+            FfxivEvent::AddTicker(_, _) => 4,
+            FfxivEvent::RemoveTicker(_, _) => 5,
+            FfxivEvent::ForceTicker(_, _) => 6,
+            FfxivEvent::ApplyBuff(_, _, _, _, _, _) => 7,
+            FfxivEvent::ApplyBuffStack(_, _, _, _, _, _) => 8,
+            FfxivEvent::ApplyRaidBuff(_, _, _, _, _) => 9,
+            FfxivEvent::RefreshBuff(_, _, _, _, _, _) => 10,
+            FfxivEvent::ApplyDebuffStack(_, _, _, _, _) => 11,
+            FfxivEvent::ApplyDebuff(_, _, _, _, _) => 12,
+            FfxivEvent::RemoveTargetBuff(_, _, _, _) => 13,
+            FfxivEvent::RemoveRaidBuff(_, _, _) => 14,
+            FfxivEvent::RemoveDebuff(_, _, _) => 15,
+            FfxivEvent::IncreasePlayerResource(_, _, _, _) => 16,
+            FfxivEvent::ReduceSkillCooldown(_, _, _, _) => 17,
+            FfxivEvent::DotTick(_) => 18,
+            FfxivEvent::PlayerTurn(_, turn_type, _, _) => match turn_type {
+                FfxivTurnType::Ogcd => 19,
+                FfxivTurnType::Gcd => 20,
+            },
+        }
+    }
 }
 
 impl PartialEq<Self> for FfxivEvent {
@@ -331,7 +359,12 @@ impl PartialOrd for FfxivEvent {
 }
 impl Ord for FfxivEvent {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.get_event_time().cmp(&other.get_event_time())
+        let first_cmp = self.get_event_time().cmp(&other.get_event_time());
+        if first_cmp == std::cmp::Ordering::Equal {
+            self.importance_of_event().cmp(&other.importance_of_event())
+        } else {
+            first_cmp
+        }
     }
 }
 
