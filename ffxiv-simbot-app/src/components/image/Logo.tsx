@@ -6,7 +6,7 @@ export const Logo = () => {
     <div className="TitleDiv">
       <Link to="/">
         <img
-          src='/images/logo.svg'
+          src='/images/logo_dark.svg'
           alt="logo"
           height="100px"
           width="200px"
