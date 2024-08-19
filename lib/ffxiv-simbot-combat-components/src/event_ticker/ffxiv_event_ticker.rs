@@ -5,8 +5,8 @@ use crate::event_ticker::independent_ticker::IndependentTicker;
 use crate::event_ticker::{EventTicker, TickerKey};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::StatusTable;
 use crate::types::{IdType, TimeType};
+use crate::types::{PlayerIdType, StatusTable};
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -67,7 +67,7 @@ impl EventTicker for FfxivEventTicker {
         }
     }
 
-    fn get_player_id(&self) -> Option<IdType> {
+    fn get_player_id(&self) -> Option<PlayerIdType> {
         match self {
             FfxivEventTicker::AutoAttackTicker(ticker) => ticker.get_player_id(),
             FfxivEventTicker::GlobalTicker(ticker) => ticker.get_player_id(),

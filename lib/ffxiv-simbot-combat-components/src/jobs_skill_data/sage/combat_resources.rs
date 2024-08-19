@@ -7,7 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -27,9 +27,9 @@ impl CombatResource for SageCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, _: IdType, _: ResourceType) {}
+    fn add_resource(&mut self, _: ResourceIdType, _: ResourceType) {}
 
-    fn get_resource(&self, _: IdType) -> ResourceType {
+    fn get_resource(&self, _: ResourceIdType) -> ResourceType {
         -1
     }
 
@@ -50,7 +50,7 @@ impl CombatResource for SageCombatResources {
         (vec![], vec![])
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
 
@@ -59,7 +59,7 @@ impl CombatResource for SageCombatResources {
 }
 
 impl SageCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_sage_skills(player_id),
         }

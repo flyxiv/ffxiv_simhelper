@@ -6,7 +6,7 @@ use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{IdType, MultiplierType};
+use crate::types::MultiplierType;
 use std::collections::HashMap;
 
 pub trait RdpsCalculator {
@@ -16,12 +16,10 @@ pub trait RdpsCalculator {
     /// 3) Order each buff to update its RDPS contribution.
     fn make_damage_profile(
         &self,
-        skill_id: IdType,
         snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
         snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
         skill_damage: MultiplierType,
         power: &PlayerPower,
-        player_id: IdType,
     ) -> DamageRdpsProfile;
 }
 
@@ -36,15 +34,12 @@ impl MultiplierCalculator for FfxivRdpsCalculator {}
 impl RdpsCalculator for FfxivRdpsCalculator {
     fn make_damage_profile(
         &self,
-        skill_id: IdType,
         snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
         snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
         skill_damage: MultiplierType,
         power: &PlayerPower,
-        _: IdType,
     ) -> DamageRdpsProfile {
         let mut damage_profile = DamageRdpsProfile {
-            skill_id,
             raw_damage: skill_damage,
             final_damage: skill_damage,
             rdps_contribution: HashMap::new(),

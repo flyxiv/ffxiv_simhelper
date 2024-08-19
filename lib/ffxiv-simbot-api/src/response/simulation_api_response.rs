@@ -1,6 +1,6 @@
 use crate::response::CountType;
 use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
-use ffxiv_simbot_combat_components::types::{DpsType, IdType, TimeType};
+use ffxiv_simbot_combat_components::types::{DpsType, IdType, PlayerIdType, TimeType};
 use serde::Serialize;
 
 pub(crate) const SKILL_ENTITY_STRING: &'static str = "Skill";
@@ -11,7 +11,7 @@ pub(crate) const STATUS_ENTITY_STRING: &'static str = "Status";
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SimulationApiResponse {
-    pub main_player_id: IdType,
+    pub main_player_id: PlayerIdType,
     pub combat_time_millisecond: TimeType,
     pub simulation_data: Vec<SimulationDataResponse>,
     pub main_player_power: PlayerPower,
@@ -21,7 +21,7 @@ pub struct SimulationApiResponse {
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SimulationDataResponse {
-    pub player_id: IdType,
+    pub player_id: PlayerIdType,
     pub job_abbrev: String,
     pub role: String,
     pub simulation_summary: SimulationSummaryResponse,
@@ -57,7 +57,7 @@ pub struct SimulationSummaryResponse {
 #[serde(rename_all = "camelCase")]
 pub struct PartyContributionResponse {
     pub skill_id: IdType,
-    pub party_member_id: IdType,
+    pub party_member_id: PlayerIdType,
     pub status_id: IdType,
     pub contributed_rdps: DpsType,
 }
@@ -82,7 +82,7 @@ pub struct DamageProfileResponse {
 pub struct SkillLogResponse {
     pub time: TimeType,
     pub skill_id: IdType,
-    pub target: Option<IdType>,
+    pub target: Option<PlayerIdType>,
     pub buffs: Vec<IdType>,
     pub debuffs: Vec<IdType>,
 }

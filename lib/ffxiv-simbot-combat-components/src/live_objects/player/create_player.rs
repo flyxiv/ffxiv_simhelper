@@ -31,7 +31,7 @@ use crate::rotation::ffxiv_priority_table::FfxivPriorityTable;
 use crate::skill::NON_GCD_DELAY_MILLISECOND;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, TimeType};
+use crate::types::{IdType, PlayerIdType, TimeType};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -60,7 +60,7 @@ pub(crate) static PICTOMANCER_START_TIME_MILLISECOND: TimeType = -4000;
 
 impl FfxivPlayer {
     pub fn new_paladin(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -86,7 +86,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_warrior(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -112,7 +112,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_darkknight(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -137,7 +137,7 @@ impl FfxivPlayer {
         )
     }
     pub fn new_gunbreaker(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -163,7 +163,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_whitemage(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -189,7 +189,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_scholar(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -214,10 +214,10 @@ impl FfxivPlayer {
         )
     }
     pub fn new_astrologian(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
-        partner_id1: IdType,
-        partner_id2: IdType,
+        partner_id1: PlayerIdType,
+        partner_id2: PlayerIdType,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
     ) -> FfxivPlayer {
@@ -242,7 +242,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_sage(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -268,7 +268,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_dragoon(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -294,7 +294,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_monk(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -332,7 +332,7 @@ impl FfxivPlayer {
         )
     }
     pub fn new_ninja(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -363,7 +363,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_samurai(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -389,7 +389,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_reaper(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -415,7 +415,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_viper(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -441,7 +441,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_bard(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -467,7 +467,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_machinist(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -492,8 +492,8 @@ impl FfxivPlayer {
         )
     }
     pub fn new_dancer(
-        player_id: IdType,
-        partner_player_id: IdType,
+        player_id: PlayerIdType,
+        partner_player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -519,7 +519,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_blackmage(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -558,7 +558,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_summoner(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -587,7 +587,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_redmage(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
@@ -613,7 +613,7 @@ impl FfxivPlayer {
     }
 
     pub fn new_pictomancer(
-        player_id: IdType,
+        player_id: PlayerIdType,
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,

@@ -10,7 +10,7 @@ use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct PaladinDatabase {
@@ -49,7 +49,7 @@ pub(crate) struct PaladinDatabase {
 }
 
 impl PaladinDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let REQUIESCAT_BUFF: BuffStatus = BuffStatus {
             id: 1900,
             name: String::from("Requiescat"),
@@ -726,7 +726,7 @@ impl PaladinDatabase {
     }
 }
 
-pub(crate) fn make_paladin_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_paladin_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = PaladinDatabase::new(player_id);
 
     let paladin_skill_list: Vec<AttackSkill> = vec![

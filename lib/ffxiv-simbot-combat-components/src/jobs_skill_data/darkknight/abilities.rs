@@ -10,7 +10,7 @@ use crate::skill::ResourceRequirements::{CheckStatus, Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct DarkknightDatabase {
@@ -43,7 +43,7 @@ pub(crate) struct DarkknightDatabase {
 }
 
 impl DarkknightDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let DARKSIDE: BuffStatus = BuffStatus {
             id: 200,
             name: String::from("Darkside"),
@@ -588,7 +588,7 @@ impl DarkknightDatabase {
     }
 }
 
-pub(crate) fn make_darkknight_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_darkknight_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = DarkknightDatabase::new(player_id);
 
     let darkknight_skill_list: Vec<AttackSkill> = vec![

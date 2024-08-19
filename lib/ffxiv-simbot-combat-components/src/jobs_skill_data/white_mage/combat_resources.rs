@@ -8,7 +8,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -23,7 +23,6 @@ const BLOOD_LILY_MAX_STACK: ResourceType = 3;
 #[derive(Clone)]
 pub(crate) struct WhitemageCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
     blood_lily_stack: ResourceType,
     lily_stack: ResourceType,
     glare4_stack: ResourceType,
@@ -39,7 +38,7 @@ impl CombatResource for WhitemageCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
         if resource_id == 0 {
             self.blood_lily_stack = min(
                 BLOOD_LILY_MAX_STACK,
@@ -52,7 +51,7 @@ impl CombatResource for WhitemageCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.blood_lily_stack
         } else if resource_id == 1 {
@@ -68,7 +67,7 @@ impl CombatResource for WhitemageCombatResources {
         None
     }
 
-    fn update_combo(&mut self, _: &Option<IdType>) {}
+    fn update_combo(&mut self, _: &ComboType) {}
 
     fn trigger_on_event(
         &mut self,
@@ -81,7 +80,7 @@ impl CombatResource for WhitemageCombatResources {
         (vec![], vec![])
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, elapsed_time_millisecond: TimeType) {
@@ -96,10 +95,9 @@ impl CombatResource for WhitemageCombatResources {
 }
 
 impl WhitemageCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_whitemage_skill_list(player_id),
-            player_id,
             blood_lily_stack: 0,
             lily_stack: 0,
             glare4_stack: 0,

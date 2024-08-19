@@ -1,7 +1,7 @@
 use crate::event::FfxivEventQueue;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -11,11 +11,10 @@ use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
     Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
 };
-use crate::types::TurnCount;
 
 #[derive(Clone)]
 pub(crate) struct SummonerPriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -49,7 +48,7 @@ impl PriorityTable for SummonerPriorityTable {
 }
 
 impl SummonerPriorityTable {
-    pub fn new(player_id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+    pub fn new(player_id: PlayerIdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
         let db = SummonerDatabase::new(player_id, ffxiv_event_queue);
         Self {
             turn_count: RefCell::new(0),

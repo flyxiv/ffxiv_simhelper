@@ -7,13 +7,12 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 };
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
-use crate::types::TurnCount;
+use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 #[derive(Clone)]
 pub(crate) struct MonkPriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -47,7 +46,7 @@ impl PriorityTable for MonkPriorityTable {
 }
 
 impl MonkPriorityTable {
-    pub fn new(player_id: IdType) -> Self {
+    pub fn new(player_id: PlayerIdType) -> Self {
         let db = MonkDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),

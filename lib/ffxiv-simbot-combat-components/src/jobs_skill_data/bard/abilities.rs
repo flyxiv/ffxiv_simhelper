@@ -16,7 +16,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -69,7 +69,10 @@ pub(crate) struct BardDatabase {
 }
 
 impl BardDatabase {
-    pub(crate) fn new(player_id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+    pub(crate) fn new(
+        player_id: PlayerIdType,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> Self {
         let CAUSTIC_BITE_DOT: DebuffStatus = {
             DebuffStatus {
                 id: 1300,
@@ -1098,7 +1101,7 @@ impl BardDatabase {
 }
 
 pub(crate) fn make_bard_skill_list(
-    player_id: IdType,
+    player_id: PlayerIdType,
     ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
 ) -> SkillTable<AttackSkill> {
     let db = BardDatabase::new(player_id, ffxiv_event_queue);

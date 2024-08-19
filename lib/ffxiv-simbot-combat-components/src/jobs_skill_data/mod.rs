@@ -3,7 +3,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 
 pub(crate) mod astrologian;
 pub(crate) mod bard;
@@ -38,7 +38,7 @@ struct CasterGlobalSkill {
 }
 
 impl PotionSkill {
-    pub fn new(player_id: IdType) -> Self {
+    pub fn new(player_id: PlayerIdType) -> Self {
         let POTION_BUFF = BuffStatus {
             id: 1,
             owner_id: player_id,
@@ -91,7 +91,7 @@ impl PotionSkill {
 }
 
 impl CasterGlobalSkill {
-    pub fn new(player_id: IdType) -> Self {
+    pub fn new(player_id: PlayerIdType) -> Self {
         let SWIFTCAST_BUFF: BuffStatus = BuffStatus {
             id: 0,
             owner_id: player_id,

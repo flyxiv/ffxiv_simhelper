@@ -1,6 +1,6 @@
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
+use crate::types::PlayerIdType;
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
@@ -9,11 +9,11 @@ use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, Or,
 };
-use crate::types::TurnCount;
+use crate::types::IdType;
 
 #[derive(Clone)]
 pub(crate) struct DragoonPriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -47,7 +47,7 @@ impl PriorityTable for DragoonPriorityTable {
 }
 
 impl DragoonPriorityTable {
-    pub fn new(player_id: IdType) -> Self {
+    pub fn new(player_id: PlayerIdType) -> Self {
         let db = DragoonDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),

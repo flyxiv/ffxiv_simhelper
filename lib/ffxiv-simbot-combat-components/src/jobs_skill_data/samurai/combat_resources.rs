@@ -7,7 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -24,7 +24,6 @@ const FILLER_MAX_STACK: ResourceType = 1;
 #[derive(Clone)]
 pub(crate) struct SamuraiCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
     current_combo: ComboType,
     genki_stack: ResourceType,
     meditation_stack: ResourceType,
@@ -43,7 +42,7 @@ impl CombatResource for SamuraiCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
         if resource_id == 0 {
             self.genki_stack = min(GENKI_MAX_STACK, self.genki_stack + resource_amount);
         } else if resource_id == 1 {
@@ -62,7 +61,7 @@ impl CombatResource for SamuraiCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.genki_stack
         } else if resource_id == 1 {
@@ -84,7 +83,7 @@ impl CombatResource for SamuraiCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo) = combo {
             self.current_combo = Some(*combo);
         }
@@ -103,17 +102,16 @@ impl CombatResource for SamuraiCombatResources {
 
     fn trigger_on_crit(&mut self) {}
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
 }
 
 impl SamuraiCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_samurai_skill_list(player_id),
-            player_id,
             current_combo: None,
             genki_stack: 0,
             meditation_stack: 0,

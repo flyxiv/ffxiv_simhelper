@@ -1,6 +1,6 @@
 use crate::live_objects::player::StatusKey;
 use crate::status::Status;
-use crate::types::{IdType, TimeType};
+use crate::types::{PlayerIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -16,7 +16,7 @@ pub trait StatusHolder<S: Status>: Sized {
         mut status: S,
         duration_millisecond: TimeType,
         max_duration_millisecond: TimeType,
-        player_id: IdType,
+        player_id: PlayerIdType,
     ) {
         let key = StatusKey::new(status.get_id(), player_id);
         let status_table = self.get_status_table();
@@ -41,7 +41,7 @@ pub trait StatusHolder<S: Status>: Sized {
         mut status: S,
         duration_millisecond: TimeType,
         refresh: bool,
-        player_id: IdType,
+        player_id: PlayerIdType,
     ) {
         let key = StatusKey::new(status.get_id(), player_id);
         let status_table = self.get_status_table();

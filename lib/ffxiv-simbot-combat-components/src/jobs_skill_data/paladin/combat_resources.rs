@@ -7,7 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -17,7 +17,6 @@ use std::rc::Rc;
 #[derive(Clone)]
 pub(crate) struct PaladinCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
     current_combo: ComboType,
     blade_of_honor_stack: ResourceType,
 }
@@ -31,13 +30,13 @@ impl CombatResource for PaladinCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
         if resource_id == 0 {
             self.blade_of_honor_stack = min(1, resource_amount + self.blade_of_honor_stack);
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.blade_of_honor_stack
         } else {
@@ -49,7 +48,7 @@ impl CombatResource for PaladinCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
         }
@@ -67,17 +66,16 @@ impl CombatResource for PaladinCombatResources {
     }
 
     fn trigger_on_crit(&mut self) {}
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
 }
 
 impl PaladinCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_paladin_skill_list(player_id),
-            player_id,
             current_combo: None,
             blade_of_honor_stack: 0,
         }

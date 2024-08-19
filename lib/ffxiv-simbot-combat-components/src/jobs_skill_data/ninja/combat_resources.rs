@@ -1,6 +1,5 @@
 use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent;
-use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::ninja::abilities::{
     bunshin_clone_id, bunshin_stack_id, bunshin_trigger_gcd_ids, make_ninja_skill_list,
 };
@@ -11,7 +10,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -26,7 +25,7 @@ pub(crate) struct NinjaCombatResources {
     skills: SkillTable<AttackSkill>,
     ninki: ResourceType,
     shuriken: ResourceType,
-    current_combo: Option<IdType>,
+    current_combo: ComboType,
 }
 
 impl CombatResource for NinjaCombatResources {
@@ -38,7 +37,7 @@ impl CombatResource for NinjaCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_type: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_type: ResourceType) {
         if resource_id == 0 {
             let ninki = self.ninki;
             self.ninki = min(NINKI_MAX, ninki + resource_type);
@@ -48,7 +47,7 @@ impl CombatResource for NinjaCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.ninki
         } else if resource_id == 1 {
@@ -62,7 +61,7 @@ impl CombatResource for NinjaCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
         }
@@ -95,7 +94,7 @@ impl CombatResource for NinjaCombatResources {
         return (vec![], vec![]);
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
 
@@ -104,7 +103,7 @@ impl CombatResource for NinjaCombatResources {
 }
 
 impl NinjaCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_ninja_skill_list(player_id),
             ninki: 0,

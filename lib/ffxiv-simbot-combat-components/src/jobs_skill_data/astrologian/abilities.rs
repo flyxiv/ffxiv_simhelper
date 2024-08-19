@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct AstrologianDatabase {
@@ -43,7 +43,7 @@ pub(crate) struct AstrologianDatabase {
 }
 
 impl AstrologianDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let DIVINATION_BUFF: BuffStatus = BuffStatus {
             id: 500,
             name: String::from("Divination"),
@@ -567,7 +567,7 @@ impl AstrologianDatabase {
     }
 }
 
-pub(crate) fn make_astrologian_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_astrologian_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = AstrologianDatabase::new(player_id);
 
     let astrologian_skill_list: Vec<AttackSkill> = vec![

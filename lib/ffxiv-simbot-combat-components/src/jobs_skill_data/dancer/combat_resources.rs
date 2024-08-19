@@ -7,7 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -21,8 +21,7 @@ const FEATHER_MAX_STACK: ResourceType = 4;
 pub(crate) struct DancerCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
-    player_id: IdType,
-    partner_player_id: IdType,
+    partner_player_id: PlayerIdType,
     esprit: ResourceType,
     feather: ResourceType,
 }
@@ -36,7 +35,7 @@ impl CombatResource for DancerCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
         if resource_id == 0 {
             self.esprit = min(ESPRIT_MAX_STACK, self.esprit + resource_amount);
         } else if resource_id == 1 {
@@ -44,7 +43,7 @@ impl CombatResource for DancerCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.esprit
         } else if resource_id == 1 {
@@ -58,7 +57,7 @@ impl CombatResource for DancerCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
         }
@@ -75,7 +74,7 @@ impl CombatResource for DancerCombatResources {
         (vec![], vec![])
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         self.partner_player_id
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
@@ -83,11 +82,10 @@ impl CombatResource for DancerCombatResources {
 }
 
 impl DancerCombatResources {
-    pub(crate) fn new(player_id: IdType, partner_player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType, partner_player_id: PlayerIdType) -> Self {
         Self {
             skills: make_dancer_skill_list(player_id, partner_player_id),
             current_combo: None,
-            player_id,
             partner_player_id,
             esprit: 0,
             feather: 0,

@@ -6,8 +6,8 @@ use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::types::{IdType, TimeType};
-use crate::types::{PotencyType, ResourceType};
+use crate::types::PotencyType;
+use crate::types::{IdType, PlayerIdType, SkillStackType, TimeType};
 use std::cmp::min;
 use std::collections::HashMap;
 
@@ -15,7 +15,7 @@ pub(crate) type SnapshotTable = HashMap<IdType, Vec<PotencyType>>;
 #[derive(PartialEq, Eq, Clone)]
 pub struct DebuffStatus {
     pub(crate) id: IdType,
-    pub(crate) owner_id: IdType,
+    pub(crate) owner_id: PlayerIdType,
     pub(crate) damage_skill_id: Option<IdType>,
     pub(crate) potency: Option<PotencyType>,
     pub(crate) trait_percent: Option<PercentType>,
@@ -24,8 +24,8 @@ pub struct DebuffStatus {
     pub(crate) status_info: Vec<StatusInfo>,
     pub(crate) duration_millisecond: TimeType,
     pub(crate) is_raidwide: bool,
-    pub(crate) stacks: ResourceType,
-    pub(crate) max_stacks: ResourceType,
+    pub(crate) stacks: SkillStackType,
+    pub(crate) max_stacks: SkillStackType,
     pub(crate) name: String,
     pub(crate) snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
     pub(crate) snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
@@ -53,10 +53,10 @@ impl Status for DebuffStatus {
     fn is_raidwide(&self) -> bool {
         self.is_raidwide
     }
-    fn add_stack(&mut self, stack: ResourceType) {
+    fn add_stack(&mut self, stack: SkillStackType) {
         self.stacks = min(self.stacks + stack, self.max_stacks);
     }
-    fn get_stack(&self) -> ResourceType {
+    fn get_stack(&self) -> SkillStackType {
         self.stacks
     }
 
@@ -66,7 +66,7 @@ impl Status for DebuffStatus {
 }
 
 impl DebuffStatus {
-    pub fn is_damage_debuff(&self, player_id: IdType) -> bool {
+    pub fn is_damage_debuff(&self, player_id: PlayerIdType) -> bool {
         if self.owner_id != player_id && !self.is_raidwide {
             return false;
         }
@@ -89,7 +89,7 @@ impl IdEntity for DebuffStatus {
 }
 
 impl OwnerTracker for DebuffStatus {
-    fn get_owner_id(&self) -> IdType {
+    fn get_owner_id(&self) -> PlayerIdType {
         self.owner_id
     }
 }

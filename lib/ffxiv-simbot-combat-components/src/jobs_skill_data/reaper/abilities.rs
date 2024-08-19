@@ -9,7 +9,7 @@ use crate::skill::ResourceRequirements::{CheckStatus, Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PotencyType};
+use crate::types::{IdType, PlayerIdType, PotencyType};
 use std::collections::HashMap;
 
 pub(crate) struct ReaperDatabase {
@@ -55,7 +55,7 @@ pub(crate) struct ReaperDatabase {
 }
 
 impl ReaperDatabase {
-    pub(crate) fn new(player_id: IdType, player_count: usize) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType, player_count: usize) -> Self {
         let ENSHROUD_STATUS: BuffStatus = BuffStatus {
             id: 1200,
             name: String::from("Enshroud"),
@@ -950,7 +950,7 @@ impl ReaperDatabase {
 }
 
 pub(crate) fn make_reaper_skill_list(
-    player_id: IdType,
+    player_id: PlayerIdType,
     player_count: usize,
 ) -> SkillTable<AttackSkill> {
     let db = ReaperDatabase::new(player_id, player_count);
@@ -988,7 +988,7 @@ pub(crate) fn make_reaper_skill_list(
     make_skill_table(reaper_skill_list)
 }
 
-pub(crate) fn reaper_normal_gcd_ids(player_id: IdType) -> Vec<IdType> {
+pub(crate) fn reaper_normal_gcd_ids(player_id: PlayerIdType) -> Vec<IdType> {
     let db = ReaperDatabase::new(player_id, 1);
     vec![db.slice.id, db.waxing_slice.id, db.infernal_slice.id]
 }

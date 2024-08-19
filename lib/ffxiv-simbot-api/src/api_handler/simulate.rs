@@ -6,6 +6,7 @@ use crate::response::convert_simulation_result::create_response_from_simulation_
 use crate::response::simulation_api_response::SimulationApiResponse;
 use axum::Json;
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
+use ffxiv_simbot_combat_components::types::BuffIncreasePercentType;
 use ffxiv_simbot_dps_simulator::combat_simulator::ffxiv_simulation_board::FfxivSimulationBoard;
 use ffxiv_simbot_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
@@ -21,8 +22,8 @@ pub(crate) async fn simulate_api_handler(
 pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> {
     let combat_time_millisecond = request.combat_time_millisecond;
     let main_player_id = request.main_player_id;
-    let main_player_power = request.party[main_player_id].power.clone();
-    let main_player_job_abbrev = request.party[main_player_id].job_abbrev.clone();
+    let main_player_power = request.party[main_player_id as usize].power.clone();
+    let main_player_job_abbrev = request.party[main_player_id as usize].job_abbrev.clone();
 
     let event_queue = Rc::new(RefCell::new(Default::default()));
 
@@ -54,7 +55,7 @@ pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> 
     for player_info_request in request.party {
         let player = create_player(
             player_info_request,
-            composition_buff_percent,
+            composition_buff_percent as BuffIncreasePercentType,
             &player_jobs,
             event_queue.clone(),
         )?;

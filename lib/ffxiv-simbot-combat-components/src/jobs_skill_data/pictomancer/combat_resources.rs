@@ -7,7 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType, StackType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -22,21 +22,20 @@ const HYPERPHANTASIA_STACK_MAX: ResourceType = 5;
 const CREATURE_STACK_MAX: ResourceType = 4;
 const SHOT_STACK_MAX: ResourceType = 2;
 
-pub(crate) const HAMMER_STACK_ID: IdType = 1;
-pub(crate) const STARRY_SKY_STACK_ID: IdType = 2;
-pub(crate) const SHOT_STACK_ID: IdType = 3;
-pub(crate) const BLACK_PAINT_STACK_ID: IdType = 7;
-pub(crate) const HARD_GCD_STACK_ID: IdType = 8;
-pub(crate) const SHOT_MOOGLE_ID: IdType = 11;
-pub(crate) const HAMMER_READY_ID: IdType = 12;
-pub(crate) const HYPERPHANTASIA_STACK_ID: IdType = 13;
-pub(crate) const HAS_CREATURE_ID: IdType = 14;
-pub(crate) const CREATURE_STACK_ID: IdType = 15;
+pub(crate) const HAMMER_STACK_ID: ResourceIdType = 1;
+pub(crate) const STARRY_SKY_STACK_ID: ResourceIdType = 2;
+pub(crate) const SHOT_STACK_ID: ResourceIdType = 3;
+pub(crate) const BLACK_PAINT_STACK_ID: ResourceIdType = 7;
+pub(crate) const HARD_GCD_STACK_ID: ResourceIdType = 8;
+pub(crate) const SHOT_MOOGLE_ID: ResourceIdType = 11;
+pub(crate) const HAMMER_READY_ID: ResourceIdType = 12;
+pub(crate) const HYPERPHANTASIA_STACK_ID: ResourceIdType = 13;
+pub(crate) const HAS_CREATURE_ID: ResourceIdType = 14;
+pub(crate) const CREATURE_STACK_ID: ResourceIdType = 15;
 
 #[derive(Clone)]
 pub(crate) struct PictomancerCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
     current_combo: ComboType,
 
     pallete_stack: ResourceType,
@@ -61,7 +60,7 @@ impl CombatResource for PictomancerCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
         if resource_id == 0 {
             self.pallete_stack = min(PALLETE_STACK_MAX, self.pallete_stack + resource_amount);
         } else if resource_id == HAMMER_STACK_ID {
@@ -90,7 +89,7 @@ impl CombatResource for PictomancerCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.pallete_stack
         } else if resource_id == HAMMER_STACK_ID {
@@ -122,7 +121,7 @@ impl CombatResource for PictomancerCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
         }
@@ -139,7 +138,7 @@ impl CombatResource for PictomancerCombatResources {
         (vec![], vec![])
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
@@ -148,9 +147,8 @@ impl CombatResource for PictomancerCombatResources {
 }
 
 impl PictomancerCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
-            player_id,
             skills: make_pictomancer_skill_list(player_id),
             current_combo: None,
             pallete_stack: 0,

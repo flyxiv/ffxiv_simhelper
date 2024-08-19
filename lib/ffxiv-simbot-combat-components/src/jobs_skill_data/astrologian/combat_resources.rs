@@ -10,7 +10,7 @@ use crate::skill::damage_category::DamageCategory;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::{max, min};
@@ -23,12 +23,12 @@ const STELLAR_TIMER: TimeType = 20000;
 #[derive(Clone)]
 pub(crate) struct AstrologianCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
+    player_id: PlayerIdType,
     current_combo: ComboType,
     lunar_stack: ResourceType,
     stellar_timer: Option<TimeType>,
-    melee_partner: IdType,
-    ranged_partner: IdType,
+    melee_partner: PlayerIdType,
+    ranged_partner: PlayerIdType,
 }
 
 impl CombatResource for AstrologianCombatResources {
@@ -40,13 +40,13 @@ impl CombatResource for AstrologianCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
         if resource_id == 0 {
             self.lunar_stack = min(LUNAR_STACK_MAX, self.lunar_stack + resource_amount);
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.lunar_stack
         } else {
@@ -58,7 +58,7 @@ impl CombatResource for AstrologianCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo) = combo {
             self.current_combo = Some(*combo);
         }
@@ -100,7 +100,7 @@ impl CombatResource for AstrologianCombatResources {
 
     fn trigger_on_crit(&mut self) {}
 
-    fn get_next_buff_target(&self, skill_id: IdType) -> IdType {
+    fn get_next_buff_target(&self, skill_id: IdType) -> PlayerIdType {
         if skill_id == 505 {
             self.melee_partner
         } else if skill_id == 506 {
@@ -117,7 +117,11 @@ impl CombatResource for AstrologianCombatResources {
 }
 
 impl AstrologianCombatResources {
-    pub(crate) fn new(player_id: IdType, melee_partner: IdType, ranged_partner: IdType) -> Self {
+    pub(crate) fn new(
+        player_id: PlayerIdType,
+        melee_partner: PlayerIdType,
+        ranged_partner: PlayerIdType,
+    ) -> Self {
         Self {
             skills: make_astrologian_skill_list(player_id),
             player_id,

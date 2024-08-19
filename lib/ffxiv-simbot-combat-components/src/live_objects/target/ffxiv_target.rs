@@ -42,7 +42,7 @@ impl Target for FfxivTarget {
             FfxivEvent::RemoveDebuff(player_id, debuff_id, _) => {
                 self.debuff_list
                     .borrow_mut()
-                    .remove(&StatusKey::new(player_id, debuff_id));
+                    .remove(&StatusKey::new(debuff_id, player_id));
             }
             FfxivEvent::DotTick(combat_time_millisecond) => {
                 for debuff in self.debuff_list.borrow().values() {

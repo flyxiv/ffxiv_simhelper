@@ -8,7 +8,7 @@ use crate::skill::ResourceRequirements::UseBuff;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct WarriorDatabase {
@@ -38,7 +38,7 @@ pub(crate) struct WarriorDatabase {
 }
 
 impl WarriorDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let SURGING_TEMPEST: BuffStatus = BuffStatus {
             id: 100,
             name: String::from("Surging Tempest"),
@@ -532,7 +532,7 @@ impl WarriorDatabase {
     }
 }
 
-pub(crate) fn make_warrior_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_warrior_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = WarriorDatabase::new(player_id);
 
     let warrior_skill_list: Vec<AttackSkill> = vec![

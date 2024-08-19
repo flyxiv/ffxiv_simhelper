@@ -1,7 +1,7 @@
 use crate::live_objects::player::player_power::PlayerPower;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::types::{BuffIncreasePercentType, MultiplierType, ResourceType};
+use crate::types::{BuffIncreasePercentType, MultiplierType, SkillStackType};
 
 #[inline]
 pub(crate) fn percent_to_actual_value(increase_percent: BuffIncreasePercentType) -> MultiplierType {
@@ -15,7 +15,7 @@ pub trait MultiplierCalculator {
     fn calculate_damage_multiplier(
         &self,
         damage_increase: BuffIncreasePercentType,
-        stacks: Option<ResourceType>,
+        stacks: Option<SkillStackType>,
     ) -> MultiplierType {
         let increase_value = percent_to_actual_value(damage_increase);
         debug_assert!(increase_value >= 0.0f64, "{}", increase_value);
@@ -31,7 +31,7 @@ pub trait MultiplierCalculator {
         &self,
         character_power: &PlayerPower,
         crit_rate_increase: BuffIncreasePercentType,
-        stacks: Option<ResourceType>,
+        stacks: Option<SkillStackType>,
     ) -> MultiplierType {
         let critical_percent_damage = character_power.critical_strike_damage - 1.0f64;
         debug_assert!(
@@ -59,7 +59,7 @@ pub trait MultiplierCalculator {
     fn calculate_direct_hit_rate_multiplier(
         &self,
         direct_hit_rate_increase: BuffIncreasePercentType,
-        stacks: Option<ResourceType>,
+        stacks: Option<SkillStackType>,
     ) -> MultiplierType {
         let increase_value = percent_to_actual_value(direct_hit_rate_increase);
         let expected_damage_increase = if let Some(stack) = stacks {

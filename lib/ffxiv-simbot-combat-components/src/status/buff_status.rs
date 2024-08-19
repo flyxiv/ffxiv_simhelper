@@ -4,22 +4,22 @@ use crate::id_entity::IdEntity;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::types::ResourceType;
-use crate::types::{IdType, TimeType};
+use crate::types::PlayerIdType;
+use crate::types::{IdType, SkillStackType, TimeType};
 use rand::{thread_rng, Rng};
 use std::cmp::min;
 
 #[derive(PartialEq, Eq, Clone)]
 pub struct BuffStatus {
     pub(crate) id: IdType,
-    pub(crate) owner_id: IdType,
+    pub(crate) owner_id: PlayerIdType,
     pub(crate) duration_left_millisecond: TimeType,
     pub(crate) status_info: Vec<StatusInfo>,
     pub(crate) duration_millisecond: TimeType,
     pub is_raidwide: bool,
     pub(crate) name: String,
-    pub(crate) stacks: ResourceType,
-    pub(crate) max_stacks: ResourceType,
+    pub(crate) stacks: SkillStackType,
+    pub(crate) max_stacks: SkillStackType,
     pub(crate) trigger_proc_event_on_gcd: Vec<(FfxivEvent, PercentType)>,
 }
 
@@ -46,11 +46,11 @@ impl Status for BuffStatus {
     fn is_raidwide(&self) -> bool {
         self.is_raidwide
     }
-    fn add_stack(&mut self, stack: ResourceType) {
+    fn add_stack(&mut self, stack: SkillStackType) {
         self.stacks = min(self.stacks + stack, self.max_stacks);
     }
 
-    fn get_stack(&self) -> ResourceType {
+    fn get_stack(&self) -> SkillStackType {
         self.stacks
     }
 
@@ -96,7 +96,7 @@ impl IdEntity for BuffStatus {
 }
 
 impl OwnerTracker for BuffStatus {
-    fn get_owner_id(&self) -> IdType {
+    fn get_owner_id(&self) -> PlayerIdType {
         self.owner_id
     }
 }

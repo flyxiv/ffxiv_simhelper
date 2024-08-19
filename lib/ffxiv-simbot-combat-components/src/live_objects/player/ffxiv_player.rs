@@ -5,7 +5,6 @@ use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
 use crate::event::turn_info::TurnInfo;
 use crate::event::FfxivEventQueue;
-use crate::id_entity::IdEntity;
 use crate::live_objects::player::gcd_calculator::GcdCalculator;
 use crate::live_objects::player::logs::{DamageLog, SkillLog};
 use crate::live_objects::player::player_power::PlayerPower;
@@ -23,7 +22,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_info::StatusInfo;
 use crate::status::status_timer::StatusTimer;
-use crate::types::{IdType, TimeType};
+use crate::types::{IdType, PlayerIdType, TimeType};
 use crate::types::{MultiplierType, StatusTable};
 use log::info;
 use std::cell::RefCell;
@@ -31,12 +30,12 @@ use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-pub static TARGET_ID: IdType = 100;
+pub static TARGET_ID: PlayerIdType = 100;
 
 /// The Abstraction for an actual FFXIV Player in the combat.
 pub struct FfxivPlayer {
     /// Stat/Job Data about the player
-    pub id: IdType,
+    pub id: PlayerIdType,
     pub job_abbrev: String,
     pub power: PlayerPower,
 
@@ -48,7 +47,6 @@ pub struct FfxivPlayer {
     pub(crate) internal_event_queue: RefCell<Vec<FfxivPlayerInternalEvent>>,
     pub event_queue: Rc<RefCell<FfxivEventQueue>>,
     pub turn_calculator: RefCell<PlayerTurnCalculator>,
-    pub mana_available: Option<i32>,
 
     /// profile tables. Saved and returned later on the response the show combat simulation results.
     /// Saves how much % of the total damage each damage skill contributed to the total damage.
@@ -69,7 +67,6 @@ impl Clone for FfxivPlayer {
             internal_event_queue: RefCell::new(self.internal_event_queue.borrow().clone()),
             event_queue: self.event_queue.clone(),
             turn_calculator: self.turn_calculator.clone(),
-            mana_available: self.mana_available,
             damage_logs: Default::default(),
             skill_logs: Default::default(),
             start_turn: self.start_turn.clone(),
@@ -137,6 +134,9 @@ impl Player for FfxivPlayer {
 }
 
 impl FfxivPlayer {
+    pub fn get_id(&self) -> PlayerIdType {
+        self.id
+    }
     fn use_turn(
         &mut self,
         turn_info: TurnInfo,
@@ -184,7 +184,7 @@ impl FfxivPlayer {
     fn use_skill(
         &mut self,
         skill_id: IdType,
-        target_id: Option<IdType>,
+        target_id: Option<PlayerIdType>,
         debuffs: StatusTable<DebuffStatus>,
         combat_time_millisecond: TimeType,
     ) {
@@ -378,12 +378,6 @@ impl FfxivPlayer {
     }
 }
 
-impl IdEntity for FfxivPlayer {
-    fn get_id(&self) -> IdType {
-        self.id
-    }
-}
-
 impl CooldownTimer for FfxivPlayer {
     fn update_cooldown(&mut self, time_passed: TimeType) {
         self.combat_resources
@@ -446,11 +440,11 @@ impl FfxivPlayer {
     }
 
     pub fn new(
-        id: IdType,
+        id: PlayerIdType,
         job_abbrev: String,
         power: PlayerPower,
-        partner_player_id1: Option<IdType>,
-        partner_player_id2: Option<IdType>,
+        partner_player_id1: Option<PlayerIdType>,
+        partner_player_id2: Option<PlayerIdType>,
         priority_table: FfxivPriorityTable,
         buff_list: HashMap<StatusKey, BuffStatus>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
@@ -479,7 +473,6 @@ impl FfxivPlayer {
                 gcd_start_time_millisecond,
             )),
             event_queue,
-            mana_available: None,
             damage_logs: vec![],
             skill_logs: vec![],
             start_turn,

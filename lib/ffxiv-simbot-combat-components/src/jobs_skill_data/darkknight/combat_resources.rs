@@ -4,7 +4,6 @@ use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
 use crate::jobs_skill_data::darkknight::abilities::{
     darkknight_gcd_ids, make_darkknight_skill_list,
 };
-use crate::jobs_skill_data::gunbreaker::abilities::make_gunbreaker_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -13,7 +12,7 @@ use crate::skill::damage_category::DamageCategory;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::{max, min};
@@ -27,7 +26,7 @@ const BLOOD_WEAPON_STACK_MAX: ResourceType = 5;
 #[derive(Clone)]
 pub(crate) struct DarkknightCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
+    player_id: PlayerIdType,
     current_combo: ComboType,
     mana: ResourceType,
     black_blood: ResourceType,
@@ -44,7 +43,7 @@ impl CombatResource for DarkknightCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, amount: ResourceType) {
         if resource_id == 0 {
             self.mana = min(self.mana + amount, MANA_MAX);
         } else if resource_id == 1 {
@@ -54,7 +53,7 @@ impl CombatResource for DarkknightCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.mana
         } else if resource_id == 1 {
@@ -70,7 +69,7 @@ impl CombatResource for DarkknightCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
         }
@@ -117,7 +116,7 @@ impl CombatResource for DarkknightCombatResources {
         (ffxiv_events, ffxiv_internal_events)
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, elapsed_time: TimeType) {
@@ -129,7 +128,7 @@ impl CombatResource for DarkknightCombatResources {
 }
 
 impl DarkknightCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_darkknight_skill_list(player_id),
             player_id,

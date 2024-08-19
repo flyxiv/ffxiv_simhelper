@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct ScholarDatabase {
@@ -32,7 +32,7 @@ pub(crate) struct ScholarDatabase {
 }
 
 impl ScholarDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let BIOLYSIS_DOT: DebuffStatus = DebuffStatus {
             id: 600,
             owner_id: player_id,
@@ -313,7 +313,7 @@ impl ScholarDatabase {
     }
 }
 
-pub(crate) fn make_scholar_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_scholar_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = ScholarDatabase::new(player_id);
 
     let scholar_skill_list: Vec<AttackSkill> = vec![

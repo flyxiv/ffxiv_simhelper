@@ -4,14 +4,13 @@ use crate::jobs_skill_data::bard::abilities::BardDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::HasSkillStacks;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
-use crate::types::TurnCount;
+use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 use std::rc::Rc;
 
 #[derive(Clone)]
 pub(crate) struct BardPriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -45,7 +44,7 @@ impl PriorityTable for BardPriorityTable {
 }
 
 impl BardPriorityTable {
-    pub fn new(player_id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+    pub fn new(player_id: PlayerIdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
         let db = BardDatabase::new(player_id, ffxiv_event_queue);
         Self {
             turn_count: RefCell::new(0),

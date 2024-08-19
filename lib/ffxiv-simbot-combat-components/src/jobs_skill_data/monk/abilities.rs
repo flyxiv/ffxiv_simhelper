@@ -9,7 +9,7 @@ use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct MonkDatabase {
@@ -49,7 +49,7 @@ pub(crate) struct MonkDatabase {
 }
 
 impl MonkDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let FIRES_RUMINATION: BuffStatus = BuffStatus {
             id: 902,
             owner_id: player_id,
@@ -799,7 +799,7 @@ impl MonkDatabase {
     }
 }
 
-pub(crate) fn make_monk_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_monk_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = MonkDatabase::new(player_id);
 
     let monk_skill_list: Vec<AttackSkill> = vec![

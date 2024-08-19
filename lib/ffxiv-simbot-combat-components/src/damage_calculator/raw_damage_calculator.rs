@@ -11,7 +11,7 @@ use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::Status;
-use crate::types::{IdType, MultiplierType, PotencyType};
+use crate::types::{IdType, MultiplierType, PlayerIdType, PotencyType};
 use log::debug;
 use rand::{random, thread_rng, Rng};
 use std::collections::HashMap;
@@ -24,7 +24,7 @@ pub const ONE_HUNDRED_PERCENT: f64 = 100.0;
 pub trait RawDamageCalculator: MultiplierCalculator {
     fn calculate_total_damage(
         &self,
-        player_id: IdType,
+        player_id: PlayerIdType,
         potency: PotencyType,
         damage_category: DamageCategory,
         trait_percent: PercentType,
@@ -125,7 +125,6 @@ pub trait RawDamageCalculator: MultiplierCalculator {
         }
 
         let mut damage_rdps_profile = DamageRdpsProfile {
-            skill_id: player_id,
             raw_damage: final_damage,
             final_damage,
             rdps_contribution: contribution_table,
@@ -201,7 +200,7 @@ fn calculate_base_damage(
 }
 
 fn calculate_crit_direct_hit_damage(
-    player_id: IdType,
+    player_id: PlayerIdType,
     base_damage: MultiplierType,
     buffs: &HashMap<StatusKey, BuffStatus>,
     debuffs: &HashMap<StatusKey, DebuffStatus>,

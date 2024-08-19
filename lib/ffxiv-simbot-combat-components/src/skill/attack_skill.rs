@@ -16,7 +16,7 @@ use crate::skill::{
 };
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{IdType, PotencyType, TimeType};
+use crate::types::{ComboType, IdType, PlayerIdType, PotencyType, TimeType};
 use crate::types::{ResourceType, StackType, StatusTable};
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
@@ -28,13 +28,13 @@ use std::rc::Rc;
 pub struct AttackSkill {
     pub id: IdType,
     pub(crate) name: String,
-    pub player_id: IdType,
+    pub player_id: PlayerIdType,
     pub(crate) potency: PotencyType,
     pub(crate) trait_percent: PercentType,
 
     pub additional_skill_events: Vec<FfxivEvent>,
     pub proc_events: Vec<(FfxivEvent, PercentType)>,
-    pub combo: Option<IdType>,
+    pub combo: ComboType,
 
     pub delay_millisecond: Option<TimeType>,
     pub casting_time_millisecond: TimeType,
@@ -345,15 +345,11 @@ impl AttackSkill {
     }
 
     #[inline]
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
-        *self.resource_created.get(&resource_id).unwrap()
-    }
-
-    #[inline]
-    fn get_combo(&self) -> Option<IdType> {
+    fn get_combo(&self) -> ComboType {
         self.combo
     }
 
+    #[inline]
     fn get_stack(&self) -> StackType {
         f64::ceil(self.current_cooldown_millisecond as f64 / self.cooldown_millisecond as f64)
             as StackType
@@ -376,7 +372,7 @@ impl AttackSkill {
         proc_events
     }
 
-    pub fn new(id: IdType, name: String, player_id: IdType, potency: PotencyType) -> Self {
+    pub fn new(id: IdType, name: String, player_id: PlayerIdType, potency: PotencyType) -> Self {
         Self {
             id,
             name,
@@ -405,7 +401,7 @@ impl AttackSkill {
 }
 
 impl OwnerTracker for AttackSkill {
-    fn get_owner_id(&self) -> IdType {
+    fn get_owner_id(&self) -> PlayerIdType {
         self.player_id
     }
 }

@@ -9,7 +9,6 @@ pub mod rdps_calculator;
 /// Implements FFXIV's damage calculation logic based on the
 /// player's stat multiplier + skill's potency + guaranteed critical hit/direct hit buff.
 pub struct DamageRdpsProfile {
-    pub skill_id: IdType,
     pub raw_damage: MultiplierType,
     pub final_damage: MultiplierType,
     pub rdps_contribution: HashMap<StatusKey, MultiplierType>,

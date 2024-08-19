@@ -1,7 +1,7 @@
 use crate::damage_calculator::multiplier_calculator::DIRECT_HIT_DAMAGE_MULTIPLIER;
 use crate::id_entity::IdEntity;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, MultiplierType, ResourceType, TimeType};
+use crate::types::{IdType, MultiplierType, ResourceType, SkillStackType, TimeType};
 
 pub mod buff_status;
 pub mod debuff_status;
@@ -24,8 +24,8 @@ pub trait Status: Sized + IdEntity {
     fn get_status_info(&self) -> &Vec<StatusInfo>;
     fn get_duration_millisecond(&self) -> TimeType;
     fn is_raidwide(&self) -> bool;
-    fn add_stack(&mut self, stack: ResourceType);
-    fn get_stack(&self) -> ResourceType;
+    fn add_stack(&mut self, stack: SkillStackType);
+    fn get_stack(&self) -> SkillStackType;
     fn get_damage_skill_id(&self) -> Option<IdType>;
 
     fn get_critical_strike_rate_increase(&self, is_guaranteed_crit: bool) -> MultiplierType {

@@ -9,7 +9,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType, StackType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType, StackType};
 use crate::types::{IdType, TimeType};
 use log::info;
 use std::cell::RefCell;
@@ -45,7 +45,7 @@ pub(crate) trait CombatResource: Clone + Sized {
         resource_events: &Vec<FfxivPlayerInternalEvent>,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
-        player_id: IdType,
+        player_id: PlayerIdType,
     ) {
         for resource in resource_events {
             match resource {
@@ -87,11 +87,11 @@ pub(crate) trait CombatResource: Clone + Sized {
             }
         }
     }
-    fn use_resource(&mut self, resource_id: IdType, resource: ResourceType) {
+    fn use_resource(&mut self, resource_id: ResourceIdType, resource: ResourceType) {
         self.add_resource(resource_id, -resource);
     }
-    fn add_resource(&mut self, resource_id: IdType, resource_type: ResourceType);
-    fn get_resource(&self, resource_id: IdType) -> ResourceType;
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_type: ResourceType);
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType;
 
     fn get_current_combo(&self) -> ComboType;
     fn update_combo(&mut self, combo: &ComboType);
@@ -112,7 +112,7 @@ pub(crate) trait CombatResource: Clone + Sized {
 
     fn trigger_on_crit(&mut self);
 
-    fn get_next_buff_target(&self, skill_id: IdType) -> IdType;
+    fn get_next_buff_target(&self, skill_id: IdType) -> PlayerIdType;
 
     fn update_cooldown(&mut self, elapsed_time: TimeType) {
         let skill_table = self.get_skills_mut();

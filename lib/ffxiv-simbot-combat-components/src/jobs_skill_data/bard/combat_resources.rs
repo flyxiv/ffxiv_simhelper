@@ -10,7 +10,9 @@ use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{
+    ComboType, IdType, PlayerIdType, ResourceIdType, ResourceType, SkillStackType, TimeType,
+};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -25,7 +27,7 @@ const RADIANT_MAX_STACK: ResourceType = 3;
 #[derive(Clone)]
 pub(crate) struct BardCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
+    player_id: PlayerIdType,
     // 1-20
     apex_stack: ResourceType,
     wanderer_stack: ResourceType,
@@ -44,7 +46,7 @@ impl CombatResource for BardCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
         if resource_id == 0 {
             self.apex_stack = min(APEX_MAX_STACK, self.apex_stack + resource_amount);
         } else if resource_id == 1 {
@@ -58,7 +60,7 @@ impl CombatResource for BardCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.apex_stack
         } else if resource_id == 1 {
@@ -78,7 +80,7 @@ impl CombatResource for BardCombatResources {
         None
     }
 
-    fn update_combo(&mut self, _: &Option<IdType>) {}
+    fn update_combo(&mut self, _: &ComboType) {}
 
     fn trigger_on_event(
         &mut self,
@@ -97,7 +99,7 @@ impl CombatResource for BardCombatResources {
 
                 if army_paeon_stacks > 0 {
                     let mut muse = self.armys_muse.clone();
-                    muse.stacks = army_paeon_stacks;
+                    muse.stacks = army_paeon_stacks as SkillStackType;
 
                     skill_events.push(FfxivEvent::ApplyBuff(
                         self.player_id,
@@ -119,7 +121,7 @@ impl CombatResource for BardCombatResources {
 
     fn trigger_on_crit(&mut self) {}
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
@@ -133,7 +135,10 @@ impl BardCombatResources {
 }
 
 impl BardCombatResources {
-    pub(crate) fn new(player_id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+    pub(crate) fn new(
+        player_id: PlayerIdType,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> Self {
         Self {
             skills: make_bard_skill_list(player_id, ffxiv_event_queue),
             player_id,

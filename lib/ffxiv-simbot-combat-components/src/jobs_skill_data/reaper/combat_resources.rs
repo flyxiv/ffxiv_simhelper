@@ -7,7 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -23,7 +23,7 @@ const EXECUTIONER_STACK_MAX: ResourceType = 2;
 #[derive(Clone)]
 pub(crate) struct ReaperCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
+    player_id: PlayerIdType,
     current_combo: ComboType,
     soul_gauge: ResourceType,
     enshroud_gauge: ResourceType,
@@ -44,7 +44,7 @@ impl CombatResource for ReaperCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
         if resource_id == 0 {
             self.soul_gauge = min(SOUL_GAUGE_MAX, self.soul_gauge + resource_amount);
         } else if resource_id == 1 {
@@ -65,7 +65,7 @@ impl CombatResource for ReaperCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.soul_gauge
         } else if resource_id == 1 {
@@ -89,7 +89,7 @@ impl CombatResource for ReaperCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo) = combo {
             self.current_combo = Some(*combo);
         }
@@ -112,14 +112,14 @@ impl CombatResource for ReaperCombatResources {
 
     fn trigger_on_crit(&mut self) {}
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
 }
 
 impl ReaperCombatResources {
-    pub(crate) fn new(player_id: IdType, player_count: usize) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType, player_count: usize) -> Self {
         Self {
             skills: make_reaper_skill_list(player_id, player_count),
             player_id,

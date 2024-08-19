@@ -9,7 +9,7 @@ use crate::skill::ResourceRequirements::{CheckStatus, UseBuff};
 use crate::skill::{make_skill_table, ResourceRequirements, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct MachinistDatabase {
@@ -46,7 +46,7 @@ pub(crate) struct MachinistDatabase {
 }
 
 impl MachinistDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let REASSEMBLE_BUFF: BuffStatus = {
             BuffStatus {
                 id: 1400,
@@ -703,32 +703,32 @@ impl MachinistDatabase {
     }
 }
 
-pub(crate) fn make_machinist_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_machinist_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = MachinistDatabase::new(player_id);
 
     let machinist_skill_list: Vec<AttackSkill> = vec![
-        db.heated_split_shot.clone(),
-        db.heated_slug_shot.clone(),
-        db.heated_clean_shot.clone(),
-        db.drill.clone(),
-        db.air_anchor.clone(),
-        db.chainsaw.clone(),
-        db.reassemble.clone(),
-        db.double_check.clone(),
-        db.checkmate.clone(),
-        db.blazing_shot.clone(),
-        db.wildfire.clone(),
-        db.hypercharge.clone(),
-        db.barrel_stabilizer.clone(),
-        db.automaton_queen.clone(),
-        db.drill_reassemble.clone(),
-        db.air_anchor_reassemble.clone(),
-        db.chainsaw_reassemble.clone(),
-        db.excavator.clone(),
-        db.full_metal_field.clone(),
-        db.excavator_reassemble.clone(),
-        db.hypercharge_hypercharged.clone(),
-        db.potion.clone(),
+        db.heated_split_shot,
+        db.heated_slug_shot,
+        db.heated_clean_shot,
+        db.drill,
+        db.air_anchor,
+        db.chainsaw,
+        db.reassemble,
+        db.double_check,
+        db.checkmate,
+        db.blazing_shot,
+        db.wildfire,
+        db.hypercharge,
+        db.barrel_stabilizer,
+        db.automaton_queen,
+        db.drill_reassemble,
+        db.air_anchor_reassemble,
+        db.chainsaw_reassemble,
+        db.excavator,
+        db.full_metal_field,
+        db.excavator_reassemble,
+        db.hypercharge_hypercharged,
+        db.potion,
     ];
 
     make_skill_table(machinist_skill_list)

@@ -8,7 +8,7 @@ use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct RedmageDatabase {
@@ -65,7 +65,7 @@ pub(crate) struct RedmageDatabase {
 }
 
 impl RedmageDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let caster_skills = CasterGlobalSkill::new(player_id);
 
         let EMBOLDEN_BUFF: BuffStatus = {
@@ -1144,7 +1144,7 @@ impl RedmageDatabase {
     }
 }
 
-pub(crate) fn make_redmage_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_redmage_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = RedmageDatabase::new(player_id);
 
     let ninja_skill_list: Vec<AttackSkill> = vec![

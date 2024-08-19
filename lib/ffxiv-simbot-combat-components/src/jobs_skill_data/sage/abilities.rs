@@ -8,7 +8,7 @@ use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 
 pub(crate) struct SageDatabase {
     pub(crate) dot_status: DebuffStatus,
@@ -22,7 +22,7 @@ pub(crate) struct SageDatabase {
 }
 
 impl SageDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let DOT_STATUS: DebuffStatus = DebuffStatus {
             id: 700,
             owner_id: player_id,
@@ -158,7 +158,7 @@ impl SageDatabase {
     }
 }
 
-pub(crate) fn make_sage_skills(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_sage_skills(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let table = SageDatabase::new(player_id);
 
     let skills = vec![

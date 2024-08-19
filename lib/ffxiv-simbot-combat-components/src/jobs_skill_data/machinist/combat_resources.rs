@@ -1,6 +1,5 @@
 use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent::Damage;
-use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::machinist::abilities::make_machinist_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
@@ -10,7 +9,7 @@ use crate::skill::damage_category::DamageCategory;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, PotencyType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, PotencyType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::{max, min};
@@ -28,7 +27,7 @@ const WILDFIRE_DELAY_MILLISECOND: TimeType = 10000;
 #[derive(Clone)]
 pub(crate) struct MachinistCombatResources {
     skills: SkillTable<AttackSkill>,
-    current_combo: Option<IdType>,
+    current_combo: ComboType,
     heat: ResourceType,
     battery: ResourceType,
     queen_damage_incoming: Option<(PotencyType, TimeType)>,
@@ -44,7 +43,7 @@ impl CombatResource for MachinistCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_type: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_type: ResourceType) {
         if resource_id == 0 {
             self.heat = min(HEAT_MAX, self.heat + resource_type);
         } else if resource_id == 1 {
@@ -52,7 +51,7 @@ impl CombatResource for MachinistCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.heat
         } else if resource_id == 1 {
@@ -66,7 +65,7 @@ impl CombatResource for MachinistCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
         }
@@ -140,7 +139,7 @@ impl CombatResource for MachinistCombatResources {
         return (ffxiv_events, vec![]);
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
 
@@ -157,7 +156,7 @@ impl CombatResource for MachinistCombatResources {
 }
 
 impl MachinistCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_machinist_skill_list(player_id),
             current_combo: None,

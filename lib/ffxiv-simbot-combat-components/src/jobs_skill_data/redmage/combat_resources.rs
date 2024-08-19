@@ -7,7 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -25,7 +25,7 @@ pub(crate) struct RedmageCombatResources {
     black_mana: ResourceType,
     verstack: ResourceType,
     manafication_stack: ResourceType,
-    current_combo: Option<IdType>,
+    current_combo: ComboType,
 }
 
 impl CombatResource for RedmageCombatResources {
@@ -37,7 +37,7 @@ impl CombatResource for RedmageCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_type: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_type: ResourceType) {
         if resource_id == 0 {
             self.white_mana = min(self.white_mana + resource_type, MANA_MAX);
         } else if resource_id == 1 {
@@ -50,7 +50,7 @@ impl CombatResource for RedmageCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.white_mana
         } else if resource_id == 1 {
@@ -68,7 +68,7 @@ impl CombatResource for RedmageCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
         }
@@ -85,7 +85,7 @@ impl CombatResource for RedmageCombatResources {
         (vec![], vec![])
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
 
@@ -94,7 +94,7 @@ impl CombatResource for RedmageCombatResources {
 }
 
 impl RedmageCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_redmage_skill_list(player_id),
             white_mana: 0,

@@ -12,7 +12,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{ResourceRequirements, NON_GCD_DELAY_MILLISECOND};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{IdType, TimeType};
+use crate::types::{ComboType, IdType, PlayerIdType, ResourceIdType, TimeType};
 use crate::types::{ResourceType, StackType};
 use itertools::Itertools;
 use std::cell::RefCell;
@@ -33,19 +33,20 @@ pub(crate) enum SkillPrerequisite {
     Or(Box<SkillPrerequisite>, Box<SkillPrerequisite>),
     And(Box<SkillPrerequisite>, Box<SkillPrerequisite>),
     Not(Box<SkillPrerequisite>),
-    Combo(Option<IdType>),
+    Combo(ComboType),
     HasBufforDebuff(IdType),
     BufforDebuffLessThan(IdType, TimeType),
-    HasResource(IdType, ResourceType),
-    HasResourceExactly(IdType, ResourceType),
+    HasResource(ResourceIdType, ResourceType),
+    HasResourceExactly(ResourceIdType, ResourceType),
     HasSkillStacks(IdType, StackType),
     MillisecondsBeforeBurst(TimeType),
     RelatedSkillCooldownLessOrEqualThan(IdType, TimeType),
 
     /// Greater resource id, Lesser resource id, Greater by how much amount
     /// example: (1, 2, 50), then ok if resource1 >= resource2 + 50
-    ResourceGreaterOrEqualThanAnotherResourceBy(IdType, IdType, ResourceType),
+    ResourceGreaterOrEqualThanAnotherResourceBy(ResourceIdType, ResourceIdType, ResourceType),
 
+    /// Skill1 id, Skill2 id
     BuffGreaterDurationThan(IdType, IdType),
 }
 
@@ -118,7 +119,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
     }
 
     fn is_opener(&self) -> bool {
-        self.get_turn_count() < self.get_opener_len()
+        self.get_turn_count() < self.get_opener_len() as IdType
     }
 
     fn get_opener_len(&self) -> usize;
@@ -130,8 +131,8 @@ pub(crate) trait PriorityTable: Sized + Clone {
         combat_resources: &FfxivCombatResources,
         turn_info: &TurnInfo,
     ) -> Vec<SkillUsageInfo> {
+        let opener = self.get_opener_at(self.get_turn_count() as usize);
         self.increment_turn();
-        let opener = self.get_opener_at(self.get_turn_count() - 1);
 
         match opener {
             Opener::GcdOpener(skill_id) => vec![SkillUsageInfo::new(skill_id)],
@@ -238,7 +239,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                                 skill_priority.skill_id,
                                 Some(first_skill_start_time),
                             ),
-                            priority_number,
+                            priority_number: priority_number as IdType,
                         }]);
                     }
 
@@ -277,7 +278,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                                 skill_priority.skill_id,
                                 Some(first_skill_start_time),
                             ),
-                            priority_number,
+                            priority_number: priority_number as IdType,
                         };
 
                         let double_weave_plan = Some(vec![first_skill_plan, second_skill_plan]);
@@ -336,7 +337,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                             skill_priority.skill_id,
                             Some(skill_start_time),
                         ),
-                        priority_number,
+                        priority_number: priority_number.try_into().unwrap(),
                     });
                 }
             }
@@ -393,7 +394,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
         combat_info: &CombatInfo,
         combat_resource: &FfxivCombatResources,
         skill: &AttackSkill,
-        player_id: IdType,
+        player_id: PlayerIdType,
     ) -> bool {
         for resource_required in &skill.resource_required {
             match resource_required {
@@ -518,7 +519,12 @@ pub(crate) trait PriorityTable: Sized + Clone {
     }
 
     #[inline]
-    fn has_status(&self, combat_info: &CombatInfo, status_id: IdType, player_id: IdType) -> bool {
+    fn has_status(
+        &self,
+        combat_info: &CombatInfo,
+        status_id: IdType,
+        player_id: PlayerIdType,
+    ) -> bool {
         let key = StatusKey::new(status_id, player_id);
 
         combat_info.buff_list.borrow().get(&key).is_some()
@@ -529,7 +535,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
         &self,
         combat_info: &CombatInfo,
         status_id: IdType,
-        player_id: IdType,
+        player_id: PlayerIdType,
     ) -> Option<TimeType> {
         let key = StatusKey::new(status_id, player_id);
         let buff_list = combat_info.buff_list.borrow();

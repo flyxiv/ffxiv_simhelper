@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct SamuraiDatabase {
@@ -56,7 +56,7 @@ pub(crate) struct SamuraiDatabase {
 }
 
 impl SamuraiDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let MEIKYO_SHISUI_BUFF: BuffStatus = BuffStatus {
             id: 1100,
             name: String::from("Meikyo Shisui"),
@@ -929,7 +929,7 @@ impl SamuraiDatabase {
     }
 }
 
-pub(crate) fn make_samurai_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_samurai_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = SamuraiDatabase::new(player_id);
 
     let samurai_skill_list: Vec<AttackSkill> = vec![

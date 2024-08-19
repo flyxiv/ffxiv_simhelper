@@ -4,7 +4,9 @@ use axum::routing::get;
 use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
 use ffxiv_simbot_combat_components::live_objects::player::player_power::add_main_stat;
-use ffxiv_simbot_combat_components::types::{BuffIncreasePercentType, IdType, IncreaseType};
+use ffxiv_simbot_combat_components::types::{
+    BuffIncreasePercentType, IdType, IncreaseType, PlayerIdType,
+};
 use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -23,7 +25,7 @@ lazy_static! {
 pub(crate) fn create_player(
     player_info: PlayerInfoRequest,
     composition_buff_percent: BuffIncreasePercentType,
-    player_jobs: &Vec<(IdType, String)>,
+    player_jobs: &Vec<(PlayerIdType, String)>,
     event_queue: Rc<RefCell<FfxivEventQueue>>,
 ) -> Result<FfxivPlayer> {
     let character_power = player_info.power;
@@ -169,7 +171,10 @@ pub(crate) fn create_player(
     }
 }
 
-fn get_partner_id(partner_id: Option<IdType>, party_jobs: &Vec<(IdType, String)>) -> IdType {
+fn get_partner_id(
+    partner_id: Option<PlayerIdType>,
+    party_jobs: &Vec<(PlayerIdType, String)>,
+) -> PlayerIdType {
     match partner_id {
         Some(id) => id,
         None => {

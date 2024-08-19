@@ -1,6 +1,6 @@
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
@@ -10,11 +10,10 @@ use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
     Or, RelatedSkillCooldownLessOrEqualThan,
 };
-use crate::types::TurnCount;
 
 #[derive(Clone)]
 pub(crate) struct SamuraiPriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -48,7 +47,7 @@ impl PriorityTable for SamuraiPriorityTable {
 }
 
 impl SamuraiPriorityTable {
-    pub fn new(player_id: IdType) -> Self {
+    pub fn new(player_id: PlayerIdType) -> Self {
         let db = SamuraiDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),

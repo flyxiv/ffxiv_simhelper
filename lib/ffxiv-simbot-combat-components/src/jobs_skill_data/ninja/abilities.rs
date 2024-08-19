@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 
 pub(crate) struct NinjaDatabase {
     pub(crate) zesho_meppo: AttackSkill,
@@ -60,7 +60,7 @@ pub(crate) struct NinjaDatabase {
 }
 
 impl NinjaDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let HUTON_STATUS: BuffStatus = {
             BuffStatus {
                 id: 1000,
@@ -1011,7 +1011,7 @@ impl NinjaDatabase {
     }
 }
 
-pub(crate) fn make_ninja_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_ninja_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = NinjaDatabase::new(player_id);
 
     let ninja_skill_list: Vec<AttackSkill> = vec![
@@ -1073,7 +1073,7 @@ pub(crate) fn bunshin_stack_id() -> IdType {
     db.bunshin_clone_status.id
 }
 
-pub(crate) fn get_huton_status(player_id: IdType) -> BuffStatus {
+pub(crate) fn get_huton_status(player_id: PlayerIdType) -> BuffStatus {
     let db = NinjaDatabase::new(0);
     let mut huton = db.huton_status.clone();
     huton.owner_id = player_id;

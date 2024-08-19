@@ -5,13 +5,12 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
-use crate::types::TurnCount;
+use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 #[derive(Clone)]
 pub(crate) struct NinjaPriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -45,7 +44,7 @@ impl PriorityTable for NinjaPriorityTable {
 }
 
 impl NinjaPriorityTable {
-    pub fn new(player_id: IdType) -> Self {
+    pub fn new(player_id: PlayerIdType) -> Self {
         let db = NinjaDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
@@ -103,9 +102,7 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
         },
         SkillPriorityInfo {
             skill_id: db.hyosho.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasBufforDebuff(
-                db.kunais_bane_status.get_id(),
-            )),
+            prerequisite: Some(HasBufforDebuff(db.kunais_bane_status.get_id())),
         },
         SkillPriorityInfo {
             skill_id: db.suiton.get_id(),

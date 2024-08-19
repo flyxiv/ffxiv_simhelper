@@ -28,7 +28,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, IdType, ResourceType, TimeType};
+use crate::types::{ComboType, IdType, PlayerIdType, ResourceIdType, ResourceType, TimeType};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -116,7 +116,7 @@ impl CombatResource for FfxivCombatResources {
         }
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_type: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_type: ResourceType) {
         match self {
             Self::Paladin(paladin_resources) => {
                 paladin_resources.add_resource(resource_id, resource_type)
@@ -178,7 +178,7 @@ impl CombatResource for FfxivCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         match self {
             Self::Paladin(paladin_resources) => paladin_resources.get_resource(resource_id),
             Self::Warrior(warrior_resources) => warrior_resources.get_resource(resource_id),
@@ -423,7 +423,7 @@ impl CombatResource for FfxivCombatResources {
         }
     }
 
-    fn get_next_buff_target(&self, skill_id: IdType) -> IdType {
+    fn get_next_buff_target(&self, skill_id: IdType) -> PlayerIdType {
         match self {
             Self::Paladin(paladin_resources) => paladin_resources.get_next_buff_target(skill_id),
             Self::Warrior(warrior_resources) => warrior_resources.get_next_buff_target(skill_id),
@@ -536,9 +536,9 @@ impl FfxivCombatResources {
     /// for AST, partner_player_id1 is the player_id of melee partner, partner_player_id2 is the player_id of ranged partner
     pub(crate) fn new(
         job_abbrev: &String,
-        player_id: IdType,
-        partner_player_id1: Option<IdType>,
-        partner_player_id2: Option<IdType>,
+        player_id: PlayerIdType,
+        partner_player_id1: Option<PlayerIdType>,
+        partner_player_id2: Option<PlayerIdType>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
     ) -> Self {

@@ -2,8 +2,8 @@ use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::StatusTable;
 use crate::types::{IdType, TimeType};
+use crate::types::{PlayerIdType, StatusTable};
 use std::cell::RefCell;
 use std::cmp::{max, Reverse};
 use std::rc::Rc;
@@ -14,7 +14,7 @@ pub mod global_ticker;
 pub mod independent_ticker;
 
 pub static GLOBAL_TICK_INTERVAL_MILLISECOND: TimeType = 3000;
-pub type PercentType = i32;
+pub type PercentType = u16;
 
 /// Tickers that generate events based on combat's time rather than
 /// the player's turn.
@@ -66,7 +66,7 @@ pub trait EventTicker: Sized + Clone {
 
     fn get_event_queue(&self) -> Rc<RefCell<FfxivEventQueue>>;
     fn get_tick_interval(&self) -> TimeType;
-    fn get_player_id(&self) -> Option<IdType>;
+    fn get_player_id(&self) -> Option<PlayerIdType>;
     fn get_id(&self) -> TickerKey;
     fn set_event_queue(&mut self, event_queue: Rc<RefCell<FfxivEventQueue>>);
     fn has_initial_tick(&self) -> bool;
@@ -76,11 +76,11 @@ pub trait EventTicker: Sized + Clone {
 #[derive(Hash, Copy, Clone, Eq, PartialEq, Debug)]
 pub struct TickerKey {
     pub ticker_id: IdType,
-    pub player_id: IdType,
+    pub player_id: PlayerIdType,
 }
 
 impl TickerKey {
-    pub fn new(ticker_id: IdType, player_id: IdType) -> Self {
+    pub fn new(ticker_id: IdType, player_id: PlayerIdType) -> Self {
         Self {
             player_id,
             ticker_id,

@@ -10,7 +10,7 @@ use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct GunbreakerDatabase {
@@ -53,7 +53,7 @@ pub(crate) struct GunbreakerDatabase {
 }
 
 impl GunbreakerDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let NO_MERCY_BUFF: BuffStatus = BuffStatus {
             id: 300,
             name: String::from("No Mercy"),
@@ -795,7 +795,7 @@ impl GunbreakerDatabase {
     }
 }
 
-pub(crate) fn make_gunbreaker_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_gunbreaker_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = GunbreakerDatabase::new(player_id);
 
     let gunbreaker_skill_list: Vec<AttackSkill> = vec![

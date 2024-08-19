@@ -7,7 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -21,7 +21,7 @@ const REAWAKEN_STACK_MAX: ResourceType = 5;
 #[derive(Clone)]
 pub(crate) struct ViperCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
+    player_id: PlayerIdType,
     current_combo: ComboType,
 
     serpent_offering_stack: ResourceType,
@@ -44,7 +44,7 @@ impl CombatResource for ViperCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, amount: ResourceType) {
         if resource_id == 0 {
             self.serpent_offering_stack =
                 min(self.serpent_offering_stack + amount, SERPENT_OFFERINGS_MAX);
@@ -67,7 +67,7 @@ impl CombatResource for ViperCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.serpent_offering_stack
         } else if resource_id == 1 {
@@ -95,7 +95,7 @@ impl CombatResource for ViperCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
         }
@@ -112,7 +112,7 @@ impl CombatResource for ViperCombatResources {
         (vec![], vec![])
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
@@ -120,7 +120,7 @@ impl CombatResource for ViperCombatResources {
 }
 
 impl ViperCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_viper_skill_list(player_id),
             player_id,

@@ -3,8 +3,8 @@ use crate::id_entity::IdEntity;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
-use crate::types::IdType;
 use crate::types::StatusTable;
+use crate::types::{IdType, PlayerIdType};
 
 pub(crate) mod create_player;
 /// If the delay is over 3 * OGCD delay, then it is turn to use a GCD skill,
@@ -22,11 +22,11 @@ static MAX_MANA: i32 = 10000;
 #[derive(Hash, Clone, Copy, PartialEq, Eq)]
 pub struct StatusKey {
     pub status_id: IdType,
-    pub player_id: IdType,
+    pub player_id: PlayerIdType,
 }
 
 impl StatusKey {
-    pub fn new(status_id: IdType, player_id: IdType) -> StatusKey {
+    pub fn new(status_id: IdType, player_id: PlayerIdType) -> StatusKey {
         StatusKey {
             status_id,
             player_id,
@@ -35,7 +35,7 @@ impl StatusKey {
 }
 
 /// Saves information about the player: buffs, stat multipliers, rotation.
-pub trait Player: Sized + StatusHolder<BuffStatus> + IdEntity {
+pub trait Player: Sized + StatusHolder<BuffStatus> {
     fn consume_internal_events(&self, debuffs: StatusTable<DebuffStatus>);
     fn handle_ffxiv_event(&mut self, event: FfxivEvent, debuffs: StatusTable<DebuffStatus>);
 }

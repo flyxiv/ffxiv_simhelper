@@ -17,5 +17,5 @@ fn get_composition_buff_percent(party: &Vec<PlayerInfoRequest>) -> IncreaseType 
         roles.insert(job_abbrev_to_role(&player_info_request.job_abbrev));
     }
 
-    return roles.len();
+    return roles.len() as IncreaseType;
 }

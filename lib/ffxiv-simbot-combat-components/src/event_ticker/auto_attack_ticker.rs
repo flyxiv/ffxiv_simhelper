@@ -6,8 +6,8 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::StatusTable;
 use crate::types::{IdType, TimeType};
+use crate::types::{PlayerIdType, StatusTable};
 use std::cell::RefCell;
 use std::cmp::{max, Reverse};
 use std::rc::Rc;
@@ -16,7 +16,7 @@ use std::rc::Rc;
 #[derive(Clone)]
 pub struct AutoAttackTicker {
     id: IdType,
-    player_id: IdType,
+    player_id: PlayerIdType,
     event_queue: Rc<RefCell<FfxivEventQueue>>,
     auto_attack_id: IdType,
     auto_attack: AttackSkill,
@@ -68,7 +68,7 @@ impl EventTicker for AutoAttackTicker {
         self.auto_attack_interval
     }
 
-    fn get_player_id(&self) -> Option<IdType> {
+    fn get_player_id(&self) -> Option<PlayerIdType> {
         Some(self.player_id)
     }
 
@@ -91,7 +91,7 @@ impl EventTicker for AutoAttackTicker {
 impl AutoAttackTicker {
     pub fn new(
         id: IdType,
-        player_id: IdType,
+        player_id: PlayerIdType,
         job_abbrev: &String,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
@@ -123,7 +123,7 @@ impl AutoAttackTicker {
 
     pub fn new_with_auto_attack(
         id: IdType,
-        player_id: IdType,
+        player_id: PlayerIdType,
         auto_attack: AttackSkill,
         damage_category: DamageCategory,
         duration_millisecond: TimeType,

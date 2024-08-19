@@ -7,7 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -19,7 +19,6 @@ const SOIL_MAX: ResourceType = 3;
 #[derive(Clone)]
 pub(crate) struct GunbreakerCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
     current_combo: ComboType,
     soil: ResourceType,
     noble_blood_stack: ResourceType,
@@ -35,7 +34,7 @@ impl CombatResource for GunbreakerCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, amount: ResourceType) {
         if resource_id == 0 {
             self.soil = min(self.soil + amount, SOIL_MAX);
         } else if resource_id == 1 {
@@ -45,7 +44,7 @@ impl CombatResource for GunbreakerCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.soil
         } else if resource_id == 1 {
@@ -61,7 +60,7 @@ impl CombatResource for GunbreakerCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
         }
@@ -78,7 +77,7 @@ impl CombatResource for GunbreakerCombatResources {
         (vec![], vec![])
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
@@ -86,10 +85,9 @@ impl CombatResource for GunbreakerCombatResources {
 }
 
 impl GunbreakerCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_gunbreaker_skill_list(player_id),
-            player_id,
             current_combo: None,
             soil: 0,
             noble_blood_stack: 0,

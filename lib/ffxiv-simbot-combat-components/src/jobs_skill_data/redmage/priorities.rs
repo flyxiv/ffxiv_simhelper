@@ -5,8 +5,7 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
-use crate::types::{ResourceType, TurnCount};
+use crate::types::{IdType, PlayerIdType, ResourceType};
 use std::cell::RefCell;
 
 const MANA_DIFFERENCE_THRESHOLD: ResourceType = 30;
@@ -15,7 +14,7 @@ const VERFIRE_PROC_ID: IdType = 1805;
 
 #[derive(Clone)]
 pub(crate) struct RedmagePriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -49,7 +48,7 @@ impl PriorityTable for RedmagePriorityTable {
 }
 
 impl RedmagePriorityTable {
-    pub fn new(player_id: IdType) -> Self {
+    pub fn new(player_id: PlayerIdType) -> Self {
         let db = RedmageDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),

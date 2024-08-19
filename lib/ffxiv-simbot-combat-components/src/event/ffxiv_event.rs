@@ -6,7 +6,7 @@ use crate::live_objects::turn_type::FfxivTurnType;
 use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{IdType, TimeType};
+use crate::types::{IdType, PlayerIdType, ResourceIdType, SkillStackType, TimeType};
 use crate::types::{PotencyType, ResourceType, StatusTable};
 use std::cmp::min;
 use std::collections::HashMap;
@@ -16,13 +16,13 @@ use std::collections::HashMap;
 #[derive(Clone)]
 pub enum FfxivEvent {
     /// owner_player_id, turn, threshold limit time
-    PlayerTurn(IdType, FfxivTurnType, TimeType, TimeType),
+    PlayerTurn(PlayerIdType, FfxivTurnType, TimeType, TimeType),
     /// player_id, target_id, skill_id
-    UseSkill(IdType, Option<IdType>, IdType, TimeType),
+    UseSkill(PlayerIdType, Option<PlayerIdType>, IdType, TimeType),
 
     /// owner_player_id, skill ID, potency, trait, guaranteed crit, guaranteed direct hit, snapshotted buffs, snapshotted debuffs, damage category
     Damage(
-        IdType,
+        PlayerIdType,
         IdType,
         PotencyType,
         PercentType,
@@ -44,31 +44,52 @@ pub enum FfxivEvent {
     ForceTicker(TickerKey, TimeType),
 
     /// owner_player_id, target_id, status, duration, max refresh duration
-    ApplyBuff(IdType, IdType, BuffStatus, TimeType, TimeType, TimeType),
+    ApplyBuff(
+        PlayerIdType,
+        PlayerIdType,
+        BuffStatus,
+        TimeType,
+        TimeType,
+        TimeType,
+    ),
     /// owner_player_id, target_id, status, status time, refresh duration or not
-    ApplyBuffStack(IdType, IdType, BuffStatus, TimeType, bool, TimeType),
+    ApplyBuffStack(
+        PlayerIdType,
+        PlayerIdType,
+        BuffStatus,
+        TimeType,
+        bool,
+        TimeType,
+    ),
     /// owner_player_id, status, duration, max refresh duration
-    ApplyRaidBuff(IdType, BuffStatus, TimeType, TimeType, TimeType),
+    ApplyRaidBuff(PlayerIdType, BuffStatus, TimeType, TimeType, TimeType),
     /// owner_player_id, target_id, status, duration, max refresh duration
-    RefreshBuff(IdType, IdType, BuffStatus, TimeType, TimeType, TimeType),
+    RefreshBuff(
+        PlayerIdType,
+        PlayerIdType,
+        BuffStatus,
+        TimeType,
+        TimeType,
+        TimeType,
+    ),
 
     /// owner_player_id, time, status time, refresh duration or not
-    ApplyDebuffStack(IdType, DebuffStatus, TimeType, bool, TimeType),
+    ApplyDebuffStack(PlayerIdType, DebuffStatus, TimeType, bool, TimeType),
     /// owner_player_id, status, status time, max refresh duration
-    ApplyDebuff(IdType, DebuffStatus, TimeType, TimeType, TimeType),
+    ApplyDebuff(PlayerIdType, DebuffStatus, TimeType, TimeType, TimeType),
 
     /// owner_player_id, target_player_id, buff_id
-    RemoveTargetBuff(IdType, IdType, IdType, TimeType),
+    RemoveTargetBuff(PlayerIdType, PlayerIdType, IdType, TimeType),
     /// owner_player_id, buff_id
-    RemoveRaidBuff(IdType, IdType, TimeType),
+    RemoveRaidBuff(PlayerIdType, IdType, TimeType),
     /// owner_player_id, debuff_id
-    RemoveDebuff(IdType, IdType, TimeType),
+    RemoveDebuff(PlayerIdType, IdType, TimeType),
 
     /// Raises stack of another player, for dance partners and brotherhood
     /// player_id, stack id, increase amount
-    IncreasePlayerResource(IdType, IdType, ResourceType, TimeType),
+    IncreasePlayerResource(PlayerIdType, ResourceIdType, ResourceType, TimeType),
     /// player_id, skill_id, reduce_amount
-    ReduceSkillCooldown(IdType, IdType, TimeType, TimeType),
+    ReduceSkillCooldown(PlayerIdType, IdType, TimeType, TimeType),
     DotTick(TimeType),
 }
 
@@ -97,7 +118,7 @@ impl FfxivEvent {
         }
     }
 
-    pub(crate) fn set_target(&mut self, target_id: IdType) {
+    pub(crate) fn set_target(&mut self, target_id: PlayerIdType) {
         match self {
             FfxivEvent::ApplyBuff(_, target, _, _, _, _)
             | FfxivEvent::ApplyBuffStack(_, target, _, _, _, _)
@@ -270,6 +291,7 @@ impl FfxivEvent {
     }
 
     pub(crate) fn set_stacks(&mut self, stacks: ResourceType) {
+        let stacks = stacks as SkillStackType;
         match self {
             FfxivEvent::ApplyBuff(_, _, buff, _, _, _) => {
                 buff.stacks = min(stacks, buff.max_stacks);

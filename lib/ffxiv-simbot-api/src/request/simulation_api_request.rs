@@ -1,12 +1,12 @@
 use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
-use ffxiv_simbot_combat_components::types::{IdType, StatType, TimeType};
+use ffxiv_simbot_combat_components::types::{IdType, PlayerIdType, StatType, TimeType};
 use serde::Deserialize;
 
 /// The main request body for the simulation API
 #[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SimulationApiRequest {
-    pub main_player_id: IdType,
+    pub main_player_id: PlayerIdType,
     pub combat_time_millisecond: TimeType,
     pub party: Vec<PlayerInfoRequest>,
 }
@@ -15,9 +15,9 @@ pub struct SimulationApiRequest {
 #[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PlayerInfoRequest {
-    pub player_id: IdType,
-    pub partner1_id: Option<IdType>,
-    pub partner2_id: Option<IdType>,
+    pub player_id: PlayerIdType,
+    pub partner1_id: Option<PlayerIdType>,
+    pub partner2_id: Option<PlayerIdType>,
     pub job_abbrev: String,
     pub power: PlayerPower,
 }

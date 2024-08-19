@@ -11,7 +11,7 @@ use crate::response::simulation_api_response::{
 use ffxiv_simbot_combat_components::jobs_skill_data::ninja::abilities::bunshin_clone_id;
 use ffxiv_simbot_combat_components::live_objects::player::logs::SkillLog;
 use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
-use ffxiv_simbot_combat_components::types::{DpsType, MultiplierType};
+use ffxiv_simbot_combat_components::types::{DpsType, MultiplierType, PlayerIdType};
 use ffxiv_simbot_combat_components::types::{IdType, TimeType};
 use ffxiv_simbot_dps_simulator::simulation_result::SimulationResult;
 use itertools::{izip, Itertools};
@@ -137,7 +137,7 @@ fn calculate_damage_profile_response(
 }
 
 fn create_party_contribution_response(
-    player_id: IdType,
+    player_id: PlayerIdType,
     skill_damage_table: &HashMap<IdType, SkillDamageAggregate>,
     combat_time_millisecond: TimeType,
 ) -> Vec<PartyContributionResponse> {
@@ -215,7 +215,7 @@ pub(crate) fn create_response_from_simulation_result(
         .enumerate()
         .map(|(player_id, skill_damage_table)| {
             create_party_contribution_response(
-                player_id,
+                player_id as PlayerIdType,
                 skill_damage_table,
                 combat_time_millisecond,
             )

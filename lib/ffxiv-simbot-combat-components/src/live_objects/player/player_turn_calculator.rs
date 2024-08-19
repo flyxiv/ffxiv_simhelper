@@ -1,8 +1,9 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
 use crate::event::FfxivEventQueue;
+use crate::live_objects::player::Player;
 use crate::live_objects::turn_type::FfxivTurnType;
-use crate::types::{IdType, TimeType};
+use crate::types::{IdType, PlayerIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::{max, Reverse};
 use std::rc::Rc;
@@ -14,7 +15,7 @@ pub static COMBAT_START_TIME: TimeType = -10000;
 pub struct PlayerTurnCalculator {
     /// How many seconds passed after the most recent GCD. If delay is close to GCD, an oGCD will
     /// clip the player's next GCD, so it becomes a GCD turn.
-    pub player_id: IdType,
+    pub player_id: PlayerIdType,
     pub total_delay_millisecond: TimeType,
     pub last_gcd_time_millisecond: TimeType,
 
@@ -95,7 +96,7 @@ impl PlayerTurnCalculator {
     }
 
     pub(crate) fn new(
-        player_id: IdType,
+        player_id: PlayerIdType,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         gcd_start_time_millisecond: Option<TimeType>,
     ) -> Self {

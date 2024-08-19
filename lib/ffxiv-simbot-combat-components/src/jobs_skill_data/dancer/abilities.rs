@@ -9,7 +9,7 @@ use crate::skill::ResourceRequirements::Resource;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct DancerDatabase {
@@ -54,7 +54,7 @@ pub(crate) struct DancerDatabase {
 }
 
 impl DancerDatabase {
-    pub(crate) fn new(player_id: IdType, partner_player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType, partner_player_id: PlayerIdType) -> Self {
         let STANDARD_STEP_BUFF: BuffStatus = BuffStatus {
             id: 1500,
             owner_id: player_id,
@@ -1044,8 +1044,8 @@ impl DancerDatabase {
 }
 
 pub(crate) fn make_dancer_skill_list(
-    player_id: IdType,
-    partner_player_id: IdType,
+    player_id: PlayerIdType,
+    partner_player_id: PlayerIdType,
 ) -> SkillTable<AttackSkill> {
     let db = DancerDatabase::new(player_id, partner_player_id);
 

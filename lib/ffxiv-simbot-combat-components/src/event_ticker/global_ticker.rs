@@ -3,8 +3,8 @@ use crate::event::FfxivEventQueue;
 use crate::event_ticker::{EventTicker, TickerKey, GLOBAL_TICK_INTERVAL_MILLISECOND};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::StatusTable;
 use crate::types::{IdType, TimeType};
+use crate::types::{PlayerIdType, StatusTable};
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::rc::Rc;
@@ -38,12 +38,12 @@ impl EventTicker for GlobalTicker {
         GLOBAL_TICK_INTERVAL_MILLISECOND
     }
 
-    fn get_player_id(&self) -> Option<IdType> {
+    fn get_player_id(&self) -> Option<PlayerIdType> {
         None
     }
 
     fn get_id(&self) -> TickerKey {
-        TickerKey::new(self.id, self.id)
+        TickerKey::new(self.id, PlayerIdType::MAX)
     }
 
     fn set_event_queue(&mut self, event_queue: Rc<RefCell<FfxivEventQueue>>) {

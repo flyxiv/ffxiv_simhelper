@@ -1,5 +1,5 @@
-use crate::types::IdType;
+use crate::types::PlayerIdType;
 
 pub trait OwnerTracker {
-    fn get_owner_id(&self) -> IdType;
+    fn get_owner_id(&self) -> PlayerIdType;
 }

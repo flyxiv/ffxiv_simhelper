@@ -1,6 +1,5 @@
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
@@ -9,11 +8,11 @@ use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
     BufforDebuffLessThan, Combo, HasResource, MillisecondsBeforeBurst, Or,
 };
-use crate::types::TurnCount;
+use crate::types::{IdType, PlayerIdType};
 
 #[derive(Clone)]
 pub(crate) struct DarkknightPriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -47,7 +46,7 @@ impl PriorityTable for DarkknightPriorityTable {
 }
 
 impl DarkknightPriorityTable {
-    pub fn new(player_id: IdType) -> Self {
+    pub fn new(player_id: PlayerIdType) -> Self {
         let db = DarkknightDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),

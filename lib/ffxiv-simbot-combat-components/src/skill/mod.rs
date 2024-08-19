@@ -11,7 +11,7 @@ use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{IdType, TimeType};
+use crate::types::{IdType, ResourceIdType, TimeType};
 use crate::types::{ResourceType, StatusTable};
 use std::collections::HashMap;
 
@@ -27,12 +27,11 @@ pub static AUTO_ATTACK_ID: IdType = 10001;
 /// Skill might need mana, status(suiton status is needed for Trick Attack), or combo status.
 #[derive(Clone)]
 pub(crate) enum ResourceRequirements {
-    Mana(ResourceType),
     UseBuff(IdType),
     UseDebuff(IdType),
     CheckStatus(IdType),
-    Resource(IdType, ResourceType),
-    UseAllResource(IdType),
+    Resource(ResourceIdType, ResourceType),
+    UseAllResource(ResourceIdType),
 }
 
 pub(crate) fn make_skill_table(skill_list: Vec<AttackSkill>) -> SkillTable<AttackSkill> {
@@ -44,7 +43,7 @@ pub(crate) fn make_skill_table(skill_list: Vec<AttackSkill>) -> SkillTable<Attac
 
 pub(crate) type SkillEvents = (Vec<FfxivEvent>, Vec<FfxivPlayerInternalEvent>);
 
-pub type ResourceTable = HashMap<IdType, ResourceType>;
+pub type ResourceTable = HashMap<ResourceIdType, ResourceType>;
 
 /// a single FFXIV skill.
 pub trait Skill: Sized + Clone + IdEntity {

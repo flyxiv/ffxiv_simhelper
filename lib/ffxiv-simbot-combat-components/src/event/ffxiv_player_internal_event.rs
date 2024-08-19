@@ -1,5 +1,5 @@
 use crate::live_objects::turn_type::FfxivTurnType;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 
 /// Events that happen to a player's internal status "instantly" after casting a skill
@@ -7,8 +7,8 @@ use crate::types::{IdType, TimeType};
 #[derive(Clone)]
 pub enum FfxivPlayerInternalEvent {
     /// stack id, increase amount
-    IncreaseResource(IdType, ResourceType),
-    UseResource(IdType, ResourceType),
+    IncreaseResource(ResourceIdType, ResourceType),
+    UseResource(ResourceIdType, ResourceType),
     /// skill ID
     StartCooldown(IdType),
     /// combo ID

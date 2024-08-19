@@ -7,7 +7,7 @@ use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct ViperDatabase {
@@ -51,7 +51,7 @@ pub(crate) struct ViperDatabase {
 }
 
 impl ViperDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let HUNTERS_INSTINCT: BuffStatus = BuffStatus {
             id: 2101,
             name: String::from("Hunter's Instinct"),
@@ -863,7 +863,7 @@ impl ViperDatabase {
     }
 }
 
-pub(crate) fn make_viper_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_viper_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = ViperDatabase::new(player_id);
 
     let viper_skill_list: Vec<AttackSkill> = vec![

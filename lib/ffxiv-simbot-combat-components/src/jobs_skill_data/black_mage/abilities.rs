@@ -12,7 +12,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
 
 pub(crate) struct BlackmageDatabase {
@@ -56,7 +56,7 @@ pub(crate) struct BlackmageDatabase {
     pub(crate) potion_buff: BuffStatus,
 }
 impl BlackmageDatabase {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let caster_skills = CasterGlobalSkill::new(player_id);
 
         let TRIPLECAST_BUFF: BuffStatus = {
@@ -913,7 +913,7 @@ impl BlackmageDatabase {
     }
 }
 
-pub(crate) fn make_blackmage_skill_list(player_id: IdType) -> SkillTable<AttackSkill> {
+pub(crate) fn make_blackmage_skill_list(player_id: PlayerIdType) -> SkillTable<AttackSkill> {
     let db = BlackmageDatabase::new(player_id);
 
     let blackmage_skill_list: Vec<AttackSkill> = vec![

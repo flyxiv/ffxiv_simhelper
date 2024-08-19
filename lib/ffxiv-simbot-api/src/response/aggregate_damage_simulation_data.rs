@@ -1,8 +1,8 @@
 use crate::response::CountType;
 use ffxiv_simbot_combat_components::live_objects::player::logs::DamageLog;
 use ffxiv_simbot_combat_components::live_objects::player::StatusKey;
-use ffxiv_simbot_combat_components::types::IdType;
 use ffxiv_simbot_combat_components::types::MultiplierType;
+use ffxiv_simbot_combat_components::types::{IdType, PlayerIdType};
 use itertools::izip;
 use std::collections::HashMap;
 
@@ -26,7 +26,7 @@ pub(crate) struct RaidbuffDamageAggregate {
 pub(crate) struct PlayerDamageAggregate {
     pub(crate) total_raw_damage: MultiplierType,
     pub(crate) total_contributions_received: MultiplierType,
-    pub(crate) total_rdps_contributions: HashMap<IdType, MultiplierType>,
+    pub(crate) total_rdps_contributions: HashMap<PlayerIdType, MultiplierType>,
 }
 
 impl Default for PlayerDamageAggregate {
@@ -121,11 +121,11 @@ pub(crate) fn aggregate_player_damage_statistics(
         }
 
         for (status_key, contributed_damage) in contribution_table.iter() {
-            if status_key.player_id == player_id {
+            if status_key.player_id == player_id as PlayerIdType {
                 party_damage_aggregate[player_id].total_raw_damage += *contributed_damage;
             } else {
-                party_damage_aggregate[status_key.player_id].total_contributions_received +=
-                    contributed_damage;
+                party_damage_aggregate[status_key.player_id as usize]
+                    .total_contributions_received += contributed_damage;
                 let entry = party_damage_aggregate[player_id]
                     .total_rdps_contributions
                     .entry(status_key.player_id)
@@ -162,7 +162,7 @@ pub(crate) fn aggregate_status_damages(
                             total_raid_damage: 0.0,
                         });
 
-                if affected_player_id == player_id {
+                if affected_player_id == (player_id as PlayerIdType) {
                     entry.total_raw_damage += *contributed_damage;
                 } else {
                     entry.total_raid_damage += contributed_damage;

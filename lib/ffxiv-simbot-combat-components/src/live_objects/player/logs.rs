@@ -1,6 +1,6 @@
 use crate::damage_calculator::DamageRdpsProfile;
 use crate::live_objects::player::StatusKey;
-use crate::types::{IdType, MultiplierType, TimeType};
+use crate::types::{IdType, MultiplierType, PlayerIdType, TimeType};
 use std::collections::HashMap;
 
 /// Records skill use events and damage events, stored for each player.
@@ -9,7 +9,7 @@ use std::collections::HashMap;
 pub struct SkillLog {
     pub time: TimeType,
     pub skill_id: IdType,
-    pub target_id: Option<IdType>,
+    pub target_id: Option<PlayerIdType>,
     pub buffs: Vec<IdType>,
     pub debuffs: Vec<IdType>,
 }
@@ -24,7 +24,7 @@ pub struct DamageLog {
 
 #[derive(Debug, Clone)]
 pub struct RdpsContribution {
-    pub player_id: IdType,
+    pub player_id: PlayerIdType,
     pub raid_buff_status_id: IdType,
     pub contributed_damage: MultiplierType,
 }

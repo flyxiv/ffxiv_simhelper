@@ -7,7 +7,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
@@ -20,7 +20,6 @@ const BURGEONING_FURY_MAX_STACK: ResourceType = 3;
 #[derive(Clone)]
 pub(crate) struct WarriorCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: IdType,
     current_combo: ComboType,
     beast_gauge: ResourceType,
     burgeoning_fury: ResourceType,
@@ -35,7 +34,7 @@ impl CombatResource for WarriorCombatResources {
         &self.skills
     }
 
-    fn add_resource(&mut self, resource_id: IdType, resource_amount: ResourceType) {
+    fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
         if resource_id == 0 {
             self.beast_gauge = min(BEAST_GAUGE_MAX_STACK, self.beast_gauge + resource_amount);
         } else if resource_id == 1 {
@@ -46,7 +45,7 @@ impl CombatResource for WarriorCombatResources {
         }
     }
 
-    fn get_resource(&self, resource_id: IdType) -> ResourceType {
+    fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
         if resource_id == 0 {
             self.beast_gauge
         } else if resource_id == 1 {
@@ -60,7 +59,7 @@ impl CombatResource for WarriorCombatResources {
         self.current_combo
     }
 
-    fn update_combo(&mut self, combo: &Option<IdType>) {
+    fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
             self.current_combo = Some(*combo_id);
         }
@@ -77,7 +76,7 @@ impl CombatResource for WarriorCombatResources {
         (vec![], vec![])
     }
 
-    fn get_next_buff_target(&self, _: IdType) -> IdType {
+    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
@@ -85,10 +84,9 @@ impl CombatResource for WarriorCombatResources {
 }
 
 impl WarriorCombatResources {
-    pub(crate) fn new(player_id: IdType) -> Self {
+    pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_warrior_skill_list(player_id),
-            player_id,
             current_combo: None,
             beast_gauge: 0,
             burgeoning_fury: 0,

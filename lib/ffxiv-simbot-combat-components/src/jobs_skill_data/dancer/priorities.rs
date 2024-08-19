@@ -2,13 +2,12 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::dancer::abilities::DancerDatabase;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
-use crate::types::TurnCount;
+use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 #[derive(Clone)]
 pub(crate) struct DancerPriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -42,7 +41,7 @@ impl PriorityTable for DancerPriorityTable {
 }
 
 impl DancerPriorityTable {
-    pub fn new(player_id: IdType, partner_player_id: IdType) -> Self {
+    pub fn new(player_id: PlayerIdType, partner_player_id: PlayerIdType) -> Self {
         let db = DancerDatabase::new(player_id, partner_player_id);
         Self {
             turn_count: RefCell::new(0),

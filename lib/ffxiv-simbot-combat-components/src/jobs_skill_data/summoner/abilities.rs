@@ -15,7 +15,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -70,7 +70,10 @@ pub(crate) struct SummonerDatabase {
 }
 
 impl SummonerDatabase {
-    pub(crate) fn new(player_id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+    pub(crate) fn new(
+        player_id: PlayerIdType,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+    ) -> Self {
         let FURTHER_RUIN: BuffStatus = BuffStatus {
             id: 1600,
             name: String::from("Further Ruin"),
@@ -1113,7 +1116,7 @@ impl SummonerDatabase {
 }
 
 pub(crate) fn make_summoner_skill_list(
-    player_id: IdType,
+    player_id: PlayerIdType,
     ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
 ) -> SkillTable<AttackSkill> {
     let db = SummonerDatabase::new(player_id, ffxiv_event_queue);

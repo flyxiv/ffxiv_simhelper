@@ -28,8 +28,8 @@ use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::status::status_info::StatusInfo;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
 use ffxiv_simbot_combat_components::status::Status;
-use ffxiv_simbot_combat_components::types::PotencyType;
 use ffxiv_simbot_combat_components::types::{IdType, TimeType};
+use ffxiv_simbot_combat_components::types::{PlayerIdType, PotencyType};
 use log::{debug, info};
 use std::cell::RefCell;
 use std::cmp::Reverse;
@@ -37,7 +37,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 use std::time::SystemTime;
 
-static GLOBAL_TICKER_ID: IdType = 10000;
+static GLOBAL_TICKER_ID: IdType = 15000;
 
 /// The main party combat simulation board for FFXIV. Think of this simulation of one instance of combat.
 /// The DpsSimulator does the following:
@@ -47,7 +47,7 @@ pub struct FfxivSimulationBoard {
     raw_damage_calculator: FfxivRawDamageCalculator,
     rdps_calculator: FfxivRdpsCalculator,
 
-    pub main_player_id: IdType,
+    pub main_player_id: PlayerIdType,
 
     pub party: Vec<Rc<RefCell<FfxivPlayer>>>,
     pub target: Rc<RefCell<FfxivTarget>>,
@@ -372,7 +372,7 @@ impl FfxivSimulationBoard {
         }
 
         snapshotted_buffs.retain(|_, buff| buff.is_damage_buff());
-        snapshotted_debuffs.retain(|_, debuff| debuff.is_damage_debuff(player_id));
+        snapshotted_debuffs.retain(|_, debuff| debuff.is_damage_debuff(player_id as PlayerIdType));
 
         let (damage_rdps_profile, is_crit) = self.raw_damage_calculator.calculate_total_damage(
             player_id,
@@ -398,8 +398,8 @@ impl FfxivSimulationBoard {
         );
     }
 
-    fn get_player_data(&self, player_id: IdType) -> Rc<RefCell<FfxivPlayer>> {
-        self.party[player_id].clone()
+    fn get_player_data(&self, player_id: PlayerIdType) -> Rc<RefCell<FfxivPlayer>> {
+        self.party[player_id as usize].clone()
     }
 
     fn get_target(&self) -> Rc<RefCell<FfxivTarget>> {
@@ -454,7 +454,7 @@ impl FfxivSimulationBoard {
     }
 
     pub fn new(
-        main_player_id: IdType,
+        main_player_id: PlayerIdType,
         target: Rc<RefCell<FfxivTarget>>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
         finish_combat_time_millisecond: TimeType,
@@ -501,7 +501,7 @@ impl FfxivSimulationBoard {
 
     fn register_auto_attack_ticker(
         &self,
-        player_id: IdType,
+        player_id: PlayerIdType,
         job_abbrev: &String,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) {

@@ -1,15 +1,13 @@
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::pictomancer::priorities::make_pictomancer_ogcd_priority_table;
 use crate::jobs_skill_data::sage::abilities::SageDatabase;
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
-use crate::types::TurnCount;
+use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 #[derive(Clone)]
 pub struct SagePriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
     gcd_priority_list: Vec<SkillPriorityInfo>,
     ogcd_priority_list: Vec<SkillPriorityInfo>,
@@ -42,7 +40,7 @@ impl PriorityTable for SagePriorityTable {
 }
 
 impl SagePriorityTable {
-    pub fn new(player_id: IdType) -> Self {
+    pub fn new(player_id: PlayerIdType) -> Self {
         let db = SageDatabase::new(player_id);
 
         Self {

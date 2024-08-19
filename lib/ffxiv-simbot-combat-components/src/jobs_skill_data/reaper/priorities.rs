@@ -1,6 +1,6 @@
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
+use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
@@ -10,11 +10,10 @@ use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
     Or, RelatedSkillCooldownLessOrEqualThan,
 };
-use crate::types::TurnCount;
 
 #[derive(Clone)]
 pub(crate) struct ReaperPriorityTable {
-    turn_count: RefCell<TurnCount>,
+    turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -48,7 +47,7 @@ impl PriorityTable for ReaperPriorityTable {
 }
 
 impl ReaperPriorityTable {
-    pub fn new(player_id: IdType, player_count: usize) -> Self {
+    pub fn new(player_id: PlayerIdType, player_count: usize) -> Self {
         let db = ReaperDatabase::new(player_id, player_count);
         Self {
             turn_count: RefCell::new(0),
