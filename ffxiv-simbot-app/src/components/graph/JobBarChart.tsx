@@ -10,17 +10,7 @@ import {
 } from "./Style";
 import { StatusIdToIconPathFactory } from "../icon/abilityicon/StatusIconFactory";
 import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
-
-export interface RdpsEntry {
-  statusId: number;
-  rdps: number;
-}
-
-export interface TeammateChartData {
-  rdpsEntry: RdpsEntry[];
-  totalRdps: number;
-  jobName: String;
-}
+import { TeammateChartData } from "./GraphData";
 
 const PartyMemberBuffBox = styled(Box)`
   ${PartyMemberBuffBoxStyle}

@@ -2,22 +2,24 @@ import { defaultItemSet } from "../types/ffxivdatabase/ItemSet";
 import { GearSetMaterias } from "../types/ffxivdatabase/Materia";
 import { QuickSimInputSaveState } from "../types/QuickSimInput";
 
+export const DEFAULT_GEARSET_MATERIAS: GearSetMaterias = [
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+];
+
 export function defaultQuickSimInput(): QuickSimInputSaveState {
   let partyMemberJobs = ["NIN", "WAR", "WHM", "SGE", "DRG", "BRD", "BLM"];
-  let defaultMaterias: GearSetMaterias = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-  ];
+  let defaultMaterias = DEFAULT_GEARSET_MATERIAS;
 
   return {
     mainPlayerJob: "PLD",

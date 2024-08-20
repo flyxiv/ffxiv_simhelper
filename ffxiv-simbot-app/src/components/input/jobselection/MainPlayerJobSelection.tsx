@@ -7,6 +7,7 @@ import {
 } from "../../../types/ffxivdatabase/ItemSet";
 import { CharacterEquipmentsData } from "../../../types/ffxivdatabase/PlayerPower";
 import { ColorConfigurations } from "../../../Themes";
+import { DEFAULT_GEARSET_MATERIAS } from "../../../const/DefaultQuickSimInput";
 
 export function MainPlayerJobSelection(
   id: number,
@@ -20,6 +21,8 @@ export function MainPlayerJobSelection(
     let newData = { ...data };
 
     newData.itemSet = defaultItemSet();
+    newData.gearSetMaterias = DEFAULT_GEARSET_MATERIAS;
+    newData.jobAbbrev = event.target.value;
 
     updatePlayerPower(newData, setData);
   };

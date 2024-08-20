@@ -1,5 +1,12 @@
 import { Box, styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { ColorConfigurations } from "../../Themes";
+import { PartyContributionData } from "../graph/GraphData";
+import {
+  BEST_TEAMMATE_TEXT,
+  DAMAGE_PROFILE_TEXT,
+  MY_CONTRIBUTIONS_TEXT,
+  ROTATION_LOG_TEXT,
+} from "../../page/SimulationResult";
 
 type ViewType = "Best Teammate" | "Damage Profile" | "Rotation Log"; // Define possible view types
 
@@ -23,7 +30,8 @@ const ToggleButtonCustom = styled(ToggleButton)(ToggleButtonCustomStyle);
 export function ResultPageButtonGroup(
   currentlyToggledView: string,
   setCurrentlyToggledView: Function,
-  mainPlayerJob: string
+  teammatesContributionToMyBuffs: PartyContributionData | null,
+  mainPlayerContributionToOthers: PartyContributionData | null
 ) {
   const handleViewChange = (
     _: React.MouseEvent<HTMLElement>,
@@ -35,12 +43,16 @@ export function ResultPageButtonGroup(
   };
 
   let bestTeammateButton = (
-    <ToggleButtonCustom value="Best Teammate">Best Teammate</ToggleButtonCustom>
+    <ToggleButtonCustom value={BEST_TEAMMATE_TEXT}>
+      {BEST_TEAMMATE_TEXT}
+    </ToggleButtonCustom>
   );
 
-  if (isNotBuffJob(mainPlayerJob)) {
-    bestTeammateButton = <></>;
-  }
+  let myContributionsButton = (
+    <ToggleButtonCustom value={MY_CONTRIBUTIONS_TEXT}>
+      {MY_CONTRIBUTIONS_TEXT}
+    </ToggleButtonCustom>
+  );
 
   return (
     <Box marginTop={4} marginBottom={2}>
@@ -51,27 +63,24 @@ export function ResultPageButtonGroup(
         aria-label="resultPage"
       >
         <ToggleButtonCustom value="Damage Profile">
-          Damage Profile
+          {DAMAGE_PROFILE_TEXT}
         </ToggleButtonCustom>
-        {bestTeammateButton}
+        {teammatesContributionToMyBuffs === null ||
+        teammatesContributionToMyBuffs.contributionData.length > 0 ? (
+          bestTeammateButton
+        ) : (
+          <Box />
+        )}
+        {mainPlayerContributionToOthers === null ||
+        mainPlayerContributionToOthers.contributionData.length > 0 ? (
+          myContributionsButton
+        ) : (
+          <Box />
+        )}
         <ToggleButtonCustom value="Rotation Log">
-          Rotation Log
+          {ROTATION_LOG_TEXT}
         </ToggleButtonCustom>
       </ToggleButtonGroup>
     </Box>
-  );
-}
-
-function isNotBuffJob(job: string) {
-  return (
-    job === "GNB" ||
-    job === "DRK" ||
-    job === "WAR" ||
-    job === "PLD" ||
-    job === "WHM" ||
-    job === "SGE" ||
-    job === "SAM" ||
-    job === "MCH" ||
-    job === "BLM"
   );
 }

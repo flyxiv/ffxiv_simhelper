@@ -4,10 +4,10 @@ import {
   TOTAL_SLOTS,
 } from "./Equipment";
 import { convertEquipmentToItemStat } from "./ItemStats";
-import { getBaseMainStat } from "../../const/StartStats"
+import { getBaseMainStat } from "../../const/StartStats";
 
 import { FOOD_DATABASE } from "./Food";
-import { addMateriaStatToTotalStat, GearSetMaterias} from "./Materia";
+import { addMateriaStatToTotalStat, GearSetMaterias } from "./Materia";
 import {
   CharacterEquipmentsData,
   defaultPlayerPower,
@@ -91,6 +91,7 @@ export function calculatePlayerPowerFromInputs(
   let power: PlayerPower = defaultPlayerPower();
 
   power.mainStat += getBaseMainStat(jobAbbrev, race);
+  console.log(power.mainStat);
 
   itemSet.forEach((equipmentId) => {
     let equipment = EQUIPMENT_DATABASE_BY_ID.get(equipmentId);

@@ -1,3 +1,4 @@
+import { DamageChartData } from "./GraphData";
 import {
   SkillBarBoxStyle,
   SkillBarStyle,
@@ -12,14 +13,6 @@ import {
   SkillPercentageTitleBoxStyle,
 } from "./Style";
 import { styled, Box, Typography } from "@mui/material";
-
-export interface DamageChartData {
-  icon: String;
-  rdps: number;
-  pdps: number;
-  castCount: number;
-  name: String;
-}
 
 const SkillBox = styled(Box)`
   ${SkillBoxStyle}

@@ -1,17 +1,22 @@
 import { QuickSimResponse } from "../../types/QuickSimResponse";
-import {
-  GraphTitleRow,
-  JobBarChartTeammate,
-  TeammateChartData,
-} from "./JobBarChart";
+import { GraphTitleRow, JobBarChartTeammate } from "./JobBarChart";
 import { Box, styled } from "@mui/material";
 import { GraphBoxStyle } from "./Style";
+import { PartyContributionData, TeammateChartData } from "./GraphData";
 
 const GraphBox = styled(Box)`
   ${GraphBoxStyle}
 `;
 
-export const BestTeammateGraph = (response: QuickSimResponse) => {
+export const makeBestTeammateData = (
+  response: QuickSimResponse,
+  teammatesContributions: null | PartyContributionData,
+  setTeammatesContributionToMyBuffs: Function
+) => {
+  if (teammatesContributions !== null) {
+    return;
+  }
+
   const mainPlayerId = response.mainPlayerId;
   const simulationDatas = response.simulationData;
 
@@ -62,8 +67,30 @@ export const BestTeammateGraph = (response: QuickSimResponse) => {
 
   contributionData.sort((a, b) => b.totalRdps - a.totalRdps);
 
-  for (let i = 0; i < contributionData.length; i++) {
-    let data = contributionData[i];
+  let teammatesContributionToMyBuffs = {
+    totalRdpsByStatus: totalRdpsByStatus,
+    contributionData: contributionData,
+  };
+
+  setTeammatesContributionToMyBuffs(teammatesContributionToMyBuffs);
+  return;
+};
+
+export const BestTeammateGraph = (
+  teammatesContributionToMyBuffs: null | PartyContributionData
+) => {
+  if (teammatesContributionToMyBuffs === null) {
+    return;
+  }
+
+  let teammateContributionData =
+    teammatesContributionToMyBuffs.contributionData;
+  let totalRdpsByStatus = teammatesContributionToMyBuffs.totalRdpsByStatus;
+
+  let maxContribution = teammateContributionData[0].totalRdps;
+
+  for (let i = 0; i < teammateContributionData.length; i++) {
+    let data = teammateContributionData[i];
     data.rdpsEntry.sort(
       (a, b) =>
         (totalRdpsByStatus.get(b.statusId) || 0) -
@@ -71,13 +98,11 @@ export const BestTeammateGraph = (response: QuickSimResponse) => {
     );
   }
 
-  let maxContribution = contributionData[0].totalRdps;
-
   return (
     <>
       {GraphTitleRow()}
       <GraphBox>
-        {contributionData.map((data) => {
+        {teammateContributionData.map((data) => {
           return JobBarChartTeammate(data, maxContribution);
         })}
       </GraphBox>
