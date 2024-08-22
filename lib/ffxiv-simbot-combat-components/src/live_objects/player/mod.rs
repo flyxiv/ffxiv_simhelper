@@ -19,7 +19,7 @@ pub mod role;
 
 static MAX_MANA: i32 = 10000;
 
-#[derive(Hash, Clone, Copy, PartialEq, Eq)]
+#[derive(Hash, Clone, Copy, PartialEq, Eq, Debug)]
 pub struct StatusKey {
     pub status_id: IdType,
     pub player_id: PlayerIdType,

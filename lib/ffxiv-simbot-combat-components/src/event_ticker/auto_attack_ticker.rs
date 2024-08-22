@@ -7,7 +7,7 @@ use crate::skill::damage_category::DamageCategory;
 use crate::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::snapshot_status::{snapshot_buff, snapshot_debuff};
-use crate::types::{IdType, TimeType};
+use crate::types::{IdType, MultiplierType, TimeType};
 use crate::types::{PlayerIdType, StatusTable};
 use std::cell::RefCell;
 use std::cmp::{max, Reverse};
@@ -25,6 +25,7 @@ pub struct AutoAttackTicker {
     trait_percent: PercentType,
     duration_millisecond: TimeType,
     damage_category: DamageCategory,
+    job_tuning_value: MultiplierType,
 }
 
 impl EventTicker for AutoAttackTicker {
@@ -36,7 +37,9 @@ impl EventTicker for AutoAttackTicker {
     ) {
         {
             if let Some(player) = player {
-                let speed = player.borrow().get_gcd_delay_millisecond(&self.auto_attack);
+                let speed = (player.borrow().get_gcd_delay_millisecond(&self.auto_attack)
+                    as MultiplierType
+                    / self.job_tuning_value) as TimeType;
                 self.auto_attack_interval = speed;
 
                 self.event_queue
@@ -97,7 +100,7 @@ impl AutoAttackTicker {
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
         let potency = match job_abbrev.as_str() {
-            "PLD" | "WAR" | "GNB" | "DRK" | "MNK" | "DRG" | "NIN" | "SAM" | "RPR" | "DNC" => 110,
+            "PLD" | "WAR" | "GNB" | "DRK" | "MNK" | "DRG" | "NIN" | "RPR" => 110,
             _ => 100,
         };
 
@@ -119,6 +122,7 @@ impl AutoAttackTicker {
             trait_percent: 100,
             duration_millisecond: 19000000,
             damage_category: DamageCategory::AutoAttack,
+            job_tuning_value: get_auto_attack_interval_tuning_value_of_job(job_abbrev),
         }
     }
 
@@ -140,6 +144,19 @@ impl AutoAttackTicker {
             auto_attack_interval: GCD_DEFAULT_DELAY_MILLISECOND,
             duration_millisecond,
             damage_category,
+            job_tuning_value: 1.0,
         }
+    }
+}
+
+/// while ten-chi-jin or dancing jobs can't auto attack but we can't implement that.
+/// so we adjust the auto attack interval based on actual logs so that auto attack swing
+/// matches the actual logs.
+fn get_auto_attack_interval_tuning_value_of_job(job_abbrev: &String) -> MultiplierType {
+    match job_abbrev.as_str() {
+        "NIN" => 0.86,
+        "DNC" => 0.75,
+        "SAM" => 0.88,
+        _ => 1.0,
     }
 }

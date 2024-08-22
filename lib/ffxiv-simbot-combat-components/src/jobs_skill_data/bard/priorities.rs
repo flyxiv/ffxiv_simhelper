@@ -1,7 +1,9 @@
 use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::bard::abilities::BardDatabase;
-use crate::rotation::priority_table::SkillPrerequisite::HasSkillStacks;
+use crate::rotation::priority_table::SkillPrerequisite::{
+    And, BufforDebuffLessThan, HasBufforDebuff, HasSkillStacks, Not,
+};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::types::{IdType, PlayerIdType};
@@ -141,9 +143,11 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
         },
         SkillPriorityInfo {
             skill_id: db.armys_paeon.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
-                db.mages_ballad_status.get_id(),
-                3000,
+            prerequisite: Some(And(
+                Box::new(BufforDebuffLessThan(db.mages_ballad_status.get_id(), 3000)),
+                Box::new(Not(Box::new(HasBufforDebuff(
+                    db.wanderers_minuet_status.get_id(),
+                )))),
             )),
         },
         SkillPriorityInfo {

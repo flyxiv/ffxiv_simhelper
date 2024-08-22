@@ -11,8 +11,14 @@ use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::rc::Rc;
 
+enum PartnerCategory {
+    MeleePartner,
+    RangedPartner,
+    AllPartner,
+}
+
 lazy_static! {
-    static ref PARTNER_PRIORITY: Vec<&'static str> = vec![
+    static ref ALL_PARTNER_PRIORITY: Vec<&'static str> = vec![
         "VPR", "PCT", "SAM", "NIN", "MNK", "DRG", "RPR", "BLM", "SMN", "RDM", "MCH", "DNC", "BRD",
         "DRK", "PLD", "WAR", "GNB", "WHM", "SGE", "SCH", "AST",
     ];
@@ -77,8 +83,16 @@ pub(crate) fn create_player(
         "AST" => Ok(FfxivPlayer::new_astrologian(
             player_info.player_id,
             character_power,
-            get_partner_id(player_info.partner1_id, player_jobs),
-            get_partner_id(player_info.partner2_id, player_jobs),
+            get_partner_id(
+                player_info.partner1_id,
+                player_jobs,
+                PartnerCategory::MeleePartner,
+            ),
+            get_partner_id(
+                player_info.partner2_id,
+                player_jobs,
+                PartnerCategory::RangedPartner,
+            ),
             event_queue,
             player_count,
         )),
@@ -132,7 +146,11 @@ pub(crate) fn create_player(
         )),
         "DNC" => Ok(FfxivPlayer::new_dancer(
             player_info.player_id,
-            get_partner_id(player_info.partner1_id, player_jobs),
+            get_partner_id(
+                player_info.partner1_id,
+                player_jobs,
+                PartnerCategory::AllPartner,
+            ),
             character_power,
             event_queue,
             player_count,
@@ -174,11 +192,18 @@ pub(crate) fn create_player(
 fn get_partner_id(
     partner_id: Option<PlayerIdType>,
     party_jobs: &Vec<(PlayerIdType, String)>,
+    partner_category: PartnerCategory,
 ) -> PlayerIdType {
     match partner_id {
         Some(id) => id,
         None => {
-            for job in PARTNER_PRIORITY.iter() {
+            let partner_priority_table = match partner_category {
+                PartnerCategory::MeleePartner => MELEE_PRIORITY.iter(),
+                PartnerCategory::RangedPartner => RANGED_PRIORITY.iter(),
+                PartnerCategory::AllPartner => ALL_PARTNER_PRIORITY.iter(),
+            };
+
+            for job in partner_priority_table {
                 for (id, job_name) in party_jobs {
                     if job_name == *job {
                         return *id;

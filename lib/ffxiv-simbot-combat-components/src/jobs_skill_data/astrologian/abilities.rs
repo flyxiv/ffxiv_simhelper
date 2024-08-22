@@ -1,4 +1,4 @@
-use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff};
+use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyDebuff, ApplyRaidBuff};
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
@@ -377,14 +377,7 @@ impl AstrologianDatabase {
             potency: 0,
             trait_percent: 100,
             additional_skill_events: vec![
-                ApplyBuff(
-                    player_id,
-                    player_id,
-                    DIVINATION_BUFF.clone(),
-                    20000,
-                    20000,
-                    0,
-                ),
+                ApplyRaidBuff(player_id, DIVINATION_BUFF.clone(), 20000, 20000, 0),
                 ApplyBuff(player_id, player_id, DIVINING.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],

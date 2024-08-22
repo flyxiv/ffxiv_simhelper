@@ -1,5 +1,5 @@
 use crate::event::ffxiv_event::FfxivEvent;
-use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
+use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyBuffStack};
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
@@ -68,7 +68,7 @@ impl NinjaDatabase {
                 owner_id: player_id,
                 duration_left_millisecond: 0,
                 status_info: vec![StatusInfo::SpeedPercent(15)],
-                duration_millisecond: 60000,
+                duration_millisecond: i32::MAX,
                 is_raidwide: false,
                 stacks: 1,
                 max_stacks: 1,
@@ -84,7 +84,7 @@ impl NinjaDatabase {
             duration_millisecond: 30000,
             is_raidwide: false,
             stacks: 1,
-            max_stacks: 1,
+            max_stacks: 3,
             trigger_proc_event_on_gcd: vec![],
         };
         let SUITON_STATUS: BuffStatus = BuffStatus {
@@ -461,7 +461,7 @@ impl NinjaDatabase {
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
-            combo: None,
+            combo: Some(0),
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 2500,
@@ -659,7 +659,7 @@ impl NinjaDatabase {
             trait_percent: 100,
             additional_skill_events: vec![
                 FfxivEvent::ApplyBuff(player_id, player_id, TCJ_2.clone(), 6000, 6000, 0),
-                ApplyBuff(player_id, player_id, RAIJUREADY.clone(), 30000, 30000, 0),
+                ApplyBuffStack(player_id, player_id, RAIJUREADY.clone(), 30000, true, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -1077,7 +1077,7 @@ pub(crate) fn get_huton_status(player_id: PlayerIdType) -> BuffStatus {
     let db = NinjaDatabase::new(0);
     let mut huton = db.huton_status.clone();
     huton.owner_id = player_id;
-    huton.duration_left_millisecond = 55000;
+    huton.duration_left_millisecond = i32::MAX;
 
     huton
 }

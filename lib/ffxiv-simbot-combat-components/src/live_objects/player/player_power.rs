@@ -3,9 +3,9 @@ use crate::types::{BuffIncreasePercentType, IncreaseType, MultiplierType, StatTy
 use serde::{Deserialize, Serialize};
 use std::cmp::min;
 
-const NON_TANK_MULTIPLIER: MultiplierType = 0.5;
-const TANK_MULTIPLIER: MultiplierType = 0.4;
-const MAIN_STAT_BASE_NON_TANK: StatType = 437;
+const NON_TANK_MULTIPLIER: MultiplierType = 237.0 / 440.0;
+const TANK_MULTIPLIER: MultiplierType = 190.0 / 440.0;
+const MAIN_STAT_BASE_NON_TANK: StatType = 440;
 const MAIN_STAT_BASE_TANK: StatType = 440;
 
 /// The main/sub stats of players that are converted to
@@ -42,8 +42,9 @@ pub fn add_main_stat(
     let mut power = power.clone();
     let role = job_abbrev_to_role(job_abbrev);
 
-    let increase_percent_amount =
-        (power.main_stat_multiplier * (increase_percent as MultiplierType / 100.0)) as IncreaseType;
+    let increase_percent_amount = (power.main_stat as MultiplierType
+        * (increase_percent as MultiplierType / 100.0))
+        as IncreaseType;
     let increase_amount = min(maximum_increase, increase_percent_amount);
     power.main_stat += increase_amount as StatType;
     power.main_stat_multiplier = convert_main_stat_to_multiplier(power.main_stat, role);

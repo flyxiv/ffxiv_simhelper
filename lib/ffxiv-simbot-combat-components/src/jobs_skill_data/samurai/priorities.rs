@@ -77,6 +77,8 @@ pub(crate) fn make_samurai_opener(db: &SamuraiDatabase) -> Vec<Opener> {
         OgcdOpener((None, None)),
         GcdOpener(db.ogi_namikiri.get_id()),
         OgcdOpener((Some(db.shoha.get_id()), None)),
+        GcdOpener(db.kaeshi_namikiri.get_id()),
+        OgcdOpener((None, None)),
         GcdOpener(db.kasha_meikyo.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.gekko_meikyo.get_id()),
@@ -378,6 +380,10 @@ pub(crate) fn make_samurai_ogcd_priority_table(db: &SamuraiDatabase) -> Vec<Skil
                 Box::new(MillisecondsBeforeBurst(0)),
                 Box::new(HasResource(1, 3)),
             )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.zanshin.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.hissatsu_shinten.get_id(),

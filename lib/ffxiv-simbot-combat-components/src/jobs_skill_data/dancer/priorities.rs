@@ -1,5 +1,8 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::dancer::abilities::DancerDatabase;
+use crate::rotation::priority_table::SkillPrerequisite::{
+    And, HasBufforDebuff, MillisecondsBeforeBurst,
+};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::types::{IdType, PlayerIdType};
@@ -58,7 +61,7 @@ pub(crate) fn make_dancer_opener(db: &DancerDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.technical_step.get_id()),
         Opener::OgcdOpener((Some(db.devilment.get_id()), None)),
-        Opener::GcdOpener(db.tillana.get_id()),
+        Opener::GcdOpener(db.last_dance.get_id()),
         Opener::OgcdOpener((Some(db.flourish.get_id()), None)),
         Opener::GcdOpener(db.starfall_dance.get_id()),
     ]
@@ -71,15 +74,7 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
             prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(5500)),
         },
         SkillPriorityInfo {
-            skill_id: db.saber_dance.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource(0, 80)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.tillana.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.starfall_dance.get_id(),
+            skill_id: db.dance_of_the_dawn.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -87,12 +82,28 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.standard_step.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.saber_dance.get_id(),
+            prerequisite: Some(HasBufforDebuff(db.technical_step_buff.get_id())),
+        },
+        SkillPriorityInfo {
+            skill_id: db.starfall_dance.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.tillana.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.last_dance.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.standard_step.get_id(),
-            prerequisite: None,
+            skill_id: db.saber_dance.get_id(),
+            prerequisite: Some(SkillPrerequisite::HasResource(0, 80)),
         },
         SkillPriorityInfo {
             skill_id: db.fountainfall_flourish.get_id(),
@@ -100,10 +111,6 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
         },
         SkillPriorityInfo {
             skill_id: db.reverse_cascade_flourish.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.dance_of_the_dawn.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -129,7 +136,7 @@ pub(crate) fn make_dancer_ogcd_priority_table(db: &DancerDatabase) -> Vec<SkillP
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.devilment.get_id(),

@@ -4,7 +4,6 @@ use ffxiv_simbot_combat_components::consts::SIMULATION_START_TIME_MILLISECOND;
 use ffxiv_simbot_combat_components::damage_calculator::raw_damage_calculator::{
     FfxivRawDamageCalculator, RawDamageCalculator,
 };
-use ffxiv_simbot_combat_components::damage_calculator::rdps_calculator::FfxivRdpsCalculator;
 use ffxiv_simbot_combat_components::event::ffxiv_event::FfxivEvent;
 use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::event_ticker::auto_attack_ticker::AutoAttackTicker;
@@ -46,7 +45,6 @@ static GLOBAL_TICKER_ID: IdType = 15000;
 /// Keeps RDPS contribution for all buffs that are in the party.
 pub struct FfxivSimulationBoard {
     raw_damage_calculator: FfxivRawDamageCalculator,
-    rdps_calculator: FfxivRdpsCalculator,
 
     pub main_player_id: PlayerIdType,
 
@@ -104,7 +102,7 @@ impl FfxivSimulationBoard {
 
         match &ffxiv_event {
             FfxivEvent::PlayerTurn(player_id, _, _, time) => {
-                info!("time: {}, player turn event: player {}", *time, *player_id);
+                debug!("time: {}, player turn event: player {}", *time, *player_id);
                 let player = self.get_player_data(*player_id);
                 let debuffs = self.target.borrow().get_status_table();
 
@@ -467,7 +465,6 @@ impl FfxivSimulationBoard {
 
         FfxivSimulationBoard {
             raw_damage_calculator: Default::default(),
-            rdps_calculator: Default::default(),
             main_player_id,
             party: vec![],
             target,

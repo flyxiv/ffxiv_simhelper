@@ -216,9 +216,9 @@ impl FfxivPlayer {
                 .collect(),
             debuffs: debuffs
                 .borrow()
-                .keys()
-                .filter_map(|key| {
-                    if key.player_id == self.id {
+                .iter()
+                .filter_map(|(key, debuff_status)| {
+                    if key.player_id == self.id || debuff_status.is_raidwide {
                         Some(key.status_id)
                     } else {
                         None

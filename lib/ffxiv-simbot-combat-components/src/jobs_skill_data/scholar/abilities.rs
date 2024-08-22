@@ -108,7 +108,7 @@ impl ScholarDatabase {
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
-            casting_time_millisecond: 1000,
+            casting_time_millisecond: 1200,
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,

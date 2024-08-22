@@ -62,11 +62,9 @@ pub(crate) fn make_scholar_opener(db: &ScholarDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.biolysis.get_id()),
         Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((Some(db.chain_stratagem.get_id()), None)),
-        Opener::GcdOpener(db.broil_iv.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.broil_iv.get_id()),
-        Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
@@ -92,7 +90,7 @@ pub(crate) fn make_scholar_gcd_priority_table(db: &ScholarDatabase) -> Vec<Skill
             skill_id: db.biolysis.get_id(),
             prerequisite: Some(Or(
                 Box::new(SkillPrerequisite::BufforDebuffLessThan(
-                    db.biolysis.get_id(),
+                    db.biolysis_dot.get_id(),
                     1500,
                 )),
                 Box::new(Not(Box::new(HasBufforDebuff(db.biolysis_dot.get_id())))),

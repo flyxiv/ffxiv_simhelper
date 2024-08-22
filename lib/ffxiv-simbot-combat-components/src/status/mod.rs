@@ -1,11 +1,13 @@
-use crate::damage_calculator::multiplier_calculator::DIRECT_HIT_DAMAGE_MULTIPLIER;
+use crate::damage_calculator::{
+    DIRECT_HIT_DAMAGE_MULTIPLIER, INCREASE_BASE, MULTIPLIER_BASE, ONE_HUNDRED_PERCENT,
+};
 use crate::id_entity::IdEntity;
 use crate::status::status_info::StatusInfo;
 use crate::types::{IdType, MultiplierType, ResourceType, SkillStackType, TimeType};
 
 pub mod buff_status;
 pub mod debuff_status;
-pub(crate) mod snapshot_status;
+pub mod snapshot_status;
 pub mod status_holder;
 pub mod status_info;
 pub mod status_timer;
@@ -71,43 +73,46 @@ pub trait Status: Sized + IdEntity {
         direct_hit_rate_increase
     }
 
-    fn get_damage_increase(
+    fn get_damage_multiplier(
         &self,
         is_guaranteed_crit: bool,
         is_guaranteed_direct_hit: bool,
         crit_damage_rate: MultiplierType,
     ) -> MultiplierType {
-        let mut total_damage_increase = 0.0;
+        let mut total_damage_multiplier = MULTIPLIER_BASE;
         let status_infos = self.get_status_info();
 
         for status_info in status_infos {
             match status_info {
                 StatusInfo::DamagePercent(percent) => {
-                    total_damage_increase +=
-                        self.get_stack() as MultiplierType * (*percent as MultiplierType) / 100.0
+                    total_damage_multiplier *= (MULTIPLIER_BASE
+                        + self.get_stack() as MultiplierType * (*percent as MultiplierType)
+                            / ONE_HUNDRED_PERCENT)
                 }
                 StatusInfo::CritHitRatePercent(percent) => {
                     let damage_increase = if is_guaranteed_crit {
-                        (*percent as MultiplierType) / 100.0 * (crit_damage_rate - 1.0)
+                        (*percent as MultiplierType) / ONE_HUNDRED_PERCENT
+                            * (crit_damage_rate - MULTIPLIER_BASE)
                     } else {
-                        0.0
+                        INCREASE_BASE
                     };
 
-                    total_damage_increase += damage_increase;
+                    total_damage_multiplier *= (MULTIPLIER_BASE + damage_increase);
                 }
                 StatusInfo::DirectHitRatePercent(percent) => {
                     let damage_increase = if is_guaranteed_direct_hit {
-                        (*percent as MultiplierType) / 100.0 * (DIRECT_HIT_DAMAGE_MULTIPLIER - 1.0)
+                        (*percent as MultiplierType) / ONE_HUNDRED_PERCENT
+                            * (DIRECT_HIT_DAMAGE_MULTIPLIER - MULTIPLIER_BASE)
                     } else {
-                        0.0
+                        INCREASE_BASE
                     };
 
-                    total_damage_increase += damage_increase;
+                    total_damage_multiplier *= (MULTIPLIER_BASE + damage_increase);
                 }
                 _ => {}
             };
         }
 
-        total_damage_increase
+        total_damage_multiplier
     }
 }

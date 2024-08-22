@@ -44,7 +44,7 @@ impl PotionSkill {
             owner_id: player_id,
             name: String::from("Potion Buff"),
             duration_left_millisecond: 0,
-            status_info: vec![StatusInfo::IncreaseMainStat(262, 10)],
+            status_info: vec![StatusInfo::IncreaseMainStat(392, 10)],
             duration_millisecond: 30000,
             is_raidwide: false,
             stacks: 1,

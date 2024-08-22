@@ -1,5 +1,6 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::ApplyBuff;
+use crate::event_ticker::PercentType;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
@@ -11,6 +12,8 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::types::{IdType, PlayerIdType};
 use std::collections::HashMap;
+
+const PROC_PERCENT: PercentType = 55;
 
 pub(crate) struct DancerDatabase {
     pub(crate) cascade: AttackSkill,
@@ -387,6 +390,8 @@ impl DancerDatabase {
             use_type: UseType::NoTarget,
         };
 
+        let technical_step_delay = 5500;
+
         let TECHNICAL_STEP: AttackSkill = AttackSkill {
             id: 1503,
             name: "Technical Step".to_string(),
@@ -400,7 +405,7 @@ impl DancerDatabase {
                     TECHNICAL_STEP_PROC_BUFF.clone(),
                     20000,
                     20000,
-                    0,
+                    technical_step_delay,
                 ),
                 FfxivEvent::ApplyBuff(
                     player_id,
@@ -408,7 +413,7 @@ impl DancerDatabase {
                     FLOURISHING_FINISH.clone(),
                     30000,
                     30000,
-                    0,
+                    technical_step_delay,
                 ),
                 FfxivEvent::ApplyBuff(
                     player_id,
@@ -416,7 +421,7 @@ impl DancerDatabase {
                     DANCE_OF_THE_DAWN_READY.clone(),
                     30000,
                     30000,
-                    0,
+                    technical_step_delay,
                 ),
             ],
             proc_events: vec![],
@@ -424,7 +429,7 @@ impl DancerDatabase {
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 1500,
-            charging_time_millisecond: 5500,
+            charging_time_millisecond: technical_step_delay,
             is_speed_buffed: true,
             resource_required: vec![],
             resource_created: Default::default(),
@@ -644,7 +649,10 @@ impl DancerDatabase {
             potency: 280,
             trait_percent: 120,
             additional_skill_events: vec![],
-            proc_events: vec![(FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0), 50)],
+            proc_events: vec![(
+                FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0),
+                PROC_PERCENT,
+            )],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -668,7 +676,10 @@ impl DancerDatabase {
             potency: 340,
             trait_percent: 120,
             additional_skill_events: vec![],
-            proc_events: vec![(FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0), 50)],
+            proc_events: vec![(
+                FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0),
+                PROC_PERCENT,
+            )],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -742,7 +753,10 @@ impl DancerDatabase {
             potency: 280,
             trait_percent: 120,
             additional_skill_events: vec![],
-            proc_events: vec![(FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0), 50)],
+            proc_events: vec![(
+                FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0),
+                PROC_PERCENT,
+            )],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -767,7 +781,10 @@ impl DancerDatabase {
             potency: 340,
             trait_percent: 120,
             additional_skill_events: vec![],
-            proc_events: vec![(FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0), 50)],
+            proc_events: vec![(
+                FfxivEvent::IncreasePlayerResource(player_id, 1, 1, 0),
+                PROC_PERCENT,
+            )],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -789,7 +806,7 @@ impl DancerDatabase {
             id: 1515,
             name: "Tillana".to_string(),
             player_id,
-            potency: 360,
+            potency: 600,
             trait_percent: 120,
             additional_skill_events: vec![
                 FfxivEvent::ApplyBuff(
@@ -824,20 +841,12 @@ impl DancerDatabase {
                     60000,
                     0,
                 ),
-                ApplyBuff(
-                    player_id,
-                    player_id,
-                    DANCE_OF_THE_DAWN_READY.clone(),
-                    30000,
-                    30000,
-                    0,
-                ),
             ],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
-            gcd_cooldown_millisecond: 1500,
+            gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             resource_required: vec![ResourceRequirements::UseBuff(FLOURISHING_FINISH.id)],

@@ -113,7 +113,7 @@ impl SamuraiCombatResources {
         Self {
             skills: make_samurai_skill_list(player_id),
             current_combo: None,
-            genki_stack: 0,
+            genki_stack: 120,
             meditation_stack: 0,
             sen_1_stack: 0,
             sen_2_stack: 0,
