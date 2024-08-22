@@ -30,6 +30,8 @@ impl EventTicker for GlobalTicker {
 
     fn update_remaining_time(&mut self, _: TimeType) {}
 
+    fn force_tick(&self, _: TimeType) {}
+
     fn get_event_queue(&self) -> Rc<RefCell<FfxivEventQueue>> {
         self.event_queue.clone()
     }

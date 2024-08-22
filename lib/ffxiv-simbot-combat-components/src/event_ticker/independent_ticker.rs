@@ -52,6 +52,14 @@ impl EventTicker for IndependentTicker {
         );
     }
 
+    fn force_tick(&self, current_time_millisecond: TimeType) {
+        let events = self.generate_event(current_time_millisecond);
+
+        for event in events {
+            self.ffxiv_event_queue.borrow_mut().push(Reverse(event));
+        }
+    }
+
     fn get_event_queue(&self) -> Rc<RefCell<FfxivEventQueue>> {
         self.ffxiv_event_queue.clone()
     }

@@ -401,7 +401,7 @@ impl FfxivPlayer {
         time_millisecond: TimeType,
         is_auto_attack: bool,
     ) -> TimeType {
-        let speed_buff_multiplier = self.get_gcd_buff_multiplier(is_auto_attack);
+        let speed_buff_multiplier = self.get_gcd_buff_reducer(is_auto_attack);
 
         self.calculate_speed_buffed_cooldown_millisecond(
             time_millisecond,
@@ -410,25 +410,27 @@ impl FfxivPlayer {
         )
     }
 
-    fn get_gcd_buff_multiplier(&self, is_auto_attack: bool) -> MultiplierType {
+    /// GCD buffs are calculated as "reduction multiplier" rather than divider
+    /// ex) 10% speed buff, GCD isn't 2.50 / 1.10 = 2.27, but 2.50 * 0.90 = 2.25
+    fn get_gcd_buff_reducer(&self, is_auto_attack: bool) -> MultiplierType {
         let mut gcd_buffs_multiplier = 1.0;
         for buff in self.buff_list.borrow().values() {
             for status_info in &buff.status_info {
                 match status_info {
                     StatusInfo::SpeedPercent(buff_increase_percent) => {
                         gcd_buffs_multiplier = gcd_buffs_multiplier
-                            * (1.0 + (*buff_increase_percent as MultiplierType / 100.0));
+                            * (1.0 - (*buff_increase_percent as MultiplierType / 100.0));
                     }
                     StatusInfo::SpeedByStack(buff_increase_percents) => {
                         let stack = (buff.stacks - 1) as usize;
                         let buff_increase = buff_increase_percents[stack] as MultiplierType;
                         gcd_buffs_multiplier =
-                            gcd_buffs_multiplier * (1.0 + (buff_increase / 100.0));
+                            gcd_buffs_multiplier * (1.0 - (buff_increase / 100.0));
                     }
                     StatusInfo::SpeedOnlyAutoAttack(buff_increase_percent) => {
                         if is_auto_attack {
                             gcd_buffs_multiplier = gcd_buffs_multiplier
-                                * (1.0 + (*buff_increase_percent as MultiplierType / 100.0));
+                                * (1.0 - (*buff_increase_percent as MultiplierType / 100.0));
                         }
                     }
                     _ => {}

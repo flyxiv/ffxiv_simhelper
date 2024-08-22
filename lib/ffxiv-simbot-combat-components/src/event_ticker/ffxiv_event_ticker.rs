@@ -51,6 +51,20 @@ impl EventTicker for FfxivEventTicker {
         }
     }
 
+    fn force_tick(&self, current_time_millisecond: TimeType) {
+        match self {
+            FfxivEventTicker::AutoAttackTicker(ticker) => {
+                ticker.force_tick(current_time_millisecond);
+            }
+            FfxivEventTicker::GlobalTicker(ticker) => {
+                ticker.force_tick(current_time_millisecond);
+            }
+            FfxivEventTicker::IndependentTicker(ticker) => {
+                ticker.force_tick(current_time_millisecond);
+            }
+        }
+    }
+
     fn get_event_queue(&self) -> Rc<RefCell<FfxivEventQueue>> {
         match self {
             FfxivEventTicker::AutoAttackTicker(ticker) => ticker.get_event_queue(),

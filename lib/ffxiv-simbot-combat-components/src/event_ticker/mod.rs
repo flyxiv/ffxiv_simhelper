@@ -46,14 +46,7 @@ pub trait EventTicker: Sized + Clone {
     );
     fn update_remaining_time(&mut self, elapsed_time: TimeType);
 
-    fn force_tick(&self, current_time_millisecond: TimeType) {
-        self.get_event_queue()
-            .borrow_mut()
-            .push(Reverse(FfxivEvent::Tick(
-                self.get_id(),
-                current_time_millisecond,
-            )));
-    }
+    fn force_tick(&self, current_time_millisecond: TimeType);
 
     fn add_next_event_to_queue(&self, current_time_millisecond: TimeType) {
         self.get_event_queue()

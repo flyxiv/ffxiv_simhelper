@@ -60,6 +60,8 @@ impl EventTicker for AutoAttackTicker {
         }
     }
 
+    fn force_tick(&self, _: TimeType) {}
+
     fn update_remaining_time(&mut self, elapsed_time_millisecond: TimeType) {
         self.duration_millisecond -= elapsed_time_millisecond;
     }
@@ -101,6 +103,7 @@ impl AutoAttackTicker {
     ) -> Self {
         let potency = match job_abbrev.as_str() {
             "PLD" | "WAR" | "GNB" | "DRK" | "MNK" | "DRG" | "NIN" | "RPR" => 110,
+            "BRD" => 80,
             _ => 100,
         };
 
@@ -157,6 +160,7 @@ fn get_auto_attack_interval_tuning_value_of_job(job_abbrev: &String) -> Multipli
         "NIN" => 0.86,
         "DNC" => 0.75,
         "SAM" => 0.88,
+        "BRD" => 0.82,
         _ => 1.0,
     }
 }

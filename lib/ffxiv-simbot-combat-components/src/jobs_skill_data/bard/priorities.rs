@@ -2,7 +2,7 @@ use crate::event::FfxivEventQueue;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::bard::abilities::BardDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BufforDebuffLessThan, HasBufforDebuff, HasSkillStacks, Not,
+    And, BufforDebuffLessThan, HasBufforDebuff, HasSkillStacks, MillisecondsBeforeBurst, Not,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
@@ -61,15 +61,17 @@ pub(crate) fn make_bard_opener(db: &BardDatabase) -> Vec<Opener> {
     let bard_opener: Vec<Opener> = vec![
         Opener::GcdOpener(db.caustic_bite.get_id()),
         Opener::OgcdOpener((Some(db.wanderers_minuet.get_id()), Some(db.potion.get_id()))),
-        Opener::GcdOpener(db.storm_bite.get_id()),
-        Opener::OgcdOpener((
-            Some(db.battle_voice.get_id()),
-            Some(db.radiant_finale.get_id()),
-        )),
         Opener::GcdOpener(db.burst_shot.get_id()),
         Opener::OgcdOpener((
             Some(db.raging_strike.get_id()),
             Some(db.empyreal_arrow.get_id()),
+        )),
+        Opener::GcdOpener(db.storm_bite.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.burst_shot.get_id()),
+        Opener::OgcdOpener((
+            Some(db.battle_voice.get_id()),
+            Some(db.radiant_finale.get_id()),
         )),
         Opener::GcdOpener(db.radiant_encore1.get_id()),
         Opener::OgcdOpener((Some(db.barrage.get_id()), Some(db.heartbreak_shot.get_id()))),
@@ -138,6 +140,14 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.battle_voice.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.radiant_finale.get_id(),
+            prerequisite: Some(MillisecondsBeforeBurst(0)),
+        },
+        SkillPriorityInfo {
             skill_id: db.wanderers_minuet.get_id(),
             prerequisite: None,
         },
@@ -177,14 +187,6 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
                 Box::new(SkillPrerequisite::HasResource(1, 1)),
                 Box::new(SkillPrerequisite::BufforDebuffLessThan(1303, 3000)),
             )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.battle_voice.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.radiant_finale.get_id(),
-            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.pitch_perfect3.get_id(),
