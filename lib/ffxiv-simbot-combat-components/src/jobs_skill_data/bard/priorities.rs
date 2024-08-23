@@ -75,6 +75,7 @@ pub(crate) fn make_bard_opener(db: &BardDatabase) -> Vec<Opener> {
         )),
         Opener::GcdOpener(db.radiant_encore1.get_id()),
         Opener::OgcdOpener((Some(db.barrage.get_id()), Some(db.heartbreak_shot.get_id()))),
+        Opener::GcdOpener(db.iron_jaws.get_id()),
     ];
 
     bard_opener

@@ -105,15 +105,15 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
         SkillPriorityInfo {
             skill_id: db.shadow_of_death.get_id(),
             prerequisite: Some(And(
-                Box::new(Or(
-                    Box::new(BufforDebuffLessThan(db.shadow_of_death.get_id(), 37000)),
-                    Box::new(Not(Box::new(HasBufforDebuff(db.shadow_of_death.get_id())))),
+                Box::new(BufforDebuffLessThan(
+                    db.shadow_of_death_debuff.get_id(),
+                    37000,
                 )),
                 Box::new(And(
                     Box::new(HasBufforDebuff(db.enshroud_status.get_id())),
                     Box::new(RelatedSkillCooldownLessOrEqualThan(
                         db.arcane_circle.get_id(),
-                        6500,
+                        7500,
                     )),
                 )),
             )),
@@ -131,16 +131,20 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.slice_refresh_combo.get_id(),
+            skill_id: db.plentiful_harvest.get_id(),
             prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.infernal_slice_refresh_combo.get_id(),
+            prerequisite: Some(Combo(Some(3))),
         },
         SkillPriorityInfo {
             skill_id: db.waxing_slice_refresh_combo.get_id(),
             prerequisite: Some(Combo(Some(2))),
         },
         SkillPriorityInfo {
-            skill_id: db.infernal_slice_refresh_combo.get_id(),
-            prerequisite: Some(Combo(Some(3))),
+            skill_id: db.slice_refresh_combo.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.executioners_gibbet.get_id(),
@@ -148,10 +152,6 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
         },
         SkillPriorityInfo {
             skill_id: db.executioners_gallows.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.plentiful_harvest.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -164,14 +164,12 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
         },
         SkillPriorityInfo {
             skill_id: db.shadow_of_death.get_id(),
-            prerequisite: Some(Or(
+            prerequisite: Some(And(
                 Box::new(BufforDebuffLessThan(
                     db.shadow_of_death_debuff.get_id(),
                     2600,
                 )),
-                Box::new(Not(Box::new(HasBufforDebuff(
-                    db.shadow_of_death_debuff.get_id(),
-                )))),
+                Box::new(Not(Box::new(MillisecondsBeforeBurst(20000)))),
             )),
         },
         SkillPriorityInfo {
@@ -205,7 +203,7 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
         },
         SkillPriorityInfo {
             skill_id: db.arcane_circle.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(500)),
         },
         SkillPriorityInfo {
             skill_id: db.enshroud_host.get_id(),
@@ -218,10 +216,7 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
                     db.gluttony.get_id(),
                     11000,
                 )),
-                Box::new(RelatedSkillCooldownLessOrEqualThan(
-                    db.arcane_circle.get_id(),
-                    6500,
-                )),
+                Box::new(MillisecondsBeforeBurst(7000)),
             )),
         },
         SkillPriorityInfo {
@@ -247,11 +242,14 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
                         db.soul_slice.get_id(),
                         30000,
                     )),
-                    Box::new(HasResource(0, 80)),
+                    Box::new(HasResource(0, 100)),
                 )),
                 Box::new(And(
                     Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
-                    Box::new(Not(Box::new(MillisecondsBeforeBurst(0)))),
+                    Box::new(And(
+                        Box::new(Not(Box::new(MillisecondsBeforeBurst(0)))),
+                        Box::new(Not(Box::new(HasResource(6, 2)))),
+                    )),
                 )),
             )),
         },

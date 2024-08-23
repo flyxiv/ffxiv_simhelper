@@ -9,6 +9,7 @@ use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::event_ticker::auto_attack_ticker::AutoAttackTicker;
 use ffxiv_simbot_combat_components::event_ticker::ffxiv_event_ticker::FfxivEventTicker;
 use ffxiv_simbot_combat_components::event_ticker::global_ticker::GlobalTicker;
+use ffxiv_simbot_combat_components::event_ticker::independent_ticker::IndependentTicker;
 use ffxiv_simbot_combat_components::event_ticker::{EventTicker, PercentType, TickerKey};
 use ffxiv_simbot_combat_components::id_entity::IdEntity;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -499,26 +500,40 @@ impl FfxivSimulationBoard {
         self.party.push(player.clone());
 
         if player.borrow().is_melee() {
-            self.register_auto_attack_ticker(
-                player.borrow().get_id(),
-                &player.borrow().job_abbrev,
-                self.event_queue.clone(),
-            );
+            self.register_auto_attack_ticker(player.borrow().get_id(), &player.borrow().job_abbrev);
+        }
+
+        if player.borrow().job_abbrev == "DRK" {
+            self.register_mana_ticker(player.borrow().get_id());
         }
     }
 
-    fn register_auto_attack_ticker(
-        &self,
-        player_id: PlayerIdType,
-        job_abbrev: &String,
-        event_queue: Rc<RefCell<FfxivEventQueue>>,
-    ) {
-        let mut auto_attack_ticker =
-            AutoAttackTicker::new(AUTO_ATTACK_ID, player_id, job_abbrev, event_queue);
+    fn register_auto_attack_ticker(&self, player_id: PlayerIdType, job_abbrev: &String) {
+        let mut auto_attack_ticker = AutoAttackTicker::new(
+            AUTO_ATTACK_ID,
+            player_id,
+            job_abbrev,
+            self.event_queue.clone(),
+        );
         let player = self.get_player_data(player_id);
 
         auto_attack_ticker.run_ticker(0, Some(player.clone()), Default::default());
         self.register_ticker(FfxivEventTicker::AutoAttackTicker(auto_attack_ticker));
+    }
+
+    fn register_mana_ticker(&self, player_id: PlayerIdType) {
+        let mana_ticker = IndependentTicker::new(
+            200,
+            0,
+            TimeType::MAX,
+            vec![FfxivEvent::IncreasePlayerResource(player_id, 0, 200, 0)],
+            self.event_queue.clone(),
+            player_id,
+            100,
+            true,
+        );
+
+        self.register_ticker(FfxivEventTicker::IndependentTicker(mana_ticker));
     }
 
     pub fn register_ticker(&self, ticker: FfxivEventTicker) {

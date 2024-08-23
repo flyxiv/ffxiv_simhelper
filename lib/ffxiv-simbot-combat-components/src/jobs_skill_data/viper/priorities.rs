@@ -7,7 +7,7 @@ use crate::jobs_skill_data::viper::abilities::ViperDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, BuffGreaterDurationThan, Combo, HasResource, HasResourceExactly, MillisecondsBeforeBurst,
-    Or,
+    Not, Or,
 };
 use crate::types::{IdType, PlayerIdType};
 
@@ -61,9 +61,9 @@ impl ViperPriorityTable {
 pub(crate) fn make_viper_opener(db: &ViperDatabase) -> Vec<Opener> {
     vec![
         GcdOpener(db.dread_fangs.get_id()),
-        OgcdOpener((Some(db.serpents_ire.get_id()), None)),
-        GcdOpener(db.swiftskins_sting.get_id()),
         OgcdOpener((None, None)),
+        GcdOpener(db.swiftskins_sting.get_id()),
+        OgcdOpener((Some(db.serpents_ire.get_id()), None)),
         GcdOpener(db.dreadwinder.get_id()),
         OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.hunters_coil.get_id()),
@@ -130,13 +130,19 @@ pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPrio
         SkillPriorityInfo {
             skill_id: db.reawaken.get_id(),
             prerequisite: Some(Or(
-                Box::new(HasResource(0, 80)),
-                Box::new(MillisecondsBeforeBurst(0)),
+                Box::new(HasResource(0, 100)),
+                Box::new(Or(
+                    Box::new(And(
+                        Box::new(MillisecondsBeforeBurst(70000)),
+                        Box::new(Not(Box::new(MillisecondsBeforeBurst(40000)))),
+                    )),
+                    Box::new(MillisecondsBeforeBurst(0)),
+                )),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.uncoiled_fury.get_id(),
-            prerequisite: None,
+            prerequisite: Some(Not(Box::new(MillisecondsBeforeBurst(3000)))),
         },
         SkillPriorityInfo {
             skill_id: db.dreadwinder.get_id(),

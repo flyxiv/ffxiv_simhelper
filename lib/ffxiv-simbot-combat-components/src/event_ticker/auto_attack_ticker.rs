@@ -102,8 +102,11 @@ impl AutoAttackTicker {
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
         let potency = match job_abbrev.as_str() {
-            "PLD" | "WAR" | "GNB" | "DRK" | "MNK" | "DRG" | "NIN" | "RPR" => 110,
-            "BRD" => 80,
+            "PLD" | "WAR" | "GNB" | "MNK" | "DRG" | "NIN" => 110,
+            "DRK" => 90,
+            "BRD" | "MCH" => 80,
+            "VPR" => 80,
+            "RPR" => 90,
             _ => 100,
         };
 
@@ -161,6 +164,8 @@ fn get_auto_attack_interval_tuning_value_of_job(job_abbrev: &String) -> Multipli
         "DNC" => 0.75,
         "SAM" => 0.88,
         "BRD" => 0.82,
+        "RPR" => 0.76,
+        "DRK" => 0.90,
         _ => 1.0,
     }
 }

@@ -42,6 +42,7 @@ pub struct AttackSkill {
     pub gcd_cooldown_millisecond: TimeType,
     pub charging_time_millisecond: TimeType,
     pub is_speed_buffed: bool,
+    pub cooldown_reduced_by_speed: bool,
 
     pub resource_required: Vec<ResourceRequirements>,
     pub resource_created: ResourceTable,
@@ -70,7 +71,7 @@ impl Skill for AttackSkill {
 
         self.stacks -= 1;
 
-        let cooldown = if self.is_speed_buffed {
+        let cooldown = if self.cooldown_reduced_by_speed {
             player.get_speed_buffed_time(self.cooldown_millisecond, false)
         } else {
             self.cooldown_millisecond
@@ -388,6 +389,7 @@ impl AttackSkill {
             gcd_cooldown_millisecond: GCD_DEFAULT_DELAY_MILLISECOND,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
+            cooldown_reduced_by_speed: true,
             resource_required: vec![],
             resource_created: Default::default(),
             is_guaranteed_crit: false,

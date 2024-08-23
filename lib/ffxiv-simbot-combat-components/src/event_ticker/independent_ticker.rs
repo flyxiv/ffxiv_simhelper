@@ -22,7 +22,7 @@ pub struct IndependentTicker {
     tick_event: Vec<FfxivEvent>,
     ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     proc_percent: PercentType,
-    initial_tick: bool,
+    pub(crate) initial_tick: bool,
 }
 
 impl EventTicker for IndependentTicker {

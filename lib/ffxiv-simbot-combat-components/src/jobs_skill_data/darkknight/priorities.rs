@@ -136,7 +136,7 @@ pub(crate) fn make_darkknight_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.edge_of_shadow.get_id(),
-            prerequisite: Some(HasResource(0, 9400)),
+            prerequisite: Some(HasResource(0, 8000)),
         },
         SkillPriorityInfo {
             skill_id: db.delirium.get_id(),
@@ -144,6 +144,10 @@ pub(crate) fn make_darkknight_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.shadowbringer.get_id(),
+            prerequisite: Some(MillisecondsBeforeBurst(0)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.carve_and_spit.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {

@@ -53,16 +53,15 @@ pub trait RawDamageCalculator {
 
         for debuff in debuffs.values() {
             if debuff.get_owner_id() == player_id {
-                continue;
-            }
-            let damage_multiplier = debuff.get_damage_multiplier(
-                is_guaranteed_critical_hit,
-                is_guaranteed_direct_hit,
-                player_power.critical_strike_damage,
-            );
+                let damage_multiplier = debuff.get_damage_multiplier(
+                    is_guaranteed_critical_hit,
+                    is_guaranteed_direct_hit,
+                    player_power.critical_strike_damage,
+                );
 
-            if damage_multiplier > MULTIPLIER_BASE {
-                base_damage *= damage_multiplier;
+                if damage_multiplier > MULTIPLIER_BASE {
+                    base_damage *= damage_multiplier;
+                }
             }
         }
 
@@ -292,8 +291,8 @@ fn calculate_crit_direct_hit_damage_direct_damage(
     };
     let crit_dh_multiplier = crit_multiplier * dh_multiplier;
 
-    if crit_dh_multiplier == 1.0 {
-        let damage_before_crit_direct_hit = match damage_category {
+    if crit_dh_multiplier == MULTIPLIER_BASE {
+        let final_damage = match damage_category {
             DamageCategory::Direct | DamageCategory::AutoAttack => {
                 damage_before_crit_direct_hit * damage_variance
             }
@@ -302,11 +301,7 @@ fn calculate_crit_direct_hit_damage_direct_damage(
             }
         };
 
-        return (
-            damage_before_crit_direct_hit * damage_variance,
-            contribution_board,
-            false,
-        );
+        return (final_damage, contribution_board, false);
     }
 
     let damage_after_crit_direct_hit =

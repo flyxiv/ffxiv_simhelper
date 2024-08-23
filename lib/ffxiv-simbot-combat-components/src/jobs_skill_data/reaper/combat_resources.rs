@@ -18,7 +18,7 @@ const SOUL_GAUGE_MAX: ResourceType = 100;
 const ENSHROUD_GAUGE_MAX: ResourceType = 100;
 const SOUL_REAVER_MAX: ResourceType = 1;
 const ENSHROUD_STACK_MAX: ResourceType = 5;
-const LEMURES_STACK_MAX: ResourceType = 2;
+const LEMURES_STACK_MAX: ResourceType = 4;
 const EXECUTIONER_STACK_MAX: ResourceType = 2;
 #[derive(Clone)]
 pub(crate) struct ReaperCombatResources {

@@ -1,5 +1,6 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
+use crate::event_ticker::independent_ticker::IndependentTicker;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::astrologian::priorities::AstrologianPriorityTable;
 use crate::jobs_skill_data::bard::priorities::BardPriorityTable;

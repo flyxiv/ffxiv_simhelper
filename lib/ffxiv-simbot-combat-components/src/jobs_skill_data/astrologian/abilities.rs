@@ -181,6 +181,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
+            cooldown_reduced_by_speed: true,
         };
         let COMBUST_III: AttackSkill = AttackSkill {
             id: 501,
@@ -211,6 +212,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
+            cooldown_reduced_by_speed: true,
         };
         let EARTHLY_STAR: AttackSkill = AttackSkill {
             id: 502,
@@ -235,6 +237,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
+            cooldown_reduced_by_speed: false,
         };
         let ASTRAL_DRAW: AttackSkill = AttackSkill {
             id: 503,
@@ -276,6 +279,7 @@ impl AstrologianDatabase {
             stack_skill_id: Some(512),
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
+            cooldown_reduced_by_speed: false,
         };
         let UMBRAL_DRAW: AttackSkill = AttackSkill {
             id: 504,
@@ -307,6 +311,7 @@ impl AstrologianDatabase {
             stack_skill_id: Some(512),
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
+            cooldown_reduced_by_speed: false,
         };
         let THE_BALANCE: AttackSkill = AttackSkill {
             id: 505,
@@ -338,6 +343,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnPartyMember,
+            cooldown_reduced_by_speed: false,
         };
         let THE_SPEAR: AttackSkill = AttackSkill {
             id: 506,
@@ -369,6 +375,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnPartyMember,
+            cooldown_reduced_by_speed: false,
         };
         let DIVINATION: AttackSkill = AttackSkill {
             id: 507,
@@ -396,6 +403,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
+            cooldown_reduced_by_speed: false,
         };
         let LIGHTSPEED: AttackSkill = AttackSkill {
             id: 508,
@@ -427,6 +435,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
+            cooldown_reduced_by_speed: true,
         };
         let LORD_OF_CROWNS: AttackSkill = AttackSkill {
             id: 510,
@@ -451,6 +460,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
+            cooldown_reduced_by_speed: false,
         };
         let FALL_MALEFIC_LIGHTSPEED: AttackSkill = AttackSkill {
             id: 511,
@@ -475,6 +485,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
+            cooldown_reduced_by_speed: false,
         };
         let DRAW: AttackSkill = AttackSkill {
             id: 512,
@@ -499,6 +510,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
+            cooldown_reduced_by_speed: false,
         };
 
         let ORACLE: AttackSkill = AttackSkill {
@@ -524,6 +536,7 @@ impl AstrologianDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
+            cooldown_reduced_by_speed: false,
         };
 
         let potion_skill = PotionSkill::new(player_id);

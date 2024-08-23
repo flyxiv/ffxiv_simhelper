@@ -495,7 +495,7 @@ impl FfxivPlayer {
     pub fn is_melee(&self) -> bool {
         match self.job_abbrev.as_str() {
             "NIN" | "MNK" | "DRG" | "SAM" | "GNB" | "DRK" | "PLD" | "WAR" | "BRD" | "MCH"
-            | "DNC" => true,
+            | "RPR" | "VPR" | "DNC" => true,
             _ => false,
         }
     }
