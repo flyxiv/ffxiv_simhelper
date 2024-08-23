@@ -1,11 +1,8 @@
-import {
-  calculatePowerByStat,
-  isCaster,
-} from "../types/ffxivdatabase/ItemSet";
+import { calculatePowerByStat, isCaster } from "../types/ffxivdatabase/ItemSet";
 import { defaultPlayerPower } from "../types/ffxivdatabase/PlayerPower";
 
 export const DEFAULT_WEAPON_DAMAGE = 100;
-export const DEFAULT_MAIN_STAT_NON_TANK = 437;
+export const DEFAULT_MAIN_STAT_NON_TANK = 440;
 export const DEFAULT_MAIN_STAT_TANK = 440;
 export const DEFAULT_CRITICAL_STRIKE = 420;
 export const DEFAULT_DIRECT_HIT = 420;
@@ -114,7 +111,7 @@ export const GNB_BIS_STATS = {
 
 export const WHM_BIS_STATS = {
   weaponDamage: 146,
-  mainStat: 5052,
+  mainStat: 4886,
   criticalStrike: 3147,
   directHit: 1320,
   determination: 2803,
@@ -124,7 +121,7 @@ export const WHM_BIS_STATS = {
 
 export const SCH_BIS_STATS = {
   weaponDamage: 146,
-  mainStat: 5130,
+  mainStat: 4886,
   criticalStrike: 3090,
   directHit: 636,
   determination: 2329,
@@ -134,7 +131,7 @@ export const SCH_BIS_STATS = {
 
 export const AST_BIS_STATS = {
   weaponDamage: 146,
-  mainStat: 5091,
+  mainStat: 4886,
   criticalStrike: 2922,
   directHit: 1158,
   determination: 3043,
@@ -144,7 +141,7 @@ export const AST_BIS_STATS = {
 
 export const SGE_BIS_STATS = {
   weaponDamage: 146,
-  mainStat: 5091,
+  mainStat: 4886,
   criticalStrike: 2922,
   directHit: 1158,
   determination: 3043,
@@ -222,13 +219,13 @@ export const BRD_BIS_STATS = {
 };
 
 export const DNC_BIS_STATS = {
-  weaponDamage: 132,
-  mainStat: 3379,
-  criticalStrike: 2557,
-  directHit: 1288,
-  determination: 1952,
-  speed: 436,
-  tenacity: 400,
+  weaponDamage: 146,
+  mainStat: 4886,
+  criticalStrike: 3177,
+  directHit: 2134,
+  determination: 2091,
+  speed: 420,
+  tenacity: DEFAULT_TENACITY,
 };
 
 export const MCH_BIS_STATS = {

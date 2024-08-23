@@ -1,11 +1,8 @@
 import { QuickSimResponse } from "../../types/QuickSimResponse";
-import {
-  DamageChartData,
-  DamageChartTitle,
-  SkillDamageProfile,
-} from "./DamageProfileBarChart";
+import { DamageChartTitle, SkillDamageProfile } from "./DamageProfileBarChart";
 import { SkillIdToIconPathFactory } from "../icon/abilityicon/SkillIconFactory";
 import { iconPathToName } from "../Util";
+import { DamageChartData } from "./GraphData";
 
 export const DamageProfileGraph = (response: QuickSimResponse) => {
   const mainPlayerId = response.mainPlayerId;
@@ -15,8 +12,7 @@ export const DamageProfileGraph = (response: QuickSimResponse) => {
   let mainPlayerSimulationData = null;
   let totalDps = 0;
 
-  let i = 0;
-  for (i = 0; i < simulationDatas.length; i++) {
+  for (let i = 0; i < simulationDatas.length; i++) {
     if (simulationDatas[i].playerId === mainPlayerId) {
       mainPlayerSimulationData = simulationDatas[i];
       break;
@@ -34,7 +30,7 @@ export const DamageProfileGraph = (response: QuickSimResponse) => {
     );
   }
 
-  for (i = 0; i < mainPlayerSimulationData.damageProfileTable.length; i++) {
+  for (let i = 0; i < mainPlayerSimulationData.damageProfileTable.length; i++) {
     let profile = mainPlayerSimulationData.damageProfileTable[i];
     if (profile.entity === "Status") {
       continue;

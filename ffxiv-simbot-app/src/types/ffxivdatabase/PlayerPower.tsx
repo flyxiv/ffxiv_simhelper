@@ -40,6 +40,10 @@ export interface PlayerPower {
   speedMultiplier: number;
   tenacityMultiplier: number;
   autoAttackDelays: number;
+
+  // https://www.akhmorning.com/allagan-studies/stats/dh/#formulae
+  // 6.2 introduced increased damage for guaranteed direct hits
+  autoDirectHitIncrease: number;
   gcd: number;
 }
 
@@ -71,6 +75,7 @@ export function defaultPlayerPower(): PlayerPower {
     determinationMultiplier: 0,
     speedMultiplier: 0,
     tenacityMultiplier: 0,
+    autoDirectHitIncrease: 0,
     autoAttackDelays: 0,
     gcd: DEFAULT_GCD,
   };
@@ -196,7 +201,7 @@ export function getStatLostByStatName(
     case "MND":
       return (
         getMinNeededStatForCurrentMainStat(
-          (totalStats.mainStatMultiplier * 100),
+          totalStats.mainStatMultiplier * 100,
           isTank(jobAbbrev)
         ) - totalStats.mainStat
       );
@@ -259,7 +264,7 @@ export function getStatNeededByStatName(
     case "MND":
       return (
         getMinNeededStatForCurrentMainStat(
-          (totalStats.mainStatMultiplier * 100) + 1,
+          totalStats.mainStatMultiplier * 100 + 1,
           isTank(jobAbbrev)
         ) - totalStats.mainStat
       );

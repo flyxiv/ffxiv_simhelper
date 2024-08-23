@@ -17,7 +17,7 @@ import {
 import { QuickSimInputSaveState } from "../../types/QuickSimInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 
-const totalRequestCount = 1;
+const totalRequestCount = 100;
 
 export function QuickSimRequestButton(
   partyMemberJobAbbrevs: string[],
@@ -62,7 +62,6 @@ export function QuickSimRequestButton(
     }
 
     let body = JSON.stringify(request);
-    console.log(body);
 
     let responsePromises = [];
     let responses: Array<Response> = [];
@@ -101,26 +100,43 @@ export function QuickSimRequestButton(
       (response) => response.simulationData[mainPlayerId].simulationSummary
     );
 
+    let maxDps = 0;
     let totalDps = 0;
     let maxRdps = 0;
     let totalRdps = 0;
     let totalEdps = 0;
+    let maxIndex = 0;
 
-    damageSummaries.forEach((summary) => {
+    damageSummaries.forEach((summary, index) => {
       totalDps += summary.pdps;
       totalRdps += summary.rdps;
       totalEdps += summary.edps;
-      maxRdps = Math.max(maxRdps, summary.rdps);
+
+      if (maxRdps < summary.rdps) {
+        maxRdps = summary.rdps;
+        maxIndex = index;
+      }
+      if (maxDps < summary.pdps) {
+        maxDps = summary.pdps;
+      }
     });
 
     let averageDps = totalDps / totalRequestCount;
     let averageRdps = totalRdps / totalRequestCount;
     let averageEdps = totalEdps / totalRequestCount;
 
+    response = finalResponses[maxIndex];
     response.simulationData[mainPlayerId].simulationSummary.pdps = averageDps;
     response.simulationData[mainPlayerId].simulationSummary.rdps = averageRdps;
     response.simulationData[mainPlayerId].simulationSummary.edps = averageEdps;
     response.simulationData[mainPlayerId].simulationSummary.maxRdps = maxRdps;
+    response.simulationData[mainPlayerId].partyContributionTable.forEach(
+      (contribution) => {
+        console.log(
+          `status: ${contribution.statusId}, skill: ${contribution.skillId}, ${contribution.contributedRdps}`
+        );
+      }
+    );
 
     const responseString = JSON.stringify(response);
     localStorage.setItem(QuickSimResponseSaveName, responseString);

@@ -471,11 +471,11 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1222:
       return actionIconDirectory + "/RPR/enshroud.png";
     case 1223:
-      return actionIconDirectory + "/RPR/slice.png";
+      return actionIconDirectory + "/RPR/slicefill.png";
     case 1224:
-      return actionIconDirectory + "/RPR/waxing_slice.png";
+      return actionIconDirectory + "/RPR/waxing_slicefill.png";
     case 1225:
-      return actionIconDirectory + "/RPR/infernal_slice.png";
+      return actionIconDirectory + "/RPR/infernal_slicefill.png";
 
     // VPR
     case 2100:
@@ -535,7 +535,7 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1302:
       return actionIconDirectory + "/BRD/raging_strikes.png";
     case 1303:
-      return actionIconDirectory + "/BRD/bloodletter.png";
+      return actionIconDirectory + "/BRD/heartbreak_shot.png";
     case 1304:
       return actionIconDirectory + "/BRD/caustic_bite.png";
     case 1305:
@@ -779,7 +779,7 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
 
     // RDM
     case 1800:
-      return actionIconDirectory + "/RDM/jolt_II.png";
+      return actionIconDirectory + "/RDM/jolt_III.png";
     case 1801:
       return actionIconDirectory + "/RDM/veraero_III.png";
     case 1802:

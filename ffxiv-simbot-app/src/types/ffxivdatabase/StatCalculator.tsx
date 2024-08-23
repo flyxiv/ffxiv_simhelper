@@ -10,9 +10,10 @@ import {
 
 const DEFAULT_DIVIDEND = 2780.0;
 export const DEFAULT_GCD = 250;
+export const AUTO_DH_SLOPE = 140;
 
-const MAIN_STAT_SLOPE_NON_TANK = 0.5;
-const MAIN_STAT_SLOPE_TANK = 0.4;
+const MAIN_STAT_SLOPE_NON_TANK = 237 / 440;
+const MAIN_STAT_SLOPE_TANK = 190 / 440;
 const CRIT_SLOPE = 200;
 const DH_SLOPE = 550;
 const DET_SLOPE = 140;
@@ -68,8 +69,8 @@ export function calculateMainStatPercentIncrease(
   isTank: boolean
 ) {
   if (isTank) {
-    return (
-      Math.floor(MAIN_STAT_SLOPE_TANK * (mainStat - DEFAULT_MAIN_STAT_TANK)) 
+    return Math.floor(
+      MAIN_STAT_SLOPE_TANK * (mainStat - DEFAULT_MAIN_STAT_TANK)
     );
   }
   return Math.floor(
@@ -200,5 +201,13 @@ export function getMinNeededStatForCurrentGCD(currentGCD: number) {
     Math.floor((defaultGcdMinutes / (currentGCD + 0.01) - 1) * 1000) / 10 + 0.1;
   return getMinNeededStatForCurrentSpeed(
     minimumNeededSpeedMultiplierPercentForGcd
+  );
+}
+
+export function calculateAutoDirectHitIncrease(directHit: number) {
+  return (
+    Math.floor(
+      ((directHit - DEFAULT_DIRECT_HIT) * AUTO_DH_SLOPE) / DEFAULT_DIVIDEND
+    ) / 1000
   );
 }

@@ -1,4 +1,4 @@
-import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory"
+import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory";
 
 // Only support raid/personal buff/debuff icons for now
 export const StatusIdToIconPathFactory = (statusId: number) => {
@@ -113,6 +113,8 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return actionIconDirectory + "/RDM/manafication.png";
     case 1802:
       return actionIconDirectory + "/RDM/acceleration.png";
+    case 1803:
+      return actionIconDirectory + "/RDM/Traits/dualcast.png";
 
     // PCT
     case 2000:

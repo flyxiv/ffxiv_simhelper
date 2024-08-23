@@ -15,6 +15,7 @@ import {
   PlayerPower,
 } from "./PlayerPower";
 import {
+  calculateAutoDirectHitIncrease,
   calculateCriticalStrikePercentIncrease,
   calculateDeterminationPercentIncrease,
   calculateDirectHitPercentIncrease,
@@ -91,7 +92,6 @@ export function calculatePlayerPowerFromInputs(
   let power: PlayerPower = defaultPlayerPower();
 
   power.mainStat += getBaseMainStat(jobAbbrev, race);
-  console.log(power.mainStat);
 
   itemSet.forEach((equipmentId) => {
     let equipment = EQUIPMENT_DATABASE_BY_ID.get(equipmentId);
@@ -171,6 +171,9 @@ export function calculatePowerByStat(power: PlayerPower, jobAbbrev: string) {
 
   power.tenacityMultiplier =
     1 + calculateTenacityPercentIncrease(power.tenacity) / 100;
+
+  power.autoDirectHitIncrease = calculateAutoDirectHitIncrease(power.directHit);
+  console.log(power.autoDirectHitIncrease);
 }
 
 export function isCaster(jobAbbrev: string) {
