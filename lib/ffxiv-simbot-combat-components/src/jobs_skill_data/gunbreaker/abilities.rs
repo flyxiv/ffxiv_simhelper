@@ -10,7 +10,7 @@ use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct GunbreakerDatabase {
@@ -81,7 +81,6 @@ impl GunbreakerDatabase {
         let SONIC_BREAK_DOT: DebuffStatus = DebuffStatus {
             id: 302,
             name: String::from("Sonic Break"),
-            snapshotted_buffs: Default::default(),
             owner_id: player_id,
             potency: Some(60),
             trait_percent: Some(100),
@@ -93,12 +92,12 @@ impl GunbreakerDatabase {
             is_raidwide: false,
             stacks: 1,
             max_stacks: 1,
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
         };
         let BOW_SHOCK_DOT: DebuffStatus = DebuffStatus {
             id: 303,
             name: String::from("Bow Shock"),
-            snapshotted_buffs: Default::default(),
+            snapshotted_infos: Default::default(),
             owner_id: player_id,
             potency: Some(60),
             trait_percent: Some(100),
@@ -110,7 +109,6 @@ impl GunbreakerDatabase {
             is_raidwide: false,
             stacks: 1,
             max_stacks: 1,
-            snapshotted_debuffs: Default::default(),
         };
         let READY_TO_RIP: BuffStatus = BuffStatus {
             id: 304,
@@ -408,7 +406,7 @@ impl GunbreakerDatabase {
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
-            gcd_cooldown_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,

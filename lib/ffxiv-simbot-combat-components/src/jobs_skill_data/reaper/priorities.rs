@@ -195,7 +195,7 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(7000)),
         },
         SkillPriorityInfo {
             skill_id: db.sacrificium.get_id(),

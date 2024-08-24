@@ -7,7 +7,8 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::gunbreaker::abilities::GunbreakerDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasBufforDebuff, HasResource, Not, Or, RelatedSkillCooldownLessOrEqualThan,
+    And, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not, Or,
+    RelatedSkillCooldownLessOrEqualThan,
 };
 
 #[derive(Clone)]
@@ -68,7 +69,7 @@ pub(crate) fn make_gunbreaker_opener(db: &GunbreakerDatabase) -> Vec<Opener> {
         GcdOpener(db.sonic_break.get_id()),
         OgcdOpener((Some(db.blasting_zone.get_id()), Some(db.bow_shock.get_id()))),
         GcdOpener(db.double_down.get_id()),
-        OgcdOpener((Some(db.bow_shock.get_id()), Some(db.rough_divide.get_id()))),
+        OgcdOpener((None, None)),
         GcdOpener(db.savage_claw.get_id()),
         OgcdOpener((Some(db.abdomen_tear.get_id()), None)),
         GcdOpener(db.wicked_talon.get_id()),
@@ -87,13 +88,13 @@ pub(crate) fn make_gunbreaker_gcd_priority_table(
                 Box::new(HasBufforDebuff(db.no_mercy.get_id())),
                 Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
                     db.no_mercy.get_id(),
-                    29500,
+                    22500,
                 )))),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.double_down.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.no_mercy.get_id())),
+            prerequisite: Some(HasBufforDebuff(db.no_mercy_buff.get_id())),
         },
         SkillPriorityInfo {
             skill_id: db.burst_strike.get_id(),
@@ -107,7 +108,7 @@ pub(crate) fn make_gunbreaker_gcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.sonic_break.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.no_mercy.get_id())),
+            prerequisite: Some(HasBufforDebuff(db.no_mercy_buff.get_id())),
         },
         SkillPriorityInfo {
             skill_id: db.savage_claw.get_id(),
@@ -154,7 +155,7 @@ pub(crate) fn make_gunbreaker_ogcd_priority_table(
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.no_mercy.get_id(),
@@ -182,6 +183,10 @@ pub(crate) fn make_gunbreaker_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.blasting_zone.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.bow_shock.get_id(),
             prerequisite: None,
         },
     ]

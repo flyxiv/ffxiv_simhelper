@@ -15,7 +15,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -189,8 +189,7 @@ impl SummonerDatabase {
             status_info: vec![],
             duration_millisecond: 15000,
             is_raidwide: false,
-            snapshotted_debuffs: Default::default(),
-            snapshotted_buffs: Default::default(),
+            snapshotted_infos: Default::default(),
         };
         let SOLAR_BAHAMUT_STATE: BuffStatus = BuffStatus {
             id: 1609,
@@ -273,7 +272,7 @@ impl SummonerDatabase {
             id: 1630,
             name: String::from("Luxwave"),
             player_id,
-            potency: 200,
+            potency: 160,
             trait_percent: 130,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -350,7 +349,7 @@ impl SummonerDatabase {
             id: 1600,
             name: String::from("Ruin III"),
             player_id,
-            potency: 310,
+            potency: 360,
             trait_percent: 130,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -375,7 +374,7 @@ impl SummonerDatabase {
             id: 1601,
             name: String::from("Ruin IV"),
             player_id,
-            potency: 430,
+            potency: 490,
             trait_percent: 130,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -402,13 +401,10 @@ impl SummonerDatabase {
             player_id,
             potency: 0,
             trait_percent: 130,
-            additional_skill_events: vec![ApplyRaidBuff(
-                player_id,
-                SEARING_LIGHT_BUFF.clone(),
-                30000,
-                30000,
-                0,
-            )],
+            additional_skill_events: vec![
+                ApplyRaidBuff(player_id, SEARING_LIGHT_BUFF.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, RUBYS_GLIMMER.clone(), 30000, 30000, 0),
+            ],
             proc_events: vec![],
             combo: None,
             delay_millisecond: None,
@@ -566,7 +562,7 @@ impl SummonerDatabase {
             id: 1608,
             name: String::from("Astral Impulse"),
             player_id,
-            potency: 440,
+            potency: 500,
             trait_percent: 130,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -592,7 +588,7 @@ impl SummonerDatabase {
             name: String::from("Summon Ifrit II"),
             player_id,
             potency: 800,
-            trait_percent: 130,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuffStack(
                 player_id,
                 player_id,
@@ -699,7 +695,7 @@ impl SummonerDatabase {
             name: String::from("Summon Titan II"),
             player_id,
             potency: 800,
-            trait_percent: 130,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuffStack(
                 player_id,
                 player_id,
@@ -790,7 +786,7 @@ impl SummonerDatabase {
             name: String::from("Summon Garuda II"),
             player_id,
             potency: 800,
-            trait_percent: 130,
+            trait_percent: 100,
             additional_skill_events: vec![ApplyBuffStack(
                 player_id,
                 player_id,

@@ -2,8 +2,8 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::monk::abilities::MonkDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, Not, Or,
-    RelatedSkillCooldownLessOrEqualThan,
+    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
+    Or, RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
@@ -215,7 +215,7 @@ pub(crate) fn make_monk_ogcd_priority_table(db: &MonkDatabase) -> Vec<SkillPrior
         },
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.brotherhood.get_id(),

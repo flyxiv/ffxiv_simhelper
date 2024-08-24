@@ -7,7 +7,8 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::dragoon::abilities::DragoonDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BufforDebuffLessThan, Combo, HasBufforDebuff, Or,
+    And, BufforDebuffLessThan, Combo, HasBufforDebuff, MillisecondsBeforeBurst, Or,
+    RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::types::IdType;
 
@@ -61,26 +62,36 @@ impl DragoonPriorityTable {
 pub(crate) fn make_dragoon_opener(db: &DragoonDatabase) -> Vec<Opener> {
     let dragoon_opener: Vec<Opener> = vec![
         GcdOpener(db.true_thrust.get_id()),
-        OgcdOpener((Some(db.potion.get_id()), None)),
+        OgcdOpener((None, None)),
         GcdOpener(db.spiral_blow.get_id()),
+        OgcdOpener((None, Some(db.potion.get_id()))),
+        GcdOpener(db.chaotic_spring.get_id()),
         OgcdOpener((
             Some(db.lance_charge.get_id()),
             Some(db.battle_litany.get_id()),
         )),
-        GcdOpener(db.chaotic_spring.get_id()),
-        OgcdOpener((Some(db.geirskogul.get_id()), Some(db.high_jump.get_id()))),
         GcdOpener(db.wheeling_thrust.get_id()),
-        OgcdOpener((
-            Some(db.dragonfire_dive.get_id()),
-            Some(db.life_surge.get_id()),
-        )),
+        OgcdOpener((Some(db.high_jump.get_id()), Some(db.life_surge.get_id()))),
         GcdOpener(db.drakesbane_surge.get_id()),
-        OgcdOpener((Some(db.nastrond.get_id()), Some(db.mirage_dive.get_id()))),
+        OgcdOpener((
+            Some(db.geirskogul.get_id()),
+            Some(db.dragonfire_dive.get_id()),
+        )),
         GcdOpener(db.raiden_thrust.get_id()),
         OgcdOpener((Some(db.stardiver.get_id()), None)),
         GcdOpener(db.lance_barrage.get_id()),
-        OgcdOpener((Some(db.life_surge.get_id()), None)),
+        OgcdOpener((Some(db.life_surge.get_id()), Some(db.starcross.get_id()))),
         GcdOpener(db.heavens_thrust.get_id()),
+        OgcdOpener((
+            Some(db.nastrond.get_id()),
+            Some(db.life_of_the_dragon.get_id()),
+        )),
+        GcdOpener(db.fang_and_claw.get_id()),
+        OgcdOpener((Some(db.nastrond.get_id()), Some(db.mirage_dive.get_id()))),
+        GcdOpener(db.drakesbane.get_id()),
+        OgcdOpener((Some(db.nastrond.get_id()), None)),
+        GcdOpener(db.raiden_thrust.get_id()),
+        OgcdOpener((Some(db.wyrmwind_thrust.get_id()), None)),
     ];
 
     dragoon_opener
@@ -148,7 +159,7 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.wyrmwind_thrust.get_id(),
@@ -185,7 +196,13 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
             skill_id: db.life_surge.get_id(),
             prerequisite: Some(And(
                 Box::new(Or(Box::new(Combo(Some(3))), Box::new(Combo(Some(7))))),
-                Box::new(HasBufforDebuff(db.lance_charge_buff.id)),
+                Box::new(Or(
+                    Box::new(HasBufforDebuff(db.lance_charge_buff.id)),
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.life_surge.get_id(),
+                        10000,
+                    )),
+                )),
             )),
         },
         SkillPriorityInfo {

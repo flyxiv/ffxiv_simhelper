@@ -8,7 +8,7 @@ use crate::skill::ResourceRequirements::UseBuff;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct WarriorDatabase {
@@ -456,7 +456,7 @@ impl WarriorDatabase {
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
             resource_required: vec![UseBuff(INNER_RELEASE_STACK.get_id())],
-            resource_created: HashMap::from([(2, 1)]),
+            resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
             stacks: 1,

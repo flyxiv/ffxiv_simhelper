@@ -5,7 +5,7 @@ use crate::jobs_skill_data::pictomancer::combat_resources::{
     HAS_CREATURE_ID, SHOT_STACK_ID, STARRY_SKY_STACK_ID,
 };
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasResource, HasResourceExactly, MillisecondsBeforeBurst, Not, Or,
+    And, Combo, HasResourceExactly, MillisecondsBeforeBurst, Not, Or,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
@@ -72,10 +72,10 @@ pub(crate) fn make_pictomancer_opener(db: &PictomancerDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.comet_in_black_hyperphantasia.get_id()),
         Opener::OgcdOpener((
             Some(db.living_muse.get_id()),
-            Some(db.mog_of_the_ages.get_id()),
+            Some(db.striking_muse.get_id()),
         )),
         Opener::GcdOpener(db.blizzard_in_cyan_hyperphantasia.get_id()),
-        Opener::OgcdOpener((Some(db.striking_muse.get_id()), None)),
+        Opener::OgcdOpener((Some(db.mog_of_the_ages.get_id()), None)),
         Opener::GcdOpener(db.stone_in_yellow_hyperphantasia.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.thunder_in_magenta_hyperphantasia.get_id()),
@@ -209,7 +209,7 @@ pub(crate) fn make_pictomancer_ogcd_priority_table(
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.starry_muse.get_id(),

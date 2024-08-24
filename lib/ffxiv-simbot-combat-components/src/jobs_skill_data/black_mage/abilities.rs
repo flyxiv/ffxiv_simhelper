@@ -11,7 +11,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct BlackmageDatabase {
@@ -85,8 +85,7 @@ impl BlackmageDatabase {
             duration_millisecond: 30000,
             is_raidwide: false,
             stacks: 1,
-            snapshotted_buffs: Default::default(),
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
             max_stacks: 1,
         };
         let THUNDERHEAD: BuffStatus = BuffStatus {

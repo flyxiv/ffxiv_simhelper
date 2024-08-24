@@ -62,25 +62,30 @@ pub(crate) fn make_darkknight_opener(db: &DarkknightDatabase) -> Vec<Opener> {
         GcdOpener(db.hard_slash.get_id()),
         OgcdOpener((Some(db.edge_of_shadow.get_id()), Some(db.potion.get_id()))),
         GcdOpener(db.syphon_strike.get_id()),
-        OgcdOpener((Some(db.delirium.get_id()), Some(db.living_shadow.get_id()))),
-        GcdOpener(db.scarlet_delirium.get_id()),
+        OgcdOpener((Some(db.living_shadow.get_id()), None)),
+        GcdOpener(db.souleater.get_id()),
+        OgcdOpener((Some(db.delirium.get_id()), None)),
+        GcdOpener(db.disesteem.get_id()),
         OgcdOpener((
+            Some(db.salted_earth.get_id()),
             Some(db.edge_of_shadow.get_id()),
-            Some(db.carve_and_spit.get_id()),
         )),
-        GcdOpener(db.comeuppance.get_id()),
+        GcdOpener(db.scarlet_delirium.get_id()),
         OgcdOpener((
             Some(db.shadowbringer.get_id()),
             Some(db.edge_of_shadow.get_id()),
+        )),
+        GcdOpener(db.comeuppance.get_id()),
+        OgcdOpener((
+            Some(db.carve_and_spit.get_id()),
+            Some(db.salt_and_darkness.get_id()),
         )),
         GcdOpener(db.torcleaver.get_id()),
         OgcdOpener((
             Some(db.shadowbringer.get_id()),
-            Some(db.salt_and_darkness.get_id()),
+            Some(db.edge_of_shadow.get_id()),
         )),
-        GcdOpener(db.souleater.get_id()),
-        OgcdOpener((Some(db.edge_of_shadow.get_id()), None)),
-        GcdOpener(db.disesteem.get_id()),
+        GcdOpener(db.bloodspiller.get_id()),
     ]
 }
 
@@ -104,7 +109,7 @@ pub(crate) fn make_darkknight_gcd_priority_table(
             skill_id: db.bloodspiller.get_id(),
             prerequisite: Some(Or(
                 Box::new(MillisecondsBeforeBurst(0)),
-                Box::new(HasResource(1, 80)),
+                Box::new(HasResource(1, 70)),
             )),
         },
         SkillPriorityInfo {
@@ -128,11 +133,11 @@ pub(crate) fn make_darkknight_ogcd_priority_table(
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.living_shadow.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(2000)),
         },
         SkillPriorityInfo {
             skill_id: db.edge_of_shadow.get_id(),

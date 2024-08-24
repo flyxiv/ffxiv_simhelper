@@ -1,17 +1,13 @@
 use crate::event_ticker::PercentType;
 use crate::id_entity::IdEntity;
-use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::skill::damage_category::DamageCategory;
-use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::types::PotencyType;
-use crate::types::{IdType, PlayerIdType, SkillStackType, TimeType};
+use crate::types::{BuffIncreasePercentType, IdType, PlayerIdType, SkillStackType, TimeType};
+use crate::types::{PotencyType, SnapshotTable};
 use std::cmp::min;
-use std::collections::HashMap;
 
-pub(crate) type SnapshotTable = HashMap<IdType, Vec<PotencyType>>;
 #[derive(PartialEq, Eq, Clone)]
 pub struct DebuffStatus {
     pub(crate) id: IdType,
@@ -27,8 +23,7 @@ pub struct DebuffStatus {
     pub(crate) stacks: SkillStackType,
     pub(crate) max_stacks: SkillStackType,
     pub(crate) name: String,
-    pub(crate) snapshotted_buffs: HashMap<StatusKey, BuffStatus>,
-    pub(crate) snapshotted_debuffs: HashMap<StatusKey, DebuffStatus>,
+    pub(crate) snapshotted_infos: SnapshotTable,
 }
 
 impl Status for DebuffStatus {
@@ -66,19 +61,23 @@ impl Status for DebuffStatus {
 }
 
 impl DebuffStatus {
-    pub fn is_damage_debuff(&self, player_id: PlayerIdType) -> bool {
+    pub fn get_damage_buff_infos(&self, player_id: PlayerIdType) -> Vec<StatusInfo> {
         if self.owner_id != player_id && !self.is_raidwide {
-            return false;
+            return vec![];
         }
-
         self.status_info
-            .iter()
-            .any(|status_info| match status_info {
+            .clone()
+            .into_iter()
+            .filter_map(|status_info| match status_info {
                 StatusInfo::DirectHitRatePercent(_)
                 | StatusInfo::CritHitRatePercent(_)
-                | StatusInfo::DamagePercent(_) => true,
-                _ => false,
+                | StatusInfo::IncreaseMainStat(_, _) => Some(status_info),
+                StatusInfo::DamagePercent(increase) => Some(StatusInfo::DamagePercent(
+                    increase * self.get_stack() as BuffIncreasePercentType,
+                )),
+                _ => None,
             })
+            .collect()
     }
 }
 

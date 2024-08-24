@@ -87,8 +87,7 @@ impl BardDatabase {
                 duration_millisecond: 45000,
                 is_raidwide: false,
                 stacks: 1,
-                snapshotted_buffs: Default::default(),
-                snapshotted_debuffs: Default::default(),
+                snapshotted_infos: Default::default(),
                 max_stacks: 1,
             }
         };
@@ -105,8 +104,7 @@ impl BardDatabase {
             duration_millisecond: 45000,
             is_raidwide: false,
             stacks: 1,
-            snapshotted_buffs: Default::default(),
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
             max_stacks: 1,
         };
         let WANDERERS_MINUET_RAIDBUFF: BuffStatus = BuffStatus {
@@ -672,7 +670,7 @@ impl BardDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
-            cooldown_millisecond: 120000,
+            cooldown_millisecond: 118000,
             resource_required: vec![],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,

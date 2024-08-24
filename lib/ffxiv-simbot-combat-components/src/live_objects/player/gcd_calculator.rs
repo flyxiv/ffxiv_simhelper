@@ -1,7 +1,6 @@
 use crate::damage_calculator::{INCREASE_BASE, MULTIPLIER_BASE};
 use crate::types::MultiplierType;
 use crate::types::TimeType;
-use log::debug;
 
 pub(crate) trait GcdCalculator {
     fn calculate_speed_buffed_cooldown_millisecond(

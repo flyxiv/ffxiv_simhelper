@@ -22,6 +22,7 @@ pub struct PlayerPower {
     pub speed_multiplier: MultiplierType,
     pub weapon_damage_multiplier: MultiplierType,
     pub main_stat_multiplier: MultiplierType,
+    pub auto_direct_hit_increase: MultiplierType,
     pub weapon_damage: StatType,
     pub main_stat: StatType,
     pub critical_strike: StatType,

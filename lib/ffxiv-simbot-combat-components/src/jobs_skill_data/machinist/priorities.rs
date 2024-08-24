@@ -4,7 +4,7 @@ use crate::rotation::priority_table::SkillPrerequisite::{
     And, Combo, HasBufforDebuff, HasResource, HasSkillStacks, MillisecondsBeforeBurst, Not, Or,
     RelatedSkillCooldownLessOrEqualThan,
 };
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
@@ -146,7 +146,7 @@ pub(crate) fn make_machinist_ogcd_priority_table(db: &MachinistDatabase) -> Vec<
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.wildfire.get_id(),

@@ -17,7 +17,7 @@ import {
 import { QuickSimInputSaveState } from "../../types/QuickSimInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 
-const totalRequestCount = 100;
+const totalRequestCount = 1;
 
 export function QuickSimRequestButton(
   partyMemberJobAbbrevs: string[],
@@ -126,7 +126,7 @@ export function QuickSimRequestButton(
     let averageEdps = totalEdps / totalRequestCount;
 
     response = finalResponses[maxIndex];
-    response.simulationData[mainPlayerId].simulationSummary.pdps = averageDps;
+    response.simulationData[mainPlayerId].simulationSummary.pdps = maxDps;
     response.simulationData[mainPlayerId].simulationSummary.rdps = averageRdps;
     response.simulationData[mainPlayerId].simulationSummary.edps = averageEdps;
     response.simulationData[mainPlayerId].simulationSummary.maxRdps = maxRdps;

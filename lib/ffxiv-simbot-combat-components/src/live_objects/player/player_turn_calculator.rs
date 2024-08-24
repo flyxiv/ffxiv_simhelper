@@ -1,9 +1,8 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
 use crate::event::FfxivEventQueue;
-use crate::live_objects::player::Player;
 use crate::live_objects::turn_type::FfxivTurnType;
-use crate::types::{IdType, PlayerIdType, TimeType};
+use crate::types::{PlayerIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::{max, Reverse};
 use std::rc::Rc;

@@ -193,7 +193,7 @@ pub(crate) fn make_viper_ogcd_priority_table(db: &ViperDatabase) -> Vec<SkillPri
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.reawaken_filler.get_id(),

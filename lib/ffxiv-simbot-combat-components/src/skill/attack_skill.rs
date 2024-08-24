@@ -16,12 +16,12 @@ use crate::skill::{
 };
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::snapshot_status::{snapshot_buff, snapshot_debuff};
+use crate::status::snapshot_status::snapshot_status_infos;
 use crate::types::{ComboType, IdType, PlayerIdType, PotencyType, TimeType};
 use crate::types::{ResourceType, StackType, StatusTable};
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
-use std::cmp::{max, min};
+use std::cmp::max;
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -226,8 +226,7 @@ impl AttackSkill {
             self.trait_percent,
             self.is_guaranteed_crit,
             self.is_guaranteed_direct_hit,
-            snapshot_buff(&buffs.borrow()),
-            snapshot_debuff(&debuffs.borrow(), self.player_id),
+            snapshot_status_infos(&buffs.borrow(), &debuffs.borrow(), self.player_id),
             DamageCategory::Direct,
             current_combat_milliseconds + inflict_damage_time,
         ))

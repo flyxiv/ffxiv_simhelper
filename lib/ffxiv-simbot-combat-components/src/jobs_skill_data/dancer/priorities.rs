@@ -1,7 +1,7 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::dancer::abilities::DancerDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, HasBufforDebuff, MillisecondsBeforeBurst,
+    HasBufforDebuff, MillisecondsBeforeBurst,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;

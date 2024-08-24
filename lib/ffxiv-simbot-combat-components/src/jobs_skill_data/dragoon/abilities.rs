@@ -1,5 +1,6 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyRaidBuff};
+use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
@@ -10,7 +11,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct DragoonDatabase {
@@ -169,7 +170,7 @@ impl DragoonDatabase {
             owner_id: player_id,
             damage_skill_id: Some(806),
             trait_percent: Some(100),
-            potency: Some(40),
+            potency: Some(45),
             damage_category: Some(DamageCategory::PhysicalDot),
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
@@ -177,8 +178,7 @@ impl DragoonDatabase {
             is_raidwide: false,
             stacks: 1,
             max_stacks: 1,
-            snapshotted_buffs: HashMap::new(),
-            snapshotted_debuffs: HashMap::new(),
+            snapshotted_infos: HashMap::new(),
         };
 
         let LIFE_SURGE: AttackSkill = AttackSkill {
@@ -613,7 +613,7 @@ impl DragoonDatabase {
             )],
             proc_events: vec![],
             combo: None,
-            delay_millisecond: Some(0),
+            delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
@@ -644,7 +644,7 @@ impl DragoonDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(DIVE_READY.id)],
+            resource_required: vec![UseBuff(DIVE_READY.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -658,7 +658,7 @@ impl DragoonDatabase {
             id: 819,
             name: String::from("Dragonfire Dive"),
             player_id,
-            potency: 300,
+            potency: 500,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -697,7 +697,7 @@ impl DragoonDatabase {
                 BATTLE_LITANY_STATUS.clone(),
                 20000,
                 20000,
-                0,
+                1000,
             )],
             proc_events: vec![],
             combo: None,

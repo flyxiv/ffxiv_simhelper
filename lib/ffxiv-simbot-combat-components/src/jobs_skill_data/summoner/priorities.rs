@@ -1,5 +1,5 @@
 use crate::event::FfxivEventQueue;
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
@@ -161,7 +161,7 @@ pub(crate) fn make_summoner_ogcd_priority_table(db: &SummonerDatabase) -> Vec<Sk
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.searing_light.get_id(),
@@ -173,7 +173,7 @@ pub(crate) fn make_summoner_ogcd_priority_table(db: &SummonerDatabase) -> Vec<Sk
         },
         SkillPriorityInfo {
             skill_id: db.energy_drain.get_id(),
-            prerequisite: Some(MillisecondsBeforeBurst(0)),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.necrotize.get_id(),
@@ -201,6 +201,10 @@ pub(crate) fn make_summoner_ogcd_priority_table(db: &SummonerDatabase) -> Vec<Sk
         },
         SkillPriorityInfo {
             skill_id: db.deathflare.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.necrotize.get_id(),
             prerequisite: None,
         },
     ]

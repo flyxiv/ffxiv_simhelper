@@ -4,7 +4,7 @@ use crate::id_entity::IdEntity;
 use crate::owner_tracker::OwnerTracker;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::types::PlayerIdType;
+use crate::types::{BuffIncreasePercentType, PlayerIdType};
 use crate::types::{IdType, SkillStackType, TimeType};
 use rand::{thread_rng, Rng};
 use std::cmp::min;
@@ -64,10 +64,10 @@ impl BuffStatus {
         &self,
         current_time_millisecond: TimeType,
     ) -> Vec<FfxivEvent> {
-        let proc_value = thread_rng().gen_range(0..100);
         let mut proc_events = vec![];
 
         for (proc_event, proc_percent) in self.trigger_proc_event_on_gcd.iter() {
+            let proc_value = thread_rng().gen_range(0..100);
             if proc_value <= *proc_percent {
                 let proc_event = proc_event.clone();
                 proc_events.push(proc_event.add_time_to_event(current_time_millisecond));
@@ -77,15 +77,20 @@ impl BuffStatus {
         proc_events
     }
 
-    pub fn is_damage_buff(&self) -> bool {
+    pub fn get_damage_buff_infos(&self) -> Vec<StatusInfo> {
         self.status_info
-            .iter()
-            .any(|status_info| match status_info {
+            .clone()
+            .into_iter()
+            .filter_map(|status_info| match status_info {
                 StatusInfo::DirectHitRatePercent(_)
                 | StatusInfo::CritHitRatePercent(_)
-                | StatusInfo::DamagePercent(_) => true,
-                _ => false,
+                | StatusInfo::IncreaseMainStat(_, _) => Some(status_info),
+                StatusInfo::DamagePercent(increase) => Some(StatusInfo::DamagePercent(
+                    increase * self.get_stack() as BuffIncreasePercentType,
+                )),
+                _ => None,
             })
+            .collect()
     }
 }
 

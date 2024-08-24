@@ -192,7 +192,7 @@ pub(crate) fn make_ninja_ogcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPri
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.bunshin.get_id(),

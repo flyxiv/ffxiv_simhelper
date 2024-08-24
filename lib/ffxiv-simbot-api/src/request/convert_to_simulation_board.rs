@@ -1,12 +1,9 @@
 use crate::errors::{FfxivSimbotServiceError, Result};
 use crate::request::simulation_api_request::PlayerInfoRequest;
-use axum::routing::get;
 use ffxiv_simbot_combat_components::event::FfxivEventQueue;
 use ffxiv_simbot_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
 use ffxiv_simbot_combat_components::live_objects::player::player_power::add_main_stat;
-use ffxiv_simbot_combat_components::types::{
-    BuffIncreasePercentType, IdType, IncreaseType, PlayerIdType,
-};
+use ffxiv_simbot_combat_components::types::{BuffIncreasePercentType, IncreaseType, PlayerIdType};
 use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::rc::Rc;

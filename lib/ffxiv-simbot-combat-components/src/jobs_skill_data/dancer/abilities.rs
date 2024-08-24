@@ -10,7 +10,7 @@ use crate::skill::ResourceRequirements::Resource;
 use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 const PROC_PERCENT: PercentType = 55;

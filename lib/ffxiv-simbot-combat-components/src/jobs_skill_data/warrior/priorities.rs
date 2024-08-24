@@ -130,7 +130,7 @@ pub(crate) fn make_warrior_ogcd_priority_table(db: &WarriorDatabase) -> Vec<Skil
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.inner_release.get_id(),
@@ -153,6 +153,13 @@ pub(crate) fn make_warrior_ogcd_priority_table(db: &WarriorDatabase) -> Vec<Skil
         SkillPriorityInfo {
             skill_id: db.primal_wrath.get_id(),
             prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.onslaught.get_id(),
+            prerequisite: Some(Or(
+                Box::new(MillisecondsBeforeBurst(0)),
+                Box::new(Not(Box::new(MillisecondsBeforeBurst(85000)))),
+            )),
         },
     ]
 }

@@ -9,7 +9,7 @@ use crate::skill::damage_category::DamageCategory;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::snapshot_status::{snapshot_buff, snapshot_debuff};
+use crate::status::snapshot_status::snapshot_status_infos;
 use crate::types::{ComboType, PlayerIdType, PotencyType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
@@ -93,8 +93,11 @@ impl CombatResource for MachinistCombatResources {
                     120,
                     false,
                     false,
-                    snapshot_buff(&buff_list.borrow()),
-                    snapshot_debuff(&debuff_list.borrow(), player.get_id()),
+                    snapshot_status_infos(
+                        &buff_list.borrow(),
+                        &debuff_list.borrow(),
+                        player.get_id(),
+                    ),
                     DamageCategory::Direct,
                     current_time_millisecond,
                 ));
@@ -115,8 +118,11 @@ impl CombatResource for MachinistCombatResources {
                     120,
                     false,
                     false,
-                    snapshot_buff(&buff_list.borrow()),
-                    snapshot_debuff(&debuff_list.borrow(), player.get_id()),
+                    snapshot_status_infos(
+                        &buff_list.borrow(),
+                        &debuff_list.borrow(),
+                        player.get_id(),
+                    ),
                     DamageCategory::Direct,
                     current_time_millisecond,
                 ));

@@ -122,7 +122,7 @@ impl MonkDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![(
                 FfxivEvent::IncreasePlayerResource(player_id, 0, 1, 0),
-                20,
+                10,
             )],
         };
         let BROTHERHOOD_PERSONAL_PROC: BuffStatus = BuffStatus {
@@ -403,15 +403,6 @@ impl MonkDatabase {
             additional_skill_events: vec![
                 ApplyRaidBuff(player_id, BROTHERHOOD_DAMAGE_BUFF.clone(), 20000, 20000, 0),
                 ApplyRaidBuff(player_id, BROTHERHOOD_RAID_PROC.clone(), 20000, 20000, 0),
-                ApplyBuff(
-                    player_id,
-                    player_id,
-                    BROTHERHOOD_PERSONAL_PROC.clone(),
-                    20000,
-                    20000,
-                    0,
-                ),
-                FfxivEvent::RemoveTargetBuff(player_id, player_id, BROTHERHOOD_RAID_PROC.id, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -505,7 +496,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
-            resource_required: vec![ResourceRequirements::Resource(0, 50)],
+            resource_required: vec![],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,

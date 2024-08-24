@@ -1,7 +1,7 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::redmage::abilities::RedmageDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasBufforDebuff, HasResource, Not, Or,
+    And, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not, Or,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
@@ -124,21 +124,43 @@ pub(crate) fn make_redmage_gcd_priority_table(db: &RedmageDatabase) -> Vec<Skill
         },
         SkillPriorityInfo {
             skill_id: db.manafication_riposte.get_id(),
-            prerequisite: None,
+            prerequisite: Some(Not(Box::new(HasBufforDebuff(db.dualcast_buff.get_id())))),
         },
         SkillPriorityInfo {
             skill_id: db.enchanted_riposte.get_id(),
-            prerequisite: Some(Or(
+            prerequisite: Some(And(
                 Box::new(And(
-                    Box::new(SkillPrerequisite::MillisecondsBeforeBurst(9000)),
+                    Box::new(Combo(Some(0))),
+                    Box::new(Not(Box::new(HasBufforDebuff(db.dualcast_buff.get_id())))),
+                )),
+                Box::new(Or(
                     Box::new(And(
-                        Box::new(HasResource(0, 50)),
-                        Box::new(And(Box::new(HasResource(1, 50)), Box::new(Combo(Some(0))))),
+                        Box::new(SkillPrerequisite::MillisecondsBeforeBurst(3000)),
+                        Box::new(And(
+                            Box::new(HasResource(0, 50)),
+                            Box::new(And(Box::new(HasResource(1, 50)), Box::new(Combo(Some(0))))),
+                        )),
+                    )),
+                    Box::new(Or(
+                        Box::new(HasResource(0, 90)),
+                        Box::new(HasResource(1, 90)),
                     )),
                 )),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.enchanted_riposte.get_id(),
+            prerequisite: Some(And(
                 Box::new(And(
-                    Box::new(HasResource(1, 80)),
-                    Box::new(And(Box::new(HasResource(0, 80)), Box::new(Combo(Some(0))))),
+                    Box::new(And(
+                        Box::new(Combo(Some(0))),
+                        Box::new(Not(Box::new(HasBufforDebuff(db.dualcast_buff.get_id())))),
+                    )),
+                    Box::new(Not(Box::new(MillisecondsBeforeBurst(40000)))),
+                )),
+                Box::new(And(
+                    Box::new(HasResource(0, 50)),
+                    Box::new(HasResource(1, 50)),
                 )),
             )),
         },
@@ -192,19 +214,18 @@ pub(crate) fn make_redmage_gcd_priority_table(db: &RedmageDatabase) -> Vec<Skill
 }
 
 pub(crate) fn make_redmage_ogcd_priority_table(db: &RedmageDatabase) -> Vec<SkillPriorityInfo> {
-    // TODO: calculate future ninki
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.embolden.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(4000)),
         },
         SkillPriorityInfo {
             skill_id: db.manafication.get_id(),
             prerequisite: Some(HasBufforDebuff(db.finish_ready.get_id())),
+        },
+        SkillPriorityInfo {
+            skill_id: db.embolden.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.fleche.get_id(),
@@ -215,20 +236,17 @@ pub(crate) fn make_redmage_ogcd_priority_table(db: &RedmageDatabase) -> Vec<Skil
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.corps_a_corps.get_id(),
-            prerequisite: Some(And(
+            skill_id: db.engagement.get_id(),
+            prerequisite: Some(Or(
                 Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
-                Box::new(SkillPrerequisite::HasSkillStacks(
-                    db.corps_a_corps.get_id(),
-                    2,
-                )),
+                Box::new(Not(Box::new(MillisecondsBeforeBurst(35000)))),
             )),
         },
         SkillPriorityInfo {
-            skill_id: db.engagement.get_id(),
-            prerequisite: Some(And(
+            skill_id: db.corps_a_corps.get_id(),
+            prerequisite: Some(Or(
                 Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
-                Box::new(SkillPrerequisite::HasSkillStacks(db.engagement.get_id(), 2)),
+                Box::new(Not(Box::new(MillisecondsBeforeBurst(35000)))),
             )),
         },
         SkillPriorityInfo {
@@ -252,7 +270,10 @@ pub(crate) fn make_redmage_ogcd_priority_table(db: &RedmageDatabase) -> Vec<Skil
         SkillPriorityInfo {
             skill_id: db.swiftcast.get_id(),
             prerequisite: Some(And(
-                Box::new(Combo(Some(0))),
+                Box::new(And(
+                    Box::new(Combo(Some(0))),
+                    Box::new(Not(Box::new(MillisecondsBeforeBurst(0)))),
+                )),
                 Box::new(Or(
                     Box::new(Not(Box::new(HasBufforDebuff(
                         db.acceleration_buff.get_id(),

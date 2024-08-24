@@ -1,4 +1,6 @@
 use crate::live_objects::player::StatusKey;
+use crate::status::snapshot_status::SnapshotInfo;
+use crate::status::status_info::StatusInfo;
 use crate::CombatComponentsError;
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -28,3 +30,5 @@ pub type SkillStackType = i8;
 pub(crate) type BuffTable<S> = HashMap<IdType, S>;
 pub type StatusTable<S> = Rc<RefCell<HashMap<StatusKey, S>>>;
 pub(crate) type ComboType = Option<u8>;
+
+pub type SnapshotTable = HashMap<StatusKey, SnapshotInfo>;

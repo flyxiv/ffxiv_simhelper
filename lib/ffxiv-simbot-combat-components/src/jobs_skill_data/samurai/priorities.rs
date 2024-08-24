@@ -8,7 +8,7 @@ use crate::jobs_skill_data::samurai::abilities::SamuraiDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
-    Or, RelatedSkillCooldownLessOrEqualThan,
+    Or,
 };
 
 #[derive(Clone)]
@@ -348,7 +348,7 @@ pub(crate) fn make_samurai_ogcd_priority_table(db: &SamuraiDatabase) -> Vec<Skil
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(7000)),
         },
         SkillPriorityInfo {
             skill_id: db.ikishoten.get_id(),

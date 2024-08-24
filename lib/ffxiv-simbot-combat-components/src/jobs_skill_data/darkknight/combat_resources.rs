@@ -1,9 +1,6 @@
 use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent::Damage;
-use crate::event::ffxiv_player_internal_event::FfxivPlayerInternalEvent;
-use crate::jobs_skill_data::darkknight::abilities::{
-    darkknight_gcd_ids, make_darkknight_skill_list,
-};
+use crate::jobs_skill_data::darkknight::abilities::make_darkknight_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -12,7 +9,7 @@ use crate::skill::damage_category::DamageCategory;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::snapshot_status::{snapshot_buff, snapshot_debuff};
+use crate::status::snapshot_status::snapshot_status_infos;
 use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
 use std::cell::RefCell;
@@ -99,19 +96,12 @@ impl CombatResource for DarkknightCombatResources {
                 100,
                 false,
                 false,
-                snapshot_buff(&buff_list.borrow()),
-                snapshot_debuff(&debuff_list.borrow(), self.player_id),
+                snapshot_status_infos(&buff_list.borrow(), &debuff_list.borrow(), self.player_id),
                 DamageCategory::Direct,
                 current_time_millisecond,
             ));
 
             self.living_shadow_delay = None;
-        }
-
-        if darkknight_gcd_ids().contains(&skill_id) && self.blood_weapon_stack > 0 {
-            ffxiv_internal_events.push(FfxivPlayerInternalEvent::IncreaseResource(0, 600));
-            ffxiv_internal_events.push(FfxivPlayerInternalEvent::IncreaseResource(1, 10));
-            self.blood_weapon_stack = max(0, self.blood_weapon_stack - 1);
         }
 
         (ffxiv_events, ffxiv_internal_events)

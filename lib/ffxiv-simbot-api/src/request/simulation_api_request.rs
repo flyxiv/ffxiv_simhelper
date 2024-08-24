@@ -1,5 +1,5 @@
 use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
-use ffxiv_simbot_combat_components::types::{IdType, PlayerIdType, StatType, TimeType};
+use ffxiv_simbot_combat_components::types::{PlayerIdType, StatType, TimeType};
 use serde::Deserialize;
 
 /// The main request body for the simulation API

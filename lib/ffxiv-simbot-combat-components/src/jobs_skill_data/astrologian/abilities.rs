@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct AstrologianDatabase {
@@ -107,7 +107,6 @@ impl AstrologianDatabase {
         let COMBUST_III_DOT: DebuffStatus = DebuffStatus {
             id: 505,
             name: String::from("Combust III"),
-            snapshotted_buffs: Default::default(),
             stacks: 1,
             max_stacks: 1,
             owner_id: player_id,
@@ -119,7 +118,7 @@ impl AstrologianDatabase {
             status_info: vec![],
             duration_millisecond: 30000,
             is_raidwide: false,
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
         };
         let THE_BALANCE_READY: BuffStatus = BuffStatus {
             id: 506,

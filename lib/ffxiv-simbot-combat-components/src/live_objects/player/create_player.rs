@@ -1,6 +1,5 @@
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
-use crate::event_ticker::independent_ticker::IndependentTicker;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::astrologian::priorities::AstrologianPriorityTable;
 use crate::jobs_skill_data::bard::priorities::BardPriorityTable;
@@ -32,7 +31,7 @@ use crate::rotation::ffxiv_priority_table::FfxivPriorityTable;
 use crate::skill::NON_GCD_DELAY_MILLISECOND;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType, TimeType};
+use crate::types::{PlayerIdType, TimeType};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -58,7 +57,7 @@ pub(crate) static MACHINIST_START_TIME_MILLISECOND: TimeType = -2000;
 pub(crate) static BLACKMAGE_START_TIME_MILLISECOND: TimeType = -4000;
 pub(crate) static SUMMONER_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static REDMAGE_START_TIME_MILLISECOND: TimeType = -5500;
-pub(crate) static PICTOMANCER_START_TIME_MILLISECOND: TimeType = -4000;
+pub(crate) static PICTOMANCER_START_TIME_MILLISECOND: TimeType = -4500;
 
 impl FfxivPlayer {
     pub fn new_paladin(

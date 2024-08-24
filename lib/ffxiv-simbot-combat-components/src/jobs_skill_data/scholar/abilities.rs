@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct ScholarDatabase {
@@ -47,8 +47,7 @@ impl ScholarDatabase {
             stacks: 1,
             max_stacks: 1,
             name: String::from("Biolysis"),
-            snapshotted_buffs: Default::default(),
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
         };
 
         let CHAIN_STRATAGEM_DEBUFF: DebuffStatus = DebuffStatus {
@@ -65,8 +64,7 @@ impl ScholarDatabase {
             stacks: 1,
             max_stacks: 1,
             name: String::from("Chain Stratagem"),
-            snapshotted_buffs: Default::default(),
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
         };
         let IMPACT_IMMINENT: BuffStatus = BuffStatus {
             id: 602,
@@ -94,8 +92,7 @@ impl ScholarDatabase {
             stacks: 1,
             max_stacks: 1,
             name: String::from("Baneful Impaction"),
-            snapshotted_buffs: Default::default(),
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
         };
 
         let BROIL_IV: AttackSkill = AttackSkill {

@@ -8,7 +8,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct WhitemageDatabase {
@@ -43,8 +43,7 @@ impl WhitemageDatabase {
             stacks: 1,
             max_stacks: 1,
             name: String::from("Dia"),
-            snapshotted_buffs: Default::default(),
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
         };
 
         let PRESENCE_OF_MIND_BUFF: BuffStatus = BuffStatus {

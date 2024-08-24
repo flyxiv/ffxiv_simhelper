@@ -6,7 +6,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::snapshot_status::{snapshot_buff, snapshot_debuff};
+use crate::status::snapshot_status::snapshot_status_infos;
 use crate::types::{IdType, MultiplierType, TimeType};
 use crate::types::{PlayerIdType, StatusTable};
 use std::cell::RefCell;
@@ -51,8 +51,11 @@ impl EventTicker for AutoAttackTicker {
                         self.trait_percent,
                         false,
                         false,
-                        snapshot_buff(&player.borrow().buff_list.borrow()),
-                        snapshot_debuff(&debuff.borrow(), self.player_id),
+                        snapshot_status_infos(
+                            &player.borrow().buff_list.borrow(),
+                            &debuff.borrow(),
+                            self.player_id,
+                        ),
                         self.damage_category,
                         max(current_time_millisecond, 0),
                     )));
@@ -102,11 +105,12 @@ impl AutoAttackTicker {
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
         let potency = match job_abbrev.as_str() {
-            "PLD" | "WAR" | "GNB" | "MNK" | "DRG" | "NIN" => 110,
-            "DRK" => 90,
+            "NIN" => 110,
+            "DRK" | "WAR" | "GNB" => 90,
             "BRD" | "MCH" => 80,
             "VPR" => 80,
-            "RPR" => 90,
+            "RPR" | "MNK" => 90,
+            "DRG" => 80,
             _ => 100,
         };
 
@@ -150,7 +154,7 @@ impl AutoAttackTicker {
             auto_attack_interval: GCD_DEFAULT_DELAY_MILLISECOND,
             duration_millisecond,
             damage_category,
-            job_tuning_value: 1.0,
+            job_tuning_value: 0.7,
         }
     }
 }
@@ -166,6 +170,9 @@ fn get_auto_attack_interval_tuning_value_of_job(job_abbrev: &String) -> Multipli
         "BRD" => 0.82,
         "RPR" => 0.76,
         "DRK" => 0.90,
+        "WAR" => 0.75,
+        "GNB" => 0.9,
+        "DRG" => 0.9,
         _ => 1.0,
     }
 }

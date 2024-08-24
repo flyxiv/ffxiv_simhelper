@@ -106,7 +106,7 @@ pub(crate) fn make_astrologian_ogcd_priority_table(
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.divination.get_id(),

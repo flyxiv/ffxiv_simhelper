@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct SamuraiDatabase {
@@ -120,7 +120,6 @@ impl SamuraiDatabase {
         let HIGANBANA_DOT: DebuffStatus = DebuffStatus {
             id: 1105,
             name: String::from("Higanbana"),
-            snapshotted_buffs: Default::default(),
             stacks: 1,
             max_stacks: 1,
             owner_id: player_id,
@@ -132,7 +131,7 @@ impl SamuraiDatabase {
             status_info: vec![StatusInfo::None],
             duration_millisecond: 60000,
             is_raidwide: false,
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
         };
 
         let OGI_NAMIKIRI_USED: BuffStatus = BuffStatus {

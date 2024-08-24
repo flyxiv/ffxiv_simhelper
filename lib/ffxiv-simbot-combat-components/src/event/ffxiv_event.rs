@@ -6,12 +6,11 @@ use crate::live_objects::turn_type::FfxivTurnType;
 use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::status::snapshot_status::{snapshot_buff, snapshot_debuff};
-use crate::types::{IdType, PlayerIdType, ResourceIdType, SkillStackType, TimeType};
-use crate::types::{PotencyType, ResourceType, StatusTable};
+use crate::status::snapshot_status::snapshot_status_infos;
+use crate::types::{IdType, PlayerIdType, ResourceIdType, SkillStackType, SnapshotTable, TimeType};
+use crate::types::{PotencyType, ResourceType};
 use std::cmp::min;
 use std::collections::HashMap;
-use std::fmt::{Debug, Display, Formatter, Pointer};
 
 /// All possible damage related events in a FFXIV combat.
 /// the last TimeType element is always the time of the event.
@@ -22,7 +21,7 @@ pub enum FfxivEvent {
     /// player_id, target_id, skill_id
     UseSkill(PlayerIdType, Option<PlayerIdType>, IdType, TimeType),
 
-    /// owner_player_id, skill ID, potency, trait, guaranteed crit, guaranteed direct hit, snapshotted buffs, snapshotted debuffs, damage category
+    /// owner_player_id, skill ID, potency, trait, guaranteed crit, guaranteed direct hit, snapshotted buffs and debuffs, damage category
     Damage(
         PlayerIdType,
         IdType,
@@ -30,8 +29,7 @@ pub enum FfxivEvent {
         PercentType,
         bool,
         bool,
-        HashMap<StatusKey, BuffStatus>,
-        HashMap<StatusKey, DebuffStatus>,
+        SnapshotTable,
         DamageCategory,
         TimeType,
     ),
@@ -100,7 +98,7 @@ impl FfxivEvent {
         match self {
             FfxivEvent::PlayerTurn(_, _, _, time)
             | FfxivEvent::UseSkill(_, _, _, time)
-            | FfxivEvent::Damage(_, _, _, _, _, _, _, _, _, time)
+            | FfxivEvent::Damage(_, _, _, _, _, _, _, _, time)
             | FfxivEvent::Tick(_, time)
             | FfxivEvent::AddTicker(_, time)
             | FfxivEvent::RemoveTicker(_, time)
@@ -132,13 +130,17 @@ impl FfxivEvent {
 
     pub(crate) fn snapshot_status(
         &mut self,
-        snapshotted_buffs: &HashMap<StatusKey, BuffStatus>,
-        snapshotted_debuffs: &HashMap<StatusKey, DebuffStatus>,
+        buffs: &HashMap<StatusKey, BuffStatus>,
+        debuffs: &HashMap<StatusKey, DebuffStatus>,
     ) {
         match self {
             FfxivEvent::ApplyDebuff(player_id, status, _, _, _) => {
-                status.snapshotted_buffs = snapshot_buff(snapshotted_buffs);
-                status.snapshotted_debuffs = snapshot_debuff(snapshotted_debuffs, *player_id);
+                if let Some(potency) = status.potency {
+                    if potency > 0 {
+                        status.snapshotted_infos =
+                            snapshot_status_infos(buffs, debuffs, *player_id);
+                    }
+                }
             }
             _ => {}
         }
@@ -153,8 +155,7 @@ impl FfxivEvent {
                 trait_percent,
                 is_crit,
                 is_direct_hit,
-                buffs,
-                debuffs,
+                snapshots,
                 damage_category,
                 time,
             ) => FfxivEvent::Damage(
@@ -164,8 +165,7 @@ impl FfxivEvent {
                 trait_percent,
                 is_crit,
                 is_direct_hit,
-                buffs,
-                debuffs,
+                snapshots,
                 damage_category,
                 elapsed_time + time,
             ),
@@ -321,7 +321,7 @@ impl FfxivEvent {
     fn importance_of_event(&self) -> i32 {
         match self {
             FfxivEvent::UseSkill(_, _, _, _) => 1,
-            FfxivEvent::Damage(_, _, _, _, _, _, _, _, _, _) => 2,
+            FfxivEvent::Damage(_, _, _, _, _, _, _, _, _) => 2,
             FfxivEvent::Tick(_, _) => 3,
             FfxivEvent::AddTicker(_, _) => 4,
             FfxivEvent::RemoveTicker(_, _) => 5,
@@ -373,11 +373,11 @@ impl Eq for FfxivEvent {}
 impl ToString for FfxivEvent {
     fn to_string(&self) -> String {
         match self {
-            FfxivEvent::PlayerTurn(id, _, _, _) => {
-                format!("Event: Player Turn {}", id)
+            FfxivEvent::PlayerTurn(id, _, _, time) => {
+                format!("Event: Player Turn {}, time: {}", id, time)
             }
             FfxivEvent::UseSkill(_, _, _, _) => String::from("Event: Use Skill"),
-            FfxivEvent::Damage(_, _, _, _, _, _, _, _, _, _) => String::from("Event: Damage"),
+            FfxivEvent::Damage(_, _, _, _, _, _, _, _, _) => String::from("Event: Damage"),
             FfxivEvent::Tick(_, _) => String::from("Event: Tick"),
             FfxivEvent::AddTicker(_, _) => String::from("Event: Add Ticker"),
             FfxivEvent::RemoveTicker(_, _) => String::from("Event: Remove Ticker"),

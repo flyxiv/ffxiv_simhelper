@@ -24,7 +24,6 @@ use crate::status::status_info::StatusInfo;
 use crate::status::status_timer::StatusTimer;
 use crate::types::{IdType, PlayerIdType, TimeType};
 use crate::types::{MultiplierType, StatusTable};
-use log::info;
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::collections::HashMap;

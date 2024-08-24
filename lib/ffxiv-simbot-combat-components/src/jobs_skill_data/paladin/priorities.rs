@@ -6,7 +6,9 @@ use std::cell::RefCell;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::paladin::abilities::PaladinDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
-use crate::rotation::priority_table::SkillPrerequisite::{Combo, HasBufforDebuff};
+use crate::rotation::priority_table::SkillPrerequisite::{
+    Combo, HasBufforDebuff, MillisecondsBeforeBurst,
+};
 
 #[derive(Clone)]
 pub(crate) struct PaladinPriorityTable {
@@ -142,7 +144,7 @@ pub(crate) fn make_paladin_ogcd_priority_table(db: &PaladinDatabase) -> Vec<Skil
     vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.imperator.get_id(),

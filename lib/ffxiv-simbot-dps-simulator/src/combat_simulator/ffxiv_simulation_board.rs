@@ -29,7 +29,7 @@ use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::status::status_info::StatusInfo;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
 use ffxiv_simbot_combat_components::status::Status;
-use ffxiv_simbot_combat_components::types::{IdType, TimeType};
+use ffxiv_simbot_combat_components::types::{IdType, SnapshotTable, TimeType};
 use ffxiv_simbot_combat_components::types::{PlayerIdType, PotencyType};
 use log::{debug, info};
 use std::cell::RefCell;
@@ -100,6 +100,8 @@ impl FfxivSimulationBoard {
     fn simulate_event(&self, ffxiv_event: FfxivEvent) {
         let event_time = ffxiv_event.get_event_time();
         self.update_time_related_informations(event_time);
+        let start_time = SystemTime::now();
+        let event = ffxiv_event.clone();
 
         match &ffxiv_event {
             FfxivEvent::PlayerTurn(player_id, _, _, time) => {
@@ -116,8 +118,7 @@ impl FfxivSimulationBoard {
                 trait_percent,
                 guaranteed_crit,
                 guaranteed_dh,
-                snapshotted_buffs,
-                snapshotted_debuffs,
+                snapshotted_infos,
                 damage_category,
                 time,
             ) => {
@@ -130,8 +131,7 @@ impl FfxivSimulationBoard {
                     *trait_percent,
                     *guaranteed_crit,
                     *guaranteed_dh,
-                    snapshotted_buffs,
-                    snapshotted_debuffs,
+                    snapshotted_infos,
                     *damage_category,
                     *time,
                 );
@@ -263,19 +263,18 @@ impl FfxivSimulationBoard {
                 );
                 let mut ticker_table = self.tickers.borrow_mut();
                 let ticker = ticker_table.get_mut(ticker_key);
-                if ticker.is_none() {
-                    return;
+                if ticker.is_some() {
+                    let ticker = ticker.unwrap();
+
+                    let player = if let Some(player_id) = ticker.get_player_id() {
+                        Some(self.get_player_data(player_id).clone())
+                    } else {
+                        None
+                    };
+
+                    let debuffs = self.target.borrow().get_status_table();
+                    ticker.run_ticker(*time, player, debuffs.clone());
                 }
-                let ticker = ticker.unwrap();
-
-                let player = if let Some(player_id) = ticker.get_player_id() {
-                    Some(self.get_player_data(player_id).clone())
-                } else {
-                    None
-                };
-
-                let debuffs = self.target.borrow().get_status_table();
-                ticker.run_ticker(*time, player, debuffs.clone());
             }
             FfxivEvent::AddTicker(ticker, time) => {
                 debug!("time: {}, add ticker event: {:?}", *time, ticker.get_id());
@@ -324,6 +323,20 @@ impl FfxivSimulationBoard {
                 target.borrow_mut().handle_ffxiv_event(ffxiv_event);
             }
         }
+
+        let end_turn_time = SystemTime::now();
+        let durations = end_turn_time
+            .duration_since(start_time)
+            .unwrap()
+            .as_millis();
+
+        if durations > 0 {
+            info!(
+                "time took: {}, event: {}",
+                durations,
+                &event.clone().to_string()
+            );
+        }
     }
 
     #[inline]
@@ -339,16 +352,16 @@ impl FfxivSimulationBoard {
         trait_percent: PercentType,
         guaranteed_crit: bool,
         guaranteed_dh: bool,
-        snapshotted_buffs: &HashMap<StatusKey, BuffStatus>,
-        snapshotted_debuffs: &HashMap<StatusKey, DebuffStatus>,
+        snapshotted_infos: &SnapshotTable,
         damage_category: DamageCategory,
         current_combat_time_millisecond: TimeType,
     ) {
         let player_id = player.borrow().get_id();
         let mut power = player.borrow().power.clone();
 
-        for (_, buff) in snapshotted_buffs.iter() {
-            buff.get_status_info()
+        for snapshot_info in snapshotted_infos.values() {
+            snapshot_info
+                .status_infos
                 .iter()
                 .for_each(|status_info| match status_info {
                     StatusInfo::IncreaseMainStat(maximum_increase, increase_percent) => {
@@ -370,8 +383,7 @@ impl FfxivSimulationBoard {
             trait_percent,
             guaranteed_crit,
             guaranteed_dh,
-            snapshotted_buffs,
-            snapshotted_debuffs,
+            snapshotted_infos,
             &power,
         );
 
@@ -482,7 +494,7 @@ impl FfxivSimulationBoard {
             .push(Reverse(player.borrow().start_turn.clone()));
 
         match &player.borrow().start_turn {
-            FfxivEvent::PlayerTurn(player_id, turn_type, next_gcd_time_millisecond, time) => {
+            FfxivEvent::PlayerTurn(player_id, turn_type, next_gcd_time_millisecond, _) => {
                 if matches!(*turn_type, FfxivTurnType::Ogcd) {
                     self.event_queue
                         .borrow_mut()
@@ -503,7 +515,7 @@ impl FfxivSimulationBoard {
             self.register_auto_attack_ticker(player.borrow().get_id(), &player.borrow().job_abbrev);
         }
 
-        if player.borrow().job_abbrev == "DRK" {
+        if player.borrow().job_abbrev.as_str() == "DRK" {
             self.register_mana_ticker(player.borrow().get_id());
         }
     }
@@ -522,7 +534,7 @@ impl FfxivSimulationBoard {
     }
 
     fn register_mana_ticker(&self, player_id: PlayerIdType) {
-        let mana_ticker = IndependentTicker::new(
+        let mut mana_ticker = IndependentTicker::new(
             200,
             0,
             TimeType::MAX,
@@ -533,6 +545,7 @@ impl FfxivSimulationBoard {
             true,
         );
 
+        mana_ticker.run_ticker(0, None, Default::default());
         self.register_ticker(FfxivEventTicker::IndependentTicker(mana_ticker));
     }
 

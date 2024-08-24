@@ -10,7 +10,7 @@ use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct PaladinDatabase {
@@ -89,7 +89,7 @@ impl PaladinDatabase {
         let CIRCLE_OF_SCORN_DOT: DebuffStatus = DebuffStatus {
             id: 1903,
             name: String::from("Circle of Scorn"),
-            snapshotted_buffs: Default::default(),
+            snapshotted_infos: Default::default(),
             owner_id: player_id,
             potency: Some(30),
             trait_percent: Some(100),
@@ -101,7 +101,6 @@ impl PaladinDatabase {
             is_raidwide: false,
             stacks: 1,
             max_stacks: 1,
-            snapshotted_debuffs: Default::default(),
         };
         let CONFITEOR_READY: BuffStatus = BuffStatus {
             id: 1904,

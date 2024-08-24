@@ -3,16 +3,13 @@ use crate::damage_calculator::{
     ONE_HUNDRED_PERCENT,
 };
 use crate::event_ticker::PercentType;
-use crate::id_entity::IdEntity;
 use crate::live_objects::player::player_power::PlayerPower;
 use crate::live_objects::player::StatusKey;
-use crate::owner_tracker::OwnerTracker;
 use crate::skill::damage_category::DamageCategory;
-use crate::status::buff_status::BuffStatus;
-use crate::status::debuff_status::DebuffStatus;
-use crate::status::Status;
-use crate::types::{IdType, MultiplierType, PlayerIdType, PotencyType};
-use log::{debug, info};
+use crate::status::snapshot_status::snapshot_status_infos;
+use crate::status::status_info::StatusInfo;
+use crate::types::{MultiplierType, PlayerIdType, PotencyType, SnapshotTable};
+use log::debug;
 use rand::{random, thread_rng, Rng};
 use std::collections::HashMap;
 
@@ -28,32 +25,22 @@ pub trait RawDamageCalculator {
         trait_percent: PercentType,
         is_guaranteed_critical_hit: bool,
         is_guaranteed_direct_hit: bool,
-        buffs: &HashMap<StatusKey, BuffStatus>,
-        debuffs: &HashMap<StatusKey, DebuffStatus>,
+        snapshotted_status: &SnapshotTable,
         player_power: &PlayerPower,
     ) -> (DamageRdpsProfile, bool) {
         let potency = potency as MultiplierType;
         debug_assert!(potency >= DAMAGE_BASE, "{}", potency);
-        let mut base_damage =
-            calculate_base_damage(potency, trait_percent, damage_category, player_power);
+        let mut base_damage = calculate_base_damage(
+            potency,
+            trait_percent,
+            damage_category,
+            player_power,
+            is_guaranteed_direct_hit,
+        );
 
-        for buff in buffs.values() {
-            if buff.get_owner_id() == player_id {
-                let damage_multiplier = buff.get_damage_multiplier(
-                    is_guaranteed_critical_hit,
-                    is_guaranteed_direct_hit,
-                    player_power.critical_strike_damage,
-                );
-
-                if damage_multiplier > MULTIPLIER_BASE {
-                    base_damage *= damage_multiplier;
-                }
-            }
-        }
-
-        for debuff in debuffs.values() {
-            if debuff.get_owner_id() == player_id {
-                let damage_multiplier = debuff.get_damage_multiplier(
+        for snapshot_info in snapshotted_status.values() {
+            if snapshot_info.owner_player_id == player_id {
+                let damage_multiplier = snapshot_info.get_damage_multiplier(
                     is_guaranteed_critical_hit,
                     is_guaranteed_direct_hit,
                     player_power.critical_strike_damage,
@@ -69,8 +56,7 @@ pub trait RawDamageCalculator {
             calculate_crit_direct_hit_damage_direct_damage(
                 player_id,
                 base_damage,
-                buffs,
-                debuffs,
+                snapshotted_status,
                 player_power,
                 is_guaranteed_critical_hit,
                 is_guaranteed_direct_hit,
@@ -80,27 +66,11 @@ pub trait RawDamageCalculator {
         let mut final_damage_multiplier = MULTIPLIER_BASE;
         let mut final_damage = crit_direct_hit_calculation_result;
 
-        for buff in buffs.values() {
-            if buff.get_owner_id() == player_id {
+        for snapshot in snapshotted_status.values() {
+            if snapshot.owner_player_id == player_id {
                 continue;
             }
-            let damage_multiplier = buff.get_damage_multiplier(
-                is_guaranteed_critical_hit,
-                is_guaranteed_direct_hit,
-                player_power.critical_strike_damage,
-            );
-
-            if damage_multiplier > MULTIPLIER_BASE {
-                final_damage_multiplier *= damage_multiplier;
-                final_damage *= damage_multiplier;
-            }
-        }
-
-        for debuff in debuffs.values() {
-            if debuff.get_owner_id() == player_id {
-                continue;
-            }
-            let damage_multiplier = debuff.get_damage_multiplier(
+            let damage_multiplier = snapshot.get_damage_multiplier(
                 is_guaranteed_critical_hit,
                 is_guaranteed_direct_hit,
                 player_power.critical_strike_damage,
@@ -115,12 +85,18 @@ pub trait RawDamageCalculator {
         let damage_buff_contribution = final_damage - crit_direct_hit_calculation_result;
         let final_damage_multiplier_log = MultiplierType::log10(final_damage_multiplier);
 
-        for buff in buffs.values() {
-            if buff.get_owner_id() == player_id {
+        for value in contribution_table.values_mut() {
+            let adjusted_crit_dh_buff_contribution = *value * final_damage_multiplier;
+            final_damage += adjusted_crit_dh_buff_contribution - *value;
+            *value = adjusted_crit_dh_buff_contribution;
+        }
+
+        for (&key, snapshot) in snapshotted_status.iter() {
+            if snapshot.owner_player_id == player_id {
                 continue;
             }
 
-            let damage_multiplier = buff.get_damage_multiplier(
+            let damage_multiplier = snapshot.get_damage_multiplier(
                 is_guaranteed_critical_hit,
                 is_guaranteed_direct_hit,
                 player_power.critical_strike_damage,
@@ -132,44 +108,19 @@ pub trait RawDamageCalculator {
                 let buff_damage_contribution = damage_buff_contribution * buff_damage_portion;
 
                 let entry = contribution_table
-                    .entry(StatusKey::new(buff.get_id(), buff.get_owner_id()))
+                    .entry(StatusKey::new(key.status_id, snapshot.owner_player_id))
                     .or_insert(DAMAGE_BASE);
                 *entry += buff_damage_contribution;
-            }
-        }
-
-        for debuff in debuffs.values() {
-            if debuff.get_owner_id() == player_id {
-                continue;
-            }
-
-            let damage_multiplier = debuff.get_damage_multiplier(
-                is_guaranteed_critical_hit,
-                is_guaranteed_direct_hit,
-                player_power.critical_strike_damage,
-            );
-
-            if damage_multiplier > MULTIPLIER_BASE {
-                let buff_damage_portion =
-                    MultiplierType::log10(damage_multiplier) / final_damage_multiplier_log;
-                let debuff_damage_contribution = damage_buff_contribution * buff_damage_portion;
-
-                let entry = contribution_table
-                    .entry(StatusKey::new(debuff.get_id(), debuff.get_owner_id()))
-                    .or_insert(DAMAGE_BASE);
-                *entry += debuff_damage_contribution;
             }
         }
 
         let mut raw_damage = final_damage;
 
         for &value in contribution_table.values() {
-            if value > DAMAGE_BASE {
-                raw_damage -= value;
-            }
+            raw_damage -= value;
         }
 
-        let mut damage_rdps_profile = DamageRdpsProfile {
+        let damage_rdps_profile = DamageRdpsProfile {
             raw_damage,
             final_damage,
             rdps_contribution: contribution_table,
@@ -190,11 +141,19 @@ fn calculate_base_damage(
     trait_percent: PercentType,
     damage_category: DamageCategory,
     player_power: &PlayerPower,
-) -> f64 {
+    is_guaranteed_direct_hit: bool,
+) -> MultiplierType {
+    let determination_multiplier = if is_guaranteed_direct_hit {
+        // https://www.akhmorning.com/allagan-studies/stats/dh/#formulae
+        // Auto DH is added to determination multiplier
+        player_power.determination_multiplier + player_power.auto_direct_hit_increase
+    } else {
+        player_power.determination_multiplier
+    };
     match damage_category {
         DamageCategory::Direct => {
             let d1 = MultiplierType::floor(
-                potency * player_power.main_stat_multiplier * player_power.determination_multiplier,
+                potency * player_power.main_stat_multiplier * determination_multiplier,
             );
             debug_assert!(d1 >= potency, "{}", d1);
 
@@ -207,7 +166,7 @@ fn calculate_base_damage(
         }
         DamageCategory::PhysicalDot => {
             let d1 = MultiplierType::floor(
-                potency * player_power.main_stat_multiplier * player_power.determination_multiplier,
+                potency * player_power.main_stat_multiplier * determination_multiplier,
             );
             let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_multiplier);
             d2 = MultiplierType::floor(d2 * player_power.speed_multiplier);
@@ -220,13 +179,13 @@ fn calculate_base_damage(
             d1 = MultiplierType::floor(d1 * player_power.main_stat_multiplier);
             d1 = MultiplierType::floor(d1 * player_power.speed_multiplier);
 
-            let mut d2 = MultiplierType::floor(d1 * player_power.determination_multiplier);
+            let mut d2 = MultiplierType::floor(d1 * determination_multiplier);
             d2 = MultiplierType::floor(d2 * trait_percent as MultiplierType);
             MultiplierType::floor(d2 / ONE_HUNDRED_PERCENT) + 1.0
         }
         DamageCategory::AutoAttack => {
             let d1 = MultiplierType::floor(
-                potency * player_power.main_stat_multiplier * player_power.determination_multiplier,
+                potency * player_power.main_stat_multiplier * determination_multiplier,
             );
 
             let mut d2 = MultiplierType::floor(d1 * player_power.tenacity_multiplier);
@@ -248,8 +207,7 @@ fn get_damage_variance_multiplier() -> MultiplierType {
 fn calculate_crit_direct_hit_damage_direct_damage(
     player_id: PlayerIdType,
     base_damage: MultiplierType,
-    buffs: &HashMap<StatusKey, BuffStatus>,
-    debuffs: &HashMap<StatusKey, DebuffStatus>,
+    snapshotted_status: &SnapshotTable,
     player_power: &PlayerPower,
     is_guaranteed_critical_hit: bool,
     is_guaranteed_direct_hit: bool,
@@ -269,9 +227,9 @@ fn calculate_crit_direct_hit_damage_direct_damage(
     };
 
     let critical_hit_rate =
-        get_final_critical_hit_rate(buffs, debuffs, is_guaranteed_critical_hit, player_power);
+        get_final_critical_hit_rate(snapshotted_status, is_guaranteed_critical_hit, player_power);
     let direct_hit_rate =
-        get_final_direct_hit_rate(buffs, debuffs, is_guaranteed_direct_hit, player_power);
+        get_final_direct_hit_rate(snapshotted_status, is_guaranteed_direct_hit, player_power);
 
     let crit_rng = thread_rng().gen_range(0..1000) as MultiplierType / 1000.0;
     let direct_hit_rng = thread_rng().gen_range(0..1000) as MultiplierType / 1000.0;
@@ -330,30 +288,15 @@ fn calculate_crit_direct_hit_damage_direct_damage(
     if crit_probability_multiplier > MULTIPLIER_BASE && !is_guaranteed_critical_hit {
         let crit_contribution = crit_portion * crit_dh_contribution;
 
-        for buff in buffs.values() {
-            let buff_critical_rate =
-                buff.get_critical_strike_rate_increase(is_guaranteed_critical_hit);
+        for (&key, snapshot_info) in snapshotted_status.iter() {
+            let status_critical_rate =
+                snapshot_info.get_critical_strike_rate_increase(is_guaranteed_critical_hit);
 
-            if player_id != buff.get_owner_id() && buff_critical_rate > INCREASE_BASE {
-                let skill_portion = buff_critical_rate / critical_hit_rate;
-
-                let entry = contribution_board
-                    .entry(StatusKey::new(buff.get_id(), buff.get_owner_id()))
-                    .or_insert(DAMAGE_BASE);
-
-                *entry += crit_contribution * skill_portion;
-            }
-        }
-
-        for debuff in debuffs.values() {
-            let debuff_critical_rate =
-                debuff.get_critical_strike_rate_increase(is_guaranteed_critical_hit);
-
-            if player_id != debuff.get_owner_id() && debuff_critical_rate > INCREASE_BASE {
-                let skill_portion = debuff_critical_rate / critical_hit_rate;
+            if player_id != snapshot_info.owner_player_id && status_critical_rate > INCREASE_BASE {
+                let skill_portion = status_critical_rate / critical_hit_rate;
 
                 let entry = contribution_board
-                    .entry(StatusKey::new(debuff.get_id(), debuff.get_owner_id()))
+                    .entry(StatusKey::new(key.status_id, snapshot_info.owner_player_id))
                     .or_insert(DAMAGE_BASE);
 
                 *entry += crit_contribution * skill_portion;
@@ -364,30 +307,16 @@ fn calculate_crit_direct_hit_damage_direct_damage(
     if dh_multiplier > 1.0 && !is_guaranteed_direct_hit {
         let dh_contribution = dh_portion * crit_dh_contribution;
 
-        for buff in buffs.values() {
-            let buff_direct_hit_rate = buff.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
+        for (&key, snapshot_info) in snapshotted_status.iter() {
+            let buff_direct_hit_rate =
+                snapshot_info.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
 
-            if player_id != buff.get_owner_id() && buff_direct_hit_rate > 0.0 {
+            if player_id != snapshot_info.owner_player_id && buff_direct_hit_rate > 0.0 {
                 let skill_portion = buff_direct_hit_rate / direct_hit_rate;
 
                 let entry = contribution_board
-                    .entry(StatusKey::new(buff.get_id(), buff.get_owner_id()))
-                    .or_insert(0.0);
-
-                *entry += dh_contribution * skill_portion;
-            }
-        }
-
-        for debuff in debuffs.values() {
-            let debuff_direct_hit_rate =
-                debuff.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
-
-            if player_id != debuff.get_owner_id() && debuff_direct_hit_rate > 0.0 {
-                let skill_portion = debuff_direct_hit_rate / direct_hit_rate;
-
-                let entry = contribution_board
-                    .entry(StatusKey::new(debuff.get_id(), debuff.get_owner_id()))
-                    .or_insert(0.0);
+                    .entry(StatusKey::new(key.status_id, snapshot_info.owner_player_id))
+                    .or_insert(DAMAGE_BASE);
 
                 *entry += dh_contribution * skill_portion;
             }
@@ -402,8 +331,7 @@ fn calculate_crit_direct_hit_damage_direct_damage(
 }
 
 fn get_final_critical_hit_rate(
-    buffs: &HashMap<StatusKey, BuffStatus>,
-    debuffs: &HashMap<StatusKey, DebuffStatus>,
+    snapshotted_status: &SnapshotTable,
     is_guaranteed_crit: bool,
     player_power: &PlayerPower,
 ) -> MultiplierType {
@@ -412,20 +340,15 @@ fn get_final_critical_hit_rate(
     }
     let mut final_critical_hit_rate = player_power.critical_strike_rate;
 
-    for buff in buffs.values() {
-        final_critical_hit_rate += buff.get_critical_strike_rate_increase(is_guaranteed_crit);
-    }
-
-    for debuff in debuffs.values() {
-        final_critical_hit_rate += debuff.get_critical_strike_rate_increase(is_guaranteed_crit);
+    for status in snapshotted_status.values() {
+        final_critical_hit_rate += status.get_critical_strike_rate_increase(is_guaranteed_crit);
     }
 
     final_critical_hit_rate
 }
 
 fn get_final_direct_hit_rate(
-    buffs: &HashMap<StatusKey, BuffStatus>,
-    debuffs: &HashMap<StatusKey, DebuffStatus>,
+    status_infos: &SnapshotTable,
     is_guaranteed_direct_hit: bool,
     player_power: &PlayerPower,
 ) -> MultiplierType {
@@ -434,12 +357,9 @@ fn get_final_direct_hit_rate(
     }
     let mut final_direct_hit_rate = player_power.direct_hit_rate;
 
-    for buff in buffs.values() {
-        final_direct_hit_rate += buff.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
-    }
-
-    for debuff in debuffs.values() {
-        final_direct_hit_rate += debuff.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
+    for snapshot_info in status_infos.values() {
+        final_direct_hit_rate +=
+            snapshot_info.get_direct_hit_rate_increase(is_guaranteed_direct_hit);
     }
 
     final_direct_hit_rate

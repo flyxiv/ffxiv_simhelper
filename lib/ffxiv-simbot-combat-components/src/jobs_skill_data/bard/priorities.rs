@@ -100,7 +100,10 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
         },
         SkillPriorityInfo {
             skill_id: db.apex_arrow.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource(0, 16)),
+            prerequisite: Some(And(
+                Box::new(SkillPrerequisite::HasResource(0, 20)),
+                Box::new(Not(Box::new(MillisecondsBeforeBurst(60000)))),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.iron_jaws.get_id(),
@@ -111,7 +114,10 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
         },
         SkillPriorityInfo {
             skill_id: db.apex_arrow.get_id(),
-            prerequisite: Some(SkillPrerequisite::HasResource(0, 80)),
+            prerequisite: Some(And(
+                Box::new(SkillPrerequisite::HasResource(0, 16)),
+                Box::new(MillisecondsBeforeBurst(0)),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.resonant_arrow.get_id(),
@@ -138,15 +144,15 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
     let bard_ogcd_table: Vec<SkillPriorityInfo> = vec![
         SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(9000)),
         },
         SkillPriorityInfo {
             skill_id: db.battle_voice.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(700)),
         },
         SkillPriorityInfo {
             skill_id: db.radiant_finale.get_id(),
-            prerequisite: Some(MillisecondsBeforeBurst(0)),
+            prerequisite: Some(MillisecondsBeforeBurst(1000)),
         },
         SkillPriorityInfo {
             skill_id: db.wanderers_minuet.get_id(),
@@ -199,7 +205,7 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
         },
         SkillPriorityInfo {
             skill_id: db.raging_strike.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(2000)),
         },
         SkillPriorityInfo {
             skill_id: db.barrage.get_id(),

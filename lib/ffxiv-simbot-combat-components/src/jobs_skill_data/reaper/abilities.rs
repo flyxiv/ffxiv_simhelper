@@ -107,7 +107,7 @@ impl ReaperDatabase {
         let SHADOW_OF_DEATH_DEBUFF: DebuffStatus = DebuffStatus {
             id: 1204,
             name: String::from("Shadow of Death"),
-            snapshotted_buffs: Default::default(),
+            snapshotted_infos: Default::default(),
             stacks: 1,
             max_stacks: 1,
             owner_id: player_id,
@@ -119,7 +119,6 @@ impl ReaperDatabase {
             status_info: vec![StatusInfo::DamagePercent(10)],
             duration_millisecond: 30000,
             is_raidwide: false,
-            snapshotted_debuffs: Default::default(),
         };
         let PLENTIFUL_HARVEST_READY: BuffStatus = BuffStatus {
             id: 1205,

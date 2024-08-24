@@ -47,8 +47,7 @@ impl Target for FfxivTarget {
             FfxivEvent::DotTick(combat_time_millisecond) => {
                 for debuff in self.debuff_list.borrow().values() {
                     if let Some(potency) = debuff.potency {
-                        let snapshotted_buffs = debuff.snapshotted_buffs.clone();
-                        let snapshotted_debuffs = debuff.snapshotted_debuffs.clone();
+                        let snapshotted_infos = debuff.snapshotted_infos.clone();
 
                         self.event_queue
                             .borrow_mut()
@@ -59,8 +58,7 @@ impl Target for FfxivTarget {
                                 debuff.trait_percent.unwrap(),
                                 false,
                                 false,
-                                snapshotted_buffs,
-                                snapshotted_debuffs,
+                                snapshotted_infos,
                                 debuff.damage_category.unwrap(),
                                 combat_time_millisecond,
                             )));

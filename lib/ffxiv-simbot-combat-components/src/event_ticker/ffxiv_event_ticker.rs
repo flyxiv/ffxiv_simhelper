@@ -5,7 +5,7 @@ use crate::event_ticker::independent_ticker::IndependentTicker;
 use crate::event_ticker::{EventTicker, TickerKey};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{IdType, TimeType};
+use crate::types::TimeType;
 use crate::types::{PlayerIdType, StatusTable};
 use std::cell::RefCell;
 use std::rc::Rc;

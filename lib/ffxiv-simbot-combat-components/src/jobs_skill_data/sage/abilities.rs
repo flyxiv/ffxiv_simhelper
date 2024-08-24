@@ -8,7 +8,7 @@ use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 
 pub(crate) struct SageDatabase {
     pub(crate) dot_status: DebuffStatus,
@@ -37,8 +37,7 @@ impl SageDatabase {
             stacks: 1,
             max_stacks: 1,
             name: String::from("Eukrasian Dosis III"),
-            snapshotted_buffs: Default::default(),
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
         };
         let DOT: AttackSkill = AttackSkill {
             id: 700,

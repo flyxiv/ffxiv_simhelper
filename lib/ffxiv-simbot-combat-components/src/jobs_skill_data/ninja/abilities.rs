@@ -112,8 +112,7 @@ impl NinjaDatabase {
             duration_millisecond: 20000,
             is_raidwide: true,
             stacks: 1,
-            snapshotted_buffs: Default::default(),
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
             max_stacks: 1,
         };
         let KUNAIS_BANE_STATUS: DebuffStatus = DebuffStatus {
@@ -129,8 +128,7 @@ impl NinjaDatabase {
             duration_millisecond: 15000,
             is_raidwide: false,
             stacks: 1,
-            snapshotted_buffs: Default::default(),
-            snapshotted_debuffs: Default::default(),
+            snapshotted_infos: Default::default(),
             max_stacks: 1,
         };
         let KASSATSU_STATUS: BuffStatus = BuffStatus {

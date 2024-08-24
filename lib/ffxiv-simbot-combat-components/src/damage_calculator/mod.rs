@@ -1,7 +1,7 @@
 use crate::live_objects::player::StatusKey;
-use crate::types::{IdType, MultiplierType};
+use crate::types::MultiplierType;
 use std::collections::HashMap;
-use std::fmt::{Debug, Pointer};
+use std::fmt::Debug;
 
 pub mod raw_damage_calculator;
 

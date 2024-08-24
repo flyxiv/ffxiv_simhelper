@@ -1,4 +1,5 @@
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ApplyRaidBuff};
+use crate::event_ticker::PercentType;
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::{CasterGlobalSkill, PotionSkill};
 use crate::rotation::SkillTable;
@@ -8,8 +9,10 @@ use crate::skill::ResourceRequirements::{Resource, UseBuff};
 use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
+
+const PROC_PERCENT: PercentType = 60;
 
 pub(crate) struct RedmageDatabase {
     pub(crate) jolt_iii: AttackSkill,
@@ -238,7 +241,7 @@ impl RedmageDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 130,
             additional_skill_events: vec![],
-            proc_events: vec![(verstone_ready_apply.clone(), 50)],
+            proc_events: vec![(verstone_ready_apply.clone(), PROC_PERCENT)],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 5000,
@@ -263,7 +266,7 @@ impl RedmageDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 130,
             additional_skill_events: vec![],
-            proc_events: vec![(verstone_ready_apply.clone(), 50)],
+            proc_events: vec![(verstone_ready_apply.clone(), PROC_PERCENT)],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -288,7 +291,7 @@ impl RedmageDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 130,
             additional_skill_events: vec![],
-            proc_events: vec![(verstone_ready_apply.clone(), 50)],
+            proc_events: vec![(verstone_ready_apply.clone(), PROC_PERCENT)],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -339,7 +342,7 @@ impl RedmageDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 130,
             additional_skill_events: vec![],
-            proc_events: vec![(verfire_ready_apply.clone(), 50)],
+            proc_events: vec![(verfire_ready_apply.clone(), PROC_PERCENT)],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
@@ -364,7 +367,7 @@ impl RedmageDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 130,
             additional_skill_events: vec![],
-            proc_events: vec![(verfire_ready_apply.clone(), 50)],
+            proc_events: vec![(verfire_ready_apply.clone(), PROC_PERCENT)],
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
