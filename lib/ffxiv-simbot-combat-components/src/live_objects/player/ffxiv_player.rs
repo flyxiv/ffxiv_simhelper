@@ -29,6 +29,7 @@ use std::cmp::Reverse;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+pub const FFXIV_EVENT_QUEUE_INITIAL_CAPACITY: usize = 20;
 pub static TARGET_ID: PlayerIdType = 100;
 
 /// The Abstraction for an actual FFXIV Player in the combat.
@@ -452,6 +453,8 @@ impl FfxivPlayer {
         gcd_start_time_millisecond: Option<TimeType>,
         player_count: usize,
     ) -> FfxivPlayer {
+        let mut internal_event_queue = vec![];
+        internal_event_queue.reserve(FFXIV_EVENT_QUEUE_INITIAL_CAPACITY);
         FfxivPlayer {
             id,
             combat_resources: RefCell::new(FfxivCombatResources::new(
@@ -466,7 +469,7 @@ impl FfxivPlayer {
             power,
             priority_table,
             buff_list: Rc::new(RefCell::new(buff_list)),
-            internal_event_queue: RefCell::new(vec![]),
+            internal_event_queue: RefCell::new(internal_event_queue),
             turn_calculator: RefCell::new(PlayerTurnCalculator::new(
                 id,
                 event_queue.clone(),

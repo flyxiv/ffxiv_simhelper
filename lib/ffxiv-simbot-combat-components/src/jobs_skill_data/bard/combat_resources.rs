@@ -1,7 +1,7 @@
 use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
-use crate::jobs_skill_data::bard::abilities::{get_song_skill_ids, make_bard_skill_list};
+use crate::jobs_skill_data::bard::abilities::make_bard_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -13,10 +13,15 @@ use crate::status::status_info::StatusInfo;
 use crate::types::{
     ComboType, IdType, PlayerIdType, ResourceIdType, ResourceType, SkillStackType, TimeType,
 };
+use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
+
+lazy_static! {
+    static ref BARD_SONG_SKILL_IDS: Vec<IdType> = vec![1312, 1313, 1314];
+}
 
 const APEX_MAX_STACK: ResourceType = 20;
 const WANDERER_MAX_STACK: ResourceType = 3;
@@ -93,7 +98,7 @@ impl CombatResource for BardCombatResources {
         let skill_internal_events = vec![];
         let mut skill_events = vec![];
 
-        if get_song_skill_ids().contains(&skill_id) {
+        if BARD_SONG_SKILL_IDS.contains(&skill_id) {
             if skill_id == 1312 {
                 let army_paeon_stacks = self.army_stack;
 

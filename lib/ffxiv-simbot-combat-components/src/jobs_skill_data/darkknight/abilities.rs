@@ -628,16 +628,3 @@ pub(crate) fn make_darkknight_skill_list(player_id: PlayerIdType) -> SkillTable<
 
     make_skill_table(darkknight_skill_list)
 }
-
-pub(crate) fn darkknight_gcd_ids() -> Vec<IdType> {
-    let db = DarkknightDatabase::new(0);
-    vec![
-        db.hard_slash.get_id(),
-        db.syphon_strike.get_id(),
-        db.souleater.get_id(),
-        db.bloodspiller.get_id(),
-        db.scarlet_delirium.get_id(),
-        db.comeuppance.get_id(),
-        db.torcleaver.get_id(),
-    ]
-}

@@ -13,6 +13,8 @@ use itertools::Itertools;
 use std::cell::RefCell;
 use std::rc::Rc;
 
+const FFXIV_QUEUE_INITIAL_CAPACITY: usize = 100;
+
 pub(crate) async fn simulate_api_handler(
     Json(request): Json<SimulationApiRequest>,
 ) -> Result<Json<SimulationApiResponse>> {

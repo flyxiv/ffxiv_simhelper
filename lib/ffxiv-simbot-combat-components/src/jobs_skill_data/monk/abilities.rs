@@ -843,7 +843,3 @@ pub(crate) fn make_monk_skill_list(player_id: PlayerIdType) -> SkillTable<Attack
 
     make_skill_table(monk_skill_list)
 }
-
-pub(crate) fn get_combo2_combo3_skill_ids() -> Vec<IdType> {
-    vec![901, 902, 903, 904]
-}

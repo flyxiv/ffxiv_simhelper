@@ -1,5 +1,5 @@
 use crate::combat_resources::CombatResource;
-use crate::jobs_skill_data::reaper::abilities::{make_reaper_skill_list, reaper_normal_gcd_ids};
+use crate::jobs_skill_data::reaper::abilities::make_reaper_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -9,10 +9,15 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
+use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
+
+lazy_static! {
+    static ref REAPER_NORMAL_GCD_IDS: Vec<IdType> = vec![1200, 1201, 1202];
+}
 
 const SOUL_GAUGE_MAX: ResourceType = 100;
 const ENSHROUD_GAUGE_MAX: ResourceType = 100;
@@ -61,7 +66,7 @@ impl CombatResource for ReaperCombatResources {
                 self.executioner_stack + resource_amount,
             );
         } else if resource_id == 6 {
-            self.enshroud_count = self.enshroud_stack + resource_amount;
+            self.enshroud_count = self.enshroud_count + resource_amount;
         }
     }
 
@@ -103,7 +108,7 @@ impl CombatResource for ReaperCombatResources {
         _: TimeType,
         _: &FfxivPlayer,
     ) -> SkillEvents {
-        if reaper_normal_gcd_ids(self.player_id).contains(&skill_id) {
+        if REAPER_NORMAL_GCD_IDS.contains(&skill_id) {
             self.enshroud_count = 0;
         }
 

@@ -1,5 +1,5 @@
 use crate::combat_resources::CombatResource;
-use crate::jobs_skill_data::monk::abilities::{get_combo2_combo3_skill_ids, make_monk_skill_list};
+use crate::jobs_skill_data::monk::abilities::make_monk_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::SkillTable;
@@ -9,10 +9,15 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{IdType, TimeType};
+use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
+
+lazy_static! {
+    static ref MONK_COMBO2_COMBO3_SKILL_IDS: Vec<IdType> = vec![901, 902, 903, 904];
+}
 
 const CHAKRA_MAX_STACK: ResourceType = 5;
 const PERFECT_MAX_STACK: ResourceType = 3;
@@ -110,7 +115,7 @@ impl CombatResource for MonkCombatResources {
         _: TimeType,
         _: &FfxivPlayer,
     ) -> SkillEvents {
-        if get_combo2_combo3_skill_ids().contains(&skill_id) {
+        if MONK_COMBO2_COMBO3_SKILL_IDS.contains(&skill_id) {
             self.fires_reply_flag = 0;
         }
 

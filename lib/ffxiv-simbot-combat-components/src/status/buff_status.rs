@@ -65,6 +65,7 @@ impl BuffStatus {
         current_time_millisecond: TimeType,
     ) -> Vec<FfxivEvent> {
         let mut proc_events = vec![];
+        proc_events.reserve(self.trigger_proc_event_on_gcd.len());
 
         for (proc_event, proc_percent) in self.trigger_proc_event_on_gcd.iter() {
             let proc_value = thread_rng().gen_range(0..100);

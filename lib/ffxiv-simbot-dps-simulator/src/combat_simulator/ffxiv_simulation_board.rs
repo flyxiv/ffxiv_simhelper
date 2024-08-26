@@ -23,8 +23,6 @@ use ffxiv_simbot_combat_components::rotation::cooldown_timer::CooldownTimer;
 use ffxiv_simbot_combat_components::skill::attack_skill::AttackSkill;
 use ffxiv_simbot_combat_components::skill::damage_category::DamageCategory;
 use ffxiv_simbot_combat_components::skill::AUTO_ATTACK_ID;
-use ffxiv_simbot_combat_components::status::buff_status::BuffStatus;
-use ffxiv_simbot_combat_components::status::debuff_status::DebuffStatus;
 use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::status::status_info::StatusInfo;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
@@ -100,8 +98,6 @@ impl FfxivSimulationBoard {
     fn simulate_event(&self, ffxiv_event: FfxivEvent) {
         let event_time = ffxiv_event.get_event_time();
         self.update_time_related_informations(event_time);
-        let start_time = SystemTime::now();
-        let event = ffxiv_event.clone();
 
         match &ffxiv_event {
             FfxivEvent::PlayerTurn(player_id, _, _, time) => {
@@ -322,20 +318,6 @@ impl FfxivSimulationBoard {
                 let target = self.get_target();
                 target.borrow_mut().handle_ffxiv_event(ffxiv_event);
             }
-        }
-
-        let end_turn_time = SystemTime::now();
-        let durations = end_turn_time
-            .duration_since(start_time)
-            .unwrap()
-            .as_millis();
-
-        if durations > 0 {
-            info!(
-                "time took: {}, event: {}",
-                durations,
-                &event.clone().to_string()
-            );
         }
     }
 

@@ -19,11 +19,15 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::snapshot_status::snapshot_status_infos;
 use crate::types::{ComboType, IdType, PlayerIdType, PotencyType, TimeType};
 use crate::types::{ResourceType, StackType, StatusTable};
+use log::info;
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
 use std::cmp::max;
 use std::collections::HashMap;
 use std::rc::Rc;
+use std::time::Instant;
+
+const RESERVE_VEC_INITIAL_CAPACITY: usize = 10;
 
 #[derive(Clone)]
 pub struct AttackSkill {
@@ -88,13 +92,16 @@ impl Skill for AttackSkill {
         player: &FfxivPlayer,
     ) -> SkillEvents {
         let mut internal_events = vec![];
+        internal_events.reserve(RESERVE_VEC_INITIAL_CAPACITY);
+
         let resource_events = self.generate_resource_events(player);
         let cooldown_event = self.generate_cooldown_event();
-
         internal_events.push(cooldown_event);
         internal_events.extend(resource_events);
 
         let mut ffxiv_events = vec![];
+        ffxiv_events.reserve(RESERVE_VEC_INITIAL_CAPACITY);
+
         let damage_event = self.generate_damage_event(
             buffs.clone(),
             debuffs.clone(),
@@ -107,7 +114,6 @@ impl Skill for AttackSkill {
             debuffs.clone(),
             current_combat_time_milliseconds,
         ));
-
         if let Some(damage_event) = damage_event {
             ffxiv_events.push(damage_event);
         }
@@ -119,9 +125,11 @@ impl Skill for AttackSkill {
             current_combat_time_milliseconds,
             player,
         );
-
         if self.is_gcd() {
             for buffs in buffs.borrow().values() {
+                if buffs.trigger_proc_event_on_gcd.is_empty() {
+                    continue;
+                }
                 ffxiv_events.extend(buffs.generate_proc_event(current_combat_time_milliseconds));
             }
         }
@@ -145,6 +153,7 @@ impl AttackSkill {
     ) -> Vec<FfxivPlayerInternalEvent> {
         let mut stack = 1;
         let mut events = vec![];
+        events.reserve(RESERVE_VEC_INITIAL_CAPACITY);
 
         for resource_requirement in self.resource_required.iter() {
             if let Some((resource_event, stacks)) =
@@ -240,6 +249,8 @@ impl AttackSkill {
         combat_time_millisecond: TimeType,
     ) -> Vec<FfxivEvent> {
         let mut additional_skill_events = vec![];
+        additional_skill_events.reserve(RESERVE_VEC_INITIAL_CAPACITY);
+
         let resource_table = player.combat_resources.borrow();
 
         for additional_skill_event in self.additional_skill_events.clone() {

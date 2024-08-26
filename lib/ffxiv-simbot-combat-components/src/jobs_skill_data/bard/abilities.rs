@@ -1158,7 +1158,3 @@ pub(crate) fn make_bard_skill_list(
 
     make_skill_table(bard_skill_list)
 }
-
-pub(crate) fn get_song_skill_ids() -> Vec<IdType> {
-    vec![1312, 1313, 1314]
-}
