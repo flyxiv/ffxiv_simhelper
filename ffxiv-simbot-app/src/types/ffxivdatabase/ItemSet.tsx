@@ -7,9 +7,8 @@ import { convertEquipmentToItemStat } from "./ItemStats";
 import { getBaseMainStat } from "../../const/StartStats";
 
 import { FOOD_DATABASE } from "./Food";
-import { addMateriaStatToTotalStat, GearSetMaterias } from "./Materia";
+import { addMateriaStatToTotalStat } from "./Materia";
 import {
-  CharacterEquipmentsData,
   defaultPlayerPower,
   isTank,
   PlayerPower,
@@ -25,6 +24,7 @@ import {
   calculateWeaponMultiplierPercent,
 } from "./StatCalculator";
 import { CRIT_BASE_DAMAGE, CRIT_BASE_PERCENT } from "./Stats";
+import { SingleEquipmentInputSaveState } from "../SingleEquipmentInputSaveState";
 
 export const WEAPON_SLOT_ID = 0;
 export const HEAD_SLOT_ID = 1;
@@ -83,17 +83,13 @@ export function defaultItemSet(): ItemSet {
 }
 
 export function calculatePlayerPowerFromInputs(
-  itemSet: ItemSet,
-  jobAbbrev: string,
-  race: string,
-  foodId: number,
-  gearSetMaterias: GearSetMaterias
+  totalState: SingleEquipmentInputSaveState
 ): PlayerPower {
   let power: PlayerPower = defaultPlayerPower();
 
-  power.mainStat += getBaseMainStat(jobAbbrev, race);
+  power.mainStat += getBaseMainStat(totalState.mainPlayerJobAbbrev, totalState.race);
 
-  itemSet.forEach((equipmentId) => {
+  totalState.itemSet.forEach((equipmentId) => {
     let equipment = EQUIPMENT_DATABASE_BY_ID.get(equipmentId);
     if (equipment === undefined) {
       return;
@@ -112,7 +108,7 @@ export function calculatePlayerPowerFromInputs(
     power.piety += itemStat.piety;
   });
 
-  let food = FOOD_DATABASE.get(foodId);
+  let food = FOOD_DATABASE.get(totalState.foodId);
   if (food !== undefined) {
     power.criticalStrike += Math.min(
       food.criticalStrike,
@@ -137,13 +133,13 @@ export function calculatePlayerPowerFromInputs(
     power.tenacity += Math.min(food.tenacity, Math.floor(power.tenacity / 10));
   }
 
-  gearSetMaterias.forEach((materiasInSlot) => {
+  totalState.gearSetMaterias.forEach((materiasInSlot) => {
     materiasInSlot.forEach((materia) => {
       addMateriaStatToTotalStat(power, materia);
     });
   });
 
-  calculatePowerByStat(power, jobAbbrev);
+  calculatePowerByStat(power, totalState.mainPlayerJobAbbrev);
 
   return power;
 }
@@ -173,7 +169,6 @@ export function calculatePowerByStat(power: PlayerPower, jobAbbrev: string) {
     1 + calculateTenacityPercentIncrease(power.tenacity) / 100;
 
   power.autoDirectHitIncrease = calculateAutoDirectHitIncrease(power.directHit);
-  console.log(power.autoDirectHitIncrease);
 }
 
 export function isCaster(jobAbbrev: string) {
@@ -193,19 +188,15 @@ export function isCaster(jobAbbrev: string) {
 }
 
 export function updatePlayerPower(
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalState: SingleEquipmentInputSaveState,
+  setTotalState: Function
 ) {
   let updatedPower = calculatePlayerPowerFromInputs(
-    data.itemSet,
-    data.jobAbbrev,
-    data.race,
-    data.foodId,
-    data.gearSetMaterias
+    totalState
   );
 
-  setData({
-    ...data,
+  setTotalState({
+    ...totalState,
     power: updatedPower,
   });
 }

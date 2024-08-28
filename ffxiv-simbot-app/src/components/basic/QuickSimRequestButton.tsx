@@ -1,6 +1,5 @@
 import { styled, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { EquipmentSimCharacterStates } from "../../types/CharacterStates";
 import {
   mapJobAbbrevToJobDefaultStat,
   playerStatToPlayerPower,
@@ -10,20 +9,13 @@ import { QuickSimInputSaveName, QuickSimResponseSaveName } from "../../App";
 import { useState } from "react";
 import { QuickSimResponse } from "../../types/QuickSimResponse";
 import { requestButtonStyle } from "./Style";
-import {
-  CharacterEquipmentsData,
-  PlayerPower,
-} from "../../types/ffxivdatabase/PlayerPower";
-import { QuickSimInputSaveState } from "../../types/QuickSimInput";
+import { SingleEquipmentInputSaveState } from "../../types/SingleEquipmentInputSaveState";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 
 const totalRequestCount = 100;
 
 export function QuickSimRequestButton(
-  partyMemberJobAbbrevs: string[],
-  combatTimeSeconds: number,
-  characterState: EquipmentSimCharacterStates,
-  data: CharacterEquipmentsData
+  totalState: SingleEquipmentInputSaveState,
 ) {
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
@@ -40,20 +32,11 @@ export function QuickSimRequestButton(
 
   const handleClick = async () => {
     setButtonText(loadingButtonText(requestCount));
-    let input = createQuickSimInputSaveState(
-      partyMemberJobAbbrevs,
-      characterState,
-      combatTimeSeconds,
-      data
-    );
-    let inputJson = JSON.stringify(input);
+    let inputJson = JSON.stringify(totalState);
     localStorage.setItem(QuickSimInputSaveName, inputJson);
 
     let request = createQuickSimRequest(
-      partyMemberJobAbbrevs,
-      combatTimeSeconds,
-      characterState,
-      data.power
+      totalState
     );
 
     if (request instanceof Error) {
@@ -150,58 +133,34 @@ export function QuickSimRequestButton(
   );
 }
 
-function createQuickSimInputSaveState(
-  partyMemberJobAbbrevs: string[],
-  mainCharacterState: EquipmentSimCharacterStates,
-  combatTimeSeconds: number,
-  data: CharacterEquipmentsData
-): QuickSimInputSaveState {
-  let partyMemberIds: number[] = [];
-  partyMemberJobAbbrevs.forEach((jobAbbrev, index) => {
-    if (jobAbbrev !== "Empty") {
-      partyMemberIds.push(index + 1);
-    }
-  });
-
-  return {
-    partyMemberJobAbbrevs: partyMemberJobAbbrevs,
-    itemSet: data.itemSet,
-    gearSetMaterias: data.gearSetMaterias,
-    mainPlayerJob: mainCharacterState.jobAbbrev,
-    race: data.race,
-    mainPlayerPartner1Id: mainCharacterState.partner1Id,
-    mainPlayerPartner2Id: mainCharacterState.partner2Id,
-    combatTimeMillisecond: combatTimeSeconds * 1000,
-    partyMemberIds: partyMemberIds,
-    foodId: data.foodId,
-  };
-}
 
 function createQuickSimRequest(
-  partyState: string[],
-  combatTimeSeconds: number,
-  characterState: EquipmentSimCharacterStates,
-  power: PlayerPower
+  totalState: SingleEquipmentInputSaveState
 ) {
-  let autoAttackDelays = AUTO_ATTACK_DELAYS.get(characterState.jobAbbrev);
+  let jobAbbrev = totalState.mainPlayerJobAbbrev;
+  let partner1Id = totalState.mainPlayerPartner1Id;
+  let partner2Id = totalState.mainPlayerPartner2Id;
+
+  let autoAttackDelays = AUTO_ATTACK_DELAYS.get(totalState.mainPlayerJobAbbrev);
   if (autoAttackDelays === undefined) {
     autoAttackDelays = 0;
   }
+  let power = totalState.power;
   power.autoAttackDelays = autoAttackDelays;
 
   let partyInfo: PartyInfo[] = [
     {
       playerId: 0,
-      jobAbbrev: characterState.jobAbbrev,
-      partner1Id: characterState.partner1Id,
-      partner2Id: characterState.partner2Id,
+      jobAbbrev: jobAbbrev,
+      partner1Id: partner1Id,
+      partner2Id: partner2Id,
       power: power,
     },
   ];
 
   let playerCount = 0;
-  for (let i = 0; i < partyState.length; i++) {
-    let jobAbbrev = partyState[i];
+  for (let i = 0; i < totalState.partyMemberJobAbbrevs.length; i++) {
+    let jobAbbrev = totalState.partyMemberJobAbbrevs[i];
     let defaultStat = mapJobAbbrevToJobDefaultStat(jobAbbrev);
 
     if (defaultStat === undefined) {
@@ -228,7 +187,7 @@ function createQuickSimRequest(
 
   return {
     mainPlayerId: 0,
-    combatTimeMillisecond: combatTimeSeconds * 1000,
+    combatTimeMillisecond: totalState.combatTimeMillisecond,
     party: partyInfo,
   };
 }

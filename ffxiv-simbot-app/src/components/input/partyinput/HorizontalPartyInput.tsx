@@ -9,12 +9,7 @@ import {
   inputStyleSimulationResultTextBox,
   SimulationResultTimeTextBox,
 } from "../SimulationResultTextBox";
-
-interface TextTimeForm {
-  value: string;
-  state: number;
-  setState: Function;
-}
+import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
 
 const HorizontalInputGridContainer = styled(Grid)`
   ${HorizontalInputGridContainerStyle}
@@ -32,44 +27,32 @@ const HorizontalInputBox = styled(Box)`
 const InputJobBox = styled(Grid)`
   ${inputStyleSimulationResultTextBox}
 `;
-export function handleTimeChange(textForm: TextTimeForm) {
-  const value = textForm.value === "" ? "" : parseInt(textForm.value);
-  textForm.setState(value);
-}
 
 export function HorizontalPartyInput(
-  playerIds: number[],
-  partyJobs: string[],
-  partySetter: React.Dispatch<React.SetStateAction<string[]>>,
-  availablePartyIds: number[],
-  setAvailablePartyIds: Function,
-  time: number,
-  timeSetter: Function
+  totalState: SingleEquipmentInputSaveState,
+  setTotalState: Function
 ) {
   let xs = 15;
   return (
     <HorizontalInputGridContainer container>
       <HorizontalInputBox marginBottom={0.5}>
         <InputGridItem item xs={xs}>
-          <SimulationResultTimeTextBox
-            label="Combat Time(Seconds)"
-            state={time}
-            setState={timeSetter}
-            handleChange={handleTimeChange}
-          />
+          {SimulationResultTimeTextBox(
+            "Combat Time(Seconds)",
+            totalState,
+            setTotalState)
+          }
         </InputGridItem>
       </HorizontalInputBox>
-      {playerIds.map((playerId) => (
+      {[1, 2, 3, 4, 5, 6, 7].map((playerId) => (
         <HorizontalInputBox marginBottom={0.5} key={playerId}>
           <InputGridItem item xs={xs}>
             <InputBox marginBottom={0.5} key={playerId}>
               <InputJobBox item xs={xs} key={`Job-${playerId}`}>
                 {PartyMemberJobSelection(
                   playerId,
-                  partyJobs,
-                  partySetter,
-                  availablePartyIds,
-                  setAvailablePartyIds
+                  totalState,
+                  setTotalState
                 )}
               </InputJobBox>
             </InputBox>

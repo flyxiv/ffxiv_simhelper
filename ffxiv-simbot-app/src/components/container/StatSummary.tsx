@@ -11,8 +11,8 @@ import {
   getStatLostByStatName,
   getStatNeededByStatName,
   getStatPowerByStatName,
-  PlayerPower,
 } from "../../types/ffxivdatabase/PlayerPower";
+import { SingleEquipmentInputSaveState } from "../../types/SingleEquipmentInputSaveState";
 
 let StatSummaryBox = styled(Box)`
   ${StatSummaryBoxStyle}
@@ -22,8 +22,10 @@ let SingleStatBox = styled(Box)`
   ${SingleStatBoxStyle}
 `;
 
-export function StatSummary(jobAbbrev: string, power: PlayerPower) {
-  let jobStatNames = getStatNames(jobAbbrev);
+export function StatSummary(totalState: SingleEquipmentInputSaveState) {
+  let jobStatNames = getStatNames(totalState.mainPlayerJobAbbrev);
+  let power = totalState.power;
+  let jobAbbrev = totalState.mainPlayerJobAbbrev;
   return (
     <Box>
       <StatSummaryBox>

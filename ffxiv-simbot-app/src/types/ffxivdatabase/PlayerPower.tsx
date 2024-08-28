@@ -47,6 +47,8 @@ export interface PlayerPower {
   gcd: number;
 }
 
+
+
 export interface CharacterEquipmentsData {
   power: PlayerPower;
   itemSet: ItemSet;

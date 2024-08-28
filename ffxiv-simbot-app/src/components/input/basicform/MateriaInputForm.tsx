@@ -16,13 +16,13 @@ import {
   EMPTY_MATERIA,
 } from "../../../types/ffxivdatabase/Materia";
 import { MateriaMenuItem } from "../../../components/items/MateriaMenuItem";
-import { CharacterEquipmentsData } from "../../../types/ffxivdatabase/PlayerPower";
 import {
   slotNameToSlotIndex,
   updatePlayerPower,
 } from "../../../types/ffxivdatabase/ItemSet";
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { ColorConfigurations } from "../../../Themes";
+import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
 
 const MateriaMenu = styled(MenuItem)`
   ${MenuItemStyle}
@@ -31,10 +31,10 @@ const MateriaMenu = styled(MenuItem)`
 export function MateriaInputTable(
   slotName: string,
   equipment: Equipment | undefined,
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalState: SingleEquipmentInputSaveState,
+  setTotalState: Function
 ) {
-  let materiasInSlot = data.gearSetMaterias[slotNameToSlotIndex(slotName)];
+  let materiasInSlot = totalState.gearSetMaterias[slotNameToSlotIndex(slotName)];
   if (equipment === undefined) {
     return <></>;
   }
@@ -45,8 +45,8 @@ export function MateriaInputTable(
       materiasInSlot,
       materiaSlot,
       slotName,
-      data,
-      setData
+      totalState,
+      setTotalState
     );
   });
 }
@@ -56,8 +56,8 @@ function SingleMateriaMenu(
   materias: Materia[] | undefined,
   materiaSlot: number,
   slotName: string,
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalState: SingleEquipmentInputSaveState,
+  setTotalState: Function
 ) {
   if (materias === undefined) {
     return <></>;
@@ -70,16 +70,16 @@ function SingleMateriaMenu(
 
   let updateMateria = (e: SelectChangeEvent<string>) => {
     let materiasOfSlot =
-      data.gearSetMaterias[slotNameToSlotIndex(slotName)];
+      totalState.gearSetMaterias[slotNameToSlotIndex(slotName)];
 
     updateMateriaList(e.target.value, equipment, materiasOfSlot, materiaSlot);
-    let newGearSetMaterias = [...data.gearSetMaterias];
-    let newData = { ...data };
+    let newGearSetMaterias = [...totalState.gearSetMaterias];
+    let newData = { ...totalState };
 
     newGearSetMaterias[slotNameToSlotIndex(slotName)] =
       materiasOfSlot;
     newData.gearSetMaterias = newGearSetMaterias;
-    updatePlayerPower(newData, setData);
+    updatePlayerPower(newData, setTotalState);
   };
 
   let materiaValue = toMateriaKey(materias[materiaSlot]);

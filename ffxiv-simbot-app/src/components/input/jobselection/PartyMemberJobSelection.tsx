@@ -6,27 +6,25 @@ import {
   Typography,
 } from "@mui/material";
 import { JobMenuItem } from "../../items/JobMenuItem";
-import React from "react";
 import { CustomFormControl } from "../basicform/BasicInputForm";
 import { ColorConfigurations } from "../../../Themes";
+import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
 
 export function PartyMemberJobSelection(
   id: number,
-  jobNames: string[],
-  jobNameSetter: React.Dispatch<React.SetStateAction<string[]>>,
-  availablePartyIds: number[],
-  setAvailablePartyIds: Function
+  totalState: SingleEquipmentInputSaveState,
+  setTotalState: Function
 ) {
   let playerId = `Party Member ${id}`;
   const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
-    const newJobNames = jobNames.map((jobName, i) => {
+    const newJobNames = totalState.partyMemberJobAbbrevs.map((jobName, i) => {
       if (i === index) {
         return e.target.value;
       }
       return jobName;
     });
 
-    let newAvailablePartyIds = availablePartyIds;
+    let newAvailablePartyIds = totalState.partyMemberIds;
     newAvailablePartyIds = newAvailablePartyIds.filter(
       (partyId) => partyId !== id
     );
@@ -36,19 +34,21 @@ export function PartyMemberJobSelection(
     }
     newAvailablePartyIds.sort((a, b) => a - b);
 
-    setAvailablePartyIds(newAvailablePartyIds);
+    let newTotalState = { ...totalState, partyMemberJobAbbrevs: newJobNames, partyMemberIds: newAvailablePartyIds };
 
-    jobNameSetter(newJobNames);
+    setTotalState(newTotalState);
   };
+
+  let key = `job-select-partymember-${id}`;
 
   return (
     <CustomFormControl fullWidth>
       <InputLabel id="JobSelect">{playerId}</InputLabel>
       <Select
         labelId={playerId}
-        id="job-select-{id}"
-        value={jobNames[id - 1]}
-        key="job-select-{id}"
+        id={key}
+        value={totalState.partyMemberJobAbbrevs[id - 1]}
+        key={key}
         label="Job Name"
         onChange={(event) => {
           updateState(id - 1)(event);

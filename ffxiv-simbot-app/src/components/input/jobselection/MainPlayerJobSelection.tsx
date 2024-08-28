@@ -5,26 +5,24 @@ import {
   defaultItemSet,
   updatePlayerPower,
 } from "../../../types/ffxivdatabase/ItemSet";
-import { CharacterEquipmentsData } from "../../../types/ffxivdatabase/PlayerPower";
 import { ColorConfigurations } from "../../../Themes";
-import { DEFAULT_GEARSET_MATERIAS } from "../../../const/DefaultQuickSimInput";
+import { DEFAULT_GEARSET_MATERIAS } from "../../../const/DefaultSingleEquipmentInput";
+import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
 
 export function MainPlayerJobSelection(
   id: number,
-  jobName: string,
-  setJobName: Function,
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalState: SingleEquipmentInputSaveState,
+  setTotalState: Function,
 ) {
   const handleJobChange = (event: SelectChangeEvent<string>) => {
-    setJobName(event.target.value);
-    let newData = { ...data };
+    let newJobAbbrev = event.target.value;
+    let newTotalState = { ...totalState };
 
-    newData.itemSet = defaultItemSet();
-    newData.gearSetMaterias = DEFAULT_GEARSET_MATERIAS;
-    newData.jobAbbrev = event.target.value;
+    newTotalState.itemSet = defaultItemSet();
+    newTotalState.gearSetMaterias = DEFAULT_GEARSET_MATERIAS;
+    newTotalState.mainPlayerJobAbbrev = newJobAbbrev;
 
-    updatePlayerPower(newData, setData);
+    updatePlayerPower(newTotalState, setTotalState);
   };
 
   let key = `Job-${id}`;
@@ -35,7 +33,7 @@ export function MainPlayerJobSelection(
       <Select
         labelId={key}
         id={key}
-        value={jobName}
+        value={totalState.mainPlayerJobAbbrev}
         label={key}
         onChange={handleJobChange}
         MenuProps={{

@@ -2,22 +2,22 @@ import { InputLabel, Select, SelectChangeEvent } from "@mui/material";
 import { CustomFormControl } from "../../components/input/basicform/BasicInputForm";
 import { RACES } from "../../const/StartStats";
 import { RaceMenuItem } from "../items/RaceMenuItem";
-import { CharacterEquipmentsData } from "src/types/ffxivdatabase/PlayerPower";
 import { ColorConfigurations } from "../../Themes";
+import { SingleEquipmentInputSaveState } from "../../types/SingleEquipmentInputSaveState";
 
 export function MainPlayerRaceSelection(
   id: number,
-  jobAbbrev: string,
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalState: SingleEquipmentInputSaveState,
+  setTotalState: Function
 ) {
   const handleRaceChange = (event: SelectChangeEvent<string>) => {
-    setData({ ...data, race: event.target.value });
+    console.log("a");
+    setTotalState({ ...totalState, race: event.target.value });
   };
 
-  let raceLabel = data.race;
+  let raceLabel = totalState.race;
 
-  if (data.race !== "") {
+  if (totalState.race !== "") {
     raceLabel = "";
   }
 
@@ -25,14 +25,14 @@ export function MainPlayerRaceSelection(
 
   return (
     <CustomFormControl fullWidth>
-      <InputLabel id="RaceSelect" key={`${data.race}_inputlabel`}>
+      <InputLabel id="RaceSelect" key={`${totalState.race}_inputlabel`}>
         {raceLabel}
       </InputLabel>
       <Select
         labelId={playerRaceId}
         id={playerRaceId}
-        value={data.race}
-        key={data.race}
+        value={totalState.race}
+        key={totalState.race}
         label="Job Name"
         onChange={handleRaceChange}
         MenuProps={{
@@ -44,7 +44,7 @@ export function MainPlayerRaceSelection(
         }}
       >
         {RACES.map((race) => {
-          return RaceMenuItem(race, jobAbbrev);
+          return RaceMenuItem(race, totalState.mainPlayerJobAbbrev);
         })}
       </Select>
     </CustomFormControl>

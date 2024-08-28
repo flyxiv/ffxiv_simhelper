@@ -2,6 +2,7 @@ import { Box, TextField, styled } from "@mui/material";
 import { ColorConfigurations } from "../..//Themes";
 import { InputGridItemStyle } from "./Styles";
 import { CharacterStats } from "../../types/CharacterStates";
+import { SingleEquipmentInputSaveState } from "../../types/SingleEquipmentInputSaveState";
 
 export interface InputFormProps {
   label: string;
@@ -67,19 +68,17 @@ export const SimulationResultTextBox: React.FC<InputFormProps> = ({
   );
 };
 
-export const SimulationResultTimeTextBox: React.FC<InputTimeFormProps> = ({
-  label,
-  state,
-  setState,
-  handleChange,
-}) => {
+export function SimulationResultTimeTextBox(label: string, totalState: SingleEquipmentInputSaveState, setTotalState: Function) {
   return (
     <InputBox marginBottom={0.5}>
       <Input
         label={label}
-        value={state}
+        value={totalState.combatTimeMillisecond / 1000}
         onChange={(e) => {
-          handleChange({ value: e.target.value, state, setState });
+          let newTimeSeconds = parseInt(e.target.value);
+          let newTotalState = { ...totalState, combatTimeMillisecond: newTimeSeconds * 1000 };
+
+          setTotalState(newTotalState);
         }}
         fullWidth
       />

@@ -2,17 +2,20 @@ import { useState } from "react";
 import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
 import { Box, Typography } from "@mui/material";
 import "./QuickSim.css";
-import { EquipmentSimCharacterStates } from "../types/CharacterStates";
-import { QuickSimInputSaveName } from "../App" 
-import { calculatePlayerPowerFromInputs } from "../types/ffxivdatabase/ItemSet";
+import { QuickSimInputSaveName } from "../App"
+import { updatePlayerPower } from "../types/ffxivdatabase/ItemSet";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
-import { QuickSimInputSaveState } from "../types/QuickSimInput";
-import { defaultQuickSimInput } from "../const/DefaultQuickSimInput";
+import { SingleEquipmentInputSaveState } from "../types/SingleEquipmentInputSaveState";
+import { defaultSingleEquipmentInput } from "../const/DefaultSingleEquipmentInput";
+import { QuicksimLeftMenu } from "../components/container/LeftMenu";
+import { ColorConfigurations } from "../Themes";
+import { Footer } from "../components/basic/Footer";
+import { AppHeader } from "../components/image/AppHeader";
 
-export function isNotValid(input: QuickSimInputSaveState) {
-  if (input.mainPlayerJob === null || input.mainPlayerJob === undefined) {
+export function isNotValid(input: SingleEquipmentInputSaveState) {
+  if (input.mainPlayerJobAbbrev === null || input.mainPlayerJobAbbrev === undefined) {
     return true;
   }
 
@@ -33,106 +36,65 @@ export function isNotValid(input: QuickSimInputSaveState) {
   return false;
 }
 
+
 export function QuickSim() {
   let mostRecentInputState = localStorage.getItem(QuickSimInputSaveName);
   let mostRecentInput = null;
 
-  if (mostRecentInputState == null) {
-    mostRecentInput = defaultQuickSimInput();
+  if (mostRecentInputState === null) {
+    mostRecentInput = defaultSingleEquipmentInput();
   } else {
     mostRecentInput = JSON.parse(
       mostRecentInputState
-    ) as QuickSimInputSaveState;
+    ) as SingleEquipmentInputSaveState;
   }
 
   if (isNotValid(mostRecentInput)) {
-    mostRecentInput = defaultQuickSimInput();
+    mostRecentInput = defaultSingleEquipmentInput();
   }
 
-  const [mainPlayerJobAbbrev, setMainPlayerJobAbbrev] = useState(
-    mostRecentInput.mainPlayerJob
+  const [totalState, setTotalState] = useState(
+    mostRecentInput
   );
-  let [mainPlayerPartner1Id, setMainPlayerPartner1Id] = useState(
-    mostRecentInput.mainPlayerPartner1Id
-  );
-  let [mainPlayerPartner2Id, setMainPlayerPartner2Id] = useState(
-    mostRecentInput.mainPlayerPartner2Id
-  );
-  const mainPlayerState: EquipmentSimCharacterStates = {
-    jobAbbrev: mainPlayerJobAbbrev,
-    jobNameSetter: setMainPlayerJobAbbrev,
-    partner1Id: mainPlayerPartner1Id,
-    setPartner1Id: setMainPlayerPartner1Id,
-    partner2Id: mainPlayerPartner2Id,
-    setPartner2Id: setMainPlayerPartner2Id,
-  };
-
-  let combatTimeSeconds = mostRecentInput.combatTimeMillisecond / 1000;
-  let [combatTimeStateSeconds, setCombatTimeSeconds] =
-    useState(combatTimeSeconds);
-
-  let partyJobAbbrevs = mostRecentInput.partyMemberJobAbbrevs;
-  let ids = [1, 2, 3, 4, 5, 6, 7];
-
-  let [availablePartyIds, setAvailablePartyIds] = useState(ids);
-
-  let [partyJobs, setPartyJobs] = useState(partyJobAbbrevs);
-  let initialPower = calculatePlayerPowerFromInputs(
-    mostRecentInput.itemSet,
-    mainPlayerJobAbbrev,
-    mostRecentInput.race,
-    mostRecentInput.foodId,
-    mostRecentInput.gearSetMaterias
-  );
-
-  let [data, setData] = useState({
-    power: initialPower,
-    itemSet: mostRecentInput.itemSet,
-    foodId: mostRecentInput.foodId,
-    gearSetMaterias: mostRecentInput.gearSetMaterias,
-    jobAbbrev: mainPlayerJobAbbrev,
-    race: mostRecentInput.race,
-  });
 
   let borderRadius = 3;
 
   return (
     <>
-      <Box alignContent={"center"}>
-        <Box className="QuickSimInputContainer">
-          <Box className="SelectionTitle" borderRadius={borderRadius}>
-            <Typography variant="h5">1. Input Your Info</Typography>
-          </Box>
-          <Box className="EquipmentBoard">
-            {EquipmentSelectionMenu(0, mainPlayerState, data, setData)}
-          </Box>
-        </Box>
-        <Box className="QuickSimInputContainer">
-          {StatSummary(mainPlayerState.jobAbbrev, data.power)}
-        </Box>
-        <Box className="StatComparePartyInputContainer">
-          <Box className="SelectionTitle" borderRadius={borderRadius}>
-            <Typography variant="h5">2. Additional Settings</Typography>
-          </Box>
-          <Box className="CustomizeBoard">
-            {HorizontalPartyInput(
-              ids,
-              partyJobs,
-              setPartyJobs,
-              availablePartyIds,
-              setAvailablePartyIds,
-              combatTimeStateSeconds,
-              setCombatTimeSeconds
-            )}
-          </Box>
-        </Box>
+      <Box display="flex" sx={{ backgroundColor: ColorConfigurations.backgroundOne }}>
+        {QuicksimLeftMenu(totalState, setTotalState)}
         <Box>
-          {QuickSimRequestButton(
-            partyJobs,
-            combatTimeStateSeconds,
-            mainPlayerState,
-            data
-          )}
+          {AppHeader()}
+          <Box alignContent={"center"}>
+            <Box className="QuickSimInputContainer">
+              <Box className="SelectionTitle" borderRadius={borderRadius}>
+                <Typography variant="h5">1. Input Your Info</Typography>
+              </Box>
+              <Box className="EquipmentBoard">
+                {EquipmentSelectionMenu(0, totalState, setTotalState)}
+              </Box>
+            </Box>
+            <Box className="QuickSimInputContainer">
+              {StatSummary(totalState)}
+            </Box>
+            <Box className="StatComparePartyInputContainer">
+              <Box className="SelectionTitle" borderRadius={borderRadius}>
+                <Typography variant="h5">2. Additional Settings</Typography>
+              </Box>
+              <Box className="CustomizeBoard">
+                {HorizontalPartyInput(
+                  totalState,
+                  setTotalState
+                )}
+              </Box>
+            </Box>
+            <Box display="flex" justifyContent="center">
+              {QuickSimRequestButton(
+                totalState
+              )}
+            </Box>
+          </Box>
+          {Footer()}
         </Box>
       </Box>
     </>

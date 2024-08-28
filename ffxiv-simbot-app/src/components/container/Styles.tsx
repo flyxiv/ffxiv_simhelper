@@ -194,3 +194,27 @@ export const EquipmentSingleSubStatBoxStyle = (numberOfSubStats: number) => `
 export const EquipmentSingleBoxStyle = `
   border: 1px solid ${"white"};
 `;
+
+export const LeftMenuLogoStyle = `
+  background-color: ${ColorConfigurations.primary};   
+  color: white;
+  height: 5vh;
+  align-content: center;
+  justify-content: center;
+`
+
+export const LeftMenuTotalBarStyle = `
+  background-color: ${ColorConfigurations.backgroundThree};
+  color: white;
+  margin-left: 10px;
+  margin-top: 10px;
+  height: 100vh;
+`
+
+export const LeftMenuNavigationBarStyle = `
+  color: white;
+`
+
+export const LeftMenuNavigationItemStyle = `
+  color: white;
+`

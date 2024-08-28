@@ -1,4 +1,3 @@
-import { EquipmentSimCharacterStates } from "../../../types/CharacterStates";
 import {
   styled,
   InputLabel,
@@ -37,9 +36,9 @@ import { ALL_FOODS } from "../../../types/ffxivdatabase/Food";
 import { EMPTY_MATERIA, Materia } from "../../../types/ffxivdatabase/Materia";
 import { EquipmentSubStatTable } from "../../../components/container/EquipmentSubStatBox";
 import { MateriaInputTable } from "./MateriaInputForm";
-import { CharacterEquipmentsData } from "../../../types/ffxivdatabase/PlayerPower";
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { ColorConfigurations } from "../../../Themes";
+import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -69,13 +68,12 @@ let PLAYER_EQUIPMENTS = new Map(EQUIPMENT_DATABASE_BY_ID);
 function EquipmentMenuOfOneSlot(
   id: number,
   slotName: string,
-  jobAbbrev: string,
   equipmentsAvailableInSlot: Equipment[],
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalState: SingleEquipmentInputSaveState,
+  setTotalState: Function
 ) {
   let key = `${slotName}-${id}-equipment`;
-  let currentEquipmentId = data.itemSet[slotNameToSlotIndex(slotName)];
+  let currentEquipmentId = totalState.itemSet[slotNameToSlotIndex(slotName)];
 
   let currentEquipment = PLAYER_EQUIPMENTS.get(currentEquipmentId);
   const updateEquipmentState = (e: SelectChangeEvent<number>) => {
@@ -84,12 +82,12 @@ function EquipmentMenuOfOneSlot(
     if (typeof newEquipmentId === "string") {
       newEquipmentId = parseInt(newEquipmentId);
     }
-    let newData = { ...data };
-    let newSet = [...data.itemSet];
+    let newData = { ...totalState };
+    let newSet = [...totalState.itemSet];
     newSet[slotNameToSlotIndex(slotName)] = newEquipmentId;
     newData.itemSet = newSet;
 
-    let newGearSetMaterias = [...data.gearSetMaterias];
+    let newGearSetMaterias = [...totalState.gearSetMaterias];
 
     let materiaSlotCount = 0;
     currentEquipment = PLAYER_EQUIPMENTS.get(newEquipmentId);
@@ -107,7 +105,7 @@ function EquipmentMenuOfOneSlot(
     }
 
     newData.gearSetMaterias = newGearSetMaterias;
-    updatePlayerPower(newData, setData);
+    updatePlayerPower(newData, setTotalState);
   };
 
   let slotLabel = slotName;
@@ -137,7 +135,7 @@ function EquipmentMenuOfOneSlot(
           }}
         >
           {equipmentsAvailableInSlot.map((equipment) => {
-            return EquipmentMenuItem(equipment, jobAbbrev);
+            return EquipmentMenuItem(equipment, totalState.mainPlayerJobAbbrev);
           })}
           <Divider />
           <EquipmentMenu value={-1} key={`${id}_${slotLabel}_empty`}>
@@ -148,7 +146,7 @@ function EquipmentMenuOfOneSlot(
         </Select>
       </CustomFormControl>
       <MateriaBox>
-        {MateriaInputTable(slotName, currentEquipment, data, setData)}
+        {MateriaInputTable(slotName, currentEquipment, totalState, setTotalState)}
       </MateriaBox>
 
       <EquipmentStatBox>
@@ -157,7 +155,7 @@ function EquipmentMenuOfOneSlot(
         ) : (
           EquipmentSubStatTable(
             currentEquipment,
-            data.gearSetMaterias[slotNameToSlotIndex(slotName)]
+            totalState.gearSetMaterias[slotNameToSlotIndex(slotName)]
           )
         )}
       </EquipmentStatBox>
@@ -167,28 +165,25 @@ function EquipmentMenuOfOneSlot(
 
 export function EquipmentSelectionMenu(
   id: number,
-  mainCharacterState: EquipmentSimCharacterStates,
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalState: SingleEquipmentInputSaveState,
+  setTotalState: Function
 ) {
   let xs = 12;
-  let mainCharacterJobAbbrev = mainCharacterState.jobAbbrev;
+  let mainCharacterJobAbbrev = totalState.mainPlayerJobAbbrev;
   return (
     <EquipmentGridContainer container>
       <EquipmentGridItemBox marginBottom={1} key={`${id}_JobSelectionItemBox`}>
         <InputEquipmentBox item xs={xs} key="Job">
           {MainPlayerJobSelection(
             id,
-            mainCharacterState.jobAbbrev,
-            mainCharacterState.jobNameSetter,
-            data,
-            setData
+            totalState,
+            setTotalState
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
       <EquipmentGridItemBox marginBottom={1} key={`${id}_RaceItemBox`}>
         <InputEquipmentBox item xs={xs} key="Race">
-          {MainPlayerRaceSelection(id, mainCharacterJobAbbrev, data, setData)}
+          {MainPlayerRaceSelection(id, totalState, setTotalState)}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
 
@@ -216,10 +211,9 @@ export function EquipmentSelectionMenu(
               {EquipmentMenuOfOneSlot(
                 id,
                 slotName,
-                mainCharacterJobAbbrev,
                 equipmentsAvailableInSlot,
-                data,
-                setData
+                totalState,
+                setTotalState
               )}
             </InputEquipmentBox>
           </EquipmentGridItemBox>
@@ -227,7 +221,7 @@ export function EquipmentSelectionMenu(
       })}
       <EquipmentGridItemBox marginBottom={1} key={`food_selectionbox`}>
         <InputEquipmentBox item xs={xs} key="food">
-          {FoodSelection(id, data, setData)}
+          {FoodSelection(id, totalState, setTotalState)}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
     </EquipmentGridContainer>
@@ -236,11 +230,11 @@ export function EquipmentSelectionMenu(
 
 function FoodSelection(
   id: number,
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalState: SingleEquipmentInputSaveState,
+  setTotalState: Function
 ) {
   let foodLabel = "Food";
-  if (data.foodId !== -1) {
+  if (totalState.foodId !== -1) {
     foodLabel = "";
   }
 
@@ -249,8 +243,8 @@ function FoodSelection(
     if (typeof newFoodId === "string") {
       newFoodId = parseInt(newFoodId);
     }
-    let newData: CharacterEquipmentsData = { ...data, foodId: newFoodId };
-    updatePlayerPower(newData, setData);
+    let newData = { ...totalState, foodId: newFoodId };
+    updatePlayerPower(newData, setTotalState);
   };
 
   let key = `food-${id}`;
@@ -262,7 +256,7 @@ function FoodSelection(
         <Select
           labelId={key}
           id={key}
-          value={data.foodId}
+          value={totalState.foodId}
           key={key}
           label="food"
           onChange={updateFoodState}
