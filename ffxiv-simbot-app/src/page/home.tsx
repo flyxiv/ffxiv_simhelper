@@ -5,7 +5,7 @@ import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { Box } from "@mui/material";
 import { ColorConfigurations } from "../Themes";
-import { BasicLeftMenu } from "../components/container/LeftMenu";
+import { BasicLeftMenu, MENU_WIDTH_VW } from "../components/container/LeftMenu";
 
 const quickSimPageName = "quicksim";
 const quickSimPagePath = `/${quickSimPageName}`;
@@ -16,11 +16,13 @@ const gearCompareSimPagePath = `/${gearCompareSimPageName}`;
 const gearCompareSimButtonImagePath = "/images/statcompare.png";
 
 export function Home() {
+  let bodyWidth = 100 - MENU_WIDTH_VW;
+
   return (
     <Box sx={{ backgroundColor: ColorConfigurations.backgroundOne }}>
-      <Box display="flex">
+      <Box display="flex" width="100vw">
         {BasicLeftMenu()}
-        <Box>
+        <Box width={`${bodyWidth}vw`}>
           {AppHeader()}
           <Box className="HomeBody">
             <div className="LeftBody">

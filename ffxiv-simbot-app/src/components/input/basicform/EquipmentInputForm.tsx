@@ -114,7 +114,7 @@ function EquipmentMenuOfOneSlot(
   }
 
   return (
-    <>
+    <Box height="10vh">
       <CustomFormControl fullWidth>
         <InputLabel id="SlotSelect" key={`${key}_label`}>
           {slotLabel}
@@ -159,7 +159,7 @@ function EquipmentMenuOfOneSlot(
           )
         )}
       </EquipmentStatBox>
-    </>
+    </Box>
   );
 }
 
@@ -233,7 +233,7 @@ function FoodSelection(
   totalState: SingleEquipmentInputSaveState,
   setTotalState: Function
 ) {
-  let foodLabel = "Food";
+  let foodLabel = "food";
   if (totalState.foodId !== -1) {
     foodLabel = "";
   }

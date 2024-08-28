@@ -29,26 +29,39 @@ export const inputStyle = {
 
 export const LoadoutInput = styled(TextField)(({ }) => inputStyle);
 
+interface LoadoutMetaData {
+    loadoutName: string;
+    jobAbbrev: string;
+}
+
+export function DefaultLoadoutMetadata(): LoadoutMetaData {
+    return {
+        loadoutName: "Default Loadout",
+        jobAbbrev: "PLD"
+    }
+}
 
 export function SingleLoadoutBox(loadoutId: number, simulationName: string, totalState: SingleEquipmentInputSaveState, setTotalState: Function) {
     let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState("");
     let loadoutSaveKey = `${simulationName}-${loadoutId}`;
-    let loadoutNameSaveKey = `${simulationName}-loadoutName-${loadoutId}`;
+    let loadoutMetadataSaveKey = `${simulationName}-loadoutMetadata-${loadoutId}`;
 
-    let savedLoadoutName = localStorage.getItem(loadoutNameSaveKey);
-    if (savedLoadoutName === null) {
-        savedLoadoutName = "Default Loadout";
+    let savedLoadoutMetadataString = localStorage.getItem(loadoutMetadataSaveKey);
+    let savedLoadoutMetadata = DefaultLoadoutMetadata();
+
+    if (savedLoadoutMetadataString !== null) {
+        savedLoadoutMetadata = JSON.parse(savedLoadoutMetadataString)
     }
-    let [loadoutName, setLoadoutName] = useState(savedLoadoutName);
+    let [loadoutMetadata, setLoadoutMetadata] = useState(savedLoadoutMetadata);
 
 
     return (
         <Box sx={{ backgroundColor: ColorConfigurations.backgroundFour, borderRadius: 4, paddingX: 2 }}>
             <Box sx={{ display: "flex", alignItems: "center", padding: 2 }}>
-                <Typography variant="h2" color={ColorConfigurations.primary} align="left" fontSize={15}>{loadoutId}. {loadoutName}</Typography>
+                <Typography variant="h2" color={ColorConfigurations.primary} align="left" fontSize={15}>{loadoutId}. {loadoutMetadata.loadoutName}</Typography>
                 <Box marginX={1}>
                     <img
-                        src={jobAbbrevToJobIconPath(totalState.mainPlayerJobAbbrev)}
+                        src={jobAbbrevToJobIconPath(loadoutMetadata.jobAbbrev)}
                         alt={totalState.mainPlayerJobAbbrev}
                         width={25}
                         height={25}
@@ -66,19 +79,24 @@ export function SingleLoadoutBox(loadoutId: number, simulationName: string, tota
                     fullWidth
                     sx={{ backgroundColor: "white" }}
                 />
-                {LoadoutOverwriteButton(loadoutSaveKey, loadoutNameSaveKey, textFieldInputLoadoutName, totalState, setLoadoutName, setTextFieldInputLoadoutName)}
+                {LoadoutOverwriteButton(loadoutSaveKey, loadoutMetadataSaveKey, textFieldInputLoadoutName, totalState, setLoadoutMetadata, setTextFieldInputLoadoutName)}
                 {LoadoutLoadButton(loadoutSaveKey, setTotalState, setTextFieldInputLoadoutName)}
             </Box>
         </Box >
     )
 }
 
-function LoadoutOverwriteButton(loadoutSaveKey: string, loadoutNameSaveKey: string, textFieldInputLoadoutName: string, totalState: SingleEquipmentInputSaveState, setLoadoutName: Function, setTextFieldInputLoadoutName: Function) {
+function LoadoutOverwriteButton(loadoutSaveKey: string, loadoutMetadataSaveKey: string, textFieldInputLoadoutName: string, totalState: SingleEquipmentInputSaveState, setLoadoutMetadata: Function, setTextFieldInputLoadoutName: Function) {
     return (
         <Button sx={{ marginX: 2, backgroundColor: ColorConfigurations.primary, color: "black", borderRadius: 2 }} onClick={(_) => {
-            localStorage.setItem(loadoutSaveKey, JSON.stringify(totalState)); setLoadoutName("");
-            localStorage.setItem(loadoutNameSaveKey, textFieldInputLoadoutName);
-            setLoadoutName(textFieldInputLoadoutName);
+            let newMetaData = {
+                loadoutName: textFieldInputLoadoutName,
+                jobAbbrev: totalState.mainPlayerJobAbbrev
+            };
+
+            localStorage.setItem(loadoutSaveKey, JSON.stringify(totalState));
+            localStorage.setItem(loadoutMetadataSaveKey, JSON.stringify(newMetaData));
+            setLoadoutMetadata(newMetaData);
             setTextFieldInputLoadoutName("");
         }}>
             <Typography sx={{ fontWeight: "bold", fontSize: 12 }}>Overwrite</Typography>

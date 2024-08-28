@@ -18,7 +18,7 @@ export interface InputTimeFormProps {
   handleChange: Function;
 }
 
-export const inputStyle = {
+export const inputStyleEquipment = {
   "& .MuiInputBase-input": {
     color: "white",
     backgroundColor: ColorConfigurations.backgroundThree,
@@ -34,8 +34,7 @@ export const inputStyle = {
     notched: false,
   },
   label: {
-    padding: "0 16px", // padding을 통해 하이라이트 된 레이블을 조정합니다.
-    transform: "translate(14px, 2.5vh) scale(1)", // 레이블이 Input 내에 위치하도록 합니다.
+    padding: "0 16px",
   },
 };
 
@@ -55,9 +54,9 @@ export const inputStyleJob = {
   },
 };
 
-export const Input = styled(TextField)(({ }) => inputStyle);
+export const Input = styled(TextField)(({ }) => inputStyleEquipment);
 
-export const CustomFormControl = styled(FormControl)(({ }) => inputStyle);
+export const CustomFormControl = styled(FormControl)(({ }) => inputStyleEquipment);
 
 const InputBox = styled(Box)`
   ${InputGridItemStyle}

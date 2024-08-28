@@ -3,12 +3,10 @@ import { Logo } from "./Logo";
 
 export function AppHeader() {
     return (
-        <Box className="App">
-            <header className="App-header">
-                <Link href="/">
-                    <Logo />
-                </Link>
-            </header>
+        <Box className="LogoBox" display="flex" width="100%" justifyContent="center">
+            <Link href="/">
+                <Logo />
+            </Link>
         </Box>
     )
 }

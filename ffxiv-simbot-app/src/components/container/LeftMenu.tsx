@@ -4,6 +4,9 @@ import { ColorConfigurations } from "../../Themes";
 import { SingleEquipmentInputSaveState } from "../../types/SingleEquipmentInputSaveState";
 import { SingleLoadoutBox } from "./LoadoutBox";
 
+const QUICKSIM_LOADOUT_COUNT = 3;
+export const MENU_WIDTH_VW = 15;
+
 let LeftMenuLogo = styled(Box)`
     ${LeftMenuLogoStyle}
 `;
@@ -21,13 +24,13 @@ let LeftMenuNavigationItem = styled(Box)`
 `;
 
 export function QuicksimLeftMenu(totalState: SingleEquipmentInputSaveState, setTotalState: Function) {
+    let menu_width_string = `${MENU_WIDTH_VW}vw`;
     return (
         <Drawer sx={{
-            width: "15vw",
+            width: menu_width_string,
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-                width: "15vw",
-                boxSizing: 'border-box',
+                width: menu_width_string,
                 backgroundColor: `${ColorConfigurations.backgroundOne}`
             },
         }} variant="permanent" anchor="left">
@@ -47,14 +50,17 @@ export function QuicksimLeftMenu(totalState: SingleEquipmentInputSaveState, setT
                     {NavigationMenu("/quicksim", "Stat Weights")}
                 </LeftMenuNavigationBar>
 
-                <Box paddingY={4}>
-                    <Box paddingX={2}>
-
-                        <Typography variant="h3" align="left" sx={{ fontWeight: "bold", paddingLeft: 2 }}>Saved Gearsets</Typography>
-                        <Divider sx={{ borderBottomWidth: 3, marginY: 2, bgcolor: `${ColorConfigurations.backgroundTwo}` }} />
-                        {SingleLoadoutBox(1, "quicksim", totalState, setTotalState)}
-                    </Box>
+                <Box paddingX={2}>
+                    <Typography variant="h3" align="left" sx={{ fontWeight: "bold", paddingLeft: 2 }}>Saved Gearsets</Typography>
+                    <Divider sx={{ borderBottomWidth: 3, marginY: 2, bgcolor: `${ColorConfigurations.backgroundTwo}` }} />
                 </Box>
+
+                {[...Array(QUICKSIM_LOADOUT_COUNT).keys()].map((loadoutId) => {
+                    return (<Box paddingY={4} marginX={4}>
+                        {SingleLoadoutBox(loadoutId + 1, "quicksim", totalState, setTotalState)}
+                    </Box>)
+
+                })}
 
             </LeftMenuTotalBar>
 
@@ -63,12 +69,13 @@ export function QuicksimLeftMenu(totalState: SingleEquipmentInputSaveState, setT
 }
 
 export function BasicLeftMenu() {
+    let menu_width_string = `${MENU_WIDTH_VW}vw`;
     return (
         <Drawer sx={{
-            width: "15vw",
+            width: menu_width_string,
             flexShrink: 0,
             '& .MuiDrawer-paper': {
-                width: "15vw",
+                width: menu_width_string,
                 boxSizing: 'border-box',
                 backgroundColor: `${ColorConfigurations.backgroundOne}`
             },

@@ -3,13 +3,12 @@ import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton
 import { Box, Typography } from "@mui/material";
 import "./QuickSim.css";
 import { QuickSimInputSaveName } from "../App"
-import { updatePlayerPower } from "../types/ffxivdatabase/ItemSet";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
 import { SingleEquipmentInputSaveState } from "../types/SingleEquipmentInputSaveState";
 import { defaultSingleEquipmentInput } from "../const/DefaultSingleEquipmentInput";
-import { QuicksimLeftMenu } from "../components/container/LeftMenu";
+import { MENU_WIDTH_VW, QuicksimLeftMenu } from "../components/container/LeftMenu";
 import { ColorConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
@@ -58,17 +57,18 @@ export function QuickSim() {
   );
 
   let borderRadius = 3;
+  let bodyWidth = 100 - MENU_WIDTH_VW;
 
   return (
     <>
-      <Box display="flex" sx={{ backgroundColor: ColorConfigurations.backgroundOne }}>
+      <Box display="flex" sx={{ backgroundColor: ColorConfigurations.backgroundOne }} width="100vw">
         {QuicksimLeftMenu(totalState, setTotalState)}
-        <Box>
+        <Box width={`${bodyWidth}vw`}>
           {AppHeader()}
           <Box alignContent={"center"}>
             <Box className="QuickSimInputContainer">
               <Box className="SelectionTitle" borderRadius={borderRadius}>
-                <Typography variant="h5">1. Input Your Info</Typography>
+                <Typography variant="h5" align="center">1. Input Your Info</Typography>
               </Box>
               <Box className="EquipmentBoard">
                 {EquipmentSelectionMenu(0, totalState, setTotalState)}
@@ -77,9 +77,9 @@ export function QuickSim() {
             <Box className="QuickSimInputContainer">
               {StatSummary(totalState)}
             </Box>
-            <Box className="StatComparePartyInputContainer">
+            <Box className="QuickSimInputContainer">
               <Box className="SelectionTitle" borderRadius={borderRadius}>
-                <Typography variant="h5">2. Additional Settings</Typography>
+                <Typography variant="h5" align="center">2. Additional Settings</Typography>
               </Box>
               <Box className="CustomizeBoard">
                 {HorizontalPartyInput(
@@ -96,7 +96,7 @@ export function QuickSim() {
           </Box>
           {Footer()}
         </Box>
-      </Box>
+      </Box >
     </>
   );
 }
