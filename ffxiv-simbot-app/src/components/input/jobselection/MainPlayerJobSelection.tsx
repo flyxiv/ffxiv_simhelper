@@ -9,6 +9,8 @@ import { ColorConfigurations } from "../../../Themes";
 import { DEFAULT_GEARSET_MATERIAS } from "../../../const/DefaultSingleEquipmentInput";
 import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
 
+let ALIGN = "left";
+
 export function MainPlayerJobSelection(
   id: number,
   totalState: SingleEquipmentInputSaveState,
@@ -28,8 +30,7 @@ export function MainPlayerJobSelection(
   let key = `Job-${id}`;
 
   return (
-    <CustomFormControl fullWidth>
-      <InputLabel id="JobSelect">Job</InputLabel>
+    <CustomFormControl fullWidth sx={{ height: '100%' }}>
       <Select
         labelId={key}
         id={key}
@@ -43,32 +44,37 @@ export function MainPlayerJobSelection(
             },
           },
         }}
+
+        sx={{
+          height: '100%',
+          display: 'flex',
+        }}
       >
-        {JobMenuItem("PLD")}
-        {JobMenuItem("WAR")}
-        {JobMenuItem("DRK")}
-        {JobMenuItem("GNB")}
+        {JobMenuItem("PLD", ALIGN)}
+        {JobMenuItem("WAR", ALIGN)}
+        {JobMenuItem("DRK", ALIGN)}
+        {JobMenuItem("GNB", ALIGN)}
         <Divider />
-        {JobMenuItem("WHM")}
-        {JobMenuItem("AST")}
-        {JobMenuItem("SCH")}
-        {JobMenuItem("SGE")}
+        {JobMenuItem("WHM", ALIGN)}
+        {JobMenuItem("AST", ALIGN)}
+        {JobMenuItem("SCH", ALIGN)}
+        {JobMenuItem("SGE", ALIGN)}
         <Divider />
-        {JobMenuItem("DRG")}
-        {JobMenuItem("MNK")}
-        {JobMenuItem("NIN")}
-        {JobMenuItem("SAM")}
-        {JobMenuItem("RPR")}
-        {JobMenuItem("VPR")}
+        {JobMenuItem("DRG", ALIGN)}
+        {JobMenuItem("MNK", ALIGN)}
+        {JobMenuItem("NIN", ALIGN)}
+        {JobMenuItem("SAM", ALIGN)}
+        {JobMenuItem("RPR", ALIGN)}
+        {JobMenuItem("VPR", ALIGN)}
         <Divider />
-        {JobMenuItem("BRD")}
-        {JobMenuItem("MCH")}
-        {JobMenuItem("DNC")}
+        {JobMenuItem("BRD", ALIGN)}
+        {JobMenuItem("MCH", ALIGN)}
+        {JobMenuItem("DNC", ALIGN)}
         <Divider />
-        {JobMenuItem("SMN")}
-        {JobMenuItem("BLM")}
-        {JobMenuItem("RDM")}
-        {JobMenuItem("PCT")}
+        {JobMenuItem("SMN", ALIGN)}
+        {JobMenuItem("BLM", ALIGN)}
+        {JobMenuItem("RDM", ALIGN)}
+        {JobMenuItem("PCT", ALIGN)}
       </Select>
     </CustomFormControl>
   );

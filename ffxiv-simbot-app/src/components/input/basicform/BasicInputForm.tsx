@@ -23,7 +23,6 @@ export const inputStyleEquipment = {
     color: "white",
     backgroundColor: ColorConfigurations.backgroundThree,
     textAlign: "right",
-    paddingRight: "30px",
   },
   "& .MuiInputLabel-root": {
     color: ColorConfigurations.primary,
@@ -32,9 +31,6 @@ export const inputStyleEquipment = {
     "& fieldset": {},
     "&:hover fieldset": {},
     notched: false,
-  },
-  label: {
-    padding: "0 16px",
   },
 };
 

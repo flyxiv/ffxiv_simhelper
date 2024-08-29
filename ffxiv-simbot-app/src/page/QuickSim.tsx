@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import "./QuickSim.css";
 import { QuickSimInputSaveName } from "../App"
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
-import { StatSummary } from "../components/container/StatSummary";
+import { StatPowerSummary, StatSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
 import { SingleEquipmentInputSaveState } from "../types/SingleEquipmentInputSaveState";
 import { defaultSingleEquipmentInput } from "../const/DefaultSingleEquipmentInput";
@@ -12,6 +12,8 @@ import { MENU_WIDTH_VW, QuicksimLeftMenu } from "../components/container/LeftMen
 import { ColorConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
+import { SelectionTitle } from "../components/basic/SelectionTitle";
+import { QuickSimBottomMenu } from "../components/container/BottomMenu";
 
 export function isNotValid(input: SingleEquipmentInputSaveState) {
   if (input.mainPlayerJobAbbrev === null || input.mainPlayerJobAbbrev === undefined) {
@@ -56,7 +58,6 @@ export function QuickSim() {
     mostRecentInput
   );
 
-  let borderRadius = 3;
   let bodyWidth = 100 - MENU_WIDTH_VW;
 
   return (
@@ -66,21 +67,19 @@ export function QuickSim() {
         <Box width={`${bodyWidth}vw`}>
           {AppHeader()}
           <Box alignContent={"center"}>
-            <Box className="QuickSimInputContainer">
-              <Box className="SelectionTitle" borderRadius={borderRadius}>
-                <Typography variant="h5" align="center">1. Input Your Info</Typography>
-              </Box>
+            <Box className="QuickSimInputContainer" justifyContent={"center"}>
+              {SelectionTitle("1. Input Your Info")}
               <Box className="EquipmentBoard">
                 {EquipmentSelectionMenu(0, totalState, setTotalState)}
               </Box>
             </Box>
-            <Box className="QuickSimInputContainer">
+
+            <Box>
               {StatSummary(totalState)}
             </Box>
+
             <Box className="QuickSimInputContainer">
-              <Box className="SelectionTitle" borderRadius={borderRadius}>
-                <Typography variant="h5" align="center">2. Additional Settings</Typography>
-              </Box>
+              {SelectionTitle("2. Additional Settings")}
               <Box className="CustomizeBoard">
                 {HorizontalPartyInput(
                   totalState,
@@ -88,11 +87,20 @@ export function QuickSim() {
                 )}
               </Box>
             </Box>
+
+            <Box className="QuickSimInputContainer">
+              {SelectionTitle("3. Specific Player Power")}
+              <Box display="flex" justifyContent="center">
+                {StatPowerSummary(totalState)}
+              </Box>
+            </Box>
+
             <Box display="flex" justifyContent="center">
               {QuickSimRequestButton(
                 totalState
               )}
             </Box>
+            {QuickSimBottomMenu()}
           </Box>
           {Footer()}
         </Box>

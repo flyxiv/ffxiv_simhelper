@@ -10,6 +10,7 @@ import {
   SimulationResultTimeTextBox,
 } from "../SimulationResultTextBox";
 import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
+import { ITEM_MIN_HEIGHT } from "../../../components/items/Styles";
 
 const HorizontalInputGridContainer = styled(Grid)`
   ${HorizontalInputGridContainerStyle}
@@ -32,20 +33,24 @@ export function HorizontalPartyInput(
   totalState: SingleEquipmentInputSaveState,
   setTotalState: Function
 ) {
-  let xs = 15;
+  let xs = 14;
   return (
     <HorizontalInputGridContainer container>
-      <HorizontalInputBox marginBottom={0.5}>
+      <HorizontalInputBox>
         <InputGridItem item xs={xs}>
-          {SimulationResultTimeTextBox(
-            "Combat Time(Seconds)",
-            totalState,
-            setTotalState)
-          }
+          <InputBox marginBottom={0.5} key={"time"}>
+            <InputJobBox item xs={xs} key={`timeinput`} height={"5vh"}>
+              {SimulationResultTimeTextBox(
+                "Combat Time(Seconds)",
+                totalState,
+                setTotalState)
+              }
+            </InputJobBox>
+          </InputBox>
         </InputGridItem>
       </HorizontalInputBox>
       {[1, 2, 3, 4, 5, 6, 7].map((playerId) => (
-        <HorizontalInputBox marginBottom={0.5} key={playerId}>
+        <HorizontalInputBox key={playerId}>
           <InputGridItem item xs={xs}>
             <InputBox marginBottom={0.5} key={playerId}>
               <InputJobBox item xs={xs} key={`Job-${playerId}`}>

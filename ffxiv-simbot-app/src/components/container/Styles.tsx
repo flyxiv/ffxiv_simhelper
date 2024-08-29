@@ -168,16 +168,13 @@ export const StatSummaryBoxStyle = `
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: ${ColorConfigurations.backgroundTwo};
-  width: 50%;
   margin: auto;
 `;
 
-export const SingleStatBoxStyle = `
-  background-color: ${ColorConfigurations.backgroundThree};
+export const SingleStatBoxStyle = (width: string) => `
   color: white;
-  width: 4vw;
-  margin: 5px 3px 5px 3px;
+  border: 1px solid #201F28;
+  width: ${width};
 `;
 
 export const EquipmentSubStatBoxStyle = `
@@ -188,11 +185,10 @@ export const EquipmentSubStatBoxStyle = `
 
 export const EquipmentSingleSubStatBoxStyle = (numberOfSubStats: number) => `
   width: ${100 / numberOfSubStats}%;
-  background-color: ${ColorConfigurations.backgroundThree};
 `;
 
 export const EquipmentSingleBoxStyle = `
-  border: 1px solid ${"white"};
+  border: 1px solid #201F28;
 `;
 
 export const LeftMenuLogoStyle = `

@@ -8,6 +8,7 @@ import {
   MenuItem,
   styled,
   Divider,
+  Box,
 } from "@mui/material";
 import { CustomFormControl } from "./BasicInputForm";
 import {
@@ -28,6 +29,8 @@ const MateriaMenu = styled(MenuItem)`
   ${MenuItemStyle}
 `;
 
+const MATERIA_MENU_HEIGHT = "3vh";
+
 export function MateriaInputTable(
   slotName: string,
   equipment: Equipment | undefined,
@@ -39,16 +42,20 @@ export function MateriaInputTable(
     return <></>;
   }
 
-  return materiasInSlot.map((_, materiaSlot) => {
-    return SingleMateriaMenu(
-      equipment,
-      materiasInSlot,
-      materiaSlot,
-      slotName,
-      totalState,
-      setTotalState
-    );
-  });
+  return (
+    <Box display="flex" height={MATERIA_MENU_HEIGHT} width="100%">
+      {materiasInSlot.map((_, materiaSlot) => {
+        return SingleMateriaMenu(
+          equipment,
+          materiasInSlot,
+          materiaSlot,
+          slotName,
+          totalState,
+          setTotalState
+        );
+      })}
+    </Box>
+  );
 }
 
 function SingleMateriaMenu(
@@ -86,11 +93,6 @@ function SingleMateriaMenu(
 
   return (
     <CustomFormControl fullWidth>
-      <InputLabel id="MateriaSelect">
-        {materiaValue === toMateriaKey(EMPTY_MATERIA)
-          ? `Mat ${materiaSlot + 1}`
-          : ""}
-      </InputLabel>
       <Select
         labelId={key}
         id={key}
@@ -105,6 +107,7 @@ function SingleMateriaMenu(
             },
           },
         }}
+        sx={{ height: "100%" }}
       >
         {possibleMaterias.map((materiaKey) => {
           return MateriaMenuItem(

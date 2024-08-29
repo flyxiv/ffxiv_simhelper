@@ -4,11 +4,14 @@ import {
   Select,
   SelectChangeEvent,
   Typography,
+  Divider,
 } from "@mui/material";
 import { JobMenuItem } from "../../items/JobMenuItem";
 import { CustomFormControl } from "../basicform/BasicInputForm";
 import { ColorConfigurations } from "../../../Themes";
 import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
+
+let ALIGN = "center";
 
 export function PartyMemberJobSelection(
   id: number,
@@ -61,27 +64,31 @@ export function PartyMemberJobSelection(
           },
         }}
       >
-        {JobMenuItem("PLD")}
-        {JobMenuItem("WAR")}
-        {JobMenuItem("DRK")}
-        {JobMenuItem("GNB")}
-        {JobMenuItem("WHM")}
-        {JobMenuItem("AST")}
-        {JobMenuItem("SCH")}
-        {JobMenuItem("SGE")}
-        {JobMenuItem("DRG")}
-        {JobMenuItem("MNK")}
-        {JobMenuItem("NIN")}
-        {JobMenuItem("SAM")}
-        {JobMenuItem("RPR")}
-        {JobMenuItem("VPR")}
-        {JobMenuItem("BRD")}
-        {JobMenuItem("MCH")}
-        {JobMenuItem("DNC")}
-        {JobMenuItem("SMN")}
-        {JobMenuItem("BLM")}
-        {JobMenuItem("RDM")}
-        {JobMenuItem("PCT")}
+        {JobMenuItem("PLD", ALIGN)}
+        {JobMenuItem("WAR", ALIGN)}
+        {JobMenuItem("DRK", ALIGN)}
+        {JobMenuItem("GNB", ALIGN)}
+        <Divider />
+        {JobMenuItem("WHM", ALIGN)}
+        {JobMenuItem("AST", ALIGN)}
+        {JobMenuItem("SCH", ALIGN)}
+        {JobMenuItem("SGE", ALIGN)}
+        <Divider />
+        {JobMenuItem("DRG", ALIGN)}
+        {JobMenuItem("MNK", ALIGN)}
+        {JobMenuItem("NIN", ALIGN)}
+        {JobMenuItem("SAM", ALIGN)}
+        {JobMenuItem("RPR", ALIGN)}
+        {JobMenuItem("VPR", ALIGN)}
+        <Divider />
+        {JobMenuItem("BRD", ALIGN)}
+        {JobMenuItem("MCH", ALIGN)}
+        {JobMenuItem("DNC", ALIGN)}
+        <Divider />
+        {JobMenuItem("SMN", ALIGN)}
+        {JobMenuItem("BLM", ALIGN)}
+        {JobMenuItem("RDM", ALIGN)}
+        {JobMenuItem("PCT", ALIGN)}
         <MenuItem value="Empty">
           <Typography variant="body1" color="white">
             Empty

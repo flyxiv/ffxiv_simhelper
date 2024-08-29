@@ -3,6 +3,7 @@ import { ColorConfigurations } from "../..//Themes";
 import { InputGridItemStyle } from "./Styles";
 import { CharacterStats } from "../../types/CharacterStates";
 import { SingleEquipmentInputSaveState } from "../../types/SingleEquipmentInputSaveState";
+import { ITEM_MIN_HEIGHT } from "../items/Styles";
 
 export interface InputFormProps {
   label: string;
@@ -70,18 +71,22 @@ export const SimulationResultTextBox: React.FC<InputFormProps> = ({
 
 export function SimulationResultTimeTextBox(label: string, totalState: SingleEquipmentInputSaveState, setTotalState: Function) {
   return (
-    <InputBox marginBottom={0.5}>
-      <Input
-        label={label}
-        value={totalState.combatTimeMillisecond / 1000}
-        onChange={(e) => {
-          let newTimeSeconds = parseInt(e.target.value);
-          let newTotalState = { ...totalState, combatTimeMillisecond: newTimeSeconds * 1000 };
+    <Input
+      label={label}
+      value={totalState.combatTimeMillisecond / 1000}
+      onChange={(e) => {
+        let newTimeSeconds = parseInt(e.target.value);
+        let newTotalState = { ...totalState, combatTimeMillisecond: newTimeSeconds * 1000 };
 
-          setTotalState(newTotalState);
-        }}
-        fullWidth
-      />
-    </InputBox>
+        setTotalState(newTotalState);
+      }}
+      fullWidth
+      sx={{
+        '& .MuiInputBase-input': {
+          height: ITEM_MIN_HEIGHT,
+          textAlign: "center",
+        },
+      }}
+    />
   );
 };

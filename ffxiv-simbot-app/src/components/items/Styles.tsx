@@ -20,3 +20,6 @@ export const MenuItemStyle = `
 
   divider: true;
 `;
+
+
+export const ITEM_MIN_HEIGHT = "4vh";

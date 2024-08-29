@@ -114,7 +114,7 @@ function EquipmentMenuOfOneSlot(
   }
 
   return (
-    <Box height="10vh">
+    <>
       <CustomFormControl fullWidth>
         <InputLabel id="SlotSelect" key={`${key}_label`}>
           {slotLabel}
@@ -130,6 +130,7 @@ function EquipmentMenuOfOneSlot(
             PaperProps: {
               sx: {
                 backgroundColor: ColorConfigurations.backgroundThree,
+                height: "100%"
               },
             },
           }}
@@ -159,7 +160,7 @@ function EquipmentMenuOfOneSlot(
           )
         )}
       </EquipmentStatBox>
-    </Box>
+    </>
   );
 }
 
@@ -172,8 +173,8 @@ export function EquipmentSelectionMenu(
   let mainCharacterJobAbbrev = totalState.mainPlayerJobAbbrev;
   return (
     <EquipmentGridContainer container>
-      <EquipmentGridItemBox marginBottom={1} key={`${id}_JobSelectionItemBox`}>
-        <InputEquipmentBox item xs={xs} key="Job">
+      <EquipmentGridItemBox key={`${id}_JobSelectionItemBox`}>
+        <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
           {MainPlayerJobSelection(
             id,
             totalState,
@@ -200,7 +201,6 @@ export function EquipmentSelectionMenu(
         }
         return (
           <EquipmentGridItemBox
-            marginBottom={1}
             key={`${id}_equipment_${slotName}_itembox`}
           >
             <InputEquipmentBox
@@ -219,7 +219,7 @@ export function EquipmentSelectionMenu(
           </EquipmentGridItemBox>
         );
       })}
-      <EquipmentGridItemBox marginBottom={1} key={`food_selectionbox`}>
+      <EquipmentGridItemBox key={`food_selectionbox_${id}`}>
         <InputEquipmentBox item xs={xs} key="food">
           {FoodSelection(id, totalState, setTotalState)}
         </InputEquipmentBox>

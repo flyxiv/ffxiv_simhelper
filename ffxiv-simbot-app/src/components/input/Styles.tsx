@@ -14,7 +14,8 @@ export const EquipmentGridContainerStyle = `
 export const EquipmentGridItemStyle = `
   background-color: ${ColorConfigurations.backgroundTwo};
   color: ${ColorConfigurations.primary};
-  width: 50%;
+  width: 46%;
+  margin: 2%;
 `;
 
 export const EquipmentStyle = `
@@ -48,8 +49,9 @@ export const HorizontalInputGridContainerStyle = `
 export const HorizontalInputGridItemStyle = `
   background-color: ${ColorConfigurations.backgroundTwo};
   color: ${ColorConfigurations.primary};
-  width: 25%;
+  width: 23%;
   display: flex;
+  margin: 1%;
 `;
 
 export const MateriaInputBoxStyle = `
