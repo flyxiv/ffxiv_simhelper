@@ -9,25 +9,25 @@ import {
 import { JobMenuItem } from "../../items/JobMenuItem";
 import { CustomFormControl } from "../basicform/BasicInputForm";
 import { ColorConfigurations } from "../../../Themes";
-import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
+import { EquipmentInput } from "../../../types/EquipmentInput";
 
 let ALIGN = "center";
 
 export function PartyMemberJobSelection(
   id: number,
-  totalState: SingleEquipmentInputSaveState,
+  totalEquipmentState: EquipmentInput,
   setTotalState: Function
 ) {
   let playerId = `Party Member ${id}`;
   const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
-    const newJobNames = totalState.partyMemberJobAbbrevs.map((jobName, i) => {
+    const newJobNames = totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs.map((jobName, i) => {
       if (i === index) {
         return e.target.value;
       }
       return jobName;
     });
 
-    let newAvailablePartyIds = totalState.partyMemberIds;
+    let newAvailablePartyIds = totalEquipmentState.equipmentDatas[0].partyMemberIds;
     newAvailablePartyIds = newAvailablePartyIds.filter(
       (partyId) => partyId !== id
     );
@@ -37,9 +37,14 @@ export function PartyMemberJobSelection(
     }
     newAvailablePartyIds.sort((a, b) => a - b);
 
-    let newTotalState = { ...totalState, partyMemberJobAbbrevs: newJobNames, partyMemberIds: newAvailablePartyIds };
+    let newTotalState = { ...totalEquipmentState };
 
-    setTotalState(newTotalState);
+    newTotalState.equipmentDatas.forEach((data) => {
+      data.partyMemberJobAbbrevs = newJobNames;
+      data.partyMemberIds = newAvailablePartyIds;
+    })
+
+    setTotalState({ ...newTotalState });
   };
 
   let key = `job-select-partymember-${id}`;
@@ -50,7 +55,7 @@ export function PartyMemberJobSelection(
       <Select
         labelId={playerId}
         id={key}
-        value={totalState.partyMemberJobAbbrevs[id - 1]}
+        value={totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[id - 1]}
         key={key}
         label="Job Name"
         onChange={(event) => {

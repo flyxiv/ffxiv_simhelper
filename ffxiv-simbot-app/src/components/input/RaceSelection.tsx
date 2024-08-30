@@ -3,17 +3,20 @@ import { CustomFormControl } from "../../components/input/basicform/BasicInputFo
 import { RACES } from "../../const/StartStats";
 import { RaceMenuItem } from "../items/RaceMenuItem";
 import { ColorConfigurations } from "../../Themes";
-import { SingleEquipmentInputSaveState } from "../../types/SingleEquipmentInputSaveState";
+import { EquipmentInput } from "../../types/EquipmentInput";
 
 export function MainPlayerRaceSelection(
   id: number,
-  totalState: SingleEquipmentInputSaveState,
+  totalEquipmentState: EquipmentInput,
   setTotalState: Function
 ) {
   const handleRaceChange = (event: SelectChangeEvent<string>) => {
-    console.log("a");
-    setTotalState({ ...totalState, race: event.target.value });
+    let newState = { ...totalEquipmentState };
+    newState.equipmentDatas[id].race = event.target.value;
+    setTotalState({ newState });
   };
+
+  let totalState = totalEquipmentState.equipmentDatas[id];
 
   let raceLabel = totalState.race;
 

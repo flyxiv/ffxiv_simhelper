@@ -5,17 +5,18 @@ import {
   playerStatToPlayerPower,
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
-import { QuickSimInputSaveName, QuickSimResponseSaveName } from "../../App";
+import { QUICKSIM_RESULT_URL, QuickSimInputSaveName, QuickSimResponseSaveName } from "../../App";
 import { useState } from "react";
 import { QuickSimResponse } from "../../types/QuickSimResponse";
 import { requestButtonStyle } from "./Style";
-import { SingleEquipmentInputSaveState } from "../../types/SingleEquipmentInputSaveState";
+import { EquipmentInput, SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 
 const totalRequestCount = 100;
+const REQUEST_SERVER = "http://localhost:13406/api/v1/simulate";
 
 export function QuickSimRequestButton(
-  totalState: SingleEquipmentInputSaveState,
+  totalState: EquipmentInput,
 ) {
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
@@ -36,7 +37,7 @@ export function QuickSimRequestButton(
     localStorage.setItem(QuickSimInputSaveName, inputJson);
 
     let request = createQuickSimRequest(
-      totalState
+      totalState.equipmentDatas[0]
     );
 
     if (request instanceof Error) {
@@ -124,7 +125,7 @@ export function QuickSimRequestButton(
     const responseString = JSON.stringify(response);
     localStorage.setItem(QuickSimResponseSaveName, responseString);
 
-    navigate("/simulationresult");
+    navigate(`/${QUICKSIM_RESULT_URL}`);
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>
@@ -201,7 +202,7 @@ function sendRequestAsync(requestBody: string): Promise<Response> {
         reject(new Error("Request timeout"));
       }, 300000);
 
-      const response = await fetch("http://localhost:13406/api/v1/simulate", {
+      const response = await fetch(REQUEST_SERVER, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

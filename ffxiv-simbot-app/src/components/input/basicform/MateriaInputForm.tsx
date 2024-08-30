@@ -19,11 +19,11 @@ import {
 import { MateriaMenuItem } from "../../../components/items/MateriaMenuItem";
 import {
   slotNameToSlotIndex,
-  updatePlayerPower,
+  updateOnePlayerPower,
 } from "../../../types/ffxivdatabase/ItemSet";
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { ColorConfigurations } from "../../../Themes";
-import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
+import { EquipmentInput, SingleEquipmentInputSaveState } from "../../../types/EquipmentInput";
 
 const MateriaMenu = styled(MenuItem)`
   ${MenuItemStyle}
@@ -32,11 +32,13 @@ const MateriaMenu = styled(MenuItem)`
 const MATERIA_MENU_HEIGHT = "3vh";
 
 export function MateriaInputTable(
+  id: number,
   slotName: string,
   equipment: Equipment | undefined,
-  totalState: SingleEquipmentInputSaveState,
-  setTotalState: Function
+  totalEquipmentState: EquipmentInput,
+  setTotalEquipmentState: Function
 ) {
+  let totalState = totalEquipmentState.equipmentDatas[id];
   let materiasInSlot = totalState.gearSetMaterias[slotNameToSlotIndex(slotName)];
   if (equipment === undefined) {
     return <></>;
@@ -46,12 +48,13 @@ export function MateriaInputTable(
     <Box display="flex" height={MATERIA_MENU_HEIGHT} width="100%">
       {materiasInSlot.map((_, materiaSlot) => {
         return SingleMateriaMenu(
+          id,
           equipment,
           materiasInSlot,
           materiaSlot,
           slotName,
-          totalState,
-          setTotalState
+          totalEquipmentState,
+          setTotalEquipmentState
         );
       })}
     </Box>
@@ -59,13 +62,16 @@ export function MateriaInputTable(
 }
 
 function SingleMateriaMenu(
+  id: number,
   equipment: Equipment,
   materias: Materia[] | undefined,
   materiaSlot: number,
   slotName: string,
-  totalState: SingleEquipmentInputSaveState,
-  setTotalState: Function
+  totalEquipmentState: EquipmentInput,
+  setTotalEquipmentState: Function
 ) {
+  let totalState = totalEquipmentState.equipmentDatas[id];
+
   if (materias === undefined) {
     return <></>;
   }
@@ -73,20 +79,22 @@ function SingleMateriaMenu(
     equipment,
     materiaSlot
   );
-  let key = `${equipment.slotName}-${equipment.id}-materia-${materiaSlot}`;
+  let key = `${id}-${equipment.slotName}-${equipment.id}-materia-${materiaSlot}`;
 
   let updateMateria = (e: SelectChangeEvent<string>) => {
+    let newTotalEquipmentState = { ...totalEquipmentState };
+    let newData = newTotalEquipmentState.equipmentDatas[id];
+
     let materiasOfSlot =
-      totalState.gearSetMaterias[slotNameToSlotIndex(slotName)];
+      newData.gearSetMaterias[slotNameToSlotIndex(slotName)];
 
     updateMateriaList(e.target.value, equipment, materiasOfSlot, materiaSlot);
     let newGearSetMaterias = [...totalState.gearSetMaterias];
-    let newData = { ...totalState };
 
     newGearSetMaterias[slotNameToSlotIndex(slotName)] =
       materiasOfSlot;
     newData.gearSetMaterias = newGearSetMaterias;
-    updatePlayerPower(newData, setTotalState);
+    updateOnePlayerPower(id, newTotalEquipmentState, setTotalEquipmentState);
   };
 
   let materiaValue = toMateriaKey(materias[materiaSlot]);

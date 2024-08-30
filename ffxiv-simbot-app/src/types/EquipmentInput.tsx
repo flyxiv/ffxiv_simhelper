@@ -2,6 +2,10 @@ import { ItemSet } from "./ffxivdatabase/ItemSet";
 import { GearSetMaterias } from "./ffxivdatabase/Materia";
 import { PlayerPower } from "./ffxivdatabase/PlayerPower";
 
+export interface EquipmentInput {
+  equipmentDatas: Array<SingleEquipmentInputSaveState>;
+}
+
 export interface SingleEquipmentInputSaveState {
   mainPlayerJobAbbrev: string;
   race: string;
@@ -20,10 +24,4 @@ export interface SingleEquipmentInputSaveState {
 export interface SingleEquipmentSetLoadoutData {
   equipmentData: SingleEquipmentInputSaveState,
   loadoutName: string,
-}
-
-export interface DoubleEquipmentSetLoadoutData {
-  equipmentData1: SingleEquipmentInputSaveState,
-  equipmentData2: SingleEquipmentInputSaveState,
-  loadoutName: string
 }

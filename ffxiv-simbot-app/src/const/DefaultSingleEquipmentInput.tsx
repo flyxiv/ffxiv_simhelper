@@ -1,7 +1,7 @@
 import { defaultPlayerPower } from "../types/ffxivdatabase/PlayerPower";
 import { defaultItemSet } from "../types/ffxivdatabase/ItemSet";
 import { GearSetMaterias } from "../types/ffxivdatabase/Materia";
-import { SingleEquipmentInputSaveState } from "../types/SingleEquipmentInputSaveState";
+import { EquipmentInput, SingleEquipmentInputSaveState } from "../types/EquipmentInput";
 
 export const DEFAULT_GEARSET_MATERIAS: GearSetMaterias = [
   [],
@@ -18,11 +18,11 @@ export const DEFAULT_GEARSET_MATERIAS: GearSetMaterias = [
   [],
 ];
 
-export function defaultSingleEquipmentInput(): SingleEquipmentInputSaveState {
+export function defaultSingleEquipmentInput(): EquipmentInput {
   let partyMemberJobs = ["NIN", "WAR", "WHM", "SGE", "DRG", "BRD", "BLM"];
   let defaultMaterias = DEFAULT_GEARSET_MATERIAS;
 
-  return {
+  let singleEquipmentInput: SingleEquipmentInputSaveState = {
     mainPlayerJobAbbrev: "PLD",
     race: "Midlander Hyur",
     mainPlayerPartner1Id: null,
@@ -35,4 +35,8 @@ export function defaultSingleEquipmentInput(): SingleEquipmentInputSaveState {
     foodId: -1,
     power: defaultPlayerPower()
   };
+
+  return {
+    equipmentDatas: [singleEquipmentInput],
+  }
 }

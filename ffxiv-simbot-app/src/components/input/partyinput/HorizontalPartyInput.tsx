@@ -9,7 +9,7 @@ import {
   inputStyleSimulationResultTextBox,
   SimulationResultTimeTextBox,
 } from "../SimulationResultTextBox";
-import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
+import { EquipmentInput, SingleEquipmentInputSaveState } from "../../../types/EquipmentInput";
 import { ITEM_MIN_HEIGHT } from "../../../components/items/Styles";
 
 const HorizontalInputGridContainer = styled(Grid)`
@@ -30,8 +30,8 @@ const InputJobBox = styled(Grid)`
 `;
 
 export function HorizontalPartyInput(
-  totalState: SingleEquipmentInputSaveState,
-  setTotalState: Function
+  totalEquipmentState: EquipmentInput,
+  setTotalEquipmentState: Function
 ) {
   let xs = 14;
   return (
@@ -42,8 +42,8 @@ export function HorizontalPartyInput(
             <InputJobBox item xs={xs} key={`timeinput`} height={"5vh"}>
               {SimulationResultTimeTextBox(
                 "Combat Time(Seconds)",
-                totalState,
-                setTotalState)
+                totalEquipmentState,
+                setTotalEquipmentState)
               }
             </InputJobBox>
           </InputBox>
@@ -56,8 +56,8 @@ export function HorizontalPartyInput(
               <InputJobBox item xs={xs} key={`Job-${playerId}`}>
                 {PartyMemberJobSelection(
                   playerId,
-                  totalState,
-                  setTotalState
+                  totalEquipmentState,
+                  setTotalEquipmentState
                 )}
               </InputJobBox>
             </InputBox>

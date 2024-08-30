@@ -1,36 +1,37 @@
 import { useState } from "react";
-import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
-import { Box, Typography } from "@mui/material";
-import "./QuickSim.css";
-import { QuickSimInputSaveName } from "../App"
+import { Box, styled } from "@mui/material";
+import { QUICKSIM_RESULT_URL, QuickSimInputSaveName } from "../App"
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
-import { StatPowerSummary, StatSummary } from "../components/container/StatSummary";
+import { StatPowerSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
-import { SingleEquipmentInputSaveState } from "../types/SingleEquipmentInputSaveState";
+import { EquipmentInput } from "../types/EquipmentInput";
 import { defaultSingleEquipmentInput } from "../const/DefaultSingleEquipmentInput";
-import { MENU_WIDTH_VW, QuicksimLeftMenu } from "../components/container/LeftMenu";
+import { MENU_WIDTH_VW, LeftMenuWithLoadout } from "../components/container/LeftMenu";
 import { ColorConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
 import { SelectionTitle } from "../components/basic/SelectionTitle";
 import { QuickSimBottomMenu } from "../components/container/BottomMenu";
+import { CustomizeBoardStyle, EquipmentBoardStyle, InputContainerStyle } from "./Styles";
+import { calculatePlayerPowerFromInputs } from "../types/ffxivdatabase/ItemSet";
 
-export function isNotValid(input: SingleEquipmentInputSaveState) {
-  if (input.mainPlayerJobAbbrev === null || input.mainPlayerJobAbbrev === undefined) {
-    return true;
-  }
+let INPUT_CONTAINER_WIDTH = "40vw";
+const QUICKSIM_LOADOUT_COUNT = 3;
 
-  if (
-    input.combatTimeMillisecond === null ||
-    input.combatTimeMillisecond === undefined
-  ) {
-    return true;
-  }
+let QuickSimInputContainer = styled(Box)`
+  ${InputContainerStyle(INPUT_CONTAINER_WIDTH)} 
+`;
 
-  if (
-    input.combatTimeMillisecond === null ||
-    input.combatTimeMillisecond === undefined
-  ) {
+let CustomizeBoard = styled(Box)`
+  ${CustomizeBoardStyle}
+`
+
+let EquipmentBoard = styled(Box)`
+  ${EquipmentBoardStyle}
+`
+
+export function isNotValid(input: EquipmentInput) {
+  if (input.equipmentDatas === null) {
     return true;
   }
 
@@ -47,12 +48,14 @@ export function QuickSim() {
   } else {
     mostRecentInput = JSON.parse(
       mostRecentInputState
-    ) as SingleEquipmentInputSaveState;
+    ) as EquipmentInput;
   }
 
   if (isNotValid(mostRecentInput)) {
     mostRecentInput = defaultSingleEquipmentInput();
   }
+  let power = calculatePlayerPowerFromInputs(mostRecentInput.equipmentDatas[0]);
+  mostRecentInput.equipmentDatas[0].power = power;
 
   const [totalState, setTotalState] = useState(
     mostRecentInput
@@ -63,33 +66,33 @@ export function QuickSim() {
   return (
     <>
       <Box display="flex" sx={{ backgroundColor: ColorConfigurations.backgroundOne }} width="100vw">
-        {QuicksimLeftMenu(totalState, setTotalState)}
+        {LeftMenuWithLoadout(QUICKSIM_LOADOUT_COUNT, QUICKSIM_RESULT_URL, totalState, setTotalState)}
         <Box width={`${bodyWidth}vw`}>
           {AppHeader()}
           <Box alignContent={"center"}>
-            <Box className="QuickSimInputContainer" justifyContent={"center"}>
+            <QuickSimInputContainer justifyContent={"center"}>
               {SelectionTitle("1. Input Your Info")}
-              <Box className="EquipmentBoard">
+              <EquipmentBoard>
                 {EquipmentSelectionMenu(0, totalState, setTotalState)}
-              </Box>
-            </Box>
+              </EquipmentBoard>
+            </QuickSimInputContainer>
 
-            <Box className="QuickSimInputContainer" marginTop={20}>
+            <QuickSimInputContainer paddingTop={20}>
               {SelectionTitle("2. Additional Settings")}
-              <Box className="CustomizeBoard">
+              <CustomizeBoard>
                 {HorizontalPartyInput(
                   totalState,
                   setTotalState
                 )}
-              </Box>
-            </Box>
+              </CustomizeBoard>
+            </QuickSimInputContainer>
 
-            <Box className="QuickSimInputContainer" marginTop={10}>
+            <QuickSimInputContainer marginTop={10}>
               {SelectionTitle("3. Specific Player Power")}
               <Box display="flex" justifyContent="center" paddingBottom={"20vh"}>
-                {StatPowerSummary(totalState)}
+                {StatPowerSummary(totalState.equipmentDatas[0])}
               </Box>
-            </Box>
+            </QuickSimInputContainer>
 
             {QuickSimBottomMenu(totalState)}
           </Box>

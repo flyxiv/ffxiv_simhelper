@@ -2,7 +2,7 @@ import { Box, Button, styled, TextField, Typography } from "@mui/material";
 import { ColorConfigurations } from "../../Themes";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { useState } from "react";
-import { SingleEquipmentInputSaveState } from "../../types/SingleEquipmentInputSaveState";
+import { EquipmentInput, SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { defaultSingleEquipmentInput } from "../../const/DefaultSingleEquipmentInput";
 
 
@@ -41,7 +41,8 @@ export function DefaultLoadoutMetadata(): LoadoutMetaData {
     }
 }
 
-export function SingleLoadoutBox(loadoutId: number, simulationName: string, totalState: SingleEquipmentInputSaveState, setTotalState: Function) {
+
+export function LoadoutBox(loadoutId: number, simulationName: string, totalState: EquipmentInput, setTotalState: Function) {
     let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState("");
     let loadoutSaveKey = `${simulationName}-${loadoutId}`;
     let loadoutMetadataSaveKey = `${simulationName}-loadoutMetadata-${loadoutId}`;
@@ -62,7 +63,7 @@ export function SingleLoadoutBox(loadoutId: number, simulationName: string, tota
                 <Box marginX={1}>
                     <img
                         src={jobAbbrevToJobIconPath(loadoutMetadata.jobAbbrev)}
-                        alt={totalState.mainPlayerJobAbbrev}
+                        alt={loadoutMetadata.jobAbbrev}
                         width={25}
                         height={25}
                         style={{ verticalAlign: "middle" }}
@@ -86,12 +87,12 @@ export function SingleLoadoutBox(loadoutId: number, simulationName: string, tota
     )
 }
 
-function LoadoutOverwriteButton(loadoutSaveKey: string, loadoutMetadataSaveKey: string, textFieldInputLoadoutName: string, totalState: SingleEquipmentInputSaveState, setLoadoutMetadata: Function, setTextFieldInputLoadoutName: Function) {
+function LoadoutOverwriteButton(loadoutSaveKey: string, loadoutMetadataSaveKey: string, textFieldInputLoadoutName: string, totalState: EquipmentInput, setLoadoutMetadata: Function, setTextFieldInputLoadoutName: Function) {
     return (
         <Button sx={{ marginX: 2, backgroundColor: ColorConfigurations.primary, color: "black", borderRadius: 2 }} onClick={(_) => {
             let newMetaData = {
                 loadoutName: textFieldInputLoadoutName,
-                jobAbbrev: totalState.mainPlayerJobAbbrev
+                jobAbbrev: totalState.equipmentDatas[0].mainPlayerJobAbbrev
             };
 
             localStorage.setItem(loadoutSaveKey, JSON.stringify(totalState));
@@ -103,6 +104,7 @@ function LoadoutOverwriteButton(loadoutSaveKey: string, loadoutMetadataSaveKey: 
         </Button >
     )
 }
+
 
 function LoadoutLoadButton(loadoutSaveKey: string, setTotalState: Function, setTextFieldInputLoadoutName: Function) {
     return (
@@ -120,3 +122,4 @@ function LoadoutLoadButton(loadoutSaveKey: string, setTotalState: Function, setT
         </Button >
     )
 }
+

@@ -1,11 +1,11 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { ColorConfigurations } from '../../Themes';
 import { MENU_WIDTH_VW } from './LeftMenu';
 import { StatSummary } from './StatSummary';
-import { SingleEquipmentInputSaveState } from '../../types/SingleEquipmentInputSaveState';
+import { EquipmentInput } from '../../types/EquipmentInput';
 import { QuickSimRequestButton } from '../basic/QuickSimRequestButton';
 
-export function QuickSimBottomMenu(totalState: SingleEquipmentInputSaveState) {
+export function QuickSimBottomMenu(totalState: EquipmentInput) {
     return (
         <Box
             sx={{
@@ -21,7 +21,7 @@ export function QuickSimBottomMenu(totalState: SingleEquipmentInputSaveState) {
             }}
         >
             <Box paddingY={3} display="flex" flexDirection="column" alignContent="center">
-                {StatSummary(totalState)}
+                {StatSummary(totalState.equipmentDatas[0])}
                 <Box display="inline-block" margin="auto" paddingTop={2}>
                     {QuickSimRequestButton(totalState)}
                 </Box>

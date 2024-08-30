@@ -24,7 +24,7 @@ import {
   calculateWeaponMultiplierPercent,
 } from "./StatCalculator";
 import { CRIT_BASE_DAMAGE, CRIT_BASE_PERCENT } from "./Stats";
-import { SingleEquipmentInputSaveState } from "../SingleEquipmentInputSaveState";
+import { EquipmentInput, SingleEquipmentInputSaveState } from "../EquipmentInput";
 
 export const WEAPON_SLOT_ID = 0;
 export const HEAD_SLOT_ID = 1;
@@ -187,16 +187,37 @@ export function isCaster(jobAbbrev: string) {
   }
 }
 
-export function updatePlayerPower(
-  totalState: SingleEquipmentInputSaveState,
+export function updateOnePlayerPower(
+  id: number,
+  totalState: EquipmentInput,
   setTotalState: Function
 ) {
   let updatedPower = calculatePlayerPowerFromInputs(
-    totalState
+    totalState.equipmentDatas[id]
   );
 
+  let newTotalState = { ...totalState };
+  newTotalState.equipmentDatas[id].power = updatedPower;
+
   setTotalState({
-    ...totalState,
-    power: updatedPower,
+    ...newTotalState
+  });
+}
+
+export function updateAllPlayerPower(
+  totalState: EquipmentInput,
+  setTotalState: Function
+) {
+  let updatedPower = calculatePlayerPowerFromInputs(
+    totalState.equipmentDatas[0]
+  );
+
+  let newTotalState = { ...totalState };
+  newTotalState.equipmentDatas.forEach((data: SingleEquipmentInputSaveState) => {
+    data.power = updatedPower;
+  })
+
+  setTotalState({
+    ...newTotalState
   });
 }

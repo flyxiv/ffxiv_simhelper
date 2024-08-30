@@ -1,30 +1,32 @@
-import { Divider, InputLabel, Select, SelectChangeEvent } from "@mui/material";
+import { Divider, Select, SelectChangeEvent } from "@mui/material";
 import { CustomFormControl } from "../basicform/BasicInputForm";
 import { JobMenuItem } from "../../items/JobMenuItem";
 import {
   defaultItemSet,
-  updatePlayerPower,
+  updateAllPlayerPower,
 } from "../../../types/ffxivdatabase/ItemSet";
 import { ColorConfigurations } from "../../../Themes";
 import { DEFAULT_GEARSET_MATERIAS } from "../../../const/DefaultSingleEquipmentInput";
-import { SingleEquipmentInputSaveState } from "../../../types/SingleEquipmentInputSaveState";
+import { EquipmentInput, SingleEquipmentInputSaveState } from "../../../types/EquipmentInput";
 
 let ALIGN = "left";
 
 export function MainPlayerJobSelection(
   id: number,
-  totalState: SingleEquipmentInputSaveState,
+  totalEquipmentState: EquipmentInput,
   setTotalState: Function,
 ) {
   const handleJobChange = (event: SelectChangeEvent<string>) => {
     let newJobAbbrev = event.target.value;
-    let newTotalState = { ...totalState };
+    let newTotalState = { ...totalEquipmentState };
 
-    newTotalState.itemSet = defaultItemSet();
-    newTotalState.gearSetMaterias = DEFAULT_GEARSET_MATERIAS;
-    newTotalState.mainPlayerJobAbbrev = newJobAbbrev;
+    newTotalState.equipmentDatas.forEach((data: SingleEquipmentInputSaveState) => {
+      data.itemSet = defaultItemSet();
+      data.gearSetMaterias = DEFAULT_GEARSET_MATERIAS;
+      data.mainPlayerJobAbbrev = newJobAbbrev;
+    });
 
-    updatePlayerPower(newTotalState, setTotalState);
+    updateAllPlayerPower(newTotalState, setTotalState);
   };
 
   let key = `Job-${id}`;
@@ -34,7 +36,7 @@ export function MainPlayerJobSelection(
       <Select
         labelId={key}
         id={key}
-        value={totalState.mainPlayerJobAbbrev}
+        value={totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev}
         label={key}
         onChange={handleJobChange}
         MenuProps={{
