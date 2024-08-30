@@ -54,8 +54,6 @@ export function QuickSim() {
   if (isNotValid(mostRecentInput)) {
     mostRecentInput = defaultSingleEquipmentInput();
   }
-  let power = calculatePlayerPowerFromInputs(mostRecentInput.equipmentDatas[0]);
-  mostRecentInput.equipmentDatas[0].power = power;
 
   const [totalState, setTotalState] = useState(
     mostRecentInput

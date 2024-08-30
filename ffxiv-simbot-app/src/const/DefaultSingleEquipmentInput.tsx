@@ -1,5 +1,5 @@
 import { defaultPlayerPower } from "../types/ffxivdatabase/PlayerPower";
-import { defaultItemSet } from "../types/ffxivdatabase/ItemSet";
+import { calculatePlayerPowerFromInputs, defaultItemSet } from "../types/ffxivdatabase/ItemSet";
 import { GearSetMaterias } from "../types/ffxivdatabase/Materia";
 import { EquipmentInput, SingleEquipmentInputSaveState } from "../types/EquipmentInput";
 
@@ -35,6 +35,8 @@ export function defaultSingleEquipmentInput(): EquipmentInput {
     foodId: -1,
     power: defaultPlayerPower()
   };
+
+  singleEquipmentInput.power = calculatePlayerPowerFromInputs(singleEquipmentInput);
 
   return {
     equipmentDatas: [singleEquipmentInput],

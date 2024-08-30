@@ -3,7 +3,6 @@ import { Materia } from "src/types/ffxivdatabase/Materia";
 import { getPossibleMateriasForEquipmentSlot } from "../../../types/ffxivdatabase/Materia";
 import {
   SelectChangeEvent,
-  InputLabel,
   Select,
   MenuItem,
   styled,
@@ -14,7 +13,6 @@ import { CustomFormControl } from "./BasicInputForm";
 import {
   toMateriaKey,
   updateMateriaList,
-  EMPTY_MATERIA,
 } from "../../../types/ffxivdatabase/Materia";
 import { MateriaMenuItem } from "../../../components/items/MateriaMenuItem";
 import {
@@ -23,7 +21,7 @@ import {
 } from "../../../types/ffxivdatabase/ItemSet";
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { ColorConfigurations } from "../../../Themes";
-import { EquipmentInput, SingleEquipmentInputSaveState } from "../../../types/EquipmentInput";
+import { EquipmentInput } from "../../../types/EquipmentInput";
 
 const MateriaMenu = styled(MenuItem)`
   ${MenuItemStyle}

@@ -172,7 +172,6 @@ export function EquipmentSelectionMenu(
   setTotalState: Function
 ) {
   let xs = 12;
-  console.log(totalEquipmentState);
   let mainCharacterJobAbbrev = totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
   return (
     <EquipmentGridContainer container>

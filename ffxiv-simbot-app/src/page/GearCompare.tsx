@@ -1,23 +1,30 @@
 import { useState } from "react";
-import { Box, styled } from "@mui/material";
-import { GearCompareRequestSaveName } from "../App"
+import { Box, Button, styled } from "@mui/material";
+import { GEAR_COMPARE_URL, GearCompareRequestSaveName } from "../App"
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
-import { StatPowerSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
 import { MENU_WIDTH_VW, LeftMenuWithLoadout } from "../components/container/LeftMenu";
 import { ColorConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
 import { SelectionTitle } from "../components/basic/SelectionTitle";
-import { QuickSimBottomMenu } from "../components/container/BottomMenu";
+import { GearCompareBottomMenu } from "../components/container/BottomMenu";
 import { CustomizeBoardStyle, EquipmentBoardStyle, InputContainerStyle } from "./Styles";
 import { defaultDoubleEquipmentInput } from "../const/DefaultDoubleEquipmentInput";
 import { EquipmentInput } from "../types/EquipmentInput";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-let INPUT_CONTAINER_WIDTH = "80vw";
+export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "80vw";
+const GEAR_COMPARE_LOADOUNT_COUNT = 3;
 
-let GearCompareInputContainer = styled(Box)`
-  ${InputContainerStyle(INPUT_CONTAINER_WIDTH)} 
+const PARTY_INPUT_WIDTH = "40vw";
+
+let GearCompareEquipmentInputContainer = styled(Box)`
+  ${InputContainerStyle(GEAR_COMPARE_INPUT_CONTAINER_WIDTH)} 
+`;
+let GearComparePartyInputContainer = styled(Box)`
+  ${InputContainerStyle(PARTY_INPUT_WIDTH)} 
 `;
 
 let CustomizeBoard = styled(Box)`
@@ -53,33 +60,42 @@ export function GearCompare() {
         mostRecentInput = defaultDoubleEquipmentInput();
     }
 
-    const [totalDoubleState, setTotalDoubleState] = useState(
+    const [totalState, setTotalState] = useState(
         mostRecentInput
     );
 
     let bodyWidth = 100 - MENU_WIDTH_VW;
 
     return (
-        <></>
-    );
-}
-/*        <>
+        <>
             <Box display="flex" sx={{ backgroundColor: ColorConfigurations.backgroundOne }} width="100vw">
-                {GearCompareLeftMenu(totalDoubleState, setTotalDoubleState)}
+                {LeftMenuWithLoadout(GEAR_COMPARE_LOADOUNT_COUNT, GEAR_COMPARE_URL, totalState, setTotalState)}
                 <Box width={`${bodyWidth}vw`}>
                     {AppHeader()}
                     <Box alignContent={"center"}>
-                        <GearCompareInputContainer justifyContent={"center"}>
-                            {SelectionTitle("1. Input Your Info")}
-                            <EquipmentBoard>
-                                {EquipmentSelectionMenu(0, totalState, setTotalState)}
-                            </EquipmentBoard>
-                            <EquipmentBoard>
-                                {EquipmentSelectionMenu(0, totalState, setTotalState)}
-                            </EquipmentBoard>
-                        </GearCompareInputContainer>
+                        <GearCompareEquipmentInputContainer>
+                            {SelectionTitle("1. Input Gearsets You Want to Compare")}
+                            <Box display="flex" justifyContent="space-evenly" width={GEAR_COMPARE_INPUT_CONTAINER_WIDTH}>
+                                <EquipmentBoard>
+                                    {EquipmentSelectionMenu(0, totalState, setTotalState)}
+                                </EquipmentBoard>
 
-                        <GearCompareInputContainer paddingTop={20}>
+                                <Box display={"flex"} flexDirection={"column"} justifyContent={"center"}>
+                                    <Box marginBottom={5}>
+                                        {LoadLeftEquipmentToRightButton(totalState, setTotalState)}
+                                    </Box>
+                                    <Box marginTop={5}>
+                                        {LoadRightEquipmentToLeftButton(totalState, setTotalState)}
+                                    </Box>
+                                </Box>
+
+                                <EquipmentBoard>
+                                    {EquipmentSelectionMenu(1, totalState, setTotalState)}
+                                </EquipmentBoard>
+                            </Box>
+                        </GearCompareEquipmentInputContainer>
+
+                        <GearComparePartyInputContainer paddingTop={20} paddingBottom={40}>
                             {SelectionTitle("2. Additional Settings")}
                             <CustomizeBoard>
                                 {HorizontalPartyInput(
@@ -87,19 +103,46 @@ export function GearCompare() {
                                     setTotalState
                                 )}
                             </CustomizeBoard>
-                        </GearCompareInputContainer>
+                        </GearComparePartyInputContainer>
 
-                        <GearCompareInputContainer marginTop={10}>
-                            {SelectionTitle("3. Specific Player Power")}
-                            <Box display="flex" justifyContent="center" paddingBottom={"20vh"}>
-                                {StatPowerSummary(totalState)}
-                            </Box>
-                        </GearCompareInputContainer>
-
-                        {QuickSimBottomMenu(totalState)}
+                        {GearCompareBottomMenu(totalState)}
                     </Box>
                     {Footer()}
                 </Box>
             </Box >
+
         </>
-*/
+    )
+}
+
+function LoadLeftEquipmentToRightButton(totalState: EquipmentInput, setTotalState: Function) {
+    return (
+        <Button
+            variant="contained"
+            endIcon={<ArrowForwardIcon />}
+            onClick={() => {
+                let newTotalState = { ...totalState };
+                newTotalState.equipmentDatas[1] = { ...totalState.equipmentDatas[0] };
+                setTotalState(newTotalState);
+            }}
+        >
+            Copy
+        </Button>
+    )
+}
+
+function LoadRightEquipmentToLeftButton(totalState: EquipmentInput, setTotalState: Function) {
+    return (
+        <Button
+            variant="contained"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => {
+                let newTotalState = { ...totalState };
+                newTotalState.equipmentDatas[0] = { ...totalState.equipmentDatas[1] };
+                setTotalState(newTotalState);
+            }}
+        >
+            Copy
+        </Button>
+    )
+}

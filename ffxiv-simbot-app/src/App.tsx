@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { SimulationResult } from "./page/SimulationResult";
 import { QuickSim } from "./page/QuickSim";
-import { Home } from "./page/home";
 import { GearCompare } from "./page/GearCompare";
+import { Home } from "./page/home";
 
 
 export const QuickSimInputSaveName = "mostRecentQuickSimInput";

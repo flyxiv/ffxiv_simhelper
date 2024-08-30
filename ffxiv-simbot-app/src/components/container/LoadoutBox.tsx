@@ -1,8 +1,8 @@
-import { Box, Button, styled, TextField, Typography } from "@mui/material";
+import { bottomNavigationClasses, Box, Button, styled, TextField, Typography } from "@mui/material";
 import { ColorConfigurations } from "../../Themes";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { useState } from "react";
-import { EquipmentInput, SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
+import { EquipmentInput } from "../../types/EquipmentInput";
 import { defaultSingleEquipmentInput } from "../../const/DefaultSingleEquipmentInput";
 
 
@@ -42,7 +42,7 @@ export function DefaultLoadoutMetadata(): LoadoutMetaData {
 }
 
 
-export function LoadoutBox(loadoutId: number, simulationName: string, totalState: EquipmentInput, setTotalState: Function) {
+export function LoadoutBox(loadoutId: number, simulationName: string, totalState: EquipmentInput, setTotalState: Function, numberOfEquipmentSets: number) {
     let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState("");
     let loadoutSaveKey = `${simulationName}-${loadoutId}`;
     let loadoutMetadataSaveKey = `${simulationName}-loadoutMetadata-${loadoutId}`;
@@ -81,7 +81,7 @@ export function LoadoutBox(loadoutId: number, simulationName: string, totalState
                     sx={{ backgroundColor: "white" }}
                 />
                 {LoadoutOverwriteButton(loadoutSaveKey, loadoutMetadataSaveKey, textFieldInputLoadoutName, totalState, setLoadoutMetadata, setTextFieldInputLoadoutName)}
-                {LoadoutLoadButton(loadoutSaveKey, setTotalState, setTextFieldInputLoadoutName)}
+                {LoadoutLoadButton(loadoutSaveKey, setTotalState, setTextFieldInputLoadoutName, numberOfEquipmentSets)}
             </Box>
         </Box >
     )
@@ -106,11 +106,16 @@ function LoadoutOverwriteButton(loadoutSaveKey: string, loadoutMetadataSaveKey: 
 }
 
 
-function LoadoutLoadButton(loadoutSaveKey: string, setTotalState: Function, setTextFieldInputLoadoutName: Function) {
+function LoadoutLoadButton(loadoutSaveKey: string, setTotalState: Function, setTextFieldInputLoadoutName: Function, numberOfEquipmentSets: number) {
     return (
         <Button sx={{ backgroundColor: ColorConfigurations.primary, color: "black", borderRadius: 2 }} onClick={(_) => {
             let savedLoadoutDataString = localStorage.getItem(loadoutSaveKey);
             let savedLoadoutData = defaultSingleEquipmentInput();
+            let defaultSet = savedLoadoutData.equipmentDatas[0];
+            for (let i = 1; i < numberOfEquipmentSets; i++) {
+                savedLoadoutData.equipmentDatas.push({ ...defaultSet });
+            }
+
             if (savedLoadoutDataString !== null) {
                 savedLoadoutData = JSON.parse(savedLoadoutDataString);
             }

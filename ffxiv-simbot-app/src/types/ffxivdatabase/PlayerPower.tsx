@@ -6,7 +6,6 @@ import {
   DEFAULT_TENACITY,
 } from "../../const/StatValue";
 import {
-  calculateCriticalStrikePercentIncrease,
   calculateGCD,
   DEFAULT_GCD,
   getMinNeededStatForCurrentCriticalStrike,
@@ -17,7 +16,7 @@ import {
   getMinNeededStatForCurrentSpeed,
   getMinNeededStatForCurrentTenacity,
 } from "./StatCalculator";
-import { CRIT_BASE_DAMAGE, CRIT_BASE_PERCENT } from "./Stats";
+import { CRIT_BASE_DAMAGE } from "./Stats";
 import { ItemSet } from "./ItemSet";
 import { GearSetMaterias } from "./Materia";
 

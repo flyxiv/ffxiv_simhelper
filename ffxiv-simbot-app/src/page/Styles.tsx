@@ -16,7 +16,8 @@ export const InputContainerStyle = (width: string) => `
 
 export const CustomizeBoardStyle = `
     margin: auto;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border: 1px solid black;
     background-color: ${ColorConfigurations.backgroundTwo};
     width: 100%;

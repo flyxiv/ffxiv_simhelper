@@ -55,7 +55,9 @@ export function BasicLeftMenu() {
                 backgroundColor: `${ColorConfigurations.backgroundOne}`
             },
         }} variant="permanent" anchor="left">
-            {DefaultLeftMenuComponents()}
+            <LeftMenuTotalBar>
+                {DefaultLeftMenuComponents()}
+            </LeftMenuTotalBar>
         </Drawer >
     )
 }
@@ -70,7 +72,7 @@ function NavigationMenu(link: string, text: string) {
 
 function DefaultLeftMenuComponents() {
     return (
-        <LeftMenuTotalBar>
+        <>
             <LeftMenuLogo>
                 <Typography align="center"><b>FFXIV SIMULATION BOT</b> </Typography>
             </LeftMenuLogo>
@@ -85,10 +87,10 @@ function DefaultLeftMenuComponents() {
                 {NavigationMenu(`/${BEST_PARTNER_URL}`, BEST_PARTNER_PAGE_NAME)}
                 {NavigationMenu(`/${STAT_WEIGHTS_URL}`, STAT_WEIGHTS_PAGE_NAME)}
             </LeftMenuNavigationBar>
-        </LeftMenuTotalBar>
+        </>
     )
-
 }
+
 
 function EquipmentLoadouts(loadoutCount: number, loadoutType: string, totalState: EquipmentInput, setTotalState: Function) {
     return (
@@ -99,10 +101,18 @@ function EquipmentLoadouts(loadoutCount: number, loadoutType: string, totalState
             </Box>
             {[...Array(loadoutCount).keys()].map((loadoutId) => {
                 return (<Box paddingY={4} marginX={4}>
-                    {LoadoutBox(loadoutId + 1, loadoutType, totalState, setTotalState)}
+                    {LoadoutBox(loadoutId + 1, loadoutType, totalState, setTotalState, getNumberOfEquipmentSets(loadoutType))}
                 </Box>)
 
             })}
         </>
     );
 }
+
+function getNumberOfEquipmentSets(loadoutType: string) {
+    if (loadoutType === GEAR_COMPARE_URL) {
+        return 2;
+    } else {
+        return 1;
+    }
+}       

@@ -6,13 +6,9 @@ import { Footer } from "../components/basic/Footer";
 import { Box } from "@mui/material";
 import { ColorConfigurations } from "../Themes";
 import { BasicLeftMenu, MENU_WIDTH_VW } from "../components/container/LeftMenu";
+import { GEAR_COMPARE_URL, QUICKSIM_URL } from "../App";
 
-const quickSimPageName = "quicksim";
-const quickSimPagePath = `/${quickSimPageName}`;
 const quickSimButtonImagePath = "/images/quickstart.png";
-
-const gearCompareSimPageName = "statcompare";
-const gearCompareSimPagePath = `/${gearCompareSimPageName}`;
 const gearCompareSimButtonImagePath = "/images/statcompare.png";
 
 export function Home() {
@@ -26,20 +22,18 @@ export function Home() {
           {AppHeader()}
           <Box className="HomeBody">
             <div className="LeftBody">
-              <Link to={quickSimPagePath}>
+              <Link to={`/${QUICKSIM_URL}`}>
                 {SimUIIcon(
                   quickSimButtonImagePath,
                   "quicksimimage",
-                  quickSimPageName
                 )}
               </Link>
             </div>
             <div className="RightBody">
-              <Link to={gearCompareSimPagePath}>
+              <Link to={`/${GEAR_COMPARE_URL}`}>
                 {SimUIIcon(
                   gearCompareSimButtonImagePath,
                   "gearcompareimage",
-                  gearCompareSimPageName
                 )}
               </Link>
             </div>
