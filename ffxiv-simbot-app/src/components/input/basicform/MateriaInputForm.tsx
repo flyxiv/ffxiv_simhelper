@@ -8,6 +8,7 @@ import {
   styled,
   Divider,
   Box,
+  Typography,
 } from "@mui/material";
 import { CustomFormControl } from "./BasicInputForm";
 import {
@@ -124,7 +125,7 @@ function SingleMateriaMenu(
           );
         })}
         <Divider />
-        <MateriaMenu value={"empty"}> </MateriaMenu>
+        <MateriaMenu value={"empty"}><Typography align="center">Empty</Typography></MateriaMenu>
       </Select>
     </CustomFormControl>
   );

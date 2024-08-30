@@ -38,7 +38,6 @@ export function LeftMenuWithLoadout(loadoutCount: number, loadoutType: string, t
                 {DefaultLeftMenuComponents()}
                 {EquipmentLoadouts(loadoutCount, loadoutType, totalState, setTotalState)}
             </LeftMenuTotalBar>
-
         </Drawer >
     )
 }

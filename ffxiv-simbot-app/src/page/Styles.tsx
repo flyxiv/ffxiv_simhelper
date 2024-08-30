@@ -28,3 +28,14 @@ export const EquipmentBoardStyle = `
     border: 1px solid black;
     background-color: ${ColorConfigurations.backgroundTwo};
 `
+
+export const CustomizeBoardSinglePartyInputStyle = (width: string) => `
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid black;
+    background-color: ${ColorConfigurations.backgroundTwo};
+    width: ${width};
+`

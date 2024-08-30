@@ -2,7 +2,7 @@ import { PlayerInfoBoxStyle, PlayerInfoJobTitleStyle } from "./Styles";
 import { Typography, styled, Box } from "@mui/material";
 import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
 import { PlayerStatInfo, StatComparePlayerStatInfo } from "./PlayerStatInfo";
-import { QuickSimResponseSaveName } from "../../App";
+import { QUICK_SIM_RESPONSE_SAVE_NAME } from "../../App";
 import { CharacterStats } from "../../types/CharacterStates";
 import { QuickSimResponse } from "../../types/QuickSimResponse";
 
@@ -15,7 +15,7 @@ const PlayerInfoJobTitle = styled(Box)`
 `;
 
 export function PlayerInfo(job: string, combatTimeMilliseconds: number) {
-  let mostRecentResponseState = localStorage.getItem(QuickSimResponseSaveName);
+  let mostRecentResponseState = localStorage.getItem(QUICK_SIM_RESPONSE_SAVE_NAME);
   let mostRecentResponse = null;
   if (mostRecentResponseState == null) {
     return;

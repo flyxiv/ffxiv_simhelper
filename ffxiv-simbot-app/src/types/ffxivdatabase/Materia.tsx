@@ -111,7 +111,8 @@ export function updateMateriaList(
   materiaSlot: number
 ) {
   if (materiaKey === "empty") {
-    return null;
+    materiasOfSlot[materiaSlot] = EMPTY_MATERIA;
+    return;
   }
 
   let [statName, maxValue] = materiaKey.split("+");

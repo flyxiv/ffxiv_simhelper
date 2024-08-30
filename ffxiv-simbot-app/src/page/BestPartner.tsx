@@ -1,29 +1,24 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
-import { QUICKSIM_RESULT_URL, SINGLE_INPUT_SAVE_NAME } from "../App"
+import { BEST_PARTNER_INPUT_SAVE_NAME, BEST_PARTNER_URL } from "../App"
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatPowerSummary } from "../components/container/StatSummary";
-import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
 import { EquipmentInput } from "../types/EquipmentInput";
-import { defaultSingleEquipmentInput } from "../const/DefaultSingleEquipmentInput";
+import { defaultBestPartnerEquipmentInput } from "../const/DefaultSingleEquipmentInput";
 import { MENU_WIDTH_VW, LeftMenuWithLoadout } from "../components/container/LeftMenu";
 import { ColorConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
 import { SelectionTitle } from "../components/basic/SelectionTitle";
 import { BasicBottomMenu } from "../components/container/BottomMenu";
-import { CustomizeBoardStyle, EquipmentBoardStyle, InputContainerStyle } from "./Styles";
+import { EquipmentBoardStyle, InputContainerStyle } from "./Styles";
 
 let INPUT_CONTAINER_WIDTH = "40vw";
-const QUICKSIM_LOADOUT_COUNT = 3;
+const BEST_PARTNER_LOADOUT_COUNT = 3;
 
-let QuickSimInputContainer = styled(Box)`
+let StatWeightsInputContainer = styled(Box)`
   ${InputContainerStyle(INPUT_CONTAINER_WIDTH)} 
 `;
-
-let CustomizeBoard = styled(Box)`
-  ${CustomizeBoardStyle}
-`
 
 let EquipmentBoard = styled(Box)`
   ${EquipmentBoardStyle}
@@ -38,12 +33,12 @@ export function isNotValid(input: EquipmentInput) {
 }
 
 
-export function QuickSim() {
-  let mostRecentInputState = localStorage.getItem(SINGLE_INPUT_SAVE_NAME);
+export function BestPartner() {
+  let mostRecentInputState = localStorage.getItem(BEST_PARTNER_INPUT_SAVE_NAME);
   let mostRecentInput = null;
 
   if (mostRecentInputState === null) {
-    mostRecentInput = defaultSingleEquipmentInput();
+    mostRecentInput = defaultBestPartnerEquipmentInput();
   } else {
     mostRecentInput = JSON.parse(
       mostRecentInputState
@@ -51,7 +46,7 @@ export function QuickSim() {
   }
 
   if (isNotValid(mostRecentInput)) {
-    mostRecentInput = defaultSingleEquipmentInput();
+    mostRecentInput = defaultBestPartnerEquipmentInput();
   }
 
   const [totalState, setTotalState] = useState(
@@ -63,34 +58,23 @@ export function QuickSim() {
   return (
     <>
       <Box display="flex" sx={{ backgroundColor: ColorConfigurations.backgroundOne }} width="100vw">
-        {LeftMenuWithLoadout(QUICKSIM_LOADOUT_COUNT, QUICKSIM_RESULT_URL, totalState, setTotalState)}
+        {LeftMenuWithLoadout(BEST_PARTNER_LOADOUT_COUNT, BEST_PARTNER_URL, totalState, setTotalState)}
         <Box width={`${bodyWidth}vw`}>
           {AppHeader()}
           <Box alignContent={"center"}>
-            <QuickSimInputContainer justifyContent={"center"}>
+            <StatWeightsInputContainer justifyContent={"center"}>
               {SelectionTitle("1. Input Your Info")}
               <EquipmentBoard>
-                {EquipmentSelectionMenu(0, totalState, setTotalState)}
+                {EquipmentSelectionMenu(0, totalState, setTotalState, true, true)}
               </EquipmentBoard>
-            </QuickSimInputContainer>
+            </StatWeightsInputContainer>
 
-            <QuickSimInputContainer paddingTop={20}>
-              {SelectionTitle("2. Additional Settings")}
-              <CustomizeBoard>
-                {HorizontalPartyInput(
-                  totalState,
-                  setTotalState,
-                  true
-                )}
-              </CustomizeBoard>
-            </QuickSimInputContainer>
-
-            <QuickSimInputContainer marginTop={10}>
-              {SelectionTitle("3. Specific Player Power")}
+            <StatWeightsInputContainer marginTop={10}>
+              {SelectionTitle("2. Specific Player Power")}
               <Box display="flex" justifyContent="center" paddingBottom={"20vh"}>
                 {StatPowerSummary(totalState.equipmentDatas[0])}
               </Box>
-            </QuickSimInputContainer>
+            </StatWeightsInputContainer>
 
             {BasicBottomMenu(totalState)}
           </Box>

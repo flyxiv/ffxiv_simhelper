@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
-import { QUICKSIM_RESULT_URL, SINGLE_INPUT_SAVE_NAME } from "../App"
+import { SINGLE_INPUT_SAVE_NAME, STAT_WEIGHTS_URL } from "../App"
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatPowerSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
@@ -15,9 +15,9 @@ import { BasicBottomMenu } from "../components/container/BottomMenu";
 import { CustomizeBoardStyle, EquipmentBoardStyle, InputContainerStyle } from "./Styles";
 
 let INPUT_CONTAINER_WIDTH = "40vw";
-const QUICKSIM_LOADOUT_COUNT = 3;
+const STATWEIGHTS_LOADOUT_COUNT = 3;
 
-let QuickSimInputContainer = styled(Box)`
+let StatWeightsInputContainer = styled(Box)`
   ${InputContainerStyle(INPUT_CONTAINER_WIDTH)} 
 `;
 
@@ -38,7 +38,7 @@ export function isNotValid(input: EquipmentInput) {
 }
 
 
-export function QuickSim() {
+export function StatWeights() {
   let mostRecentInputState = localStorage.getItem(SINGLE_INPUT_SAVE_NAME);
   let mostRecentInput = null;
 
@@ -63,18 +63,18 @@ export function QuickSim() {
   return (
     <>
       <Box display="flex" sx={{ backgroundColor: ColorConfigurations.backgroundOne }} width="100vw">
-        {LeftMenuWithLoadout(QUICKSIM_LOADOUT_COUNT, QUICKSIM_RESULT_URL, totalState, setTotalState)}
+        {LeftMenuWithLoadout(STATWEIGHTS_LOADOUT_COUNT, STAT_WEIGHTS_URL, totalState, setTotalState)}
         <Box width={`${bodyWidth}vw`}>
           {AppHeader()}
           <Box alignContent={"center"}>
-            <QuickSimInputContainer justifyContent={"center"}>
+            <StatWeightsInputContainer justifyContent={"center"}>
               {SelectionTitle("1. Input Your Info")}
               <EquipmentBoard>
                 {EquipmentSelectionMenu(0, totalState, setTotalState)}
               </EquipmentBoard>
-            </QuickSimInputContainer>
+            </StatWeightsInputContainer>
 
-            <QuickSimInputContainer paddingTop={20}>
+            <StatWeightsInputContainer paddingTop={20}>
               {SelectionTitle("2. Additional Settings")}
               <CustomizeBoard>
                 {HorizontalPartyInput(
@@ -83,14 +83,14 @@ export function QuickSim() {
                   true
                 )}
               </CustomizeBoard>
-            </QuickSimInputContainer>
+            </StatWeightsInputContainer>
 
-            <QuickSimInputContainer marginTop={10}>
+            <StatWeightsInputContainer marginTop={10}>
               {SelectionTitle("3. Specific Player Power")}
               <Box display="flex" justifyContent="center" paddingBottom={"20vh"}>
                 {StatPowerSummary(totalState.equipmentDatas[0])}
               </Box>
-            </QuickSimInputContainer>
+            </StatWeightsInputContainer>
 
             {BasicBottomMenu(totalState)}
           </Box>

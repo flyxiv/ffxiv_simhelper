@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box, Button, styled } from "@mui/material";
-import { GEAR_COMPARE_URL, GearCompareRequestSaveName } from "../App"
+import { GEAR_COMPARE_URL, GEAR_COMPARE_REQUEST_SAVE_NAME } from "../App"
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
 import { MENU_WIDTH_VW, LeftMenuWithLoadout } from "../components/container/LeftMenu";
@@ -45,7 +45,7 @@ export function isNotValid(input: EquipmentInput) {
 
 
 export function GearCompare() {
-    let mostRecentInputState = localStorage.getItem(GearCompareRequestSaveName);
+    let mostRecentInputState = localStorage.getItem(GEAR_COMPARE_REQUEST_SAVE_NAME);
     let mostRecentInput = null;
 
     if (mostRecentInputState === null) {
@@ -100,7 +100,8 @@ export function GearCompare() {
                             <CustomizeBoard>
                                 {HorizontalPartyInput(
                                     totalState,
-                                    setTotalState
+                                    setTotalState,
+                                    true
                                 )}
                             </CustomizeBoard>
                         </GearComparePartyInputContainer>

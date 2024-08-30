@@ -6,7 +6,7 @@ import { EquipmentInput } from '../../types/EquipmentInput';
 import { QuickSimRequestButton } from '../basic/QuickSimRequestButton';
 import { GEAR_COMPARE_INPUT_CONTAINER_WIDTH } from '../../page/GearCompare';
 
-export function QuickSimBottomMenu(totalState: EquipmentInput) {
+export function BasicBottomMenu(totalState: EquipmentInput) {
     return (
         <Box
             sx={{

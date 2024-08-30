@@ -1,9 +1,10 @@
-import { bottomNavigationClasses, Box, Button, styled, TextField, Typography } from "@mui/material";
+import { Box, Button, styled, TextField, Typography } from "@mui/material";
 import { ColorConfigurations } from "../../Themes";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { useState } from "react";
 import { EquipmentInput } from "../../types/EquipmentInput";
-import { defaultSingleEquipmentInput } from "../../const/DefaultSingleEquipmentInput";
+import { defaultBestPartnerEquipmentInput, defaultSingleEquipmentInput } from "../../const/DefaultSingleEquipmentInput";
+import { BEST_PARTNER_URL } from "../../App";
 
 
 export const inputStyle = {
@@ -41,6 +42,13 @@ export function DefaultLoadoutMetadata(): LoadoutMetaData {
     }
 }
 
+export function DefaultBestPartnerLoadoutMetadata(): LoadoutMetaData {
+    return {
+        loadoutName: "Default Loadout",
+        jobAbbrev: "SCH"
+    }
+}
+
 
 export function LoadoutBox(loadoutId: number, simulationName: string, totalState: EquipmentInput, setTotalState: Function, numberOfEquipmentSets: number) {
     let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState("");
@@ -48,7 +56,7 @@ export function LoadoutBox(loadoutId: number, simulationName: string, totalState
     let loadoutMetadataSaveKey = `${simulationName}-loadoutMetadata-${loadoutId}`;
 
     let savedLoadoutMetadataString = localStorage.getItem(loadoutMetadataSaveKey);
-    let savedLoadoutMetadata = DefaultLoadoutMetadata();
+    let savedLoadoutMetadata = simulationName !== BEST_PARTNER_URL ? DefaultLoadoutMetadata() : DefaultBestPartnerLoadoutMetadata();
 
     if (savedLoadoutMetadataString !== null) {
         savedLoadoutMetadata = JSON.parse(savedLoadoutMetadataString)
@@ -81,7 +89,7 @@ export function LoadoutBox(loadoutId: number, simulationName: string, totalState
                     sx={{ backgroundColor: "white" }}
                 />
                 {LoadoutOverwriteButton(loadoutSaveKey, loadoutMetadataSaveKey, textFieldInputLoadoutName, totalState, setLoadoutMetadata, setTextFieldInputLoadoutName)}
-                {LoadoutLoadButton(loadoutSaveKey, setTotalState, setTextFieldInputLoadoutName, numberOfEquipmentSets)}
+                {LoadoutLoadButton(loadoutSaveKey, simulationName, setTotalState, setTextFieldInputLoadoutName, numberOfEquipmentSets)}
             </Box>
         </Box >
     )
@@ -106,11 +114,12 @@ function LoadoutOverwriteButton(loadoutSaveKey: string, loadoutMetadataSaveKey: 
 }
 
 
-function LoadoutLoadButton(loadoutSaveKey: string, setTotalState: Function, setTextFieldInputLoadoutName: Function, numberOfEquipmentSets: number) {
+function LoadoutLoadButton(loadoutSaveKey: string, simulationName: string, setTotalState: Function, setTextFieldInputLoadoutName: Function, numberOfEquipmentSets: number) {
     return (
         <Button sx={{ backgroundColor: ColorConfigurations.primary, color: "black", borderRadius: 2 }} onClick={(_) => {
             let savedLoadoutDataString = localStorage.getItem(loadoutSaveKey);
-            let savedLoadoutData = defaultSingleEquipmentInput();
+            let savedLoadoutData = simulationName !== BEST_PARTNER_URL ? defaultSingleEquipmentInput() : defaultBestPartnerEquipmentInput();
+
             let defaultSet = savedLoadoutData.equipmentDatas[0];
             for (let i = 1; i < numberOfEquipmentSets; i++) {
                 savedLoadoutData.equipmentDatas.push({ ...defaultSet });

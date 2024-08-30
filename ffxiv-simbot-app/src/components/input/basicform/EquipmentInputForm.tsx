@@ -29,7 +29,7 @@ import {
   updateOnePlayerPower,
 } from "../../../types/ffxivdatabase/ItemSet";
 import { EquipmentMenuItem } from "../../../components/items/EquipmentMenuItem";
-import { MainPlayerJobSelection } from "../jobselection/MainPlayerJobSelection";
+import { MainPlayerJobSelection, MainPlayerJobSelectionOnlyBuffJobs } from "../jobselection/MainPlayerJobSelection";
 import { MainPlayerRaceSelection } from "../RaceSelection";
 import { FoodMenuItem } from "../../../components/items/FoodMenuItem";
 import { ALL_FOODS } from "../../../types/ffxivdatabase/Food";
@@ -39,6 +39,7 @@ import { MateriaInputTable } from "./MateriaInputForm";
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { ColorConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
+import { SimulationResultTimeTextBox } from "../SimulationResultTextBox";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -169,7 +170,9 @@ function EquipmentMenuOfOneSlot(
 export function EquipmentSelectionMenu(
   id: number,
   totalEquipmentState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
+  onlyBuffJobs: boolean = false,
+  hasTimeInput: boolean = false
 ) {
   let xs = 12;
   let mainCharacterJobAbbrev = totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
@@ -177,10 +180,10 @@ export function EquipmentSelectionMenu(
     <EquipmentGridContainer container>
       <EquipmentGridItemBox key={`${id}_JobSelectionItemBox`}>
         <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
-          {MainPlayerJobSelection(
+          {onlyBuffJobs ? MainPlayerJobSelectionOnlyBuffJobs(id, totalEquipmentState, setTotalState) : MainPlayerJobSelection(
             id,
             totalEquipmentState,
-            setTotalState
+            setTotalState,
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
@@ -222,10 +225,22 @@ export function EquipmentSelectionMenu(
         );
       })}
       <EquipmentGridItemBox key={`food_selectionbox_${id}`}>
-        <InputEquipmentBox item xs={xs} key="food">
+        <InputEquipmentBox item xs={xs} key={`food_${id}`}>
           {FoodSelection(id, totalEquipmentState, setTotalState)}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
+      {hasTimeInput ?
+        <EquipmentGridItemBox>
+          <InputEquipmentBox item xs={xs} key="time">
+            {SimulationResultTimeTextBox(
+              "Combat Time(Seconds)",
+              totalEquipmentState,
+              setTotalState
+            )}
+          </InputEquipmentBox>
+        </EquipmentGridItemBox>
+        : <Box></Box>
+      }
     </EquipmentGridContainer>
   );
 }

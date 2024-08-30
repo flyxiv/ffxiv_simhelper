@@ -13,7 +13,7 @@ import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { DamageProfileGraph } from "../components/graph/DamageProfileGraph";
 import { SkillLogResult } from "../components/container/SkillLog";
 import { ResultPageButtonGroup } from "../components/container/ResultPageButtonGroup";
-import { QuickSimResponseSaveName } from "../App";
+import { QUICK_SIM_RESPONSE_SAVE_NAME } from "../App";
 import { PartyContributionData } from "../components/graph/GraphData";
 import {
   MainPlayerContributionGraph,
@@ -32,7 +32,7 @@ export const ROTATION_LOG_TEXT = "Rotation Log";
 export function SimulationResult() {
   let [currentlyToggledView, setCurrentlyToggledView] =
     useState(DAMAGE_PROFILE_TEXT);
-  let response = localStorage.getItem(QuickSimResponseSaveName);
+  let response = localStorage.getItem(QUICK_SIM_RESPONSE_SAVE_NAME);
 
   if (response == null) {
     return (

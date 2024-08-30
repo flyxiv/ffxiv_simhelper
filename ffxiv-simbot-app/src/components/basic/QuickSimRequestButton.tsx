@@ -5,7 +5,7 @@ import {
   playerStatToPlayerPower,
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
-import { QUICKSIM_RESULT_URL, QuickSimInputSaveName, QuickSimResponseSaveName } from "../../App";
+import { QUICKSIM_RESULT_URL, SINGLE_INPUT_SAVE_NAME, QUICK_SIM_RESPONSE_SAVE_NAME } from "../../App";
 import { useState } from "react";
 import { QuickSimResponse } from "../../types/QuickSimResponse";
 import { requestButtonStyle } from "./Style";
@@ -34,7 +34,7 @@ export function QuickSimRequestButton(
   const handleClick = async () => {
     setButtonText(loadingButtonText(requestCount));
     let inputJson = JSON.stringify(totalState);
-    localStorage.setItem(QuickSimInputSaveName, inputJson);
+    localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
     let request = createQuickSimRequest(
       totalState.equipmentDatas[0]
@@ -123,7 +123,7 @@ export function QuickSimRequestButton(
     );
 
     const responseString = JSON.stringify(response);
-    localStorage.setItem(QuickSimResponseSaveName, responseString);
+    localStorage.setItem(QUICK_SIM_RESPONSE_SAVE_NAME, responseString);
 
     navigate(`/${QUICKSIM_RESULT_URL}`);
   };
