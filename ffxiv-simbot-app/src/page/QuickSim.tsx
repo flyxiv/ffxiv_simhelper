@@ -74,11 +74,7 @@ export function QuickSim() {
               </Box>
             </Box>
 
-            <Box>
-              {StatSummary(totalState)}
-            </Box>
-
-            <Box className="QuickSimInputContainer">
+            <Box className="QuickSimInputContainer" marginTop={20}>
               {SelectionTitle("2. Additional Settings")}
               <Box className="CustomizeBoard">
                 {HorizontalPartyInput(
@@ -88,19 +84,14 @@ export function QuickSim() {
               </Box>
             </Box>
 
-            <Box className="QuickSimInputContainer">
+            <Box className="QuickSimInputContainer" marginTop={10}>
               {SelectionTitle("3. Specific Player Power")}
-              <Box display="flex" justifyContent="center">
+              <Box display="flex" justifyContent="center" paddingBottom={"20vh"}>
                 {StatPowerSummary(totalState)}
               </Box>
             </Box>
 
-            <Box display="flex" justifyContent="center">
-              {QuickSimRequestButton(
-                totalState
-              )}
-            </Box>
-            {QuickSimBottomMenu()}
+            {QuickSimBottomMenu(totalState)}
           </Box>
           {Footer()}
         </Box>

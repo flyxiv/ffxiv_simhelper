@@ -3,9 +3,10 @@ import { ColorConfigurations } from "../../Themes";
 export const requestButtonStyle = `
     font-size: 0.8rem;
     margin: 1rem;
-    height: 8vh;
     background-color: ${ColorConfigurations.backgroundButton};
     color: black;
+    padding-top: 10px;
+    padding-bottom: 10px;
   `;
 
 export const SelectionTitleStyle = `

@@ -1,23 +1,31 @@
 import { Box, Typography } from '@mui/material';
+import { ColorConfigurations } from '../../Themes';
+import { MENU_WIDTH_VW } from './LeftMenu';
+import { StatSummary } from './StatSummary';
+import { SingleEquipmentInputSaveState } from '../../types/SingleEquipmentInputSaveState';
+import { QuickSimRequestButton } from '../basic/QuickSimRequestButton';
 
-export function QuickSimBottomMenu() {
+export function QuickSimBottomMenu(totalState: SingleEquipmentInputSaveState) {
     return (
         <Box
             sx={{
                 position: 'fixed',
                 bottom: 0,
-                left: 0,
-                width: '100%',
-                backgroundColor: '#ffffff',
-                boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
+                left: `${MENU_WIDTH_VW}vs`,
+                width: `${100 - MENU_WIDTH_VW}vw`,
+                backgroundColor: ColorConfigurations.backgroundTwo,
                 display: 'flex',
                 justifyContent: 'space-around',
                 alignItems: 'center',
-                padding: '10px',
-                zIndex: 1000,  // Ensure it's above other elements
+                zIndex: 1000,
             }}
         >
-            <Typography>Test</Typography>
+            <Box paddingY={3} display="flex" flexDirection="column" alignContent="center">
+                {StatSummary(totalState)}
+                <Box display="inline-block" margin="auto" paddingTop={2}>
+                    {QuickSimRequestButton(totalState)}
+                </Box>
+            </Box>
         </Box>
     );
 };
