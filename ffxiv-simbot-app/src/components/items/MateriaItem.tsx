@@ -17,10 +17,10 @@ export function MateriaItem(
 
   return (
     <Box
+      className={materiaKey}
       display="flex"
       flexDirection="column"
-      justifyContent="left"
-      alignContent={"center"}
+      alignItems="center"
     >
       <Box marginRight={1}>
         <img

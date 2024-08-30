@@ -3,62 +3,74 @@ import { Materia } from "src/types/ffxivdatabase/Materia";
 import { getPossibleMateriasForEquipmentSlot } from "../../../types/ffxivdatabase/Materia";
 import {
   SelectChangeEvent,
-  InputLabel,
   Select,
   MenuItem,
   styled,
   Divider,
+  Box,
+  Typography,
 } from "@mui/material";
 import { CustomFormControl } from "./BasicInputForm";
 import {
   toMateriaKey,
   updateMateriaList,
-  EMPTY_MATERIA,
 } from "../../../types/ffxivdatabase/Materia";
 import { MateriaMenuItem } from "../../../components/items/MateriaMenuItem";
-import { CharacterEquipmentsData } from "../../../types/ffxivdatabase/PlayerPower";
 import {
   slotNameToSlotIndex,
-  updatePlayerPower,
+  updateOnePlayerPower,
 } from "../../../types/ffxivdatabase/ItemSet";
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { ColorConfigurations } from "../../../Themes";
+import { EquipmentInput } from "../../../types/EquipmentInput";
 
 const MateriaMenu = styled(MenuItem)`
   ${MenuItemStyle}
 `;
 
+const MATERIA_MENU_HEIGHT = "3vh";
+
 export function MateriaInputTable(
+  id: number,
   slotName: string,
   equipment: Equipment | undefined,
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalEquipmentState: EquipmentInput,
+  setTotalEquipmentState: Function
 ) {
-  let materiasInSlot = data.gearSetMaterias[slotNameToSlotIndex(slotName)];
+  let totalState = totalEquipmentState.equipmentDatas[id];
+  let materiasInSlot = totalState.gearSetMaterias[slotNameToSlotIndex(slotName)];
   if (equipment === undefined) {
     return <></>;
   }
 
-  return materiasInSlot.map((_, materiaSlot) => {
-    return SingleMateriaMenu(
-      equipment,
-      materiasInSlot,
-      materiaSlot,
-      slotName,
-      data,
-      setData
-    );
-  });
+  return (
+    <Box display="flex" height={MATERIA_MENU_HEIGHT} width="100%">
+      {materiasInSlot.map((_, materiaSlot) => {
+        return SingleMateriaMenu(
+          id,
+          equipment,
+          materiasInSlot,
+          materiaSlot,
+          slotName,
+          totalEquipmentState,
+          setTotalEquipmentState
+        );
+      })}
+    </Box>
+  );
 }
 
 function SingleMateriaMenu(
+  id: number,
   equipment: Equipment,
   materias: Materia[] | undefined,
   materiaSlot: number,
   slotName: string,
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalEquipmentState: EquipmentInput,
+  setTotalEquipmentState: Function
 ) {
+  let totalState = totalEquipmentState.equipmentDatas[id];
+
   if (materias === undefined) {
     return <></>;
   }
@@ -66,31 +78,28 @@ function SingleMateriaMenu(
     equipment,
     materiaSlot
   );
-  let key = `${equipment.slotName}-${equipment.id}-materia-${materiaSlot}`;
+  let key = `${id}-${equipment.slotName}-${equipment.id}-materia-${materiaSlot}`;
 
   let updateMateria = (e: SelectChangeEvent<string>) => {
+    let newTotalEquipmentState = { ...totalEquipmentState };
+    let newData = newTotalEquipmentState.equipmentDatas[id];
+
     let materiasOfSlot =
-      data.gearSetMaterias[slotNameToSlotIndex(slotName)];
+      newData.gearSetMaterias[slotNameToSlotIndex(slotName)];
 
     updateMateriaList(e.target.value, equipment, materiasOfSlot, materiaSlot);
-    let newGearSetMaterias = [...data.gearSetMaterias];
-    let newData = { ...data };
+    let newGearSetMaterias = [...totalState.gearSetMaterias];
 
     newGearSetMaterias[slotNameToSlotIndex(slotName)] =
       materiasOfSlot;
     newData.gearSetMaterias = newGearSetMaterias;
-    updatePlayerPower(newData, setData);
+    updateOnePlayerPower(id, newTotalEquipmentState, setTotalEquipmentState);
   };
 
   let materiaValue = toMateriaKey(materias[materiaSlot]);
 
   return (
     <CustomFormControl fullWidth>
-      <InputLabel id="MateriaSelect">
-        {materiaValue === toMateriaKey(EMPTY_MATERIA)
-          ? `Mat ${materiaSlot + 1}`
-          : ""}
-      </InputLabel>
       <Select
         labelId={key}
         id={key}
@@ -105,6 +114,7 @@ function SingleMateriaMenu(
             },
           },
         }}
+        sx={{ height: "100%" }}
       >
         {possibleMaterias.map((materiaKey) => {
           return MateriaMenuItem(
@@ -115,7 +125,7 @@ function SingleMateriaMenu(
           );
         })}
         <Divider />
-        <MateriaMenu value={"empty"}> </MateriaMenu>
+        <MateriaMenu value={"empty"}><Typography align="center">Empty</Typography></MateriaMenu>
       </Select>
     </CustomFormControl>
   );

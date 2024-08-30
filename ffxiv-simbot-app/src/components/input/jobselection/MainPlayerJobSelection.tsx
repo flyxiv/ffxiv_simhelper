@@ -1,41 +1,42 @@
-import { Divider, InputLabel, Select, SelectChangeEvent } from "@mui/material";
+import { Divider, Select, SelectChangeEvent } from "@mui/material";
 import { CustomFormControl } from "../basicform/BasicInputForm";
 import { JobMenuItem } from "../../items/JobMenuItem";
 import {
   defaultItemSet,
-  updatePlayerPower,
+  updateAllPlayerPower,
 } from "../../../types/ffxivdatabase/ItemSet";
-import { CharacterEquipmentsData } from "../../../types/ffxivdatabase/PlayerPower";
 import { ColorConfigurations } from "../../../Themes";
-import { DEFAULT_GEARSET_MATERIAS } from "../../../const/DefaultQuickSimInput";
+import { DEFAULT_GEARSET_MATERIAS } from "../../../const/DefaultSingleEquipmentInput";
+import { EquipmentInput, SingleEquipmentInputSaveState } from "../../../types/EquipmentInput";
+
+let ALIGN = "left";
 
 export function MainPlayerJobSelection(
   id: number,
-  jobName: string,
-  setJobName: Function,
-  data: CharacterEquipmentsData,
-  setData: Function
+  totalEquipmentState: EquipmentInput,
+  setTotalState: Function,
 ) {
   const handleJobChange = (event: SelectChangeEvent<string>) => {
-    setJobName(event.target.value);
-    let newData = { ...data };
+    let newJobAbbrev = event.target.value;
+    let newTotalState = { ...totalEquipmentState };
 
-    newData.itemSet = defaultItemSet();
-    newData.gearSetMaterias = DEFAULT_GEARSET_MATERIAS;
-    newData.jobAbbrev = event.target.value;
+    newTotalState.equipmentDatas.forEach((data: SingleEquipmentInputSaveState) => {
+      data.itemSet = defaultItemSet();
+      data.gearSetMaterias = DEFAULT_GEARSET_MATERIAS;
+      data.mainPlayerJobAbbrev = newJobAbbrev;
+    });
 
-    updatePlayerPower(newData, setData);
+    updateAllPlayerPower(newTotalState, setTotalState);
   };
 
   let key = `Job-${id}`;
 
   return (
-    <CustomFormControl fullWidth>
-      <InputLabel id="JobSelect">Job</InputLabel>
+    <CustomFormControl fullWidth sx={{ height: '100%' }}>
       <Select
         labelId={key}
         id={key}
-        value={jobName}
+        value={totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev}
         label={key}
         onChange={handleJobChange}
         MenuProps={{
@@ -45,32 +46,99 @@ export function MainPlayerJobSelection(
             },
           },
         }}
+
+        sx={{
+          height: '100%',
+          display: 'flex',
+        }}
       >
-        {JobMenuItem("PLD")}
-        {JobMenuItem("WAR")}
-        {JobMenuItem("DRK")}
-        {JobMenuItem("GNB")}
+        {JobMenuItem("PLD", ALIGN)}
+        {JobMenuItem("WAR", ALIGN)}
+        {JobMenuItem("DRK", ALIGN)}
+        {JobMenuItem("GNB", ALIGN)}
         <Divider />
-        {JobMenuItem("WHM")}
-        {JobMenuItem("AST")}
-        {JobMenuItem("SCH")}
-        {JobMenuItem("SGE")}
+        {JobMenuItem("WHM", ALIGN)}
+        {JobMenuItem("AST", ALIGN)}
+        {JobMenuItem("SCH", ALIGN)}
+        {JobMenuItem("SGE", ALIGN)}
         <Divider />
-        {JobMenuItem("DRG")}
-        {JobMenuItem("MNK")}
-        {JobMenuItem("NIN")}
-        {JobMenuItem("SAM")}
-        {JobMenuItem("RPR")}
-        {JobMenuItem("VPR")}
+        {JobMenuItem("DRG", ALIGN)}
+        {JobMenuItem("MNK", ALIGN)}
+        {JobMenuItem("NIN", ALIGN)}
+        {JobMenuItem("SAM", ALIGN)}
+        {JobMenuItem("RPR", ALIGN)}
+        {JobMenuItem("VPR", ALIGN)}
         <Divider />
-        {JobMenuItem("BRD")}
-        {JobMenuItem("MCH")}
-        {JobMenuItem("DNC")}
+        {JobMenuItem("BRD", ALIGN)}
+        {JobMenuItem("MCH", ALIGN)}
+        {JobMenuItem("DNC", ALIGN)}
         <Divider />
-        {JobMenuItem("SMN")}
-        {JobMenuItem("BLM")}
-        {JobMenuItem("RDM")}
-        {JobMenuItem("PCT")}
+        {JobMenuItem("SMN", ALIGN)}
+        {JobMenuItem("BLM", ALIGN)}
+        {JobMenuItem("RDM", ALIGN)}
+        {JobMenuItem("PCT", ALIGN)}
+      </Select>
+    </CustomFormControl>
+  );
+}
+
+
+
+export function MainPlayerJobSelectionOnlyBuffJobs(
+  id: number,
+  totalEquipmentState: EquipmentInput,
+  setTotalState: Function,
+) {
+  const handleJobChange = (event: SelectChangeEvent<string>) => {
+    let newJobAbbrev = event.target.value;
+    let newTotalState = { ...totalEquipmentState };
+
+    newTotalState.equipmentDatas.forEach((data: SingleEquipmentInputSaveState) => {
+      data.itemSet = defaultItemSet();
+      data.gearSetMaterias = DEFAULT_GEARSET_MATERIAS;
+      data.mainPlayerJobAbbrev = newJobAbbrev;
+    });
+
+    updateAllPlayerPower(newTotalState, setTotalState);
+  };
+
+  let key = `Job-${id}`;
+
+  return (
+    <CustomFormControl fullWidth sx={{ height: '100%' }}>
+      <Select
+        labelId={key}
+        id={key}
+        value={totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev}
+        label={key}
+        onChange={handleJobChange}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              backgroundColor: ColorConfigurations.backgroundThree,
+            },
+          },
+        }}
+
+        sx={{
+          height: '100%',
+          display: 'flex',
+        }}
+      >
+        {JobMenuItem("AST", ALIGN)}
+        {JobMenuItem("SCH", ALIGN)}
+        <Divider />
+        {JobMenuItem("DRG", ALIGN)}
+        {JobMenuItem("MNK", ALIGN)}
+        {JobMenuItem("NIN", ALIGN)}
+        {JobMenuItem("RPR", ALIGN)}
+        <Divider />
+        {JobMenuItem("BRD", ALIGN)}
+        {JobMenuItem("DNC", ALIGN)}
+        <Divider />
+        {JobMenuItem("SMN", ALIGN)}
+        {JobMenuItem("RDM", ALIGN)}
+        {JobMenuItem("PCT", ALIGN)}
       </Select>
     </CustomFormControl>
   );

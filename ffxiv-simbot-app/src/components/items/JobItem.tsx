@@ -1,16 +1,16 @@
 import { Box, Typography } from "@mui/material";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
+import { ITEM_MIN_HEIGHT } from "./Styles";
 
-// Container item of job icon at the left and job abbreviation at the right
-export function JobItem(jobAbbrev: string) {
+export function JobItem(jobAbbrev: string, align: string) {
   return (
-    <Box display="flex" justifyContent="right" alignContent={"center"}>
+    <Box display="flex" justifyContent={align} alignItems={"center"} height={ITEM_MIN_HEIGHT}>
       <Box marginRight={1}>
         <img
           src={jobAbbrevToJobIconPath(jobAbbrev)}
           alt={jobAbbrev}
-          width={17}
-          height={17}
+          width={25}
+          height={25}
           style={{ verticalAlign: "middle" }}
         />
       </Box>

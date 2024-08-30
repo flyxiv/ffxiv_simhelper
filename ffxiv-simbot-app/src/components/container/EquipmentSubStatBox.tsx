@@ -10,6 +10,7 @@ import {
   EquipmentSingleSubStatBoxStyle,
   EquipmentSubStatBoxStyle,
 } from "./Styles";
+import { ColorConfigurations } from "../../Themes";
 
 const EquipmentSubStatBox = styled(Box)`
   ${EquipmentSubStatBoxStyle}
@@ -70,12 +71,13 @@ export function EquipmentSubStatTable(
         return (
           <EquipmentSingleSubStatBox
             color={clippedAmount < 0 ? "red" : "white"}
+            paddingY={2}
           >
-            <EquipmentSingleBox>
-              <Typography variant="body2">{subStatName}</Typography>
+            <EquipmentSingleBox sx={{ backgroundColor: ColorConfigurations.backgroundThree }}>
+              <Typography variant="body2" align="center">{subStatName}</Typography>
             </EquipmentSingleBox>
-            <EquipmentSingleBox>
-              <Typography variant="body2">
+            <EquipmentSingleBox alignContent={"center"}>
+              <Typography variant="body2" sx={{ backgroundColor: ColorConfigurations.backgroundFour }} align="center">
                 {subStatNonClippedValue + clippedAmount}/{finalStats.maxSubstat}
                 {clippedAmount < 0 ? `(${clippedAmount})` : ""}
               </Typography>

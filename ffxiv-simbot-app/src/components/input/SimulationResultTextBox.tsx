@@ -2,6 +2,8 @@ import { Box, TextField, styled } from "@mui/material";
 import { ColorConfigurations } from "../..//Themes";
 import { InputGridItemStyle } from "./Styles";
 import { CharacterStats } from "../../types/CharacterStates";
+import { EquipmentInput, SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
+import { ITEM_MIN_HEIGHT } from "../items/Styles";
 
 export interface InputFormProps {
   label: string;
@@ -67,22 +69,28 @@ export const SimulationResultTextBox: React.FC<InputFormProps> = ({
   );
 };
 
-export const SimulationResultTimeTextBox: React.FC<InputTimeFormProps> = ({
-  label,
-  state,
-  setState,
-  handleChange,
-}) => {
+export function SimulationResultTimeTextBox(label: string, totalEquipmentState: EquipmentInput, setTotalState: Function) {
   return (
-    <InputBox marginBottom={0.5}>
-      <Input
-        label={label}
-        value={state}
-        onChange={(e) => {
-          handleChange({ value: e.target.value, state, setState });
-        }}
-        fullWidth
-      />
-    </InputBox>
+    <Input
+      label={label}
+      value={totalEquipmentState.equipmentDatas[0].combatTimeMillisecond / 1000}
+      onChange={(e) => {
+        let newTimeSeconds = parseInt(e.target.value);
+
+        let newTotalState = { ...totalEquipmentState };
+        newTotalState.equipmentDatas.forEach((data: SingleEquipmentInputSaveState) => {
+          data.combatTimeMillisecond = newTimeSeconds * 1000;
+        });
+
+        setTotalState({ ...newTotalState });
+      }}
+      fullWidth
+      sx={{
+        '& .MuiInputBase-input': {
+          height: ITEM_MIN_HEIGHT,
+          textAlign: "center",
+        },
+      }}
+    />
   );
 };

@@ -1,17 +1,8 @@
 .HomeBody {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-}
-
-.LeftBody {
-    padding-left: 5vh;
-    width: 30vw;
-}
-
-.RightBody {
-    padding-right: 5vh;
-    width: 30vw;
+    justify-content: space-evenly;
+    height: 100vh;
+    width: 100%;
+    padding-top: 20px;
 }
