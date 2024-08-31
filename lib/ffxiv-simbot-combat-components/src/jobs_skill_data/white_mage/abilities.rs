@@ -29,7 +29,7 @@ pub(crate) struct WhitemageDatabase {
 
 impl WhitemageDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let DIA_DOT: DebuffStatus = DebuffStatus {
+        let dia_dot: DebuffStatus = DebuffStatus {
             id: 400,
             owner_id: player_id,
             potency: Some(75),
@@ -46,7 +46,7 @@ impl WhitemageDatabase {
             snapshotted_infos: Default::default(),
         };
 
-        let PRESENCE_OF_MIND_BUFF: BuffStatus = BuffStatus {
+        let presence_of_mind_buff: BuffStatus = BuffStatus {
             id: 401,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -59,7 +59,7 @@ impl WhitemageDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let GLARE_III: AttackSkill = AttackSkill {
+        let glare_iii: AttackSkill = AttackSkill {
             id: 400,
             name: "Glare III".to_string(),
             player_id,
@@ -84,7 +84,7 @@ impl WhitemageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let DIA: AttackSkill = AttackSkill {
+        let dia: AttackSkill = AttackSkill {
             id: 401,
             name: "Dia".to_string(),
             player_id,
@@ -92,7 +92,7 @@ impl WhitemageDatabase {
             trait_percent: 130,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
-                DIA_DOT.clone(),
+                dia_dot.clone(),
                 30000,
                 30000,
                 0,
@@ -115,7 +115,7 @@ impl WhitemageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let AFFLATUS_MISERY: AttackSkill = AttackSkill {
+        let afflatus_misery: AttackSkill = AttackSkill {
             id: 402,
             name: "Afflatus Misery".to_string(),
             player_id,
@@ -140,7 +140,7 @@ impl WhitemageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let AFFLATUS_RAPTURE: AttackSkill = AttackSkill {
+        let afflatus_rapture: AttackSkill = AttackSkill {
             id: 403,
             name: "Afflatus Rapture".to_string(),
             player_id,
@@ -165,7 +165,7 @@ impl WhitemageDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
-        let ASSIZE: AttackSkill = AttackSkill {
+        let assize: AttackSkill = AttackSkill {
             id: 404,
             name: "Assize".to_string(),
             player_id,
@@ -190,7 +190,7 @@ impl WhitemageDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
-        let PRESENCE_OF_MIND: AttackSkill = AttackSkill {
+        let presence_of_mind: AttackSkill = AttackSkill {
             id: 405,
             name: String::from("Presence of Mind"),
             player_id,
@@ -199,7 +199,7 @@ impl WhitemageDatabase {
             additional_skill_events: vec![FfxivEvent::ApplyBuff(
                 player_id,
                 player_id,
-                PRESENCE_OF_MIND_BUFF.clone(),
+                presence_of_mind_buff.clone(),
                 15000,
                 15000,
                 0,
@@ -222,7 +222,7 @@ impl WhitemageDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
-        let GLARE_IV: AttackSkill = AttackSkill {
+        let glare_iv: AttackSkill = AttackSkill {
             id: 406,
             name: "Glare IV".to_string(),
             player_id,
@@ -251,15 +251,15 @@ impl WhitemageDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         WhitemageDatabase {
-            glare3: GLARE_III,
-            dia: DIA,
-            afflatus_misery: AFFLATUS_MISERY,
-            afflatus_rapture: AFFLATUS_RAPTURE,
-            assize: ASSIZE,
-            presence_of_mind: PRESENCE_OF_MIND,
-            glare4: GLARE_IV,
-            dia_dot: DIA_DOT,
-            presence_of_mind_buff: PRESENCE_OF_MIND_BUFF,
+            glare3: glare_iii,
+            dia,
+            afflatus_misery,
+            afflatus_rapture,
+            assize,
+            presence_of_mind,
+            glare4: glare_iv,
+            dia_dot,
+            presence_of_mind_buff,
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,
         }

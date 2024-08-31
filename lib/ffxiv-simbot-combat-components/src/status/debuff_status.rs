@@ -37,7 +37,7 @@ impl Status for DebuffStatus {
         &self.name
     }
 
-    fn get_status_info(&self) -> &Vec<StatusInfo> {
+    fn get_status_info(&self) -> &[StatusInfo] {
         &self.status_info
     }
 

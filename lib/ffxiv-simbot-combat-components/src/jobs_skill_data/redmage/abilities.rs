@@ -71,7 +71,7 @@ impl RedmageDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let caster_skills = CasterGlobalSkill::new(player_id);
 
-        let EMBOLDEN_BUFF: BuffStatus = {
+        let embolden_buff: BuffStatus = {
             BuffStatus {
                 id: 1800,
                 name: String::from("Embolden"),
@@ -85,7 +85,7 @@ impl RedmageDatabase {
                 trigger_proc_event_on_gcd: vec![],
             }
         };
-        let MANAFICATION_BUFF: BuffStatus = BuffStatus {
+        let manafication_buff: BuffStatus = BuffStatus {
             id: 1801,
             name: String::from("Manafication"),
             owner_id: player_id,
@@ -97,7 +97,7 @@ impl RedmageDatabase {
             max_stacks: 6,
             trigger_proc_event_on_gcd: vec![],
         };
-        let ACCELERATION_BUFF: BuffStatus = BuffStatus {
+        let acceleration_buff: BuffStatus = BuffStatus {
             id: 1802,
             name: String::from("Acceleration"),
             owner_id: player_id,
@@ -109,7 +109,7 @@ impl RedmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let DUALCAST_BUFF: BuffStatus = BuffStatus {
+        let dualcast_buff: BuffStatus = BuffStatus {
             id: 1803,
             name: String::from("Dualcast"),
             owner_id: player_id,
@@ -121,7 +121,7 @@ impl RedmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let VERSTONE_READY: BuffStatus = BuffStatus {
+        let verstone_ready: BuffStatus = BuffStatus {
             id: 1804,
             name: String::from("Verstone Ready"),
             owner_id: player_id,
@@ -133,7 +133,7 @@ impl RedmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let VERFIRE_READY: BuffStatus = BuffStatus {
+        let verfire_ready: BuffStatus = BuffStatus {
             id: 1805,
             name: String::from("Verfire Ready"),
             owner_id: player_id,
@@ -146,7 +146,7 @@ impl RedmageDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let FINISH_READY: BuffStatus = BuffStatus {
+        let finish_ready: BuffStatus = BuffStatus {
             id: 1806,
             name: String::from("Finish Ready"),
             owner_id: player_id,
@@ -158,7 +158,7 @@ impl RedmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let THORNED_FLOURISH: BuffStatus = BuffStatus {
+        let thorned_flourish: BuffStatus = BuffStatus {
             id: 1807,
             name: String::from("Thorned Flourish"),
             owner_id: player_id,
@@ -170,7 +170,7 @@ impl RedmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let GRAND_IMPACT_READY: BuffStatus = BuffStatus {
+        let grand_impact_ready: BuffStatus = BuffStatus {
             id: 1808,
             name: String::from("Grand Impact Ready"),
             owner_id: player_id,
@@ -182,7 +182,7 @@ impl RedmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let MAGICKED_SWORDPLAY: BuffStatus = BuffStatus {
+        let magicked_swordplay: BuffStatus = BuffStatus {
             id: 1810,
             name: String::from("Magicked Swordplay"),
             owner_id: player_id,
@@ -196,19 +196,19 @@ impl RedmageDatabase {
         };
 
         let dualcast_buff_apply =
-            ApplyBuff(player_id, player_id, DUALCAST_BUFF.clone(), 15000, 15000, 0);
+            ApplyBuff(player_id, player_id, dualcast_buff.clone(), 15000, 15000, 0);
         let verstone_ready_apply = ApplyBuff(
             player_id,
             player_id,
-            VERSTONE_READY.clone(),
+            verstone_ready.clone(),
             30000,
             30000,
             0,
         );
         let verfire_ready_apply =
-            ApplyBuff(player_id, player_id, VERFIRE_READY.clone(), 30000, 30000, 0);
+            ApplyBuff(player_id, player_id, verfire_ready.clone(), 30000, 30000, 0);
 
-        let JOLT_III: AttackSkill = AttackSkill {
+        let jolt_iii: AttackSkill = AttackSkill {
             id: 1800,
             name: String::from("Jolt III"),
             player_id,
@@ -233,7 +233,7 @@ impl RedmageDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let VERAERO_III: AttackSkill = AttackSkill {
+        let veraero_iii: AttackSkill = AttackSkill {
             id: 1801,
             name: String::from("Veraero III"),
             player_id,
@@ -258,7 +258,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let VERAERO_III_SWIFT: AttackSkill = AttackSkill {
+        let veraero_iii_swift: AttackSkill = AttackSkill {
             id: 1802,
             name: String::from("Veraero III"),
             player_id,
@@ -283,7 +283,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let VERAERO_III_DUALCAST: AttackSkill = AttackSkill {
+        let veraero_iii_dualcast: AttackSkill = AttackSkill {
             id: 1803,
             name: String::from("Veraero III"),
             player_id,
@@ -300,7 +300,7 @@ impl RedmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(DUALCAST_BUFF.get_id())],
+            resource_required: vec![UseBuff(dualcast_buff.get_id())],
             resource_created: HashMap::from([(0, 6)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -308,7 +308,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let VERAERO_III_ACCEL: AttackSkill = AttackSkill {
+        let veraero_iii_accel: AttackSkill = AttackSkill {
             id: 1804,
             name: String::from("Veraero III"),
             player_id,
@@ -325,7 +325,7 @@ impl RedmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(ACCELERATION_BUFF.get_id())],
+            resource_required: vec![UseBuff(acceleration_buff.get_id())],
             resource_created: HashMap::from([(0, 6)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -334,7 +334,7 @@ impl RedmageDatabase {
             is_guaranteed_direct_hit: false,
         };
 
-        let VERTHUNDER_III_SWIFT: AttackSkill = AttackSkill {
+        let verthunder_iii_swift: AttackSkill = AttackSkill {
             id: 1805,
             name: String::from("Verthunder III"),
             player_id,
@@ -359,7 +359,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let VERTHUNDER_III_DUALCAST: AttackSkill = AttackSkill {
+        let verthunder_iii_dualcast: AttackSkill = AttackSkill {
             id: 1806,
             name: String::from("Verthunder III"),
             player_id,
@@ -376,7 +376,7 @@ impl RedmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(DUALCAST_BUFF.get_id())],
+            resource_required: vec![UseBuff(dualcast_buff.get_id())],
             resource_created: HashMap::from([(1, 6)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -384,7 +384,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let VERTHUNDER_III_ACCEL: AttackSkill = AttackSkill {
+        let verthunder_iii_accel: AttackSkill = AttackSkill {
             id: 1807,
             name: String::from("Verthunder III"),
             player_id,
@@ -401,7 +401,7 @@ impl RedmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(ACCELERATION_BUFF.get_id())],
+            resource_required: vec![UseBuff(acceleration_buff.get_id())],
             resource_created: HashMap::from([(1, 6)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -409,7 +409,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let VERSTONE: AttackSkill = AttackSkill {
+        let verstone: AttackSkill = AttackSkill {
             id: 1808,
             name: String::from("Verstone"),
             player_id,
@@ -426,7 +426,7 @@ impl RedmageDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(VERSTONE_READY.get_id())],
+            resource_required: vec![UseBuff(verstone_ready.get_id())],
             resource_created: HashMap::from([(0, 5)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -434,7 +434,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let VERFIRE: AttackSkill = AttackSkill {
+        let verfire: AttackSkill = AttackSkill {
             id: 1809,
             name: String::from("Verfire"),
             player_id,
@@ -451,7 +451,7 @@ impl RedmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(VERFIRE_READY.get_id())],
+            resource_required: vec![UseBuff(verfire_ready.get_id())],
             resource_created: ResourceTable::from([(1, 5)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -459,7 +459,7 @@ impl RedmageDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let FLECHE: AttackSkill = AttackSkill {
+        let fleche: AttackSkill = AttackSkill {
             id: 1810,
             name: String::from("Fleche"),
             player_id,
@@ -484,7 +484,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let CONTRE_SIXTE: AttackSkill = AttackSkill {
+        let contre_sixte: AttackSkill = AttackSkill {
             id: 1811,
             name: String::from("Contre Sixte"),
             player_id,
@@ -510,7 +510,7 @@ impl RedmageDatabase {
             is_guaranteed_direct_hit: false,
         };
 
-        let CORPS_A_CORPS: AttackSkill = AttackSkill {
+        let corps_a_corps: AttackSkill = AttackSkill {
             id: 1812,
             name: String::from("Corps-a-corps"),
             player_id,
@@ -535,7 +535,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let ENGAGEMENT: AttackSkill = AttackSkill {
+        let engagement: AttackSkill = AttackSkill {
             id: 1813,
             name: String::from("Engagement"),
             player_id,
@@ -560,7 +560,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let EMBOLDEN: AttackSkill = AttackSkill {
+        let embolden: AttackSkill = AttackSkill {
             id: 1814,
             name: String::from("Embolden"),
             player_id,
@@ -568,11 +568,11 @@ impl RedmageDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyRaidBuff(player_id, EMBOLDEN_BUFF.clone(), 20000, 20000, 0),
+                ApplyRaidBuff(player_id, embolden_buff.clone(), 20000, 20000, 0),
                 ApplyBuff(
                     player_id,
                     player_id,
-                    THORNED_FLOURISH.clone(),
+                    thorned_flourish.clone(),
                     20000,
                     20000,
                     0,
@@ -595,7 +595,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let ENCHANTED_RIPOSTE: AttackSkill = AttackSkill {
+        let enchanted_riposte: AttackSkill = AttackSkill {
             id: 1815,
             name: String::from("Enchanted Riposte"),
             player_id,
@@ -620,7 +620,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let ENHANCED_ZWERCHHAU: AttackSkill = AttackSkill {
+        let enchanted_zwerchhau: AttackSkill = AttackSkill {
             id: 1816,
             name: String::from("Enchanted Zwerchhau"),
             player_id,
@@ -645,7 +645,7 @@ impl RedmageDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let ENCHANTED_REDOUBLEMENT: AttackSkill = AttackSkill {
+        let enchanted_redoublement: AttackSkill = AttackSkill {
             id: 1817,
             name: String::from("Enchanted Redoublement"),
             player_id,
@@ -655,7 +655,7 @@ impl RedmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                FINISH_READY.clone(),
+                finish_ready.clone(),
                 30000,
                 30000,
                 0,
@@ -677,7 +677,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let VERHOLY: AttackSkill = AttackSkill {
+        let verholy: AttackSkill = AttackSkill {
             id: 1818,
             name: String::from("Verholy"),
             player_id,
@@ -694,7 +694,7 @@ impl RedmageDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(FINISH_READY.get_id())],
+            resource_required: vec![UseBuff(finish_ready.get_id())],
             resource_created: HashMap::from([(0, 11)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -702,7 +702,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let VERFLARE: AttackSkill = AttackSkill {
+        let verflare: AttackSkill = AttackSkill {
             id: 1819,
             name: String::from("Verflare"),
             player_id,
@@ -719,7 +719,7 @@ impl RedmageDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(FINISH_READY.get_id())],
+            resource_required: vec![UseBuff(finish_ready.get_id())],
             resource_created: HashMap::from([(1, 11)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -727,7 +727,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let ACCELERATION: AttackSkill = AttackSkill {
+        let acceleration: AttackSkill = AttackSkill {
             id: 1820,
             name: String::from("Acceleration"),
             player_id,
@@ -738,7 +738,7 @@ impl RedmageDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    ACCELERATION_BUFF.clone(),
+                    acceleration_buff.clone(),
                     20000,
                     20000,
                     0,
@@ -746,7 +746,7 @@ impl RedmageDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    GRAND_IMPACT_READY.clone(),
+                    grand_impact_ready.clone(),
                     30000,
                     30000,
                     0,
@@ -769,7 +769,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let MANAFICATION: AttackSkill = AttackSkill {
+        let manafication: AttackSkill = AttackSkill {
             id: 1821,
             name: String::from("Manafication"),
             player_id,
@@ -780,7 +780,7 @@ impl RedmageDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    MANAFICATION_BUFF.clone(),
+                    manafication_buff.clone(),
                     15000,
                     15000,
                     0,
@@ -788,7 +788,7 @@ impl RedmageDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    MAGICKED_SWORDPLAY.clone(),
+                    magicked_swordplay.clone(),
                     15000,
                     15000,
                     0,
@@ -811,7 +811,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let SCORCH: AttackSkill = AttackSkill {
+        let scorch: AttackSkill = AttackSkill {
             id: 1822,
             name: String::from("Scorch"),
             player_id,
@@ -836,7 +836,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let RESOLUTION: AttackSkill = AttackSkill {
+        let resolution: AttackSkill = AttackSkill {
             id: 1823,
             name: String::from("Resolution"),
             player_id,
@@ -861,7 +861,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let VICE_OF_THORNS: AttackSkill = AttackSkill {
+        let vice_of_thorns: AttackSkill = AttackSkill {
             id: 1824,
             name: String::from("Vice of Thorns"),
             player_id,
@@ -878,7 +878,7 @@ impl RedmageDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(THORNED_FLOURISH.get_id())],
+            resource_required: vec![UseBuff(thorned_flourish.get_id())],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -886,7 +886,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let GRAND_IMPACT: AttackSkill = AttackSkill {
+        let grand_impact: AttackSkill = AttackSkill {
             id: 1825,
             name: String::from("Grand Impact"),
             player_id,
@@ -903,7 +903,7 @@ impl RedmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(GRAND_IMPACT_READY.get_id())],
+            resource_required: vec![UseBuff(grand_impact_ready.get_id())],
             resource_created: HashMap::from([(0, 3), (1, 3)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -911,7 +911,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let PREFULGENCE: AttackSkill = AttackSkill {
+        let prefulgence: AttackSkill = AttackSkill {
             id: 1826,
             name: String::from("Prefulgence"),
             player_id,
@@ -936,7 +936,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let MANAFICATION_RIPOSTE: AttackSkill = AttackSkill {
+        let manafication_riposte: AttackSkill = AttackSkill {
             id: 1827,
             name: String::from("Enchanted Riposte"),
             player_id,
@@ -953,7 +953,7 @@ impl RedmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(MANAFICATION_BUFF.id)],
+            resource_required: vec![UseBuff(manafication_buff.id)],
             resource_created: HashMap::from([(3, 1)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -961,7 +961,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let MANAFICATION_ZWERCHHAU: AttackSkill = AttackSkill {
+        let manafication_zwerchhau: AttackSkill = AttackSkill {
             id: 1828,
             name: String::from("Enchanted Zwerchhau"),
             player_id,
@@ -978,7 +978,7 @@ impl RedmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(MANAFICATION_BUFF.id)],
+            resource_required: vec![UseBuff(manafication_buff.id)],
             resource_created: HashMap::from([(3, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -986,7 +986,7 @@ impl RedmageDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let MANAFICATION_REDOUBLEMENT: AttackSkill = AttackSkill {
+        let manafication_redoublement: AttackSkill = AttackSkill {
             id: 1829,
             name: String::from("Manafication Redoublement"),
             player_id,
@@ -996,7 +996,7 @@ impl RedmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                FINISH_READY.clone(),
+                finish_ready.clone(),
                 30000,
                 30000,
                 0,
@@ -1010,7 +1010,7 @@ impl RedmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(MANAFICATION_BUFF.id)],
+            resource_required: vec![UseBuff(manafication_buff.id)],
             resource_created: HashMap::from([(3, 1)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -1018,7 +1018,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let MANAFICATION_VERHOLY: AttackSkill = AttackSkill {
+        let manafication_verholy: AttackSkill = AttackSkill {
             id: 1830,
             name: String::from("Verholy"),
             player_id,
@@ -1036,8 +1036,8 @@ impl RedmageDatabase {
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
             resource_required: vec![
-                UseBuff(MANAFICATION_BUFF.get_id()),
-                UseBuff(FINISH_READY.get_id()),
+                UseBuff(manafication_buff.get_id()),
+                UseBuff(finish_ready.get_id()),
             ],
             resource_created: HashMap::from([(0, 11), (3, 1)]),
             current_cooldown_millisecond: 0,
@@ -1046,7 +1046,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let MANAFICATION_VERFLARE: AttackSkill = AttackSkill {
+        let manafication_verflare: AttackSkill = AttackSkill {
             id: 1831,
             name: String::from("Verflare"),
             player_id,
@@ -1064,8 +1064,8 @@ impl RedmageDatabase {
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
             resource_required: vec![
-                UseBuff(MANAFICATION_BUFF.get_id()),
-                UseBuff(FINISH_READY.get_id()),
+                UseBuff(manafication_buff.get_id()),
+                UseBuff(finish_ready.get_id()),
             ],
             resource_created: HashMap::from([(1, 11), (3, 1)]),
             current_cooldown_millisecond: 0,
@@ -1074,7 +1074,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let MANAFICATION_SCORCH: AttackSkill = AttackSkill {
+        let manafication_scorch: AttackSkill = AttackSkill {
             id: 1832,
             name: String::from("Scorch"),
             player_id,
@@ -1091,7 +1091,7 @@ impl RedmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(MANAFICATION_BUFF.get_id())],
+            resource_required: vec![UseBuff(manafication_buff.get_id())],
             resource_created: HashMap::from([(0, 4), (1, 4), (3, 1)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -1099,7 +1099,7 @@ impl RedmageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let MANAFICATION_RESOLUTION: AttackSkill = AttackSkill {
+        let manafication_resolution: AttackSkill = AttackSkill {
             id: 1833,
             name: String::from("Resolution"),
             player_id,
@@ -1116,7 +1116,7 @@ impl RedmageDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(MANAFICATION_BUFF.get_id())],
+            resource_required: vec![UseBuff(manafication_buff.get_id())],
             resource_created: ResourceTable::from([(0, 4), (1, 4), (3, 1)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -1128,51 +1128,51 @@ impl RedmageDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         Self {
-            jolt_iii: JOLT_III,
-            veraero_iii: VERAERO_III,
-            veraero_iii_swift: VERAERO_III_SWIFT,
-            veraero_iii_dual: VERAERO_III_DUALCAST,
-            veraero_iii_accel: VERAERO_III_ACCEL,
-            verthunder_iii_swift: VERTHUNDER_III_SWIFT,
-            verthunder_iii_dual: VERTHUNDER_III_DUALCAST,
-            verthunder_iii_accel: VERTHUNDER_III_ACCEL,
-            verstone: VERSTONE,
-            verfire: VERFIRE,
-            fleche: FLECHE,
-            contre_sixte: CONTRE_SIXTE,
-            corps_a_corps: CORPS_A_CORPS,
-            engagement: ENGAGEMENT,
-            embolden: EMBOLDEN,
-            enchanted_riposte: ENCHANTED_RIPOSTE,
-            enchanted_zwerchhau: ENHANCED_ZWERCHHAU,
-            enchanted_redoublement: ENCHANTED_REDOUBLEMENT,
-            verholy: VERHOLY,
-            verflare: VERFLARE,
-            acceleration: ACCELERATION,
-            manafication: MANAFICATION,
-            scorch: SCORCH,
-            resolution: RESOLUTION,
-            vice_of_thorns: VICE_OF_THORNS,
-            grand_impact: GRAND_IMPACT,
-            prefulgence: PREFULGENCE,
-            manafication_riposte: MANAFICATION_RIPOSTE,
-            manafication_zwerchhau: MANAFICATION_ZWERCHHAU,
-            manafication_redoublement: MANAFICATION_REDOUBLEMENT,
-            manafication_verholy: MANAFICATION_VERHOLY,
-            manafication_verflare: MANAFICATION_VERFLARE,
-            manafication_scorch: MANAFICATION_SCORCH,
-            manafication_resolution: MANAFICATION_RESOLUTION,
+            jolt_iii,
+            veraero_iii,
+            veraero_iii_swift,
+            veraero_iii_dual: veraero_iii_dualcast,
+            veraero_iii_accel,
+            verthunder_iii_swift,
+            verthunder_iii_dual: verthunder_iii_dualcast,
+            verthunder_iii_accel,
+            verstone,
+            verfire,
+            fleche,
+            contre_sixte,
+            corps_a_corps,
+            engagement,
+            embolden,
+            enchanted_riposte,
+            enchanted_zwerchhau,
+            enchanted_redoublement,
+            verholy,
+            verflare,
+            acceleration,
+            manafication,
+            scorch,
+            resolution,
+            vice_of_thorns,
+            grand_impact,
+            prefulgence,
+            manafication_riposte,
+            manafication_zwerchhau,
+            manafication_redoublement,
+            manafication_verholy,
+            manafication_verflare,
+            manafication_scorch,
+            manafication_resolution,
 
             swiftcast: caster_skills.swiftcast,
-            embolden_buff: EMBOLDEN_BUFF,
-            manafication_buff: MANAFICATION_BUFF,
-            acceleration_buff: ACCELERATION_BUFF,
-            dualcast_buff: DUALCAST_BUFF,
-            verstone_ready: VERSTONE_READY,
-            verfire_ready: VERFIRE_READY,
-            finish_ready: FINISH_READY,
-            thorned_floursh: THORNED_FLOURISH,
-            grand_impact_ready: GRAND_IMPACT_READY,
+            embolden_buff,
+            manafication_buff,
+            acceleration_buff,
+            dualcast_buff,
+            verstone_ready,
+            verfire_ready,
+            finish_ready,
+            thorned_floursh: thorned_flourish,
+            grand_impact_ready,
             swiftcast_buff: caster_skills.swiftcast_buff,
 
             potion: potion_skill.potion,

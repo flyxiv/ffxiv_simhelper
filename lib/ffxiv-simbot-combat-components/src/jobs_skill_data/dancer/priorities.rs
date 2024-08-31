@@ -26,11 +26,11 @@ impl PriorityTable for DancerPriorityTable {
         self.opener[index].clone()
     }
 
-    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.gcd_priority_table
     }
 
-    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_ogcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.ogcd_priority_table
     }
 
@@ -71,7 +71,7 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
     vec![
         SkillPriorityInfo {
             skill_id: db.technical_step.get_id(),
-            prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(5500)),
+            prerequisite: Some(MillisecondsBeforeBurst(5500)),
         },
         SkillPriorityInfo {
             skill_id: db.dance_of_the_dawn.get_id(),
@@ -154,7 +154,7 @@ pub(crate) fn make_dancer_ogcd_priority_table(db: &DancerDatabase) -> Vec<SkillP
             skill_id: db.fan_dance1.get_id(),
             prerequisite: Some(SkillPrerequisite::Or(
                 Box::new(SkillPrerequisite::HasResource(1, 4)),
-                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+                Box::new(MillisecondsBeforeBurst(0)),
             )),
         },
         SkillPriorityInfo {

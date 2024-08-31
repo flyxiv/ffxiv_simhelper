@@ -29,11 +29,11 @@ impl PriorityTable for WarriorPriorityTable {
         self.opener[index].clone()
     }
 
-    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.gcd_priority_table
     }
 
-    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_ogcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.ogcd_priority_table
     }
 
@@ -141,7 +141,7 @@ pub(crate) fn make_warrior_ogcd_priority_table(db: &WarriorDatabase) -> Vec<Skil
             prerequisite: Some(And(
                 Box::new(Not(Box::new(HasResource(0, 50)))),
                 Box::new(Or(
-                    Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+                    Box::new(MillisecondsBeforeBurst(0)),
                     Box::new(SkillPrerequisite::HasSkillStacks(db.infuriate.get_id(), 2)),
                 )),
             )),

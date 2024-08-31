@@ -41,7 +41,7 @@ pub(crate) trait CombatResource: Clone + Sized {
 
     fn handle_resource_event(
         &mut self,
-        resource_events: &Vec<FfxivPlayerInternalEvent>,
+        resource_events: &[FfxivPlayerInternalEvent],
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         player_id: PlayerIdType,

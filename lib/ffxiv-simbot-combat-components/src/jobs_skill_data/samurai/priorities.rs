@@ -29,11 +29,11 @@ impl PriorityTable for SamuraiPriorityTable {
         self.opener[index].clone()
     }
 
-    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.gcd_priority_table
     }
 
-    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_ogcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.ogcd_priority_table
     }
 
@@ -272,6 +272,7 @@ pub(crate) fn make_samurai_gcd_priority_table(db: &SamuraiDatabase) -> Vec<Skill
     ]
 }
 
+#[allow(unused)]
 pub(crate) fn make_samurai_ogcd_priority_table(db: &SamuraiDatabase) -> Vec<SkillPriorityInfo> {
     let has_no_sen = And(
         Box::new(Not(Box::new(HasResource(2, 1)))),

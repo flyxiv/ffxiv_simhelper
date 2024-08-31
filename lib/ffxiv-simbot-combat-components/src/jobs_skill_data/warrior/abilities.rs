@@ -39,7 +39,7 @@ pub(crate) struct WarriorDatabase {
 
 impl WarriorDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let SURGING_TEMPEST: BuffStatus = BuffStatus {
+        let surging_tempest: BuffStatus = BuffStatus {
             id: 100,
             name: String::from("Surging Tempest"),
             stacks: 1,
@@ -51,7 +51,7 @@ impl WarriorDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let NASCENT_CHAOS: BuffStatus = BuffStatus {
+        let nascent_chaos: BuffStatus = BuffStatus {
             id: 101,
             name: String::from("Nascent Chaos"),
             stacks: 1,
@@ -63,7 +63,7 @@ impl WarriorDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let INNER_RELEASE_STACK: BuffStatus = BuffStatus {
+        let inner_release_stack: BuffStatus = BuffStatus {
             id: 102,
             name: String::from("Inner Release"),
             stacks: 3,
@@ -75,7 +75,7 @@ impl WarriorDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let PRIMAL_REND_READY: BuffStatus = BuffStatus {
+        let primal_rend_ready: BuffStatus = BuffStatus {
             id: 103,
             name: String::from("Primal Rend Ready"),
             owner_id: player_id,
@@ -87,7 +87,7 @@ impl WarriorDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let PRIMAL_RUINATION_READY: BuffStatus = BuffStatus {
+        let primal_ruination_ready: BuffStatus = BuffStatus {
             id: 104,
             name: String::from("Primal Ruination Ready"),
             owner_id: player_id,
@@ -100,7 +100,7 @@ impl WarriorDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let HEAVY_SWING: AttackSkill = AttackSkill {
+        let heavy_swing: AttackSkill = AttackSkill {
             id: 100,
             name: String::from("Heavy Swing"),
             player_id,
@@ -125,7 +125,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let MAIM: AttackSkill = AttackSkill {
+        let maim: AttackSkill = AttackSkill {
             id: 101,
             name: String::from("Maim"),
             player_id,
@@ -150,7 +150,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let STORMS_EYE: AttackSkill = AttackSkill {
+        let storms_eye: AttackSkill = AttackSkill {
             id: 102,
             name: String::from("Storm's Eye"),
             player_id,
@@ -159,7 +159,7 @@ impl WarriorDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                SURGING_TEMPEST.clone(),
+                surging_tempest.clone(),
                 30000,
                 60000,
                 0,
@@ -182,7 +182,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let INFURIATE: AttackSkill = AttackSkill {
+        let infuriate: AttackSkill = AttackSkill {
             id: 103,
             name: String::from("Infuriate"),
             player_id,
@@ -191,7 +191,7 @@ impl WarriorDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                NASCENT_CHAOS.clone(),
+                nascent_chaos.clone(),
                 30000,
                 30000,
                 0,
@@ -214,7 +214,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let FELL_CLEAVE: AttackSkill = AttackSkill {
+        let fell_cleave: AttackSkill = AttackSkill {
             id: 104,
             name: String::from("Fell Cleave"),
             player_id,
@@ -222,7 +222,7 @@ impl WarriorDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ReduceSkillCooldown(
                 player_id,
-                INFURIATE.get_id(),
+                infuriate.get_id(),
                 5000,
                 0,
             )],
@@ -244,7 +244,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ONSLAUGHT: AttackSkill = AttackSkill {
+        let onslaught: AttackSkill = AttackSkill {
             id: 105,
             name: String::from("Onslaught"),
             player_id,
@@ -269,7 +269,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let UPHEAVAL: AttackSkill = AttackSkill {
+        let upheaval: AttackSkill = AttackSkill {
             id: 106,
             name: String::from("Upheaval"),
             player_id,
@@ -294,7 +294,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let INNER_RELEASE: AttackSkill = AttackSkill {
+        let inner_release: AttackSkill = AttackSkill {
             id: 107,
             name: String::from("Inner Release"),
             player_id,
@@ -304,7 +304,7 @@ impl WarriorDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    INNER_RELEASE_STACK.clone(),
+                    inner_release_stack.clone(),
                     30000,
                     30000,
                     0,
@@ -312,7 +312,7 @@ impl WarriorDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    PRIMAL_REND_READY.clone(),
+                    primal_rend_ready.clone(),
                     30000,
                     30000,
                     0,
@@ -320,7 +320,7 @@ impl WarriorDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    SURGING_TEMPEST.clone(),
+                    surging_tempest.clone(),
                     10000,
                     60000,
                     0,
@@ -344,7 +344,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let PRIMAL_REND: AttackSkill = AttackSkill {
+        let primal_rend: AttackSkill = AttackSkill {
             id: 108,
             name: String::from("Primal Rend"),
             player_id,
@@ -353,7 +353,7 @@ impl WarriorDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                PRIMAL_RUINATION_READY.clone(),
+                primal_ruination_ready.clone(),
                 30000,
                 30000,
                 0,
@@ -367,7 +367,7 @@ impl WarriorDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(PRIMAL_REND_READY.get_id())],
+            resource_required: vec![UseBuff(primal_rend_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -376,7 +376,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: true,
             use_type: UseType::UseOnTarget,
         };
-        let STORMS_PATH: AttackSkill = AttackSkill {
+        let storms_path: AttackSkill = AttackSkill {
             id: 109,
             name: String::from("Storm's Path"),
             player_id,
@@ -401,7 +401,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let INNER_CHAOS: AttackSkill = AttackSkill {
+        let inner_chaos: AttackSkill = AttackSkill {
             id: 110,
             name: String::from("Inner Chaos"),
             player_id,
@@ -409,7 +409,7 @@ impl WarriorDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ReduceSkillCooldown(
                 player_id,
-                INFURIATE.get_id(),
+                infuriate.get_id(),
                 5000,
                 0,
             )],
@@ -424,7 +424,7 @@ impl WarriorDatabase {
             cooldown_millisecond: 0,
             resource_required: vec![
                 ResourceRequirements::Resource(0, 50),
-                UseBuff(NASCENT_CHAOS.get_id()),
+                UseBuff(nascent_chaos.get_id()),
             ],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
@@ -434,7 +434,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: true,
             use_type: UseType::UseOnTarget,
         };
-        let FELL_CLEAVE_INNER: AttackSkill = AttackSkill {
+        let fell_cleave_inner: AttackSkill = AttackSkill {
             id: 111,
             name: String::from("Fell Cleave"),
             player_id,
@@ -442,7 +442,7 @@ impl WarriorDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ReduceSkillCooldown(
                 player_id,
-                INFURIATE.get_id(),
+                infuriate.get_id(),
                 5000,
                 0,
             )],
@@ -455,7 +455,7 @@ impl WarriorDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(INNER_RELEASE_STACK.get_id())],
+            resource_required: vec![UseBuff(inner_release_stack.get_id())],
             resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -464,7 +464,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: true,
             use_type: UseType::UseOnTarget,
         };
-        let PRIMAL_WRATH: AttackSkill = AttackSkill {
+        let primal_wrath: AttackSkill = AttackSkill {
             id: 112,
             name: String::from("Primal Wrath"),
             player_id,
@@ -489,7 +489,7 @@ impl WarriorDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let PRIMAL_RUINATION: AttackSkill = AttackSkill {
+        let primal_ruination: AttackSkill = AttackSkill {
             id: 113,
             name: String::from("Primal Ruination"),
             player_id,
@@ -505,7 +505,7 @@ impl WarriorDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(PRIMAL_RUINATION_READY.get_id())],
+            resource_required: vec![UseBuff(primal_ruination_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -518,27 +518,27 @@ impl WarriorDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         WarriorDatabase {
-            heavy_swing: HEAVY_SWING,
-            maim: MAIM,
-            storms_eye: STORMS_EYE,
-            infuriate: INFURIATE,
-            fell_cleave: FELL_CLEAVE,
-            onslaught: ONSLAUGHT,
-            upheaval: UPHEAVAL,
-            inner_release: INNER_RELEASE,
-            primal_rend: PRIMAL_REND,
-            storms_path: STORMS_PATH,
-            inner_chaos: INNER_CHAOS,
-            fell_cleave_inner: FELL_CLEAVE_INNER,
-            primal_wrath: PRIMAL_WRATH,
-            primal_ruination: PRIMAL_RUINATION,
+            heavy_swing,
+            maim,
+            storms_eye,
+            infuriate,
+            fell_cleave,
+            onslaught,
+            upheaval,
+            inner_release,
+            primal_rend,
+            storms_path,
+            inner_chaos,
+            fell_cleave_inner,
+            primal_wrath,
+            primal_ruination,
 
-            surging_tempest: SURGING_TEMPEST,
-            nascent_chaos: NASCENT_CHAOS,
+            surging_tempest,
+            nascent_chaos,
 
-            inner_release_stack: INNER_RELEASE_STACK,
-            primal_rend_ready: PRIMAL_REND_READY,
-            primal_ruination_ready: PRIMAL_RUINATION_READY,
+            inner_release_stack,
+            primal_rend_ready,
+            primal_ruination_ready,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

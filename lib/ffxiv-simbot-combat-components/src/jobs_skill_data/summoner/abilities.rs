@@ -9,9 +9,9 @@ use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
+use crate::skill::make_skill_table;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{CheckStatus, Resource, UseBuff};
-use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
@@ -74,7 +74,7 @@ impl SummonerDatabase {
         player_id: PlayerIdType,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
-        let FURTHER_RUIN: BuffStatus = BuffStatus {
+        let further_ruin: BuffStatus = BuffStatus {
             id: 1600,
             name: String::from("Further Ruin"),
             stacks: 1,
@@ -86,7 +86,7 @@ impl SummonerDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SEARING_LIGHT_BUFF: BuffStatus = BuffStatus {
+        let searing_light_buff: BuffStatus = BuffStatus {
             id: 1601,
             name: String::from("Searing Light"),
             stacks: 1,
@@ -98,7 +98,7 @@ impl SummonerDatabase {
             is_raidwide: true,
             trigger_proc_event_on_gcd: vec![],
         };
-        let BAHAMUT_STATE: BuffStatus = BuffStatus {
+        let bahamut_state: BuffStatus = BuffStatus {
             id: 1602,
             name: String::from("Bahamut State"),
             stacks: 1,
@@ -110,7 +110,7 @@ impl SummonerDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let PHOENIX_STATE: BuffStatus = BuffStatus {
+        let pheonix_state: BuffStatus = BuffStatus {
             id: 1603,
             name: String::from("Phoenix State"),
             stacks: 1,
@@ -123,7 +123,7 @@ impl SummonerDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let IFRIT_STATE: BuffStatus = BuffStatus {
+        let ifrit_state: BuffStatus = BuffStatus {
             id: 1604,
             name: String::from("Ifrit State"),
             stacks: 2,
@@ -136,7 +136,7 @@ impl SummonerDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let TITAN_STATE: BuffStatus = BuffStatus {
+        let titan_state: BuffStatus = BuffStatus {
             id: 1605,
             name: String::from("Titan State"),
             stacks: 4,
@@ -149,7 +149,7 @@ impl SummonerDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let GARUDA_STATE: BuffStatus = BuffStatus {
+        let garuda_state: BuffStatus = BuffStatus {
             id: 1606,
             name: String::from("Garuda State"),
             stacks: 4,
@@ -162,7 +162,7 @@ impl SummonerDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let TITANS_FAVOR: BuffStatus = BuffStatus {
+        let titans_favor: BuffStatus = BuffStatus {
             id: 1607,
             name: String::from("Titan's Favor"),
             stacks: 1,
@@ -175,7 +175,7 @@ impl SummonerDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let SLIPSTREAM_DOT: DebuffStatus = DebuffStatus {
+        let slipstream_dot: DebuffStatus = DebuffStatus {
             id: 1608,
             name: String::from("Slipstream"),
             stacks: 1,
@@ -191,7 +191,7 @@ impl SummonerDatabase {
             is_raidwide: false,
             snapshotted_infos: Default::default(),
         };
-        let SOLAR_BAHAMUT_STATE: BuffStatus = BuffStatus {
+        let solar_bahamut_state: BuffStatus = BuffStatus {
             id: 1609,
             name: String::from("Solar Bahamut State"),
             stacks: 1,
@@ -203,7 +203,7 @@ impl SummonerDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let RUBYS_GLIMMER: BuffStatus = BuffStatus {
+        let rubys_glimmer: BuffStatus = BuffStatus {
             id: 1610,
             name: String::from("Ruby's Glimmer"),
             stacks: 1,
@@ -216,7 +216,7 @@ impl SummonerDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let WYRMWAVE: AttackSkill = AttackSkill {
+        let wyrmwave: AttackSkill = AttackSkill {
             id: 1609,
             name: String::from("Wyrmwave"),
             player_id,
@@ -242,7 +242,7 @@ impl SummonerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let SCARLET_FLAME: AttackSkill = AttackSkill {
+        let scarlet_flame: AttackSkill = AttackSkill {
             id: 1623,
             name: String::from("Scarlet Flame"),
             player_id,
@@ -268,7 +268,7 @@ impl SummonerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let LUXWAVE: AttackSkill = AttackSkill {
+        let luxwave: AttackSkill = AttackSkill {
             id: 1630,
             name: String::from("Luxwave"),
             player_id,
@@ -294,7 +294,7 @@ impl SummonerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let TRANSFORM: AttackSkill = AttackSkill {
+        let transform: AttackSkill = AttackSkill {
             id: 1624,
             name: String::from("Transform"),
             player_id,
@@ -323,7 +323,7 @@ impl SummonerDatabase {
         let wyrmwave_ticker = AutoAttackTicker::new_with_auto_attack(
             1600,
             player_id,
-            WYRMWAVE.clone(),
+            wyrmwave.clone(),
             DamageCategory::Direct,
             15000,
             ffxiv_event_queue.clone(),
@@ -331,7 +331,7 @@ impl SummonerDatabase {
         let phoenix_ticker = AutoAttackTicker::new_with_auto_attack(
             1601,
             player_id,
-            SCARLET_FLAME.clone(),
+            scarlet_flame.clone(),
             DamageCategory::Direct,
             15000,
             ffxiv_event_queue.clone(),
@@ -339,13 +339,13 @@ impl SummonerDatabase {
         let solar_bahamut_ticker = AutoAttackTicker::new_with_auto_attack(
             1602,
             player_id,
-            LUXWAVE.clone(),
+            luxwave.clone(),
             DamageCategory::Direct,
             15000,
             ffxiv_event_queue.clone(),
         );
 
-        let RUIN_III: AttackSkill = AttackSkill {
+        let ruin_iii: AttackSkill = AttackSkill {
             id: 1600,
             name: String::from("Ruin III"),
             player_id,
@@ -370,7 +370,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let RUIN_IV: AttackSkill = AttackSkill {
+        let ruin_iv: AttackSkill = AttackSkill {
             id: 1601,
             name: String::from("Ruin IV"),
             player_id,
@@ -386,7 +386,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(FURTHER_RUIN.get_id())],
+            resource_required: vec![UseBuff(further_ruin.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -395,15 +395,15 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SEARING_LIGHT: AttackSkill = AttackSkill {
+        let searing_light: AttackSkill = AttackSkill {
             id: 1602,
             name: String::from("Searing Light"),
             player_id,
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyRaidBuff(player_id, SEARING_LIGHT_BUFF.clone(), 30000, 30000, 0),
-                ApplyBuff(player_id, player_id, RUBYS_GLIMMER.clone(), 30000, 30000, 0),
+                ApplyRaidBuff(player_id, searing_light_buff.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, rubys_glimmer.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -423,7 +423,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let ENERGY_DRAIN: AttackSkill = AttackSkill {
+        let energy_drain: AttackSkill = AttackSkill {
             id: 1603,
             name: String::from("Energy Drain"),
             player_id,
@@ -432,7 +432,7 @@ impl SummonerDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                FURTHER_RUIN.clone(),
+                further_ruin.clone(),
                 60000,
                 60000,
                 0,
@@ -455,7 +455,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let NECROTIZE: AttackSkill = AttackSkill {
+        let necrotize: AttackSkill = AttackSkill {
             id: 1604,
             name: String::from("Necrotize"),
             player_id,
@@ -471,7 +471,7 @@ impl SummonerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::Resource(0, 1)],
+            resource_required: vec![Resource(0, 1)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -480,14 +480,14 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SUMMON_BAHAMUT: AttackSkill = AttackSkill {
+        let summon_bahamut: AttackSkill = AttackSkill {
             id: 1605,
             name: String::from("Summon Bahamut"),
             player_id,
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyBuff(player_id, player_id, BAHAMUT_STATE.clone(), 15000, 15000, 0),
+                ApplyBuff(player_id, player_id, bahamut_state.clone(), 15000, 15000, 0),
                 AddTicker(FfxivEventTicker::AutoAttackTicker(wyrmwave_ticker), 0),
             ],
             proc_events: vec![],
@@ -504,11 +504,11 @@ impl SummonerDatabase {
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(TRANSFORM.get_id()),
+            stack_skill_id: Some(transform.get_id()),
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let ENKINDLE_BAHAMUT: AttackSkill = AttackSkill {
+        let enkindle_bahamut: AttackSkill = AttackSkill {
             id: 1606,
             name: String::from("Enkindle Bahamut"),
             player_id,
@@ -524,7 +524,7 @@ impl SummonerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 20000,
-            resource_required: vec![ResourceRequirements::CheckStatus(BAHAMUT_STATE.get_id())],
+            resource_required: vec![CheckStatus(bahamut_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -533,7 +533,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let DEATHFLARE: AttackSkill = AttackSkill {
+        let deathflare: AttackSkill = AttackSkill {
             id: 1607,
             name: String::from("Deathflare"),
             player_id,
@@ -549,7 +549,7 @@ impl SummonerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 20000,
-            resource_required: vec![ResourceRequirements::CheckStatus(BAHAMUT_STATE.get_id())],
+            resource_required: vec![CheckStatus(bahamut_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -558,7 +558,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ASTRAL_IMPULSE: AttackSkill = AttackSkill {
+        let astral_impulse: AttackSkill = AttackSkill {
             id: 1608,
             name: String::from("Astral Impulse"),
             player_id,
@@ -574,7 +574,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::CheckStatus(BAHAMUT_STATE.get_id())],
+            resource_required: vec![CheckStatus(bahamut_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -583,7 +583,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SUMMON_IFRIT_II: AttackSkill = AttackSkill {
+        let summon_ifrit_ii: AttackSkill = AttackSkill {
             id: 1610,
             name: String::from("Summon Ifrit II"),
             player_id,
@@ -592,7 +592,7 @@ impl SummonerDatabase {
             additional_skill_events: vec![ApplyBuffStack(
                 player_id,
                 player_id,
-                IFRIT_STATE.clone(),
+                ifrit_state.clone(),
                 30000,
                 true,
                 0,
@@ -606,7 +606,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::Resource(1, 1)],
+            resource_required: vec![Resource(1, 1)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -615,7 +615,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let CRIMSON_CYCLONE: AttackSkill = AttackSkill {
+        let crimson_cyclone: AttackSkill = AttackSkill {
             id: 1611,
             name: String::from("Crimson Cyclone"),
             player_id,
@@ -631,7 +631,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 30000,
-            resource_required: vec![CheckStatus(IFRIT_STATE.get_id())],
+            resource_required: vec![CheckStatus(ifrit_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -640,7 +640,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let CRIMSON_STRIKE: AttackSkill = AttackSkill {
+        let crimson_strike: AttackSkill = AttackSkill {
             id: 1612,
             name: String::from("Crimson Strike"),
             player_id,
@@ -656,7 +656,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 30000,
-            resource_required: vec![CheckStatus(IFRIT_STATE.get_id())],
+            resource_required: vec![CheckStatus(ifrit_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -665,7 +665,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let RUBY_RITE: AttackSkill = AttackSkill {
+        let ruby_rite: AttackSkill = AttackSkill {
             id: 1613,
             name: String::from("Ruby Rite"),
             player_id,
@@ -681,7 +681,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(IFRIT_STATE.get_id())],
+            resource_required: vec![UseBuff(ifrit_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -690,7 +690,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SUMMON_TITAN_II: AttackSkill = AttackSkill {
+        let summon_titan_ii: AttackSkill = AttackSkill {
             id: 1614,
             name: String::from("Summon Titan II"),
             player_id,
@@ -699,7 +699,7 @@ impl SummonerDatabase {
             additional_skill_events: vec![ApplyBuffStack(
                 player_id,
                 player_id,
-                TITAN_STATE.clone(),
+                titan_state.clone(),
                 30000,
                 true,
                 0,
@@ -713,7 +713,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::Resource(2, 1)],
+            resource_required: vec![Resource(2, 1)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -722,7 +722,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let TOPAZ_RITE: AttackSkill = AttackSkill {
+        let topaz_rite: AttackSkill = AttackSkill {
             id: 1615,
             name: String::from("Topaz Rite"),
             player_id,
@@ -731,7 +731,7 @@ impl SummonerDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                TITANS_FAVOR.clone(),
+                titans_favor.clone(),
                 10000,
                 10000,
                 0,
@@ -745,7 +745,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(TITAN_STATE.get_id())],
+            resource_required: vec![UseBuff(titan_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -755,7 +755,7 @@ impl SummonerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let MOUNTAIN_BUSTER: AttackSkill = AttackSkill {
+        let mountain_buster: AttackSkill = AttackSkill {
             id: 1616,
             name: String::from("Mountain Buster"),
             player_id,
@@ -771,7 +771,7 @@ impl SummonerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(TITANS_FAVOR.get_id())],
+            resource_required: vec![UseBuff(titans_favor.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -781,7 +781,7 @@ impl SummonerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let SUMMON_GARUDA_II: AttackSkill = AttackSkill {
+        let summon_garuda_ii: AttackSkill = AttackSkill {
             id: 1617,
             name: String::from("Summon Garuda II"),
             player_id,
@@ -790,7 +790,7 @@ impl SummonerDatabase {
             additional_skill_events: vec![ApplyBuffStack(
                 player_id,
                 player_id,
-                GARUDA_STATE.clone(),
+                garuda_state.clone(),
                 30000,
                 true,
                 0,
@@ -804,7 +804,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::Resource(3, 1)],
+            resource_required: vec![Resource(3, 1)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -814,7 +814,7 @@ impl SummonerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let EMERALD_RITE: AttackSkill = AttackSkill {
+        let emerald_rite: AttackSkill = AttackSkill {
             id: 1618,
             name: String::from("Emerald Rite"),
             player_id,
@@ -830,7 +830,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(GARUDA_STATE.get_id())],
+            resource_required: vec![UseBuff(garuda_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -840,7 +840,7 @@ impl SummonerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let SLIPSTREAM: AttackSkill = AttackSkill {
+        let slipstream: AttackSkill = AttackSkill {
             id: 1619,
             name: String::from("Slipstream"),
             player_id,
@@ -848,7 +848,7 @@ impl SummonerDatabase {
             trait_percent: 130,
             additional_skill_events: vec![ApplyDebuff(
                 player_id,
-                SLIPSTREAM_DOT.clone(),
+                slipstream_dot.clone(),
                 15000,
                 15000,
                 0,
@@ -862,7 +862,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![CheckStatus(GARUDA_STATE.get_id())],
+            resource_required: vec![CheckStatus(garuda_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -872,14 +872,14 @@ impl SummonerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let SUMMON_PHOENIX: AttackSkill = AttackSkill {
+        let summon_pheonix: AttackSkill = AttackSkill {
             id: 1620,
             name: String::from("Summon Phoenix"),
             player_id,
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyBuff(player_id, player_id, PHOENIX_STATE.clone(), 15000, 15000, 0),
+                ApplyBuff(player_id, player_id, pheonix_state.clone(), 15000, 15000, 0),
                 AddTicker(FfxivEventTicker::AutoAttackTicker(phoenix_ticker), 0),
             ],
             proc_events: vec![],
@@ -891,17 +891,17 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 60000,
-            resource_required: vec![ResourceRequirements::Resource(4, 1)],
+            resource_required: vec![Resource(4, 1)],
             resource_created: HashMap::from([(1, 1), (2, 1), (3, 1), (5, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(TRANSFORM.get_id()),
+            stack_skill_id: Some(transform.get_id()),
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
 
-        let FOUNTAIN_OF_FIRE: AttackSkill = AttackSkill {
+        let fountain_of_fire: AttackSkill = AttackSkill {
             id: 1621,
             name: String::from("Fountain of Fire"),
             player_id,
@@ -917,7 +917,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![CheckStatus(PHOENIX_STATE.get_id())],
+            resource_required: vec![CheckStatus(pheonix_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -927,7 +927,7 @@ impl SummonerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let ENKINDLE_PHOENIX: AttackSkill = AttackSkill {
+        let enkindle_pheonix: AttackSkill = AttackSkill {
             id: 1622,
             name: String::from("Enkindle Phoenix"),
             player_id,
@@ -943,7 +943,7 @@ impl SummonerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 20000,
-            resource_required: vec![ResourceRequirements::CheckStatus(PHOENIX_STATE.get_id())],
+            resource_required: vec![CheckStatus(pheonix_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -952,7 +952,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SEARING_FLASH: AttackSkill = AttackSkill {
+        let searing_flash: AttackSkill = AttackSkill {
             id: 1625,
             name: String::from("Searing Flash"),
             player_id,
@@ -968,7 +968,7 @@ impl SummonerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(RUBYS_GLIMMER.get_id())],
+            resource_required: vec![UseBuff(rubys_glimmer.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -977,7 +977,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SUMMON_SOLAR_BAHAMUT: AttackSkill = AttackSkill {
+        let summon_solar_bahamut: AttackSkill = AttackSkill {
             id: 1626,
             name: String::from("Summon Solar Bahamut"),
             player_id,
@@ -987,7 +987,7 @@ impl SummonerDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    SOLAR_BAHAMUT_STATE.clone(),
+                    solar_bahamut_state.clone(),
                     15000,
                     15000,
                     0,
@@ -1008,11 +1008,11 @@ impl SummonerDatabase {
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(TRANSFORM.get_id()),
+            stack_skill_id: Some(transform.get_id()),
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let UMBRAL_IMPULSE: AttackSkill = AttackSkill {
+        let umbral_impulse: AttackSkill = AttackSkill {
             id: 1627,
             name: String::from("Umbral Impulse"),
             player_id,
@@ -1028,7 +1028,7 @@ impl SummonerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![CheckStatus(SOLAR_BAHAMUT_STATE.get_id())],
+            resource_required: vec![CheckStatus(solar_bahamut_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -1037,7 +1037,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let SUNFLARE: AttackSkill = AttackSkill {
+        let sunflare: AttackSkill = AttackSkill {
             id: 1628,
             name: String::from("Sunflare"),
             player_id,
@@ -1053,7 +1053,7 @@ impl SummonerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 20000,
-            resource_required: vec![CheckStatus(SOLAR_BAHAMUT_STATE.get_id())],
+            resource_required: vec![CheckStatus(solar_bahamut_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -1062,7 +1062,7 @@ impl SummonerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ENKINDLE_SOLAR_BAHAMUT: AttackSkill = AttackSkill {
+        let enkindle_solar_bahamut: AttackSkill = AttackSkill {
             id: 1629,
             name: String::from("Enkindle Solar Bahamut"),
             player_id,
@@ -1078,7 +1078,7 @@ impl SummonerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 20000,
-            resource_required: vec![CheckStatus(SOLAR_BAHAMUT_STATE.get_id())],
+            resource_required: vec![CheckStatus(solar_bahamut_state.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -1091,50 +1091,50 @@ impl SummonerDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         SummonerDatabase {
-            ruin_iii: RUIN_III,
-            ruin_iv: RUIN_IV,
-            searing_light: SEARING_LIGHT,
-            energy_drain: ENERGY_DRAIN,
+            ruin_iii,
+            ruin_iv,
+            searing_light,
+            energy_drain,
 
-            necrotize: NECROTIZE,
-            summon_bahamut: SUMMON_BAHAMUT,
-            enkindle_bahamut: ENKINDLE_BAHAMUT,
-            deathflare: DEATHFLARE,
-            astral_impulse: ASTRAL_IMPULSE,
-            wyrmwave: WYRMWAVE,
-            summon_ifrit_ii: SUMMON_IFRIT_II,
-            crimson_cyclone: CRIMSON_CYCLONE,
-            crimson_strike: CRIMSON_STRIKE,
-            ruby_rite: RUBY_RITE,
-            summon_titan_ii: SUMMON_TITAN_II,
-            topaz_rite: TOPAZ_RITE,
-            mountain_buster: MOUNTAIN_BUSTER,
-            summon_garuda_ii: SUMMON_GARUDA_II,
-            emerald_rite: EMERALD_RITE,
-            slipstream: SLIPSTREAM,
-            summon_phoenix: SUMMON_PHOENIX,
-            fountain_of_fire: FOUNTAIN_OF_FIRE,
-            enkindle_phoenix: ENKINDLE_PHOENIX,
-            scarlet_flame: SCARLET_FLAME,
-            transform: TRANSFORM,
-            searing_flash: SEARING_FLASH,
-            summon_solar_bahamut: SUMMON_SOLAR_BAHAMUT,
-            umbral_impulse: UMBRAL_IMPULSE,
-            sunflare: SUNFLARE,
-            enkindle_solar_bahamut: ENKINDLE_SOLAR_BAHAMUT,
-            luxwave: LUXWAVE,
+            necrotize,
+            summon_bahamut,
+            enkindle_bahamut,
+            deathflare,
+            astral_impulse,
+            wyrmwave,
+            summon_ifrit_ii,
+            crimson_cyclone,
+            crimson_strike,
+            ruby_rite,
+            summon_titan_ii,
+            topaz_rite,
+            mountain_buster,
+            summon_garuda_ii,
+            emerald_rite,
+            slipstream,
+            summon_phoenix: summon_pheonix,
+            fountain_of_fire,
+            enkindle_phoenix: enkindle_pheonix,
+            scarlet_flame,
+            transform,
+            searing_flash,
+            summon_solar_bahamut,
+            umbral_impulse,
+            sunflare,
+            enkindle_solar_bahamut,
+            luxwave,
 
-            further_ruin: FURTHER_RUIN,
-            searing_light_buff: SEARING_LIGHT_BUFF,
-            bahamut_state: BAHAMUT_STATE,
-            phoenix_state: PHOENIX_STATE,
-            ifrit_state: IFRIT_STATE,
-            titan_state: TITAN_STATE,
-            garuda_state: GARUDA_STATE,
-            titans_favor: TITANS_FAVOR,
-            slipstream_dot: SLIPSTREAM_DOT,
-            rubys_glimmer: RUBYS_GLIMMER,
-            solar_bahamut_state: SOLAR_BAHAMUT_STATE,
+            further_ruin,
+            searing_light_buff,
+            bahamut_state,
+            phoenix_state: pheonix_state,
+            ifrit_state,
+            titan_state,
+            garuda_state,
+            titans_favor,
+            slipstream_dot,
+            rubys_glimmer,
+            solar_bahamut_state,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

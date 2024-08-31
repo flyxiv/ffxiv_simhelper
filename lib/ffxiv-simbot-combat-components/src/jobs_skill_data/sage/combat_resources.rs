@@ -50,12 +50,12 @@ impl CombatResource for SageCombatResources {
         (vec![], vec![])
     }
 
+    fn trigger_on_crit(&mut self) {}
+
     fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
-
     fn update_stack_timer(&mut self, _: TimeType) {}
-    fn trigger_on_crit(&mut self) {}
 }
 
 impl SageCombatResources {

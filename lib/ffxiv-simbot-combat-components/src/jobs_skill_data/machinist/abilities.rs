@@ -1,4 +1,3 @@
-use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::ffxiv_event::FfxivEvent::{ApplyBuff, ReduceSkillCooldown};
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
@@ -47,7 +46,7 @@ pub(crate) struct MachinistDatabase {
 
 impl MachinistDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let REASSEMBLE_BUFF: BuffStatus = {
+        let reassemble_buff: BuffStatus = {
             BuffStatus {
                 id: 1400,
                 name: String::from("Reassemble"),
@@ -61,7 +60,7 @@ impl MachinistDatabase {
                 trigger_proc_event_on_gcd: vec![],
             }
         };
-        let HYPERCHARGE_BUFF: BuffStatus = BuffStatus {
+        let hypercharge_buff: BuffStatus = BuffStatus {
             id: 1401,
             name: String::from("Hypercharge"),
             owner_id: player_id,
@@ -73,7 +72,7 @@ impl MachinistDatabase {
             max_stacks: 5,
             trigger_proc_event_on_gcd: vec![],
         };
-        let EXCAVATOR_READY: BuffStatus = BuffStatus {
+        let excavator_ready: BuffStatus = BuffStatus {
             id: 1402,
             name: String::from("Excavator Ready"),
             owner_id: player_id,
@@ -85,9 +84,9 @@ impl MachinistDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FULL_METAL_MACHINIST: BuffStatus = BuffStatus {
+        let full_metal_machinist: BuffStatus = BuffStatus {
             id: 1403,
-            name: String::from("Full Metal Field"),
+            name: String::from("Full Metal Machinist"),
             owner_id: player_id,
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
@@ -97,7 +96,7 @@ impl MachinistDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let HYPERCHARGED: BuffStatus = BuffStatus {
+        let hypercharged: BuffStatus = BuffStatus {
             id: 1404,
             name: String::from("Hypercharged"),
             owner_id: player_id,
@@ -110,7 +109,7 @@ impl MachinistDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let HEATED_SPLIT_SHOT: AttackSkill = AttackSkill {
+        let heated_split_shot: AttackSkill = AttackSkill {
             id: 1400,
             name: String::from("Heated Split Shot"),
             player_id,
@@ -135,7 +134,7 @@ impl MachinistDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let HEATED_SLUG_SHOT: AttackSkill = AttackSkill {
+        let heated_slug_shot: AttackSkill = AttackSkill {
             id: 1401,
             name: String::from("Heated Slug Shot"),
             player_id,
@@ -160,7 +159,7 @@ impl MachinistDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let HEATED_CLEAN_SHOT: AttackSkill = AttackSkill {
+        let heated_clean_shot: AttackSkill = AttackSkill {
             id: 1402,
             name: String::from("Heated Clean Shot"),
             player_id,
@@ -185,7 +184,7 @@ impl MachinistDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let DRILL: AttackSkill = AttackSkill {
+        let drill: AttackSkill = AttackSkill {
             id: 1403,
             name: String::from("Drill"),
             player_id,
@@ -210,7 +209,7 @@ impl MachinistDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let AIR_ANCHOR: AttackSkill = AttackSkill {
+        let air_anchor: AttackSkill = AttackSkill {
             id: 1404,
             name: String::from("Air Anchor"),
             player_id,
@@ -235,7 +234,7 @@ impl MachinistDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let CHAIN_SAW: AttackSkill = AttackSkill {
+        let chain_saw: AttackSkill = AttackSkill {
             id: 1405,
             name: String::from("Chain Saw"),
             player_id,
@@ -245,7 +244,7 @@ impl MachinistDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                EXCAVATOR_READY.clone(),
+                excavator_ready.clone(),
                 30000,
                 30000,
                 0,
@@ -267,7 +266,7 @@ impl MachinistDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let REASSEMBLE: AttackSkill = AttackSkill {
+        let reassemble: AttackSkill = AttackSkill {
             id: 1406,
             name: String::from("Reassemble"),
             player_id,
@@ -277,7 +276,7 @@ impl MachinistDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                REASSEMBLE_BUFF.clone(),
+                reassemble_buff.clone(),
                 5000,
                 5000,
                 0,
@@ -299,7 +298,7 @@ impl MachinistDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let DOUBLE_CHECK: AttackSkill = AttackSkill {
+        let double_check: AttackSkill = AttackSkill {
             id: 1407,
             name: String::from("Double Check"),
             player_id,
@@ -324,7 +323,7 @@ impl MachinistDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let CHECKMATE: AttackSkill = AttackSkill {
+        let checkmate: AttackSkill = AttackSkill {
             id: 1408,
             name: String::from("Checkmate"),
             player_id,
@@ -349,7 +348,7 @@ impl MachinistDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let BLAZING_SHOT: AttackSkill = AttackSkill {
+        let blazing_shot: AttackSkill = AttackSkill {
             id: 1409,
             name: String::from("Blazing Shot"),
             player_id,
@@ -357,8 +356,8 @@ impl MachinistDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 120,
             additional_skill_events: vec![
-                ReduceSkillCooldown(player_id, DOUBLE_CHECK.get_id(), 15000, 0),
-                ReduceSkillCooldown(player_id, CHECKMATE.get_id(), 15000, 0),
+                ReduceSkillCooldown(player_id, double_check.get_id(), 15000, 0),
+                ReduceSkillCooldown(player_id, checkmate.get_id(), 15000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -369,7 +368,7 @@ impl MachinistDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(HYPERCHARGE_BUFF.get_id())],
+            resource_required: vec![UseBuff(hypercharge_buff.get_id())],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -377,7 +376,7 @@ impl MachinistDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let WILDFIRE: AttackSkill = AttackSkill {
+        let wildfire: AttackSkill = AttackSkill {
             id: 1410,
             name: String::from("Wildfire"),
             player_id,
@@ -402,17 +401,17 @@ impl MachinistDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let HYPERCHARGE: AttackSkill = AttackSkill {
+        let hypercharge: AttackSkill = AttackSkill {
             id: 1411,
             name: String::from("Hypercharge"),
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
             trait_percent: 120,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                HYPERCHARGE_BUFF.clone(),
+                hypercharge_buff.clone(),
                 10000,
                 10000,
                 0,
@@ -434,7 +433,7 @@ impl MachinistDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let BARREL_STABILIZER: AttackSkill = AttackSkill {
+        let barrel_stabilizer: AttackSkill = AttackSkill {
             id: 1412,
             name: String::from("Barrel Stabilizer"),
             player_id,
@@ -445,12 +444,12 @@ impl MachinistDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    FULL_METAL_MACHINIST.clone(),
+                    full_metal_machinist.clone(),
                     30000,
                     30000,
                     0,
                 ),
-                ApplyBuff(player_id, player_id, HYPERCHARGED.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, hypercharged.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -469,7 +468,7 @@ impl MachinistDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let AUTOMATON_QUEEN: AttackSkill = AttackSkill {
+        let automaton_queen: AttackSkill = AttackSkill {
             id: 1413,
             name: String::from("Automaton Queen"),
             player_id,
@@ -494,7 +493,7 @@ impl MachinistDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let DRILL_REASSEMBLE: crate::skill::attack_skill::AttackSkill = AttackSkill {
+        let drill_reassemble: AttackSkill = AttackSkill {
             id: 1414,
             name: String::from("Drill"),
             player_id,
@@ -511,15 +510,15 @@ impl MachinistDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 20000,
-            resource_required: vec![UseBuff(REASSEMBLE_BUFF.get_id())],
+            resource_required: vec![UseBuff(reassemble_buff.get_id())],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(DRILL.get_id()),
+            stack_skill_id: Some(drill.get_id()),
             is_guaranteed_crit: true,
             is_guaranteed_direct_hit: true,
         };
-        let AIR_ANCHOR_REASSEMBLE: AttackSkill = AttackSkill {
+        let air_anchor_reassemble: AttackSkill = AttackSkill {
             id: 1415,
             name: String::from("Air Anchor"),
             player_id,
@@ -540,11 +539,11 @@ impl MachinistDatabase {
             resource_created: HashMap::from([(1, 2)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(AIR_ANCHOR.get_id()),
+            stack_skill_id: Some(air_anchor.get_id()),
             is_guaranteed_crit: true,
             is_guaranteed_direct_hit: true,
         };
-        let CHAIN_SAW_REASSEMBLE: AttackSkill = AttackSkill {
+        let chain_saw_reassemble: AttackSkill = AttackSkill {
             id: 1416,
             name: String::from("Chain Saw"),
             player_id,
@@ -554,7 +553,7 @@ impl MachinistDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                EXCAVATOR_READY.clone(),
+                excavator_ready.clone(),
                 30000,
                 30000,
                 0,
@@ -573,10 +572,10 @@ impl MachinistDatabase {
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(CHAIN_SAW.get_id()),
+            stack_skill_id: Some(chain_saw.get_id()),
             is_guaranteed_direct_hit: true,
         };
-        let EXCAVATOR: AttackSkill = AttackSkill {
+        let excavator: AttackSkill = AttackSkill {
             id: 1417,
             name: String::from("Excavator"),
             player_id,
@@ -593,7 +592,7 @@ impl MachinistDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(EXCAVATOR_READY.get_id())],
+            resource_required: vec![UseBuff(excavator_ready.get_id())],
             resource_created: HashMap::from([(1, 2)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -601,7 +600,7 @@ impl MachinistDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let FULL_METAL_FIELD: AttackSkill = AttackSkill {
+        let full_metal_field: AttackSkill = AttackSkill {
             id: 1418,
             name: String::from("Full Metal Field"),
             player_id,
@@ -618,7 +617,7 @@ impl MachinistDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(FULL_METAL_MACHINIST.get_id())],
+            resource_required: vec![UseBuff(full_metal_machinist.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -626,7 +625,7 @@ impl MachinistDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: true,
         };
-        let EXCAVATOR_REASSEMBLE: AttackSkill = AttackSkill {
+        let excavator_reasssemble: AttackSkill = AttackSkill {
             id: 1419,
             name: String::from("Excavator"),
             player_id,
@@ -644,8 +643,8 @@ impl MachinistDatabase {
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
             resource_required: vec![
-                UseBuff(REASSEMBLE_BUFF.get_id()),
-                UseBuff(EXCAVATOR_READY.get_id()),
+                UseBuff(reassemble_buff.get_id()),
+                UseBuff(excavator_ready.get_id()),
             ],
             resource_created: HashMap::from([(1, 2)]),
             is_guaranteed_crit: true,
@@ -654,17 +653,17 @@ impl MachinistDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: true,
         };
-        let HYPERCHARGE_HYPERCHARGED: AttackSkill = AttackSkill {
+        let hypercharge_hypercharged: AttackSkill = AttackSkill {
             id: 1420,
             name: String::from("Hypercharge"),
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
             trait_percent: 120,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                HYPERCHARGE_BUFF.clone(),
+                hypercharge_buff.clone(),
                 10000,
                 10000,
                 0,
@@ -678,7 +677,7 @@ impl MachinistDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 10000,
-            resource_required: vec![ResourceRequirements::UseBuff(HYPERCHARGED.id)],
+            resource_required: vec![UseBuff(hypercharged.id)],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -690,33 +689,33 @@ impl MachinistDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         Self {
-            heated_split_shot: HEATED_SPLIT_SHOT,
-            heated_slug_shot: HEATED_SLUG_SHOT,
-            heated_clean_shot: HEATED_CLEAN_SHOT,
-            drill: DRILL,
-            air_anchor: AIR_ANCHOR,
-            chainsaw: CHAIN_SAW,
-            reassemble: REASSEMBLE,
-            double_check: DOUBLE_CHECK,
-            checkmate: CHECKMATE,
-            blazing_shot: BLAZING_SHOT,
-            wildfire: WILDFIRE,
-            hypercharge: HYPERCHARGE,
-            barrel_stabilizer: BARREL_STABILIZER,
-            automaton_queen: AUTOMATON_QUEEN,
-            drill_reassemble: DRILL_REASSEMBLE,
-            air_anchor_reassemble: AIR_ANCHOR_REASSEMBLE,
-            chainsaw_reassemble: CHAIN_SAW_REASSEMBLE,
-            excavator: EXCAVATOR,
-            full_metal_field: FULL_METAL_FIELD,
-            excavator_reassemble: EXCAVATOR_REASSEMBLE,
-            hypercharge_hypercharged: HYPERCHARGE_HYPERCHARGED,
+            heated_split_shot,
+            heated_slug_shot,
+            heated_clean_shot,
+            drill,
+            air_anchor,
+            chainsaw: chain_saw,
+            reassemble,
+            double_check,
+            checkmate,
+            blazing_shot,
+            wildfire,
+            hypercharge,
+            barrel_stabilizer,
+            automaton_queen,
+            drill_reassemble,
+            air_anchor_reassemble,
+            chainsaw_reassemble: chain_saw_reassemble,
+            excavator,
+            full_metal_field,
+            excavator_reassemble: excavator_reasssemble,
+            hypercharge_hypercharged,
 
-            reassemble_buff: REASSEMBLE_BUFF,
-            hypercharge_buff: HYPERCHARGE_BUFF,
-            excavator_ready: EXCAVATOR_READY,
-            full_metal_machinist: FULL_METAL_MACHINIST,
-            hypercharged: HYPERCHARGED,
+            reassemble_buff,
+            hypercharge_buff,
+            excavator_ready,
+            full_metal_machinist,
+            hypercharged,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

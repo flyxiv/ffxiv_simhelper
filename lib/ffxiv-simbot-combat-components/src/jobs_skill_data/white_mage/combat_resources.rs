@@ -80,6 +80,7 @@ impl CombatResource for WhitemageCombatResources {
         (vec![], vec![])
     }
 
+    fn trigger_on_crit(&mut self) {}
     fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
@@ -91,7 +92,6 @@ impl CombatResource for WhitemageCombatResources {
 
         self.next_lily_time -= elapsed_time_millisecond;
     }
-    fn trigger_on_crit(&mut self) {}
 }
 
 impl WhitemageCombatResources {

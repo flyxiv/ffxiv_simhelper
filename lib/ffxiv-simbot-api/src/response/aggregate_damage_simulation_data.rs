@@ -53,7 +53,7 @@ impl Default for SkillDamageAggregate {
 /// and the total number of buff contribution for each raidbuff.
 /// for each skill unit.
 pub(crate) fn aggregate_skill_damage(
-    damage_logs_of_party: &Vec<Vec<DamageLog>>,
+    damage_logs_of_party: &[Vec<DamageLog>],
 ) -> Vec<HashMap<IdType, SkillDamageAggregate>> {
     let mut skill_damage_tables = vec![];
 
@@ -107,8 +107,8 @@ pub(crate) fn aggregate_contribution(
 /// Calculate the final damage profile statistic for each player:
 /// raw damage, given contribution and received contribution.
 pub(crate) fn aggregate_player_damage_statistics(
-    party_damage_contribution_table: &Vec<HashMap<StatusKey, MultiplierType>>,
-    skill_damage_tables: &Vec<HashMap<IdType, SkillDamageAggregate>>,
+    party_damage_contribution_table: &[HashMap<StatusKey, MultiplierType>],
+    skill_damage_tables: &[HashMap<IdType, SkillDamageAggregate>],
 ) -> Vec<PlayerDamageAggregate> {
     let mut party_damage_aggregate: Vec<PlayerDamageAggregate> = vec![];
     party_damage_aggregate.resize(party_damage_contribution_table.len(), Default::default());
@@ -139,7 +139,7 @@ pub(crate) fn aggregate_player_damage_statistics(
 }
 
 pub(crate) fn aggregate_status_damages(
-    skill_damage_tables: &Vec<HashMap<IdType, SkillDamageAggregate>>,
+    skill_damage_tables: &[HashMap<IdType, SkillDamageAggregate>],
 ) -> Vec<HashMap<IdType, RaidbuffDamageAggregate>> {
     let mut status_damages = vec![];
 

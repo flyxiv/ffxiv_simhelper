@@ -6,7 +6,7 @@ use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{Resource, UseBuff};
-use crate::skill::{make_skill_table, ResourceRequirements, ResourceTable};
+use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
@@ -61,7 +61,7 @@ pub(crate) struct NinjaDatabase {
 
 impl NinjaDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let HUTON_STATUS: BuffStatus = {
+        let huton_status: BuffStatus = {
             BuffStatus {
                 id: 1000,
                 name: String::from("Huton"),
@@ -75,7 +75,7 @@ impl NinjaDatabase {
                 trigger_proc_event_on_gcd: vec![],
             }
         };
-        let RAIJUREADY: BuffStatus = BuffStatus {
+        let raiju_ready: BuffStatus = BuffStatus {
             id: 1001,
             name: String::from("Raiju Ready"),
             owner_id: player_id,
@@ -87,7 +87,7 @@ impl NinjaDatabase {
             max_stacks: 3,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SUITON_STATUS: BuffStatus = BuffStatus {
+        let suiton_status: BuffStatus = BuffStatus {
             id: 1002,
             name: String::from("Suiton"),
             owner_id: player_id,
@@ -99,7 +99,7 @@ impl NinjaDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let DOKUMORI_STATUS: DebuffStatus = DebuffStatus {
+        let dokumori_status: DebuffStatus = DebuffStatus {
             id: 1003,
             name: String::from("Dokumori"),
             owner_id: player_id,
@@ -115,7 +115,7 @@ impl NinjaDatabase {
             snapshotted_infos: Default::default(),
             max_stacks: 1,
         };
-        let KUNAIS_BANE_STATUS: DebuffStatus = DebuffStatus {
+        let kunais_bane_status: DebuffStatus = DebuffStatus {
             id: 1004,
             name: String::from("Kunai's Bane"),
             owner_id: player_id,
@@ -131,7 +131,7 @@ impl NinjaDatabase {
             snapshotted_infos: Default::default(),
             max_stacks: 1,
         };
-        let KASSATSU_STATUS: BuffStatus = BuffStatus {
+        let kassatsu_status: BuffStatus = BuffStatus {
             id: 1005,
             name: String::from("Kassatsu"),
             owner_id: player_id,
@@ -143,7 +143,7 @@ impl NinjaDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let TENCHIJIN_STATUS: BuffStatus = BuffStatus {
+        let tenchijin_status: BuffStatus = BuffStatus {
             id: 1006,
             name: String::from("Ten Chi Jin"),
             owner_id: player_id,
@@ -155,7 +155,7 @@ impl NinjaDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let BUNSHIN_STATUS: BuffStatus = BuffStatus {
+        let bunshin_status: BuffStatus = BuffStatus {
             id: 1007,
             name: String::from("Bunshin"),
             owner_id: player_id,
@@ -167,7 +167,7 @@ impl NinjaDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let MEISUI_STATUS: BuffStatus = BuffStatus {
+        let meisui_status: BuffStatus = BuffStatus {
             id: 1008,
             name: String::from("Meisui"),
             owner_id: player_id,
@@ -180,7 +180,7 @@ impl NinjaDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let TCJ_1: BuffStatus = BuffStatus {
+        let tcj_1: BuffStatus = BuffStatus {
             id: 1009,
             name: String::from("Ten Chi Jin-1"),
             owner_id: player_id,
@@ -192,7 +192,7 @@ impl NinjaDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let TCJ_2: BuffStatus = BuffStatus {
+        let tcj_2: BuffStatus = BuffStatus {
             id: 1010,
             name: String::from("Ten Chi Jin-2"),
             owner_id: player_id,
@@ -204,7 +204,7 @@ impl NinjaDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let BUNSHIN_CLONE_STATUS: BuffStatus = BuffStatus {
+        let bunshin_clone_status: BuffStatus = BuffStatus {
             id: 1011,
             name: String::from("Bunshin Clone"),
             owner_id: player_id,
@@ -216,7 +216,7 @@ impl NinjaDatabase {
             max_stacks: 5,
             trigger_proc_event_on_gcd: vec![],
         };
-        let TENRI_JINDO_READY: BuffStatus = BuffStatus {
+        let tenri_jindo_ready: BuffStatus = BuffStatus {
             id: 1012,
             name: String::from("Tenri Jindo Ready"),
             owner_id: player_id,
@@ -228,7 +228,7 @@ impl NinjaDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let HIGI: BuffStatus = BuffStatus {
+        let higi: BuffStatus = BuffStatus {
             id: 1013,
             name: String::from("Higi"),
             owner_id: player_id,
@@ -241,7 +241,7 @@ impl NinjaDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let ZESHO_MEPPO: AttackSkill = AttackSkill {
+        let zesho_meppo: AttackSkill = AttackSkill {
             id: 1000,
             name: String::from("Zesho Meppo"),
             player_id,
@@ -258,10 +258,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![
-                ResourceRequirements::Resource(0, 50),
-                UseBuff(HIGI.get_id()),
-            ],
+            resource_required: vec![Resource(0, 50), UseBuff(higi.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -269,17 +266,17 @@ impl NinjaDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let RAITON: AttackSkill = AttackSkill {
+        let raiton: AttackSkill = AttackSkill {
             id: 1001,
             name: String::from("Raiton"),
             player_id,
             potency: 740,
             use_type: UseType::UseOnTarget,
             trait_percent: 100,
-            additional_skill_events: vec![FfxivEvent::ApplyBuffStack(
+            additional_skill_events: vec![ApplyBuffStack(
                 player_id,
                 player_id,
-                RAIJUREADY.clone(),
+                raiju_ready.clone(),
                 30000,
                 true,
                 0,
@@ -301,7 +298,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let RAIJU: AttackSkill = AttackSkill {
+        let raiju: AttackSkill = AttackSkill {
             id: 1002,
             name: String::from("Fleeting Raiju"),
             player_id,
@@ -318,7 +315,7 @@ impl NinjaDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(1001)],
+            resource_required: vec![UseBuff(1001)],
             resource_created: ResourceTable::from([(0, 5)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -326,7 +323,7 @@ impl NinjaDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let HYOSHO: AttackSkill = AttackSkill {
+        let hyosho: AttackSkill = AttackSkill {
             id: 1003,
             name: String::from("Hyosho Ranryu"),
             player_id,
@@ -343,7 +340,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(1005)],
+            resource_required: vec![UseBuff(1005)],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -351,17 +348,17 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let SUITON: AttackSkill = AttackSkill {
+        let suiton: AttackSkill = AttackSkill {
             id: 1004,
             name: String::from("Suiton"),
             player_id,
             potency: 580,
             use_type: UseType::UseOnTarget,
             trait_percent: 100,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                SUITON_STATUS.clone(),
+                suiton_status.clone(),
                 20000,
                 20000,
                 0,
@@ -383,7 +380,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let SPINNING_EDGE: AttackSkill = AttackSkill {
+        let spinning_edge: AttackSkill = AttackSkill {
             id: 1005,
             name: String::from("Spinning Edge"),
             player_id,
@@ -408,7 +405,7 @@ impl NinjaDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let GUST_SLASH: AttackSkill = AttackSkill {
+        let gust_slash: AttackSkill = AttackSkill {
             id: 1006,
             name: String::from("Gust Slash"),
             player_id,
@@ -433,7 +430,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let AEOLIAN_EDGE: AttackSkill = AttackSkill {
+        let aeolian_edge: AttackSkill = AttackSkill {
             id: 1007,
             name: String::from("Aeolian Edge"),
             player_id,
@@ -458,7 +455,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let ARMOR_CRUSH: AttackSkill = AttackSkill {
+        let armor_crush: AttackSkill = AttackSkill {
             id: 1008,
             name: String::from("Armor Crush"),
             player_id,
@@ -483,7 +480,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let DOKUMORI: AttackSkill = AttackSkill {
+        let dokumori: AttackSkill = AttackSkill {
             id: 1009,
             name: String::from("Dokumori"),
             player_id,
@@ -491,8 +488,8 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 100,
             additional_skill_events: vec![
-                FfxivEvent::ApplyDebuff(player_id, DOKUMORI_STATUS.clone(), 20000, 20000, 0),
-                ApplyBuff(player_id, player_id, HIGI.clone(), 30000, 30000, 0),
+                FfxivEvent::ApplyDebuff(player_id, dokumori_status.clone(), 20000, 20000, 0),
+                ApplyBuff(player_id, player_id, higi.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -511,7 +508,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let KUNAIS_BANE: AttackSkill = AttackSkill {
+        let kunais_bane: AttackSkill = AttackSkill {
             id: 1010,
             name: String::from("Kunai's Bane"),
             player_id,
@@ -520,7 +517,7 @@ impl NinjaDatabase {
             trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
-                KUNAIS_BANE_STATUS.clone(),
+                kunais_bane_status.clone(),
                 15000,
                 15000,
                 0,
@@ -534,7 +531,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 60000,
-            resource_required: vec![ResourceRequirements::UseBuff(1002)],
+            resource_required: vec![UseBuff(1002)],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -542,17 +539,17 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let KASSATSU: AttackSkill = AttackSkill {
+        let kassatsu: AttackSkill = AttackSkill {
             id: 1011,
             name: String::from("Kassatsu"),
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
             trait_percent: 100,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                KASSATSU_STATUS.clone(),
+                kassatsu_status.clone(),
                 15000,
                 15000,
                 0,
@@ -574,7 +571,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let BHAVACAKRA: AttackSkill = AttackSkill {
+        let bhavacakra: AttackSkill = AttackSkill {
             id: 1012,
             name: String::from("Bhavakacra"),
             player_id,
@@ -591,7 +588,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::Resource(0, 50)],
+            resource_required: vec![Resource(0, 50)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -599,17 +596,17 @@ impl NinjaDatabase {
             stack_skill_id: None,
             is_guaranteed_direct_hit: false,
         };
-        let TENCHIJIN: AttackSkill = AttackSkill {
+        let tenchijin: AttackSkill = AttackSkill {
             id: 1013,
             name: String::from("Ten Chi Jin"),
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
             trait_percent: 100,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                TENCHIJIN_STATUS.clone(),
+                tenchijin_status.clone(),
                 6000,
                 6000,
                 0,
@@ -631,17 +628,17 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let FUMA_TENCHIJIN: AttackSkill = AttackSkill {
+        let fuma_tenchijin: AttackSkill = AttackSkill {
             id: 1014,
             name: String::from("Fuma Shuriken-TCJ"),
             player_id,
             potency: 500,
             use_type: UseType::UseOnTarget,
             trait_percent: 100,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                TCJ_1.clone(),
+                tcj_1.clone(),
                 6000,
                 6000,
                 0,
@@ -655,7 +652,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(TENCHIJIN_STATUS.get_id())],
+            resource_required: vec![UseBuff(tenchijin_status.get_id())],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -663,7 +660,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let RAITON_TENCHIJIN: AttackSkill = AttackSkill {
+        let raiton_tenchijin: AttackSkill = AttackSkill {
             id: 1015,
             name: String::from("Raiton-TCJ"),
             player_id,
@@ -671,8 +668,8 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 100,
             additional_skill_events: vec![
-                FfxivEvent::ApplyBuff(player_id, player_id, TCJ_2.clone(), 6000, 6000, 0),
-                ApplyBuffStack(player_id, player_id, RAIJUREADY.clone(), 30000, true, 0),
+                ApplyBuff(player_id, player_id, tcj_2.clone(), 6000, 6000, 0),
+                ApplyBuffStack(player_id, player_id, raiju_ready.clone(), 30000, true, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -683,7 +680,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(TCJ_1.get_id())],
+            resource_required: vec![UseBuff(tcj_1.get_id())],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -691,7 +688,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let SUITON_TENCHIJIN: AttackSkill = AttackSkill {
+        let suiton_tenchijin: AttackSkill = AttackSkill {
             id: 1016,
             name: String::from("Suiton-TCJ"),
             player_id,
@@ -699,11 +696,11 @@ impl NinjaDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 100,
             additional_skill_events: vec![
-                FfxivEvent::ApplyBuff(player_id, player_id, SUITON_STATUS.clone(), 20000, 20000, 0),
+                ApplyBuff(player_id, player_id, suiton_status.clone(), 20000, 20000, 0),
                 ApplyBuff(
                     player_id,
                     player_id,
-                    TENRI_JINDO_READY.clone(),
+                    tenri_jindo_ready.clone(),
                     30000,
                     30000,
                     0,
@@ -718,7 +715,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(TCJ_2.get_id())],
+            resource_required: vec![UseBuff(tcj_2.get_id())],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -726,7 +723,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let BUNSHIN: AttackSkill = AttackSkill {
+        let bunshin: AttackSkill = AttackSkill {
             id: 1017,
             name: String::from("Bunshin"),
             player_id,
@@ -734,18 +731,18 @@ impl NinjaDatabase {
             potency: 0,
             trait_percent: 100,
             additional_skill_events: vec![
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    BUNSHIN_STATUS.clone(),
+                    bunshin_status.clone(),
                     45000,
                     45000,
                     0,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    BUNSHIN_CLONE_STATUS.clone(),
+                    bunshin_clone_status.clone(),
                     30000,
                     30000,
                     0,
@@ -760,7 +757,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 90000,
-            resource_required: vec![ResourceRequirements::Resource(0, 50)],
+            resource_required: vec![Resource(0, 50)],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -768,7 +765,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let DREAM: AttackSkill = AttackSkill {
+        let dream: AttackSkill = AttackSkill {
             id: 1018,
             name: String::from("Dream Within a Dream"),
             player_id,
@@ -793,7 +790,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let PHANTOM_KAMAITACHI: AttackSkill = AttackSkill {
+        let phantom_kamaitachi: AttackSkill = AttackSkill {
             id: 1019,
             name: String::from("Phantom Kamaitachi"),
             player_id,
@@ -810,7 +807,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(1007)],
+            resource_required: vec![UseBuff(1007)],
             resource_created: ResourceTable::from([(0, 10)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -818,17 +815,17 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let MEISUI: AttackSkill = AttackSkill {
+        let meisui: AttackSkill = AttackSkill {
             id: 1020,
             name: String::from("Meisui"),
             player_id,
             potency: 0,
             use_type: UseType::NoTarget,
             trait_percent: 100,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                MEISUI_STATUS.clone(),
+                meisui_status.clone(),
                 30000,
                 30000,
                 0,
@@ -842,7 +839,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(1002)],
+            resource_required: vec![UseBuff(1002)],
             resource_created: ResourceTable::from([(0, 50)]),
             current_cooldown_millisecond: 120000,
             stacks: 1,
@@ -850,7 +847,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let BHAVACAKRA_MEISUI: AttackSkill = AttackSkill {
+        let bhavacakra_meisui: AttackSkill = AttackSkill {
             id: 1021,
             name: String::from("Bhavakacra-Meisui"),
             player_id,
@@ -867,10 +864,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 1000,
-            resource_required: vec![
-                ResourceRequirements::Resource(0, 50),
-                ResourceRequirements::UseBuff(1008),
-            ],
+            resource_required: vec![Resource(0, 50), UseBuff(1008)],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -878,7 +872,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let BUNSHIN_STACK: AttackSkill = AttackSkill {
+        let bunshin_stack: AttackSkill = AttackSkill {
             id: 1022,
             name: String::from("Bunshin-Stack"),
             player_id,
@@ -895,7 +889,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(BUNSHIN_CLONE_STATUS.id)],
+            resource_required: vec![UseBuff(bunshin_clone_status.id)],
             resource_created: ResourceTable::from([(0, 5)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -903,7 +897,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let MUDRA: AttackSkill = AttackSkill {
+        let mudra: AttackSkill = AttackSkill {
             id: 1023,
             name: String::from("Mudra"),
             player_id,
@@ -928,7 +922,7 @@ impl NinjaDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let TENRI_JINDO: AttackSkill = AttackSkill {
+        let tenri_jindo: AttackSkill = AttackSkill {
             id: 1024,
             name: String::from("Tenri Jindo"),
             player_id,
@@ -945,7 +939,7 @@ impl NinjaDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(TENRI_JINDO_READY.id)],
+            resource_required: vec![UseBuff(tenri_jindo_ready.id)],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -954,7 +948,7 @@ impl NinjaDatabase {
             is_guaranteed_direct_hit: false,
         };
 
-        let ZESHO_MEPPO_MEISUI: AttackSkill = AttackSkill {
+        let zesho_meppo_meisui: AttackSkill = AttackSkill {
             id: 1025,
             name: String::from("Zesho Meppo"),
             player_id,
@@ -973,8 +967,8 @@ impl NinjaDatabase {
             cooldown_millisecond: 0,
             resource_required: vec![
                 Resource(0, 50),
-                UseBuff(HIGI.get_id()),
-                UseBuff(MEISUI_STATUS.get_id()),
+                UseBuff(higi.get_id()),
+                UseBuff(meisui_status.get_id()),
             ],
             resource_created: Default::default(),
             current_cooldown_millisecond: 0,
@@ -987,48 +981,48 @@ impl NinjaDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         Self {
-            zesho_meppo: ZESHO_MEPPO,
-            raiton: RAITON,
-            raiju: RAIJU,
-            hyosho: HYOSHO,
-            suiton: SUITON,
-            spinning_edge: SPINNING_EDGE,
-            gust_slash: GUST_SLASH,
-            aeolian_edge: AEOLIAN_EDGE,
-            armor_crush: ARMOR_CRUSH,
-            dokumori: DOKUMORI,
-            kunais_bane: KUNAIS_BANE,
-            kassatsu: KASSATSU,
-            bhavacakra: BHAVACAKRA,
-            tenchijin: TENCHIJIN,
-            fuma_tenchijin: FUMA_TENCHIJIN,
-            raiton_tenchijin: RAITON_TENCHIJIN,
-            suiton_tenchijin: SUITON_TENCHIJIN,
-            bunshin: BUNSHIN,
-            dream: DREAM,
-            phantom_kamaitachi: PHANTOM_KAMAITACHI,
-            meisui: MEISUI,
-            bhavacakra_meisui: BHAVACAKRA_MEISUI,
-            bunshin_stack: BUNSHIN_STACK,
-            mudra: MUDRA,
-            tenri_jindo: TENRI_JINDO,
-            zesho_meppo_meisui: ZESHO_MEPPO_MEISUI,
+            zesho_meppo,
+            raiton,
+            raiju,
+            hyosho,
+            suiton,
+            spinning_edge,
+            gust_slash,
+            aeolian_edge,
+            armor_crush,
+            dokumori,
+            kunais_bane,
+            kassatsu,
+            bhavacakra,
+            tenchijin,
+            fuma_tenchijin,
+            raiton_tenchijin,
+            suiton_tenchijin,
+            bunshin,
+            dream,
+            phantom_kamaitachi,
+            meisui,
+            bhavacakra_meisui,
+            bunshin_stack,
+            mudra,
+            tenri_jindo,
+            zesho_meppo_meisui,
 
-            huton_status: HUTON_STATUS,
-            raijuready: RAIJUREADY,
-            suiton_status: SUITON_STATUS,
-            dokumori_status: DOKUMORI_STATUS,
-            kunais_bane_status: KUNAIS_BANE_STATUS,
-            kassatsu_status: KASSATSU_STATUS,
-            tenchijin_status: TENCHIJIN_STATUS,
-            bunshin_status: BUNSHIN_STATUS,
-            meisui_status: MEISUI_STATUS,
-            bunshin_clone_status: BUNSHIN_CLONE_STATUS,
+            huton_status,
+            raijuready: raiju_ready,
+            suiton_status,
+            dokumori_status,
+            kunais_bane_status,
+            kassatsu_status,
+            tenchijin_status,
+            bunshin_status,
+            meisui_status,
+            bunshin_clone_status,
 
-            tcj_1: TCJ_1,
-            tcj_2: TCJ_2,
-            tenri_jindo_ready: TENRI_JINDO_READY,
-            higi: HIGI,
+            tcj_1,
+            tcj_2,
+            tenri_jindo_ready,
+            higi,
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,
         }

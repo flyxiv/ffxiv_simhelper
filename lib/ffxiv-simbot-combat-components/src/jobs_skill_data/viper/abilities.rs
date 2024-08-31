@@ -52,7 +52,7 @@ pub(crate) struct ViperDatabase {
 
 impl ViperDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let HUNTERS_INSTINCT: BuffStatus = BuffStatus {
+        let hunters_instinct: BuffStatus = BuffStatus {
             id: 2101,
             name: String::from("Hunter's Instinct"),
             stacks: 1,
@@ -64,7 +64,7 @@ impl ViperDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SWIFTSCALED: BuffStatus = BuffStatus {
+        let swiftscaled: BuffStatus = BuffStatus {
             id: 2102,
             name: String::from("Swiftscaled"),
             owner_id: player_id,
@@ -76,7 +76,7 @@ impl ViperDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let HINDSTUNG_VENOM: BuffStatus = BuffStatus {
+        let hindstung_venom: BuffStatus = BuffStatus {
             id: 2103,
             name: String::from("Hindstung Venom"),
             owner_id: player_id,
@@ -88,7 +88,7 @@ impl ViperDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let HINDSBANE_VENOM: BuffStatus = BuffStatus {
+        let hindsbane_venom: BuffStatus = BuffStatus {
             id: 2104,
             name: String::from("Hindsbane Venom"),
             owner_id: player_id,
@@ -100,7 +100,7 @@ impl ViperDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FLANKSBANE_VENOM: BuffStatus = BuffStatus {
+        let flanksbane_venom: BuffStatus = BuffStatus {
             id: 2105,
             name: String::from("Flanksbane Venom"),
             owner_id: player_id,
@@ -112,7 +112,7 @@ impl ViperDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FLANKSTUNG_VENOM: BuffStatus = BuffStatus {
+        let flankstung_venom: BuffStatus = BuffStatus {
             id: 2106,
             name: String::from("Flankstung Venom"),
             owner_id: player_id,
@@ -124,7 +124,7 @@ impl ViperDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let READY_TO_REAWAKEN: BuffStatus = BuffStatus {
+        let ready_to_reawaken: BuffStatus = BuffStatus {
             id: 2107,
             name: String::from("Ready to Reawaken"),
             stacks: 1,
@@ -136,7 +136,7 @@ impl ViperDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let HONED_REAVERS: BuffStatus = BuffStatus {
+        let honed_reavers: BuffStatus = BuffStatus {
             id: 2108,
             name: String::from("Honed Reavers"),
             stacks: 1,
@@ -148,7 +148,7 @@ impl ViperDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let HONED_STEELS: BuffStatus = BuffStatus {
+        let honed_steels: BuffStatus = BuffStatus {
             id: 2109,
             name: String::from("Honed Steels"),
             stacks: 1,
@@ -161,7 +161,7 @@ impl ViperDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let STEEL_FANGS: AttackSkill = AttackSkill {
+        let steel_fangs: AttackSkill = AttackSkill {
             id: 2100,
             name: String::from("Steel Fangs"),
             player_id,
@@ -170,7 +170,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                HONED_REAVERS.clone(),
+                honed_reavers.clone(),
                 60000,
                 60000,
                 0,
@@ -184,7 +184,7 @@ impl ViperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(HONED_STEELS.id)],
+            resource_required: vec![UseBuff(honed_steels.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -193,7 +193,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let DREAD_FANGS: AttackSkill = AttackSkill {
+        let dread_fangs: AttackSkill = AttackSkill {
             id: 2101,
             name: String::from("Dread Fangs"),
             player_id,
@@ -202,7 +202,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                HONED_STEELS.clone(),
+                honed_steels.clone(),
                 60000,
                 60000,
                 0,
@@ -216,7 +216,7 @@ impl ViperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(HONED_REAVERS.id)],
+            resource_required: vec![UseBuff(honed_reavers.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -225,7 +225,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let DREADWINDER: AttackSkill = AttackSkill {
+        let dreadwinder: AttackSkill = AttackSkill {
             id: 2102,
             name: String::from("Dreadwinder"),
             player_id,
@@ -250,7 +250,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HUNTERS_STING: AttackSkill = AttackSkill {
+        let hunters_sting: AttackSkill = AttackSkill {
             id: 2103,
             name: String::from("Hunter's Sting"),
             player_id,
@@ -259,7 +259,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                HUNTERS_INSTINCT.clone(),
+                hunters_instinct.clone(),
                 40000,
                 40000,
                 0,
@@ -282,7 +282,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SWIFTSKINS_STING: AttackSkill = AttackSkill {
+        let swiftskins_sting: AttackSkill = AttackSkill {
             id: 2104,
             name: String::from("Swiftskin's Sting"),
             player_id,
@@ -291,7 +291,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                SWIFTSCALED.clone(),
+                swiftscaled.clone(),
                 40000,
                 40000,
                 0,
@@ -314,7 +314,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let FLANKSTING_STRIKE: AttackSkill = AttackSkill {
+        let flanksting_strike: AttackSkill = AttackSkill {
             id: 2105,
             name: String::from("Flanksting Strike"),
             player_id,
@@ -323,7 +323,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                HINDSTUNG_VENOM.clone(),
+                hindstung_venom.clone(),
                 60000,
                 60000,
                 0,
@@ -337,7 +337,7 @@ impl ViperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(FLANKSTUNG_VENOM.id)],
+            resource_required: vec![UseBuff(flankstung_venom.id)],
             resource_created: HashMap::from([(0, 10), (8, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -346,7 +346,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let FLANKSBANE_FANG: AttackSkill = AttackSkill {
+        let flanksbane_fang: AttackSkill = AttackSkill {
             id: 2106,
             name: String::from("Flanksbane Fang"),
             player_id,
@@ -355,7 +355,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                HINDSBANE_VENOM.clone(),
+                hindsbane_venom.clone(),
                 60000,
                 60000,
                 0,
@@ -369,7 +369,7 @@ impl ViperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(FLANKSBANE_VENOM.id)],
+            resource_required: vec![UseBuff(flanksbane_venom.id)],
             resource_created: HashMap::from([(0, 10), (8, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -378,7 +378,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HINDSTING_STRIKE: AttackSkill = AttackSkill {
+        let hindsting_strike: AttackSkill = AttackSkill {
             id: 2107,
             name: String::from("Hindsting Strike"),
             player_id,
@@ -387,7 +387,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                FLANKSBANE_VENOM.clone(),
+                flanksbane_venom.clone(),
                 60000,
                 60000,
                 0,
@@ -401,7 +401,7 @@ impl ViperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(HINDSTUNG_VENOM.id)],
+            resource_required: vec![UseBuff(hindstung_venom.id)],
             resource_created: HashMap::from([(0, 10), (8, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -410,7 +410,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HINDSBANE_FANG: AttackSkill = AttackSkill {
+        let hindsbane_fang: AttackSkill = AttackSkill {
             id: 2108,
             name: String::from("Hindsbane Fang"),
             player_id,
@@ -419,7 +419,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                FLANKSTUNG_VENOM.clone(),
+                flankstung_venom.clone(),
                 60000,
                 60000,
                 0,
@@ -433,7 +433,7 @@ impl ViperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(HINDSBANE_VENOM.id)],
+            resource_required: vec![UseBuff(hindsbane_venom.id)],
             resource_created: HashMap::from([(0, 10), (8, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -443,7 +443,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let NORMAL_FILLER1: AttackSkill = AttackSkill {
+        let normal_filler1: AttackSkill = AttackSkill {
             id: 2109,
             name: String::from("Normal Filler1"),
             player_id,
@@ -468,7 +468,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let NORMAL_FILLER2: AttackSkill = AttackSkill {
+        let normal_filler2: AttackSkill = AttackSkill {
             id: 2110,
             name: String::from("Normal Filler2"),
             player_id,
@@ -493,7 +493,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HUNTERS_COIL: AttackSkill = AttackSkill {
+        let hunters_coil: AttackSkill = AttackSkill {
             id: 2111,
             name: String::from("Hunter's Coil"),
             player_id,
@@ -502,7 +502,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                HUNTERS_INSTINCT.clone(),
+                hunters_instinct.clone(),
                 40000,
                 40000,
                 0,
@@ -525,7 +525,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SWIFTSKINS_COIL: AttackSkill = AttackSkill {
+        let swiftskins_coil: AttackSkill = AttackSkill {
             id: 2112,
             name: String::from("Swiftskin's Coil"),
             player_id,
@@ -534,7 +534,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                SWIFTSCALED.clone(),
+                swiftscaled.clone(),
                 40000,
                 40000,
                 0,
@@ -557,7 +557,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SERPENTS_IRE: AttackSkill = AttackSkill {
+        let serpents_ire: AttackSkill = AttackSkill {
             id: 2113,
             name: String::from("Serpent's Ire"),
             player_id,
@@ -566,7 +566,7 @@ impl ViperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                READY_TO_REAWAKEN.clone(),
+                ready_to_reawaken.clone(),
                 30000,
                 30000,
                 0,
@@ -589,7 +589,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let REAWAKEN: AttackSkill = AttackSkill {
+        let reawaken: AttackSkill = AttackSkill {
             id: 2114,
             name: String::from("Reawaken"),
             player_id,
@@ -614,7 +614,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let FIRST_GENERATION: AttackSkill = AttackSkill {
+        let first_generation: AttackSkill = AttackSkill {
             id: 2115,
             name: String::from("First Generation"),
             player_id,
@@ -639,7 +639,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SECOND_GENERATION: AttackSkill = AttackSkill {
+        let second_generation: AttackSkill = AttackSkill {
             id: 2116,
             name: String::from("Second Generation"),
             player_id,
@@ -664,7 +664,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let THIRD_GENERATION: AttackSkill = AttackSkill {
+        let third_generation: AttackSkill = AttackSkill {
             id: 2117,
             name: String::from("Third Generation"),
             player_id,
@@ -689,7 +689,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let FOURTH_GENERATION: AttackSkill = AttackSkill {
+        let fourth_generation: AttackSkill = AttackSkill {
             id: 2118,
             name: String::from("Fourth Generation"),
             player_id,
@@ -715,7 +715,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let OUROBOROS: AttackSkill = AttackSkill {
+        let ouroboros: AttackSkill = AttackSkill {
             id: 2119,
             name: String::from("Ouroboros"),
             player_id,
@@ -741,7 +741,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let AWAKENED_FILLER: AttackSkill = AttackSkill {
+        let awakened_filler: AttackSkill = AttackSkill {
             id: 2120,
             name: String::from("Awakened Filler"),
             player_id,
@@ -766,7 +766,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let REAWAKEN_PROC: AttackSkill = AttackSkill {
+        let reawaken_proc: AttackSkill = AttackSkill {
             id: 2121,
             name: String::from("Reawaken"),
             player_id,
@@ -782,7 +782,7 @@ impl ViperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(READY_TO_REAWAKEN.id)],
+            resource_required: vec![UseBuff(ready_to_reawaken.id)],
             resource_created: HashMap::from([(7, 5)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -791,7 +791,7 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let UNCOILED_FURY: AttackSkill = AttackSkill {
+        let uncoiled_fury: AttackSkill = AttackSkill {
             id: 2122,
             name: String::from("Uncoiled Fury"),
             player_id,
@@ -817,7 +817,7 @@ impl ViperDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let DEATH_RATTLE: AttackSkill = AttackSkill {
+        let death_rattle: AttackSkill = AttackSkill {
             id: 2123,
             name: String::from("Death Rattle"),
             player_id,
@@ -846,40 +846,40 @@ impl ViperDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         ViperDatabase {
-            steel_fangs: STEEL_FANGS,
-            dread_fangs: DREAD_FANGS,
-            dreadwinder: DREADWINDER,
-            hunters_sting: HUNTERS_STING,
-            swiftskins_sting: SWIFTSKINS_STING,
-            flankstings_strike: FLANKSTING_STRIKE,
-            flanksbane_fang: FLANKSBANE_FANG,
-            hindsting_strike: HINDSTING_STRIKE,
-            hindsbane_fang: HINDSBANE_FANG,
-            normal_filler1: NORMAL_FILLER1,
-            normal_filler2: NORMAL_FILLER2,
-            hunters_coil: HUNTERS_COIL,
-            swiftskins_coil: SWIFTSKINS_COIL,
-            serpents_ire: SERPENTS_IRE,
-            reawaken: REAWAKEN,
-            first_generation: FIRST_GENERATION,
-            second_generation: SECOND_GENERATION,
-            third_generation: THIRD_GENERATION,
-            fourth_generation: FOURTH_GENERATION,
-            ouroboros: OUROBOROS,
-            reawaken_filler: AWAKENED_FILLER,
-            reawaken_proc: REAWAKEN_PROC,
-            uncoiled_fury: UNCOILED_FURY,
-            death_rattle: DEATH_RATTLE,
+            steel_fangs,
+            dread_fangs,
+            dreadwinder,
+            hunters_sting,
+            swiftskins_sting,
+            flankstings_strike: flanksting_strike,
+            flanksbane_fang,
+            hindsting_strike,
+            hindsbane_fang,
+            normal_filler1,
+            normal_filler2,
+            hunters_coil,
+            swiftskins_coil,
+            serpents_ire,
+            reawaken,
+            first_generation,
+            second_generation,
+            third_generation,
+            fourth_generation,
+            ouroboros,
+            reawaken_filler: awakened_filler,
+            reawaken_proc,
+            uncoiled_fury,
+            death_rattle,
 
-            hunters_instinct: HUNTERS_INSTINCT,
-            swiftscaled: SWIFTSCALED,
-            hindstung_venom: HINDSTUNG_VENOM,
-            hindsbane_venom: HINDSBANE_VENOM,
-            flanksbane_venom: FLANKSBANE_VENOM,
-            flankstung_venom: FLANKSTUNG_VENOM,
-            ready_to_reawaken: READY_TO_REAWAKEN,
-            honed_reavers: HONED_REAVERS,
-            honed_steels: HONED_STEELS,
+            hunters_instinct,
+            swiftscaled,
+            hindstung_venom,
+            hindsbane_venom,
+            flanksbane_venom,
+            flankstung_venom,
+            ready_to_reawaken,
+            honed_reavers,
+            honed_steels,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

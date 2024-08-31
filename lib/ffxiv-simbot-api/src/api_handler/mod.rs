@@ -6,7 +6,7 @@ use std::collections::HashSet;
 pub mod simulate;
 pub(crate) mod statcompare;
 
-fn get_composition_buff_percent(party: &Vec<PlayerInfoRequest>) -> IncreaseType {
+fn get_composition_buff_percent(party: &[PlayerInfoRequest]) -> IncreaseType {
     if party.len() == 1 {
         return 0;
     }

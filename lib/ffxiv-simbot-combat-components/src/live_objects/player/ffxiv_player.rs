@@ -230,7 +230,7 @@ impl FfxivPlayer {
 
     fn insert_turn_update_internal_event(
         &self,
-        next_skill_ids: &Vec<SkillUsageInfo>,
+        next_skill_ids: &[SkillUsageInfo],
         turn_info: TurnInfo,
     ) {
         let update_turn_event = match turn_info.turn_type {

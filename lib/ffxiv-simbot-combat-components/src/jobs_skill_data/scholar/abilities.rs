@@ -33,7 +33,7 @@ pub(crate) struct ScholarDatabase {
 
 impl ScholarDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let BIOLYSIS_DOT: DebuffStatus = DebuffStatus {
+        let biolysis_dot: DebuffStatus = DebuffStatus {
             id: 600,
             owner_id: player_id,
             potency: Some(75),
@@ -50,7 +50,7 @@ impl ScholarDatabase {
             snapshotted_infos: Default::default(),
         };
 
-        let CHAIN_STRATAGEM_DEBUFF: DebuffStatus = DebuffStatus {
+        let chain_stratagem_buff: DebuffStatus = DebuffStatus {
             id: 601,
             owner_id: player_id,
             potency: None,
@@ -66,7 +66,7 @@ impl ScholarDatabase {
             name: String::from("Chain Stratagem"),
             snapshotted_infos: Default::default(),
         };
-        let IMPACT_IMMINENT: BuffStatus = BuffStatus {
+        let impact_imminent: BuffStatus = BuffStatus {
             id: 602,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -78,7 +78,7 @@ impl ScholarDatabase {
             name: String::from("Impact Imminent"),
             trigger_proc_event_on_gcd: vec![],
         };
-        let BANEFUL_IMPACTION_DOT: DebuffStatus = DebuffStatus {
+        let baneful_impaction_dot: DebuffStatus = DebuffStatus {
             id: 603,
             owner_id: player_id,
             potency: Some(140),
@@ -95,7 +95,7 @@ impl ScholarDatabase {
             snapshotted_infos: Default::default(),
         };
 
-        let BROIL_IV: AttackSkill = AttackSkill {
+        let broil_iv: AttackSkill = AttackSkill {
             id: 600,
             name: "BROIL_IV".to_string(),
             player_id,
@@ -120,7 +120,7 @@ impl ScholarDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let BIOLYSIS: AttackSkill = AttackSkill {
+        let biolysis: AttackSkill = AttackSkill {
             id: 601,
             name: "Biolysis".to_string(),
             player_id,
@@ -128,7 +128,7 @@ impl ScholarDatabase {
             trait_percent: 130,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
-                BIOLYSIS_DOT.clone(),
+                biolysis_dot.clone(),
                 30000,
                 30000,
                 0,
@@ -151,7 +151,7 @@ impl ScholarDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let AETHERFLOW: AttackSkill = AttackSkill {
+        let aetherflow: AttackSkill = AttackSkill {
             id: 602,
             name: "Aetherflow".to_string(),
             player_id,
@@ -176,7 +176,7 @@ impl ScholarDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let ENERGY_DRAIN: AttackSkill = AttackSkill {
+        let energy_drain: AttackSkill = AttackSkill {
             id: 603,
             name: "Energy Drain".to_string(),
             player_id,
@@ -202,7 +202,7 @@ impl ScholarDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let DISSIPATION: AttackSkill = AttackSkill {
+        let dissipation: AttackSkill = AttackSkill {
             id: 604,
             name: "Dissipation".to_string(),
             player_id,
@@ -228,18 +228,18 @@ impl ScholarDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let CHAIN_STRATAGEM: AttackSkill = AttackSkill {
+        let chain_stratagem: AttackSkill = AttackSkill {
             id: 605,
             name: "Chain Stratagem".to_string(),
             player_id,
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                FfxivEvent::ApplyDebuff(player_id, CHAIN_STRATAGEM_DEBUFF.clone(), 20000, 20000, 0),
+                FfxivEvent::ApplyDebuff(player_id, chain_stratagem_buff.clone(), 20000, 20000, 0),
                 FfxivEvent::ApplyBuff(
                     player_id,
                     player_id,
-                    IMPACT_IMMINENT.clone(),
+                    impact_imminent.clone(),
                     30000,
                     30000,
                     0,
@@ -263,7 +263,7 @@ impl ScholarDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let BANEFUL_IMPACTION: AttackSkill = AttackSkill {
+        let baneful_impaction: AttackSkill = AttackSkill {
             id: 606,
             name: "Baneful Impaction".to_string(),
             player_id,
@@ -271,7 +271,7 @@ impl ScholarDatabase {
             trait_percent: 130,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
-                BANEFUL_IMPACTION_DOT.clone(),
+                baneful_impaction_dot.clone(),
                 15000,
                 15000,
                 0,
@@ -284,7 +284,7 @@ impl ScholarDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![UseBuff(IMPACT_IMMINENT.get_id())],
+            resource_required: vec![UseBuff(impact_imminent.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -298,18 +298,18 @@ impl ScholarDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         ScholarDatabase {
-            broil_iv: BROIL_IV,
-            biolysis: BIOLYSIS,
-            aetherflow: AETHERFLOW,
-            energy_drain: ENERGY_DRAIN,
-            dissipation: DISSIPATION,
-            chain_stratagem: CHAIN_STRATAGEM,
-            baneful_impaction: BANEFUL_IMPACTION,
+            broil_iv,
+            biolysis,
+            aetherflow,
+            energy_drain,
+            dissipation,
+            chain_stratagem,
+            baneful_impaction,
 
-            biolysis_dot: BIOLYSIS_DOT,
-            chain_stratagem_debuff: CHAIN_STRATAGEM_DEBUFF,
-            impact_imminent: IMPACT_IMMINENT,
-            baneful_impaction_dot: BANEFUL_IMPACTION_DOT,
+            biolysis_dot,
+            chain_stratagem_debuff: chain_stratagem_buff,
+            impact_imminent,
+            baneful_impaction_dot,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

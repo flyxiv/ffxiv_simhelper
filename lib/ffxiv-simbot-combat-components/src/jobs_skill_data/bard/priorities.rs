@@ -28,11 +28,11 @@ impl PriorityTable for BardPriorityTable {
         self.opener[index].clone()
     }
 
-    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.gcd_priority_table
     }
 
-    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_ogcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.ogcd_priority_table
     }
 
@@ -86,8 +86,8 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
         SkillPriorityInfo {
             skill_id: db.iron_jaws.get_id(),
             prerequisite: Some(SkillPrerequisite::Or(
-                Box::new(SkillPrerequisite::BufforDebuffLessThan(1300, 3000)),
-                Box::new(SkillPrerequisite::BufforDebuffLessThan(1301, 3000)),
+                Box::new(BufforDebuffLessThan(1300, 3000)),
+                Box::new(BufforDebuffLessThan(1301, 3000)),
             )),
         },
         SkillPriorityInfo {
@@ -108,8 +108,8 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
         SkillPriorityInfo {
             skill_id: db.iron_jaws.get_id(),
             prerequisite: Some(SkillPrerequisite::Or(
-                Box::new(SkillPrerequisite::BufforDebuffLessThan(1300, 6000)),
-                Box::new(SkillPrerequisite::BufforDebuffLessThan(1301, 6000)),
+                Box::new(BufforDebuffLessThan(1300, 6000)),
+                Box::new(BufforDebuffLessThan(1301, 6000)),
             )),
         },
         SkillPriorityInfo {
@@ -169,30 +169,30 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
         },
         SkillPriorityInfo {
             skill_id: db.mages_ballad.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(
+            prerequisite: Some(BufforDebuffLessThan(
                 db.wanderers_minuet_status.get_id(),
                 3000,
             )),
         },
         SkillPriorityInfo {
             skill_id: db.pitch_perfect3.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
+            prerequisite: Some(And(
                 Box::new(SkillPrerequisite::HasResource(1, 3)),
-                Box::new(SkillPrerequisite::BufforDebuffLessThan(1303, 3000)),
+                Box::new(BufforDebuffLessThan(1303, 3000)),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.pitch_perfect2.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
+            prerequisite: Some(And(
                 Box::new(SkillPrerequisite::HasResource(1, 2)),
-                Box::new(SkillPrerequisite::BufforDebuffLessThan(1303, 3000)),
+                Box::new(BufforDebuffLessThan(1303, 3000)),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.pitch_perfect1.get_id(),
-            prerequisite: Some(SkillPrerequisite::And(
+            prerequisite: Some(And(
                 Box::new(SkillPrerequisite::HasResource(1, 1)),
-                Box::new(SkillPrerequisite::BufforDebuffLessThan(1303, 3000)),
+                Box::new(BufforDebuffLessThan(1303, 3000)),
             )),
         },
         SkillPriorityInfo {
@@ -209,11 +209,11 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
         },
         SkillPriorityInfo {
             skill_id: db.barrage.get_id(),
-            prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+            prerequisite: Some(MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {
             skill_id: db.heartbreak_shot.get_id(),
-            prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+            prerequisite: Some(MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {
             skill_id: db.side_winder.get_id(),

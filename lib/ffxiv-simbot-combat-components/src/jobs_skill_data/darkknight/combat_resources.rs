@@ -107,6 +107,7 @@ impl CombatResource for DarkknightCombatResources {
         (ffxiv_events, ffxiv_internal_events)
     }
 
+    fn trigger_on_crit(&mut self) {}
     fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
@@ -115,7 +116,6 @@ impl CombatResource for DarkknightCombatResources {
             self.living_shadow_delay = Some(max(delay_time - elapsed_time, 0))
         }
     }
-    fn trigger_on_crit(&mut self) {}
 }
 
 impl DarkknightCombatResources {

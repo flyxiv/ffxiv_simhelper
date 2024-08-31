@@ -58,7 +58,7 @@ pub(crate) struct DancerDatabase {
 
 impl DancerDatabase {
     pub(crate) fn new(player_id: PlayerIdType, partner_player_id: PlayerIdType) -> Self {
-        let STANDARD_STEP_BUFF: BuffStatus = BuffStatus {
+        let standard_step_buff: BuffStatus = BuffStatus {
             id: 1500,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -70,7 +70,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let STANDARD_STEP_PROC_BUFF: BuffStatus = BuffStatus {
+        let standard_step_proc_buff: BuffStatus = BuffStatus {
             id: 1501,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -85,7 +85,7 @@ impl DancerDatabase {
                 20,
             )],
         };
-        let TECHNICAL_STEP_BUFF: BuffStatus = BuffStatus {
+        let technical_step_buff: BuffStatus = BuffStatus {
             id: 1502,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -97,7 +97,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let TECHNICAL_STEP_PROC_BUFF: BuffStatus = BuffStatus {
+        let technical_step_proc_buff: BuffStatus = BuffStatus {
             id: 1503,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -112,7 +112,7 @@ impl DancerDatabase {
                 20,
             )],
         };
-        let DEVILMENT_BUFF: BuffStatus = BuffStatus {
+        let devilment_buff: BuffStatus = BuffStatus {
             id: 1504,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -127,7 +127,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let THREEFOLD_FAN_DANCE: BuffStatus = BuffStatus {
+        let threefold_fan_dance: BuffStatus = BuffStatus {
             id: 1505,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -139,7 +139,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FOURFOLD_FAN_DANCE: BuffStatus = BuffStatus {
+        let fourfold_fan_dance: BuffStatus = BuffStatus {
             id: 1506,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -151,7 +151,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SILKEN_SYMMETRY: BuffStatus = BuffStatus {
+        let silken_symmetry: BuffStatus = BuffStatus {
             id: 1507,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -163,7 +163,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SILKEN_FLOW: BuffStatus = BuffStatus {
+        let silken_flow: BuffStatus = BuffStatus {
             id: 1508,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -175,7 +175,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FLOURSHING_STARFALL: BuffStatus = BuffStatus {
+        let flourishing_starfall: BuffStatus = BuffStatus {
             id: 1509,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -187,7 +187,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FLOURSHING_SYMMETRY: BuffStatus = BuffStatus {
+        let flourishing_symmetry: BuffStatus = BuffStatus {
             id: 1510,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -199,7 +199,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FLOURSHING_FLOW: BuffStatus = BuffStatus {
+        let flourishing_flow: BuffStatus = BuffStatus {
             id: 1511,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -212,7 +212,7 @@ impl DancerDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let FLOURISHING_FINISH: BuffStatus = BuffStatus {
+        let flourishing_finish: BuffStatus = BuffStatus {
             id: 1512,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -224,7 +224,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let LAST_DANCE_READY: BuffStatus = BuffStatus {
+        let last_dance_ready: BuffStatus = BuffStatus {
             id: 1513,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -236,7 +236,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let DANCE_OF_THE_DAWN_READY: BuffStatus = BuffStatus {
+        let dance_of_the_dawn_ready: BuffStatus = BuffStatus {
             id: 1514,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -248,7 +248,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FINISHING_MOVE_READY: BuffStatus = BuffStatus {
+        let finishing_move_ready: BuffStatus = BuffStatus {
             id: 1515,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -261,7 +261,7 @@ impl DancerDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let CASCADE: AttackSkill = AttackSkill {
+        let cascade: AttackSkill = AttackSkill {
             id: 1500,
             name: "Cascade".to_string(),
             player_id,
@@ -269,10 +269,10 @@ impl DancerDatabase {
             trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![(
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    SILKEN_SYMMETRY.clone(),
+                    silken_symmetry.clone(),
                     30000,
                     30000,
                     0,
@@ -297,7 +297,7 @@ impl DancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let FOUNTAIN: AttackSkill = AttackSkill {
+        let fountain: AttackSkill = AttackSkill {
             id: 1501,
             name: "Fountain".to_string(),
             player_id,
@@ -305,7 +305,7 @@ impl DancerDatabase {
             trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![(
-                FfxivEvent::ApplyBuff(player_id, player_id, SILKEN_FLOW.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, silken_flow.clone(), 30000, 30000, 0),
                 50,
             )],
             combo: Some(0),
@@ -326,41 +326,17 @@ impl DancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let STANDARD_STEP: AttackSkill = AttackSkill {
+        let standard_step: AttackSkill = AttackSkill {
             id: 1502,
             name: "Standard Step".to_string(),
             player_id,
             potency: 850,
             trait_percent: 120,
             additional_skill_events: vec![
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    STANDARD_STEP_BUFF.clone(),
-                    60000,
-                    60000,
-                    0,
-                ),
-                FfxivEvent::ApplyBuff(
-                    player_id,
-                    player_id,
-                    STANDARD_STEP_PROC_BUFF.clone(),
-                    60000,
-                    60000,
-                    0,
-                ),
-                FfxivEvent::ApplyBuff(
-                    player_id,
-                    partner_player_id,
-                    STANDARD_STEP_BUFF.clone(),
-                    60000,
-                    60000,
-                    0,
-                ),
-                FfxivEvent::ApplyBuff(
-                    player_id,
-                    partner_player_id,
-                    STANDARD_STEP_PROC_BUFF.clone(),
+                    standard_step_buff.clone(),
                     60000,
                     60000,
                     0,
@@ -368,7 +344,31 @@ impl DancerDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    LAST_DANCE_READY.clone(),
+                    standard_step_proc_buff.clone(),
+                    60000,
+                    60000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    partner_player_id,
+                    standard_step_buff.clone(),
+                    60000,
+                    60000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    partner_player_id,
+                    standard_step_proc_buff.clone(),
+                    60000,
+                    60000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    last_dance_ready.clone(),
                     30000,
                     30000,
                     0,
@@ -395,33 +395,33 @@ impl DancerDatabase {
 
         let technical_step_delay = 5500;
 
-        let TECHNICAL_STEP: AttackSkill = AttackSkill {
+        let technical_step: AttackSkill = AttackSkill {
             id: 1503,
             name: "Technical Step".to_string(),
             player_id,
             potency: 1300,
             trait_percent: 120,
             additional_skill_events: vec![
-                FfxivEvent::ApplyRaidBuff(player_id, TECHNICAL_STEP_BUFF.clone(), 20000, 20000, 0),
+                FfxivEvent::ApplyRaidBuff(player_id, technical_step_buff.clone(), 20000, 20000, 0),
                 FfxivEvent::ApplyRaidBuff(
                     player_id,
-                    TECHNICAL_STEP_PROC_BUFF.clone(),
+                    technical_step_proc_buff.clone(),
                     20000,
                     20000,
                     technical_step_delay,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    FLOURISHING_FINISH.clone(),
+                    flourishing_finish.clone(),
                     30000,
                     30000,
                     technical_step_delay,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    DANCE_OF_THE_DAWN_READY.clone(),
+                    dance_of_the_dawn_ready.clone(),
                     30000,
                     30000,
                     technical_step_delay,
@@ -446,33 +446,33 @@ impl DancerDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let DEVILMENT: AttackSkill = AttackSkill {
+        let devilment: AttackSkill = AttackSkill {
             id: 1504,
             name: "Devilment".to_string(),
             player_id,
             potency: 0,
             trait_percent: 120,
             additional_skill_events: vec![
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    DEVILMENT_BUFF.clone(),
+                    devilment_buff.clone(),
                     20000,
                     20000,
                     0,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     partner_player_id,
-                    DEVILMENT_BUFF.clone(),
+                    devilment_buff.clone(),
                     20000,
                     20000,
                     0,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    FLOURSHING_STARFALL.clone(),
+                    flourishing_starfall.clone(),
                     20000,
                     20000,
                     0,
@@ -497,49 +497,49 @@ impl DancerDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let FLOURISH: AttackSkill = AttackSkill {
+        let flourish: AttackSkill = AttackSkill {
             id: 1505,
             name: "Flourish".to_string(),
             player_id,
             potency: 0,
             trait_percent: 120,
             additional_skill_events: vec![
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    THREEFOLD_FAN_DANCE.clone(),
+                    threefold_fan_dance.clone(),
                     30000,
                     30000,
                     0,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    FOURFOLD_FAN_DANCE.clone(),
+                    fourfold_fan_dance.clone(),
                     30000,
                     30000,
                     0,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    FLOURSHING_FLOW.clone(),
+                    flourishing_flow.clone(),
                     30000,
                     30000,
                     0,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    FLOURSHING_SYMMETRY.clone(),
+                    flourishing_symmetry.clone(),
                     30000,
                     30000,
                     0,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    FINISHING_MOVE_READY.clone(),
+                    finishing_move_ready.clone(),
                     30000,
                     30000,
                     0,
@@ -564,7 +564,7 @@ impl DancerDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let FAN_DANCE_I: AttackSkill = AttackSkill {
+        let fan_dance_i: AttackSkill = AttackSkill {
             id: 1506,
             name: "Fan Dance I".to_string(),
             player_id,
@@ -572,10 +572,10 @@ impl DancerDatabase {
             trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![(
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    THREEFOLD_FAN_DANCE.clone(),
+                    threefold_fan_dance.clone(),
                     30000,
                     30000,
                     0,
@@ -589,7 +589,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
-            resource_required: vec![ResourceRequirements::Resource(1, 1)],
+            resource_required: vec![Resource(1, 1)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -600,7 +600,7 @@ impl DancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let FAN_DANCE_III: AttackSkill = AttackSkill {
+        let fan_dance_iii: AttackSkill = AttackSkill {
             id: 1507,
             name: "Fan Dance III".to_string(),
             player_id,
@@ -615,7 +615,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
-            resource_required: vec![ResourceRequirements::UseBuff(THREEFOLD_FAN_DANCE.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(threefold_fan_dance.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -625,7 +625,7 @@ impl DancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let FAN_DANCE_IV: AttackSkill = AttackSkill {
+        let fan_dance_iv: AttackSkill = AttackSkill {
             id: 1508,
             name: "Fan Dance IV".to_string(),
             player_id,
@@ -640,7 +640,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
-            resource_required: vec![ResourceRequirements::UseBuff(FOURFOLD_FAN_DANCE.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(fourfold_fan_dance.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -651,7 +651,7 @@ impl DancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let REVERSE_CASCADE: AttackSkill = AttackSkill {
+        let reverse_cascade: AttackSkill = AttackSkill {
             id: 1509,
             name: "Reverse Cascade".to_string(),
             player_id,
@@ -669,7 +669,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(SILKEN_SYMMETRY.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(silken_symmetry.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -679,7 +679,7 @@ impl DancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let FOUNTAINFALL: AttackSkill = AttackSkill {
+        let fountainfall: AttackSkill = AttackSkill {
             id: 1510,
             name: "Fountainfall".to_string(),
             player_id,
@@ -697,7 +697,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(SILKEN_FLOW.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(silken_flow.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -707,7 +707,7 @@ impl DancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let SABER_DANCE: AttackSkill = AttackSkill {
+        let saber_dance: AttackSkill = AttackSkill {
             id: 1511,
             name: "Saber Dance".to_string(),
             player_id,
@@ -722,7 +722,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::Resource(0, 50)],
+            resource_required: vec![Resource(0, 50)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -733,7 +733,7 @@ impl DancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let STARFALL_DANCE: AttackSkill = AttackSkill {
+        let starfall_dance: AttackSkill = AttackSkill {
             id: 1512,
             name: "Starfall Dance".to_string(),
             player_id,
@@ -748,7 +748,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(FLOURSHING_STARFALL.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(flourishing_starfall.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
             is_guaranteed_direct_hit: true,
@@ -759,7 +759,7 @@ impl DancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let REVERSE_CASCADE_FLOURISH: AttackSkill = AttackSkill {
+        let reverse_cascade_flourish: AttackSkill = AttackSkill {
             id: 1513,
             name: "Reverse Cascade Flourish".to_string(),
             player_id,
@@ -777,7 +777,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(FLOURSHING_SYMMETRY.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(flourishing_symmetry.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -788,7 +788,7 @@ impl DancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let FOUNTAINFALL_FLOURISH: AttackSkill = AttackSkill {
+        let fountainfall_flourish: AttackSkill = AttackSkill {
             id: 1514,
             name: "Fountainfall Flourish".to_string(),
             player_id,
@@ -806,7 +806,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(FLOURSHING_FLOW.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(flourishing_flow.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -817,41 +817,41 @@ impl DancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let TILLANA: AttackSkill = AttackSkill {
+        let tillana: AttackSkill = AttackSkill {
             id: 1515,
             name: "Tillana".to_string(),
             player_id,
             potency: 600,
             trait_percent: 120,
             additional_skill_events: vec![
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    STANDARD_STEP_BUFF.clone(),
+                    standard_step_buff.clone(),
                     60000,
                     60000,
                     0,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    STANDARD_STEP_PROC_BUFF.clone(),
+                    standard_step_proc_buff.clone(),
                     60000,
                     60000,
                     0,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     partner_player_id,
-                    STANDARD_STEP_BUFF.clone(),
+                    standard_step_buff.clone(),
                     60000,
                     60000,
                     0,
                 ),
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     partner_player_id,
-                    STANDARD_STEP_PROC_BUFF.clone(),
+                    standard_step_proc_buff.clone(),
                     60000,
                     60000,
                     0,
@@ -865,7 +865,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
-            resource_required: vec![ResourceRequirements::UseBuff(FLOURISHING_FINISH.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(flourishing_finish.id)],
             resource_created: HashMap::from([(0, 50)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -875,7 +875,7 @@ impl DancerDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
-        let LAST_DANCE: AttackSkill = AttackSkill {
+        let last_dance: AttackSkill = AttackSkill {
             id: 1516,
             name: "Last Dance".to_string(),
             player_id,
@@ -890,7 +890,7 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(LAST_DANCE_READY.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(last_dance_ready.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -900,7 +900,7 @@ impl DancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let FINISHING_MOVE: AttackSkill = AttackSkill {
+        let finishing_move: AttackSkill = AttackSkill {
             id: 1517,
             name: "Finishing Move".to_string(),
             player_id,
@@ -909,7 +909,7 @@ impl DancerDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                LAST_DANCE_READY.clone(),
+                last_dance_ready.clone(),
                 30000,
                 30000,
                 0,
@@ -922,17 +922,17 @@ impl DancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(FINISHING_MOVE_READY.id)],
+            resource_required: vec![ResourceRequirements::UseBuff(finishing_move_ready.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(STANDARD_STEP.get_id()),
+            stack_skill_id: Some(standard_step.get_id()),
             use_type: UseType::UseOnTarget,
         };
-        let DANCE_OF_THE_DAWN: AttackSkill = AttackSkill {
+        let dance_of_the_dawn: AttackSkill = AttackSkill {
             id: 1518,
             name: "Dance of the Dawn".to_string(),
             player_id,
@@ -948,7 +948,7 @@ impl DancerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             resource_required: vec![
-                ResourceRequirements::UseBuff(DANCE_OF_THE_DAWN_READY.id),
+                ResourceRequirements::UseBuff(dance_of_the_dawn_ready.id),
                 Resource(0, 50),
             ],
             resource_created: Default::default(),
@@ -961,41 +961,17 @@ impl DancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let STANDARD_STEP_OPENER: AttackSkill = AttackSkill {
+        let standard_step_opener: AttackSkill = AttackSkill {
             id: 1519,
             name: "Standard Step".to_string(),
             player_id,
             potency: 850,
             trait_percent: 120,
             additional_skill_events: vec![
-                FfxivEvent::ApplyBuff(
+                ApplyBuff(
                     player_id,
                     player_id,
-                    STANDARD_STEP_BUFF.clone(),
-                    60000,
-                    60000,
-                    0,
-                ),
-                FfxivEvent::ApplyBuff(
-                    player_id,
-                    player_id,
-                    STANDARD_STEP_PROC_BUFF.clone(),
-                    60000,
-                    60000,
-                    0,
-                ),
-                FfxivEvent::ApplyBuff(
-                    player_id,
-                    partner_player_id,
-                    STANDARD_STEP_BUFF.clone(),
-                    60000,
-                    60000,
-                    0,
-                ),
-                FfxivEvent::ApplyBuff(
-                    player_id,
-                    partner_player_id,
-                    STANDARD_STEP_PROC_BUFF.clone(),
+                    standard_step_buff.clone(),
                     60000,
                     60000,
                     0,
@@ -1003,7 +979,31 @@ impl DancerDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    LAST_DANCE_READY.clone(),
+                    standard_step_proc_buff.clone(),
+                    60000,
+                    60000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    partner_player_id,
+                    standard_step_buff.clone(),
+                    60000,
+                    60000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    partner_player_id,
+                    standard_step_proc_buff.clone(),
+                    60000,
+                    60000,
+                    0,
+                ),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    last_dance_ready.clone(),
                     30000,
                     30000,
                     0,
@@ -1024,47 +1024,47 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(STANDARD_STEP.get_id()),
+            stack_skill_id: Some(standard_step.get_id()),
             use_type: UseType::NoTarget,
         };
         let potion_skill = PotionSkill::new(player_id);
 
         DancerDatabase {
-            cascade: CASCADE,
-            fountain: FOUNTAIN,
-            standard_step: STANDARD_STEP,
-            technical_step: TECHNICAL_STEP,
-            devilment: DEVILMENT,
-            flourish: FLOURISH,
-            fan_dance1: FAN_DANCE_I,
-            fan_dance3: FAN_DANCE_III,
-            fan_dance4: FAN_DANCE_IV,
-            reverse_cascade: REVERSE_CASCADE,
-            fountainfall: FOUNTAINFALL,
-            saber_dance: SABER_DANCE,
-            starfall_dance: STARFALL_DANCE,
-            reverse_cascade_flourish: REVERSE_CASCADE_FLOURISH,
-            fountainfall_flourish: FOUNTAINFALL_FLOURISH,
-            tillana: TILLANA,
-            last_dance: LAST_DANCE,
-            finishing_move: FINISHING_MOVE,
-            dance_of_the_dawn: DANCE_OF_THE_DAWN,
-            standard_opener: STANDARD_STEP_OPENER,
+            cascade,
+            fountain,
+            standard_step,
+            technical_step,
+            devilment,
+            flourish,
+            fan_dance1: fan_dance_i,
+            fan_dance3: fan_dance_iii,
+            fan_dance4: fan_dance_iv,
+            reverse_cascade,
+            fountainfall,
+            saber_dance,
+            starfall_dance,
+            reverse_cascade_flourish,
+            fountainfall_flourish,
+            tillana,
+            last_dance,
+            finishing_move,
+            dance_of_the_dawn,
+            standard_opener: standard_step_opener,
 
-            standard_step_buff: STANDARD_STEP_BUFF,
-            standard_step_proc_buff: STANDARD_STEP_PROC_BUFF,
-            technical_step_buff: TECHNICAL_STEP_BUFF,
-            technical_step_proc_buff: TECHNICAL_STEP_PROC_BUFF,
-            devilment_buff: DEVILMENT_BUFF,
-            threefold_fan_dance: THREEFOLD_FAN_DANCE,
-            fourfold_fan_dance: FOURFOLD_FAN_DANCE,
-            silken_symmetry: SILKEN_SYMMETRY,
-            silken_flow: SILKEN_FLOW,
-            starfall_ready: FLOURSHING_STARFALL,
-            flourishing_finish: FLOURISHING_FINISH,
-            last_dance_ready: LAST_DANCE_READY,
-            dance_of_the_dawn_ready: DANCE_OF_THE_DAWN_READY,
-            finishing_move_ready: FINISHING_MOVE_READY,
+            standard_step_buff,
+            standard_step_proc_buff,
+            technical_step_buff,
+            technical_step_proc_buff,
+            devilment_buff,
+            threefold_fan_dance,
+            fourfold_fan_dance,
+            silken_symmetry,
+            silken_flow,
+            starfall_ready: flourishing_starfall,
+            flourishing_finish,
+            last_dance_ready,
+            dance_of_the_dawn_ready,
+            finishing_move_ready,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

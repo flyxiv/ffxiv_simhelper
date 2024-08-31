@@ -10,7 +10,7 @@ use crate::skill::ResourceRequirements::{CheckStatus, Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct DarkknightDatabase {
@@ -44,7 +44,7 @@ pub(crate) struct DarkknightDatabase {
 
 impl DarkknightDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let DARKSIDE: BuffStatus = BuffStatus {
+        let darkside: BuffStatus = BuffStatus {
             id: 200,
             name: String::from("Darkside"),
             stacks: 1,
@@ -56,7 +56,7 @@ impl DarkknightDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let DELIRIUM_BUFF: BuffStatus = BuffStatus {
+        let delirium_buff: BuffStatus = BuffStatus {
             id: 201,
             name: String::from("Delirium"),
             stacks: 3,
@@ -68,7 +68,7 @@ impl DarkknightDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SALTED_EARTH_DEBUFF: DebuffStatus = DebuffStatus {
+        let salted_earth_debuff: DebuffStatus = DebuffStatus {
             id: 202,
             name: String::from("Salted Earth"),
             owner_id: player_id,
@@ -84,7 +84,7 @@ impl DarkknightDatabase {
             max_stacks: 1,
             snapshotted_infos: Default::default(),
         };
-        let SCORN: BuffStatus = BuffStatus {
+        let scorn: BuffStatus = BuffStatus {
             id: 203,
             name: String::from("Scorn"),
             stacks: 1,
@@ -96,7 +96,7 @@ impl DarkknightDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let COMEUPPANCE_READY: BuffStatus = BuffStatus {
+        let comeuppance_ready: BuffStatus = BuffStatus {
             id: 204,
             name: String::from("Comeuppance Ready"),
             stacks: 1,
@@ -108,7 +108,7 @@ impl DarkknightDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let TORCLEAVER_READY: BuffStatus = BuffStatus {
+        let torcleaver_ready: BuffStatus = BuffStatus {
             id: 205,
             name: String::from("Torcleaver Ready"),
             stacks: 1,
@@ -121,7 +121,7 @@ impl DarkknightDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let HARD_SLASH: AttackSkill = AttackSkill {
+        let hard_slash: AttackSkill = AttackSkill {
             id: 200,
             name: String::from("Hard Slash"),
             player_id,
@@ -146,7 +146,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SYPHON_STRIKE: AttackSkill = AttackSkill {
+        let syphon_strike: AttackSkill = AttackSkill {
             id: 201,
             name: String::from("Syphon Strike"),
             player_id,
@@ -171,7 +171,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SOULEATER: AttackSkill = AttackSkill {
+        let souleater: AttackSkill = AttackSkill {
             id: 202,
             name: String::from("Soul Eater"),
             player_id,
@@ -196,7 +196,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let EDGE_OF_SHADOW: AttackSkill = AttackSkill {
+        let edge_of_shadow: AttackSkill = AttackSkill {
             id: 203,
             name: String::from("Edge of Shadow"),
             player_id,
@@ -205,7 +205,7 @@ impl DarkknightDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                DARKSIDE.clone(),
+                darkside.clone(),
                 30000,
                 60000,
                 0,
@@ -228,7 +228,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let LIVING_SHADOW: AttackSkill = AttackSkill {
+        let living_shadow: AttackSkill = AttackSkill {
             id: 211,
             name: String::from("Living Shadow"),
             player_id,
@@ -237,7 +237,7 @@ impl DarkknightDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                SCORN.clone(),
+                scorn.clone(),
                 30000,
                 30000,
                 0,
@@ -260,7 +260,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let DISESTEEM: AttackSkill = AttackSkill {
+        let disesteem: AttackSkill = AttackSkill {
             id: 204,
             name: String::from("Disesteem"),
             player_id,
@@ -276,7 +276,7 @@ impl DarkknightDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(SCORN.get_id())],
+            resource_required: vec![UseBuff(scorn.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -285,7 +285,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SALTED_EARTH: AttackSkill = AttackSkill {
+        let salted_earth: AttackSkill = AttackSkill {
             id: 205,
             name: String::from("Salted Earth"),
             player_id,
@@ -293,7 +293,7 @@ impl DarkknightDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ApplyDebuff(
                 player_id,
-                SALTED_EARTH_DEBUFF.clone(),
+                salted_earth_debuff.clone(),
                 15000,
                 15000,
                 0,
@@ -316,7 +316,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let PLUNGE: AttackSkill = AttackSkill {
+        let plunge: AttackSkill = AttackSkill {
             id: 206,
             name: String::from("Plunge"),
             player_id,
@@ -341,7 +341,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let CARVE_AND_SPIT: AttackSkill = AttackSkill {
+        let carve_and_spit: AttackSkill = AttackSkill {
             id: 207,
             name: String::from("Carve and Spit"),
             player_id,
@@ -366,7 +366,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let DELIRIUM: AttackSkill = AttackSkill {
+        let delirium: AttackSkill = AttackSkill {
             id: 208,
             name: String::from("Delirium"),
             player_id,
@@ -375,7 +375,7 @@ impl DarkknightDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                DELIRIUM_BUFF.clone(),
+                delirium_buff.clone(),
                 20000,
                 20000,
                 0,
@@ -398,7 +398,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let SHADOWBRINGER: AttackSkill = AttackSkill {
+        let shadowbringer: AttackSkill = AttackSkill {
             id: 209,
             name: String::from("Shadowbringer"),
             player_id,
@@ -423,7 +423,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let BLOODSPILLER: AttackSkill = AttackSkill {
+        let bloodspiller: AttackSkill = AttackSkill {
             id: 210,
             name: String::from("Bloodspiller"),
             player_id,
@@ -448,7 +448,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SCARLET_DELIRIUM: AttackSkill = AttackSkill {
+        let scarlet_delirium: AttackSkill = AttackSkill {
             id: 212,
             name: String::from("Scarlet Delirium"),
             player_id,
@@ -457,7 +457,7 @@ impl DarkknightDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                COMEUPPANCE_READY.clone(),
+                comeuppance_ready.clone(),
                 20000,
                 20000,
                 0,
@@ -471,7 +471,7 @@ impl DarkknightDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(DELIRIUM_BUFF.get_id())],
+            resource_required: vec![UseBuff(delirium_buff.get_id())],
             resource_created: HashMap::from([(0, 800), (1, 10)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -480,7 +480,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SALT_AND_DARKNESS: AttackSkill = AttackSkill {
+        let salt_and_darkness: AttackSkill = AttackSkill {
             id: 213,
             name: String::from("Salt and Darkness"),
             player_id,
@@ -496,7 +496,7 @@ impl DarkknightDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 20000,
-            resource_required: vec![CheckStatus(SALTED_EARTH_DEBUFF.get_id())],
+            resource_required: vec![CheckStatus(salted_earth_debuff.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -506,7 +506,7 @@ impl DarkknightDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let COMEUPPANCE: AttackSkill = AttackSkill {
+        let comeuppance: AttackSkill = AttackSkill {
             id: 214,
             name: String::from("Comeuppance"),
             player_id,
@@ -515,7 +515,7 @@ impl DarkknightDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                TORCLEAVER_READY.clone(),
+                torcleaver_ready.clone(),
                 20000,
                 20000,
                 0,
@@ -530,8 +530,8 @@ impl DarkknightDatabase {
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
             resource_required: vec![
-                UseBuff(DELIRIUM_BUFF.get_id()),
-                UseBuff(COMEUPPANCE_READY.get_id()),
+                UseBuff(delirium_buff.get_id()),
+                UseBuff(comeuppance_ready.get_id()),
             ],
             resource_created: HashMap::from([(0, 800), (1, 10)]),
             is_guaranteed_crit: false,
@@ -541,7 +541,7 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let TORCLEAVER: AttackSkill = AttackSkill {
+        let torcleaver: AttackSkill = AttackSkill {
             id: 215,
             name: String::from("Torcleaver"),
             player_id,
@@ -558,8 +558,8 @@ impl DarkknightDatabase {
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
             resource_required: vec![
-                UseBuff(DELIRIUM_BUFF.get_id()),
-                UseBuff(TORCLEAVER_READY.get_id()),
+                UseBuff(delirium_buff.get_id()),
+                UseBuff(torcleaver_ready.get_id()),
             ],
             resource_created: HashMap::from([(0, 800), (1, 10)]),
             is_guaranteed_crit: false,
@@ -573,29 +573,29 @@ impl DarkknightDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         DarkknightDatabase {
-            hard_slash: HARD_SLASH,
-            syphon_strike: SYPHON_STRIKE,
-            souleater: SOULEATER,
-            edge_of_shadow: EDGE_OF_SHADOW,
-            salted_earth: SALTED_EARTH,
-            plunge: PLUNGE,
-            carve_and_spit: CARVE_AND_SPIT,
-            delirium: DELIRIUM,
-            shadowbringer: SHADOWBRINGER,
-            bloodspiller: BLOODSPILLER,
-            living_shadow: LIVING_SHADOW,
-            salt_and_darkness: SALT_AND_DARKNESS,
-            comeuppance: COMEUPPANCE,
-            torcleaver: TORCLEAVER,
-            scarlet_delirium: SCARLET_DELIRIUM,
-            disesteem: DISESTEEM,
+            hard_slash,
+            syphon_strike,
+            souleater,
+            edge_of_shadow,
+            salted_earth,
+            plunge,
+            carve_and_spit,
+            delirium,
+            shadowbringer,
+            bloodspiller,
+            living_shadow,
+            salt_and_darkness,
+            comeuppance,
+            torcleaver,
+            scarlet_delirium,
+            disesteem,
 
-            darkside: DARKSIDE,
-            delirium_buff: DELIRIUM_BUFF,
-            salted_earth_debuff: SALTED_EARTH_DEBUFF,
-            scorn: SCORN,
-            comeuppance_ready: COMEUPPANCE_READY,
-            torcleaver_ready: TORCLEAVER_READY,
+            darkside,
+            delirium_buff,
+            salted_earth_debuff,
+            scorn,
+            comeuppance_ready,
+            torcleaver_ready,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

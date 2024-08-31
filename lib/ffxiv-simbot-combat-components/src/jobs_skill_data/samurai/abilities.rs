@@ -4,9 +4,9 @@ use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
+use crate::skill::make_skill_table;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{Resource, UseBuff};
-use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
@@ -57,7 +57,7 @@ pub(crate) struct SamuraiDatabase {
 
 impl SamuraiDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let MEIKYO_SHISUI_BUFF: BuffStatus = BuffStatus {
+        let meikyo_shisui_buff: BuffStatus = BuffStatus {
             id: 1100,
             name: String::from("Meikyo Shisui"),
             stacks: 3,
@@ -69,7 +69,7 @@ impl SamuraiDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let TENDO_SETSUGEKKA_USED: BuffStatus = BuffStatus {
+        let tendo_setsugekka_used: BuffStatus = BuffStatus {
             id: 1101,
             name: String::from("Tendo Setsugekka Used"),
             stacks: 1,
@@ -81,7 +81,7 @@ impl SamuraiDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let OGI_NAMIKIRI_READY: BuffStatus = BuffStatus {
+        let ogi_namikiri_ready: BuffStatus = BuffStatus {
             id: 1102,
             name: String::from("Ogi Namikiri Ready"),
             stacks: 1,
@@ -93,7 +93,7 @@ impl SamuraiDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FUGETSU: BuffStatus = BuffStatus {
+        let fugetsu: BuffStatus = BuffStatus {
             id: 1103,
             name: String::from("Fugetsu"),
             stacks: 1,
@@ -105,7 +105,7 @@ impl SamuraiDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FUKA: BuffStatus = BuffStatus {
+        let fuka: BuffStatus = BuffStatus {
             id: 1104,
             name: String::from("Fuka"),
             stacks: 1,
@@ -117,7 +117,7 @@ impl SamuraiDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let HIGANBANA_DOT: DebuffStatus = DebuffStatus {
+        let higanbana_dot: DebuffStatus = DebuffStatus {
             id: 1105,
             name: String::from("Higanbana"),
             stacks: 1,
@@ -134,7 +134,7 @@ impl SamuraiDatabase {
             snapshotted_infos: Default::default(),
         };
 
-        let OGI_NAMIKIRI_USED: BuffStatus = BuffStatus {
+        let ogi_namikiri_used: BuffStatus = BuffStatus {
             id: 1106,
             name: String::from("Ogi Namikiri Used"),
             stacks: 1,
@@ -146,7 +146,7 @@ impl SamuraiDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let ZANSHIN_READY: BuffStatus = BuffStatus {
+        let zanshin_ready: BuffStatus = BuffStatus {
             id: 1108,
             name: String::from("Zanshin Ready"),
             stacks: 1,
@@ -159,7 +159,7 @@ impl SamuraiDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let TENDO: BuffStatus = BuffStatus {
+        let tendo: BuffStatus = BuffStatus {
             id: 1109,
             name: String::from("Tendo"),
             stacks: 1,
@@ -171,7 +171,7 @@ impl SamuraiDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let MIDARE_USED: BuffStatus = BuffStatus {
+        let midare_used: BuffStatus = BuffStatus {
             id: 1107,
             name: String::from("Midare Used"),
             stacks: 1,
@@ -184,7 +184,7 @@ impl SamuraiDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let GYOFU: AttackSkill = AttackSkill {
+        let gyofu: AttackSkill = AttackSkill {
             id: 1100,
             name: String::from("Gyofu"),
             player_id,
@@ -209,7 +209,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let JINPU: AttackSkill = AttackSkill {
+        let jinpu: AttackSkill = AttackSkill {
             id: 1101,
             name: String::from("Jinpu"),
             player_id,
@@ -218,7 +218,7 @@ impl SamuraiDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                FUGETSU.clone(),
+                fugetsu.clone(),
                 40000,
                 40000,
                 0,
@@ -241,7 +241,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let GEKKO: AttackSkill = AttackSkill {
+        let gekko: AttackSkill = AttackSkill {
             id: 1102,
             name: String::from("Gekko"),
             player_id,
@@ -266,7 +266,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let SHIFU: AttackSkill = AttackSkill {
+        let shifu: AttackSkill = AttackSkill {
             id: 1103,
             name: String::from("Shifu"),
             player_id,
@@ -275,7 +275,7 @@ impl SamuraiDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                FUKA.clone(),
+                fuka.clone(),
                 40000,
                 40000,
                 0,
@@ -298,7 +298,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let KASHA: AttackSkill = AttackSkill {
+        let kasha: AttackSkill = AttackSkill {
             id: 1104,
             name: String::from("Kasha"),
             player_id,
@@ -323,7 +323,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let YUKIKAZE: AttackSkill = AttackSkill {
+        let yukikaze: AttackSkill = AttackSkill {
             id: 1105,
             name: String::from("Yukikaze"),
             player_id,
@@ -348,7 +348,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HISSATSU_SHINTEN: AttackSkill = AttackSkill {
+        let hissatsu_shinten: AttackSkill = AttackSkill {
             id: 1106,
             name: String::from("Hissatsu: Shinten"),
             player_id,
@@ -364,7 +364,7 @@ impl SamuraiDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::Resource(0, 25)],
+            resource_required: vec![Resource(0, 25)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -373,7 +373,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HISSATSU_SENEI: AttackSkill = AttackSkill {
+        let hissatsu_senei: AttackSkill = AttackSkill {
             id: 1107,
             name: String::from("Hissatsu: Senei"),
             player_id,
@@ -389,7 +389,7 @@ impl SamuraiDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 60000,
-            resource_required: vec![ResourceRequirements::Resource(0, 25)],
+            resource_required: vec![Resource(0, 25)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -398,7 +398,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let MEIKYO_SHISUI: AttackSkill = AttackSkill {
+        let meikyo_shisui: AttackSkill = AttackSkill {
             id: 1108,
             name: String::from("Meikyo Shisui"),
             player_id,
@@ -408,12 +408,12 @@ impl SamuraiDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    MEIKYO_SHISUI_BUFF.clone(),
+                    meikyo_shisui_buff.clone(),
                     20000,
                     20000,
                     0,
                 ),
-                ApplyBuff(player_id, player_id, TENDO.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, tendo.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -433,7 +433,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let KAESHI_TENDO_SETSUGEKKA: AttackSkill = AttackSkill {
+        let kaeshi_tendo_setsugekka: AttackSkill = AttackSkill {
             id: 1109,
             name: String::from("Kaeshi Tendo Setsugekka"),
             player_id,
@@ -449,7 +449,7 @@ impl SamuraiDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(TENDO_SETSUGEKKA_USED.get_id())],
+            resource_required: vec![UseBuff(tendo_setsugekka_used.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -458,7 +458,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let GEKKO_MEIKYO: AttackSkill = AttackSkill {
+        let gekko_meikyo: AttackSkill = AttackSkill {
             id: 1110,
             name: String::from("Gekko"),
             player_id,
@@ -467,7 +467,7 @@ impl SamuraiDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                FUGETSU.clone(),
+                fugetsu.clone(),
                 40000,
                 40000,
                 0,
@@ -481,7 +481,7 @@ impl SamuraiDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(MEIKYO_SHISUI_BUFF.get_id())],
+            resource_required: vec![UseBuff(meikyo_shisui_buff.get_id())],
             resource_created: HashMap::from([(0, 10), (2, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -490,7 +490,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let KASHA_MEIKYO: AttackSkill = AttackSkill {
+        let kasha_meikyo: AttackSkill = AttackSkill {
             id: 1111,
             name: String::from("Kasha"),
             player_id,
@@ -499,7 +499,7 @@ impl SamuraiDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                FUKA.clone(),
+                fuka.clone(),
                 40000,
                 40000,
                 0,
@@ -513,7 +513,7 @@ impl SamuraiDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(MEIKYO_SHISUI_BUFF.get_id())],
+            resource_required: vec![UseBuff(meikyo_shisui_buff.get_id())],
             resource_created: HashMap::from([(0, 10), (3, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -522,7 +522,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let YUKI_MEIKYO: AttackSkill = AttackSkill {
+        let yuki_meikyo: AttackSkill = AttackSkill {
             id: 1112,
             name: String::from("Yukikaze"),
             player_id,
@@ -538,7 +538,7 @@ impl SamuraiDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 30000,
-            resource_required: vec![UseBuff(MEIKYO_SHISUI_BUFF.get_id())],
+            resource_required: vec![UseBuff(meikyo_shisui_buff.get_id())],
             resource_created: HashMap::from([(0, 15), (4, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -547,7 +547,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let IKISHOTEN: AttackSkill = AttackSkill {
+        let ikishoten: AttackSkill = AttackSkill {
             id: 1113,
             name: String::from("Ikishoten"),
             player_id,
@@ -557,12 +557,12 @@ impl SamuraiDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    OGI_NAMIKIRI_READY.clone(),
+                    ogi_namikiri_ready.clone(),
                     30000,
                     30000,
                     0,
                 ),
-                ApplyBuff(player_id, player_id, ZANSHIN_READY.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, zanshin_ready.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -582,7 +582,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HAGAKURE: AttackSkill = AttackSkill {
+        let hagakure: AttackSkill = AttackSkill {
             id: 1114,
             name: String::from("Hagakure"),
             player_id,
@@ -598,7 +598,7 @@ impl SamuraiDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 10000,
-            resource_required: vec![ResourceRequirements::Resource(4, 1)],
+            resource_required: vec![Resource(4, 1)],
             resource_created: HashMap::from([(0, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -607,7 +607,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let MIDARE_SETSUGEKKA: AttackSkill = AttackSkill {
+        let midare_setsugekka: AttackSkill = AttackSkill {
             id: 1115,
             name: String::from("Midare Setsugekka"),
             player_id,
@@ -616,7 +616,7 @@ impl SamuraiDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                MIDARE_USED.clone(),
+                midare_used.clone(),
                 30000,
                 30000,
                 0,
@@ -639,7 +639,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let OGI_NAMIKIRI: AttackSkill = AttackSkill {
+        let ogi_namikiri: AttackSkill = AttackSkill {
             id: 1116,
             name: String::from("Ogi Namikiri"),
             player_id,
@@ -648,7 +648,7 @@ impl SamuraiDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                OGI_NAMIKIRI_USED.clone(),
+                ogi_namikiri_used.clone(),
                 3000,
                 3000,
                 0,
@@ -662,7 +662,7 @@ impl SamuraiDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(OGI_NAMIKIRI_READY.get_id())],
+            resource_required: vec![UseBuff(ogi_namikiri_ready.get_id())],
             resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -672,7 +672,7 @@ impl SamuraiDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let KAESHI_NAMIKIRI: AttackSkill = AttackSkill {
+        let kaeshi_namikiri: AttackSkill = AttackSkill {
             id: 1117,
             name: String::from("Kaeshi: Namikiri"),
             player_id,
@@ -688,7 +688,7 @@ impl SamuraiDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(OGI_NAMIKIRI_USED.get_id())],
+            resource_required: vec![UseBuff(ogi_namikiri_used.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -698,7 +698,7 @@ impl SamuraiDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let HIGANBANA_ONE: AttackSkill = AttackSkill {
+        let higanbana_one: AttackSkill = AttackSkill {
             id: 1118,
             name: String::from("Higanbana"),
             player_id,
@@ -706,7 +706,7 @@ impl SamuraiDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ApplyDebuff(
                 player_id,
-                HIGANBANA_DOT.clone(),
+                higanbana_dot.clone(),
                 60000,
                 60000,
                 0,
@@ -730,7 +730,7 @@ impl SamuraiDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let HIGANBANA_TWO: AttackSkill = AttackSkill {
+        let higanbana_two: AttackSkill = AttackSkill {
             id: 1119,
             name: String::from("Higanbana"),
             player_id,
@@ -738,7 +738,7 @@ impl SamuraiDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ApplyDebuff(
                 player_id,
-                HIGANBANA_DOT.clone(),
+                higanbana_dot.clone(),
                 60000,
                 60000,
                 0,
@@ -761,7 +761,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HIGANBANA_THREE: AttackSkill = AttackSkill {
+        let higanbana_three: AttackSkill = AttackSkill {
             id: 1120,
             name: String::from("Higanbana"),
             player_id,
@@ -769,7 +769,7 @@ impl SamuraiDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ApplyDebuff(
                 player_id,
-                HIGANBANA_DOT.clone(),
+                higanbana_dot.clone(),
                 60000,
                 60000,
                 0,
@@ -793,7 +793,7 @@ impl SamuraiDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let SHOHA: AttackSkill = AttackSkill {
+        let shoha: AttackSkill = AttackSkill {
             id: 1121,
             name: String::from("Shoha"),
             player_id,
@@ -818,7 +818,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ZANSHIN: AttackSkill = AttackSkill {
+        let zanshin: AttackSkill = AttackSkill {
             id: 1122,
             name: String::from("Zanshin"),
             player_id,
@@ -834,7 +834,7 @@ impl SamuraiDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![Resource(0, 50), UseBuff(ZANSHIN_READY.get_id())],
+            resource_required: vec![Resource(0, 50), UseBuff(zanshin_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -844,7 +844,7 @@ impl SamuraiDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let TENDO_SETSUGEKKA: AttackSkill = AttackSkill {
+        let tendo_setsugekka: AttackSkill = AttackSkill {
             id: 1123,
             name: String::from("Tendo Setsugekka"),
             player_id,
@@ -853,7 +853,7 @@ impl SamuraiDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                TENDO_SETSUGEKKA_USED.clone(),
+                tendo_setsugekka_used.clone(),
                 30000,
                 30000,
                 0,
@@ -868,7 +868,7 @@ impl SamuraiDatabase {
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
             resource_required: vec![
-                UseBuff(TENDO.id),
+                UseBuff(tendo.id),
                 Resource(2, 1),
                 Resource(3, 1),
                 Resource(4, 1),
@@ -881,7 +881,7 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let KAESHI_SETSUGEKKA: AttackSkill = AttackSkill {
+        let kaeshi_setsugekka: AttackSkill = AttackSkill {
             id: 1124,
             name: String::from("Kaeshi Setsugekka"),
             player_id,
@@ -897,7 +897,7 @@ impl SamuraiDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(MIDARE_USED.get_id())],
+            resource_required: vec![UseBuff(midare_used.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -910,43 +910,43 @@ impl SamuraiDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         SamuraiDatabase {
-            gyofu: GYOFU,
-            jinpu: JINPU,
-            gekko: GEKKO,
-            shifu: SHIFU,
-            kasha: KASHA,
-            yukikaze: YUKIKAZE,
-            hissatsu_shinten: HISSATSU_SHINTEN,
-            hissatsu_senei: HISSATSU_SENEI,
-            meikyo_shisui: MEIKYO_SHISUI,
-            gekko_meikyo: GEKKO_MEIKYO,
-            kasha_meikyo: KASHA_MEIKYO,
-            yuki_meikyo: YUKI_MEIKYO,
-            ikishoten: IKISHOTEN,
-            hagakure: HAGAKURE,
-            kaeshi_tendo_setsugekka: KAESHI_TENDO_SETSUGEKKA,
-            ogi_namikiri: OGI_NAMIKIRI,
-            kaeshi_namikiri: KAESHI_NAMIKIRI,
-            higanbana: HIGANBANA_ONE,
-            midare_setsugekka: MIDARE_SETSUGEKKA,
-            shoha: SHOHA,
-            higanbana_two: HIGANBANA_TWO,
-            higanbana_three: HIGANBANA_THREE,
-            zanshin: ZANSHIN,
-            tendo_setsugekka: TENDO_SETSUGEKKA,
-            kaeshi_setsugekka: KAESHI_SETSUGEKKA,
+            gyofu,
+            jinpu,
+            gekko,
+            shifu,
+            kasha,
+            yukikaze,
+            hissatsu_shinten,
+            hissatsu_senei,
+            meikyo_shisui,
+            gekko_meikyo,
+            kasha_meikyo,
+            yuki_meikyo,
+            ikishoten,
+            hagakure,
+            kaeshi_tendo_setsugekka,
+            ogi_namikiri,
+            kaeshi_namikiri,
+            higanbana: higanbana_one,
+            midare_setsugekka,
+            shoha,
+            higanbana_two,
+            higanbana_three,
+            zanshin,
+            tendo_setsugekka,
+            kaeshi_setsugekka,
 
-            tendo_setsugekka_used: TENDO_SETSUGEKKA_USED,
-            ogi_namikiri_ready: OGI_NAMIKIRI_READY,
-            fugetsu: FUGETSU,
-            fuka: FUKA,
-            higanbana_dot: HIGANBANA_DOT,
-            midare_used: MIDARE_USED,
-            ogi_namikiri_used: OGI_NAMIKIRI_USED,
-            meikyo_shisui_buff: MEIKYO_SHISUI_BUFF,
+            tendo_setsugekka_used,
+            ogi_namikiri_ready,
+            fugetsu,
+            fuka,
+            higanbana_dot,
+            midare_used,
+            ogi_namikiri_used,
+            meikyo_shisui_buff,
 
-            zanshin_ready: ZANSHIN_READY,
-            tendo: TENDO,
+            zanshin_ready,
+            tendo,
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,
         }

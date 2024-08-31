@@ -8,7 +8,6 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::types::{IdType, PlayerIdType};
-use lazy_static::lazy_static;
 use std::cell::RefCell;
 
 #[derive(Clone)]
@@ -29,11 +28,11 @@ impl PriorityTable for ReaperPriorityTable {
         self.opener[index].clone()
     }
 
-    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.gcd_priority_table
     }
 
-    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_ogcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.ogcd_priority_table
     }
 

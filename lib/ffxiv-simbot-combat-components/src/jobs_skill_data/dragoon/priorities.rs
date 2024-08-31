@@ -30,11 +30,11 @@ impl PriorityTable for DragoonPriorityTable {
         self.opener[index].clone()
     }
 
-    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.gcd_priority_table
     }
 
-    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_ogcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.ogcd_priority_table
     }
 
@@ -165,7 +165,7 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
             skill_id: db.wyrmwind_thrust.get_id(),
             prerequisite: Some(Or(
                 Box::new(HasBufforDebuff(db.draconian_fire.get_id())),
-                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+                Box::new(MillisecondsBeforeBurst(0)),
             )),
         },
         SkillPriorityInfo {

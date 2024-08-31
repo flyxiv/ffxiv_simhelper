@@ -4,12 +4,12 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::PotionSkill;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
+use crate::skill::make_skill_table;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{Resource, UseBuff};
-use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
 pub(crate) struct MonkDatabase {
@@ -50,7 +50,7 @@ pub(crate) struct MonkDatabase {
 
 impl MonkDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let FIRES_RUMINATION: BuffStatus = BuffStatus {
+        let fires_rumination: BuffStatus = BuffStatus {
             id: 902,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -62,7 +62,7 @@ impl MonkDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let PERFECT_BALANCE_BUFF: BuffStatus = BuffStatus {
+        let perfect_balance_buff: BuffStatus = BuffStatus {
             id: 903,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -74,7 +74,7 @@ impl MonkDatabase {
             max_stacks: 3,
             trigger_proc_event_on_gcd: vec![],
         };
-        let RIDDLE_OF_FIRE_BUFF: BuffStatus = BuffStatus {
+        let riddle_of_fire_buff: BuffStatus = BuffStatus {
             id: 904,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -86,7 +86,7 @@ impl MonkDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let RIDDLE_OF_WIND_BUFF: BuffStatus = BuffStatus {
+        let riddle_of_wind_buff: BuffStatus = BuffStatus {
             id: 905,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -98,7 +98,7 @@ impl MonkDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let BROTHERHOOD_DAMAGE_BUFF: BuffStatus = BuffStatus {
+        let brotherhood_damage_buff: BuffStatus = BuffStatus {
             id: 906,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -110,7 +110,7 @@ impl MonkDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let BROTHERHOOD_RAID_PROC: BuffStatus = BuffStatus {
+        let brotherhood_raid_proc: BuffStatus = BuffStatus {
             id: 907,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -125,22 +125,7 @@ impl MonkDatabase {
                 10,
             )],
         };
-        let BROTHERHOOD_PERSONAL_PROC: BuffStatus = BuffStatus {
-            id: 908,
-            owner_id: player_id,
-            duration_left_millisecond: 0,
-            status_info: vec![StatusInfo::None],
-            duration_millisecond: 20000,
-            is_raidwide: false,
-            name: "Brotherhood Personal Proc".to_string(),
-            stacks: 1,
-            max_stacks: 1,
-            trigger_proc_event_on_gcd: vec![(
-                FfxivEvent::IncreasePlayerResource(player_id, 0, 1, 0),
-                100,
-            )],
-        };
-        let WINDS_RUMINATION: BuffStatus = BuffStatus {
+        let winds_rumination: BuffStatus = BuffStatus {
             id: 910,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -153,7 +138,7 @@ impl MonkDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let LEAPING_OPO: AttackSkill = AttackSkill {
+        let leaping_opo = AttackSkill {
             id: 900,
             name: "Leaping Opo".to_string(),
             player_id,
@@ -179,7 +164,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let RISING_RAPTOR: AttackSkill = AttackSkill {
+        let rising_raptor = AttackSkill {
             id: 901,
             name: "Rising Raptor".to_string(),
             player_id,
@@ -205,7 +190,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let POUNCING_COEURL: AttackSkill = AttackSkill {
+        let pouncing_coeurl = AttackSkill {
             id: 902,
             name: "Pouncing Coeurl".to_string(),
             player_id,
@@ -231,7 +216,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let TWIN_SNAKES: AttackSkill = AttackSkill {
+        let twin_snakes = AttackSkill {
             id: 903,
             name: "Twin Snakes".to_string(),
             player_id,
@@ -257,7 +242,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let DEMOLISH: AttackSkill = AttackSkill {
+        let demolish = AttackSkill {
             id: 904,
             name: "Demolish".to_string(),
             player_id,
@@ -283,7 +268,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let DRAGON_KICK: AttackSkill = AttackSkill {
+        let dragon_kick = AttackSkill {
             id: 905,
             name: "Dragon Kick".to_string(),
             player_id,
@@ -309,7 +294,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let ELIXIR_BURST: AttackSkill = AttackSkill {
+        let elixir_burst = AttackSkill {
             id: 906,
             name: "Elixir Field".to_string(),
             player_id,
@@ -324,7 +309,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::Resource(1, 3)],
+            resource_required: vec![Resource(1, 3)],
             resource_created: HashMap::from([(4, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -335,7 +320,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let RISING_PHEONIX: AttackSkill = AttackSkill {
+        let rising_pheonix = AttackSkill {
             id: 907,
             name: "Rising Pheonix".to_string(),
             player_id,
@@ -350,11 +335,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![
-                ResourceRequirements::Resource(1, 1),
-                ResourceRequirements::Resource(2, 1),
-                ResourceRequirements::Resource(3, 1),
-            ],
+            resource_required: vec![Resource(1, 1), Resource(2, 1), Resource(3, 1)],
             resource_created: HashMap::from([(5, 1), (9, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -364,7 +345,7 @@ impl MonkDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let PHANTOM_RUSH: AttackSkill = AttackSkill {
+        let phantom_rush = AttackSkill {
             id: 908,
             name: "Phantom Rush".to_string(),
             player_id,
@@ -379,11 +360,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![
-                ResourceRequirements::Resource(4, 1),
-                ResourceRequirements::Resource(5, 1),
-                ResourceRequirements::Resource(1, 3),
-            ],
+            resource_required: vec![Resource(4, 1), Resource(5, 1), Resource(1, 3)],
             resource_created: HashMap::from([(9, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -394,15 +371,15 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let BROTHERHOOD: AttackSkill = AttackSkill {
+        let brotherhood = AttackSkill {
             id: 909,
             name: "Brotherhood".to_string(),
             player_id,
             potency: 0,
             trait_percent: 100,
             additional_skill_events: vec![
-                ApplyRaidBuff(player_id, BROTHERHOOD_DAMAGE_BUFF.clone(), 20000, 20000, 0),
-                ApplyRaidBuff(player_id, BROTHERHOOD_RAID_PROC.clone(), 20000, 20000, 0),
+                ApplyRaidBuff(player_id, brotherhood_damage_buff.clone(), 20000, 20000, 0),
+                ApplyRaidBuff(player_id, brotherhood_raid_proc.clone(), 20000, 20000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -422,7 +399,7 @@ impl MonkDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
-        let RIDDLE_OF_FIRE: AttackSkill = AttackSkill {
+        let riddle_of_fire = AttackSkill {
             id: 910,
             name: "Riddle of Fire".to_string(),
             player_id,
@@ -432,7 +409,7 @@ impl MonkDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    RIDDLE_OF_FIRE_BUFF.clone(),
+                    riddle_of_fire_buff.clone(),
                     20000,
                     20000,
                     0,
@@ -440,7 +417,7 @@ impl MonkDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    FIRES_RUMINATION.clone(),
+                    fires_rumination.clone(),
                     30000,
                     30000,
                     0,
@@ -464,7 +441,7 @@ impl MonkDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
-        let RIDDLE_OF_WIND: AttackSkill = AttackSkill {
+        let riddle_of_wind = AttackSkill {
             id: 911,
             name: "Riddle of Wind".to_string(),
             player_id,
@@ -474,7 +451,7 @@ impl MonkDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    RIDDLE_OF_WIND_BUFF.clone(),
+                    riddle_of_wind_buff.clone(),
                     15000,
                     15000,
                     0,
@@ -482,7 +459,7 @@ impl MonkDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    WINDS_RUMINATION.clone(),
+                    winds_rumination.clone(),
                     15000,
                     15000,
                     0,
@@ -507,7 +484,7 @@ impl MonkDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let PERFECT_BALANCE: AttackSkill = AttackSkill {
+        let perfect_balance = AttackSkill {
             id: 912,
             name: "Perfect Balance".to_string(),
             player_id,
@@ -516,7 +493,7 @@ impl MonkDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                PERFECT_BALANCE_BUFF.clone(),
+                perfect_balance_buff.clone(),
                 20000,
                 20000,
                 0,
@@ -540,7 +517,7 @@ impl MonkDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let THE_FORBIDDEN_CHAKRA: AttackSkill = AttackSkill {
+        let the_forbidden_chakra = AttackSkill {
             id: 913,
             name: "The Forbidden Chakra".to_string(),
             player_id,
@@ -555,7 +532,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
-            resource_required: vec![ResourceRequirements::Resource(0, 5)],
+            resource_required: vec![Resource(0, 5)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -566,7 +543,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let PERFECT_LEAPING_OPO: AttackSkill = AttackSkill {
+        let perfect_leaping_opo = AttackSkill {
             id: 914,
             name: "Leaping Opo".to_string(),
             player_id,
@@ -581,7 +558,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![UseBuff(PERFECT_BALANCE_BUFF.get_id()), Resource(6, 1)],
+            resource_required: vec![UseBuff(perfect_balance_buff.get_id()), Resource(6, 1)],
             resource_created: HashMap::from([(0, 1), (1, 1)]),
             is_guaranteed_crit: true,
             is_guaranteed_direct_hit: false,
@@ -592,7 +569,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let PERFECT_RISING_RAPTOR: AttackSkill = AttackSkill {
+        let perfect_rising_raptor = AttackSkill {
             id: 915,
             name: "Rising Raptor".to_string(),
             player_id,
@@ -607,7 +584,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![UseBuff(PERFECT_BALANCE_BUFF.get_id()), Resource(7, 1)],
+            resource_required: vec![UseBuff(perfect_balance_buff.get_id()), Resource(7, 1)],
             resource_created: HashMap::from([(2, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -618,7 +595,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let PERFECT_POUNCING_COEURL: AttackSkill = AttackSkill {
+        let perfect_pouncing_coeurl = AttackSkill {
             id: 916,
             name: "Pouncing Coeurl".to_string(),
             player_id,
@@ -633,7 +610,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![UseBuff(PERFECT_BALANCE_BUFF.id), Resource(8, 1)],
+            resource_required: vec![UseBuff(perfect_balance_buff.id), Resource(8, 1)],
             resource_created: HashMap::from([(3, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -644,7 +621,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let PERFECT_TWIN_SNAKES: AttackSkill = AttackSkill {
+        let perfect_twin_snakes = AttackSkill {
             id: 917,
             name: "Twin Snakes".to_string(),
             player_id,
@@ -659,7 +636,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(PERFECT_BALANCE_BUFF.id)],
+            resource_required: vec![UseBuff(perfect_balance_buff.id)],
             resource_created: HashMap::from([(2, 1), (7, 2)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -670,7 +647,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let PERFECT_DEMOLISH: AttackSkill = AttackSkill {
+        let perfect_demolish = AttackSkill {
             id: 918,
             name: "Demolish".to_string(),
             player_id,
@@ -685,7 +662,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(PERFECT_BALANCE_BUFF.id)],
+            resource_required: vec![UseBuff(perfect_balance_buff.id)],
             resource_created: HashMap::from([(3, 1), (8, 2)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -696,7 +673,7 @@ impl MonkDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let PERFECT_DRAGON_KICK: AttackSkill = AttackSkill {
+        let perfect_dragon_kick = AttackSkill {
             id: 919,
             name: "Dragon Kick".to_string(),
             player_id,
@@ -711,7 +688,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(PERFECT_BALANCE_BUFF.id)],
+            resource_required: vec![UseBuff(perfect_balance_buff.id)],
             resource_created: HashMap::from([(1, 1), (6, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -721,7 +698,7 @@ impl MonkDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let WINDS_REPLY: AttackSkill = AttackSkill {
+        let winds_reply = AttackSkill {
             id: 920,
             name: "Wind's Reply".to_string(),
             player_id,
@@ -736,7 +713,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![UseBuff(WINDS_RUMINATION.id)],
+            resource_required: vec![UseBuff(winds_rumination.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -746,7 +723,7 @@ impl MonkDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let FIRES_REPLY: AttackSkill = AttackSkill {
+        let fires_reply = AttackSkill {
             id: 921,
             name: "Fire's Reply".to_string(),
             player_id,
@@ -761,7 +738,7 @@ impl MonkDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![UseBuff(FIRES_RUMINATION.id), Resource(9, 1)],
+            resource_required: vec![UseBuff(fires_rumination.id), Resource(9, 1)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -775,39 +752,39 @@ impl MonkDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         MonkDatabase {
-            leaping_opo: LEAPING_OPO,
-            rising_raptor: RISING_RAPTOR,
-            pouncing_coeurl: POUNCING_COEURL,
-            rising_pheonix: RISING_PHEONIX,
-            phantom_rush: PHANTOM_RUSH,
-            brotherhood: BROTHERHOOD,
-            riddle_of_fire: RIDDLE_OF_FIRE,
-            riddle_of_wind: RIDDLE_OF_WIND,
-            perfect_balance: PERFECT_BALANCE,
-            the_forbidden_chakra: THE_FORBIDDEN_CHAKRA,
-            twin_snakes: TWIN_SNAKES,
-            demolish: DEMOLISH,
-            dragon_kick: DRAGON_KICK,
-            perfect_twin_snakes: PERFECT_TWIN_SNAKES,
-            perfect_demolish: PERFECT_DEMOLISH,
-            perfect_dragon_kick: PERFECT_DRAGON_KICK,
-            perfect_leaping_opo: PERFECT_LEAPING_OPO,
-            perfect_rising_raptor: PERFECT_RISING_RAPTOR,
-            perfect_pouncing_coeurl: PERFECT_POUNCING_COEURL,
-            winds_reply: WINDS_REPLY,
-            fires_reply: FIRES_REPLY,
+            leaping_opo,
+            rising_raptor,
+            pouncing_coeurl,
+            rising_pheonix,
+            phantom_rush,
+            brotherhood,
+            riddle_of_fire,
+            riddle_of_wind,
+            perfect_balance,
+            the_forbidden_chakra,
+            twin_snakes,
+            demolish,
+            dragon_kick,
+            perfect_twin_snakes,
+            perfect_demolish,
+            perfect_dragon_kick,
+            perfect_leaping_opo,
+            perfect_rising_raptor,
+            perfect_pouncing_coeurl,
+            winds_reply,
+            fires_reply,
 
-            fires_rumination: FIRES_RUMINATION,
-            perfect_balance_buff: PERFECT_BALANCE_BUFF,
-            riddle_of_fire_buff: RIDDLE_OF_FIRE_BUFF,
-            riddle_of_wind_buff: RIDDLE_OF_WIND_BUFF,
-            brotherhood_damage_buff: BROTHERHOOD_DAMAGE_BUFF,
-            brotherhood_proc_buff: BROTHERHOOD_RAID_PROC,
-            winds_rumination: WINDS_RUMINATION,
+            fires_rumination,
+            perfect_balance_buff,
+            riddle_of_fire_buff,
+            riddle_of_wind_buff,
+            brotherhood_damage_buff,
+            brotherhood_proc_buff: brotherhood_raid_proc,
+            winds_rumination,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,
-            elixir_burst: ELIXIR_BURST,
+            elixir_burst,
         }
     }
 }

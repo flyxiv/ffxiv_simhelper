@@ -30,11 +30,11 @@ impl PriorityTable for RedmagePriorityTable {
         self.opener[index].clone()
     }
 
-    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.gcd_priority_table
     }
 
-    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_ogcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.ogcd_priority_table
     }
 
@@ -135,7 +135,7 @@ pub(crate) fn make_redmage_gcd_priority_table(db: &RedmageDatabase) -> Vec<Skill
                 )),
                 Box::new(Or(
                     Box::new(And(
-                        Box::new(SkillPrerequisite::MillisecondsBeforeBurst(3000)),
+                        Box::new(MillisecondsBeforeBurst(3000)),
                         Box::new(And(
                             Box::new(HasResource(0, 50)),
                             Box::new(And(Box::new(HasResource(1, 50)), Box::new(Combo(Some(0))))),
@@ -238,14 +238,14 @@ pub(crate) fn make_redmage_ogcd_priority_table(db: &RedmageDatabase) -> Vec<Skil
         SkillPriorityInfo {
             skill_id: db.engagement.get_id(),
             prerequisite: Some(Or(
-                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+                Box::new(MillisecondsBeforeBurst(0)),
                 Box::new(Not(Box::new(MillisecondsBeforeBurst(35000)))),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.corps_a_corps.get_id(),
             prerequisite: Some(Or(
-                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+                Box::new(MillisecondsBeforeBurst(0)),
                 Box::new(Not(Box::new(MillisecondsBeforeBurst(35000)))),
             )),
         },

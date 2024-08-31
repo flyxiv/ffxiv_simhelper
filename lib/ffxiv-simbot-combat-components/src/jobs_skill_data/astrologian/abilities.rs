@@ -44,7 +44,7 @@ pub(crate) struct AstrologianDatabase {
 
 impl AstrologianDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let DIVINATION_BUFF: BuffStatus = BuffStatus {
+        let divination_buff: BuffStatus = BuffStatus {
             id: 500,
             name: String::from("Divination"),
             stacks: 1,
@@ -56,7 +56,7 @@ impl AstrologianDatabase {
             is_raidwide: true,
             trigger_proc_event_on_gcd: vec![],
         };
-        let THE_BALANCE_BUFF: BuffStatus = BuffStatus {
+        let the_balance_buff: BuffStatus = BuffStatus {
             id: 501,
             name: String::from("The Balance"),
             stacks: 1,
@@ -68,7 +68,7 @@ impl AstrologianDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let THE_SPEAR_BUFF: BuffStatus = BuffStatus {
+        let the_spear_buff: BuffStatus = BuffStatus {
             id: 502,
             name: String::from("The Spear"),
             stacks: 1,
@@ -80,7 +80,7 @@ impl AstrologianDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let LIGHTSPEED_BUFF: BuffStatus = BuffStatus {
+        let lightspeed_buff: BuffStatus = BuffStatus {
             id: 503,
             name: String::from("Lightspeed"),
             stacks: 1,
@@ -92,7 +92,7 @@ impl AstrologianDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let LORD_OF_CROWNS_BUFF: BuffStatus = BuffStatus {
+        let lord_of_crowns_buff: BuffStatus = BuffStatus {
             id: 504,
             name: String::from("Lord of Crowns"),
             stacks: 1,
@@ -104,7 +104,7 @@ impl AstrologianDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let COMBUST_III_DOT: DebuffStatus = DebuffStatus {
+        let combust_iii_dot: DebuffStatus = DebuffStatus {
             id: 505,
             name: String::from("Combust III"),
             stacks: 1,
@@ -120,7 +120,7 @@ impl AstrologianDatabase {
             is_raidwide: false,
             snapshotted_infos: Default::default(),
         };
-        let THE_BALANCE_READY: BuffStatus = BuffStatus {
+        let the_balance_ready: BuffStatus = BuffStatus {
             id: 506,
             name: String::from("The Balance Ready"),
             stacks: 1,
@@ -132,7 +132,7 @@ impl AstrologianDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let THE_SPEAR_READY: BuffStatus = BuffStatus {
+        let the_spear_ready: BuffStatus = BuffStatus {
             id: 507,
             name: String::from("The Spear Ready"),
             stacks: 1,
@@ -144,7 +144,7 @@ impl AstrologianDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let DIVINING: BuffStatus = BuffStatus {
+        let divining: BuffStatus = BuffStatus {
             id: 508,
             name: String::from("Divining"),
             stacks: 1,
@@ -157,7 +157,7 @@ impl AstrologianDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let FALL_MALEFIC: AttackSkill = AttackSkill {
+        let fall_malefic = AttackSkill {
             id: 500,
             name: String::from("Fall Malefic"),
             player_id,
@@ -182,7 +182,7 @@ impl AstrologianDatabase {
             use_type: UseType::UseOnTarget,
             cooldown_reduced_by_speed: true,
         };
-        let COMBUST_III: AttackSkill = AttackSkill {
+        let combust_iii = AttackSkill {
             id: 501,
             name: String::from("Combust III"),
             player_id,
@@ -190,7 +190,7 @@ impl AstrologianDatabase {
             trait_percent: 130,
             additional_skill_events: vec![ApplyDebuff(
                 player_id,
-                COMBUST_III_DOT.clone(),
+                combust_iii_dot.clone(),
                 30000,
                 30000,
                 0,
@@ -213,7 +213,7 @@ impl AstrologianDatabase {
             use_type: UseType::UseOnTarget,
             cooldown_reduced_by_speed: true,
         };
-        let EARTHLY_STAR: AttackSkill = AttackSkill {
+        let earthly_star = AttackSkill {
             id: 502,
             name: String::from("Earthly Star"),
             player_id,
@@ -238,7 +238,7 @@ impl AstrologianDatabase {
             use_type: UseType::UseOnTarget,
             cooldown_reduced_by_speed: false,
         };
-        let ASTRAL_DRAW: AttackSkill = AttackSkill {
+        let astral_draw = AttackSkill {
             id: 503,
             name: String::from("Astral Draw"),
             player_id,
@@ -248,7 +248,7 @@ impl AstrologianDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    THE_BALANCE_READY.clone(),
+                    the_balance_ready.clone(),
                     240000,
                     240000,
                     0,
@@ -256,7 +256,7 @@ impl AstrologianDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    LORD_OF_CROWNS_BUFF.clone(),
+                    lord_of_crowns_buff.clone(),
                     240000,
                     240000,
                     0,
@@ -280,7 +280,7 @@ impl AstrologianDatabase {
             use_type: UseType::NoTarget,
             cooldown_reduced_by_speed: false,
         };
-        let UMBRAL_DRAW: AttackSkill = AttackSkill {
+        let umbral_draw = AttackSkill {
             id: 504,
             name: String::from("Umbral Draw"),
             player_id,
@@ -289,7 +289,7 @@ impl AstrologianDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                THE_SPEAR_READY.clone(),
+                the_spear_ready.clone(),
                 240000,
                 240000,
                 0,
@@ -312,7 +312,7 @@ impl AstrologianDatabase {
             use_type: UseType::NoTarget,
             cooldown_reduced_by_speed: false,
         };
-        let THE_BALANCE: AttackSkill = AttackSkill {
+        let the_balance = AttackSkill {
             id: 505,
             name: String::from("The Balance"),
             player_id,
@@ -321,7 +321,7 @@ impl AstrologianDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                THE_BALANCE_BUFF.clone(),
+                the_balance_buff.clone(),
                 15000,
                 15000,
                 0,
@@ -334,7 +334,7 @@ impl AstrologianDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(THE_BALANCE_READY.get_id())],
+            resource_required: vec![UseBuff(the_balance_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -344,7 +344,7 @@ impl AstrologianDatabase {
             use_type: UseType::UseOnPartyMember,
             cooldown_reduced_by_speed: false,
         };
-        let THE_SPEAR: AttackSkill = AttackSkill {
+        let the_spear = AttackSkill {
             id: 506,
             name: String::from("The Spear"),
             player_id,
@@ -353,7 +353,7 @@ impl AstrologianDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                THE_SPEAR_BUFF.clone(),
+                the_spear_buff.clone(),
                 15000,
                 15000,
                 0,
@@ -366,7 +366,7 @@ impl AstrologianDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(THE_SPEAR_READY.get_id())],
+            resource_required: vec![UseBuff(the_spear_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -376,15 +376,15 @@ impl AstrologianDatabase {
             use_type: UseType::UseOnPartyMember,
             cooldown_reduced_by_speed: false,
         };
-        let DIVINATION: AttackSkill = AttackSkill {
+        let divination = AttackSkill {
             id: 507,
             name: String::from("Divination"),
             player_id,
             potency: 0,
             trait_percent: 100,
             additional_skill_events: vec![
-                ApplyRaidBuff(player_id, DIVINATION_BUFF.clone(), 20000, 20000, 0),
-                ApplyBuff(player_id, player_id, DIVINING.clone(), 30000, 30000, 0),
+                ApplyRaidBuff(player_id, divination_buff.clone(), 20000, 20000, 0),
+                ApplyBuff(player_id, player_id, divining.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -404,7 +404,7 @@ impl AstrologianDatabase {
             use_type: UseType::UseOnTarget,
             cooldown_reduced_by_speed: false,
         };
-        let LIGHTSPEED: AttackSkill = AttackSkill {
+        let lightspeed = AttackSkill {
             id: 508,
             name: String::from("Lightspeed"),
             player_id,
@@ -413,7 +413,7 @@ impl AstrologianDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                LIGHTSPEED_BUFF.clone(),
+                lightspeed_buff.clone(),
                 15000,
                 15000,
                 0,
@@ -436,7 +436,7 @@ impl AstrologianDatabase {
             use_type: UseType::NoTarget,
             cooldown_reduced_by_speed: true,
         };
-        let LORD_OF_CROWNS: AttackSkill = AttackSkill {
+        let lord_of_crowns = AttackSkill {
             id: 510,
             name: String::from("Lord of Crowns"),
             player_id,
@@ -451,7 +451,7 @@ impl AstrologianDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(LORD_OF_CROWNS_BUFF.get_id())],
+            resource_required: vec![UseBuff(lord_of_crowns_buff.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -461,7 +461,7 @@ impl AstrologianDatabase {
             use_type: UseType::NoTarget,
             cooldown_reduced_by_speed: false,
         };
-        let FALL_MALEFIC_LIGHTSPEED: AttackSkill = AttackSkill {
+        let fall_malefic_lightspeed = AttackSkill {
             id: 511,
             name: String::from("Fall Malefic"),
             player_id,
@@ -476,7 +476,7 @@ impl AstrologianDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![CheckStatus(LIGHTSPEED_BUFF.get_id())],
+            resource_required: vec![CheckStatus(lightspeed_buff.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -486,7 +486,7 @@ impl AstrologianDatabase {
             use_type: UseType::UseOnTarget,
             cooldown_reduced_by_speed: false,
         };
-        let DRAW: AttackSkill = AttackSkill {
+        let draw = AttackSkill {
             id: 512,
             name: String::from("Draw"),
             player_id,
@@ -512,7 +512,7 @@ impl AstrologianDatabase {
             cooldown_reduced_by_speed: false,
         };
 
-        let ORACLE: AttackSkill = AttackSkill {
+        let oracle = AttackSkill {
             id: 513,
             name: String::from("Oracle"),
             player_id,
@@ -527,7 +527,7 @@ impl AstrologianDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(DIVINING.get_id())],
+            resource_required: vec![UseBuff(divining.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -541,30 +541,30 @@ impl AstrologianDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         AstrologianDatabase {
-            fall_malefic: FALL_MALEFIC,
-            combust_iii: COMBUST_III,
-            earthly_star: EARTHLY_STAR,
-            astral_draw: ASTRAL_DRAW,
-            umbral_draw: UMBRAL_DRAW,
-            the_balance: THE_BALANCE,
-            the_spear: THE_SPEAR,
-            divination: DIVINATION,
-            lightspeed: LIGHTSPEED,
-            lord_of_crowns: LORD_OF_CROWNS,
-            fall_malefic_lightspeed: FALL_MALEFIC_LIGHTSPEED,
-            draw: DRAW,
-            oracle: ORACLE,
+            fall_malefic,
+            combust_iii,
+            earthly_star,
+            astral_draw,
+            umbral_draw,
+            the_balance,
+            the_spear,
+            divination,
+            lightspeed,
+            lord_of_crowns,
+            fall_malefic_lightspeed,
+            draw,
+            oracle,
 
-            divination_buff: DIVINATION_BUFF,
-            the_balance_buff: THE_BALANCE_BUFF,
-            the_spear_buff: THE_SPEAR_BUFF,
-            lightspeed_buff: LIGHTSPEED_BUFF,
-            lord_of_crowns_buff: LORD_OF_CROWNS_BUFF,
-            the_spear_ready: THE_SPEAR_READY,
-            the_balance_ready: THE_BALANCE_READY,
-            divining: DIVINING,
+            divination_buff,
+            the_balance_buff,
+            the_spear_buff,
+            lightspeed_buff,
+            lord_of_crowns_buff,
+            the_spear_ready,
+            the_balance_ready,
+            divining,
 
-            combust_iii_dot: COMBUST_III_DOT,
+            combust_iii_dot,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

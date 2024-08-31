@@ -28,7 +28,7 @@ lazy_static! {
 pub(crate) fn create_player(
     player_info: PlayerInfoRequest,
     composition_buff_percent: BuffIncreasePercentType,
-    player_jobs: &Vec<(PlayerIdType, String)>,
+    player_jobs: &[(PlayerIdType, String)],
     event_queue: Rc<RefCell<FfxivEventQueue>>,
 ) -> Result<FfxivPlayer> {
     let character_power = player_info.power;
@@ -188,7 +188,7 @@ pub(crate) fn create_player(
 
 fn get_partner_id(
     partner_id: Option<PlayerIdType>,
-    party_jobs: &Vec<(PlayerIdType, String)>,
+    party_jobs: &[(PlayerIdType, String)],
     partner_category: PartnerCategory,
 ) -> PlayerIdType {
     match partner_id {

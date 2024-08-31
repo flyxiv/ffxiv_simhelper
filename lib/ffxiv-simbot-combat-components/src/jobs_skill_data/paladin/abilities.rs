@@ -50,7 +50,7 @@ pub(crate) struct PaladinDatabase {
 
 impl PaladinDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let REQUIESCAT_BUFF: BuffStatus = BuffStatus {
+        let requiescat_buff: BuffStatus = BuffStatus {
             id: 1900,
             name: String::from("Requiescat"),
             stacks: 4,
@@ -62,7 +62,7 @@ impl PaladinDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FIGHT_OR_FLIGHT_BUFF: BuffStatus = BuffStatus {
+        let fight_or_flight_buff: BuffStatus = BuffStatus {
             id: 1901,
             name: String::from("Fight or Flight"),
             stacks: 1,
@@ -74,7 +74,7 @@ impl PaladinDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let ATONEMENT_READY: BuffStatus = BuffStatus {
+        let atonement_ready: BuffStatus = BuffStatus {
             id: 1902,
             name: String::from("Atonement Ready"),
             stacks: 1,
@@ -86,7 +86,7 @@ impl PaladinDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let CIRCLE_OF_SCORN_DOT: DebuffStatus = DebuffStatus {
+        let circle_of_scorn_dot: DebuffStatus = DebuffStatus {
             id: 1903,
             name: String::from("Circle of Scorn"),
             snapshotted_infos: Default::default(),
@@ -102,7 +102,7 @@ impl PaladinDatabase {
             stacks: 1,
             max_stacks: 1,
         };
-        let CONFITEOR_READY: BuffStatus = BuffStatus {
+        let confiteor_ready: BuffStatus = BuffStatus {
             id: 1904,
             name: String::from("Confiteor Ready"),
             owner_id: player_id,
@@ -114,7 +114,7 @@ impl PaladinDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let DIVINE_MIGHT: BuffStatus = BuffStatus {
+        let divine_might: BuffStatus = BuffStatus {
             id: 1905,
             name: String::from("Divine Might"),
             stacks: 1,
@@ -126,7 +126,7 @@ impl PaladinDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let GORING_BLADE_READY: BuffStatus = BuffStatus {
+        let goring_blade_ready: BuffStatus = BuffStatus {
             id: 1906,
             name: String::from("Goring Blade Ready"),
             owner_id: player_id,
@@ -138,7 +138,7 @@ impl PaladinDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SUPPLICATION_READY: BuffStatus = BuffStatus {
+        let supplication_ready: BuffStatus = BuffStatus {
             id: 1907,
             name: String::from("Supplication Ready"),
             owner_id: player_id,
@@ -150,7 +150,7 @@ impl PaladinDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SEPULCHRE_READY: BuffStatus = BuffStatus {
+        let sepulchre_ready: BuffStatus = BuffStatus {
             id: 1908,
             name: String::from("Sepulchre Ready"),
             owner_id: player_id,
@@ -163,7 +163,7 @@ impl PaladinDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let IMPERATOR: AttackSkill = AttackSkill {
+        let imperator: AttackSkill = AttackSkill {
             id: 1900,
             name: String::from("Imperator"),
             player_id,
@@ -173,7 +173,7 @@ impl PaladinDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    REQUIESCAT_BUFF.clone(),
+                    requiescat_buff.clone(),
                     30000,
                     30000,
                     0,
@@ -181,7 +181,7 @@ impl PaladinDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    CONFITEOR_READY.clone(),
+                    confiteor_ready.clone(),
                     30000,
                     30000,
                     0,
@@ -205,7 +205,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let GORING_BLADE: AttackSkill = AttackSkill {
+        let goring_blade: AttackSkill = AttackSkill {
             id: 1901,
             name: String::from("Goring Blade"),
             player_id,
@@ -221,7 +221,7 @@ impl PaladinDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(GORING_BLADE_READY.get_id())],
+            resource_required: vec![UseBuff(goring_blade_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -230,7 +230,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let CIRCLE_OF_SCORN: AttackSkill = AttackSkill {
+        let circle_of_scorn: AttackSkill = AttackSkill {
             id: 1902,
             name: String::from("Circle of Scorn"),
             player_id,
@@ -238,7 +238,7 @@ impl PaladinDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ApplyDebuff(
                 player_id,
-                CIRCLE_OF_SCORN_DOT.clone(),
+                circle_of_scorn_dot.clone(),
                 15000,
                 15000,
                 0,
@@ -261,7 +261,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let ROYAL_AUTHORITY: AttackSkill = AttackSkill {
+        let royal_authority: AttackSkill = AttackSkill {
             id: 1903,
             name: String::from("Royal Authority"),
             player_id,
@@ -271,12 +271,12 @@ impl PaladinDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    ATONEMENT_READY.clone(),
+                    atonement_ready.clone(),
                     30000,
                     30000,
                     0,
                 ),
-                ApplyBuff(player_id, player_id, DIVINE_MIGHT.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, divine_might.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: Some(0),
@@ -296,7 +296,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let CONFITEOR: AttackSkill = AttackSkill {
+        let confiteor: AttackSkill = AttackSkill {
             id: 1904,
             name: String::from("Confiteor"),
             player_id,
@@ -312,7 +312,7 @@ impl PaladinDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(CONFITEOR_READY.get_id())],
+            resource_required: vec![UseBuff(confiteor_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -321,7 +321,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HOLY_SPIRIT: AttackSkill = AttackSkill {
+        let holy_spirit: AttackSkill = AttackSkill {
             id: 1905,
             name: String::from("Holy Spirit"),
             player_id,
@@ -337,7 +337,7 @@ impl PaladinDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(DIVINE_MIGHT.get_id())],
+            resource_required: vec![UseBuff(divine_might.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -346,7 +346,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ATONEMENT: AttackSkill = AttackSkill {
+        let atonement: AttackSkill = AttackSkill {
             id: 1906,
             name: String::from("Atonement"),
             player_id,
@@ -355,7 +355,7 @@ impl PaladinDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                SUPPLICATION_READY.clone(),
+                supplication_ready.clone(),
                 30000,
                 30000,
                 0,
@@ -369,7 +369,7 @@ impl PaladinDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(ATONEMENT_READY.get_id())],
+            resource_required: vec![UseBuff(atonement_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -378,7 +378,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let EXPLACION: AttackSkill = AttackSkill {
+        let explacion: AttackSkill = AttackSkill {
             id: 1907,
             name: String::from("Explacion"),
             player_id,
@@ -403,7 +403,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let BLADE_OF_FAITH: AttackSkill = AttackSkill {
+        let blade_of_faith: AttackSkill = AttackSkill {
             id: 1908,
             name: String::from("Blade of Faith"),
             player_id,
@@ -428,7 +428,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let BLADE_OF_TRUTH: AttackSkill = AttackSkill {
+        let blade_of_truth: AttackSkill = AttackSkill {
             id: 1909,
             name: String::from("Blade of Truth"),
             player_id,
@@ -453,7 +453,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let BLADE_OF_VALOR: AttackSkill = AttackSkill {
+        let blade_of_valor: AttackSkill = AttackSkill {
             id: 1910,
             name: String::from("Blade of Valor"),
             player_id,
@@ -478,7 +478,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let INTERVENE: AttackSkill = AttackSkill {
+        let intervene: AttackSkill = AttackSkill {
             id: 1911,
             name: String::from("Intervene"),
             player_id,
@@ -503,7 +503,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let FIGHT_OR_FLIGHT: AttackSkill = AttackSkill {
+        let fight_or_flight: AttackSkill = AttackSkill {
             id: 1912,
             name: String::from("Fight or Flight"),
             player_id,
@@ -513,7 +513,7 @@ impl PaladinDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    FIGHT_OR_FLIGHT_BUFF.clone(),
+                    fight_or_flight_buff.clone(),
                     20000,
                     20000,
                     0,
@@ -521,7 +521,7 @@ impl PaladinDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    GORING_BLADE_READY.clone(),
+                    goring_blade_ready.clone(),
                     30000,
                     30000,
                     0,
@@ -545,7 +545,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let FAST_BLADE: AttackSkill = AttackSkill {
+        let fast_blade: AttackSkill = AttackSkill {
             id: 1913,
             name: String::from("Fast Blade"),
             player_id,
@@ -570,7 +570,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let RIOT_BLADE: AttackSkill = AttackSkill {
+        let riot_blade: AttackSkill = AttackSkill {
             id: 1914,
             name: String::from("Riot Blade"),
             player_id,
@@ -596,7 +596,7 @@ impl PaladinDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let WEAK_HOLY_SPIRIT: AttackSkill = AttackSkill {
+        let weak_holy_spirit: AttackSkill = AttackSkill {
             id: 1915,
             name: String::from("Holy Spirit"),
             player_id,
@@ -621,7 +621,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SUPPLICATION: AttackSkill = AttackSkill {
+        let supplication: AttackSkill = AttackSkill {
             id: 1916,
             name: String::from("Supplication"),
             player_id,
@@ -630,7 +630,7 @@ impl PaladinDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                SEPULCHRE_READY.clone(),
+                sepulchre_ready.clone(),
                 30000,
                 30000,
                 0,
@@ -644,7 +644,7 @@ impl PaladinDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(SUPPLICATION_READY.get_id())],
+            resource_required: vec![UseBuff(supplication_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -653,7 +653,7 @@ impl PaladinDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SEPULCHRE: AttackSkill = AttackSkill {
+        let sepulchre: AttackSkill = AttackSkill {
             id: 1917,
             name: String::from("Sepulchre"),
             player_id,
@@ -669,7 +669,7 @@ impl PaladinDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(SEPULCHRE_READY.get_id())],
+            resource_required: vec![UseBuff(sepulchre_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -679,7 +679,7 @@ impl PaladinDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let BLADE_OF_HONOR: AttackSkill = AttackSkill {
+        let blade_of_honor: AttackSkill = AttackSkill {
             id: 1918,
             name: String::from("Blade of Honor"),
             player_id,
@@ -708,35 +708,35 @@ impl PaladinDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         PaladinDatabase {
-            fast_blade: FAST_BLADE,
-            fight_or_flight: FIGHT_OR_FLIGHT,
-            riot_blade: RIOT_BLADE,
-            imperator: IMPERATOR,
-            goring_blade: GORING_BLADE,
-            circle_of_scorn: CIRCLE_OF_SCORN,
-            royal_authority: ROYAL_AUTHORITY,
-            confiteor: CONFITEOR,
-            holy_spirit: HOLY_SPIRIT,
-            atonement: ATONEMENT,
-            explacion: EXPLACION,
-            blade_of_faith: BLADE_OF_FAITH,
-            blade_of_truth: BLADE_OF_TRUTH,
-            blade_of_valor: BLADE_OF_VALOR,
-            intervene: INTERVENE,
-            weak_holy_spirit: WEAK_HOLY_SPIRIT,
-            supplication: SUPPLICATION,
-            sepulchre: SEPULCHRE,
-            blade_of_honor: BLADE_OF_HONOR,
+            fast_blade,
+            fight_or_flight,
+            riot_blade,
+            imperator,
+            goring_blade,
+            circle_of_scorn,
+            royal_authority,
+            confiteor,
+            holy_spirit,
+            atonement,
+            explacion,
+            blade_of_faith,
+            blade_of_truth,
+            blade_of_valor,
+            intervene,
+            weak_holy_spirit,
+            supplication,
+            sepulchre,
+            blade_of_honor,
 
-            requiescat_buff: REQUIESCAT_BUFF,
-            fight_or_flight_buff: FIGHT_OR_FLIGHT_BUFF,
-            atonement_ready: ATONEMENT_READY,
-            circle_of_scorn_dot: CIRCLE_OF_SCORN_DOT,
-            confiteor_ready: CONFITEOR_READY,
-            divine_might: DIVINE_MIGHT,
-            goring_blade_ready: GORING_BLADE_READY,
-            sepulchre_ready: SEPULCHRE_READY,
-            supplication_ready: SUPPLICATION_READY,
+            requiescat_buff,
+            fight_or_flight_buff,
+            atonement_ready,
+            circle_of_scorn_dot,
+            confiteor_ready,
+            divine_might,
+            goring_blade_ready,
+            sepulchre_ready,
+            supplication_ready,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

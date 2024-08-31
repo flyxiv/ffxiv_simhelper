@@ -146,10 +146,11 @@ impl CombatResource for MachinistCombatResources {
         return (ffxiv_events, vec![]);
     }
 
+    fn trigger_on_crit(&mut self) {}
+
     fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
-
     fn update_stack_timer(&mut self, elapsed_time: TimeType) {
         if let Some((potency, delay)) = self.queen_damage_incoming {
             self.queen_damage_incoming = Some((potency, max(delay - elapsed_time, 0)));
@@ -159,7 +160,6 @@ impl CombatResource for MachinistCombatResources {
             self.wildfire_damage_incoming = Some((potency, max(delay - elapsed_time, 0)));
         }
     }
-    fn trigger_on_crit(&mut self) {}
 }
 
 impl MachinistCombatResources {

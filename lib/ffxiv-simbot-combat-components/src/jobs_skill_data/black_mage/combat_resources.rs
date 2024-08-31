@@ -97,9 +97,11 @@ impl CombatResource for BlackmageCombatResources {
         (vec![], vec![])
     }
 
+    fn trigger_on_crit(&mut self) {}
     fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
         0
     }
+
     fn update_stack_timer(&mut self, elapsed_time_millisecond: TimeType) {
         if elapsed_time_millisecond >= self.next_polyglot_time {
             let polyglot_stack = self.polyglot_stack;
@@ -109,8 +111,6 @@ impl CombatResource for BlackmageCombatResources {
 
         self.next_polyglot_time -= elapsed_time_millisecond;
     }
-
-    fn trigger_on_crit(&mut self) {}
 }
 
 impl BlackmageCombatResources {

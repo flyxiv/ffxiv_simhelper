@@ -9,7 +9,7 @@ use crate::skill::ResourceRequirements::{CheckStatus, Resource, UseBuff};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType, PotencyType};
+use crate::types::{PlayerIdType, PotencyType};
 use std::collections::HashMap;
 
 pub(crate) struct ReaperDatabase {
@@ -53,7 +53,7 @@ pub(crate) struct ReaperDatabase {
 
 impl ReaperDatabase {
     pub(crate) fn new(player_id: PlayerIdType, player_count: usize) -> Self {
-        let ENSHROUD_STATUS: BuffStatus = BuffStatus {
+        let enshroud_status: BuffStatus = BuffStatus {
             id: 1200,
             name: String::from("Enshroud"),
             stacks: 1,
@@ -65,7 +65,7 @@ impl ReaperDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let ENHANCED_GALLOWS_BUFF: BuffStatus = BuffStatus {
+        let enhanced_gallows_buff: BuffStatus = BuffStatus {
             id: 1201,
             name: String::from("Enhanced Gallows"),
             stacks: 1,
@@ -77,7 +77,7 @@ impl ReaperDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let ENHANCED_GIBBET_BUFF: BuffStatus = BuffStatus {
+        let enhanced_gibbet_buff: BuffStatus = BuffStatus {
             id: 1202,
             name: String::from("Enhanced Gibbet"),
             stacks: 1,
@@ -89,7 +89,7 @@ impl ReaperDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let ARCANE_CIRCLE_BUFF: BuffStatus = BuffStatus {
+        let arcane_circle_buff: BuffStatus = BuffStatus {
             id: 1203,
             name: String::from("Arcane Circle"),
             stacks: 1,
@@ -101,7 +101,7 @@ impl ReaperDatabase {
             is_raidwide: true,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SHADOW_OF_DEATH_DEBUFF: DebuffStatus = DebuffStatus {
+        let shadow_of_death_debuff: DebuffStatus = DebuffStatus {
             id: 1204,
             name: String::from("Shadow of Death"),
             snapshotted_infos: Default::default(),
@@ -117,7 +117,7 @@ impl ReaperDatabase {
             duration_millisecond: 30000,
             is_raidwide: false,
         };
-        let PLENTIFUL_HARVEST_READY: BuffStatus = BuffStatus {
+        let plentiful_harvest_ready: BuffStatus = BuffStatus {
             id: 1205,
             name: String::from("Plentiful Harvest"),
             stacks: 1,
@@ -129,7 +129,7 @@ impl ReaperDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let OBLATIO: BuffStatus = BuffStatus {
+        let oblatio: BuffStatus = BuffStatus {
             id: 1206,
             name: String::from("Oblatio"),
             stacks: 1,
@@ -142,7 +142,7 @@ impl ReaperDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let PERFECTIO_PARATA: BuffStatus = BuffStatus {
+        let perfectio_parata: BuffStatus = BuffStatus {
             id: 1207,
             name: String::from("Perfectio Parata"),
             stacks: 1,
@@ -155,7 +155,7 @@ impl ReaperDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let IDEAL_HOST: BuffStatus = BuffStatus {
+        let ideal_host: BuffStatus = BuffStatus {
             id: 1208,
             name: String::from("Ideal Host"),
             stacks: 1,
@@ -168,7 +168,7 @@ impl ReaperDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let SLICE: AttackSkill = AttackSkill {
+        let slice: AttackSkill = AttackSkill {
             id: 1200,
             name: String::from("Slice"),
             player_id,
@@ -193,7 +193,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let WAXING_SLICE: AttackSkill = AttackSkill {
+        let waxing_slice: AttackSkill = AttackSkill {
             id: 1201,
             name: String::from("Waxing Slice"),
             player_id,
@@ -218,7 +218,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let INFERNAL_SLICE: AttackSkill = AttackSkill {
+        let infernal_slice: AttackSkill = AttackSkill {
             id: 1202,
             name: String::from("Infernal Slice"),
             player_id,
@@ -243,7 +243,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SHADOW_OF_DEATH: AttackSkill = AttackSkill {
+        let shadow_of_death: AttackSkill = AttackSkill {
             id: 1203,
             name: String::from("Shadow of Death"),
             player_id,
@@ -251,7 +251,7 @@ impl ReaperDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ApplyDebuff(
                 player_id,
-                SHADOW_OF_DEATH_DEBUFF.clone(),
+                shadow_of_death_debuff.clone(),
                 30000,
                 60000,
                 0,
@@ -274,7 +274,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SOUL_SLICE: AttackSkill = AttackSkill {
+        let soul_slice: AttackSkill = AttackSkill {
             id: 1204,
             name: String::from("Soul Slice"),
             player_id,
@@ -299,7 +299,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let BLOOD_STALK: AttackSkill = AttackSkill {
+        let blood_stalk: AttackSkill = AttackSkill {
             id: 1205,
             name: String::from("Blood Stalk"),
             player_id,
@@ -324,7 +324,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let GLUTTONY: AttackSkill = AttackSkill {
+        let gluttony: AttackSkill = AttackSkill {
             id: 1206,
             name: String::from("Gluttony"),
             player_id,
@@ -349,7 +349,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let GALLOWS: AttackSkill = AttackSkill {
+        let gallows: AttackSkill = AttackSkill {
             id: 1207,
             name: String::from("Gallows"),
             player_id,
@@ -358,7 +358,7 @@ impl ReaperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ENHANCED_GIBBET_BUFF.clone(),
+                enhanced_gibbet_buff.clone(),
                 30000,
                 30000,
                 0,
@@ -381,7 +381,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ENHANCED_GALLOWS: AttackSkill = AttackSkill {
+        let enhanced_gallows: AttackSkill = AttackSkill {
             id: 1208,
             name: String::from("Gallows"),
             player_id,
@@ -390,7 +390,7 @@ impl ReaperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ENHANCED_GIBBET_BUFF.clone(),
+                enhanced_gibbet_buff.clone(),
                 30000,
                 30000,
                 0,
@@ -404,7 +404,7 @@ impl ReaperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![Resource(2, 1), UseBuff(ENHANCED_GALLOWS_BUFF.get_id())],
+            resource_required: vec![Resource(2, 1), UseBuff(enhanced_gallows_buff.get_id())],
             resource_created: HashMap::from([(1, 10)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -413,7 +413,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ENHANCED_GIBBET: AttackSkill = AttackSkill {
+        let enhanced_gibbet: AttackSkill = AttackSkill {
             id: 1209,
             name: String::from("Gibbet"),
             player_id,
@@ -422,7 +422,7 @@ impl ReaperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ENHANCED_GALLOWS_BUFF.clone(),
+                enhanced_gallows_buff.clone(),
                 30000,
                 30000,
                 0,
@@ -436,7 +436,7 @@ impl ReaperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![Resource(2, 1), UseBuff(ENHANCED_GIBBET_BUFF.get_id())],
+            resource_required: vec![Resource(2, 1), UseBuff(enhanced_gibbet_buff.get_id())],
             resource_created: HashMap::from([(1, 10)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -445,7 +445,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HARVEST_MOON: AttackSkill = AttackSkill {
+        let harvest_moon: AttackSkill = AttackSkill {
             id: 1210,
             name: String::from("Harvest Moon"),
             player_id,
@@ -470,18 +470,18 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ARCANE_CIRCLE: AttackSkill = AttackSkill {
+        let arcane_circle: AttackSkill = AttackSkill {
             id: 1211,
             name: String::from("Arcane Circle"),
             player_id,
             potency: 0,
             trait_percent: 100,
             additional_skill_events: vec![
-                ApplyRaidBuff(player_id, ARCANE_CIRCLE_BUFF.clone(), 20000, 20000, 0),
+                ApplyRaidBuff(player_id, arcane_circle_buff.clone(), 20000, 20000, 0),
                 ApplyBuff(
                     player_id,
                     player_id,
-                    PLENTIFUL_HARVEST_READY.clone(),
+                    plentiful_harvest_ready.clone(),
                     20000,
                     20000,
                     5000,
@@ -505,22 +505,22 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let PLENTIFUL_HARVEST: AttackSkill = AttackSkill {
+        let plentiful_harvest: AttackSkill = AttackSkill {
             id: 1212,
             name: String::from("Plentiful Harvest"),
             player_id,
-            potency: (720 + 40 * (player_count - 1) as PotencyType),
+            potency: 720 + 40 * (player_count - 1) as PotencyType,
             trait_percent: 100,
             additional_skill_events: vec![
                 ApplyBuff(
                     player_id,
                     player_id,
-                    PERFECTIO_PARATA.clone(),
+                    perfectio_parata.clone(),
                     30000,
                     30000,
                     0,
                 ),
-                ApplyBuff(player_id, player_id, IDEAL_HOST.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, ideal_host.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -531,7 +531,7 @@ impl ReaperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(PLENTIFUL_HARVEST_READY.get_id())],
+            resource_required: vec![UseBuff(plentiful_harvest_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -540,7 +540,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ENSHROUD: AttackSkill = AttackSkill {
+        let enshroud: AttackSkill = AttackSkill {
             id: 1213,
             name: String::from("Enshroud"),
             player_id,
@@ -550,12 +550,12 @@ impl ReaperDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    ENSHROUD_STATUS.clone(),
+                    enshroud_status.clone(),
                     30000,
                     30000,
                     0,
                 ),
-                ApplyBuff(player_id, player_id, OBLATIO.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, oblatio.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -575,7 +575,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let CROSS_REAPING: AttackSkill = AttackSkill {
+        let cross_reaping: AttackSkill = AttackSkill {
             id: 1214,
             name: String::from("Cross Reaping"),
             player_id,
@@ -584,7 +584,7 @@ impl ReaperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ENHANCED_GIBBET_BUFF.clone(),
+                enhanced_gibbet_buff.clone(),
                 60000,
                 60000,
                 0,
@@ -599,8 +599,8 @@ impl ReaperDatabase {
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
             resource_required: vec![
-                CheckStatus(ENSHROUD_STATUS.get_id()),
-                UseBuff(ENHANCED_GALLOWS_BUFF.get_id()),
+                CheckStatus(enshroud_status.get_id()),
+                UseBuff(enhanced_gallows_buff.get_id()),
                 Resource(3, 1),
             ],
             resource_created: HashMap::from([(4, 1)]),
@@ -611,7 +611,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let VOID_REAPING: AttackSkill = AttackSkill {
+        let void_reaping: AttackSkill = AttackSkill {
             id: 1215,
             name: String::from("Void Reaping"),
             player_id,
@@ -620,7 +620,7 @@ impl ReaperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ENHANCED_GALLOWS_BUFF.clone(),
+                enhanced_gallows_buff.clone(),
                 60000,
                 60000,
                 0,
@@ -635,8 +635,8 @@ impl ReaperDatabase {
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
             resource_required: vec![
-                CheckStatus(ENSHROUD_STATUS.get_id()),
-                UseBuff(ENHANCED_GIBBET_BUFF.get_id()),
+                CheckStatus(enshroud_status.get_id()),
+                UseBuff(enhanced_gibbet_buff.get_id()),
                 Resource(3, 1),
             ],
             resource_created: HashMap::from([(4, 1)]),
@@ -647,7 +647,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let LEMURES_SLICE: AttackSkill = AttackSkill {
+        let lemures_slice: AttackSkill = AttackSkill {
             id: 1216,
             name: String::from("Lemure's Slice"),
             player_id,
@@ -672,7 +672,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let COMMUNIO: AttackSkill = AttackSkill {
+        let communio: AttackSkill = AttackSkill {
             id: 1217,
             name: String::from("Communio"),
             player_id,
@@ -688,7 +688,7 @@ impl ReaperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![Resource(3, 1), UseBuff(ENSHROUD_STATUS.get_id())],
+            resource_required: vec![Resource(3, 1), UseBuff(enshroud_status.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -697,7 +697,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let EXECUTIONERS_GALLOWS: AttackSkill = AttackSkill {
+        let executioners_gallows: AttackSkill = AttackSkill {
             id: 1218,
             name: String::from("Executioner's Gallows"),
             player_id,
@@ -706,7 +706,7 @@ impl ReaperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ENHANCED_GIBBET_BUFF.clone(),
+                enhanced_gibbet_buff.clone(),
                 30000,
                 30000,
                 0,
@@ -720,7 +720,7 @@ impl ReaperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![Resource(5, 1), UseBuff(ENHANCED_GALLOWS_BUFF.get_id())],
+            resource_required: vec![Resource(5, 1), UseBuff(enhanced_gallows_buff.get_id())],
             resource_created: HashMap::from([(1, 10)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -729,7 +729,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let EXECUTIONERS_GIBBET: AttackSkill = AttackSkill {
+        let executioners_gibbet: AttackSkill = AttackSkill {
             id: 1219,
             name: String::from("Executioner's Gibbet"),
             player_id,
@@ -738,7 +738,7 @@ impl ReaperDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ENHANCED_GALLOWS_BUFF.clone(),
+                enhanced_gallows_buff.clone(),
                 30000,
                 30000,
                 0,
@@ -752,7 +752,7 @@ impl ReaperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![Resource(5, 1), UseBuff(ENHANCED_GIBBET_BUFF.get_id())],
+            resource_required: vec![Resource(5, 1), UseBuff(enhanced_gibbet_buff.get_id())],
             resource_created: HashMap::from([(1, 10)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -761,7 +761,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SACRIFICIUM: AttackSkill = AttackSkill {
+        let sacrificium: AttackSkill = AttackSkill {
             id: 1220,
             name: String::from("Sacrificium"),
             player_id,
@@ -778,8 +778,8 @@ impl ReaperDatabase {
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
             resource_required: vec![
-                CheckStatus(ENSHROUD_STATUS.get_id()),
-                UseBuff(OBLATIO.get_id()),
+                CheckStatus(enshroud_status.get_id()),
+                UseBuff(oblatio.get_id()),
             ],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
@@ -789,7 +789,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let PERFECTIO: AttackSkill = AttackSkill {
+        let perfectio: AttackSkill = AttackSkill {
             id: 1221,
             name: String::from("Perfectio"),
             player_id,
@@ -805,7 +805,7 @@ impl ReaperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(PERFECTIO_PARATA.get_id())],
+            resource_required: vec![UseBuff(perfectio_parata.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -814,7 +814,7 @@ impl ReaperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ENSHROUD_HOST: AttackSkill = AttackSkill {
+        let enshroud_host: AttackSkill = AttackSkill {
             id: 1222,
             name: String::from("Enshroud"),
             player_id,
@@ -824,12 +824,12 @@ impl ReaperDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    ENSHROUD_STATUS.clone(),
+                    enshroud_status.clone(),
                     30000,
                     30000,
                     0,
                 ),
-                ApplyBuff(player_id, player_id, OBLATIO.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, oblatio.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -840,7 +840,7 @@ impl ReaperDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 15000,
-            resource_required: vec![UseBuff(IDEAL_HOST.get_id())],
+            resource_required: vec![UseBuff(ideal_host.get_id())],
             resource_created: HashMap::from([(3, 5), (6, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -853,39 +853,39 @@ impl ReaperDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         ReaperDatabase {
-            slice: SLICE,
-            waxing_slice: WAXING_SLICE,
-            infernal_slice: INFERNAL_SLICE,
-            shadow_of_death: SHADOW_OF_DEATH,
-            soul_slice: SOUL_SLICE,
-            blood_stalk: BLOOD_STALK,
-            gluttony: GLUTTONY,
-            gallows: GALLOWS,
-            enhanced_gallows: ENHANCED_GALLOWS,
-            enhanced_gibbet: ENHANCED_GIBBET,
-            harvest_moon: HARVEST_MOON,
-            arcane_circle: ARCANE_CIRCLE,
-            plentiful_harvest: PLENTIFUL_HARVEST,
-            enshroud: ENSHROUD,
-            cross_reaping: CROSS_REAPING,
-            void_reaping: VOID_REAPING,
-            lemures_slice: LEMURES_SLICE,
-            communio: COMMUNIO,
-            executioners_gallows: EXECUTIONERS_GALLOWS,
-            executioners_gibbet: EXECUTIONERS_GIBBET,
-            sacrificium: SACRIFICIUM,
-            perfectio: PERFECTIO,
-            enshroud_host: ENSHROUD_HOST,
+            slice,
+            waxing_slice,
+            infernal_slice,
+            shadow_of_death,
+            soul_slice,
+            blood_stalk,
+            gluttony,
+            gallows,
+            enhanced_gallows,
+            enhanced_gibbet,
+            harvest_moon,
+            arcane_circle,
+            plentiful_harvest,
+            enshroud,
+            cross_reaping,
+            void_reaping,
+            lemures_slice,
+            communio,
+            executioners_gallows,
+            executioners_gibbet,
+            sacrificium,
+            perfectio,
+            enshroud_host,
 
-            enshroud_status: ENSHROUD_STATUS,
-            enhanced_gallows_buff: ENHANCED_GALLOWS_BUFF,
-            enhanced_gibbet_buff: ENHANCED_GIBBET_BUFF,
-            arcane_circle_buff: ARCANE_CIRCLE_BUFF,
-            shadow_of_death_debuff: SHADOW_OF_DEATH_DEBUFF,
-            oblatio: OBLATIO,
-            perfectio_parata: PERFECTIO_PARATA,
-            ideal_host: IDEAL_HOST,
-            plentiful_harvest_ready: PLENTIFUL_HARVEST_READY,
+            enshroud_status,
+            enhanced_gallows_buff,
+            enhanced_gibbet_buff,
+            arcane_circle_buff,
+            shadow_of_death_debuff,
+            oblatio,
+            perfectio_parata,
+            ideal_host,
+            plentiful_harvest_ready,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

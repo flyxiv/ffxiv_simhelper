@@ -26,11 +26,11 @@ impl PriorityTable for NinjaPriorityTable {
         self.opener[index].clone()
     }
 
-    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.gcd_priority_table
     }
 
-    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_ogcd_priority_table(&self) -> &[SkillPriorityInfo] {
         &self.ogcd_priority_table
     }
 
@@ -107,10 +107,8 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
         SkillPriorityInfo {
             skill_id: db.suiton.get_id(),
             prerequisite: Some(And(
-                Box::new(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
-                    1010, 17000,
-                )),
-                Box::new(Not(Box::new(SkillPrerequisite::HasBufforDebuff(1002)))),
+                Box::new(RelatedSkillCooldownLessOrEqualThan(1010, 17000)),
+                Box::new(Not(Box::new(HasBufforDebuff(1002)))),
             )),
         },
         SkillPriorityInfo {
@@ -125,7 +123,7 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
             prerequisite: Some(And(
                 Box::new(Not(Box::new(HasResource(1, 4)))),
                 Box::new(And(
-                    Box::new(Not(Box::new(SkillPrerequisite::HasBufforDebuff(
+                    Box::new(Not(Box::new(HasBufforDebuff(
                         db.kunais_bane_status.get_id(),
                     )))),
                     Box::new(SkillPrerequisite::Combo(Some(2))),
@@ -150,16 +148,14 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
                         30000,
                     )))),
                 )),
-                Box::new(Not(Box::new(SkillPrerequisite::HasBufforDebuff(
-                    db.kassatsu_status.get_id(),
-                )))),
+                Box::new(Not(Box::new(HasBufforDebuff(db.kassatsu_status.get_id())))),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.phantom_kamaitachi.get_id(),
             prerequisite: Some(And(
                 Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
-                Box::new(SkillPrerequisite::HasBufforDebuff(1007)),
+                Box::new(HasBufforDebuff(1007)),
             )),
         },
         SkillPriorityInfo {

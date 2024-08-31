@@ -15,12 +15,10 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, IdType, PlayerIdType, ResourceIdType, TimeType};
 use crate::types::{ResourceType, StackType};
 use itertools::Itertools;
-use log::info;
 use std::cell::RefCell;
 use std::cmp::max;
 use std::collections::HashMap;
 use std::rc::Rc;
-use std::time::Instant;
 
 #[derive(Clone)]
 pub(crate) enum Opener {
@@ -320,7 +318,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
         combat_info: CombatInfo,
         player: &FfxivPlayer,
         combat_resource: FfxivCombatResources,
-        ogcd_priority_table: &Vec<SkillPriorityInfo>,
+        ogcd_priority_table: &[SkillPriorityInfo],
         start_time: TimeType,
         turn_info: &TurnInfo,
         first_used_skill_id: IdType,
@@ -401,8 +399,8 @@ pub(crate) trait PriorityTable: Sized + Clone {
         self.meets_prequisite(&prerequisite, &combat_resource, &combat_info, skill, player)
     }
 
-    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo>;
-    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo>;
+    fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo];
+    fn get_ogcd_priority_table(&self) -> &[SkillPriorityInfo];
 
     fn meets_requirements(
         &self,

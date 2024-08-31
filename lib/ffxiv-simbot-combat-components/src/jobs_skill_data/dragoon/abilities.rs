@@ -55,7 +55,7 @@ pub(crate) struct DragoonDatabase {
 
 impl DragoonDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let LIFE_SURGE_STATUS: BuffStatus = BuffStatus {
+        let life_surge_status: BuffStatus = BuffStatus {
             id: 800,
             name: String::from("Life Surge"),
             stacks: 1,
@@ -67,7 +67,7 @@ impl DragoonDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let POWER_SURGE: BuffStatus = BuffStatus {
+        let power_surge: BuffStatus = BuffStatus {
             id: 801,
             name: String::from("Power Surge"),
             stacks: 1,
@@ -79,7 +79,7 @@ impl DragoonDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let DRAGONS_FLIGHT: BuffStatus = BuffStatus {
+        let dragons_flight: BuffStatus = BuffStatus {
             id: 802,
             name: String::from("Dragon's Flight"),
             stacks: 1,
@@ -91,7 +91,7 @@ impl DragoonDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let DRACONIAN_FIRE: BuffStatus = BuffStatus {
+        let draconian_fire: BuffStatus = BuffStatus {
             id: 803,
             name: String::from("Draconian Fire"),
             owner_id: player_id,
@@ -103,7 +103,7 @@ impl DragoonDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let LANCE_CHARGE_STATUS: BuffStatus = BuffStatus {
+        let lance_charge_status: BuffStatus = BuffStatus {
             id: 804,
             name: String::from("Lance Charge"),
             owner_id: player_id,
@@ -115,7 +115,7 @@ impl DragoonDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let DIVE_READY: BuffStatus = BuffStatus {
+        let dive_ready: BuffStatus = BuffStatus {
             id: 805,
             name: String::from("Dive Ready"),
             stacks: 1,
@@ -127,7 +127,7 @@ impl DragoonDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let STARCROSS_READY: BuffStatus = BuffStatus {
+        let starcross_ready: BuffStatus = BuffStatus {
             id: 806,
             name: String::from("Starcross Ready"),
             owner_id: player_id,
@@ -139,7 +139,7 @@ impl DragoonDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let BATTLE_LITANY_STATUS: BuffStatus = BuffStatus {
+        let battle_litany_status: BuffStatus = BuffStatus {
             id: 807,
             name: String::from("Battle Litany"),
             owner_id: player_id,
@@ -151,7 +151,7 @@ impl DragoonDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let LIFE_OF_THE_DRAGON: BuffStatus = BuffStatus {
+        let life_of_the_dragon: BuffStatus = BuffStatus {
             id: 808,
             name: String::from("Life of the Dragon"),
             owner_id: player_id,
@@ -164,7 +164,7 @@ impl DragoonDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let CHAOTIC_SPRING_DOT: DebuffStatus = DebuffStatus {
+        let chaotic_spring_dot: DebuffStatus = DebuffStatus {
             id: 810,
             name: String::from("Chaotic Spring"),
             owner_id: player_id,
@@ -181,16 +181,16 @@ impl DragoonDatabase {
             snapshotted_infos: HashMap::new(),
         };
 
-        let LIFE_SURGE: AttackSkill = AttackSkill {
+        let life_surge: AttackSkill = AttackSkill {
             id: 800,
             name: String::from("Life Surge"),
             player_id,
             potency: 0,
             trait_percent: 100,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                LIFE_SURGE_STATUS.clone(),
+                life_surge_status.clone(),
                 5000,
                 5000,
                 0,
@@ -213,7 +213,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let TRUE_THRUST: AttackSkill = AttackSkill {
+        let true_thrust: AttackSkill = AttackSkill {
             id: 801,
             name: String::from("True Thrust"),
             player_id,
@@ -238,7 +238,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let RAIDEN_THRUST: AttackSkill = AttackSkill {
+        let raiden_thrust: AttackSkill = AttackSkill {
             id: 802,
             name: String::from("Raiden Thrust"),
             player_id,
@@ -254,7 +254,7 @@ impl DragoonDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(DRACONIAN_FIRE.id)],
+            resource_required: vec![UseBuff(draconian_fire.id)],
             resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -263,7 +263,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let LANCE_BARRAGE: AttackSkill = AttackSkill {
+        let lance_barrage: AttackSkill = AttackSkill {
             id: 803,
             name: String::from("Lance Barrage"),
             player_id,
@@ -288,16 +288,16 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SPIRAL_BLOW: AttackSkill = AttackSkill {
+        let spiral_blow: AttackSkill = AttackSkill {
             id: 804,
             name: String::from("Spiral Blow"),
             player_id,
             potency: 300,
             trait_percent: 100,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                POWER_SURGE.clone(),
+                power_surge.clone(),
                 30000,
                 30000,
                 0,
@@ -320,7 +320,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HEAVENS_THRUST: AttackSkill = AttackSkill {
+        let heavens_thrust: AttackSkill = AttackSkill {
             id: 805,
             name: String::from("Heaven's Thrust"),
             player_id,
@@ -345,7 +345,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let CHAOTIC_SPRING: AttackSkill = AttackSkill {
+        let chaotic_spring: AttackSkill = AttackSkill {
             id: 806,
             name: String::from("Chaotic Spring"),
             player_id,
@@ -353,7 +353,7 @@ impl DragoonDatabase {
             trait_percent: 100,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
-                CHAOTIC_SPRING_DOT.clone(),
+                chaotic_spring_dot.clone(),
                 24000,
                 24000,
                 0,
@@ -376,7 +376,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let FANG_AND_CLAW: AttackSkill = AttackSkill {
+        let fang_and_claw: AttackSkill = AttackSkill {
             id: 807,
             name: String::from("Fang and Claw"),
             player_id,
@@ -401,7 +401,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let WHEELING_THRUST: AttackSkill = AttackSkill {
+        let wheeling_thrust: AttackSkill = AttackSkill {
             id: 808,
             name: String::from("Wheeling Thrust"),
             player_id,
@@ -426,7 +426,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let DRAKESBANE: AttackSkill = AttackSkill {
+        let drakesbane: AttackSkill = AttackSkill {
             id: 809,
             name: String::from("Drakesbane"),
             player_id,
@@ -435,7 +435,7 @@ impl DragoonDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                DRACONIAN_FIRE.clone(),
+                draconian_fire.clone(),
                 30000,
                 30000,
                 0,
@@ -458,7 +458,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let RISE_OF_THE_DRAGON: AttackSkill = AttackSkill {
+        let rise_of_the_dragon: AttackSkill = AttackSkill {
             id: 810,
             name: String::from("Rise of the Dragon"),
             player_id,
@@ -474,7 +474,7 @@ impl DragoonDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(DRAGONS_FLIGHT.id)],
+            resource_required: vec![UseBuff(dragons_flight.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -483,7 +483,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let LANCE_CHARGE: AttackSkill = AttackSkill {
+        let lance_charge: AttackSkill = AttackSkill {
             id: 811,
             name: String::from("Lance Charge"),
             player_id,
@@ -492,7 +492,7 @@ impl DragoonDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                LANCE_CHARGE_STATUS.clone(),
+                lance_charge_status.clone(),
                 20000,
                 20000,
                 0,
@@ -515,7 +515,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let HEAVENS_THRUST_SURGE: AttackSkill = AttackSkill {
+        let heavens_thrust_surge: AttackSkill = AttackSkill {
             id: 812,
             name: String::from("Heaven's Thrust"),
             player_id,
@@ -531,7 +531,7 @@ impl DragoonDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(LIFE_SURGE.id)],
+            resource_required: vec![UseBuff(life_surge.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -540,7 +540,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let DRAKESBANE_SURGE: AttackSkill = AttackSkill {
+        let drakesbane_surge: AttackSkill = AttackSkill {
             id: 813,
             name: String::from("Drakesbane"),
             player_id,
@@ -549,7 +549,7 @@ impl DragoonDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                DRACONIAN_FIRE.clone(),
+                draconian_fire.clone(),
                 30000,
                 30000,
                 0,
@@ -563,7 +563,7 @@ impl DragoonDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![ResourceRequirements::UseBuff(LIFE_SURGE.id)],
+            resource_required: vec![UseBuff(life_surge.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
             current_cooldown_millisecond: 0,
@@ -572,7 +572,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let STARCROSS: AttackSkill = AttackSkill {
+        let starcross: AttackSkill = AttackSkill {
             id: 814,
             name: String::from("Starcross"),
             player_id,
@@ -588,7 +588,7 @@ impl DragoonDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(STARCROSS_READY.id)],
+            resource_required: vec![UseBuff(starcross_ready.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -597,7 +597,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HIGH_JUMP: AttackSkill = AttackSkill {
+        let high_jump: AttackSkill = AttackSkill {
             id: 815,
             name: String::from("High Jump"),
             player_id,
@@ -606,7 +606,7 @@ impl DragoonDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                DIVE_READY.clone(),
+                dive_ready.clone(),
                 15000,
                 15000,
                 0,
@@ -629,7 +629,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let MIRAGE_DIVE: AttackSkill = AttackSkill {
+        let mirage_dive: AttackSkill = AttackSkill {
             id: 816,
             name: String::from("Mirage Dive"),
             player_id,
@@ -644,7 +644,7 @@ impl DragoonDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(DIVE_READY.get_id())],
+            resource_required: vec![UseBuff(dive_ready.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -654,7 +654,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let DRAGONFIRE_DIVE: AttackSkill = AttackSkill {
+        let dragonfire_dive: AttackSkill = AttackSkill {
             id: 819,
             name: String::from("Dragonfire Dive"),
             player_id,
@@ -663,7 +663,7 @@ impl DragoonDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                DRAGONS_FLIGHT.clone(),
+                dragons_flight.clone(),
                 30000,
                 30000,
                 0,
@@ -686,7 +686,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let BATTLE_LITANY: AttackSkill = AttackSkill {
+        let battle_litany: AttackSkill = AttackSkill {
             id: 820,
             name: String::from("Battle Litany"),
             player_id,
@@ -694,7 +694,7 @@ impl DragoonDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ApplyRaidBuff(
                 player_id,
-                BATTLE_LITANY_STATUS.clone(),
+                battle_litany_status.clone(),
                 20000,
                 20000,
                 1000,
@@ -717,7 +717,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let GEIRSKOGUL: AttackSkill = AttackSkill {
+        let geirskogul: AttackSkill = AttackSkill {
             id: 821,
             name: String::from("Geirskogul"),
             player_id,
@@ -726,7 +726,7 @@ impl DragoonDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                LIFE_OF_THE_DRAGON.clone(),
+                life_of_the_dragon.clone(),
                 30000,
                 30000,
                 0,
@@ -749,7 +749,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let NASTROND: AttackSkill = AttackSkill {
+        let nastrond: AttackSkill = AttackSkill {
             id: 823,
             name: String::from("Nastrond"),
             player_id,
@@ -774,7 +774,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let STARDIVER: AttackSkill = AttackSkill {
+        let stardiver: AttackSkill = AttackSkill {
             id: 824,
             name: String::from("Stardiver"),
             player_id,
@@ -783,7 +783,7 @@ impl DragoonDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                STARCROSS_READY.clone(),
+                starcross_ready.clone(),
                 20000,
                 20000,
                 0,
@@ -797,7 +797,7 @@ impl DragoonDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 30000,
-            resource_required: vec![ResourceRequirements::CheckStatus(LIFE_OF_THE_DRAGON.id)],
+            resource_required: vec![ResourceRequirements::CheckStatus(life_of_the_dragon.id)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -806,7 +806,7 @@ impl DragoonDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let WYRMWIND_THRUST: AttackSkill = AttackSkill {
+        let wyrmwind_thrust: AttackSkill = AttackSkill {
             id: 825,
             name: String::from("Wyrmwind Thrust"),
             player_id,
@@ -822,7 +822,7 @@ impl DragoonDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 20000,
-            resource_required: vec![ResourceRequirements::Resource(1, 2)],
+            resource_required: vec![Resource(1, 2)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -835,39 +835,39 @@ impl DragoonDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         DragoonDatabase {
-            life_surge: LIFE_SURGE,
-            true_thrust: TRUE_THRUST,
-            raiden_thrust: RAIDEN_THRUST,
-            lance_barrage: LANCE_BARRAGE,
-            spiral_blow: SPIRAL_BLOW,
-            heavens_thrust: HEAVENS_THRUST,
-            chaotic_spring: CHAOTIC_SPRING,
-            fang_and_claw: FANG_AND_CLAW,
-            wheeling_thrust: WHEELING_THRUST,
-            drakesbane: DRAKESBANE,
-            rise_of_the_dragon: RISE_OF_THE_DRAGON,
-            lance_charge: LANCE_CHARGE,
-            heavens_thrust_surge: HEAVENS_THRUST_SURGE,
-            drakesbane_surge: DRAKESBANE_SURGE,
-            starcross: STARCROSS,
-            high_jump: HIGH_JUMP,
-            mirage_dive: MIRAGE_DIVE,
-            dragonfire_dive: DRAGONFIRE_DIVE,
-            battle_litany: BATTLE_LITANY,
-            geirskogul: GEIRSKOGUL,
-            nastrond: NASTROND,
-            stardiver: STARDIVER,
-            wyrmwind_thrust: WYRMWIND_THRUST,
+            life_surge,
+            true_thrust,
+            raiden_thrust,
+            lance_barrage,
+            spiral_blow,
+            heavens_thrust,
+            chaotic_spring,
+            fang_and_claw,
+            wheeling_thrust,
+            drakesbane,
+            rise_of_the_dragon,
+            lance_charge,
+            heavens_thrust_surge,
+            drakesbane_surge,
+            starcross,
+            high_jump,
+            mirage_dive,
+            dragonfire_dive,
+            battle_litany,
+            geirskogul,
+            nastrond,
+            stardiver,
+            wyrmwind_thrust,
 
-            life_surge_buff: LIFE_SURGE_STATUS,
-            power_surge: POWER_SURGE,
-            dragons_flight: DRAGONS_FLIGHT,
-            draconian_fire: DRACONIAN_FIRE,
-            lance_charge_buff: LANCE_CHARGE_STATUS,
-            dive_ready: DIVE_READY,
-            starcross_ready: STARCROSS_READY,
-            battle_litany_buff: BATTLE_LITANY_STATUS,
-            life_of_the_dragon: LIFE_OF_THE_DRAGON,
+            life_surge_buff: life_surge_status,
+            power_surge,
+            dragons_flight,
+            draconian_fire,
+            lance_charge_buff: lance_charge_status,
+            dive_ready,
+            starcross_ready,
+            battle_litany_buff: battle_litany_status,
+            life_of_the_dragon,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

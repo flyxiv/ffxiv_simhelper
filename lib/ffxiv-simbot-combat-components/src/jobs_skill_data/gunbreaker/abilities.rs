@@ -54,7 +54,7 @@ pub(crate) struct GunbreakerDatabase {
 
 impl GunbreakerDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let NO_MERCY_BUFF: BuffStatus = BuffStatus {
+        let no_mercy_buff: BuffStatus = BuffStatus {
             id: 300,
             name: String::from("No Mercy"),
             stacks: 1,
@@ -66,7 +66,7 @@ impl GunbreakerDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let READY_TO_BLAST: BuffStatus = BuffStatus {
+        let ready_to_blast: BuffStatus = BuffStatus {
             id: 301,
             name: String::from("Ready to Blast"),
             stacks: 1,
@@ -78,7 +78,7 @@ impl GunbreakerDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SONIC_BREAK_DOT: DebuffStatus = DebuffStatus {
+        let sonic_break_dot: DebuffStatus = DebuffStatus {
             id: 302,
             name: String::from("Sonic Break"),
             owner_id: player_id,
@@ -94,7 +94,7 @@ impl GunbreakerDatabase {
             max_stacks: 1,
             snapshotted_infos: Default::default(),
         };
-        let BOW_SHOCK_DOT: DebuffStatus = DebuffStatus {
+        let bow_shock_dot: DebuffStatus = DebuffStatus {
             id: 303,
             name: String::from("Bow Shock"),
             snapshotted_infos: Default::default(),
@@ -110,7 +110,7 @@ impl GunbreakerDatabase {
             stacks: 1,
             max_stacks: 1,
         };
-        let READY_TO_RIP: BuffStatus = BuffStatus {
+        let ready_to_rip: BuffStatus = BuffStatus {
             id: 304,
             name: String::from("Ready to Rip"),
             owner_id: player_id,
@@ -122,7 +122,7 @@ impl GunbreakerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let READY_TO_TEAR: BuffStatus = BuffStatus {
+        let ready_to_tear: BuffStatus = BuffStatus {
             id: 305,
             name: String::from("Ready to Tear"),
             stacks: 1,
@@ -134,7 +134,7 @@ impl GunbreakerDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let READY_TO_GOUGE: BuffStatus = BuffStatus {
+        let ready_to_gouge: BuffStatus = BuffStatus {
             id: 306,
             name: String::from("Ready to Gouge"),
             stacks: 1,
@@ -146,7 +146,7 @@ impl GunbreakerDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let SAVAGE_NEXT: BuffStatus = BuffStatus {
+        let savage_next: BuffStatus = BuffStatus {
             id: 307,
             name: String::from("Savage Next"),
             stacks: 1,
@@ -158,7 +158,7 @@ impl GunbreakerDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let WICKED_NEXT: BuffStatus = BuffStatus {
+        let wicked_next: BuffStatus = BuffStatus {
             id: 308,
             name: String::from("Wicked Next"),
             stacks: 1,
@@ -170,7 +170,7 @@ impl GunbreakerDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let READY_TO_BREAK: BuffStatus = BuffStatus {
+        let ready_to_break: BuffStatus = BuffStatus {
             id: 309,
             name: String::from("Ready to Break"),
             stacks: 1,
@@ -182,7 +182,7 @@ impl GunbreakerDatabase {
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
-        let READY_TO_REIGN: BuffStatus = BuffStatus {
+        let ready_to_reign: BuffStatus = BuffStatus {
             id: 310,
             name: String::from("Ready to Reign"),
             stacks: 1,
@@ -195,7 +195,7 @@ impl GunbreakerDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let KEEN_EDGE: AttackSkill = AttackSkill {
+        let keen_edge: AttackSkill = AttackSkill {
             id: 300,
             name: String::from("Keen Edge"),
             player_id,
@@ -220,7 +220,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let BRUTAL_SHELL: AttackSkill = AttackSkill {
+        let brutal_shell: AttackSkill = AttackSkill {
             id: 301,
             name: String::from("Brutal Shell"),
             player_id,
@@ -245,7 +245,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SOLID_BARREL: AttackSkill = AttackSkill {
+        let solid_barrel: AttackSkill = AttackSkill {
             id: 302,
             name: String::from("Solid Barrel"),
             player_id,
@@ -270,7 +270,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SONIC_BREAK: AttackSkill = AttackSkill {
+        let sonic_break: AttackSkill = AttackSkill {
             id: 303,
             name: String::from("Sonic Break"),
             player_id,
@@ -278,7 +278,7 @@ impl GunbreakerDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ApplyDebuff(
                 player_id,
-                SONIC_BREAK_DOT.clone(),
+                sonic_break_dot.clone(),
                 30000,
                 30000,
                 0,
@@ -292,7 +292,7 @@ impl GunbreakerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(READY_TO_BREAK.get_id())],
+            resource_required: vec![UseBuff(ready_to_break.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -301,7 +301,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let BOW_SHOCK: AttackSkill = AttackSkill {
+        let bow_shock: AttackSkill = AttackSkill {
             id: 304,
             name: String::from("Bow Shock"),
             player_id,
@@ -309,7 +309,7 @@ impl GunbreakerDatabase {
             trait_percent: 100,
             additional_skill_events: vec![ApplyDebuff(
                 player_id,
-                BOW_SHOCK_DOT.clone(),
+                bow_shock_dot.clone(),
                 15000,
                 15000,
                 0,
@@ -332,18 +332,18 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let NO_MERCY: AttackSkill = AttackSkill {
+        let no_mercy: AttackSkill = AttackSkill {
             id: 305,
             name: String::from("No Mercy"),
             player_id,
             potency: 0,
             trait_percent: 100,
             additional_skill_events: vec![
-                ApplyBuff(player_id, player_id, NO_MERCY_BUFF.clone(), 20000, 20000, 0),
+                ApplyBuff(player_id, player_id, no_mercy_buff.clone(), 20000, 20000, 0),
                 ApplyBuff(
                     player_id,
                     player_id,
-                    READY_TO_BREAK.clone(),
+                    ready_to_break.clone(),
                     30000,
                     30000,
                     0,
@@ -367,7 +367,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::NoTarget,
         };
-        let ROUGH_DIVIDE: AttackSkill = AttackSkill {
+        let rough_divide: AttackSkill = AttackSkill {
             id: 306,
             name: String::from("Rough Divide"),
             player_id,
@@ -392,15 +392,15 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let GNASHING_FANG: AttackSkill = AttackSkill {
+        let gnashing_fang: AttackSkill = AttackSkill {
             id: 307,
             name: String::from("Gnashing Fang"),
             player_id,
             potency: 500,
             trait_percent: 100,
             additional_skill_events: vec![
-                ApplyBuff(player_id, player_id, READY_TO_RIP.clone(), 10000, 10000, 0),
-                ApplyBuff(player_id, player_id, SAVAGE_NEXT.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, ready_to_rip.clone(), 10000, 10000, 0),
+                ApplyBuff(player_id, player_id, savage_next.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -420,15 +420,15 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let SAVAGE_CLAW: AttackSkill = AttackSkill {
+        let savage_claw: AttackSkill = AttackSkill {
             id: 308,
             name: String::from("Savage Claw"),
             player_id,
             potency: 560,
             trait_percent: 100,
             additional_skill_events: vec![
-                ApplyBuff(player_id, player_id, READY_TO_TEAR.clone(), 10000, 10000, 0),
-                ApplyBuff(player_id, player_id, WICKED_NEXT.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, ready_to_tear.clone(), 10000, 10000, 0),
+                ApplyBuff(player_id, player_id, wicked_next.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -439,7 +439,7 @@ impl GunbreakerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(SAVAGE_NEXT.get_id())],
+            resource_required: vec![UseBuff(savage_next.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -448,7 +448,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let WICKED_TALON: AttackSkill = AttackSkill {
+        let wicked_talon: AttackSkill = AttackSkill {
             id: 309,
             name: String::from("Wicked Talon"),
             player_id,
@@ -457,7 +457,7 @@ impl GunbreakerDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                READY_TO_GOUGE.clone(),
+                ready_to_gouge.clone(),
                 10000,
                 10000,
                 0,
@@ -471,7 +471,7 @@ impl GunbreakerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(WICKED_NEXT.get_id())],
+            resource_required: vec![UseBuff(wicked_next.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -480,7 +480,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let JUGULAR_RIP: AttackSkill = AttackSkill {
+        let jugular_rip: AttackSkill = AttackSkill {
             id: 310,
             name: String::from("Jugular Rip"),
             player_id,
@@ -496,7 +496,7 @@ impl GunbreakerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(READY_TO_RIP.get_id())],
+            resource_required: vec![UseBuff(ready_to_rip.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -505,7 +505,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let ABDOMENT_TEAR: AttackSkill = AttackSkill {
+        let abdomen_tear: AttackSkill = AttackSkill {
             id: 311,
             name: String::from("Abdomen Tear"),
             player_id,
@@ -521,7 +521,7 @@ impl GunbreakerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(READY_TO_TEAR.get_id())],
+            resource_required: vec![UseBuff(ready_to_tear.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -530,7 +530,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let EYE_GOUGE: AttackSkill = AttackSkill {
+        let eye_gouge: AttackSkill = AttackSkill {
             id: 312,
             name: String::from("Eye Gouge"),
             player_id,
@@ -546,7 +546,7 @@ impl GunbreakerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(READY_TO_GOUGE.get_id())],
+            resource_required: vec![UseBuff(ready_to_gouge.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -555,7 +555,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let BLASTING_ZONE: AttackSkill = AttackSkill {
+        let blasting_zone: AttackSkill = AttackSkill {
             id: 313,
             name: String::from("Blasting Zone"),
             player_id,
@@ -580,7 +580,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let DOUBLE_DOWN: AttackSkill = AttackSkill {
+        let double_down: AttackSkill = AttackSkill {
             id: 314,
             name: String::from("Double Down"),
             player_id,
@@ -606,7 +606,7 @@ impl GunbreakerDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let BLOODFEST: AttackSkill = AttackSkill {
+        let bloodfest: AttackSkill = AttackSkill {
             id: 315,
             name: String::from("Bloodfest"),
             player_id,
@@ -615,7 +615,7 @@ impl GunbreakerDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                READY_TO_REIGN.clone(),
+                ready_to_reign.clone(),
                 30000,
                 30000,
                 0,
@@ -638,7 +638,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let BURST_STRIKE: AttackSkill = AttackSkill {
+        let burst_strike: AttackSkill = AttackSkill {
             id: 316,
             name: String::from("Burst Strike"),
             player_id,
@@ -647,7 +647,7 @@ impl GunbreakerDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                READY_TO_BLAST.clone(),
+                ready_to_blast.clone(),
                 10000,
                 10000,
                 0,
@@ -670,7 +670,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let HYPERVELOCITY: AttackSkill = AttackSkill {
+        let hypervelocity: AttackSkill = AttackSkill {
             id: 317,
             name: String::from("Hypervelocity"),
             player_id,
@@ -686,7 +686,7 @@ impl GunbreakerDatabase {
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(READY_TO_BLAST.get_id())],
+            resource_required: vec![UseBuff(ready_to_blast.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -695,7 +695,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let REIGN_OF_BEASTS: AttackSkill = AttackSkill {
+        let right_of_beasts: AttackSkill = AttackSkill {
             id: 318,
             name: String::from("Reign of Beasts"),
             player_id,
@@ -711,7 +711,7 @@ impl GunbreakerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![UseBuff(READY_TO_REIGN.get_id())],
+            resource_required: vec![UseBuff(ready_to_reign.get_id())],
             resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -720,7 +720,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let NOBLE_BLOOD: AttackSkill = AttackSkill {
+        let noble_blood: AttackSkill = AttackSkill {
             id: 319,
             name: String::from("Noble Blood"),
             player_id,
@@ -745,7 +745,7 @@ impl GunbreakerDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let LION_HEART: AttackSkill = AttackSkill {
+        let lion_heart: AttackSkill = AttackSkill {
             id: 320,
             name: String::from("Lion Heart"),
             player_id,
@@ -774,39 +774,39 @@ impl GunbreakerDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         GunbreakerDatabase {
-            keen_edge: KEEN_EDGE,
-            brutal_shell: BRUTAL_SHELL,
-            solid_barrel: SOLID_BARREL,
-            sonic_break: SONIC_BREAK,
-            bow_shock: BOW_SHOCK,
-            no_mercy: NO_MERCY,
-            rough_divide: ROUGH_DIVIDE,
-            gnashing_fang: GNASHING_FANG,
-            savage_claw: SAVAGE_CLAW,
-            wicked_talon: WICKED_TALON,
-            jugular_rip: JUGULAR_RIP,
-            abdomen_tear: ABDOMENT_TEAR,
-            eye_gouge: EYE_GOUGE,
-            blasting_zone: BLASTING_ZONE,
-            double_down: DOUBLE_DOWN,
-            bloodfest: BLOODFEST,
-            burst_strike: BURST_STRIKE,
-            hypervelocity: HYPERVELOCITY,
+            keen_edge,
+            brutal_shell,
+            solid_barrel,
+            sonic_break,
+            bow_shock,
+            no_mercy,
+            rough_divide,
+            gnashing_fang,
+            savage_claw,
+            wicked_talon,
+            jugular_rip,
+            abdomen_tear,
+            eye_gouge,
+            blasting_zone,
+            double_down,
+            bloodfest,
+            burst_strike,
+            hypervelocity,
 
-            reign_of_beasts: REIGN_OF_BEASTS,
-            noble_blood: NOBLE_BLOOD,
-            lion_heart: LION_HEART,
-            no_mercy_buff: NO_MERCY_BUFF,
-            ready_to_blast: READY_TO_BLAST,
-            sonic_break_dot: SONIC_BREAK_DOT,
-            bow_shock_dot: BOW_SHOCK_DOT,
-            ready_to_rip: READY_TO_RIP,
-            ready_to_tear: READY_TO_TEAR,
-            ready_to_gouge: READY_TO_GOUGE,
-            savage_next: SAVAGE_NEXT,
-            wicked_next: WICKED_NEXT,
-            ready_to_break: READY_TO_BREAK,
-            ready_to_reign: READY_TO_REIGN,
+            reign_of_beasts: right_of_beasts,
+            noble_blood,
+            lion_heart,
+            no_mercy_buff,
+            ready_to_blast,
+            sonic_break_dot,
+            bow_shock_dot,
+            ready_to_rip,
+            ready_to_tear,
+            ready_to_gouge,
+            savage_next,
+            wicked_next,
+            ready_to_break,
+            ready_to_reign,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

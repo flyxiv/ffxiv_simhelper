@@ -23,7 +23,7 @@ pub(crate) struct SageDatabase {
 
 impl SageDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let DOT_STATUS: DebuffStatus = DebuffStatus {
+        let eukrasian_dosis_iii_dot: DebuffStatus = DebuffStatus {
             id: 700,
             owner_id: player_id,
             potency: Some(75),
@@ -39,7 +39,7 @@ impl SageDatabase {
             name: String::from("Eukrasian Dosis III"),
             snapshotted_infos: Default::default(),
         };
-        let DOT: AttackSkill = AttackSkill {
+        let eukrasian_dosis_iii: AttackSkill = AttackSkill {
             id: 700,
             name: String::from("Eukrasian Dosis III"),
             player_id,
@@ -48,7 +48,7 @@ impl SageDatabase {
             trait_percent: 130,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 0,
-                DOT_STATUS.clone(),
+                eukrasian_dosis_iii_dot.clone(),
                 30000,
                 30000,
                 1000,
@@ -70,7 +70,7 @@ impl SageDatabase {
             is_guaranteed_direct_hit: false,
             is_guaranteed_crit: false,
         };
-        let GCD: AttackSkill = AttackSkill {
+        let dosis_iii: AttackSkill = AttackSkill {
             id: 701,
             name: String::from("Dosis III"),
             player_id,
@@ -95,7 +95,7 @@ impl SageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let PHLEGMA: AttackSkill = AttackSkill {
+        let phlegma: AttackSkill = AttackSkill {
             id: 702,
             name: String::from("Phlegma III"),
             player_id,
@@ -120,7 +120,7 @@ impl SageDatabase {
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
         };
-        let PSYCHE: AttackSkill = AttackSkill {
+        let psyche: AttackSkill = AttackSkill {
             id: 703,
             name: String::from("Psyche"),
             player_id,
@@ -149,11 +149,11 @@ impl SageDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         Self {
-            dot_status: DOT_STATUS,
-            dot: DOT,
-            gcd: GCD,
-            phlegma: PHLEGMA,
-            psyche: PSYCHE,
+            dot_status: eukrasian_dosis_iii_dot,
+            dot: eukrasian_dosis_iii,
+            gcd: dosis_iii,
+            phlegma,
+            psyche,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

@@ -58,7 +58,7 @@ impl BlackmageDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
         let caster_skills = CasterGlobalSkill::new(player_id);
 
-        let TRIPLECAST_BUFF: BuffStatus = {
+        let triplecast_buff: BuffStatus = {
             BuffStatus {
                 id: 1700,
                 name: String::from("Triplecast"),
@@ -72,7 +72,7 @@ impl BlackmageDatabase {
                 trigger_proc_event_on_gcd: vec![],
             }
         };
-        let HIGH_THUNDER_DOT: DebuffStatus = DebuffStatus {
+        let high_thunder_dot: DebuffStatus = DebuffStatus {
             id: 1701,
             name: String::from("High Thunder"),
             owner_id: player_id,
@@ -88,7 +88,7 @@ impl BlackmageDatabase {
             snapshotted_infos: Default::default(),
             max_stacks: 1,
         };
-        let THUNDERHEAD: BuffStatus = BuffStatus {
+        let thunderhead: BuffStatus = BuffStatus {
             id: 1702,
             name: String::from("Thunderhead"),
             owner_id: player_id,
@@ -100,7 +100,7 @@ impl BlackmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let LEYLINES_BUFF: BuffStatus = BuffStatus {
+        let leylines_buff: BuffStatus = BuffStatus {
             id: 1703,
             name: String::from("Ley Lines"),
             owner_id: player_id,
@@ -112,7 +112,7 @@ impl BlackmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let ASTRAL_FIRE_I: BuffStatus = BuffStatus {
+        let astral_fire_i: BuffStatus = BuffStatus {
             id: 1704,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -124,7 +124,7 @@ impl BlackmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let UMBRAL_ICE_I: BuffStatus = BuffStatus {
+        let umbral_ice_i: BuffStatus = BuffStatus {
             id: 1705,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -136,7 +136,7 @@ impl BlackmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let ASTRAL_FIRE_III: BuffStatus = BuffStatus {
+        let astral_fire_iii: BuffStatus = BuffStatus {
             id: 1706,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -148,7 +148,7 @@ impl BlackmageDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let FIRESTARTER: BuffStatus = BuffStatus {
+        let firestarter: BuffStatus = BuffStatus {
             id: 1708,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -161,15 +161,15 @@ impl BlackmageDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let TRANSPOSE_ICE_TO_FIRE: AttackSkill = AttackSkill {
+        let transpose_ice_to_fire: AttackSkill = AttackSkill {
             id: 1700,
             name: "Transpose".to_string(),
             player_id,
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyBuff(player_id, player_id, ASTRAL_FIRE_I.clone(), 15000, 15000, 0),
-                ApplyBuff(player_id, player_id, THUNDERHEAD.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, astral_fire_i.clone(), 15000, 15000, 0),
+                ApplyBuff(player_id, player_id, thunderhead.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: Some(0),
@@ -190,7 +190,7 @@ impl BlackmageDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let HIGH_THUNDER: AttackSkill = AttackSkill {
+        let high_thunder: AttackSkill = AttackSkill {
             id: 1701,
             name: "High Thunder".to_string(),
             player_id,
@@ -198,7 +198,7 @@ impl BlackmageDatabase {
             trait_percent: 130,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
                 player_id,
-                HIGH_THUNDER_DOT.clone(),
+                high_thunder_dot.clone(),
                 30000,
                 30000,
                 0,
@@ -211,7 +211,7 @@ impl BlackmageDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![UseBuff(THUNDERHEAD.get_id())],
+            resource_required: vec![UseBuff(thunderhead.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -222,15 +222,15 @@ impl BlackmageDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let TRANSPOSE_FIRE_TO_ICE: AttackSkill = AttackSkill {
+        let transpose_fire_to_ice: AttackSkill = AttackSkill {
             id: 1702,
             name: "Transpose".to_string(),
             player_id,
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyBuff(player_id, player_id, UMBRAL_ICE_I.clone(), 15000, 15000, 0),
-                ApplyBuff(player_id, player_id, THUNDERHEAD.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, umbral_ice_i.clone(), 15000, 15000, 0),
+                ApplyBuff(player_id, player_id, thunderhead.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
             combo: Some(1),
@@ -240,7 +240,7 @@ impl BlackmageDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
-            resource_required: vec![UseBuff(ASTRAL_FIRE_III.get_id()), Resource(4, 1)],
+            resource_required: vec![UseBuff(astral_fire_iii.get_id()), Resource(4, 1)],
             resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -250,7 +250,7 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
-        let FIRE_IV: AttackSkill = AttackSkill {
+        let fire_iv: AttackSkill = AttackSkill {
             id: 1703,
             name: "Fire IV".to_string(),
             player_id,
@@ -276,7 +276,7 @@ impl BlackmageDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let FIRE_IV_TRIPLECAST: AttackSkill = AttackSkill {
+        let fire_iv_triplecast: AttackSkill = AttackSkill {
             id: 1704,
             name: "Fire IV".to_string(),
             player_id,
@@ -291,18 +291,18 @@ impl BlackmageDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::UseBuff(TRIPLECAST_BUFF.get_id())],
+            resource_required: vec![UseBuff(triplecast_buff.get_id())],
             resource_created: HashMap::from([(2, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(FIRE_IV.get_id()),
+            stack_skill_id: Some(fire_iv.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let FIRE_III_ICE: AttackSkill = AttackSkill {
+        let fire_iii_ice: AttackSkill = AttackSkill {
             id: 1705,
             name: "Fire III Ice".to_string(),
             player_id,
@@ -311,7 +311,7 @@ impl BlackmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ASTRAL_FIRE_III.clone(),
+                astral_fire_iii.clone(),
                 15000,
                 15000,
                 0,
@@ -334,7 +334,7 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let FIRE_III_ASTRAL_FIRE_I: AttackSkill = AttackSkill {
+        let fire_iii_astral_fire_i: AttackSkill = AttackSkill {
             id: 1706,
             name: "Fire III Astral Fire I".to_string(),
             player_id,
@@ -343,7 +343,7 @@ impl BlackmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ASTRAL_FIRE_III.clone(),
+                astral_fire_iii.clone(),
                 15000,
                 15000,
                 0,
@@ -357,8 +357,8 @@ impl BlackmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             resource_required: vec![
-                UseBuff(FIRESTARTER.get_id()),
-                UseBuff(ASTRAL_FIRE_I.get_id()),
+                UseBuff(firestarter.get_id()),
+                UseBuff(astral_fire_i.get_id()),
             ],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
@@ -366,11 +366,11 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(FIRE_III_ICE.get_id()),
+            stack_skill_id: Some(fire_iii_ice.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let DESPAIR: AttackSkill = AttackSkill {
+        let despair: AttackSkill = AttackSkill {
             id: 1707,
             name: "Despair".to_string(),
             player_id,
@@ -379,7 +379,7 @@ impl BlackmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ASTRAL_FIRE_III.clone(),
+                astral_fire_iii.clone(),
                 15000,
                 15000,
                 0,
@@ -392,7 +392,7 @@ impl BlackmageDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::Resource(2, 6)],
+            resource_required: vec![Resource(2, 6)],
             resource_created: HashMap::from([(3, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -402,7 +402,7 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let DESPAIR_TRIPLECAST: AttackSkill = AttackSkill {
+        let despair_triplecast: AttackSkill = AttackSkill {
             id: 1708,
             name: "Despair".to_string(),
             player_id,
@@ -411,7 +411,7 @@ impl BlackmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ASTRAL_FIRE_III.clone(),
+                astral_fire_iii.clone(),
                 15000,
                 15000,
                 0,
@@ -424,21 +424,18 @@ impl BlackmageDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![
-                UseBuff(TRIPLECAST_BUFF.get_id()),
-                ResourceRequirements::Resource(2, 6),
-            ],
+            resource_required: vec![UseBuff(triplecast_buff.get_id()), Resource(2, 6)],
             resource_created: HashMap::from([(3, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(DESPAIR.get_id()),
+            stack_skill_id: Some(despair.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let XENOGLOSSY: AttackSkill = AttackSkill {
+        let xenoglossy: AttackSkill = AttackSkill {
             id: 1710,
             name: "Xenoglossy".to_string(),
             player_id,
@@ -453,7 +450,7 @@ impl BlackmageDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::Resource(0, 1)],
+            resource_required: vec![Resource(0, 1)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -464,22 +461,22 @@ impl BlackmageDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let PARADOX: AttackSkill = AttackSkill {
+        let paradox: AttackSkill = AttackSkill {
             id: 1711,
             name: "Paradox".to_string(),
             player_id,
             potency: 520,
             trait_percent: 130,
             additional_skill_events: vec![
-                FfxivEvent::RefreshBuff(
+                RefreshBuff(
                     player_id,
                     player_id,
-                    ASTRAL_FIRE_III.clone(),
+                    astral_fire_iii.clone(),
                     15000,
                     15000,
                     0,
                 ),
-                ApplyBuff(player_id, player_id, FIRESTARTER.clone(), 15000, 15000, 0),
+                ApplyBuff(player_id, player_id, firestarter.clone(), 15000, 15000, 0),
             ],
             proc_events: vec![],
             combo: None,
@@ -489,7 +486,7 @@ impl BlackmageDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![ResourceRequirements::Resource(1, 1)],
+            resource_required: vec![Resource(1, 1)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -499,7 +496,7 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let BLIZZARD_III: AttackSkill = AttackSkill {
+        let blizzard_iii: AttackSkill = AttackSkill {
             id: 1712,
             name: "Blizzard III".to_string(),
             player_id,
@@ -508,7 +505,7 @@ impl BlackmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                THUNDERHEAD.clone(),
+                thunderhead.clone(),
                 30000,
                 30000,
                 0,
@@ -521,7 +518,7 @@ impl BlackmageDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![Resource(4, 1), UseBuff(ASTRAL_FIRE_III.get_id())],
+            resource_required: vec![Resource(4, 1), UseBuff(astral_fire_iii.get_id())],
             resource_created: HashMap::from([(1, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -531,7 +528,7 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let BLIZZARD_IV: AttackSkill = AttackSkill {
+        let blizzard_iv: AttackSkill = AttackSkill {
             id: 1713,
             name: "Blizzard IV".to_string(),
             player_id,
@@ -556,7 +553,7 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let TRIPLECAST: AttackSkill = AttackSkill {
+        let triplecast: AttackSkill = AttackSkill {
             id: 1714,
             name: "Triplecast".to_string(),
             player_id,
@@ -565,7 +562,7 @@ impl BlackmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                TRIPLECAST_BUFF.clone(),
+                triplecast_buff.clone(),
                 15000,
                 15000,
                 0,
@@ -589,7 +586,7 @@ impl BlackmageDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let LEY_LINES: AttackSkill = AttackSkill {
+        let ley_lines: AttackSkill = AttackSkill {
             id: 1715,
             name: "Ley Lines".to_string(),
             player_id,
@@ -598,7 +595,7 @@ impl BlackmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                LEYLINES_BUFF.clone(),
+                leylines_buff.clone(),
                 30000,
                 30000,
                 0,
@@ -622,18 +619,18 @@ impl BlackmageDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let MANAFONT: AttackSkill = AttackSkill {
+        let manafont: AttackSkill = AttackSkill {
             id: 1716,
             name: "Manafont".to_string(),
             player_id,
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyBuff(player_id, player_id, THUNDERHEAD.clone(), 30000, 30000, 0),
+                ApplyBuff(player_id, player_id, thunderhead.clone(), 30000, 30000, 0),
                 RefreshBuff(
                     player_id,
                     player_id,
-                    ASTRAL_FIRE_III.clone(),
+                    astral_fire_iii.clone(),
                     15000,
                     15000,
                     0,
@@ -657,7 +654,7 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
-        let AMPLIFIER: AttackSkill = AttackSkill {
+        let amplifier: AttackSkill = AttackSkill {
             id: 1717,
             name: "Amplifier".to_string(),
             player_id,
@@ -683,7 +680,7 @@ impl BlackmageDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let FIRE_III_OPENER: AttackSkill = AttackSkill {
+        let fire_iii_opener: AttackSkill = AttackSkill {
             id: 1718,
             name: "Fire III".to_string(),
             player_id,
@@ -692,7 +689,7 @@ impl BlackmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ASTRAL_FIRE_III.clone(),
+                astral_fire_iii.clone(),
                 15000,
                 15000,
                 0,
@@ -712,11 +709,11 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(FIRE_III_ICE.get_id()),
+            stack_skill_id: Some(fire_iii_ice.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let BLIZZARD_III_OPENER: AttackSkill = AttackSkill {
+        let blizzard_iii_opener: AttackSkill = AttackSkill {
             id: 1719,
             name: "Blizzard III".to_string(),
             player_id,
@@ -725,7 +722,7 @@ impl BlackmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                THUNDERHEAD.clone(),
+                thunderhead.clone(),
                 30000,
                 30000,
                 0,
@@ -745,10 +742,10 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(BLIZZARD_III.get_id()),
+            stack_skill_id: Some(blizzard_iii.get_id()),
             use_type: UseType::UseOnTarget,
         };
-        let FLARE_STAR: AttackSkill = AttackSkill {
+        let flare_star: AttackSkill = AttackSkill {
             id: 1720,
             name: "Flare Star".to_string(),
             player_id,
@@ -773,7 +770,7 @@ impl BlackmageDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let BLIZZARD_III_TRANSPOSE_SWIFT: AttackSkill = AttackSkill {
+        let blizzard_iii_transpose_swift: AttackSkill = AttackSkill {
             id: 1721,
             name: "Blizzard III".to_string(),
             player_id,
@@ -789,7 +786,7 @@ impl BlackmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             resource_required: vec![
-                UseBuff(UMBRAL_ICE_I.get_id()),
+                UseBuff(umbral_ice_i.get_id()),
                 UseBuff(caster_skills.swiftcast.get_id()),
             ],
             resource_created: Default::default(),
@@ -798,11 +795,11 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(BLIZZARD_III.get_id()),
+            stack_skill_id: Some(blizzard_iii.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let FLARE_STAR_TRIPLECAST: AttackSkill = AttackSkill {
+        let flare_star_triplecast: AttackSkill = AttackSkill {
             id: 1722,
             name: "Flare Star".to_string(),
             player_id,
@@ -817,18 +814,18 @@ impl BlackmageDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![UseBuff(TRIPLECAST_BUFF.get_id()), Resource(3, 1)],
+            resource_required: vec![UseBuff(triplecast_buff.get_id()), Resource(3, 1)],
             resource_created: HashMap::from([(4, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(FLARE_STAR.get_id()),
+            stack_skill_id: Some(flare_star.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let BLIZZARD_III_TRANSPOSE_TRIPLECAST: AttackSkill = AttackSkill {
+        let blizzard_iii_transpose_triplecast: AttackSkill = AttackSkill {
             id: 1723,
             name: "Blizzard III".to_string(),
             player_id,
@@ -844,8 +841,8 @@ impl BlackmageDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             resource_required: vec![
-                UseBuff(UMBRAL_ICE_I.get_id()),
-                UseBuff(TRIPLECAST_BUFF.get_id()),
+                UseBuff(umbral_ice_i.get_id()),
+                UseBuff(triplecast_buff.get_id()),
             ],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
@@ -853,10 +850,10 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(BLIZZARD_III.get_id()),
+            stack_skill_id: Some(blizzard_iii.get_id()),
             use_type: UseType::UseOnTarget,
         };
-        let FIRE_III_PROC: AttackSkill = AttackSkill {
+        let fire_iii_proc: AttackSkill = AttackSkill {
             id: 1724,
             name: "Fire III Proc".to_string(),
             player_id,
@@ -865,7 +862,7 @@ impl BlackmageDatabase {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                ASTRAL_FIRE_III.clone(),
+                astral_fire_iii.clone(),
                 15000,
                 15000,
                 0,
@@ -878,56 +875,56 @@ impl BlackmageDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![UseBuff(FIRESTARTER.get_id())],
+            resource_required: vec![UseBuff(firestarter.get_id())],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(FIRE_III_ICE.get_id()),
+            stack_skill_id: Some(fire_iii_ice.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
         let potion_skills = PotionSkill::new(player_id);
 
         BlackmageDatabase {
-            transpose_ice_to_fire: TRANSPOSE_ICE_TO_FIRE,
-            high_thunder: HIGH_THUNDER,
-            transpose_fire_to_ice: TRANSPOSE_FIRE_TO_ICE,
-            fire4: FIRE_IV,
-            fire4_triplecast: FIRE_IV_TRIPLECAST,
-            fire3_ice: FIRE_III_ICE,
-            fire3_f1: FIRE_III_ASTRAL_FIRE_I,
-            despair: DESPAIR,
-            despair_triplecast: DESPAIR_TRIPLECAST,
-            xenoglossy: XENOGLOSSY,
-            paradox: PARADOX,
-            blizzard3: BLIZZARD_III,
-            blizzard4: BLIZZARD_IV,
-            triplecast: TRIPLECAST,
-            leylines: LEY_LINES,
-            manafont: MANAFONT,
-            fire3_opener: FIRE_III_OPENER,
-            amplifier: AMPLIFIER,
-            blizzard3_opener: BLIZZARD_III_OPENER,
-            flare_star: FLARE_STAR,
-            blizzard3_transpose_swift: BLIZZARD_III_TRANSPOSE_SWIFT,
-            flare_star_triplecast: FLARE_STAR_TRIPLECAST,
-            blizzard3_transpose_triplecast: BLIZZARD_III_TRANSPOSE_TRIPLECAST,
-            fire_iii_proc: FIRE_III_PROC,
+            transpose_ice_to_fire,
+            high_thunder,
+            transpose_fire_to_ice,
+            fire4: fire_iv,
+            fire4_triplecast: fire_iv_triplecast,
+            fire3_ice: fire_iii_ice,
+            fire3_f1: fire_iii_astral_fire_i,
+            despair,
+            despair_triplecast,
+            xenoglossy,
+            paradox,
+            blizzard3: blizzard_iii,
+            blizzard4: blizzard_iv,
+            triplecast,
+            leylines: ley_lines,
+            manafont,
+            fire3_opener: fire_iii_opener,
+            amplifier,
+            blizzard3_opener: blizzard_iii_opener,
+            flare_star,
+            blizzard3_transpose_swift: blizzard_iii_transpose_swift,
+            flare_star_triplecast,
+            blizzard3_transpose_triplecast: blizzard_iii_transpose_triplecast,
+            fire_iii_proc,
 
             swiftcast: caster_skills.swiftcast,
 
-            triplecast_buff: TRIPLECAST_BUFF,
-            high_thunder_dot: HIGH_THUNDER_DOT,
-            thunderhead: THUNDERHEAD,
+            triplecast_buff,
+            high_thunder_dot,
+            thunderhead,
             swiftcast_buff: caster_skills.swiftcast_buff,
-            leylines_buff: LEYLINES_BUFF,
-            astral_fire3: ASTRAL_FIRE_III,
-            umbral_ice1: UMBRAL_ICE_I,
-            astral_fire1: ASTRAL_FIRE_I,
-            firestarter: FIRESTARTER,
+            leylines_buff,
+            astral_fire3: astral_fire_iii,
+            umbral_ice1: umbral_ice_i,
+            astral_fire1: astral_fire_i,
+            firestarter,
 
             potion: potion_skills.potion,
             potion_buff: potion_skills.potion_buff,

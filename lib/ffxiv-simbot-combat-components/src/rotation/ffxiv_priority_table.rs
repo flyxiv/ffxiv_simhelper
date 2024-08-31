@@ -101,7 +101,7 @@ impl PriorityTable for FfxivPriorityTable {
         }
     }
 
-    fn get_gcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo] {
         match self {
             Self::Paladin(paladin) => paladin.get_gcd_priority_table(),
             Self::Warrior(warrior) => warrior.get_gcd_priority_table(),
@@ -127,7 +127,7 @@ impl PriorityTable for FfxivPriorityTable {
         }
     }
 
-    fn get_ogcd_priority_table(&self) -> &Vec<SkillPriorityInfo> {
+    fn get_ogcd_priority_table(&self) -> &[SkillPriorityInfo] {
         match self {
             Self::Paladin(paladin) => paladin.get_ogcd_priority_table(),
             Self::Warrior(warrior) => warrior.get_ogcd_priority_table(),

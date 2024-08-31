@@ -60,7 +60,7 @@ pub(crate) struct PictomancerDatabase {
 }
 impl PictomancerDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let STARRY_MUSE_BUFF: BuffStatus = {
+        let starry_muse_buff: BuffStatus = {
             BuffStatus {
                 id: 2000,
                 name: String::from("Starry Muse"),
@@ -74,7 +74,7 @@ impl PictomancerDatabase {
                 trigger_proc_event_on_gcd: vec![],
             }
         };
-        let SUBTRACTIVE_SPECTRUM: BuffStatus = BuffStatus {
+        let subtractive_spectrum: BuffStatus = BuffStatus {
             id: 2001,
             name: String::from("Subtractive Spectrum"),
             owner_id: player_id,
@@ -86,7 +86,7 @@ impl PictomancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let HYPERPHANTASIA: BuffStatus = BuffStatus {
+        let hyperphantasia: BuffStatus = BuffStatus {
             id: 2002,
             name: String::from("Hyperphantasia"),
             owner_id: player_id,
@@ -98,7 +98,7 @@ impl PictomancerDatabase {
             max_stacks: 5,
             trigger_proc_event_on_gcd: vec![],
         };
-        let STARSTRUCK: BuffStatus = BuffStatus {
+        let starstruck: BuffStatus = BuffStatus {
             id: 2003,
             owner_id: player_id,
             duration_left_millisecond: 0,
@@ -111,7 +111,7 @@ impl PictomancerDatabase {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let FIRE_IN_RED: AttackSkill = AttackSkill {
+        let fire_in_red: AttackSkill = AttackSkill {
             id: 2000,
             name: "Fire in Red".to_string(),
             player_id,
@@ -137,7 +137,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let AERO_IN_GREEN: AttackSkill = AttackSkill {
+        let aero_in_green: AttackSkill = AttackSkill {
             id: 2001,
             name: "Aero in Green".to_string(),
             player_id,
@@ -163,7 +163,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let WATER_IN_BLUE: AttackSkill = AttackSkill {
+        let water_in_blue: AttackSkill = AttackSkill {
             id: 2002,
             name: "Water in Blue".to_string(),
             player_id,
@@ -188,7 +188,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let LIVING_MUSE: AttackSkill = AttackSkill {
+        let living_muse: AttackSkill = AttackSkill {
             id: 2003,
             name: "Living Muse".to_string(),
             player_id,
@@ -213,7 +213,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let CREATURE_SHOT: AttackSkill = AttackSkill {
+        let creature_shot: AttackSkill = AttackSkill {
             id: 2004,
             name: "Creature Shot".to_string(),
             player_id,
@@ -239,7 +239,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let MOG_OF_THE_AGES: AttackSkill = AttackSkill {
+        let mog_of_the_ages: AttackSkill = AttackSkill {
             id: 2005,
             name: "Mog of the Ages".to_string(),
             player_id,
@@ -261,11 +261,11 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(CREATURE_SHOT.get_id()),
+            stack_skill_id: Some(creature_shot.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let POM_MOTIF: AttackSkill = AttackSkill {
+        let pom_motif: AttackSkill = AttackSkill {
             id: 2006,
             name: "Pom Motif".to_string(),
             player_id,
@@ -290,7 +290,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let POM_MUSE: AttackSkill = AttackSkill {
+        let pom_muse: AttackSkill = AttackSkill {
             id: 2007,
             name: "Pom Muse".to_string(),
             player_id,
@@ -312,11 +312,11 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(LIVING_MUSE.get_id()),
+            stack_skill_id: Some(living_muse.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let WINGED_MOTIF: AttackSkill = AttackSkill {
+        let winged_motif: AttackSkill = AttackSkill {
             id: 2008,
             name: "Winged Motif".to_string(),
             player_id,
@@ -341,7 +341,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let WINGED_MUSE: AttackSkill = AttackSkill {
+        let winged_muse: AttackSkill = AttackSkill {
             id: 2009,
             name: "Winged Muse".to_string(),
             player_id,
@@ -363,11 +363,11 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(LIVING_MUSE.get_id()),
+            stack_skill_id: Some(living_muse.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let HAMMER_MOTIF: AttackSkill = AttackSkill {
+        let hammer_motif: AttackSkill = AttackSkill {
             id: 2010,
             name: "Hammer Motif".to_string(),
             player_id,
@@ -393,7 +393,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let SUBTRACTIVE_PALLETE: AttackSkill = AttackSkill {
+        let subtractive_pallete: AttackSkill = AttackSkill {
             id: 2011,
             name: "Subtractive Pallete".to_string(),
             player_id,
@@ -418,7 +418,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let STRIKING_MUSE: AttackSkill = AttackSkill {
+        let striking_muse: AttackSkill = AttackSkill {
             id: 2012,
             name: "Striking Muse".to_string(),
             player_id,
@@ -443,7 +443,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let BLIZZARD_IN_CYAN: AttackSkill = AttackSkill {
+        let blizzard_in_cyan: AttackSkill = AttackSkill {
             id: 2013,
             name: "Blizzard In Cyan".to_string(),
             player_id,
@@ -468,7 +468,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let STONE_IN_YELLOW: AttackSkill = AttackSkill {
+        let stone_in_yellow: AttackSkill = AttackSkill {
             id: 2014,
             name: "Stone in Yellow".to_string(),
             player_id,
@@ -494,7 +494,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let THUNDER_IN_MAGENTA: AttackSkill = AttackSkill {
+        let thunder_in_magenta: AttackSkill = AttackSkill {
             id: 2015,
             name: "Thunder in Magenta".to_string(),
             player_id,
@@ -520,7 +520,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let STARRY_SKY_MOTIF: AttackSkill = AttackSkill {
+        let starry_sky_motif: AttackSkill = AttackSkill {
             id: 2016,
             name: "Starry Sky Motif".to_string(),
             player_id,
@@ -545,19 +545,19 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
-        let STARRY_MUSE: AttackSkill = AttackSkill {
+        let starry_muse: AttackSkill = AttackSkill {
             id: 2017,
             name: "Starry Muse".to_string(),
             player_id,
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyRaidBuff(player_id, STARRY_MUSE_BUFF.clone(), 20000, 20000, 500),
-                ApplyBuff(player_id, player_id, STARSTRUCK.clone(), 30000, 30000, 0),
+                ApplyRaidBuff(player_id, starry_muse_buff.clone(), 20000, 20000, 500),
+                ApplyBuff(player_id, player_id, starstruck.clone(), 30000, 30000, 0),
                 ApplyBuff(
                     player_id,
                     player_id,
-                    HYPERPHANTASIA.clone(),
+                    hyperphantasia.clone(),
                     30000,
                     30000,
                     0,
@@ -565,7 +565,7 @@ impl PictomancerDatabase {
                 ApplyBuff(
                     player_id,
                     player_id,
-                    SUBTRACTIVE_SPECTRUM.clone(),
+                    subtractive_spectrum.clone(),
                     30000,
                     30000,
                     0,
@@ -590,7 +590,7 @@ impl PictomancerDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let HOLY_IN_WHITE: AttackSkill = AttackSkill {
+        let holy_in_white: AttackSkill = AttackSkill {
             id: 2018,
             name: "Holy in White".to_string(),
             player_id,
@@ -616,7 +616,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let HAMMER_STAMP: AttackSkill = AttackSkill {
+        let hammer_stamp: AttackSkill = AttackSkill {
             id: 2019,
             name: "Hammer Stamp".to_string(),
             player_id,
@@ -641,7 +641,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let HAMMER_BRUSH: AttackSkill = AttackSkill {
+        let hammer_brush: AttackSkill = AttackSkill {
             id: 2020,
             name: "Hammer Brush".to_string(),
             player_id,
@@ -666,7 +666,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let POLISHING_HAMMER: AttackSkill = AttackSkill {
+        let polishing_hammer: AttackSkill = AttackSkill {
             id: 2021,
             name: "Polishing Hammer".to_string(),
             player_id,
@@ -692,7 +692,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let COMET_IN_BLACK: AttackSkill = AttackSkill {
+        let comet_in_black: AttackSkill = AttackSkill {
             id: 2022,
             name: "Comet in Black".to_string(),
             player_id,
@@ -717,7 +717,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let RAINBOW_DRIP: AttackSkill = AttackSkill {
+        let rainbow_drip: AttackSkill = AttackSkill {
             id: 2023,
             name: "Rainbow Drip".to_string(),
             player_id,
@@ -743,7 +743,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let RAINBOW_DRIP_PROC: AttackSkill = AttackSkill {
+        let rainbow_drip_proc: AttackSkill = AttackSkill {
             id: 2024,
             name: "Rainbow Drip".to_string(),
             player_id,
@@ -769,7 +769,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let CLAW_MOTIF: AttackSkill = AttackSkill {
+        let claw_motif: AttackSkill = AttackSkill {
             id: 2025,
             name: "Claw Motif".to_string(),
             player_id,
@@ -794,7 +794,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let CLAWED_MUSE: AttackSkill = AttackSkill {
+        let clawed_muse: AttackSkill = AttackSkill {
             id: 2026,
             name: "Clawed Muse".to_string(),
             player_id,
@@ -816,11 +816,11 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(LIVING_MUSE.get_id()),
+            stack_skill_id: Some(living_muse.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let MAW_MOTIF: AttackSkill = AttackSkill {
+        let maw_motif: AttackSkill = AttackSkill {
             id: 2027,
             name: "Maw Motif".to_string(),
             player_id,
@@ -845,7 +845,7 @@ impl PictomancerDatabase {
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
-        let FANGED_MUSE: AttackSkill = AttackSkill {
+        let fanged_muse: AttackSkill = AttackSkill {
             id: 2026,
             name: "Fanged Muse".to_string(),
             player_id,
@@ -867,10 +867,10 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(LIVING_MUSE.get_id()),
+            stack_skill_id: Some(living_muse.get_id()),
             use_type: UseType::UseOnTarget,
         };
-        let RETRIBUTION_OF_THE_MADEEM: AttackSkill = AttackSkill {
+        let retribution_of_the_madeem: AttackSkill = AttackSkill {
             id: 2029,
             name: "Retribution of the Madeem".to_string(),
             player_id,
@@ -892,11 +892,11 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
-            stack_skill_id: Some(CREATURE_SHOT.get_id()),
+            stack_skill_id: Some(creature_shot.get_id()),
             use_type: UseType::UseOnTarget,
         };
 
-        let STAR_PRISM: AttackSkill = AttackSkill {
+        let star_prism: AttackSkill = AttackSkill {
             id: 2030,
             name: "Star Prism".to_string(),
             player_id,
@@ -912,8 +912,8 @@ impl PictomancerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             resource_required: vec![
-                UseBuff(STARSTRUCK.get_id()),
-                UseBuff(HYPERPHANTASIA.get_id()),
+                UseBuff(starstruck.get_id()),
+                UseBuff(hyperphantasia.get_id()),
             ],
             resource_created: HashMap::from([(13, 1)]),
             is_guaranteed_crit: false,
@@ -925,7 +925,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let SUBTRACTIVE_PALLETE_PROC: AttackSkill = AttackSkill {
+        let subtractive_pallete_proc: AttackSkill = AttackSkill {
             id: 2031,
             name: "Subtractive Pallete".to_string(),
             player_id,
@@ -940,7 +940,7 @@ impl PictomancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![UseBuff(SUBTRACTIVE_SPECTRUM.get_id())],
+            resource_required: vec![UseBuff(subtractive_spectrum.get_id())],
             resource_created: HashMap::from([(8, 3), (7, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -951,7 +951,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let COMET_IN_BLACK_HYPERPHANTASIA: AttackSkill = AttackSkill {
+        let comet_in_black_hyperphantasia: AttackSkill = AttackSkill {
             id: 2032,
             name: "Comet in Black".to_string(),
             player_id,
@@ -966,7 +966,7 @@ impl PictomancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![Resource(7, 1), UseBuff(HYPERPHANTASIA.get_id())],
+            resource_required: vec![Resource(7, 1), UseBuff(hyperphantasia.get_id())],
             resource_created: HashMap::from([(13, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -977,7 +977,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let BLIZZARD_IN_CYAN_HYPERPHANTASIA: AttackSkill = AttackSkill {
+        let blizzard_in_cyan_hyperphantasia: AttackSkill = AttackSkill {
             id: 2033,
             name: "Blizzard in Cyan".to_string(),
             player_id,
@@ -992,7 +992,7 @@ impl PictomancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![Resource(8, 1), UseBuff(HYPERPHANTASIA.get_id())],
+            resource_required: vec![Resource(8, 1), UseBuff(hyperphantasia.get_id())],
             resource_created: HashMap::from([(13, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -1003,7 +1003,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let STONE_IN_YELLOW_HYPERPHANTASIA: AttackSkill = AttackSkill {
+        let stone_in_yellow_hyperphantasia: AttackSkill = AttackSkill {
             id: 2034,
             name: "Stone in Yellow".to_string(),
             player_id,
@@ -1018,7 +1018,7 @@ impl PictomancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![Resource(8, 1), UseBuff(HYPERPHANTASIA.get_id())],
+            resource_required: vec![Resource(8, 1), UseBuff(hyperphantasia.get_id())],
             resource_created: HashMap::from([(13, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -1029,7 +1029,7 @@ impl PictomancerDatabase {
             use_type: UseType::UseOnTarget,
         };
 
-        let THUNDER_IN_MAGENTA_HYPERPHANTASIA: AttackSkill = AttackSkill {
+        let thunder_in_magenta_hyperphantasia: AttackSkill = AttackSkill {
             id: 2035,
             name: "Thunder in Magenta".to_string(),
             player_id,
@@ -1044,7 +1044,7 @@ impl PictomancerDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            resource_required: vec![Resource(8, 1), UseBuff(HYPERPHANTASIA.get_id())],
+            resource_required: vec![Resource(8, 1), UseBuff(hyperphantasia.get_id())],
             resource_created: HashMap::from([(13, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
@@ -1058,47 +1058,47 @@ impl PictomancerDatabase {
         let potion_skills = PotionSkill::new(player_id);
 
         PictomancerDatabase {
-            fire_in_red: FIRE_IN_RED,
-            aero_in_green: AERO_IN_GREEN,
-            water_in_blue: WATER_IN_BLUE,
-            living_muse: LIVING_MUSE,
-            creature_shot: CREATURE_SHOT,
-            mog_of_the_ages: MOG_OF_THE_AGES,
-            pom_motif: POM_MOTIF,
-            pom_muse: POM_MUSE,
-            winged_motif: WINGED_MOTIF,
-            winged_muse: WINGED_MUSE,
-            hammer_motif: HAMMER_MOTIF,
-            subtractive_pallete: SUBTRACTIVE_PALLETE,
-            striking_muse: STRIKING_MUSE,
-            blizzard_in_cyan: BLIZZARD_IN_CYAN,
-            stone_in_yellow: STONE_IN_YELLOW,
-            thunder_in_magenta: THUNDER_IN_MAGENTA,
-            starry_sky_motif: STARRY_SKY_MOTIF,
-            starry_muse: STARRY_MUSE,
-            holy_in_white: HOLY_IN_WHITE,
-            hammer_stamp: HAMMER_STAMP,
-            hammer_brush: HAMMER_BRUSH,
-            polishing_hammer: POLISHING_HAMMER,
-            comet_in_black: COMET_IN_BLACK,
-            rainbow_drip: RAINBOW_DRIP,
-            rainbow_drip_proc: RAINBOW_DRIP_PROC,
-            claw_motif: CLAW_MOTIF,
-            clawed_muse: CLAWED_MUSE,
-            maw_motif: MAW_MOTIF,
-            fanged_muse: FANGED_MUSE,
-            retribution_of_the_madeem: RETRIBUTION_OF_THE_MADEEM,
-            star_prism: STAR_PRISM,
-            subtractive_pallete_proc: SUBTRACTIVE_PALLETE_PROC,
-            comet_in_black_hyperphantasia: COMET_IN_BLACK_HYPERPHANTASIA,
-            blizzard_in_cyan_hyperphantasia: BLIZZARD_IN_CYAN_HYPERPHANTASIA,
-            stone_in_yellow_hyperphantasia: STONE_IN_YELLOW_HYPERPHANTASIA,
-            thunder_in_magenta_hyperphantasia: THUNDER_IN_MAGENTA_HYPERPHANTASIA,
+            fire_in_red,
+            aero_in_green,
+            water_in_blue,
+            living_muse,
+            creature_shot,
+            mog_of_the_ages,
+            pom_motif,
+            pom_muse,
+            winged_motif,
+            winged_muse,
+            hammer_motif,
+            subtractive_pallete,
+            striking_muse,
+            blizzard_in_cyan,
+            stone_in_yellow,
+            thunder_in_magenta,
+            starry_sky_motif,
+            starry_muse,
+            holy_in_white,
+            hammer_stamp,
+            hammer_brush,
+            polishing_hammer,
+            comet_in_black,
+            rainbow_drip,
+            rainbow_drip_proc,
+            claw_motif,
+            clawed_muse,
+            maw_motif,
+            fanged_muse,
+            retribution_of_the_madeem,
+            star_prism,
+            subtractive_pallete_proc,
+            comet_in_black_hyperphantasia,
+            blizzard_in_cyan_hyperphantasia,
+            stone_in_yellow_hyperphantasia,
+            thunder_in_magenta_hyperphantasia,
 
-            starry_muse_buff: STARRY_MUSE_BUFF,
-            hyperphantasia: HYPERPHANTASIA,
-            subtractive_spectrum: SUBTRACTIVE_SPECTRUM,
-            starstruck: STARSTRUCK,
+            starry_muse_buff,
+            hyperphantasia,
+            subtractive_spectrum,
+            starstruck,
 
             potion: potion_skills.potion,
             potion_buff: potion_skills.potion_buff,
