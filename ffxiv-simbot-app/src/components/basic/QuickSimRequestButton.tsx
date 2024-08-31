@@ -195,7 +195,7 @@ export function createQuickSimRequest(
   };
 }
 
-function sendRequestAsync(requestBody: string): Promise<Response> {
+export function sendRequestAsync(requestBody: string): Promise<Response> {
   return new Promise(async (resolve, reject) => {
     try {
       const controller = new AbortController();

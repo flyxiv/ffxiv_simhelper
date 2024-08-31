@@ -1,3 +1,27 @@
+export const ALL_PLAYER_JOBS: string[] = [
+  "PLD",
+  "WAR",
+  "DRK",
+  "GNB",
+  "WHM",
+  "SCH",
+  "AST",
+  "SGE",
+  "DRG",
+  "MNK",
+  "NIN",
+  "SAM",
+  "RPR",
+  "VPR",
+  "BRD",
+  "MCH",
+  "DNC",
+  "BLM",
+  "SMN",
+  "RDM",
+  "PCT",
+];
+
 export const AUTO_ATTACK_DELAYS: Map<string, number> = new Map([
   ["PLD", 2.24],
   ["WAR", 3.36],

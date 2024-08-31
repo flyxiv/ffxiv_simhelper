@@ -11,12 +11,15 @@ import {
   EquipmentInput,
   SingleEquipmentInputSaveState,
 } from "../../types/EquipmentInput";
-import { createQuickSimRequest } from "./QuickSimRequestButton";
+import {
+  createQuickSimRequest,
+  sendRequestAsync,
+} from "./QuickSimRequestButton";
 import { GearCompareResponse } from "src/types/GearCompareResponse";
 import { SimulationSummary } from "src/types/CombatSimulationResult";
 
 const TOTAL_REQUEST_COUNT = 1000;
-const REQUEST_SERVER = "http://localhost:13406/api/v1/gearcompare";
+const REQUEST_URL = "http://localhost:13406/api/v1/gearcompare";
 
 export function GearCompareRequestButton(totalState: EquipmentInput) {
   let RequestButton = styled(Button)`
@@ -58,7 +61,7 @@ export function GearCompareRequestButton(totalState: EquipmentInput) {
 
     for (let i = 0; i < TOTAL_REQUEST_COUNT; i++) {
       responsePromises.push(
-        sendRequestAsync(body)
+        sendRequestAsync(body, REQUEST_URL)
           .then((response) => {
             responses.push(response);
             count = count + 1;
@@ -122,48 +125,6 @@ function createGearCompareRequest(
     gear1Request: createQuickSimRequest(equipment1),
     gear2Request: createQuickSimRequest(equipment2),
   };
-}
-
-function sendRequestAsync(requestBody: string): Promise<Response> {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => {
-        controller.abort();
-        reject(new Error("Request timeout"));
-      }, 300000);
-
-      const response = await fetch(REQUEST_SERVER, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: requestBody,
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (response.ok) {
-        console.log("POST request successful");
-        resolve(response);
-      } else {
-        // Read the response body for error details
-        const errorText = await response.text(); // Or use response.json() if you expect JSON
-        console.error("POST request failed", {
-          status: response.status,
-          body: errorText,
-        });
-        reject(
-          new Error(
-            `Request failed with status ${response.status}: ${errorText}`
-          )
-        );
-      }
-    } catch (error) {
-      console.error("Error occurred: ", error);
-    }
-  });
 }
 
 function aggregateDamageStatisticsFromSampleRuns(

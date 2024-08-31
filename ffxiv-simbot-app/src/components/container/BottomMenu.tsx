@@ -7,7 +7,10 @@ import { QuickSimRequestButton } from "../basic/QuickSimRequestButton";
 import { GEAR_COMPARE_INPUT_CONTAINER_WIDTH } from "../../page/GearCompare";
 import { GearCompareRequestButton } from "../basic/GearCompareRequestButton";
 
-export function BasicBottomMenu(totalState: EquipmentInput) {
+export function BasicBottomMenu(
+  totalState: EquipmentInput,
+  buttonComponentFunction: Function
+) {
   return (
     <Box
       sx={{
@@ -30,7 +33,7 @@ export function BasicBottomMenu(totalState: EquipmentInput) {
       >
         {StatSummary(totalState.equipmentDatas[0])}
         <Box display="inline-block" margin="auto" paddingTop={2}>
-          {QuickSimRequestButton(totalState)}
+          {buttonComponentFunction(totalState)}
         </Box>
       </Box>
     </Box>

@@ -1,0 +1,193 @@
+import { styled, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {
+  mapJobAbbrevToJobDefaultStat,
+  playerStatToPlayerPower,
+} from "../../const/StatValue";
+import { PartyInfo } from "../../types/PartyStates";
+import {
+  BEST_PARTNER_RESPONSE_SAVE_NAME,
+  BEST_PARTNER_URL,
+  SINGLE_INPUT_SAVE_NAME,
+} from "../../App";
+import { useState } from "react";
+import { requestButtonStyle } from "./Style";
+import {
+  EquipmentInput,
+  SingleEquipmentInputSaveState,
+} from "../../types/EquipmentInput";
+import {
+  ALL_PLAYER_JOBS,
+  AUTO_ATTACK_DELAYS,
+} from "../../types/ffxivdatabase/Job";
+import { sendRequestAsync } from "./QuickSimRequestButton";
+import { jobAbbrevToRole, JobRole } from "../../page/BestPartner";
+import {
+  BestPartnerResponse,
+  BestPartnerResponseTable,
+} from "../../types/BestPartnerResponse";
+
+const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
+
+interface PartnerKey {
+  jobAbbrev: string;
+  role: JobRole;
+}
+
+export function BestPartnerRequestButton(totalState: EquipmentInput) {
+  let RequestButton = styled(Button)`
+    ${requestButtonStyle}
+  `;
+
+  let allPossiblePartners = createAllPossiblePartnerList(
+    totalState.equipmentDatas[0].mainPlayerJobAbbrev
+  );
+  let totalRequestCount = allPossiblePartners.length;
+
+  let [buttonText, setButtonText] = useState("Simulate");
+  let [requestCount, setRequestCount] = useState(0);
+
+  const loadingButtonText = (requestCount: number) => {
+    return `Simulating... ${requestCount}/${totalRequestCount}`;
+  };
+
+  let navigate = useNavigate();
+  let count = 0;
+
+  const handleClick = async () => {
+    setButtonText(loadingButtonText(requestCount));
+    let inputJson = JSON.stringify(totalState);
+    localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
+
+    let bestPartnerResponseTable: BestPartnerResponseTable = {
+      combatTimeMillisecond: totalState.equipmentDatas[0].combatTimeMillisecond,
+      mainPlayerPower: totalState.equipmentDatas[0].power,
+      mainPlayerJobAbbrev: totalState.equipmentDatas[0].mainPlayerJobAbbrev,
+      partnerSimulationData: [],
+    };
+
+    let responsePromises = [];
+    let responses: Array<Response> = [];
+
+    let requests = allPossiblePartners.map((partnerKey) => {
+      return JSON.stringify(
+        createBestPartnerRequest(
+          totalState.equipmentDatas[0],
+          partnerKey.jobAbbrev
+        )
+      );
+    });
+
+    const incrementState = (count: number) => {
+      setRequestCount(count);
+      setButtonText(loadingButtonText(count));
+    };
+
+    for (let i = 0; i < requests.length; i++) {
+      responsePromises.push(
+        sendRequestAsync(requests[i], REQUEST_URL)
+          .then((response) => {
+            responses.push(response);
+            count = count + 1;
+            incrementState(count);
+          })
+          .catch((error) => {
+            console.error("Error: ", error.message);
+          })
+      );
+    }
+
+    await Promise.all(responsePromises);
+    const formattedResponses: Array<Promise<BestPartnerResponse>> =
+      responses.map(async (response) => {
+        const data = await response.json();
+        return data;
+      });
+
+    const finalResponses = await Promise.all(formattedResponses);
+    bestPartnerResponseTable.partnerSimulationData = finalResponses;
+
+    let responseString = JSON.stringify(bestPartnerResponseTable);
+
+    localStorage.setItem(BEST_PARTNER_RESPONSE_SAVE_NAME, responseString);
+
+    navigate(`/${BEST_PARTNER_URL}`);
+  };
+  return (
+    <RequestButton variant="contained" onClick={handleClick}>
+      {buttonText}
+    </RequestButton>
+  );
+}
+
+function createBestPartnerRequest(
+  totalState: SingleEquipmentInputSaveState,
+  partnerJobAbbrev: string
+) {
+  let jobAbbrev = totalState.mainPlayerJobAbbrev;
+  let partner1Id = totalState.mainPlayerPartner1Id;
+  let partner2Id = totalState.mainPlayerPartner2Id;
+
+  let autoAttackDelays = AUTO_ATTACK_DELAYS.get(totalState.mainPlayerJobAbbrev);
+  if (autoAttackDelays === undefined) {
+    autoAttackDelays = 0;
+  }
+  let power = totalState.power;
+  power.autoAttackDelays = autoAttackDelays;
+
+  let partyInfo: PartyInfo[] = [
+    {
+      playerId: 0,
+      jobAbbrev: jobAbbrev,
+      partner1Id: partner1Id,
+      partner2Id: partner2Id,
+      power: power,
+    },
+  ];
+
+  let playerCount = 0;
+  let defaultStat = mapJobAbbrevToJobDefaultStat(partnerJobAbbrev);
+
+  if (defaultStat !== undefined) {
+    let partnerPower = playerStatToPlayerPower(defaultStat, jobAbbrev);
+    let autoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
+    if (autoAttackDelays === undefined) {
+      autoAttackDelays = 0;
+    }
+    partnerPower.autoAttackDelays = autoAttackDelays;
+
+    partyInfo.push({
+      playerId: playerCount + 1,
+      partner1Id: null,
+      partner2Id: null,
+      jobAbbrev: jobAbbrev,
+      power: partnerPower,
+    });
+
+    playerCount++;
+  }
+
+  return {
+    mainPlayerId: 0,
+    combatTimeMillisecond: totalState.combatTimeMillisecond,
+    party: partyInfo,
+  };
+}
+
+function createAllPossiblePartnerList(mainPlayerJobAbbrev: string) {
+  let allPartnerList = [];
+
+  for (let jobAbbrev of ALL_PLAYER_JOBS) {
+    if (jobAbbrev === mainPlayerJobAbbrev) {
+      continue;
+    }
+
+    allPartnerList.push(convertToPartnerKey(jobAbbrev));
+  }
+
+  return allPartnerList;
+}
+
+function convertToPartnerKey(jobAbbrev: string): PartnerKey {
+  return { jobAbbrev: jobAbbrev, role: jobAbbrevToRole(jobAbbrev) };
+}
