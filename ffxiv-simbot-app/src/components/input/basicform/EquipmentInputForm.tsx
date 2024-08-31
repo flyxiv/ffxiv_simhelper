@@ -40,6 +40,7 @@ import { MenuItemStyle } from "../../../components/items/Styles";
 import { ColorConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
 import { SimulationResultTimeTextBox } from "../SimulationResultTextBox";
+import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -170,7 +171,7 @@ function EquipmentMenuOfOneSlot(
 export function EquipmentSelectionMenu(
   id: number,
   totalEquipmentState: EquipmentInput,
-  setTotalState: Function,
+  setTotalEquipmentState: Function,
   onlyBuffJobs: boolean = false,
   hasTimeInput: boolean = false
 ) {
@@ -180,16 +181,16 @@ export function EquipmentSelectionMenu(
     <EquipmentGridContainer container>
       <EquipmentGridItemBox key={`${id}_JobSelectionItemBox`}>
         <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
-          {onlyBuffJobs ? MainPlayerJobSelectionOnlyBuffJobs(id, totalEquipmentState, setTotalState) : MainPlayerJobSelection(
+          {onlyBuffJobs ? MainPlayerJobSelectionOnlyBuffJobs(id, totalEquipmentState, setTotalEquipmentState) : MainPlayerJobSelection(
             id,
             totalEquipmentState,
-            setTotalState,
+            setTotalEquipmentState,
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
       <EquipmentGridItemBox marginBottom={1} key={`${id}_RaceItemBox`}>
         <InputEquipmentBox item xs={xs} key="Race">
-          {MainPlayerRaceSelection(id, totalEquipmentState, setTotalState)}
+          {MainPlayerRaceSelection(id, totalEquipmentState, setTotalEquipmentState)}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
 
@@ -218,7 +219,7 @@ export function EquipmentSelectionMenu(
                 slotName,
                 equipmentsAvailableInSlot,
                 totalEquipmentState,
-                setTotalState
+                setTotalEquipmentState
               )}
             </InputEquipmentBox>
           </EquipmentGridItemBox>
@@ -226,16 +227,17 @@ export function EquipmentSelectionMenu(
       })}
       <EquipmentGridItemBox key={`food_selectionbox_${id}`}>
         <InputEquipmentBox item xs={xs} key={`food_${id}`}>
-          {FoodSelection(id, totalEquipmentState, setTotalState)}
+          {FoodSelection(id, totalEquipmentState, setTotalEquipmentState)}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
+      {PartnerSelectionMenu(id, totalEquipmentState, setTotalEquipmentState)}
       {hasTimeInput ?
         <EquipmentGridItemBox>
           <InputEquipmentBox item xs={xs} key="time">
             {SimulationResultTimeTextBox(
               "Combat Time(Seconds)",
               totalEquipmentState,
-              setTotalState
+              setTotalEquipmentState
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
@@ -243,6 +245,43 @@ export function EquipmentSelectionMenu(
       }
     </EquipmentGridContainer>
   );
+}
+
+function PartnerSelectionMenu(
+  id: number,
+  totalEquipmentState: EquipmentInput,
+  setTotalEquipmentState: Function
+) {
+  let mainPlayerJobAbbrev = totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
+
+  if (mainPlayerJobAbbrev === "AST") {
+    return (
+      <>
+        <EquipmentGridItemBox key={`partner_${id}`}>
+          <InputEquipmentBox item xs={12} key={`partner_${id}`}>
+            {Partner1Selection(id, totalEquipmentState, setTotalEquipmentState, "Melee Partner")}
+          </InputEquipmentBox>
+        </EquipmentGridItemBox>
+
+        <EquipmentGridItemBox key={`partner_${id}`}>
+          <InputEquipmentBox item xs={12} key={`partner_${id}`}>
+            {Partner2Selection(id, totalEquipmentState, setTotalEquipmentState, "Ranged Partner")}
+          </InputEquipmentBox>
+        </EquipmentGridItemBox>
+      </>
+    );
+  } else if (mainPlayerJobAbbrev === "DNC") {
+    return (
+      <EquipmentGridItemBox key={`partner_${id}`}>
+        <InputEquipmentBox item xs={12} key={`partner_${id}`}>
+          {Partner1Selection(id, totalEquipmentState, setTotalEquipmentState, "Dance Partner")}
+        </InputEquipmentBox>
+      </EquipmentGridItemBox>
+    );
+  } else {
+    return <Box></Box>;
+  }
+
 }
 
 function FoodSelection(

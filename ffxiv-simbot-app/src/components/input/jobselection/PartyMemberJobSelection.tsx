@@ -44,6 +44,14 @@ export function PartyMemberJobSelection(
       data.partyMemberIds = newAvailablePartyIds;
     })
 
+    if (newTotalState.equipmentDatas[0].mainPlayerPartner1Id === id) {
+      newTotalState.equipmentDatas[0].mainPlayerPartner1Id = null;
+    }
+
+    if (newTotalState.equipmentDatas[0].mainPlayerPartner2Id === id) {
+      newTotalState.equipmentDatas[0].mainPlayerPartner2Id = null;
+    }
+
     setTotalState({ ...newTotalState });
   };
 
