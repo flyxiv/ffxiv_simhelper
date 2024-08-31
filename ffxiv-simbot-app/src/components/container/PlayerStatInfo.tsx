@@ -1,4 +1,3 @@
-import { CharacterStats } from "../../types/CharacterStates";
 import { Box, Grid, styled, Typography } from "@mui/material";
 import {
   PlayerStatInfoBoxStyle,
@@ -56,12 +55,19 @@ export function StatOutput(statName: string, statValue: number) {
     <Grid item xs={3}>
       <StatBox>
         <StatTitleBox>
-          <Typography variant="body2" component="div" fontSize={11}>
+          <Typography
+            variant="body2"
+            component="div"
+            fontSize={11}
+            align="center"
+          >
             {statName}
           </Typography>
         </StatTitleBox>
         <StatTextBox>
-          <Typography variant="body1">{statValue}</Typography>
+          <Typography variant="body1" align="center">
+            {statValue}
+          </Typography>
         </StatTextBox>
       </StatBox>
     </Grid>

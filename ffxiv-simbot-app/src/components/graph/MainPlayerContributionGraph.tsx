@@ -1,7 +1,5 @@
-import { QuickSimResponse } from "src/types/SimulationResponse";
 import {
   PartyContributionData,
-  StatusKey,
   statusKeyStringToKey,
   statusKeyToString,
   TeammateChartData,
@@ -9,6 +7,8 @@ import {
 import { Box, styled } from "@mui/material";
 import { GraphBoxStyle } from "./Style";
 import { GraphTitleRow, JobBarChartTeammate } from "./JobBarChart";
+import { TABLE_WIDTH } from "../../page/SimulationResult";
+import { QuickSimResponse } from "../../types/QuickSimResponse";
 
 const GraphBox = styled(Box)`
   ${GraphBoxStyle}
@@ -116,13 +116,13 @@ export const MainPlayerContributionGraph = (
   }
 
   return (
-    <>
+    <Box width={TABLE_WIDTH}>
       {GraphTitleRow()}
       <GraphBox>
         {contributionData.map((data) => {
           return JobBarChartTeammate(data, maxContribution);
         })}
       </GraphBox>
-    </>
+    </Box>
   );
 };

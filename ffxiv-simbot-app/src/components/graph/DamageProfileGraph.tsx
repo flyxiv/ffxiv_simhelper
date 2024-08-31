@@ -3,6 +3,7 @@ import { DamageChartTitle, SkillDamageProfile } from "./DamageProfileBarChart";
 import { SkillIdToIconPathFactory } from "../icon/abilityicon/SkillIconFactory";
 import { iconPathToName } from "../Util";
 import { DamageChartData } from "./GraphData";
+import { Box } from "@mui/material";
 
 export const DamageProfileGraph = (response: QuickSimResponse) => {
   const mainPlayerId = response.mainPlayerId;
@@ -53,7 +54,7 @@ export const DamageProfileGraph = (response: QuickSimResponse) => {
   let highestDamageOfSingleSkill = damageProfileData[0].pdps;
 
   return (
-    <>
+    <Box margin="auto">
       {DamageChartTitle}
       {damageProfileData.map((data) => {
         return SkillDamageProfile(
@@ -63,6 +64,6 @@ export const DamageProfileGraph = (response: QuickSimResponse) => {
           response.combatTimeMillisecond
         );
       })}
-    </>
+    </Box>
   );
 };

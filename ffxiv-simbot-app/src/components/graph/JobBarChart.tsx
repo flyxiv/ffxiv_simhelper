@@ -51,7 +51,7 @@ export function JobBarChartTeammate(
     return (
       <BuffBarBox>
         {roundedRdps}
-        <Bar>
+        <Bar paddingY={0.5}>
           <img
             src={StatusIdToIconPathFactory(entry.statusId)}
             alt={"rdps"}
@@ -65,7 +65,7 @@ export function JobBarChartTeammate(
 
   return (
     <PartyMemberBuffBox>
-      <PartyMemberIconBox>
+      <PartyMemberIconBox paddingTop={"1%"}>
         {JobIconFactory(data.jobName, 25)}
       </PartyMemberIconBox>
       <TotalBuffBox>{buffBars}</TotalBuffBox>
@@ -77,16 +77,23 @@ export function JobBarChartTeammate(
 }
 
 export function GraphTitleRow() {
+  let fontSize = 14;
   return (
     <PartyMemberBuffBox>
       <PartyMemberIconBox>
-        <Typography variant="h6">Member</Typography>
+        <Typography variant="h6" fontSize={fontSize}>
+          Member
+        </Typography>
       </PartyMemberIconBox>
       <BuffTitleBar>
-        <Typography variant="h6">RDPS Contribution</Typography>
+        <Typography variant="h6" fontSize={fontSize}>
+          RDPS Contribution
+        </Typography>
       </BuffTitleBar>
       <TotalRdpsBox>
-        <Typography variant="h6">Total</Typography>
+        <Typography variant="h6" fontSize={fontSize}>
+          Total
+        </Typography>
       </TotalRdpsBox>
     </PartyMemberBuffBox>
   );

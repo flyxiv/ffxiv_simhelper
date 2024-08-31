@@ -32,10 +32,14 @@ function DpsBox(
   return (
     <DpsBox>
       <Box className="DpsTitle" padding={1}>
-        <Typography variant="h6">{dpsName}</Typography>
+        <Typography variant="h6" align="center" fontSize={15}>
+          {dpsName}
+        </Typography>
       </Box>
       <Box className="Dps" paddingTop={1}>
-        <Typography variant="h3">{Math.round(dps)}</Typography>
+        <Typography variant="h3" align="center">
+          {Math.round(dps)}
+        </Typography>
       </Box>
     </DpsBox>
   );

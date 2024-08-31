@@ -3,6 +3,7 @@ import { GraphTitleRow, JobBarChartTeammate } from "./JobBarChart";
 import { Box, styled } from "@mui/material";
 import { GraphBoxStyle } from "./Style";
 import { PartyContributionData, TeammateChartData } from "./GraphData";
+import { TABLE_WIDTH } from "../../page/SimulationResult";
 
 const GraphBox = styled(Box)`
   ${GraphBoxStyle}
@@ -99,13 +100,13 @@ export const BestTeammateGraph = (
   }
 
   return (
-    <>
+    <Box width={TABLE_WIDTH}>
       {GraphTitleRow()}
       <GraphBox>
         {teammateContributionData.map((data) => {
           return JobBarChartTeammate(data, maxContribution);
         })}
       </GraphBox>
-    </>
+    </Box>
   );
 };

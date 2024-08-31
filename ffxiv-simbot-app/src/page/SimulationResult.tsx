@@ -19,6 +19,9 @@ import {
   MainPlayerContributionGraph,
   makeMainPlayerContributionData,
 } from "../components/graph/MainPlayerContributionGraph";
+import { ColorConfigurations } from "../Themes";
+import { BasicLeftMenu } from "../components/container/LeftMenu";
+import { AppHeader } from "../components/image/AppHeader";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -28,6 +31,7 @@ export const DAMAGE_PROFILE_TEXT = "Damage Profile";
 export const BEST_TEAMMATE_TEXT = "Best Teammate";
 export const MY_CONTRIBUTIONS_TEXT = "My Contributions";
 export const ROTATION_LOG_TEXT = "Rotation Log";
+export const TABLE_WIDTH = "80%";
 
 export function SimulationResult() {
   let [currentlyToggledView, setCurrentlyToggledView] =
@@ -63,24 +67,39 @@ export function SimulationResult() {
   );
 
   return (
-    <Box className="SimulationResult">
-      <ResultBoardBox>
-        {SimulationTitle("Simulation Result")}
-        {DpsSummary(mainPlayerSimulationData)}
-        {PlayerInfo(mainPlayerJob, responseJson.combatTimeMillisecond)}
-      </ResultBoardBox>
-      {ResultPageButtonGroup(
-        currentlyToggledView,
-        setCurrentlyToggledView,
-        teammatesBuffContributionToMyBuffs,
-        mainPlayerContributionToOthers
-      )}
-      {renderTableBasedOnSelectedButton(
-        currentlyToggledView,
-        responseJson,
-        teammatesBuffContributionToMyBuffs,
-        mainPlayerContributionToOthers
-      )}
+    <Box
+      display="flex"
+      flexDirection={"column"}
+      sx={{ backgroundColor: ColorConfigurations.backgroundOne }}
+      width="100vw"
+      alignItems={"center"}
+      paddingBottom={20}
+    >
+      <Box display="flex">
+        {BasicLeftMenu()}
+        <Box>
+          {AppHeader()}
+          <ResultBoardBox>
+            {SimulationTitle("Simulation Result")}
+            {DpsSummary(mainPlayerSimulationData)}
+            {PlayerInfo(mainPlayerJob, responseJson.combatTimeMillisecond)}
+          </ResultBoardBox>
+          <Box display="flex" justifyContent={"center"}>
+            {ResultPageButtonGroup(
+              currentlyToggledView,
+              setCurrentlyToggledView,
+              teammatesBuffContributionToMyBuffs,
+              mainPlayerContributionToOthers
+            )}
+          </Box>
+          {renderTableBasedOnSelectedButton(
+            currentlyToggledView,
+            responseJson,
+            teammatesBuffContributionToMyBuffs,
+            mainPlayerContributionToOthers
+          )}
+        </Box>
+      </Box>
     </Box>
   );
 }
@@ -107,7 +126,7 @@ function renderTableBasedOnSelectedButton(
     );
   } else if (currentlyToggledView == MY_CONTRIBUTIONS_TEXT) {
     return (
-      <ResultBoardBox>
+      <ResultBoardBox paddingBottom={5}>
         {SimulationTitle(MY_CONTRIBUTIONS_TEXT)}
         {MainPlayerContributionGraph(mainPlayerContributionToOthers)}
       </ResultBoardBox>

@@ -7,11 +7,12 @@ export const minusTextColor = "#850B21";
 export const statusBoxWidth = "22vw";
 export const ResultBoardBoxStyle = `
   background-color: ${ColorConfigurations.backgroundTwo};
-  width: 45vw;
+  width: 60vw;
   align-items: center;
   justify-content: center;
   display: flex;
   flex-direction: column;
+  padding-bottom: 100px;
 `;
 
 export const TitleBoxStyle = `

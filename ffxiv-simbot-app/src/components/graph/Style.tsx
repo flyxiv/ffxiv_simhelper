@@ -4,8 +4,9 @@ export const imageSize = "30px";
 export const barHeight = "15px";
 
 export const GraphBoxStyle = `
-width: 100%;
-background-color: ${ColorConfigurations.backgroundTwo};
+    width: 100%;
+    background-color: ${ColorConfigurations.backgroundTwo};
+    align-items: center;
 `;
 
 export const GraphEntryStyle = `
@@ -34,9 +35,12 @@ export const TotalBarStyle = `
 export const BuffBarStyle = (index: number) => `
     background-color: ${rdpsColors[index]};
     width: 100%;
+    display: flex;
+    justify-content: center;
 `;
 
 export const PartyMemberBuffBoxStyle = `
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -47,23 +51,24 @@ export const PartyMemberBuffBoxStyle = `
 
 export const PartyMemberIconBoxStyle = `
     display: flex;
-    width: 10%;
+    width: 15%;
     flex-direction: column;
-    margin-top: 3%;
     padding-left: 10px;
+    justify-items: flex-end;
+    align-items: center;
+    margin-top: 2.5%;
 `;
 
 export const TotalRdpsBoxStyle = `
     color: white;
-    width: 10%;
-    margin-top: 2.7%;
+    width: 15%;
     margin-left: 1vw;
-    margin-right: 0.5vw;
+    margin-top: 2.5%;
 `;
 
 export const BuffTitleBarStyle = `
-    margin-top: 2.7%;
-    width: 80%;
+    width: 100%;
+    margin-top: 2.5%;
 `;
 
 export const SkillBoxStyle = `
