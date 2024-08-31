@@ -7,7 +7,12 @@ import { getEquipmentIconDirectory } from "../icon/equipmenticon/EquipmentIconFa
 
 export function EquipmentItem(equipment: Equipment, jobAbbrev: string) {
   return (
-    <Box display="flex" justifyContent="left" alignContent={"center"}>
+    <Box
+      display="flex"
+      justifyContent="left"
+      alignContent={"center"}
+      height="5vh"
+    >
       <Box marginRight={1}>
         <img
           src={getEquipmentIconDirectory(
@@ -26,23 +31,19 @@ export function EquipmentItem(equipment: Equipment, jobAbbrev: string) {
         />
       </Box>
       <Box>
-        <Box marginLeft={1}>
-          <Typography
-            variant="body2"
-            alignContent={"center"}
-            fontSize={12}
-            color="white"
-          >
-            {equipment.name}
-          </Typography>
-        </Box>
         <Box>
           <Typography
             variant="body2"
             alignContent={"center"}
             fontSize={10}
             color="white"
+            align="left"
           >
+            {equipment.name}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="body2" fontSize={8} color="white" align="left">
             {equipmentStatDescriptionString(equipment)}
           </Typography>
         </Box>

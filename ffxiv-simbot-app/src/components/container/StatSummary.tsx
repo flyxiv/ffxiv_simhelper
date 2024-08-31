@@ -15,8 +15,8 @@ import {
 } from "../../types/ffxivdatabase/PlayerPower";
 import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 
-const STAT_SUMMARY_BOX_WIDTH = "2vw";
-const POWER_SUMMARY_BOX_WIDTH = "3vw";
+const STAT_SUMMARY_BOX_WIDTH = "3vw";
+const POWER_SUMMARY_BOX_WIDTH = "4vw";
 
 let StatSummaryBox = styled(Box)`
   ${StatSummaryBoxStyle}
@@ -50,10 +50,10 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
   let jobAbbrev = totalState.mainPlayerJobAbbrev;
   return (
     <Box display="inline-block">
-      <StatSummaryBox sx={{ backgroundColor: ColorConfigurations.backgroundThree }}>
-        <SingleStatBox>
-          {StatSummaryTypography("Name", false)}
-        </SingleStatBox>
+      <StatSummaryBox
+        sx={{ backgroundColor: ColorConfigurations.backgroundThree }}
+      >
+        <SingleStatBox>{StatSummaryTypography("Name", false)}</SingleStatBox>
         {jobStatNames.map((statName) => {
           return (
             <SingleStatBox>
@@ -63,25 +63,28 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
         })}
       </StatSummaryBox>
 
-      <StatSummaryBox sx={{
-        backgroundColor: ColorConfigurations.backgroundFour
-      }}>
-        <SingleStatBox>
-          {StatSummaryTypography("Stat", false)}
-        </SingleStatBox>
+      <StatSummaryBox
+        sx={{
+          backgroundColor: ColorConfigurations.backgroundFour,
+        }}
+      >
+        <SingleStatBox>{StatSummaryTypography("Stat", false)}</SingleStatBox>
         {jobStatNames.map((statName) => {
           return (
             <SingleStatBox>
-              {StatSummaryTypography(getStatByStatName(power, statName, jobAbbrev), false)}
+              {StatSummaryTypography(
+                getStatByStatName(power, statName, jobAbbrev),
+                false
+              )}
             </SingleStatBox>
           );
         })}
       </StatSummaryBox>
 
-      <StatSummaryBox sx={{ backgroundColor: ColorConfigurations.backgroundFour }}>
-        <SingleStatBox>
-          {StatSummaryTypography("Prev", false)}
-        </SingleStatBox>
+      <StatSummaryBox
+        sx={{ backgroundColor: ColorConfigurations.backgroundFour }}
+      >
+        <SingleStatBox>{StatSummaryTypography("Prev", false)}</SingleStatBox>
         {jobStatNames.map((statName) => {
           let lostStat = getStatLostByStatName(power, statName, jobAbbrev);
           let color =
@@ -98,19 +101,22 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
         })}
       </StatSummaryBox>
 
-      <StatSummaryBox sx={{ backgroundColor: ColorConfigurations.backgroundFour }}>
-        <SingleStatBox>
-          {StatSummaryTypography("Next", false)}
-        </SingleStatBox>
+      <StatSummaryBox
+        sx={{ backgroundColor: ColorConfigurations.backgroundFour }}
+      >
+        <SingleStatBox>{StatSummaryTypography("Next", false)}</SingleStatBox>
         {jobStatNames.map((statName) => {
           return (
             <SingleStatBox>
-              {StatSummaryTypography(getStatNeededByStatName(power, statName, jobAbbrev).toString(), false)}
+              {StatSummaryTypography(
+                getStatNeededByStatName(power, statName, jobAbbrev).toString(),
+                false
+              )}
             </SingleStatBox>
           );
         })}
       </StatSummaryBox>
-    </Box >
+    </Box>
   );
 }
 
@@ -119,10 +125,10 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
 
   return (
     <Box display="inline-block">
-      <StatSummaryBox sx={{ backgroundColor: ColorConfigurations.backgroundThree }}>
-        <SinglePowerBox>
-          {StatSummaryTypography("Name", true)}
-        </SinglePowerBox>
+      <StatSummaryBox
+        sx={{ backgroundColor: ColorConfigurations.backgroundThree }}
+      >
+        <SinglePowerBox>{StatSummaryTypography("Name", true)}</SinglePowerBox>
         {POWER_NAMES.map((powerName) => {
           return (
             <SinglePowerBox>
@@ -132,12 +138,12 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
         })}
       </StatSummaryBox>
 
-      <StatSummaryBox sx={{
-        backgroundColor: ColorConfigurations.backgroundFour
-      }}>
-        <SinglePowerBox>
-          {StatSummaryTypography("Values", true)}
-        </SinglePowerBox>
+      <StatSummaryBox
+        sx={{
+          backgroundColor: ColorConfigurations.backgroundFour,
+        }}
+      >
+        <SinglePowerBox>{StatSummaryTypography("Values", true)}</SinglePowerBox>
         {POWER_NAMES.map((powerName) => {
           return (
             <SinglePowerBox>
@@ -146,6 +152,6 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
           );
         })}
       </StatSummaryBox>
-    </Box >
+    </Box>
   );
 }

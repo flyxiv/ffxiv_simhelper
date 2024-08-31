@@ -22,7 +22,7 @@ import { EquipmentInput } from "../types/EquipmentInput";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "80vw";
+export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "70vw";
 const GEAR_COMPARE_LOADOUNT_COUNT = 3;
 
 const PARTY_INPUT_WIDTH = "40vw";

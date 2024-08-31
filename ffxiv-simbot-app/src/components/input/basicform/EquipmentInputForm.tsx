@@ -29,7 +29,10 @@ import {
   updateOnePlayerPower,
 } from "../../../types/ffxivdatabase/ItemSet";
 import { EquipmentMenuItem } from "../../../components/items/EquipmentMenuItem";
-import { MainPlayerJobSelection, MainPlayerJobSelectionOnlyBuffJobs } from "../jobselection/MainPlayerJobSelection";
+import {
+  MainPlayerJobSelection,
+  MainPlayerJobSelectionOnlyBuffJobs,
+} from "../jobselection/MainPlayerJobSelection";
 import { MainPlayerRaceSelection } from "../RaceSelection";
 import { FoodMenuItem } from "../../../components/items/FoodMenuItem";
 import { ALL_FOODS } from "../../../types/ffxivdatabase/Food";
@@ -134,13 +137,16 @@ function EquipmentMenuOfOneSlot(
             PaperProps: {
               sx: {
                 backgroundColor: ColorConfigurations.backgroundThree,
-                height: "100%"
               },
             },
           }}
         >
           {equipmentsAvailableInSlot.map((equipment) => {
-            return EquipmentMenuItem(id, equipment, totalState.mainPlayerJobAbbrev);
+            return EquipmentMenuItem(
+              id,
+              equipment,
+              totalState.mainPlayerJobAbbrev
+            );
           })}
           <Divider />
           <EquipmentMenu value={-1} key={`${id}_${slotLabel}_empty`}>
@@ -151,7 +157,13 @@ function EquipmentMenuOfOneSlot(
         </Select>
       </CustomFormControl>
       <MateriaBox>
-        {MateriaInputTable(id, slotName, currentEquipment, totalEquipmentState, setTotalEquipmentState)}
+        {MateriaInputTable(
+          id,
+          slotName,
+          currentEquipment,
+          totalEquipmentState,
+          setTotalEquipmentState
+        )}
       </MateriaBox>
 
       <EquipmentStatBox>
@@ -176,21 +188,32 @@ export function EquipmentSelectionMenu(
   hasTimeInput: boolean = false
 ) {
   let xs = 12;
-  let mainCharacterJobAbbrev = totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
+  let mainCharacterJobAbbrev =
+    totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
   return (
     <EquipmentGridContainer container>
       <EquipmentGridItemBox key={`${id}_JobSelectionItemBox`}>
         <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
-          {onlyBuffJobs ? MainPlayerJobSelectionOnlyBuffJobs(id, totalEquipmentState, setTotalEquipmentState) : MainPlayerJobSelection(
-            id,
-            totalEquipmentState,
-            setTotalEquipmentState,
-          )}
+          {onlyBuffJobs
+            ? MainPlayerJobSelectionOnlyBuffJobs(
+                id,
+                totalEquipmentState,
+                setTotalEquipmentState
+              )
+            : MainPlayerJobSelection(
+                id,
+                totalEquipmentState,
+                setTotalEquipmentState
+              )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
       <EquipmentGridItemBox marginBottom={1} key={`${id}_RaceItemBox`}>
         <InputEquipmentBox item xs={xs} key="Race">
-          {MainPlayerRaceSelection(id, totalEquipmentState, setTotalEquipmentState)}
+          {MainPlayerRaceSelection(
+            id,
+            totalEquipmentState,
+            setTotalEquipmentState
+          )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
 
@@ -206,9 +229,7 @@ export function EquipmentSelectionMenu(
           return;
         }
         return (
-          <EquipmentGridItemBox
-            key={`${id}_equipment_${slotName}_itembox`}
-          >
+          <EquipmentGridItemBox key={`${id}_equipment_${slotName}_itembox`}>
             <InputEquipmentBox
               item
               xs={xs}
@@ -231,7 +252,7 @@ export function EquipmentSelectionMenu(
         </InputEquipmentBox>
       </EquipmentGridItemBox>
       {PartnerSelectionMenu(id, totalEquipmentState, setTotalEquipmentState)}
-      {hasTimeInput ?
+      {hasTimeInput ? (
         <EquipmentGridItemBox>
           <InputEquipmentBox item xs={xs} key="time">
             {SimulationResultTimeTextBox(
@@ -241,8 +262,9 @@ export function EquipmentSelectionMenu(
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
-        : <Box></Box>
-      }
+      ) : (
+        <Box></Box>
+      )}
     </EquipmentGridContainer>
   );
 }
@@ -252,20 +274,31 @@ function PartnerSelectionMenu(
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function
 ) {
-  let mainPlayerJobAbbrev = totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
+  let mainPlayerJobAbbrev =
+    totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
 
   if (mainPlayerJobAbbrev === "AST") {
     return (
       <>
         <EquipmentGridItemBox key={`partner_${id}`}>
           <InputEquipmentBox item xs={12} key={`partner_${id}`}>
-            {Partner1Selection(id, totalEquipmentState, setTotalEquipmentState, "Melee Partner")}
+            {Partner1Selection(
+              id,
+              totalEquipmentState,
+              setTotalEquipmentState,
+              "Melee Partner"
+            )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
 
         <EquipmentGridItemBox key={`partner_${id}`}>
           <InputEquipmentBox item xs={12} key={`partner_${id}`}>
-            {Partner2Selection(id, totalEquipmentState, setTotalEquipmentState, "Ranged Partner")}
+            {Partner2Selection(
+              id,
+              totalEquipmentState,
+              setTotalEquipmentState,
+              "Ranged Partner"
+            )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
       </>
@@ -274,14 +307,18 @@ function PartnerSelectionMenu(
     return (
       <EquipmentGridItemBox key={`partner_${id}`}>
         <InputEquipmentBox item xs={12} key={`partner_${id}`}>
-          {Partner1Selection(id, totalEquipmentState, setTotalEquipmentState, "Dance Partner")}
+          {Partner1Selection(
+            id,
+            totalEquipmentState,
+            setTotalEquipmentState,
+            "Dance Partner"
+          )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
     );
   } else {
     return <Box></Box>;
   }
-
 }
 
 function FoodSelection(

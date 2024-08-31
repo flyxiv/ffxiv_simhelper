@@ -197,20 +197,19 @@ export const LeftMenuLogoStyle = `
   height: 5vh;
   align-content: center;
   justify-content: center;
-`
+`;
 
 export const LeftMenuTotalBarStyle = `
   background-color: ${ColorConfigurations.backgroundThree};
   color: white;
   margin-left: 10px;
   margin-top: 10px;
-  height: 100vh;
-`
+`;
 
 export const LeftMenuNavigationBarStyle = `
   color: white;
-`
+`;
 
 export const LeftMenuNavigationItemStyle = `
   color: white;
-`
+`;

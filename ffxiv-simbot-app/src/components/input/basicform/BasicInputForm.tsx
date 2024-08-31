@@ -23,6 +23,7 @@ export const inputStyleEquipment = {
     color: "white",
     backgroundColor: ColorConfigurations.backgroundThree,
     textAlign: "right",
+    height: "5vh",
   },
   "& .MuiInputLabel-root": {
     color: ColorConfigurations.primary,
@@ -50,9 +51,11 @@ export const inputStyleJob = {
   },
 };
 
-export const Input = styled(TextField)(({ }) => inputStyleEquipment);
+export const Input = styled(TextField)(({}) => inputStyleEquipment);
 
-export const CustomFormControl = styled(FormControl)(({ }) => inputStyleEquipment);
+export const CustomFormControl = styled(FormControl)(
+  ({}) => inputStyleEquipment
+);
 
 const InputBox = styled(Box)`
   ${InputGridItemStyle}

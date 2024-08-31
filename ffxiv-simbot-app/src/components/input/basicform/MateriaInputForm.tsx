@@ -28,7 +28,7 @@ const MateriaMenu = styled(MenuItem)`
   ${MenuItemStyle}
 `;
 
-const MATERIA_MENU_HEIGHT = "3vh";
+const MATERIA_MENU_HEIGHT = "6vh";
 
 export function MateriaInputTable(
   id: number,
@@ -38,7 +38,8 @@ export function MateriaInputTable(
   setTotalEquipmentState: Function
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
-  let materiasInSlot = totalState.gearSetMaterias[slotNameToSlotIndex(slotName)];
+  let materiasInSlot =
+    totalState.gearSetMaterias[slotNameToSlotIndex(slotName)];
   if (equipment === undefined) {
     return <></>;
   }
@@ -84,14 +85,12 @@ function SingleMateriaMenu(
     let newTotalEquipmentState = { ...totalEquipmentState };
     let newData = newTotalEquipmentState.equipmentDatas[id];
 
-    let materiasOfSlot =
-      newData.gearSetMaterias[slotNameToSlotIndex(slotName)];
+    let materiasOfSlot = newData.gearSetMaterias[slotNameToSlotIndex(slotName)];
 
     updateMateriaList(e.target.value, equipment, materiasOfSlot, materiaSlot);
     let newGearSetMaterias = [...totalState.gearSetMaterias];
 
-    newGearSetMaterias[slotNameToSlotIndex(slotName)] =
-      materiasOfSlot;
+    newGearSetMaterias[slotNameToSlotIndex(slotName)] = materiasOfSlot;
     newData.gearSetMaterias = newGearSetMaterias;
     updateOnePlayerPower(id, newTotalEquipmentState, setTotalEquipmentState);
   };
@@ -125,7 +124,9 @@ function SingleMateriaMenu(
           );
         })}
         <Divider />
-        <MateriaMenu value={"empty"}><Typography align="center">Empty</Typography></MateriaMenu>
+        <MateriaMenu value={"empty"}>
+          <Typography align="center">Empty</Typography>
+        </MateriaMenu>
       </Select>
     </CustomFormControl>
   );
