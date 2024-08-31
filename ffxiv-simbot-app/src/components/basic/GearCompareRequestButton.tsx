@@ -1,16 +1,32 @@
-export function StatCompareRequestButton(
-) {
-  return <></>;
-}
-/*
+import { styled, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {
+  SINGLE_INPUT_SAVE_NAME,
+  GEAR_COMPARE_RESULT_URL,
+  GEAR_COMPARE_RESPONSE_SAVE_NAME,
+} from "../../App";
+import { useState } from "react";
+import { requestButtonStyle } from "./Style";
+import {
+  EquipmentInput,
+  SingleEquipmentInputSaveState,
+} from "../../types/EquipmentInput";
+import { createQuickSimRequest } from "./QuickSimRequestButton";
+import { GearCompareResponse } from "src/types/GearCompareResponse";
+import { SimulationSummary } from "src/types/CombatSimulationResult";
+
+const TOTAL_REQUEST_COUNT = 1000;
+const REQUEST_SERVER = "http://localhost:13406/api/v1/gearcompare";
+
+export function GearCompareRequestButton(totalState: EquipmentInput) {
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
   `;
+
   let [buttonText, setButtonText] = useState("Simulate");
   let [requestCount, setRequestCount] = useState(0);
-
   const loadingButtonText = (requestCount: number) => {
-    return `Simulating... ${requestCount}/${totalRequestCount}`;
+    return `Simulating... ${requestCount}/${TOTAL_REQUEST_COUNT}`;
   };
 
   let navigate = useNavigate();
@@ -18,14 +34,13 @@ export function StatCompareRequestButton(
 
   const handleClick = async () => {
     setButtonText(loadingButtonText(requestCount));
-    let request = createStatCompareRequest(
-      partyState,
-      combatTimeSeconds,
-      characterState1,
-      characterState2
-    );
+    let inputJson = JSON.stringify(totalState);
+    localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
-    console.log(request);
+    let request = createGearCompareRequest(
+      totalState.equipmentDatas[0],
+      totalState.equipmentDatas[1]
+    );
 
     if (request instanceof Error) {
       console.error("Error: ", request.message);
@@ -33,7 +48,7 @@ export function StatCompareRequestButton(
     }
 
     let body = JSON.stringify(request);
-    localStorage.setItem(StatCompareRequestSaveName, body);
+
     let responsePromises = [];
     let responses: Array<Response> = [];
     const incrementState = (count: number) => {
@@ -41,7 +56,7 @@ export function StatCompareRequestButton(
       setButtonText(loadingButtonText(count));
     };
 
-    for (let i = 0; i < totalRequestCount; i++) {
+    for (let i = 0; i < TOTAL_REQUEST_COUNT; i++) {
       responsePromises.push(
         sendRequestAsync(body)
           .then((response) => {
@@ -56,41 +71,41 @@ export function StatCompareRequestButton(
     }
 
     await Promise.all(responsePromises);
-    const formattedResponses: Array<Promise<StatCompareResponse>> =
+    const formattedResponses: Array<Promise<GearCompareResponse>> =
       responses.map(async (response) => {
         const data = await response.json();
         return data;
       });
 
     const finalResponses = await Promise.all(formattedResponses);
+
     // Use mean/max for the summary and the very first request for the other results.
     let response = finalResponses[0];
+    let mainPlayerId = response.simulationGear1.mainPlayerId;
+
     let damageSummaries1 = finalResponses.map(
-      (response) => response.simulationGear1
+      (response) =>
+        response.simulationGear1.simulationData[mainPlayerId].simulationSummary
     );
     let damageSummaries2 = finalResponses.map(
-      (response) => response.simulationGear2
+      (response) =>
+        response.simulationGear2.simulationData[mainPlayerId].simulationSummary
     );
 
-    let damageSummary1 =
+    let aggregatedDamageSummary1 =
       aggregateDamageStatisticsFromSampleRuns(damageSummaries1);
-    let damageSummary2 =
+    let aggregatedDamageSummary2 =
       aggregateDamageStatisticsFromSampleRuns(damageSummaries2);
 
-    response.simulationGear1.pdps = damageSummary1.pdps;
-    response.simulationGear1.rdps = damageSummary1.rdps;
-    response.simulationGear1.edps = damageSummary1.edps;
-    response.simulationGear1.maxRdps = damageSummary1.maxRdps;
-
-    response.simulationGear2.pdps = damageSummary2.pdps;
-    response.simulationGear2.rdps = damageSummary2.rdps;
-    response.simulationGear2.edps = damageSummary2.edps;
-    response.simulationGear2.maxRdps = damageSummary2.maxRdps;
+    response.simulationGear1.simulationData[mainPlayerId].simulationSummary =
+      aggregatedDamageSummary1;
+    response.simulationGear2.simulationData[mainPlayerId].simulationSummary =
+      aggregatedDamageSummary2;
 
     const responseString = JSON.stringify(response);
-    localStorage.setItem(StatCompareResponseSaveName, responseString);
+    localStorage.setItem(GEAR_COMPARE_RESPONSE_SAVE_NAME, responseString);
 
-    navigate("/statcompareresult");
+    navigate(`/${GEAR_COMPARE_RESULT_URL}`);
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>
@@ -99,43 +114,13 @@ export function StatCompareRequestButton(
   );
 }
 
-function createStatCompareRequest(
-  partyState: string[],
-  combatTimeSeconds: number,
-  characterState1: CharacterStates,
-  characterState2: CharacterStates
-): StatCompareRequest {
-  let partyInfo: PartyInfo[] = [];
-
-  let playerCount = 0;
-
-  for (let i = 0; i < partyState.length; i++) {
-    let defaultStat = mapJobAbbrevToJobDefaultStat(partyState[i]);
-
-    if (defaultStat === undefined) {
-      continue;
-    }
-
-    partyInfo.push({
-      playerId: playerCount + 1,
-      partner1Id: null,
-      partner2Id: null,
-      job: partyState[i],
-      stats: defaultStat,
-    });
-
-    playerCount++;
-  }
-
+function createGearCompareRequest(
+  equipment1: SingleEquipmentInputSaveState,
+  equipment2: SingleEquipmentInputSaveState
+) {
   return {
-    mainPlayerId: 0,
-    mainPlayerJob: characterState1.jobAbbrev,
-    mainPlayerPartner1Id: characterState1.partner1Id,
-    mainPlayerPartner2Id: characterState1.partner2Id,
-    combatTimeMillisecond: combatTimeSeconds * 1000,
-    mainPlayerStat1: characterState1.stats,
-    mainPlayerStat2: characterState2.stats,
-    party: partyInfo,
+    gear1Request: createQuickSimRequest(equipment1),
+    gear2Request: createQuickSimRequest(equipment2),
   };
 }
 
@@ -146,19 +131,16 @@ function sendRequestAsync(requestBody: string): Promise<Response> {
       const timeoutId = setTimeout(() => {
         controller.abort();
         reject(new Error("Request timeout"));
-      }, 60000);
+      }, 300000);
 
-      const response = await fetch(
-        "http://localhost:13406/api/v1/statcompare",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: requestBody,
-          signal: controller.signal,
-        }
-      );
+      const response = await fetch(REQUEST_SERVER, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: requestBody,
+        signal: controller.signal,
+      });
 
       clearTimeout(timeoutId);
 
@@ -166,12 +148,20 @@ function sendRequestAsync(requestBody: string): Promise<Response> {
         console.log("POST request successful");
         resolve(response);
       } else {
-        console.error("POST request failed");
-        reject(new Error("Request failed"));
+        // Read the response body for error details
+        const errorText = await response.text(); // Or use response.json() if you expect JSON
+        console.error("POST request failed", {
+          status: response.status,
+          body: errorText,
+        });
+        reject(
+          new Error(
+            `Request failed with status ${response.status}: ${errorText}`
+          )
+        );
       }
     } catch (error) {
       console.error("Error occurred: ", error);
-      reject(error);
     }
   });
 }
@@ -191,7 +181,7 @@ function aggregateDamageStatisticsFromSampleRuns(
     maxRdps = Math.max(maxRdps, summary.rdps);
   });
 
-  let medianIndex = Math.floor(totalRequestCount / 2);
+  let medianIndex = Math.floor(TOTAL_REQUEST_COUNT / 2);
   totalDps.sort((a, b) => a - b);
   totalRdps.sort((a, b) => a - b);
   totalEdps.sort((a, b) => a - b);
@@ -206,4 +196,4 @@ function aggregateDamageStatisticsFromSampleRuns(
     edps: medianEdps,
     maxRdps: maxRdps,
   };
-} */
+}

@@ -69,7 +69,7 @@ export const DpsSummary = (props: SimulationData) => {
   );
 };
 
-export const StatCompareDpsBox = (
+export const GearCompareDpsBox = (
   dpsName: string,
   targetDps: number,
   compareDps: number
@@ -128,16 +128,16 @@ export const StatCompareDpsBox = (
   );
 };
 
-export const StatCompareDpsSummary = (
+export const GearCompareDpsSummary = (
   target: SimulationSummary,
   compare: SimulationSummary
 ) => {
   return (
     <DpsSummaryBox>
-      {StatCompareDpsBox("DPS", target.pdps, compare.pdps)}
-      {StatCompareDpsBox("RDPS", target.rdps, compare.rdps)}
-      {StatCompareDpsBox("Max RDPS", target.maxRdps, compare.maxRdps)}
-      {StatCompareDpsBox("EDPS", target.edps, compare.edps)}
+      {GearCompareDpsBox("DPS", target.pdps, compare.pdps)}
+      {GearCompareDpsBox("RDPS", target.rdps, compare.rdps)}
+      {GearCompareDpsBox("Max RDPS", target.maxRdps, compare.maxRdps)}
+      {GearCompareDpsBox("EDPS", target.edps, compare.edps)}
     </DpsSummaryBox>
   );
 };

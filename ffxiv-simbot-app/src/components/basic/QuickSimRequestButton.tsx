@@ -5,19 +5,24 @@ import {
   playerStatToPlayerPower,
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
-import { QUICKSIM_RESULT_URL, SINGLE_INPUT_SAVE_NAME, QUICK_SIM_RESPONSE_SAVE_NAME } from "../../App";
+import {
+  QUICKSIM_RESULT_URL,
+  SINGLE_INPUT_SAVE_NAME,
+  QUICK_SIM_RESPONSE_SAVE_NAME,
+} from "../../App";
 import { useState } from "react";
 import { QuickSimResponse } from "../../types/QuickSimResponse";
 import { requestButtonStyle } from "./Style";
-import { EquipmentInput, SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
+import {
+  EquipmentInput,
+  SingleEquipmentInputSaveState,
+} from "../../types/EquipmentInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 
-const totalRequestCount = 100;
+const totalRequestCount = 1000;
 const REQUEST_SERVER = "http://localhost:13406/api/v1/simulate";
 
-export function QuickSimRequestButton(
-  totalState: EquipmentInput,
-) {
+export function QuickSimRequestButton(totalState: EquipmentInput) {
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
   `;
@@ -36,9 +41,7 @@ export function QuickSimRequestButton(
     let inputJson = JSON.stringify(totalState);
     localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
-    let request = createQuickSimRequest(
-      totalState.equipmentDatas[0]
-    );
+    let request = createQuickSimRequest(totalState.equipmentDatas[0]);
 
     if (request instanceof Error) {
       console.error("Error: ", request.message);
@@ -134,8 +137,7 @@ export function QuickSimRequestButton(
   );
 }
 
-
-function createQuickSimRequest(
+export function createQuickSimRequest(
   totalState: SingleEquipmentInputSaveState
 ) {
   let jobAbbrev = totalState.mainPlayerJobAbbrev;

@@ -6,4 +6,5 @@ export interface QuickSimResponse {
   combatTimeMillisecond: number;
   simulationData: Array<SimulationData>;
   mainPlayerPower: PlayerPower;
+  mainPlayerJobAbbrev: string;
 }

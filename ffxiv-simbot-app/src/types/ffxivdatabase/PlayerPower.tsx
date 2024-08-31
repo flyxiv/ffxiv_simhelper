@@ -30,7 +30,17 @@ export const SPEED_MULTIPLIER_NAME = "Speed";
 export const TENACITY_MULTIPLIER_NAME = "Tenacity";
 export const GCD_NAME = "GCD";
 
-export const POWER_NAMES = [WEAPON_MULTIPLIER_NAME, MAIN_STAT_MULTIPLIER_NAME, CRIT_RATE_NAME, CRIT_DAMAGE_NAME, DH_RATE_NAME, DET_MULTIPLIER_NAME, SPEED_MULTIPLIER_NAME, TENACITY_MULTIPLIER_NAME, GCD_NAME];
+export const POWER_NAMES = [
+  WEAPON_MULTIPLIER_NAME,
+  MAIN_STAT_MULTIPLIER_NAME,
+  CRIT_RATE_NAME,
+  CRIT_DAMAGE_NAME,
+  DH_RATE_NAME,
+  DET_MULTIPLIER_NAME,
+  SPEED_MULTIPLIER_NAME,
+  TENACITY_MULTIPLIER_NAME,
+  GCD_NAME,
+];
 
 export interface PlayerPower {
   weaponDamage: number;
@@ -57,8 +67,6 @@ export interface PlayerPower {
   autoDirectHitIncrease: number;
   gcd: number;
 }
-
-
 
 export interface CharacterEquipmentsData {
   power: PlayerPower;
@@ -125,7 +133,8 @@ export function getStatByStatName(
       );
       return `${playerPower.gcd.toFixed(2)}`;
     }
-    default: return "";
+    default:
+      return "";
   }
 }
 
@@ -142,7 +151,6 @@ export function getStatPower(power: PlayerPower, powerName: string) {
     }
     case CRIT_DAMAGE_NAME: {
       return `+${(power.criticalStrikeDamage * 100).toFixed(1)}%`;
-
     }
     case DH_RATE_NAME: {
       return `${(power.directHitRate * 100).toFixed(1)}%`;
@@ -176,7 +184,10 @@ export function isTank(jobAbbrev: string) {
   }
 }
 
-function getSpeedStatByJobAbbrev(totalStats: PlayerPower, jobAbbrev: string) {
+export function getSpeedStatByJobAbbrev(
+  totalStats: PlayerPower,
+  jobAbbrev: string
+) {
   switch (jobAbbrev) {
     case "PLD":
     case "WAR":

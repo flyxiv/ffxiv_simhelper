@@ -6,7 +6,10 @@ import {
   StatTextBoxStyle,
   StatTitleTextBoxStyle,
 } from "./Styles";
-import { PlayerPower } from "../../types/ffxivdatabase/PlayerPower";
+import {
+  getSpeedStatByJobAbbrev,
+  PlayerPower,
+} from "../../types/ffxivdatabase/PlayerPower";
 import { isCaster } from "../../types/ffxivdatabase/ItemSet";
 
 const PlayerStatInfoBox = styled(Box)`
@@ -66,8 +69,9 @@ export function StatOutput(statName: string, statValue: number) {
 }
 
 export function StatComparePlayerStatInfo(
-  targetStat: CharacterStats,
-  compareStat: CharacterStats,
+  targetStat: PlayerPower,
+  compareStat: PlayerPower,
+  jobAbbrev: string,
   combatTimeMilliseconds: number
 ) {
   let weaponDamageColor = "black";
@@ -108,9 +112,12 @@ export function StatComparePlayerStatInfo(
     determinationColor = "red";
   }
 
-  if (targetStat.speed > compareStat.speed) {
+  let targetSpeed = getSpeedStatByJobAbbrev(targetStat, jobAbbrev);
+  let compareSpeed = getSpeedStatByJobAbbrev(compareStat, jobAbbrev);
+
+  if (targetSpeed > compareSpeed) {
     speedColor = "blue";
-  } else if (targetStat.speed < compareStat.speed) {
+  } else if (targetSpeed < compareSpeed) {
     speedColor = "red";
   }
 
@@ -144,7 +151,7 @@ export function StatComparePlayerStatInfo(
           targetStat.determination,
           determinationColor
         )}
-        {StatCompareStatOutput("Speed", targetStat.speed, speedColor)}
+        {StatCompareStatOutput("Speed", targetSpeed, speedColor)}
         {StatCompareStatOutput("Tenacity", targetStat.tenacity, tenacityColor)}
         {StatOutput("Time(Seconds)", Math.floor(combatTimeMilliseconds / 1000))}
       </Grid>

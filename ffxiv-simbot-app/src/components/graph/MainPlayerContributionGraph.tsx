@@ -1,4 +1,4 @@
-import { QuickSimResponse } from "src/types/QuickSimResponse";
+import { QuickSimResponse } from "src/types/SimulationResponse";
 import {
   PartyContributionData,
   StatusKey,

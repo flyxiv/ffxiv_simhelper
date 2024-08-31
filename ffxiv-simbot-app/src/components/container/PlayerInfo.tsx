@@ -3,8 +3,8 @@ import { Typography, styled, Box } from "@mui/material";
 import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
 import { PlayerStatInfo, StatComparePlayerStatInfo } from "./PlayerStatInfo";
 import { QUICK_SIM_RESPONSE_SAVE_NAME } from "../../App";
-import { CharacterStats } from "../../types/CharacterStates";
 import { QuickSimResponse } from "../../types/QuickSimResponse";
+import { PlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 
 const PlayerInfoBox = styled(Box)`
   ${PlayerInfoBoxStyle}
@@ -15,7 +15,9 @@ const PlayerInfoJobTitle = styled(Box)`
 `;
 
 export function PlayerInfo(job: string, combatTimeMilliseconds: number) {
-  let mostRecentResponseState = localStorage.getItem(QUICK_SIM_RESPONSE_SAVE_NAME);
+  let mostRecentResponseState = localStorage.getItem(
+    QUICK_SIM_RESPONSE_SAVE_NAME
+  );
   let mostRecentResponse = null;
   if (mostRecentResponseState == null) {
     return;
@@ -44,22 +46,23 @@ export function PlayerInfo(job: string, combatTimeMilliseconds: number) {
 }
 
 export function StatComparePlayerInfo(
-  job: string,
-  targetStat: CharacterStats,
-  compareStat: CharacterStats,
+  jobAbbrev: string,
+  targetStat: PlayerPower,
+  compareStat: PlayerPower,
   combatTimeMilliseconds: number
 ) {
   return (
     <PlayerInfoBox>
       <PlayerInfoJobTitle>
-        {JobIconFactory(job, 30)}
+        {JobIconFactory(jobAbbrev, 30)}
         <Typography variant="h3" component="div" color="white">
-          {job}
+          {jobAbbrev}
         </Typography>
       </PlayerInfoJobTitle>
       {StatComparePlayerStatInfo(
         targetStat,
         compareStat,
+        jobAbbrev,
         combatTimeMilliseconds
       )}
     </PlayerInfoBox>

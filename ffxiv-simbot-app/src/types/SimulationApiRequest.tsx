@@ -1,6 +1,6 @@
 import { PartyInfo } from "./PartyStates";
 
-export interface QuickSimRequest {
+export interface SimulationApiRequest {
   mainPlayerId: number;
   combatTimeMillisecond: number;
   party: Array<PartyInfo>;

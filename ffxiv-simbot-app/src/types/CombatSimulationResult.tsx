@@ -1,6 +1,5 @@
 export interface SimulationSummary {
   rdps: number;
-  adps: number;
   pdps: number;
   edps: number;
   maxRdps: number;
