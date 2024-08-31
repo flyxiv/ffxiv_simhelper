@@ -38,16 +38,8 @@ pub(crate) struct ViperDatabase {
 
     pub(crate) hunters_instinct: BuffStatus,
     pub(crate) swiftscaled: BuffStatus,
-    pub(crate) hindstung_venom: BuffStatus,
-    pub(crate) hindsbane_venom: BuffStatus,
-    pub(crate) flanksbane_venom: BuffStatus,
-    pub(crate) flankstung_venom: BuffStatus,
-    pub(crate) ready_to_reawaken: BuffStatus,
-    pub(crate) honed_reavers: BuffStatus,
-    pub(crate) honed_steels: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl ViperDatabase {
@@ -873,16 +865,8 @@ impl ViperDatabase {
 
             hunters_instinct,
             swiftscaled,
-            hindstung_venom,
-            hindsbane_venom,
-            flanksbane_venom,
-            flankstung_venom,
-            ready_to_reawaken,
-            honed_reavers,
-            honed_steels,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

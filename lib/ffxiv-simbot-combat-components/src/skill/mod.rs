@@ -26,9 +26,12 @@ pub static AUTO_ATTACK_ID: IdType = 10001;
 /// The resource requirements for a skill.
 /// Skill might need mana, status(suiton status is needed for Trick Attack), or combo status.
 #[derive(Clone)]
-pub(crate) enum ResourceRequirements {
+pub enum ResourceRequirements {
     UseBuff(IdType),
+
+    #[allow(unused)]
     UseDebuff(IdType),
+
     CheckStatus(IdType),
     Resource(ResourceIdType, ResourceType),
     UseAllResource(ResourceIdType),

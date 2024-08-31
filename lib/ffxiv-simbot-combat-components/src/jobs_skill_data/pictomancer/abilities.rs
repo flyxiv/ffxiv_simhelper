@@ -50,13 +50,7 @@ pub(crate) struct PictomancerDatabase {
     pub(crate) stone_in_yellow_hyperphantasia: AttackSkill,
     pub(crate) thunder_in_magenta_hyperphantasia: AttackSkill,
 
-    pub(crate) starry_muse_buff: BuffStatus,
-    pub(crate) subtractive_spectrum: BuffStatus,
-    pub(crate) hyperphantasia: BuffStatus,
-    pub(crate) starstruck: BuffStatus,
-
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 impl PictomancerDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
@@ -1095,13 +1089,7 @@ impl PictomancerDatabase {
             stone_in_yellow_hyperphantasia,
             thunder_in_magenta_hyperphantasia,
 
-            starry_muse_buff,
-            hyperphantasia,
-            subtractive_spectrum,
-            starstruck,
-
             potion: potion_skills.potion,
-            potion_buff: potion_skills.potion_buff,
         }
     }
 }

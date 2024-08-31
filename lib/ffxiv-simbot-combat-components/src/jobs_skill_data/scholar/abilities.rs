@@ -23,12 +23,8 @@ pub(crate) struct ScholarDatabase {
     pub(crate) baneful_impaction: AttackSkill,
 
     pub(crate) biolysis_dot: DebuffStatus,
-    pub(crate) chain_stratagem_debuff: DebuffStatus,
-    pub(crate) impact_imminent: BuffStatus,
-    pub(crate) baneful_impaction_dot: DebuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl ScholarDatabase {
@@ -307,12 +303,8 @@ impl ScholarDatabase {
             baneful_impaction,
 
             biolysis_dot,
-            chain_stratagem_debuff: chain_stratagem_buff,
-            impact_imminent,
-            baneful_impaction_dot,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

@@ -25,9 +25,12 @@ const SOUL_REAVER_MAX: ResourceType = 1;
 const ENSHROUD_STACK_MAX: ResourceType = 5;
 const LEMURES_STACK_MAX: ResourceType = 4;
 const EXECUTIONER_STACK_MAX: ResourceType = 2;
+
 #[derive(Clone)]
 pub(crate) struct ReaperCombatResources {
     skills: SkillTable<AttackSkill>,
+
+    #[allow(unused)]
     player_id: PlayerIdType,
     current_combo: ComboType,
     soul_gauge: ResourceType,
@@ -37,7 +40,6 @@ pub(crate) struct ReaperCombatResources {
     lemures_stack: ResourceType,
     executioner_stack: ResourceType,
     enshroud_count: ResourceType,
-    refreshed_combo: ResourceType,
 }
 
 impl CombatResource for ReaperCombatResources {
@@ -136,7 +138,6 @@ impl ReaperCombatResources {
             lemures_stack: 0,
             executioner_stack: 0,
             enshroud_count: 0,
-            refreshed_combo: 0,
         }
     }
 }

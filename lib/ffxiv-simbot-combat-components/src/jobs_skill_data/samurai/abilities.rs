@@ -40,19 +40,10 @@ pub(crate) struct SamuraiDatabase {
     pub(crate) tendo_setsugekka: AttackSkill,
     pub(crate) kaeshi_setsugekka: AttackSkill,
 
-    pub(crate) tendo_setsugekka_used: BuffStatus,
-    pub(crate) ogi_namikiri_ready: BuffStatus,
-    pub(crate) fugetsu: BuffStatus,
-    pub(crate) fuka: BuffStatus,
     pub(crate) higanbana_dot: DebuffStatus,
-    pub(crate) ogi_namikiri_used: BuffStatus,
-    pub(crate) midare_used: BuffStatus,
-    pub(crate) zanshin_ready: BuffStatus,
-    pub(crate) tendo: BuffStatus,
     pub(crate) meikyo_shisui_buff: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl SamuraiDatabase {
@@ -936,19 +927,10 @@ impl SamuraiDatabase {
             tendo_setsugekka,
             kaeshi_setsugekka,
 
-            tendo_setsugekka_used,
-            ogi_namikiri_ready,
-            fugetsu,
-            fuka,
             higanbana_dot,
-            midare_used,
-            ogi_namikiri_used,
             meikyo_shisui_buff,
 
-            zanshin_ready,
-            tendo,
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

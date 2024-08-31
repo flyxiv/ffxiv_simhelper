@@ -19,13 +19,11 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::snapshot_status::snapshot_status_infos;
 use crate::types::{ComboType, IdType, PlayerIdType, PotencyType, TimeType};
 use crate::types::{ResourceType, StackType, StatusTable};
-use log::info;
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
 use std::cmp::max;
 use std::collections::HashMap;
 use std::rc::Rc;
-use std::time::Instant;
 
 const RESERVE_VEC_INITIAL_CAPACITY: usize = 10;
 
@@ -330,10 +328,6 @@ impl AttackSkill {
         max(self.gcd_cooldown_millisecond, self.casting_time_millisecond)
     }
 
-    fn is_ready(&self) -> bool {
-        self.stacks >= 1
-    }
-
     pub(crate) fn is_speed_buffed(&self) -> bool {
         self.is_speed_buffed
     }
@@ -344,21 +338,6 @@ impl AttackSkill {
         } else {
             self.id
         }
-    }
-
-    #[inline]
-    fn is_auto_attack(&self) -> bool {
-        self.id == 0
-    }
-
-    #[inline]
-    fn get_name(&self) -> &String {
-        &self.name
-    }
-
-    #[inline]
-    fn get_combo(&self) -> ComboType {
-        self.combo
     }
 
     #[inline]

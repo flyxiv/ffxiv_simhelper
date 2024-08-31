@@ -11,7 +11,7 @@ use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 #[derive(Clone)]
-pub(crate) struct MonkPriorityTable {
+pub struct MonkPriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

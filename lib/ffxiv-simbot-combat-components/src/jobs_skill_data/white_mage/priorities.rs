@@ -7,7 +7,7 @@ use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 #[derive(Clone)]
-pub(crate) struct WhitemagePriorityTable {
+pub struct WhitemagePriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

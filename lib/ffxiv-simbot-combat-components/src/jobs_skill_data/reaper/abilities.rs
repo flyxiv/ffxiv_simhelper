@@ -38,17 +38,10 @@ pub(crate) struct ReaperDatabase {
     pub(crate) enshroud_host: AttackSkill,
 
     pub(crate) enshroud_status: BuffStatus,
-    pub(crate) enhanced_gallows_buff: BuffStatus,
-    pub(crate) enhanced_gibbet_buff: BuffStatus,
     pub(crate) arcane_circle_buff: BuffStatus,
     pub(crate) shadow_of_death_debuff: DebuffStatus,
-    pub(crate) oblatio: BuffStatus,
-    pub(crate) perfectio_parata: BuffStatus,
-    pub(crate) ideal_host: BuffStatus,
-    pub(crate) plentiful_harvest_ready: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl ReaperDatabase {
@@ -878,17 +871,10 @@ impl ReaperDatabase {
             enshroud_host,
 
             enshroud_status,
-            enhanced_gallows_buff,
-            enhanced_gibbet_buff,
             arcane_circle_buff,
             shadow_of_death_debuff,
-            oblatio,
-            perfectio_parata,
-            ideal_host,
-            plentiful_harvest_ready,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

@@ -36,16 +36,9 @@ pub(crate) struct MonkDatabase {
     pub(crate) winds_reply: AttackSkill,
     pub(crate) fires_reply: AttackSkill,
 
-    pub(crate) fires_rumination: BuffStatus,
-    pub(crate) perfect_balance_buff: BuffStatus,
     pub(crate) riddle_of_fire_buff: BuffStatus,
-    pub(crate) riddle_of_wind_buff: BuffStatus,
-    pub(crate) brotherhood_damage_buff: BuffStatus,
-    pub(crate) brotherhood_proc_buff: BuffStatus,
-    pub(crate) winds_rumination: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl MonkDatabase {
@@ -774,16 +767,9 @@ impl MonkDatabase {
             winds_reply,
             fires_reply,
 
-            fires_rumination,
-            perfect_balance_buff,
             riddle_of_fire_buff,
-            riddle_of_wind_buff,
-            brotherhood_damage_buff,
-            brotherhood_proc_buff: brotherhood_raid_proc,
-            winds_rumination,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
             elixir_burst,
         }
     }

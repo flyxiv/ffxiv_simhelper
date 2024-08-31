@@ -37,19 +37,8 @@ pub(crate) struct GunbreakerDatabase {
     pub(crate) lion_heart: AttackSkill,
 
     pub(crate) no_mercy_buff: BuffStatus,
-    pub(crate) ready_to_blast: BuffStatus,
-    pub(crate) sonic_break_dot: DebuffStatus,
-    pub(crate) bow_shock_dot: DebuffStatus,
-    pub(crate) ready_to_rip: BuffStatus,
-    pub(crate) ready_to_tear: BuffStatus,
-    pub(crate) ready_to_gouge: BuffStatus,
-    pub(crate) savage_next: BuffStatus,
-    pub(crate) wicked_next: BuffStatus,
-    pub(crate) ready_to_break: BuffStatus,
-    pub(crate) ready_to_reign: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl GunbreakerDatabase {
@@ -797,19 +786,8 @@ impl GunbreakerDatabase {
             noble_blood,
             lion_heart,
             no_mercy_buff,
-            ready_to_blast,
-            sonic_break_dot,
-            bow_shock_dot,
-            ready_to_rip,
-            ready_to_tear,
-            ready_to_gouge,
-            savage_next,
-            wicked_next,
-            ready_to_break,
-            ready_to_reign,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

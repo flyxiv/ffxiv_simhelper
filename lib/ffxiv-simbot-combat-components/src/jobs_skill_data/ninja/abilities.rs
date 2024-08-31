@@ -41,22 +41,11 @@ pub(crate) struct NinjaDatabase {
     pub(crate) zesho_meppo_meisui: AttackSkill,
 
     pub(crate) huton_status: BuffStatus,
-    pub(crate) raijuready: BuffStatus,
-    pub(crate) suiton_status: BuffStatus,
-    pub(crate) dokumori_status: DebuffStatus,
     pub(crate) kunais_bane_status: DebuffStatus,
     pub(crate) kassatsu_status: BuffStatus,
-    pub(crate) tenchijin_status: BuffStatus,
-    pub(crate) bunshin_status: BuffStatus,
-    pub(crate) meisui_status: BuffStatus,
     pub(crate) bunshin_clone_status: BuffStatus,
-    pub(crate) tcj_1: BuffStatus,
-    pub(crate) tcj_2: BuffStatus,
-    pub(crate) tenri_jindo_ready: BuffStatus,
-    pub(crate) higi: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl NinjaDatabase {
@@ -1009,22 +998,11 @@ impl NinjaDatabase {
             zesho_meppo_meisui,
 
             huton_status,
-            raijuready: raiju_ready,
-            suiton_status,
-            dokumori_status,
             kunais_bane_status,
             kassatsu_status,
-            tenchijin_status,
-            bunshin_status,
-            meisui_status,
             bunshin_clone_status,
 
-            tcj_1,
-            tcj_2,
-            tenri_jindo_ready,
-            higi,
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }
@@ -1063,19 +1041,6 @@ pub(crate) fn make_ninja_skill_list(player_id: PlayerIdType) -> SkillTable<Attac
     ];
 
     make_skill_table(ninja_skill_list)
-}
-
-#[inline]
-pub(crate) fn bunshin_trigger_gcd_ids() -> Vec<IdType> {
-    let db = NinjaDatabase::new(0);
-
-    vec![
-        db.aeolian_edge.id,
-        db.gust_slash.id,
-        db.spinning_edge.id,
-        db.armor_crush.id,
-        db.raiju.id,
-    ]
 }
 
 #[inline]

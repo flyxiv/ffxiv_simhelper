@@ -16,8 +16,6 @@ pub mod player_power;
 pub mod player_turn_calculator;
 pub mod role;
 
-static MAX_MANA: i32 = 10000;
-
 #[derive(Hash, Clone, Copy, PartialEq, Eq, Debug)]
 pub struct StatusKey {
     pub status_id: IdType,

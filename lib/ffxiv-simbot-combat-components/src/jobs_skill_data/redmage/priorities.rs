@@ -13,7 +13,7 @@ const VERSTONE_PROC_ID: IdType = 1804;
 const VERFIRE_PROC_ID: IdType = 1805;
 
 #[derive(Clone)]
-pub(crate) struct RedmagePriorityTable {
+pub struct RedmagePriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

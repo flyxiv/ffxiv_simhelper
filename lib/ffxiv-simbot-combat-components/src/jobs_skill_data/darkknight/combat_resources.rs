@@ -82,7 +82,7 @@ impl CombatResource for DarkknightCombatResources {
         _: &FfxivPlayer,
     ) -> SkillEvents {
         let mut ffxiv_events = vec![];
-        let mut ffxiv_internal_events = vec![];
+        let ffxiv_internal_events = vec![];
 
         if skill_id == 211 {
             self.living_shadow_delay = Some(5000);

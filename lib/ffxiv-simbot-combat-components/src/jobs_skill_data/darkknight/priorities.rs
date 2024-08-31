@@ -11,7 +11,7 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 use crate::types::{IdType, PlayerIdType};
 
 #[derive(Clone)]
-pub(crate) struct DarkknightPriorityTable {
+pub struct DarkknightPriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

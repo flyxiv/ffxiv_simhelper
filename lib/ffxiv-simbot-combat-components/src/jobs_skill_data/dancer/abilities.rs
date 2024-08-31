@@ -37,23 +37,9 @@ pub(crate) struct DancerDatabase {
     pub(crate) dance_of_the_dawn: AttackSkill,
     pub(crate) standard_opener: AttackSkill,
 
-    pub(crate) standard_step_buff: BuffStatus,
-    pub(crate) standard_step_proc_buff: BuffStatus,
     pub(crate) technical_step_buff: BuffStatus,
-    pub(crate) technical_step_proc_buff: BuffStatus,
-    pub(crate) devilment_buff: BuffStatus,
-    pub(crate) threefold_fan_dance: BuffStatus,
-    pub(crate) fourfold_fan_dance: BuffStatus,
-    pub(crate) silken_symmetry: BuffStatus,
-    pub(crate) silken_flow: BuffStatus,
-    pub(crate) starfall_ready: BuffStatus,
-    pub(crate) flourishing_finish: BuffStatus,
-    pub(crate) last_dance_ready: BuffStatus,
-    pub(crate) dance_of_the_dawn_ready: BuffStatus,
-    pub(crate) finishing_move_ready: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl DancerDatabase {
@@ -1051,23 +1037,9 @@ impl DancerDatabase {
             dance_of_the_dawn,
             standard_opener: standard_step_opener,
 
-            standard_step_buff,
-            standard_step_proc_buff,
             technical_step_buff,
-            technical_step_proc_buff,
-            devilment_buff,
-            threefold_fan_dance,
-            fourfold_fan_dance,
-            silken_symmetry,
-            silken_flow,
-            starfall_ready: flourishing_starfall,
-            flourishing_finish,
-            last_dance_ready,
-            dance_of_the_dawn_ready,
-            finishing_move_ready,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

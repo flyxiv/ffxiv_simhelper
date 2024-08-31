@@ -11,7 +11,7 @@ use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 #[derive(Clone)]
-pub(crate) struct ReaperPriorityTable {
+pub struct ReaperPriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

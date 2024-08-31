@@ -32,11 +32,6 @@ pub(crate) struct DarkknightDatabase {
     pub(crate) torcleaver: AttackSkill,
 
     pub(crate) darkside: BuffStatus,
-    pub(crate) delirium_buff: BuffStatus,
-    pub(crate) salted_earth_debuff: DebuffStatus,
-    pub(crate) scorn: BuffStatus,
-    pub(crate) comeuppance_ready: BuffStatus,
-    pub(crate) torcleaver_ready: BuffStatus,
 
     pub(crate) potion: AttackSkill,
     pub(crate) potion_buff: BuffStatus,
@@ -591,11 +586,6 @@ impl DarkknightDatabase {
             disesteem,
 
             darkside,
-            delirium_buff,
-            salted_earth_debuff,
-            scorn,
-            comeuppance_ready,
-            torcleaver_ready,
 
             potion: potion_skill.potion,
             potion_buff: potion_skill.potion_buff,

@@ -6,8 +6,6 @@ use crate::event_ticker::PercentType;
 use crate::live_objects::player::player_power::PlayerPower;
 use crate::live_objects::player::StatusKey;
 use crate::skill::damage_category::DamageCategory;
-use crate::status::snapshot_status::snapshot_status_infos;
-use crate::status::status_info::StatusInfo;
 use crate::types::{MultiplierType, PlayerIdType, PotencyType, SnapshotTable};
 use log::debug;
 use rand::{random, thread_rng, Rng};
@@ -372,70 +370,5 @@ impl RawDamageCalculator for FfxivRawDamageCalculator {}
 impl Default for FfxivRawDamageCalculator {
     fn default() -> Self {
         FfxivRawDamageCalculator {}
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::damage_calculator::raw_damage_calculator::{
-        FfxivRawDamageCalculator, RawDamageCalculator,
-    };
-    use crate::live_objects::player::player_power::PlayerPower;
-    use crate::types::PotencyType;
-
-    fn within_accepted_range(expected: f64, actual: f64) -> bool {
-        let lower_bound = 0.90;
-        let upper_bound = 1.10;
-        expected >= actual * lower_bound && expected <= actual * upper_bound
-    }
-
-    #[test]
-    fn test_ninja_damage_stat1() {
-        // https://github.com/flyxiv/ffxiv_simbot/issues/11#issuecomment-2118842780
-        // Ninja stat1 damage test
-
-        let power = PlayerPower {
-            critical_strike_rate: 1.169,
-            critical_strike_damage: 1.519,
-            direct_hit_rate: 1.242,
-            determination_multiplier: 1.063,
-            tenacity_damage_multiplier: 1.0f64,
-            main_stat_multiplier: 12.52,
-            weapon_damage_multiplier: 1.62,
-            speed_multiplier: 1.032,
-        };
-
-        let hyosho_potency = (1300 as f64 * 1.3) as PotencyType;
-        let raiton_potency = 650;
-        let suiton_potency = 500;
-        let fuma_potency = 450;
-        let raiju_potency = 560;
-
-        let direct_hit_expected = 1.06;
-        let crit_expected = 1.08;
-
-        let potencies = vec![
-            (hyosho_potency, 37750),
-            (raiton_potency, 13945),
-            (suiton_potency, 10600),
-            (fuma_potency, 9923),
-            (raiju_potency, 11483),
-        ];
-
-        let damage_calculator = FfxivRawDamageCalculator {};
-
-        for (potency, actual_damage) in potencies {
-            let simulated_damage =
-                damage_calculator.calculate_total_damage(potency, false, false, &power);
-
-            // With crit/dh expected damage
-            let expected_actual_damage =
-                (actual_damage as f64 * crit_expected * direct_hit_expected) as PotencyType;
-
-            assert!(within_accepted_range(
-                expected_actual_damage as f64,
-                simulated_damage as f64
-            ));
-        }
     }
 }

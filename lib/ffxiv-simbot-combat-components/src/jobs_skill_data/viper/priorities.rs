@@ -12,7 +12,7 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 use crate::types::{IdType, PlayerIdType};
 
 #[derive(Clone)]
-pub(crate) struct ViperPriorityTable {
+pub struct ViperPriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

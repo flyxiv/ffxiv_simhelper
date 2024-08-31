@@ -53,20 +53,9 @@ pub(crate) struct SummonerDatabase {
     pub(crate) enkindle_solar_bahamut: AttackSkill,
     pub(crate) luxwave: AttackSkill,
 
-    pub(crate) further_ruin: BuffStatus,
     pub(crate) searing_light_buff: BuffStatus,
-    pub(crate) bahamut_state: BuffStatus,
-    pub(crate) phoenix_state: BuffStatus,
-    pub(crate) ifrit_state: BuffStatus,
-    pub(crate) titan_state: BuffStatus,
-    pub(crate) garuda_state: BuffStatus,
-    pub(crate) titans_favor: BuffStatus,
-    pub(crate) slipstream_dot: DebuffStatus,
-    pub(crate) solar_bahamut_state: BuffStatus,
-    pub(crate) rubys_glimmer: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl SummonerDatabase {
@@ -1124,20 +1113,9 @@ impl SummonerDatabase {
             enkindle_solar_bahamut,
             luxwave,
 
-            further_ruin,
             searing_light_buff,
-            bahamut_state,
-            phoenix_state: pheonix_state,
-            ifrit_state,
-            titan_state,
-            garuda_state,
-            titans_favor,
-            slipstream_dot,
-            rubys_glimmer,
-            solar_bahamut_state,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

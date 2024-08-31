@@ -47,25 +47,11 @@ pub(crate) struct BardDatabase {
     pub(crate) radiant_encore3: AttackSkill,
     pub(crate) refulgent_arrow_barrage: AttackSkill,
 
-    pub(crate) caustic_bite_dot: DebuffStatus,
-    pub(crate) storm_bite_dot: DebuffStatus,
-    pub(crate) wanderers_minuet_raidbuff: BuffStatus,
-    pub(crate) wanderers_minuet_status: BuffStatus,
-    pub(crate) mages_ballad_raidbuff: BuffStatus,
+    pub(crate) armys_muse: BuffStatus,
     pub(crate) mages_ballad_status: BuffStatus,
-    pub(crate) armys_paeon_raidbuff: BuffStatus,
-    pub(crate) armys_paeon_status: BuffStatus,
-    pub(crate) barrage_status: BuffStatus,
-    pub(crate) straight_shot_ready: BuffStatus,
-    pub(crate) blast_arrow_ready: BuffStatus,
-    pub(crate) battle_voice_status: BuffStatus,
-    pub(crate) army_muse: BuffStatus,
-    pub(crate) raging_strike_status: BuffStatus,
-    pub(crate) radiant_finale_status: BuffStatus,
-    pub(crate) resonant_arrow_ready: BuffStatus,
+    pub(crate) wanderers_minuet_status: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl BardDatabase {
@@ -383,7 +369,7 @@ impl BardDatabase {
             potency: 0,
             use_type: UseType::UseOnTarget,
             trait_percent: 120,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
                 raging_strike_status.clone(),
@@ -505,7 +491,7 @@ impl BardDatabase {
             potency: 30,
             use_type: UseType::UseOnTarget,
             trait_percent: 120,
-            additional_skill_events: vec![FfxivEvent::ApplyBuff(
+            additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
                 blast_arrow_ready.clone(),
@@ -1059,6 +1045,19 @@ impl BardDatabase {
             is_guaranteed_direct_hit: false,
         };
 
+        let armys_muse: BuffStatus = BuffStatus {
+            id: 1313,
+            name: String::from("Army's Muse"),
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: vec![StatusInfo::SpeedByStack(vec![1, 2, 4, 12])],
+            duration_millisecond: 10000,
+            is_raidwide: false,
+            stacks: 1,
+            max_stacks: 1,
+            trigger_proc_event_on_gcd: vec![],
+        };
+
         let potion_skill = PotionSkill::new(player_id);
 
         Self {
@@ -1088,25 +1087,11 @@ impl BardDatabase {
             radiant_encore3,
             refulgent_arrow_barrage,
 
-            straight_shot_ready,
-            blast_arrow_ready,
-            battle_voice_status,
-            army_muse,
-            raging_strike_status,
-            caustic_bite_dot,
-            storm_bite_dot,
-            wanderers_minuet_raidbuff,
-            wanderers_minuet_status,
-            mages_ballad_raidbuff,
             mages_ballad_status,
-            armys_paeon_raidbuff,
-            armys_paeon_status,
-            barrage_status,
-            radiant_finale_status,
-            resonant_arrow_ready,
+            armys_muse,
+            wanderers_minuet_status,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

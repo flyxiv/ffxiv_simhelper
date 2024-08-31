@@ -11,7 +11,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 #[derive(Clone)]
-pub(crate) struct BardPriorityTable {
+pub struct BardPriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

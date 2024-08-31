@@ -13,7 +13,7 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 };
 
 #[derive(Clone)]
-pub(crate) struct SummonerPriorityTable {
+pub struct SummonerPriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

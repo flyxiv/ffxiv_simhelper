@@ -51,20 +51,13 @@ pub(crate) struct RedmageDatabase {
     pub(crate) manafication_scorch: AttackSkill,
     pub(crate) manafication_resolution: AttackSkill,
 
-    pub(crate) embolden_buff: BuffStatus,
-    pub(crate) manafication_buff: BuffStatus,
     pub(crate) acceleration_buff: BuffStatus,
     pub(crate) dualcast_buff: BuffStatus,
     pub(crate) verstone_ready: BuffStatus,
     pub(crate) verfire_ready: BuffStatus,
     pub(crate) finish_ready: BuffStatus,
-    pub(crate) thorned_floursh: BuffStatus,
-    pub(crate) grand_impact_ready: BuffStatus,
-
-    pub(crate) swiftcast_buff: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl RedmageDatabase {
@@ -1164,19 +1157,13 @@ impl RedmageDatabase {
             manafication_resolution,
 
             swiftcast: caster_skills.swiftcast,
-            embolden_buff,
-            manafication_buff,
             acceleration_buff,
             dualcast_buff,
             verstone_ready,
             verfire_ready,
             finish_ready,
-            thorned_floursh: thorned_flourish,
-            grand_impact_ready,
-            swiftcast_buff: caster_skills.swiftcast_buff,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

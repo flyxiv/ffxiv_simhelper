@@ -34,14 +34,9 @@ pub(crate) struct MachinistDatabase {
     pub(crate) excavator_reassemble: AttackSkill,
     pub(crate) hypercharge_hypercharged: AttackSkill,
 
-    pub(crate) reassemble_buff: BuffStatus,
     pub(crate) hypercharge_buff: BuffStatus,
-    pub(crate) excavator_ready: BuffStatus,
-    pub(crate) full_metal_machinist: BuffStatus,
-    pub(crate) hypercharged: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl MachinistDatabase {
@@ -711,14 +706,9 @@ impl MachinistDatabase {
             excavator_reassemble: excavator_reasssemble,
             hypercharge_hypercharged,
 
-            reassemble_buff,
             hypercharge_buff,
-            excavator_ready,
-            full_metal_machinist,
-            hypercharged,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

@@ -39,7 +39,7 @@ struct CasterGlobalSkill {
 
 impl PotionSkill {
     pub fn new(player_id: PlayerIdType) -> Self {
-        let POTION_BUFF = BuffStatus {
+        let potion_buff = BuffStatus {
             id: 1,
             owner_id: player_id,
             name: String::from("Potion Buff"),
@@ -51,7 +51,7 @@ impl PotionSkill {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
-        let POTION = AttackSkill {
+        let potion = AttackSkill {
             id: 1,
             name: String::from("Potion"),
             player_id,
@@ -60,7 +60,7 @@ impl PotionSkill {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                POTION_BUFF.clone(),
+                potion_buff.clone(),
                 30000,
                 30000,
                 0,
@@ -85,15 +85,15 @@ impl PotionSkill {
         };
 
         Self {
-            potion: POTION,
-            potion_buff: POTION_BUFF,
+            potion,
+            potion_buff,
         }
     }
 }
 
 impl CasterGlobalSkill {
     pub fn new(player_id: PlayerIdType) -> Self {
-        let SWIFTCAST_BUFF: BuffStatus = BuffStatus {
+        let swiftcast_buff: BuffStatus = BuffStatus {
             id: 0,
             owner_id: player_id,
             name: String::from("Swiftcast"),
@@ -106,7 +106,7 @@ impl CasterGlobalSkill {
             trigger_proc_event_on_gcd: vec![],
         };
 
-        let SWIFTCAST = AttackSkill {
+        let swiftcast = AttackSkill {
             id: 0,
             name: String::from("Swiftcast"),
             player_id,
@@ -115,7 +115,7 @@ impl CasterGlobalSkill {
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
-                SWIFTCAST_BUFF.clone(),
+                swiftcast_buff.clone(),
                 10000,
                 10000,
                 0,
@@ -140,8 +140,8 @@ impl CasterGlobalSkill {
         };
 
         Self {
-            swiftcast: SWIFTCAST,
-            swiftcast_buff: SWIFTCAST_BUFF,
+            swiftcast,
+            swiftcast_buff,
         }
     }
 }

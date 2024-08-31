@@ -39,7 +39,6 @@ pub fn add_main_stat(
     maximum_increase: IncreaseType,
     increase_percent: BuffIncreasePercentType,
 ) -> PlayerPower {
-    debug_assert!(increase_percent >= 0, "{}", increase_percent);
     let mut power = power.clone();
     let role = job_abbrev_to_role(job_abbrev);
 

@@ -2,12 +2,10 @@ use crate::simulation_result::SimulationResult;
 use ffxiv_simbot_combat_components::live_objects::player::Player;
 use ffxiv_simbot_combat_components::live_objects::target::Target;
 use ffxiv_simbot_combat_components::skill::Skill;
-use ffxiv_simbot_combat_components::types::{DpsType, IdType, TimeType};
+use ffxiv_simbot_combat_components::types::{DpsType, IdType};
 use std::collections::HashMap;
 
 pub mod ffxiv_simulation_board;
-static INFINITE_TIME: TimeType = 10000000;
-
 /// Simulate DPS for a job based on Priority System
 /// 1) Read the priority table and get the next skill
 /// 2) Calculate the expected damage of the skill, and distribute RDPS to the applied buffs

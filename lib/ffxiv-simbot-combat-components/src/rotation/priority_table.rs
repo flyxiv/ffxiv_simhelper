@@ -26,8 +26,6 @@ pub(crate) enum Opener {
     OgcdOpener((Option<IdType>, Option<IdType>)),
 }
 
-static OGCD_PENALTY: usize = 4;
-
 #[derive(Clone)]
 pub(crate) enum SkillPrerequisite {
     Or(Box<SkillPrerequisite>, Box<SkillPrerequisite>),
@@ -75,6 +73,8 @@ pub(crate) struct SkillUsageInfo {
 #[derive(Clone)]
 pub(crate) struct OgcdPlan {
     pub(crate) skill: SkillUsageInfo,
+
+    #[allow(unused)]
     pub(crate) priority_number: IdType,
 }
 

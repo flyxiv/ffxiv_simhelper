@@ -30,11 +30,8 @@ pub(crate) struct WarriorDatabase {
     pub(crate) surging_tempest: BuffStatus,
     pub(crate) nascent_chaos: BuffStatus,
     pub(crate) inner_release_stack: BuffStatus,
-    pub(crate) primal_rend_ready: BuffStatus,
-    pub(crate) primal_ruination_ready: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl WarriorDatabase {
@@ -537,11 +534,8 @@ impl WarriorDatabase {
             nascent_chaos,
 
             inner_release_stack,
-            primal_rend_ready,
-            primal_ruination_ready,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

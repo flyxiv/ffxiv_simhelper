@@ -338,11 +338,6 @@ impl FfxivPlayer {
         skill.charging_time_millisecond + self.get_cast_time(skill)
     }
 
-    fn has_resources_for_skill<S: Skill>(&self, _: S) -> bool {
-        // TODO: Implement mana resource check for casters.
-        return false;
-    }
-
     pub fn get_gcd_delay_millisecond(&self, skill: &AttackSkill) -> TimeType {
         let gcd_cooldown_millisecond = skill.get_gcd_cooldown_millisecond();
         let charging_time = skill.charging_time_millisecond;

@@ -24,7 +24,7 @@ use crate::rotation::SkillPriorityInfo;
 use crate::types::IdType;
 
 #[derive(Clone)]
-pub(crate) enum FfxivPriorityTable {
+pub enum FfxivPriorityTable {
     Paladin(PaladinPriorityTable),
     Warrior(WarriorPriorityTable),
     Darkknight(DarkknightPriorityTable),

@@ -4,13 +4,13 @@ use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, HasSkillStacks, Not, Or,
     RelatedSkillCooldownLessOrEqualThan,
 };
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 #[derive(Clone)]
-pub(crate) struct BlackmagePriorityTable {
+pub struct BlackmagePriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

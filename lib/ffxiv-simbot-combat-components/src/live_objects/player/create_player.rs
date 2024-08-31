@@ -300,7 +300,7 @@ impl FfxivPlayer {
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
     ) -> FfxivPlayer {
-        let GREASED_LIGHTNING_IV: BuffStatus = BuffStatus {
+        let greased_lightning_iv: BuffStatus = BuffStatus {
             id: 909,
             owner_id: player_id,
             duration_left_millisecond: 999999999,
@@ -320,7 +320,7 @@ impl FfxivPlayer {
             None,
             None,
             FfxivPriorityTable::Monk(MonkPriorityTable::new(player_id)),
-            HashMap::from([(StatusKey::new(909, player_id), GREASED_LIGHTNING_IV)]),
+            HashMap::from([(StatusKey::new(909, player_id), greased_lightning_iv)]),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
                 player_id,
@@ -525,7 +525,7 @@ impl FfxivPlayer {
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
     ) -> FfxivPlayer {
-        let ENOCHIAN: BuffStatus = BuffStatus {
+        let enochian: BuffStatus = BuffStatus {
             id: 1907,
             owner_id: player_id,
             duration_left_millisecond: 999999999,
@@ -545,7 +545,7 @@ impl FfxivPlayer {
             None,
             None,
             FfxivPriorityTable::Blackmage(BlackmagePriorityTable::new(player_id)),
-            HashMap::from([(StatusKey::new(1707, player_id), ENOCHIAN)]),
+            HashMap::from([(StatusKey::new(1707, player_id), enochian)]),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
                 player_id,

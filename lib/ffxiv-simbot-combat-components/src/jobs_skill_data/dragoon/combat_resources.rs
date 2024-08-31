@@ -20,6 +20,8 @@ const FIRSTMIND_MAX_STACK: ResourceType = 2;
 #[derive(Clone)]
 pub(crate) struct DragoonCombatResources {
     skills: SkillTable<AttackSkill>,
+
+    #[allow(unused)]
     player_id: PlayerIdType,
     current_combo: ComboType,
     nastrond_stack: ResourceType,

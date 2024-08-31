@@ -5,20 +5,17 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::{make_skill_table, ResourceTable};
-use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::types::PlayerIdType;
 
 pub(crate) struct SageDatabase {
-    pub(crate) dot_status: DebuffStatus,
     pub(crate) dot: AttackSkill,
     pub(crate) gcd: AttackSkill,
     pub(crate) phlegma: AttackSkill,
     pub(crate) psyche: AttackSkill,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl SageDatabase {
@@ -149,14 +146,12 @@ impl SageDatabase {
         let potion_skill = PotionSkill::new(player_id);
 
         Self {
-            dot_status: eukrasian_dosis_iii_dot,
             dot: eukrasian_dosis_iii,
             gcd: dosis_iii,
             phlegma,
             psyche,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

@@ -40,17 +40,12 @@ pub(crate) struct DragoonDatabase {
     pub(crate) wyrmwind_thrust: AttackSkill,
 
     pub(crate) life_surge_buff: BuffStatus,
-    pub(crate) power_surge: BuffStatus,
-    pub(crate) dragons_flight: BuffStatus,
     pub(crate) draconian_fire: BuffStatus,
     pub(crate) lance_charge_buff: BuffStatus,
-    pub(crate) dive_ready: BuffStatus,
-    pub(crate) starcross_ready: BuffStatus,
     pub(crate) battle_litany_buff: BuffStatus,
     pub(crate) life_of_the_dragon: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl DragoonDatabase {
@@ -860,17 +855,12 @@ impl DragoonDatabase {
             wyrmwind_thrust,
 
             life_surge_buff: life_surge_status,
-            power_surge,
-            dragons_flight,
             draconian_fire,
             lance_charge_buff: lance_charge_status,
-            dive_ready,
-            starcross_ready,
             battle_litany_buff: battle_litany_status,
             life_of_the_dragon,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

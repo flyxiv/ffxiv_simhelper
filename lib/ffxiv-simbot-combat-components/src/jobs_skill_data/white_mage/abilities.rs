@@ -21,10 +21,8 @@ pub(crate) struct WhitemageDatabase {
     pub(crate) glare4: AttackSkill,
 
     pub(crate) dia_dot: DebuffStatus,
-    pub(crate) presence_of_mind_buff: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl WhitemageDatabase {
@@ -259,9 +257,7 @@ impl WhitemageDatabase {
             presence_of_mind,
             glare4: glare_iv,
             dia_dot,
-            presence_of_mind_buff,
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

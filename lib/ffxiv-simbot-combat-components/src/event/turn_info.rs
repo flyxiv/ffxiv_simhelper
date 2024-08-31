@@ -6,10 +6,10 @@ static BURST_START_TIME_MILLISECOND: TimeType = 7000;
 static BURST_END_TIME_MILLISECOND: TimeType = 27000;
 
 /// Extracts needed information from the player turn event.
-pub(crate) struct TurnInfo {
-    pub(crate) turn_type: FfxivTurnType,
-    pub(crate) next_gcd_millisecond: TimeType,
-    pub(crate) lower_bound_millisecond: TimeType,
+pub struct TurnInfo {
+    pub turn_type: FfxivTurnType,
+    pub next_gcd_millisecond: TimeType,
+    pub lower_bound_millisecond: TimeType,
 }
 
 impl TurnInfo {

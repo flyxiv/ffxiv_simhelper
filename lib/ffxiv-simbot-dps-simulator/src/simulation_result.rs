@@ -1,5 +1,5 @@
 use ffxiv_simbot_combat_components::live_objects::player::logs::{DamageLog, SkillLog};
-use ffxiv_simbot_combat_components::types::{IdType, PlayerIdType, TimeType};
+use ffxiv_simbot_combat_components::types::{PlayerIdType, TimeType};
 
 /// Saves all the raw data from the simulation
 /// and aggregates raw data to needed format depending on the requested query.

@@ -19,6 +19,7 @@ const RATTLING_COIL_MAX: ResourceType = 3;
 const REAWAKEN_STACK_MAX: ResourceType = 5;
 
 #[derive(Clone)]
+#[allow(unused)]
 pub(crate) struct ViperCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: PlayerIdType,

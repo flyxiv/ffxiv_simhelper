@@ -1,4 +1,4 @@
-use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
+use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::types::PlayerIdType;
 use std::cell::RefCell;
@@ -13,7 +13,7 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 use crate::types::IdType;
 
 #[derive(Clone)]
-pub(crate) struct DragoonPriorityTable {
+pub struct DragoonPriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

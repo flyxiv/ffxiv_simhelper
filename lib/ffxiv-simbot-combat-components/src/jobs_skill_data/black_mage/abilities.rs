@@ -5,9 +5,9 @@ use crate::jobs_skill_data::{CasterGlobalSkill, PotionSkill};
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory::MagicalDot;
+use crate::skill::make_skill_table;
 use crate::skill::use_type::UseType;
 use crate::skill::ResourceRequirements::{Resource, UseBuff};
-use crate::skill::{make_skill_table, ResourceRequirements};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
@@ -43,16 +43,11 @@ pub(crate) struct BlackmageDatabase {
 
     pub(crate) triplecast_buff: BuffStatus,
     pub(crate) high_thunder_dot: DebuffStatus,
-    pub(crate) thunderhead: BuffStatus,
-    pub(crate) swiftcast_buff: BuffStatus,
-    pub(crate) leylines_buff: BuffStatus,
     pub(crate) astral_fire3: BuffStatus,
     pub(crate) umbral_ice1: BuffStatus,
     pub(crate) astral_fire1: BuffStatus,
-    pub(crate) firestarter: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 impl BlackmageDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
@@ -918,16 +913,11 @@ impl BlackmageDatabase {
 
             triplecast_buff,
             high_thunder_dot,
-            thunderhead,
-            swiftcast_buff: caster_skills.swiftcast_buff,
-            leylines_buff,
             astral_fire3: astral_fire_iii,
             umbral_ice1: umbral_ice_i,
             astral_fire1: astral_fire_i,
-            firestarter,
 
             potion: potion_skills.potion,
-            potion_buff: potion_skills.potion_buff,
         }
     }
 }

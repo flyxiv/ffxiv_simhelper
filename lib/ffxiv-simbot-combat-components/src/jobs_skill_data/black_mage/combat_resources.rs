@@ -19,8 +19,6 @@ const POLYGLOT_STACK_INTERVAL_MILLISECOND: TimeType = 30000;
 const POLYGLOT_MAX_STACK: ResourceType = 3;
 const PARADOX_GAUGE_MAX_STACK: ResourceType = 1;
 const FLARESTAR_MAX_STACK: ResourceType = 1;
-const USED_FIRE_III_STACK: ResourceType = 1;
-
 #[derive(Clone)]
 pub(crate) struct BlackmageCombatResources {
     skills: SkillTable<AttackSkill>,

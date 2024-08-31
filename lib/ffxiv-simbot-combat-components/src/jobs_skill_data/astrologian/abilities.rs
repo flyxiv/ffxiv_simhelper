@@ -28,18 +28,12 @@ pub(crate) struct AstrologianDatabase {
     pub(crate) draw: AttackSkill,
     pub(crate) oracle: AttackSkill,
 
-    pub(crate) divination_buff: BuffStatus,
-    pub(crate) the_balance_buff: BuffStatus,
-    pub(crate) the_spear_buff: BuffStatus,
-    pub(crate) lightspeed_buff: BuffStatus,
     pub(crate) lord_of_crowns_buff: BuffStatus,
     pub(crate) combust_iii_dot: DebuffStatus,
     pub(crate) the_balance_ready: BuffStatus,
     pub(crate) the_spear_ready: BuffStatus,
-    pub(crate) divining: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl AstrologianDatabase {
@@ -555,19 +549,13 @@ impl AstrologianDatabase {
             draw,
             oracle,
 
-            divination_buff,
-            the_balance_buff,
-            the_spear_buff,
-            lightspeed_buff,
             lord_of_crowns_buff,
             the_spear_ready,
             the_balance_ready,
-            divining,
 
             combust_iii_dot,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

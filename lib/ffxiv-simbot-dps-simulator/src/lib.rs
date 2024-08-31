@@ -1,7 +1,5 @@
 use std::fmt::{Debug, Display, Formatter};
 
-type Result<T> = std::result::Result<T, SimulatorError>;
-
 pub mod combat_simulator;
 pub mod simulation_result;
 

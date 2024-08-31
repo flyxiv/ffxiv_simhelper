@@ -12,7 +12,7 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 };
 
 #[derive(Clone)]
-pub(crate) struct GunbreakerPriorityTable {
+pub struct GunbreakerPriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 

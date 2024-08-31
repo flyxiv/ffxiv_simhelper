@@ -34,18 +34,11 @@ pub(crate) struct PaladinDatabase {
     pub(crate) sepulchre: AttackSkill,
     pub(crate) blade_of_honor: AttackSkill,
 
-    pub(crate) requiescat_buff: BuffStatus,
     pub(crate) fight_or_flight_buff: BuffStatus,
-    pub(crate) atonement_ready: BuffStatus,
-    pub(crate) circle_of_scorn_dot: DebuffStatus,
     pub(crate) confiteor_ready: BuffStatus,
-    pub(crate) divine_might: BuffStatus,
-    pub(crate) goring_blade_ready: BuffStatus,
     pub(crate) sepulchre_ready: BuffStatus,
-    pub(crate) supplication_ready: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl PaladinDatabase {
@@ -728,18 +721,11 @@ impl PaladinDatabase {
             sepulchre,
             blade_of_honor,
 
-            requiescat_buff,
             fight_or_flight_buff,
-            atonement_ready,
-            circle_of_scorn_dot,
             confiteor_ready,
-            divine_might,
-            goring_blade_ready,
             sepulchre_ready,
-            supplication_ready,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

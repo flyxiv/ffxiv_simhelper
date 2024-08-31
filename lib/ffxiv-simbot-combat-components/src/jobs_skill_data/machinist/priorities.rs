@@ -10,7 +10,7 @@ use crate::types::{IdType, PlayerIdType};
 use std::cell::RefCell;
 
 #[derive(Clone)]
-pub(crate) struct MachinistPriorityTable {
+pub struct MachinistPriorityTable {
     turn_count: RefCell<IdType>,
     opener: Vec<Opener>,
 
