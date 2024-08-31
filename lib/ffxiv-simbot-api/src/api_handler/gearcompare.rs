@@ -2,7 +2,7 @@ use crate::api_handler::create_simulation_board;
 use crate::errors::Result;
 use crate::request::gear_compare_api_request::GearCompareApiRequest;
 use crate::response::convert_simulation_result::create_response_from_simulation_result;
-use crate::response::stat_compare_response::GearCompareApiResponse;
+use crate::response::stat_compare_api_response::GearCompareApiResponse;
 use axum::Json;
 use ffxiv_simbot_dps_simulator::combat_simulator::SimulationBoard;
 

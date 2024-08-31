@@ -10,8 +10,10 @@ use std::cell::RefCell;
 use std::collections::HashSet;
 use std::rc::Rc;
 
+pub(crate) mod bestpartner;
 pub(crate) mod gearcompare;
 pub mod quicksim;
+pub(crate) mod statweights;
 
 fn get_composition_buff_percent(party: &[PlayerInfoRequest]) -> IncreaseType {
     if party.len() == 1 {

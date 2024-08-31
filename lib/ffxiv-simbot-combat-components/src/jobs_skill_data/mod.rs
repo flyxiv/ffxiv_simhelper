@@ -29,6 +29,8 @@ pub(crate) mod white_mage;
 
 struct PotionSkill {
     potion: AttackSkill,
+
+    #[allow(unused)]
     potion_buff: BuffStatus,
 }
 

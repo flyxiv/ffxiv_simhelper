@@ -1,8 +1,6 @@
 use crate::response::simulation_api_response::SimulationApiResponse;
 use serde::Serialize;
 
-/// API Response Format for quicksim/advancedsim API
-/// Given as a GraphQL response
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct GearCompareApiResponse {
