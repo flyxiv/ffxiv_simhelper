@@ -34,7 +34,6 @@ pub(crate) struct DarkknightDatabase {
     pub(crate) darkside: BuffStatus,
 
     pub(crate) potion: AttackSkill,
-    pub(crate) potion_buff: BuffStatus,
 }
 
 impl DarkknightDatabase {
@@ -588,7 +587,6 @@ impl DarkknightDatabase {
             darkside,
 
             potion: potion_skill.potion,
-            potion_buff: potion_skill.potion_buff,
         }
     }
 }

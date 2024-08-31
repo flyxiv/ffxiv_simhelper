@@ -36,7 +36,6 @@ pub(crate) struct PaladinDatabase {
 
     pub(crate) fight_or_flight_buff: BuffStatus,
     pub(crate) confiteor_ready: BuffStatus,
-    pub(crate) sepulchre_ready: BuffStatus,
 
     pub(crate) potion: AttackSkill,
 }
@@ -723,7 +722,6 @@ impl PaladinDatabase {
 
             fight_or_flight_buff,
             confiteor_ready,
-            sepulchre_ready,
 
             potion: potion_skill.potion,
         }
