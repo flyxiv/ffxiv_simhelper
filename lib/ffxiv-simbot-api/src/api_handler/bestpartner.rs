@@ -26,7 +26,7 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
         [0; BEST_PARTNER_SIMULATION_COUNT];
 
     for simulation_idx in 0..BEST_PARTNER_SIMULATION_COUNT {
-        let simulation_board = create_simulation_board(request.clone())?;
+        let simulation_board = create_simulation_board(request.clone(), false)?;
         simulation_board.run_simulation();
 
         let simulation_result = simulation_board.create_simulation_result();
@@ -48,5 +48,6 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
             .sorted()
             .nth((WANTED_CONTRIBUTION_PERCENTILE * BEST_PARTNER_SIMULATION_COUNT as f64) as usize)
             .unwrap() as DpsType,
+        partner_job_abbrev: request.party[1].job_abbrev.clone(),
     })
 }

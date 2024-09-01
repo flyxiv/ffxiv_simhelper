@@ -7,7 +7,7 @@ import {
 import { PartyInfo } from "../../types/PartyStates";
 import {
   BEST_PARTNER_RESPONSE_SAVE_NAME,
-  BEST_PARTNER_URL,
+  BEST_PARTNER_RESULT_URL,
   SINGLE_INPUT_SAVE_NAME,
 } from "../../App";
 import { useState } from "react";
@@ -111,7 +111,8 @@ export function BestPartnerRequestButton(totalState: EquipmentInput) {
 
     localStorage.setItem(BEST_PARTNER_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(`/${BEST_PARTNER_URL}`);
+    console.log(responseString);
+    navigate(`/${BEST_PARTNER_RESULT_URL}`);
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>
@@ -160,7 +161,7 @@ function createBestPartnerRequest(
       playerId: playerCount + 1,
       partner1Id: null,
       partner2Id: null,
-      jobAbbrev: jobAbbrev,
+      jobAbbrev: partnerJobAbbrev,
       power: partnerPower,
     });
 

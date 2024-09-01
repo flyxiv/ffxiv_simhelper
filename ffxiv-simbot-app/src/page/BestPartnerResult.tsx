@@ -6,9 +6,15 @@ import { BEST_PARTNER_RESPONSE_SAVE_NAME } from "../App";
 import { ColorConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
-import { BestPartnerResponse, BestPartnerResponseTable } from "../types/BestPartnerResponse";
+import {
+  BestPartnerResponse,
+  BestPartnerResponseTable,
+} from "../types/BestPartnerResponse";
 import { Footer } from "../components/basic/Footer";
-import { PartyCompositionMaker, SimulationDataByRole } from "../types/ffxivdatabase/PartyCompositionMaker";
+import {
+  PartyCompositionMaker,
+  SimulationDataByRole,
+} from "../types/ffxivdatabase/PartyCompositionMaker";
 import { ContributionByRoleTable } from "../components/graph/ContributionByRoleTable";
 
 const ResultBoardBox = styled(Box)`
@@ -34,7 +40,10 @@ export function BestPartnerResult() {
   let mainPlayerJob = responseJson.mainPlayerJobAbbrev;
   let contributionTable = responseJson.partnerSimulationData;
   let simulationDataByRole = convertToContributionTable(contributionTable);
-  let partyCompositionMaker = new PartyCompositionMaker(mainPlayerJob, simulationDataByRole);
+  let partyCompositionMaker = new PartyCompositionMaker(
+    mainPlayerJob,
+    simulationDataByRole
+  );
 
   return (
     <Box
@@ -64,14 +73,16 @@ export function BestPartnerResult() {
   );
 }
 
-function convertToContributionTable(partnerSimulationData: Array<BestPartnerResponse>) {
+function convertToContributionTable(
+  partnerSimulationData: Array<BestPartnerResponse>
+) {
   let table: SimulationDataByRole = {
     tanks: [],
     healers: [],
     melee: [],
     ranged: [],
     casters: [],
-  }
+  };
 
   for (let data of partnerSimulationData) {
     switch (data.partnerJobAbbrev) {

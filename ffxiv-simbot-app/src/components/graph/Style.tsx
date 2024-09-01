@@ -39,6 +39,14 @@ export const BuffBarStyle = (index: number) => `
     justify-content: center;
 `;
 
+export const BestPartnerBuffBarStyle = (index: number, height: string) => `
+    background-color: ${rdpsColors[index]};
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: ${height};
+`;
+
 export const PartyMemberBuffBoxStyle = `
     margin-top: 20px;
     display: flex;

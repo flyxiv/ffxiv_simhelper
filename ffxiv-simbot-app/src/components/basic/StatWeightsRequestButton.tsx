@@ -8,7 +8,7 @@ import { PartyInfo } from "../../types/PartyStates";
 import {
   SINGLE_INPUT_SAVE_NAME,
   STAT_WEIGHTS_RESPONSE_SAVE_NAME,
-  STAT_WEIGHTS_URL,
+  STAT_WEIGHTS_RESULT_URL,
 } from "../../App";
 import { useState } from "react";
 import { requestButtonStyle } from "./Style";
@@ -17,7 +17,10 @@ import {
   SingleEquipmentInputSaveState,
 } from "../../types/EquipmentInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
-import { getStatNames } from "../../types/ffxivdatabase/Stats";
+import {
+  getStatNames,
+  getStatWeightNames,
+} from "../../types/ffxivdatabase/Stats";
 import {
   StatWeightsResponse,
   StatWeightsResponseTable,
@@ -28,7 +31,7 @@ import { sendRequestAsync } from "./QuickSimRequestButton";
 const REQUEST_URL = "http://localhost:13406/api/v1/statweights";
 const WEAPON_DAMAGE_INCREASE = 10;
 const MAIN_STAT_INCREASE = 100;
-const SUB_STAT_INCREASE = 500;
+const SUB_STAT_INCREASE = 300;
 
 export function StatWeightsRequestButton(totalState: EquipmentInput) {
   let RequestButton = styled(Button)`
@@ -36,7 +39,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
   `;
 
   let stats = [""].concat(
-    getStatNames(totalState.equipmentDatas[0].mainPlayerJobAbbrev)
+    getStatWeightNames(totalState.equipmentDatas[0].mainPlayerJobAbbrev)
   );
   let totalRequestCount = stats.length;
 
@@ -55,6 +58,9 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
     localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
     let statWeightsResponseTable: StatWeightsResponseTable = {
+      combatTimeMillisecond: totalState.equipmentDatas[0].combatTimeMillisecond,
+      mainPlayerPower: totalState.equipmentDatas[0].power,
+      mainPlayerJobAbbrev: totalState.equipmentDatas[0].mainPlayerJobAbbrev,
       statAugmentedSimulationData: [],
     };
 
@@ -100,7 +106,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
 
     localStorage.setItem(STAT_WEIGHTS_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(`/${STAT_WEIGHTS_URL}`);
+    navigate(`/${STAT_WEIGHTS_RESULT_URL}`);
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>
@@ -121,11 +127,14 @@ function createAugmentedRequest(
   if (autoAttackDelays === undefined) {
     autoAttackDelays = 0;
   }
-  let power = totalState.power;
+  let power = { ...totalState.power };
   power.autoAttackDelays = autoAttackDelays;
+
+  let augmentAmount = 0;
 
   if (augmentStatName !== "") {
     if (augmentStatName === "WD") {
+      augmentAmount = WEAPON_DAMAGE_INCREASE;
       power.weaponDamage += WEAPON_DAMAGE_INCREASE;
     }
     if (
@@ -134,24 +143,31 @@ function createAugmentedRequest(
       augmentStatName === "INT" ||
       augmentStatName === "MND"
     ) {
+      augmentAmount = MAIN_STAT_INCREASE;
       power.mainStat += MAIN_STAT_INCREASE;
     }
     if (augmentStatName === "CRT") {
+      augmentAmount = SUB_STAT_INCREASE;
       power.criticalStrike += SUB_STAT_INCREASE;
     }
     if (augmentStatName === "DH") {
+      augmentAmount = SUB_STAT_INCREASE;
       power.directHit += SUB_STAT_INCREASE;
     }
     if (augmentStatName === "DET") {
+      augmentAmount = SUB_STAT_INCREASE;
       power.determination += SUB_STAT_INCREASE;
     }
     if (augmentStatName === "SKS") {
+      augmentAmount = SUB_STAT_INCREASE;
       power.skillSpeed += SUB_STAT_INCREASE;
     }
     if (augmentStatName === "SPS") {
+      augmentAmount = SUB_STAT_INCREASE;
       power.spellSpeed += SUB_STAT_INCREASE;
     }
     if (augmentStatName === "TEN") {
+      augmentAmount = SUB_STAT_INCREASE;
       power.tenacity += SUB_STAT_INCREASE;
     }
 
@@ -199,5 +215,7 @@ function createAugmentedRequest(
     mainPlayerId: 0,
     combatTimeMillisecond: totalState.combatTimeMillisecond,
     party: partyInfo,
+    statName: augmentStatName,
+    augmentAmount: augmentAmount,
   };
 }

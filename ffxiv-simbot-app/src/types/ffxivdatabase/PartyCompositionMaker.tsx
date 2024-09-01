@@ -1,25 +1,25 @@
 export interface SimulationDataByRole {
-  tanks: Array<SimulationData>;
-  healers: Array<SimulationData>;
-  melee: Array<SimulationData>;
-  ranged: Array<SimulationData>;
-  casters: Array<SimulationData>;
+  tanks: Array<BestPartnerSimulationData>;
+  healers: Array<BestPartnerSimulationData>;
+  melee: Array<BestPartnerSimulationData>;
+  ranged: Array<BestPartnerSimulationData>;
+  casters: Array<BestPartnerSimulationData>;
 }
 
-export interface SimulationData {
+export interface BestPartnerSimulationData {
   jobAbbrev: string;
   buffContribution: number | null;
 }
 
 export class PartyCompositionMaker {
-  private tank1: SimulationData | null = null;
-  private tank2: SimulationData | null = null;
-  private mainHealer: SimulationData | null = null;
-  private subHealer: SimulationData | null = null;
-  private melee: SimulationData | null = null;
-  private ranged: SimulationData | null = null;
-  private caster: SimulationData | null = null;
-  private additionalDps: SimulationData | null = null;
+  private tank1: BestPartnerSimulationData | null = null;
+  private tank2: BestPartnerSimulationData | null = null;
+  private mainHealer: BestPartnerSimulationData | null = null;
+  private subHealer: BestPartnerSimulationData | null = null;
+  private melee: BestPartnerSimulationData | null = null;
+  private ranged: BestPartnerSimulationData | null = null;
+  private caster: BestPartnerSimulationData | null = null;
+  private additionalDps: BestPartnerSimulationData | null = null;
   private simulationDataByRole: SimulationDataByRole;
 
   constructor(
@@ -125,10 +125,11 @@ export class PartyCompositionMaker {
       return contributionB - contributionA;
     });
 
-
     if (this.mainHealer === null) {
       let bestTwoHealers = [healersData[0], healersData[1]];
-      bestTwoHealers.sort((a, b) => { return (getHealerOrder(a.jobAbbrev) - getHealerOrder(b.jobAbbrev)) });
+      bestTwoHealers.sort((a, b) => {
+        return getHealerOrder(a.jobAbbrev) - getHealerOrder(b.jobAbbrev);
+      });
 
       this.mainHealer = bestTwoHealers[0];
       this.subHealer = bestTwoHealers[1];

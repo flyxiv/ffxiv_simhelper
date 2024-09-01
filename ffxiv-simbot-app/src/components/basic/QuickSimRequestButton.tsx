@@ -20,7 +20,7 @@ import {
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 
 const totalRequestCount = 1000;
-const REQUEST_SERVER = "http://localhost:13406/api/v1/simulate";
+const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
 
 export function QuickSimRequestButton(totalState: EquipmentInput) {
   let RequestButton = styled(Button)`
@@ -59,7 +59,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
 
     for (let i = 0; i < totalRequestCount; i++) {
       responsePromises.push(
-        sendRequestAsync(body)
+        sendRequestAsync(body, REQUEST_URL)
           .then((response) => {
             responses.push(response);
             count = count + 1;
@@ -195,7 +195,10 @@ export function createQuickSimRequest(
   };
 }
 
-export function sendRequestAsync(requestBody: string): Promise<Response> {
+export function sendRequestAsync(
+  requestBody: string,
+  request_url: string
+): Promise<Response> {
   return new Promise(async (resolve, reject) => {
     try {
       const controller = new AbortController();
@@ -204,7 +207,7 @@ export function sendRequestAsync(requestBody: string): Promise<Response> {
         reject(new Error("Request timeout"));
       }, 300000);
 
-      const response = await fetch(REQUEST_SERVER, {
+      const response = await fetch(request_url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -214,7 +217,6 @@ export function sendRequestAsync(requestBody: string): Promise<Response> {
       });
 
       clearTimeout(timeoutId);
-
       if (response.ok) {
         console.log("POST request successful");
         resolve(response);

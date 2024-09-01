@@ -7,6 +7,8 @@ import { Home } from "./page/home";
 import { StatWeights } from "./page/StatWeights";
 import { BestPartner } from "./page/BestPartner";
 import { GearCompareResult } from "./page/GearCompareResult";
+import { BestPartnerResult } from "./page/BestPartnerResult";
+import { StatWeightsResult } from "./page/StatWeightsResult";
 
 export const SINGLE_INPUT_SAVE_NAME = "mostRecentSingleInput";
 export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
@@ -24,8 +26,10 @@ export const GEAR_COMPARE_URL = "gearcompare";
 export const GEAR_COMPARE_RESULT_URL = "gearcomparesimulationresult";
 
 export const BEST_PARTNER_URL = "bestpartner";
+export const BEST_PARTNER_RESULT_URL = "bestpartnersimulationresult";
 
 export const STAT_WEIGHTS_URL = "statweights";
+export const STAT_WEIGHTS_RESULT_URL = "statweightssimulationresult";
 
 export const HOME_PAGE_NAME = "Home";
 export const QUICKSIM_PAGE_NAME = "Quick Sim";
@@ -53,7 +57,16 @@ function App() {
           />
 
           <Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
+          <Route
+            path={`/${BEST_PARTNER_RESULT_URL}`}
+            element={<BestPartnerResult />}
+          />
+
           <Route path={`/${STAT_WEIGHTS_URL}`} element={<StatWeights />} />
+          <Route
+            path={`/${STAT_WEIGHTS_RESULT_URL}`}
+            element={<StatWeightsResult />}
+          />
         </Routes>
       </main>
     </Router>

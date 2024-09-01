@@ -42,6 +42,39 @@ export function getStatNames(jobAbbrev: string) {
   }
 }
 
+export function getStatWeightNames(jobAbbrev: string) {
+  switch (jobAbbrev) {
+    case "PLD":
+    case "WAR":
+    case "DRK":
+    case "GNB":
+      return ["WD", "STR", "CRT", "DH", "DET", "SKS", "TEN"];
+    case "WHM":
+    case "SCH":
+    case "AST":
+    case "SGE":
+      return ["WD", "MND", "CRT", "DH", "DET", "SPS"];
+    case "DRG":
+    case "MNK":
+    case "SAM":
+    case "RPR":
+      return ["WD", "STR", "CRT", "DH", "DET", "SKS"];
+    case "NIN":
+    case "VPR":
+    case "BRD":
+    case "MCH":
+    case "DNC":
+      return ["WD", "DEX", "CRT", "DH", "DET", "SKS"];
+    case "BLM":
+    case "SMN":
+    case "RDM":
+    case "PCT":
+      return ["WD", "INT", "CRT", "DH", "DET", "SPS"];
+    default:
+      return [];
+  }
+}
+
 export function convertToSubStatInfos(totalStats: PlayerPower) {
   let subStats: SubStatInfo[] = [];
   if (totalStats.criticalStrike > 0) {

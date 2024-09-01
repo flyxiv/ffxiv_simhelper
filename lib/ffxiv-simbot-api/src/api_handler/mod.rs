@@ -29,7 +29,10 @@ fn get_composition_buff_percent(party: &[PlayerInfoRequest]) -> IncreaseType {
     return roles.len() as IncreaseType;
 }
 
-fn create_simulation_board(request: SimulationApiRequest) -> Result<FfxivSimulationBoard> {
+fn create_simulation_board(
+    request: SimulationApiRequest,
+    apply_composition_buff: bool,
+) -> Result<FfxivSimulationBoard> {
     let combat_time_millisecond = request.combat_time_millisecond;
     let main_player_id = request.main_player_id;
 
@@ -48,7 +51,12 @@ fn create_simulation_board(request: SimulationApiRequest) -> Result<FfxivSimulat
         combat_time_millisecond,
     );
 
-    let composition_buff_percent = get_composition_buff_percent(&request.party);
+    let composition_buff_percent = if apply_composition_buff {
+        get_composition_buff_percent(&request.party)
+    } else {
+        1
+    };
+
     let player_jobs = request
         .party
         .iter()

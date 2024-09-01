@@ -10,7 +10,7 @@ use ffxiv_simbot_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
 
 const STAT_WEIGHTS_SIMULATION_COUNT: usize = 100;
-const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.90;
+const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.99;
 
 pub(crate) async fn stat_weights_api_handler(
     Json(request): Json<StatWeightsApiRequest>,
@@ -26,7 +26,7 @@ pub fn stat_weights(request: StatWeightsApiRequest) -> Result<StatWeightsApiResp
     let mut dps_results: [i32; STAT_WEIGHTS_SIMULATION_COUNT] = [0; STAT_WEIGHTS_SIMULATION_COUNT];
 
     for simulation_idx in 0..STAT_WEIGHTS_SIMULATION_COUNT {
-        let simulation_board = create_simulation_board(SimulationApiRequest::from(&request))?;
+        let simulation_board = create_simulation_board(SimulationApiRequest::from(&request), true)?;
         simulation_board.run_simulation();
 
         let simulation_result = simulation_board.create_simulation_result();

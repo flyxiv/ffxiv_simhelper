@@ -17,7 +17,7 @@ pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> 
     let main_player_power = request.party[main_player_id as usize].power.clone();
     let main_player_job_abbrev = request.party[main_player_id as usize].job_abbrev.clone();
 
-    let simulation_board = create_simulation_board(request)?;
+    let simulation_board = create_simulation_board(request, true)?;
     simulation_board.run_simulation();
 
     let simulation_result = simulation_board.create_simulation_result();

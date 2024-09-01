@@ -20,8 +20,8 @@ pub(crate) async fn gear_compare_api_handler(
         .job_abbrev
         .clone();
 
-    let simulation_board1 = create_simulation_board(request.gear1_request)?;
-    let simulation_board2 = create_simulation_board(request.gear2_request)?;
+    let simulation_board1 = create_simulation_board(request.gear1_request, true)?;
+    let simulation_board2 = create_simulation_board(request.gear2_request, true)?;
 
     simulation_board1.run_simulation();
     simulation_board2.run_simulation();

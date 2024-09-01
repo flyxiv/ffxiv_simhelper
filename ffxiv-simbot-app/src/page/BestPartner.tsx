@@ -15,7 +15,7 @@ import { AppHeader } from "../components/image/AppHeader";
 import { SelectionTitle } from "../components/basic/SelectionTitle";
 import { BasicBottomMenu } from "../components/container/BottomMenu";
 import { EquipmentBoardStyle, InputContainerStyle } from "./Styles";
-import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
+import { BestPartnerRequestButton } from "../components/basic/BestPartnerRequestButton";
 
 export enum JobRole {
   TANK,
@@ -47,6 +47,7 @@ export function isNotValid(input: EquipmentInput) {
 export function BestPartner() {
   let mostRecentInputState = localStorage.getItem(BEST_PARTNER_INPUT_SAVE_NAME);
   let mostRecentInput = null;
+  console.log(mostRecentInputState);
 
   if (mostRecentInputState === null) {
     mostRecentInput = defaultBestPartnerEquipmentInput();
@@ -102,7 +103,7 @@ export function BestPartner() {
               </Box>
             </StatWeightsInputContainer>
 
-            {BasicBottomMenu(totalState, QuickSimRequestButton)}
+            {BasicBottomMenu(totalState, BestPartnerRequestButton)}
           </Box>
           {Footer()}
         </Box>
