@@ -1,18 +1,17 @@
-interface SimulationDataByRole {
+export interface SimulationDataByRole {
   tanks: Array<SimulationData>;
-  mainHealers: Array<SimulationData>;
-  subHealers: Array<SimulationData>;
+  healers: Array<SimulationData>;
   melee: Array<SimulationData>;
   ranged: Array<SimulationData>;
   casters: Array<SimulationData>;
 }
 
-interface SimulationData {
+export interface SimulationData {
   jobAbbrev: string;
   buffContribution: number | null;
 }
 
-class PartyCompositionMaker {
+export class PartyCompositionMaker {
   private tank1: SimulationData | null = null;
   private tank2: SimulationData | null = null;
   private mainHealer: SimulationData | null = null;
@@ -42,15 +41,9 @@ class PartyCompositionMaker {
 
       case "WHM":
       case "AST":
-        this.mainHealer = {
-          jobAbbrev: mainPlayerJobAbbrev,
-          buffContribution: null,
-        };
-        break;
-
       case "SCH":
       case "SGE":
-        this.subHealer = {
+        this.mainHealer = {
           jobAbbrev: mainPlayerJobAbbrev,
           buffContribution: null,
         };
@@ -124,28 +117,24 @@ class PartyCompositionMaker {
   }
 
   chooseHealer() {
-    let mainHealersData = this.simulationDataByRole.mainHealers;
-    let subHealersData = this.simulationDataByRole.subHealers;
+    let healersData = this.simulationDataByRole.healers;
 
-    mainHealersData.sort((a, b) => {
-      let contributionA = a.buffContribution || 0;
-      let contributionB = b.buffContribution || 0;
-      return contributionB - contributionA;
-    });
-    subHealersData.sort((a, b) => {
+    healersData.sort((a, b) => {
       let contributionA = a.buffContribution || 0;
       let contributionB = b.buffContribution || 0;
       return contributionB - contributionA;
     });
 
-    let bestMainHealer = mainHealersData.pop();
-    let bestSubHealer = subHealersData.pop();
-    if (this.mainHealer === null && bestMainHealer !== undefined) {
-      this.mainHealer = bestMainHealer;
-    }
 
-    if (this.subHealer === null && bestSubHealer !== undefined) {
-      this.subHealer = bestSubHealer;
+    if (this.mainHealer === null) {
+      let bestTwoHealers = [healersData[0], healersData[1]];
+      bestTwoHealers.sort((a, b) => { return (getHealerOrder(a.jobAbbrev) - getHealerOrder(b.jobAbbrev)) });
+
+      this.mainHealer = bestTwoHealers[0];
+      this.subHealer = bestTwoHealers[1];
+    } else {
+      let bestHealer = healersData[0];
+      this.subHealer = bestHealer;
     }
   }
 
@@ -214,5 +203,18 @@ class PartyCompositionMaker {
     } else {
       this.additionalDps = nextBestCaster;
     }
+  }
+}
+
+function getHealerOrder(healerJobAbbrev: string) {
+  switch (healerJobAbbrev) {
+    case "WHM":
+      return 0;
+    case "AST":
+      return 1;
+    case "SCH":
+      return 2;
+    default:
+      return 3;
   }
 }

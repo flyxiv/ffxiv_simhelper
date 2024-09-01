@@ -22,7 +22,7 @@ import {
 import { ColorConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
-import { Footer } from "src/components/basic/Footer";
+import { Footer } from "../components/basic/Footer";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}

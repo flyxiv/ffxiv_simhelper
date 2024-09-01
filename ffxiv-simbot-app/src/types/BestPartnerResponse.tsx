@@ -8,5 +8,6 @@ export interface BestPartnerResponseTable {
 }
 
 export interface BestPartnerResponse {
+  partnerJobAbbrev: string;
   contributedDps: number;
 }
