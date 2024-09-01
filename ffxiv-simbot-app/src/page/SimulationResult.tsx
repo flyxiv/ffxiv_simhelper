@@ -22,6 +22,7 @@ import {
 import { ColorConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
+import { Footer } from "src/components/basic/Footer";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -98,6 +99,7 @@ export function SimulationResult() {
             teammatesBuffContributionToMyBuffs,
             mainPlayerContributionToOthers
           )}
+          {Footer()}
         </Box>
       </Box>
     </Box>
@@ -126,7 +128,7 @@ function renderTableBasedOnSelectedButton(
     );
   } else if (currentlyToggledView == MY_CONTRIBUTIONS_TEXT) {
     return (
-      <ResultBoardBox paddingBottom={5}>
+      <ResultBoardBox>
         {SimulationTitle(MY_CONTRIBUTIONS_TEXT)}
         {MainPlayerContributionGraph(mainPlayerContributionToOthers)}
       </ResultBoardBox>
