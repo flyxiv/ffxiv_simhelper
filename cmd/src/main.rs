@@ -1,7 +1,8 @@
-mod profile;
+mod profile_quicksim;
+mod profile_statweight;
 
 use ffxiv_simbot_api::api_server::api_router::create_ffxiv_simbot_service_router;
-use log::LevelFilter::{Debug, Error, Info};
+use log::LevelFilter::Info;
 use log::{info, Level, LevelFilter, Metadata, Record, SetLoggerError};
 
 struct SimpleLogger;

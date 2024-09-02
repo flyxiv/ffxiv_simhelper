@@ -1,5 +1,6 @@
-use ffxiv_simbot_api::api_handler::quicksim::quicksim;
-use ffxiv_simbot_api::request::simulation_api_request::{PlayerInfoRequest, SimulationApiRequest};
+use ffxiv_simbot_api::api_handler::statweights::stat_weights;
+use ffxiv_simbot_api::request::simulation_api_request::PlayerInfoRequest;
+use ffxiv_simbot_api::request::stat_weights_api_request::StatWeightsApiRequest;
 use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
 use ffxiv_simbot_combat_components::types::PlayerIdType;
 use itertools::Itertools;
@@ -60,23 +61,16 @@ fn main() {
         })
         .collect_vec();
 
-    let request = SimulationApiRequest {
+    let request = StatWeightsApiRequest {
         main_player_id: 0,
         combat_time_millisecond: 600000,
         party,
+        stat_name: "DET".to_string(),
+        augment_amount: 500,
     };
 
-    let response = quicksim(request);
-    println!(
-        "{:?}",
-        response
-            .unwrap()
-            .simulation_data
-            .last()
-            .unwrap()
-            .rotation_log
-            .last()
-            .unwrap()
-            .skill_id
-    );
+    for _ in 0..8 {
+        let response = stat_weights(request.clone());
+        println!("{:?}", response.unwrap().dps);
+    }
 }
