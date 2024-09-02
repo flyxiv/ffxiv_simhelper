@@ -5,6 +5,7 @@ use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPo
 use ffxiv_simbot_combat_components::types::PlayerIdType;
 use itertools::Itertools;
 use log::{Level, LevelFilter, Metadata, Record, SetLoggerError};
+use tokio::time::Instant;
 
 struct SimpleLogger;
 
@@ -69,8 +70,12 @@ fn main() {
         augment_amount: 500,
     };
 
+    let new = Instant::now();
+
     for _ in 0..8 {
         let response = stat_weights(request.clone());
         println!("{:?}", response.unwrap().dps);
     }
+
+    println!("{}ms elapsed", new.elapsed().as_millis());
 }
