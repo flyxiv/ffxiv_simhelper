@@ -1,8 +1,6 @@
 use crate::combat_resources::CombatResource;
 use crate::event::ffxiv_event::FfxivEvent;
-use crate::jobs_skill_data::ninja::abilities::{
-    bunshin_clone_id, bunshin_stack_id, make_ninja_skill_list,
-};
+use crate::jobs_skill_data::ninja::abilities::make_ninja_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
@@ -11,13 +9,16 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType, StatusIdType};
 use crate::types::{SkillIdType, TimeType};
 use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
+
+pub const BUNSHIN_STACK_ID: StatusIdType = 1022;
+pub const BUNSHIN_CLONE_ID: SkillIdType = 1011;
 
 const NINKI_MAX: ResourceType = 100;
 const SHURIKEN_MAX_STACK: ResourceType = 5;
@@ -82,14 +83,14 @@ impl CombatResource for NinjaCombatResources {
         player: &FfxivPlayer,
     ) -> SkillEvents {
         if NINJA_BUNSHIN_COMBO_IDS.contains(&skill_id) {
-            let key = StatusKey::new(bunshin_stack_id(), player.get_id());
+            let key = StatusKey::new(BUNSHIN_STACK_ID, player.get_id());
 
             if buff_list.borrow().contains_key(&key) {
                 return (
                     vec![FfxivEvent::UseSkill(
                         player.get_id(),
                         None,
-                        bunshin_clone_id(),
+                        BUNSHIN_CLONE_ID,
                         current_time_millisecond,
                     )],
                     vec![],

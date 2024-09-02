@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{PlayerIdType, SkillIdType};
+use crate::types::PlayerIdType;
 
 pub(crate) struct NinjaDatabase {
     pub(crate) zesho_meppo: AttackSkill,
@@ -40,7 +40,6 @@ pub(crate) struct NinjaDatabase {
     pub(crate) tenri_jindo: AttackSkill,
     pub(crate) zesho_meppo_meisui: AttackSkill,
 
-    pub(crate) huton_status: BuffStatus,
     pub(crate) kunais_bane_status: DebuffStatus,
     pub(crate) kassatsu_status: BuffStatus,
     pub(crate) bunshin_clone_status: BuffStatus,
@@ -50,20 +49,6 @@ pub(crate) struct NinjaDatabase {
 
 impl NinjaDatabase {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
-        let huton_status: BuffStatus = {
-            BuffStatus {
-                id: 1000,
-                name: String::from("Huton"),
-                owner_id: player_id,
-                duration_left_millisecond: 0,
-                status_info: vec![StatusInfo::SpeedPercent(15)],
-                duration_millisecond: i32::MAX,
-                is_raidwide: false,
-                stacks: 1,
-                max_stacks: 1,
-                trigger_proc_event_on_gcd: vec![],
-            }
-        };
         let raiju_ready: BuffStatus = BuffStatus {
             id: 1001,
             name: String::from("Raiju Ready"),
@@ -997,7 +982,6 @@ impl NinjaDatabase {
             tenri_jindo,
             zesho_meppo_meisui,
 
-            huton_status,
             kunais_bane_status,
             kassatsu_status,
             bunshin_clone_status,
@@ -1041,26 +1025,4 @@ pub(crate) fn make_ninja_skill_list(player_id: PlayerIdType) -> SkillTable<Attac
     ];
 
     make_skill_table(ninja_skill_list)
-}
-
-#[inline]
-pub fn bunshin_clone_id() -> SkillIdType {
-    let db = NinjaDatabase::new(0);
-
-    db.bunshin_stack.id
-}
-
-#[inline]
-pub(crate) fn bunshin_stack_id() -> SkillIdType {
-    let db = NinjaDatabase::new(0);
-    db.bunshin_clone_status.id
-}
-
-pub(crate) fn get_huton_status(player_id: PlayerIdType) -> BuffStatus {
-    let db = NinjaDatabase::new(0);
-    let mut huton = db.huton_status.clone();
-    huton.owner_id = player_id;
-    huton.duration_left_millisecond = i32::MAX;
-
-    huton
 }

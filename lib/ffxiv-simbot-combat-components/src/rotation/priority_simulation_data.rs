@@ -82,23 +82,11 @@ pub(crate) struct PriorityDecisionTable {
 }
 
 pub(crate) fn to_priority_decision_table(
-    buff_list: HashMap<StatusKey, BuffStatus>,
-    debuff_list: HashMap<StatusKey, DebuffStatus>,
+    buff_list: &HashMap<StatusKey, TruncatedBuffStatus>,
+    debuff_list: &HashMap<StatusKey, TruncatedDebuffStatus>,
     milliseconds_before_burst: TimeType,
     combat_resources: &FfxivCombatResources,
 ) -> PriorityDecisionTable {
-    let buff_list: HashMap<StatusKey, TruncatedBuffStatus> = buff_list
-        .into_iter()
-        .map(|(status_key, buff_status)| (status_key, TruncatedBuffStatus::from(&buff_status)))
-        .collect();
-
-    let debuff_list: HashMap<StatusKey, TruncatedDebuffStatus> = debuff_list
-        .into_iter()
-        .map(|(status_key, debuff_status)| {
-            (status_key, TruncatedDebuffStatus::from(&debuff_status))
-        })
-        .collect();
-
     let skill_list: HashMap<StatusIdType, TruncatedAttackSkill> = combat_resources
         .get_skills()
         .iter()
@@ -108,10 +96,10 @@ pub(crate) fn to_priority_decision_table(
     let mut resources = Vec::with_capacity(MAX_RESOURCE);
     let mut resource_id = 0;
 
-    while resource_id > EMPTY_RESOURCE {
+    while resource_id <= MAX_RESOURCE {
         let resource_value = combat_resources.get_resource(resource_id as ResourceIdType);
 
-        if resource_value >= -5 {
+        if resource_value >= EMPTY_RESOURCE {
             resources.push(resource_value);
             resource_id += 1;
         } else {
@@ -120,8 +108,8 @@ pub(crate) fn to_priority_decision_table(
     }
 
     PriorityDecisionTable {
-        buff_list,
-        debuff_list,
+        buff_list: buff_list.clone(),
+        debuff_list: debuff_list.clone(),
         skill_list,
         combo: combat_resources.get_current_combo(),
         milliseconds_before_burst,

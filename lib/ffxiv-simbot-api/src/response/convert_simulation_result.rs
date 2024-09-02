@@ -8,7 +8,7 @@ use crate::response::simulation_api_response::{
     SimulationDataResponse, SimulationSummaryResponse, SkillLogResponse, SKILL_ENTITY_STRING,
     STATUS_ENTITY_STRING,
 };
-use ffxiv_simbot_combat_components::jobs_skill_data::ninja::abilities::bunshin_clone_id;
+use ffxiv_simbot_combat_components::jobs_skill_data::ninja::combat_resources::BUNSHIN_CLONE_ID;
 use ffxiv_simbot_combat_components::live_objects::player::logs::SkillLog;
 use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
 use ffxiv_simbot_combat_components::types::{DpsType, MultiplierType, PlayerIdType};
@@ -230,7 +230,7 @@ pub(crate) fn create_response_from_simulation_result(
                 .skill_log
                 .iter()
                 .map(|skill_log| convert_to_skill_log_response(skill_log))
-                .filter(|skill_log_response| skill_log_response.skill_id != bunshin_clone_id())
+                .filter(|skill_log_response| skill_log_response.skill_id != BUNSHIN_CLONE_ID)
                 .collect_vec()
         })
         .collect_vec();

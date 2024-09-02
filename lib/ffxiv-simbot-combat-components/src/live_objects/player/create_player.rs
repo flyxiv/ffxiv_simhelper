@@ -10,7 +10,6 @@ use crate::jobs_skill_data::dragoon::priorities::DragoonPriorityTable;
 use crate::jobs_skill_data::gunbreaker::priorities::GunbreakerPriorityTable;
 use crate::jobs_skill_data::machinist::priorities::MachinistPriorityTable;
 use crate::jobs_skill_data::monk::priorities::MonkPriorityTable;
-use crate::jobs_skill_data::ninja::abilities::get_huton_status;
 use crate::jobs_skill_data::ninja::priorities::NinjaPriorityTable;
 use crate::jobs_skill_data::paladin::priorities::PaladinPriorityTable;
 use crate::jobs_skill_data::pictomancer::priorities::PictomancerPriorityTable;
@@ -338,7 +337,20 @@ impl FfxivPlayer {
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
     ) -> FfxivPlayer {
-        let huton = get_huton_status(player_id);
+        let huton_status: BuffStatus = {
+            BuffStatus {
+                id: 1000,
+                name: String::from("Huton"),
+                owner_id: player_id,
+                duration_left_millisecond: 0,
+                status_info: vec![StatusInfo::SpeedPercent(15)],
+                duration_millisecond: i32::MAX,
+                is_raidwide: false,
+                stacks: 1,
+                max_stacks: 1,
+                trigger_proc_event_on_gcd: vec![],
+            }
+        };
 
         Self::new(
             player_id,
@@ -348,8 +360,8 @@ impl FfxivPlayer {
             None,
             FfxivPriorityTable::Ninja(NinjaPriorityTable::new(player_id)),
             HashMap::from([(
-                StatusKey::new(huton.get_id(), player_id),
-                get_huton_status(player_id),
+                StatusKey::new(huton_status.get_id(), player_id),
+                huton_status,
             )]),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(

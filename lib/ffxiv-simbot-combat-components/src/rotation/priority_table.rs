@@ -6,14 +6,16 @@ use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::live_objects::turn_type::FfxivTurnType;
 use crate::rotation::priority_simulation_data::{
-    to_priority_decision_table, PriorityDecisionTable, TruncatedAttackSkill,
+    to_priority_decision_table, PriorityDecisionTable, TruncatedAttackSkill, TruncatedBuffStatus,
+    TruncatedDebuffStatus,
 };
 use crate::rotation::simulate_status::simulate_status;
 use crate::rotation::simulated_combat_resource::FirstSkillCombatSimulation;
 use crate::rotation::SkillPriorityInfo;
+use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{ResourceRequirements, NON_GCD_DELAY_MILLISECOND};
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, PlayerIdType, ResourceIdType, SkillIdType, TimeType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, SkillIdType, StatusIdType, TimeType};
 use crate::types::{ResourceType, StackType};
 use itertools::Itertools;
 use std::cell::RefCell;
@@ -158,32 +160,45 @@ pub(crate) trait PriorityTable: Sized + Clone {
         turn_info: &TurnInfo,
         combat_resource: &FfxivCombatResources,
     ) -> Vec<SkillUsageInfo> {
-        let buffs_only_self = player
+        let buffs_only_self: HashMap<StatusKey, TruncatedBuffStatus> = player
             .buff_list
             .borrow()
-            .clone()
-            .into_iter()
-            .filter(|(key, _)| key.player_id == player.get_id())
+            .iter()
+            .filter_map(|(&key, buff)| {
+                if key.player_id == player.get_id() {
+                    Some((key, TruncatedBuffStatus::from(buff)))
+                } else {
+                    None
+                }
+            })
             .collect();
-        let debuffs_only_self = debuff_list
+        let debuffs_only_self: HashMap<StatusKey, TruncatedDebuffStatus> = debuff_list
             .borrow()
-            .clone()
-            .into_iter()
-            .filter(|(key, _)| key.player_id == player.get_id())
+            .iter()
+            .filter_map(|(&key, debuff)| {
+                if key.player_id == player.get_id() {
+                    Some((key, TruncatedDebuffStatus::from(debuff)))
+                } else {
+                    None
+                }
+            })
             .collect();
-
-        let combat_info = to_priority_decision_table(
-            buffs_only_self,
-            debuffs_only_self,
-            turn_info.get_next_burst_time(),
-            combat_resource,
-        );
 
         if matches!(turn_info.turn_type, FfxivTurnType::Gcd) {
-            self.find_highest_gcd_skill(combat_info, player)
+            self.find_highest_gcd_skill(
+                combat_resource,
+                buffs_only_self,
+                debuffs_only_self,
+                turn_info.get_next_burst_time(),
+                player,
+            )
         } else {
+            let priority_simulation_data = None;
+
             if let Some(ogcd_plans) = self.find_best_ogcd_skill_combination(
-                &combat_info,
+                priority_simulation_data,
+                buffs_only_self,
+                debuffs_only_self,
                 player,
                 combat_resource,
                 turn_info,
@@ -197,7 +212,9 @@ pub(crate) trait PriorityTable: Sized + Clone {
 
     fn find_best_ogcd_skill_combination(
         &self,
-        combat_info: &PriorityDecisionTable,
+        mut priority_simulation_data: Option<PriorityDecisionTable>,
+        buffs_only_self: HashMap<StatusKey, TruncatedBuffStatus>,
+        debuffs_only_self: HashMap<StatusKey, TruncatedDebuffStatus>,
         player: &FfxivPlayer,
         combat_resource: &FfxivCombatResources,
         turn_info: &TurnInfo,
@@ -219,10 +236,24 @@ pub(crate) trait PriorityTable: Sized + Clone {
             let first_skill_start_time = turn_info.lower_bound_millisecond + skill_cooldown;
 
             if first_skill_start_time <= latest_time_to_use {
-                let mut combat_info_simulation = combat_info.clone();
-                advance_time(&mut combat_info_simulation, skill_cooldown);
+                if priority_simulation_data.is_none() {
+                    priority_simulation_data = Some(to_priority_decision_table(
+                        &buffs_only_self,
+                        &debuffs_only_self,
+                        turn_info.get_next_burst_time(),
+                        combat_resource,
+                    ));
+                }
 
-                if self.can_use_skill(skill_priority, &combat_info_simulation, &player) {
+                let mut priority_simulation_data_simulation =
+                    priority_simulation_data.clone().unwrap();
+                advance_time(&mut priority_simulation_data_simulation, skill_cooldown);
+
+                if self.can_use_skill(
+                    skill_priority,
+                    &priority_simulation_data_simulation,
+                    &player,
+                ) {
                     if best_one_ogcd.is_none() {
                         best_one_ogcd = Some(vec![OgcdPlan {
                             skill: SkillUsageInfo::new_delay(
@@ -242,15 +273,18 @@ pub(crate) trait PriorityTable: Sized + Clone {
                     let first_skill_simulation =
                         FirstSkillCombatSimulation::new(player.get_id(), skill);
 
-                    advance_time(&mut combat_info_simulation, skill_delay_millisecond);
+                    advance_time(
+                        &mut priority_simulation_data_simulation,
+                        skill_delay_millisecond,
+                    );
 
                     simulate_status(
-                        &mut combat_info_simulation,
+                        &mut priority_simulation_data_simulation,
                         &first_skill_simulation,
                         skill.get_id(),
                     );
                     if let Some(second_skill_plan) = self.find_second_highest_ogcd_skill(
-                        combat_info_simulation,
+                        priority_simulation_data_simulation,
                         player,
                         &ogcd_priority_table,
                         second_skill_start_time,
@@ -286,7 +320,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
 
     fn find_second_highest_ogcd_skill(
         &self,
-        combat_info: PriorityDecisionTable,
+        priority_simulation_data: PriorityDecisionTable,
         player: &FfxivPlayer,
         ogcd_priority_table: &[SkillPriorityInfo],
         start_time: TimeType,
@@ -296,7 +330,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
         let next_gcd_millisecond = turn_info.next_gcd_millisecond;
 
         for (priority_number, skill_priority) in ogcd_priority_table.iter().enumerate() {
-            let skill = combat_info
+            let skill = priority_simulation_data
                 .skill_list
                 .get(&skill_priority.skill_id)
                 .unwrap();
@@ -317,7 +351,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
             let skill_start_time = start_time + skill_cooldown;
 
             if skill_start_time <= latest_time_to_use {
-                if self.can_use_skill(skill_priority, &combat_info, &player) {
+                if self.can_use_skill(skill_priority, &priority_simulation_data, &player) {
                     return Some(OgcdPlan {
                         skill: SkillUsageInfo::new_delay(
                             skill_priority.skill_id,
@@ -334,13 +368,23 @@ pub(crate) trait PriorityTable: Sized + Clone {
 
     fn find_highest_gcd_skill(
         &self,
-        combat_info: PriorityDecisionTable,
+        combat_resource: &FfxivCombatResources,
+        buffs_only_self: HashMap<StatusKey, TruncatedBuffStatus>,
+        debuffs_only_self: HashMap<StatusKey, TruncatedDebuffStatus>,
+        milliseconds_before_burst: TimeType,
         player: &FfxivPlayer,
     ) -> Vec<SkillUsageInfo> {
         let gcd_priority_table = self.get_gcd_priority_table();
 
         for skill_priority in gcd_priority_table {
-            if self.can_use_skill(skill_priority, &combat_info, player) {
+            if self.can_use_skill_gcd(
+                skill_priority,
+                &buffs_only_self,
+                &debuffs_only_self,
+                milliseconds_before_burst,
+                player,
+                combat_resource,
+            ) {
                 return vec![SkillUsageInfo::new(skill_priority.skill_id)];
             }
         }
@@ -348,18 +392,63 @@ pub(crate) trait PriorityTable: Sized + Clone {
         return vec![];
     }
 
-    fn can_use_skill(
+    fn meets_requirements_gcd(
+        &self,
+        buff_list: &HashMap<StatusKey, TruncatedBuffStatus>,
+        debuff_list: &HashMap<StatusKey, TruncatedDebuffStatus>,
+        combat_resource: &FfxivCombatResources,
+        skill: &AttackSkill,
+        player_id: PlayerIdType,
+    ) -> bool {
+        for resource_required in &skill.resource_required {
+            match resource_required {
+                ResourceRequirements::Resource(id, resource) => {
+                    if combat_resource.get_resource(*id) < *resource {
+                        return false;
+                    }
+                }
+                ResourceRequirements::UseBuff(status_id) => {
+                    if !self.has_status_gcd(buff_list, debuff_list, *status_id, player_id) {
+                        return false;
+                    }
+                }
+                ResourceRequirements::UseDebuff(status_id) => {
+                    if !self.has_status_gcd(buff_list, debuff_list, *status_id, player_id) {
+                        return false;
+                    }
+                }
+                ResourceRequirements::CheckStatus(status_id) => {
+                    if !self.has_status_gcd(buff_list, debuff_list, *status_id, player_id) {
+                        return false;
+                    }
+                }
+                _ => {}
+            }
+        }
+
+        true
+    }
+
+    fn can_use_skill_gcd(
         &self,
         skill_priority: &SkillPriorityInfo,
-        combat_info: &PriorityDecisionTable,
+        buff_list: &HashMap<StatusKey, TruncatedBuffStatus>,
+        debuff_list: &HashMap<StatusKey, TruncatedDebuffStatus>,
+        milliseconds_before_burst: TimeType,
         player: &FfxivPlayer,
+        combat_resource: &FfxivCombatResources,
     ) -> bool {
-        let skill = combat_info
-            .skill_list
-            .get(&skill_priority.skill_id)
-            .unwrap();
+        let skill = combat_resource.get_skill(skill_priority.skill_id);
 
-        if skill.stacks == 0 || !self.meets_requirements(combat_info, skill, player.get_id()) {
+        if combat_resource.get_stack(skill.get_id()) == 0
+            || !self.meets_requirements_gcd(
+                buff_list,
+                debuff_list,
+                combat_resource,
+                skill,
+                player.get_id(),
+            )
+        {
             return false;
         }
 
@@ -368,7 +457,219 @@ pub(crate) trait PriorityTable: Sized + Clone {
         }
 
         let prerequisite = skill_priority.prerequisite.clone().unwrap();
-        self.meets_prequisite(&prerequisite, &combat_info, skill, player)
+        self.meets_prequisite_gcd(
+            &prerequisite,
+            combat_resource,
+            &buff_list,
+            &debuff_list,
+            milliseconds_before_burst,
+            skill,
+            player,
+        )
+    }
+
+    fn meets_prequisite_gcd(
+        &self,
+        prerequisite: &SkillPrerequisite,
+        combat_resources: &FfxivCombatResources,
+        buff_list: &HashMap<StatusKey, TruncatedBuffStatus>,
+        debuff_list: &HashMap<StatusKey, TruncatedDebuffStatus>,
+        milliseconds_before_burst: TimeType,
+        skill: &AttackSkill,
+        player: &FfxivPlayer,
+    ) -> bool {
+        match prerequisite {
+            SkillPrerequisite::Or(left, right) => {
+                self.meets_prequisite_gcd(
+                    left,
+                    combat_resources,
+                    buff_list,
+                    debuff_list,
+                    milliseconds_before_burst,
+                    skill,
+                    player,
+                ) || self.meets_prequisite_gcd(
+                    right,
+                    combat_resources,
+                    buff_list,
+                    debuff_list,
+                    milliseconds_before_burst,
+                    skill,
+                    player,
+                )
+            }
+            SkillPrerequisite::And(left, right) => {
+                self.meets_prequisite_gcd(
+                    left,
+                    combat_resources,
+                    buff_list,
+                    debuff_list,
+                    milliseconds_before_burst,
+                    skill,
+                    player,
+                ) && self.meets_prequisite_gcd(
+                    right,
+                    combat_resources,
+                    buff_list,
+                    debuff_list,
+                    milliseconds_before_burst,
+                    skill,
+                    player,
+                )
+            }
+            SkillPrerequisite::Not(prerequisite) => !self.meets_prequisite_gcd(
+                prerequisite,
+                combat_resources,
+                buff_list,
+                debuff_list,
+                milliseconds_before_burst,
+                skill,
+                player,
+            ),
+            SkillPrerequisite::Combo(combo_id) => {
+                if let Some(current_combo_id) = combat_resources.get_current_combo() {
+                    if let Some(combo_id) = combo_id {
+                        current_combo_id == *combo_id
+                    } else {
+                        false
+                    }
+                } else {
+                    false
+                }
+            }
+            SkillPrerequisite::HasBufforDebuff(status_id) => {
+                self.has_status_gcd(buff_list, debuff_list, *status_id, player.get_id())
+            }
+            SkillPrerequisite::BufforDebuffLessThan(status_id, time_millisecond) => {
+                let status_remaining_time = self.find_status_remaining_time_gcd(
+                    buff_list,
+                    debuff_list,
+                    *status_id,
+                    player.get_id(),
+                );
+
+                if let Some(remaining_time) = status_remaining_time {
+                    remaining_time <= *time_millisecond
+                } else {
+                    true
+                }
+            }
+            SkillPrerequisite::HasResource(resource_id, resource) => {
+                combat_resources.get_resource(*resource_id) >= *resource
+            }
+            SkillPrerequisite::HasResourceExactly(resource_id, resource) => {
+                combat_resources.get_resource(*resource_id) == *resource
+            }
+            SkillPrerequisite::MillisecondsBeforeBurst(milliseconds) => {
+                *milliseconds >= milliseconds_before_burst
+            }
+            SkillPrerequisite::HasSkillStacks(skill_id, stacks) => {
+                combat_resources.get_stack(*skill_id) >= *stacks
+            }
+            SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
+                related_skill_id,
+                time_millisecond,
+            ) => {
+                let related_skill = combat_resources.get_skills().get(related_skill_id).unwrap();
+
+                related_skill.current_cooldown_millisecond <= *time_millisecond
+            }
+            SkillPrerequisite::ResourceGreaterOrEqualThanAnotherResourceBy(
+                greater_resource_id,
+                lesser_resource_id,
+                amount,
+            ) => {
+                let greater_resource = combat_resources.get_resource(*greater_resource_id);
+                let lesser_resource = combat_resources.get_resource(*lesser_resource_id);
+
+                greater_resource >= lesser_resource + *amount
+            }
+            SkillPrerequisite::BuffGreaterDurationThan(buff1_id, buff2_id) => {
+                let buff1_remaining_time = self.find_status_remaining_time_gcd(
+                    buff_list,
+                    debuff_list,
+                    *buff1_id,
+                    player.get_id(),
+                );
+                let buff2_remaining_time = self.find_status_remaining_time_gcd(
+                    buff_list,
+                    debuff_list,
+                    *buff2_id,
+                    player.get_id(),
+                );
+
+                if let Some(buff1_remaining_time) = buff1_remaining_time {
+                    if let Some(buff2_remaining_time) = buff2_remaining_time {
+                        buff1_remaining_time > buff2_remaining_time
+                    } else {
+                        true
+                    }
+                } else {
+                    false
+                }
+            }
+        }
+    }
+
+    fn find_status_remaining_time_gcd(
+        &self,
+        buff_list: &HashMap<StatusKey, TruncatedBuffStatus>,
+        debuff_list: &HashMap<StatusKey, TruncatedDebuffStatus>,
+        status_id: StatusIdType,
+        player_id: PlayerIdType,
+    ) -> Option<TimeType> {
+        let key = StatusKey::new(status_id, player_id);
+
+        let buff_search = buff_list.get(&key);
+        let debuff_search = debuff_list.get(&key);
+
+        if let Some(buff) = buff_search {
+            return Some(buff.duration_left_millisecond);
+        }
+
+        if let Some(debuff) = debuff_search {
+            return Some(debuff.duration_left_millisecond);
+        }
+
+        None
+    }
+
+    #[inline]
+    fn has_status_gcd(
+        &self,
+        buff_list: &HashMap<StatusKey, TruncatedBuffStatus>,
+        debuff_list: &HashMap<StatusKey, TruncatedDebuffStatus>,
+        status_id: StatusIdType,
+        player_id: PlayerIdType,
+    ) -> bool {
+        let key = StatusKey::new(status_id, player_id);
+
+        buff_list.get(&key).is_some() || debuff_list.get(&key).is_some()
+    }
+
+    fn can_use_skill(
+        &self,
+        skill_priority: &SkillPriorityInfo,
+        priority_simulation_data: &PriorityDecisionTable,
+        player: &FfxivPlayer,
+    ) -> bool {
+        let skill = priority_simulation_data
+            .skill_list
+            .get(&skill_priority.skill_id)
+            .unwrap();
+
+        if skill.stacks == 0
+            || !self.meets_requirements(priority_simulation_data, skill, player.get_id())
+        {
+            return false;
+        }
+
+        if skill_priority.prerequisite.is_none() {
+            return true;
+        }
+
+        let prerequisite = skill_priority.prerequisite.clone().unwrap();
+        self.meets_prequisite(&prerequisite, &priority_simulation_data, skill, player)
     }
 
     fn get_gcd_priority_table(&self) -> &[SkillPriorityInfo];
@@ -376,29 +677,29 @@ pub(crate) trait PriorityTable: Sized + Clone {
 
     fn meets_requirements(
         &self,
-        combat_info: &PriorityDecisionTable,
+        priority_simulation_data: &PriorityDecisionTable,
         skill: &TruncatedAttackSkill,
         player_id: PlayerIdType,
     ) -> bool {
         for resource_required in &skill.resource_required {
             match resource_required {
                 ResourceRequirements::Resource(id, resource) => {
-                    if combat_info.resources[*id as usize] < *resource {
+                    if priority_simulation_data.resources[*id as usize] < *resource {
                         return false;
                     }
                 }
                 ResourceRequirements::UseBuff(status_id) => {
-                    if !self.has_status(combat_info, *status_id, player_id) {
+                    if !self.has_status(priority_simulation_data, *status_id, player_id) {
                         return false;
                     }
                 }
                 ResourceRequirements::UseDebuff(status_id) => {
-                    if !self.has_status(combat_info, *status_id, player_id) {
+                    if !self.has_status(priority_simulation_data, *status_id, player_id) {
                         return false;
                     }
                 }
                 ResourceRequirements::CheckStatus(status_id) => {
-                    if !self.has_status(combat_info, *status_id, player_id) {
+                    if !self.has_status(priority_simulation_data, *status_id, player_id) {
                         return false;
                     }
                 }
@@ -412,24 +713,24 @@ pub(crate) trait PriorityTable: Sized + Clone {
     fn meets_prequisite(
         &self,
         prerequisite: &SkillPrerequisite,
-        combat_info: &PriorityDecisionTable,
+        priority_simulation_data: &PriorityDecisionTable,
         skill: &TruncatedAttackSkill,
         player: &FfxivPlayer,
     ) -> bool {
         match prerequisite {
             SkillPrerequisite::Or(left, right) => {
-                self.meets_prequisite(left, combat_info, skill, player)
-                    || self.meets_prequisite(right, combat_info, skill, player)
+                self.meets_prequisite(left, priority_simulation_data, skill, player)
+                    || self.meets_prequisite(right, priority_simulation_data, skill, player)
             }
             SkillPrerequisite::And(left, right) => {
-                self.meets_prequisite(left, combat_info, skill, player)
-                    && self.meets_prequisite(right, combat_info, skill, player)
+                self.meets_prequisite(left, priority_simulation_data, skill, player)
+                    && self.meets_prequisite(right, priority_simulation_data, skill, player)
             }
             SkillPrerequisite::Not(prerequisite) => {
-                !self.meets_prequisite(prerequisite, combat_info, skill, player)
+                !self.meets_prequisite(prerequisite, priority_simulation_data, skill, player)
             }
             SkillPrerequisite::Combo(combo_id) => {
-                if let Some(current_combo_id) = combat_info.combo {
+                if let Some(current_combo_id) = priority_simulation_data.combo {
                     if let Some(combo_id) = combo_id {
                         current_combo_id == *combo_id
                     } else {
@@ -440,11 +741,14 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 }
             }
             SkillPrerequisite::HasBufforDebuff(status_id) => {
-                self.has_status(combat_info, *status_id, player.get_id())
+                self.has_status(priority_simulation_data, *status_id, player.get_id())
             }
             SkillPrerequisite::BufforDebuffLessThan(status_id, time_millisecond) => {
-                let status_remaining_time =
-                    self.find_status_remaining_time(combat_info, *status_id, player.get_id());
+                let status_remaining_time = self.find_status_remaining_time(
+                    priority_simulation_data,
+                    *status_id,
+                    player.get_id(),
+                );
 
                 if let Some(remaining_time) = status_remaining_time {
                     remaining_time <= *time_millisecond
@@ -453,22 +757,30 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 }
             }
             SkillPrerequisite::HasResource(resource_id, resource) => {
-                combat_info.resources[*resource_id as usize] >= *resource
+                priority_simulation_data.resources[*resource_id as usize] >= *resource
             }
             SkillPrerequisite::HasResourceExactly(resource_id, resource) => {
-                combat_info.get_resource(*resource_id) == *resource
+                priority_simulation_data.get_resource(*resource_id) == *resource
             }
             SkillPrerequisite::MillisecondsBeforeBurst(milliseconds) => {
-                *milliseconds >= combat_info.milliseconds_before_burst
+                *milliseconds >= priority_simulation_data.milliseconds_before_burst
             }
             SkillPrerequisite::HasSkillStacks(skill_id, stacks) => {
-                combat_info.skill_list.get(skill_id).unwrap().stacks >= *stacks
+                priority_simulation_data
+                    .skill_list
+                    .get(skill_id)
+                    .unwrap()
+                    .stacks
+                    >= *stacks
             }
             SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
                 related_skill_id,
                 time_millisecond,
             ) => {
-                let related_skill = combat_info.skill_list.get(related_skill_id).unwrap();
+                let related_skill = priority_simulation_data
+                    .skill_list
+                    .get(related_skill_id)
+                    .unwrap();
 
                 related_skill.current_cooldown_millisecond <= *time_millisecond
             }
@@ -477,16 +789,22 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 lesser_resource_id,
                 amount,
             ) => {
-                let greater_resource = combat_info.get_resource(*greater_resource_id);
-                let lesser_resource = combat_info.get_resource(*lesser_resource_id);
+                let greater_resource = priority_simulation_data.get_resource(*greater_resource_id);
+                let lesser_resource = priority_simulation_data.get_resource(*lesser_resource_id);
 
                 greater_resource >= lesser_resource + *amount
             }
             SkillPrerequisite::BuffGreaterDurationThan(buff1_id, buff2_id) => {
-                let buff1_remaining_time =
-                    self.find_status_remaining_time(combat_info, *buff1_id, player.get_id());
-                let buff2_remaining_time =
-                    self.find_status_remaining_time(combat_info, *buff2_id, player.get_id());
+                let buff1_remaining_time = self.find_status_remaining_time(
+                    priority_simulation_data,
+                    *buff1_id,
+                    player.get_id(),
+                );
+                let buff2_remaining_time = self.find_status_remaining_time(
+                    priority_simulation_data,
+                    *buff2_id,
+                    player.get_id(),
+                );
 
                 if let Some(buff1_remaining_time) = buff1_remaining_time {
                     if let Some(buff2_remaining_time) = buff2_remaining_time {
@@ -504,24 +822,25 @@ pub(crate) trait PriorityTable: Sized + Clone {
     #[inline]
     fn has_status(
         &self,
-        combat_info: &PriorityDecisionTable,
+        priority_simulation_data: &PriorityDecisionTable,
         status_id: SkillIdType,
         player_id: PlayerIdType,
     ) -> bool {
         let key = StatusKey::new(status_id, player_id);
 
-        combat_info.buff_list.get(&key).is_some() || combat_info.debuff_list.get(&key).is_some()
+        priority_simulation_data.buff_list.get(&key).is_some()
+            || priority_simulation_data.debuff_list.get(&key).is_some()
     }
 
     fn find_status_remaining_time(
         &self,
-        combat_info: &PriorityDecisionTable,
+        priority_simulation_data: &PriorityDecisionTable,
         status_id: SkillIdType,
         player_id: PlayerIdType,
     ) -> Option<TimeType> {
         let key = StatusKey::new(status_id, player_id);
-        let buff_list = &combat_info.buff_list;
-        let debuff_list = &combat_info.debuff_list;
+        let buff_list = &priority_simulation_data.buff_list;
+        let debuff_list = &priority_simulation_data.debuff_list;
 
         let buff_search = buff_list.get(&key);
         let debuff_search = debuff_list.get(&key);
@@ -541,25 +860,27 @@ pub(crate) trait PriorityTable: Sized + Clone {
     fn get_turn_count(&self) -> SkillIdType;
 }
 
-fn advance_time(combat_info: &mut PriorityDecisionTable, elapsed_time: TimeType) {
-    for buff in combat_info.buff_list.values_mut() {
+fn advance_time(priority_simulation_data: &mut PriorityDecisionTable, elapsed_time: TimeType) {
+    for buff in priority_simulation_data.buff_list.values_mut() {
         buff.duration_left_millisecond -= elapsed_time;
     }
 
-    for debuff in combat_info.debuff_list.values_mut() {
+    for debuff in priority_simulation_data.debuff_list.values_mut() {
         debuff.duration_left_millisecond -= elapsed_time;
     }
 
-    combat_info
+    priority_simulation_data
         .buff_list
         .retain(|_, buff| buff.duration_left_millisecond > 0);
-    combat_info
+    priority_simulation_data
         .debuff_list
         .retain(|_, debuff| debuff.duration_left_millisecond > 0);
-    combat_info.milliseconds_before_burst =
-        max(combat_info.milliseconds_before_burst - elapsed_time, 0);
+    priority_simulation_data.milliseconds_before_burst = max(
+        priority_simulation_data.milliseconds_before_burst - elapsed_time,
+        0,
+    );
 
-    combat_info.update_cooldown(elapsed_time);
+    priority_simulation_data.update_cooldown(elapsed_time);
 }
 
 fn has_important_skill(ogcd_plans: &Option<Vec<OgcdPlan>>) -> bool {
