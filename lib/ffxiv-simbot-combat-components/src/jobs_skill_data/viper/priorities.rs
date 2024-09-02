@@ -9,11 +9,11 @@ use crate::rotation::priority_table::SkillPrerequisite::{
     And, BuffGreaterDurationThan, Combo, HasResource, HasResourceExactly, MillisecondsBeforeBurst,
     Not, Or,
 };
-use crate::types::{IdType, PlayerIdType};
+use crate::types::{PlayerIdType, SkillIdType};
 
 #[derive(Clone)]
 pub struct ViperPriorityTable {
-    turn_count: RefCell<IdType>,
+    turn_count: RefCell<SkillIdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -41,7 +41,7 @@ impl PriorityTable for ViperPriorityTable {
         *self.turn_count.borrow_mut() += 1;
     }
 
-    fn get_turn_count(&self) -> IdType {
+    fn get_turn_count(&self) -> SkillIdType {
         *self.turn_count.borrow()
     }
 }

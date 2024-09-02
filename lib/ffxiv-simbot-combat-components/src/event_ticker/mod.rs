@@ -2,8 +2,8 @@ use crate::event::ffxiv_event::FfxivEvent;
 use crate::event::FfxivEventQueue;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{IdType, TimeType};
 use crate::types::{PlayerIdType, StatusTable};
+use crate::types::{SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::{max, Reverse};
 use std::rc::Rc;
@@ -68,12 +68,12 @@ pub trait EventTicker: Sized + Clone {
 
 #[derive(Hash, Copy, Clone, Eq, PartialEq, Debug)]
 pub struct TickerKey {
-    pub ticker_id: IdType,
+    pub ticker_id: SkillIdType,
     pub player_id: PlayerIdType,
 }
 
 impl TickerKey {
-    pub fn new(ticker_id: IdType, player_id: PlayerIdType) -> Self {
+    pub fn new(ticker_id: SkillIdType, player_id: PlayerIdType) -> Self {
         Self {
             player_id,
             ticker_id,

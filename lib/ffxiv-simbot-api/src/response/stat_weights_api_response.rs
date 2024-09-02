@@ -4,7 +4,7 @@ use serde::Serialize;
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct StatWeightsApiResponse {
-    pub(crate) stat_name: String,
-    pub(crate) augment_amount: StatType,
-    pub(crate) dps: DpsType,
+    pub stat_name: String,
+    pub augment_amount: StatType,
+    pub dps: DpsType,
 }

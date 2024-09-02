@@ -7,7 +7,7 @@ use crate::skill::damage_category::DamageCategory;
 use crate::skill::{AUTO_ATTACK_ID, GCD_DEFAULT_DELAY_MILLISECOND};
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::snapshot_status::snapshot_status_infos;
-use crate::types::{IdType, MultiplierType, TimeType};
+use crate::types::{MultiplierType, SkillIdType, TimeType};
 use crate::types::{PlayerIdType, StatusTable};
 use std::cell::RefCell;
 use std::cmp::{max, Reverse};
@@ -16,10 +16,10 @@ use std::rc::Rc;
 /// Loads Auto Attack Event for Melee Jobs
 #[derive(Clone)]
 pub struct AutoAttackTicker {
-    id: IdType,
+    id: SkillIdType,
     player_id: PlayerIdType,
     event_queue: Rc<RefCell<FfxivEventQueue>>,
-    auto_attack_id: IdType,
+    auto_attack_id: SkillIdType,
     auto_attack: AttackSkill,
     auto_attack_interval: TimeType,
     trait_percent: PercentType,
@@ -99,7 +99,7 @@ impl EventTicker for AutoAttackTicker {
 
 impl AutoAttackTicker {
     pub fn new(
-        id: IdType,
+        id: SkillIdType,
         player_id: PlayerIdType,
         job_abbrev: &String,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
@@ -137,7 +137,7 @@ impl AutoAttackTicker {
     }
 
     pub fn new_with_auto_attack(
-        id: IdType,
+        id: SkillIdType,
         player_id: PlayerIdType,
         auto_attack: AttackSkill,
         damage_category: DamageCategory,

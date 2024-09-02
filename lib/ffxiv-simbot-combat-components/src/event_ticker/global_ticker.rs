@@ -3,8 +3,8 @@ use crate::event::FfxivEventQueue;
 use crate::event_ticker::{EventTicker, TickerKey, GLOBAL_TICK_INTERVAL_MILLISECOND};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{IdType, TimeType};
 use crate::types::{PlayerIdType, StatusTable};
+use crate::types::{SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::rc::Rc;
@@ -12,7 +12,7 @@ use std::rc::Rc;
 /// Global DOT ticker
 #[derive(Clone)]
 pub struct GlobalTicker {
-    id: IdType,
+    id: SkillIdType,
     event_queue: Rc<RefCell<FfxivEventQueue>>,
 }
 
@@ -61,7 +61,7 @@ impl EventTicker for GlobalTicker {
 }
 
 impl GlobalTicker {
-    pub fn new(id: IdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+    pub fn new(id: SkillIdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
         Self {
             id,
             event_queue: ffxiv_event_queue,

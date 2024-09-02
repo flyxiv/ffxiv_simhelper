@@ -5,16 +5,16 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::{IdType, PlayerIdType, ResourceType};
+use crate::types::{PlayerIdType, ResourceType, SkillIdType};
 use std::cell::RefCell;
 
 const MANA_DIFFERENCE_THRESHOLD: ResourceType = 30;
-const VERSTONE_PROC_ID: IdType = 1804;
-const VERFIRE_PROC_ID: IdType = 1805;
+const VERSTONE_PROC_ID: SkillIdType = 1804;
+const VERFIRE_PROC_ID: SkillIdType = 1805;
 
 #[derive(Clone)]
 pub struct RedmagePriorityTable {
-    turn_count: RefCell<IdType>,
+    turn_count: RefCell<SkillIdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -42,7 +42,7 @@ impl PriorityTable for RedmagePriorityTable {
         *self.turn_count.borrow_mut() += 1;
     }
 
-    fn get_turn_count(&self) -> IdType {
+    fn get_turn_count(&self) -> SkillIdType {
         *self.turn_count.borrow()
     }
 }
@@ -287,8 +287,8 @@ pub(crate) fn make_redmage_ogcd_priority_table(db: &RedmageDatabase) -> Vec<Skil
 
 fn make_magic_pair_priority(
     mana_generation: ResourceType,
-    white_mana_skill_id: IdType,
-    black_mana_skill_id: IdType,
+    white_mana_skill_id: SkillIdType,
+    black_mana_skill_id: SkillIdType,
 ) -> Vec<SkillPriorityInfo> {
     let threshold = MANA_DIFFERENCE_THRESHOLD - mana_generation + 1;
     vec![

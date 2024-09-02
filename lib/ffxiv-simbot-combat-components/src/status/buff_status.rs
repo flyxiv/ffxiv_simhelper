@@ -5,13 +5,13 @@ use crate::owner_tracker::OwnerTracker;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
 use crate::types::{BuffIncreasePercentType, PlayerIdType};
-use crate::types::{IdType, SkillStackType, TimeType};
+use crate::types::{SkillIdType, SkillStackType, TimeType};
 use rand::{thread_rng, Rng};
 use std::cmp::min;
 
 #[derive(PartialEq, Eq, Clone)]
 pub struct BuffStatus {
-    pub(crate) id: IdType,
+    pub(crate) id: SkillIdType,
     pub(crate) owner_id: PlayerIdType,
     pub(crate) duration_left_millisecond: TimeType,
     pub(crate) status_info: Vec<StatusInfo>,
@@ -54,7 +54,7 @@ impl Status for BuffStatus {
         self.stacks
     }
 
-    fn get_damage_skill_id(&self) -> Option<IdType> {
+    fn get_damage_skill_id(&self) -> Option<SkillIdType> {
         None
     }
 }
@@ -96,7 +96,7 @@ impl BuffStatus {
 }
 
 impl IdEntity for BuffStatus {
-    fn get_id(&self) -> IdType {
+    fn get_id(&self) -> SkillIdType {
         self.id
     }
 }

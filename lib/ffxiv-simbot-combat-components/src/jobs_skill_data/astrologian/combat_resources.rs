@@ -3,6 +3,7 @@ use crate::event::ffxiv_event::FfxivEvent::Damage;
 use crate::jobs_skill_data::astrologian::abilities::make_astrologian_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
+use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
@@ -11,7 +12,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::snapshot_status::snapshot_status_infos;
 use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
-use crate::types::{IdType, TimeType};
+use crate::types::{SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::{max, min};
 use std::collections::HashMap;
@@ -50,7 +51,7 @@ impl CombatResource for AstrologianCombatResources {
         if resource_id == 0 {
             self.lunar_stack
         } else {
-            -1
+            EMPTY_RESOURCE
         }
     }
 
@@ -66,7 +67,7 @@ impl CombatResource for AstrologianCombatResources {
 
     fn trigger_on_event(
         &mut self,
-        skill_id: IdType,
+        skill_id: SkillIdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         combat_time_millisecond: TimeType,
@@ -103,7 +104,7 @@ impl CombatResource for AstrologianCombatResources {
 
     fn trigger_on_crit(&mut self) {}
 
-    fn get_next_buff_target(&self, skill_id: IdType) -> PlayerIdType {
+    fn get_next_buff_target(&self, skill_id: SkillIdType) -> PlayerIdType {
         if skill_id == 505 {
             self.melee_partner
         } else if skill_id == 506 {

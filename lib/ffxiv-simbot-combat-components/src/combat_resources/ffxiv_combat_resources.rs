@@ -28,7 +28,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, IdType, PlayerIdType, ResourceIdType, ResourceType, TimeType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType, SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -266,7 +266,7 @@ impl CombatResource for FfxivCombatResources {
 
     fn trigger_on_event(
         &mut self,
-        skill_id: IdType,
+        skill_id: SkillIdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
@@ -423,7 +423,7 @@ impl CombatResource for FfxivCombatResources {
         }
     }
 
-    fn get_next_buff_target(&self, skill_id: IdType) -> PlayerIdType {
+    fn get_next_buff_target(&self, skill_id: SkillIdType) -> PlayerIdType {
         match self {
             Self::Paladin(paladin_resources) => paladin_resources.get_next_buff_target(skill_id),
             Self::Warrior(warrior_resources) => warrior_resources.get_next_buff_target(skill_id),

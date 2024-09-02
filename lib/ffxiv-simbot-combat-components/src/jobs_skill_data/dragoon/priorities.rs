@@ -10,11 +10,11 @@ use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, MillisecondsBeforeBurst, Or,
     RelatedSkillCooldownLessOrEqualThan,
 };
-use crate::types::IdType;
+use crate::types::SkillIdType;
 
 #[derive(Clone)]
 pub struct DragoonPriorityTable {
-    turn_count: RefCell<IdType>,
+    turn_count: RefCell<SkillIdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -42,7 +42,7 @@ impl PriorityTable for DragoonPriorityTable {
         *self.turn_count.borrow_mut() += 1;
     }
 
-    fn get_turn_count(&self) -> IdType {
+    fn get_turn_count(&self) -> SkillIdType {
         *self.turn_count.borrow()
     }
 }

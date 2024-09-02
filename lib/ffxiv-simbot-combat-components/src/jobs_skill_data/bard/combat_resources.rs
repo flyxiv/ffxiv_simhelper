@@ -4,6 +4,7 @@ use crate::event::FfxivEventQueue;
 use crate::jobs_skill_data::bard::abilities::make_bard_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
+use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -11,7 +12,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::types::{
-    ComboType, IdType, PlayerIdType, ResourceIdType, ResourceType, SkillStackType, TimeType,
+    ComboType, PlayerIdType, ResourceIdType, ResourceType, SkillIdType, SkillStackType, TimeType,
 };
 use lazy_static::lazy_static;
 use std::cell::RefCell;
@@ -20,7 +21,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 lazy_static! {
-    static ref BARD_SONG_SKILL_IDS: Vec<IdType> = vec![1312, 1313, 1314];
+    static ref BARD_SONG_SKILL_IDS: Vec<SkillIdType> = vec![1312, 1313, 1314];
 }
 
 const APEX_MAX_STACK: ResourceType = 20;
@@ -77,7 +78,7 @@ impl CombatResource for BardCombatResources {
         } else if resource_id == 4 {
             self.radiant_stack
         } else {
-            -1
+            EMPTY_RESOURCE
         }
     }
 
@@ -89,7 +90,7 @@ impl CombatResource for BardCombatResources {
 
     fn trigger_on_event(
         &mut self,
-        skill_id: IdType,
+        skill_id: SkillIdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_combat_time_millisecond: TimeType,
@@ -126,7 +127,7 @@ impl CombatResource for BardCombatResources {
 
     fn trigger_on_crit(&mut self) {}
 
-    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
+    fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}

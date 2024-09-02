@@ -1,6 +1,6 @@
 use crate::response::CountType;
 use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
-use ffxiv_simbot_combat_components::types::{DpsType, IdType, PlayerIdType, TimeType};
+use ffxiv_simbot_combat_components::types::{DpsType, PlayerIdType, SkillIdType, TimeType};
 use serde::Serialize;
 
 pub(crate) const SKILL_ENTITY_STRING: &'static str = "Skill";
@@ -56,9 +56,9 @@ pub struct SimulationSummaryResponse {
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PartyContributionResponse {
-    pub skill_id: IdType,
+    pub skill_id: SkillIdType,
     pub party_member_id: PlayerIdType,
-    pub status_id: IdType,
+    pub status_id: SkillIdType,
     pub contributed_rdps: DpsType,
 }
 
@@ -66,7 +66,7 @@ pub struct PartyContributionResponse {
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct DamageProfileResponse {
-    pub id: IdType,
+    pub id: SkillIdType,
     /// Skill or Status
     pub entity: String,
     /// Sum of all raw damage
@@ -81,8 +81,8 @@ pub struct DamageProfileResponse {
 #[serde(rename_all = "camelCase")]
 pub struct SkillLogResponse {
     pub time: TimeType,
-    pub skill_id: IdType,
+    pub skill_id: SkillIdType,
     pub target: Option<PlayerIdType>,
-    pub buffs: Vec<IdType>,
-    pub debuffs: Vec<IdType>,
+    pub buffs: Vec<SkillIdType>,
+    pub debuffs: Vec<SkillIdType>,
 }

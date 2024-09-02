@@ -1,6 +1,6 @@
 use crate::live_objects::turn_type::FfxivTurnType;
 use crate::types::{ComboType, ResourceIdType, ResourceType};
-use crate::types::{IdType, TimeType};
+use crate::types::{SkillIdType, TimeType};
 
 /// Events that happen to a player's internal status "instantly" after casting a skill
 /// Ex) Stack is raised, cooldown is started, combo is updated
@@ -10,7 +10,7 @@ pub enum FfxivPlayerInternalEvent {
     IncreaseResource(ResourceIdType, ResourceType),
     UseResource(ResourceIdType, ResourceType),
     /// skill ID
-    StartCooldown(IdType),
+    StartCooldown(SkillIdType),
     /// combo ID
     UpdateCombo(ComboType),
     /// turn type, combat time, charge time, cast time, gcd cooldown, delay of current turn
@@ -24,7 +24,7 @@ pub enum FfxivPlayerInternalEvent {
     ),
 
     /// buff_id
-    RemoveBuff(IdType),
+    RemoveBuff(SkillIdType),
     /// debuff_id
-    RemoveDebuff(IdType),
+    RemoveDebuff(SkillIdType),
 }

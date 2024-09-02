@@ -3,8 +3,8 @@ use crate::event::FfxivEventQueue;
 use crate::event_ticker::{EventTicker, PercentType, TickerKey, GLOBAL_TICK_INTERVAL_MILLISECOND};
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{IdType, TimeType};
 use crate::types::{PlayerIdType, StatusTable};
+use crate::types::{SkillIdType, TimeType};
 use log::debug;
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
@@ -15,7 +15,7 @@ use std::rc::Rc;
 /// ex) Bard's Song Ticks
 #[derive(Clone)]
 pub struct IndependentTicker {
-    id: IdType,
+    id: SkillIdType,
     player_id: PlayerIdType,
     tick_millisecond: TimeType,
     time_left_millisecond: TimeType,
@@ -90,7 +90,7 @@ impl EventTicker for IndependentTicker {
 
 impl IndependentTicker {
     pub fn new(
-        id: IdType,
+        id: SkillIdType,
         _: TimeType,
         time_left_millisecond: TimeType,
         tick_event: Vec<FfxivEvent>,

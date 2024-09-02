@@ -4,15 +4,15 @@ use crate::owner_tracker::OwnerTracker;
 use crate::skill::damage_category::DamageCategory;
 use crate::status::status_info::StatusInfo;
 use crate::status::Status;
-use crate::types::{BuffIncreasePercentType, IdType, PlayerIdType, SkillStackType, TimeType};
+use crate::types::{BuffIncreasePercentType, PlayerIdType, SkillIdType, SkillStackType, TimeType};
 use crate::types::{PotencyType, SnapshotTable};
 use std::cmp::min;
 
 #[derive(PartialEq, Eq, Clone)]
 pub struct DebuffStatus {
-    pub(crate) id: IdType,
+    pub(crate) id: SkillIdType,
     pub(crate) owner_id: PlayerIdType,
-    pub(crate) damage_skill_id: Option<IdType>,
+    pub(crate) damage_skill_id: Option<SkillIdType>,
     pub(crate) potency: Option<PotencyType>,
     pub(crate) trait_percent: Option<PercentType>,
     pub(crate) damage_category: Option<DamageCategory>,
@@ -55,7 +55,7 @@ impl Status for DebuffStatus {
         self.stacks
     }
 
-    fn get_damage_skill_id(&self) -> Option<IdType> {
+    fn get_damage_skill_id(&self) -> Option<SkillIdType> {
         self.damage_skill_id
     }
 }
@@ -82,7 +82,7 @@ impl DebuffStatus {
 }
 
 impl IdEntity for DebuffStatus {
-    fn get_id(&self) -> IdType {
+    fn get_id(&self) -> SkillIdType {
         self.id
     }
 }

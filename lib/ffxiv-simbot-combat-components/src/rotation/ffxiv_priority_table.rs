@@ -21,7 +21,7 @@ use crate::jobs_skill_data::warrior::priorities::WarriorPriorityTable;
 use crate::jobs_skill_data::white_mage::priorities::WhitemagePriorityTable;
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::IdType;
+use crate::types::SkillIdType;
 
 #[derive(Clone)]
 pub enum FfxivPriorityTable {
@@ -179,7 +179,7 @@ impl PriorityTable for FfxivPriorityTable {
         }
     }
 
-    fn get_turn_count(&self) -> IdType {
+    fn get_turn_count(&self) -> SkillIdType {
         match self {
             Self::Paladin(paladin) => paladin.get_turn_count(),
             Self::Warrior(warrior) => warrior.get_turn_count(),

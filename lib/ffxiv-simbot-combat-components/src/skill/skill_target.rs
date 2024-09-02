@@ -1,8 +1,8 @@
-use crate::types::IdType;
+use crate::types::SkillIdType;
 
 #[derive(Clone, Debug)]
 #[allow(unused)]
 pub enum SkillTarget {
     Target,
-    Player(IdType),
+    Player(SkillIdType),
 }

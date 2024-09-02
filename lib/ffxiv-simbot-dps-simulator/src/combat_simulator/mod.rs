@@ -2,7 +2,7 @@ use crate::simulation_result::SimulationResult;
 use ffxiv_simbot_combat_components::live_objects::player::Player;
 use ffxiv_simbot_combat_components::live_objects::target::Target;
 use ffxiv_simbot_combat_components::skill::Skill;
-use ffxiv_simbot_combat_components::types::{DpsType, IdType};
+use ffxiv_simbot_combat_components::types::{DpsType, SkillIdType};
 use std::collections::HashMap;
 
 pub mod ffxiv_simulation_board;
@@ -29,5 +29,5 @@ where
 {
     pub player: P,
     pub skill: S,
-    pub rdps_table: HashMap<IdType, DpsType>,
+    pub rdps_table: HashMap<SkillIdType, DpsType>,
 }

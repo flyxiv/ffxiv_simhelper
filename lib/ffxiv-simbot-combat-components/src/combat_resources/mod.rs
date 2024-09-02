@@ -9,7 +9,7 @@ use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType, StackType};
-use crate::types::{IdType, TimeType};
+use crate::types::{SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -19,17 +19,17 @@ use std::rc::Rc;
 pub(crate) trait CombatResource: Clone + Sized {
     fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill>;
     fn get_skills(&self) -> &SkillTable<AttackSkill>;
-    fn get_skill(&self, skill_id: IdType) -> &AttackSkill {
+    fn get_skill(&self, skill_id: SkillIdType) -> &AttackSkill {
         let skill = self.get_skills().get(&skill_id).unwrap();
         skill
     }
 
-    fn reduce_cooldown(&mut self, skill_id: IdType, reduce_amount: TimeType) {
+    fn reduce_cooldown(&mut self, skill_id: SkillIdType, reduce_amount: TimeType) {
         let skill = self.get_skills_mut().get_mut(&skill_id).unwrap();
         skill.update_cooldown(reduce_amount);
     }
 
-    fn get_stack(&self, skill_id: IdType) -> StackType {
+    fn get_stack(&self, skill_id: SkillIdType) -> StackType {
         let skill = self.get_skill(skill_id);
         let skill_table = self.get_skills();
 
@@ -45,7 +45,7 @@ pub(crate) trait CombatResource: Clone + Sized {
 
     fn get_current_combo(&self) -> ComboType;
     fn update_combo(&mut self, combo: &ComboType);
-    fn start_cooldown(&mut self, skill_id: IdType, player: &FfxivPlayer) {
+    fn start_cooldown(&mut self, skill_id: SkillIdType, player: &FfxivPlayer) {
         let skill = self.get_skills_mut().get_mut(&skill_id).unwrap();
         skill.start_cooldown(player);
     }
@@ -53,7 +53,7 @@ pub(crate) trait CombatResource: Clone + Sized {
     /// Add conditional trigger event on skill
     fn trigger_on_event(
         &mut self,
-        skill_id: IdType,
+        skill_id: SkillIdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
@@ -62,7 +62,7 @@ pub(crate) trait CombatResource: Clone + Sized {
 
     fn trigger_on_crit(&mut self);
 
-    fn get_next_buff_target(&self, skill_id: IdType) -> PlayerIdType;
+    fn get_next_buff_target(&self, skill_id: SkillIdType) -> PlayerIdType;
 
     fn update_cooldown(&mut self, elapsed_time: TimeType) {
         let skill_table = self.get_skills_mut();

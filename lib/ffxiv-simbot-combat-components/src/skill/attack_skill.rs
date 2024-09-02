@@ -17,7 +17,7 @@ use crate::skill::{
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::snapshot_status::snapshot_status_infos;
-use crate::types::{ComboType, IdType, PlayerIdType, PotencyType, TimeType};
+use crate::types::{ComboType, PlayerIdType, PotencyType, SkillIdType, TimeType};
 use crate::types::{ResourceType, StackType, StatusTable};
 use rand::{thread_rng, Rng};
 use std::cell::RefCell;
@@ -29,8 +29,10 @@ const RESERVE_VEC_INITIAL_CAPACITY: usize = 10;
 
 #[derive(Clone)]
 pub struct AttackSkill {
-    pub id: IdType,
+    pub id: SkillIdType,
+
     pub(crate) name: String,
+
     pub player_id: PlayerIdType,
     pub(crate) potency: PotencyType,
     pub(crate) trait_percent: PercentType,
@@ -55,12 +57,12 @@ pub struct AttackSkill {
     pub(crate) cooldown_millisecond: TimeType,
     pub(crate) current_cooldown_millisecond: TimeType,
     pub(crate) stacks: StackType,
-    pub(crate) stack_skill_id: Option<IdType>,
+    pub(crate) stack_skill_id: Option<SkillIdType>,
     pub(crate) use_type: UseType,
 }
 
 impl IdEntity for AttackSkill {
-    fn get_id(&self) -> IdType {
+    fn get_id(&self) -> SkillIdType {
         self.id
     }
 }
@@ -321,9 +323,6 @@ impl AttackSkill {
         self.casting_time_millisecond
     }
 
-    pub(crate) fn get_current_cooldown_millisecond(&self) -> TimeType {
-        self.current_cooldown_millisecond
-    }
     pub(crate) fn get_gcd_cooldown_millisecond(&self) -> TimeType {
         max(self.gcd_cooldown_millisecond, self.casting_time_millisecond)
     }
@@ -332,7 +331,7 @@ impl AttackSkill {
         self.is_speed_buffed
     }
 
-    pub(crate) fn stack_skill_id(&self) -> IdType {
+    pub(crate) fn stack_skill_id(&self) -> SkillIdType {
         if let Some(skill_id) = self.stack_skill_id {
             skill_id
         } else {
@@ -363,7 +362,12 @@ impl AttackSkill {
         proc_events
     }
 
-    pub fn new(id: IdType, name: String, player_id: PlayerIdType, potency: PotencyType) -> Self {
+    pub fn new(
+        id: SkillIdType,
+        name: String,
+        player_id: PlayerIdType,
+        potency: PotencyType,
+    ) -> Self {
         Self {
             id,
             name,

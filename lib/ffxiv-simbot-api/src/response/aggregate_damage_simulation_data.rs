@@ -2,7 +2,7 @@ use crate::response::CountType;
 use ffxiv_simbot_combat_components::live_objects::player::logs::DamageLog;
 use ffxiv_simbot_combat_components::live_objects::player::StatusKey;
 use ffxiv_simbot_combat_components::types::MultiplierType;
-use ffxiv_simbot_combat_components::types::{IdType, PlayerIdType};
+use ffxiv_simbot_combat_components::types::{PlayerIdType, SkillIdType};
 use itertools::izip;
 use std::collections::HashMap;
 
@@ -54,7 +54,7 @@ impl Default for SkillDamageAggregate {
 /// for each skill unit.
 pub(crate) fn aggregate_skill_damage(
     damage_logs_of_party: &[Vec<DamageLog>],
-) -> Vec<HashMap<IdType, SkillDamageAggregate>> {
+) -> Vec<HashMap<SkillIdType, SkillDamageAggregate>> {
     let mut skill_damage_tables = vec![];
 
     for damage_logs_of_single_player in damage_logs_of_party {
@@ -91,7 +91,7 @@ pub(crate) fn aggregate_skill_damage(
 
 /// Aggregate the total number of buff contribution for each player in player units.
 pub(crate) fn aggregate_contribution(
-    skill_damage_table: &HashMap<IdType, SkillDamageAggregate>,
+    skill_damage_table: &HashMap<SkillIdType, SkillDamageAggregate>,
 ) -> HashMap<StatusKey, MultiplierType> {
     let mut contribution_table = HashMap::new();
     for skill_damage in skill_damage_table.values() {
@@ -108,7 +108,7 @@ pub(crate) fn aggregate_contribution(
 /// raw damage, given contribution and received contribution.
 pub(crate) fn aggregate_player_damage_statistics(
     party_damage_contribution_table: &[HashMap<StatusKey, MultiplierType>],
-    skill_damage_tables: &[HashMap<IdType, SkillDamageAggregate>],
+    skill_damage_tables: &[HashMap<SkillIdType, SkillDamageAggregate>],
 ) -> Vec<PlayerDamageAggregate> {
     let mut party_damage_aggregate: Vec<PlayerDamageAggregate> = vec![];
     party_damage_aggregate.resize(party_damage_contribution_table.len(), Default::default());
@@ -139,8 +139,8 @@ pub(crate) fn aggregate_player_damage_statistics(
 }
 
 pub(crate) fn aggregate_status_damages(
-    skill_damage_tables: &[HashMap<IdType, SkillDamageAggregate>],
-) -> Vec<HashMap<IdType, RaidbuffDamageAggregate>> {
+    skill_damage_tables: &[HashMap<SkillIdType, SkillDamageAggregate>],
+) -> Vec<HashMap<SkillIdType, RaidbuffDamageAggregate>> {
     let mut status_damages = vec![];
 
     for _ in 0..skill_damage_tables.len() {

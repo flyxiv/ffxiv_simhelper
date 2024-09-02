@@ -7,7 +7,9 @@ use crate::skill::damage_category::DamageCategory;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::snapshot_status::snapshot_status_infos;
-use crate::types::{IdType, PlayerIdType, ResourceIdType, SkillStackType, SnapshotTable, TimeType};
+use crate::types::{
+    PlayerIdType, ResourceIdType, SkillIdType, SkillStackType, SnapshotTable, TimeType,
+};
 use crate::types::{PotencyType, ResourceType};
 use std::cmp::min;
 use std::collections::HashMap;
@@ -19,12 +21,12 @@ pub enum FfxivEvent {
     /// owner_player_id, turn, threshold limit time
     PlayerTurn(PlayerIdType, FfxivTurnType, TimeType, TimeType),
     /// player_id, target_id, skill_id
-    UseSkill(PlayerIdType, Option<PlayerIdType>, IdType, TimeType),
+    UseSkill(PlayerIdType, Option<PlayerIdType>, SkillIdType, TimeType),
 
     /// owner_player_id, skill ID, potency, trait, guaranteed crit, guaranteed direct hit, snapshotted buffs and debuffs, damage category
     Damage(
         PlayerIdType,
-        IdType,
+        SkillIdType,
         PotencyType,
         PercentType,
         bool,
@@ -79,17 +81,17 @@ pub enum FfxivEvent {
     ApplyDebuff(PlayerIdType, DebuffStatus, TimeType, TimeType, TimeType),
 
     /// owner_player_id, target_player_id, buff_id
-    RemoveTargetBuff(PlayerIdType, PlayerIdType, IdType, TimeType),
+    RemoveTargetBuff(PlayerIdType, PlayerIdType, SkillIdType, TimeType),
     /// owner_player_id, buff_id
-    RemoveRaidBuff(PlayerIdType, IdType, TimeType),
+    RemoveRaidBuff(PlayerIdType, SkillIdType, TimeType),
     /// owner_player_id, debuff_id
-    RemoveDebuff(PlayerIdType, IdType, TimeType),
+    RemoveDebuff(PlayerIdType, SkillIdType, TimeType),
 
     /// Raises stack of another player, for dance partners and brotherhood
     /// player_id, stack id, increase amount
     IncreasePlayerResource(PlayerIdType, ResourceIdType, ResourceType, TimeType),
     /// player_id, skill_id, reduce_amount
-    ReduceSkillCooldown(PlayerIdType, IdType, TimeType, TimeType),
+    ReduceSkillCooldown(PlayerIdType, SkillIdType, TimeType, TimeType),
     DotTick(TimeType),
 }
 

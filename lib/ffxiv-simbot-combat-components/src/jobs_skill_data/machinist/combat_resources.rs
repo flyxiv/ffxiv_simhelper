@@ -3,6 +3,7 @@ use crate::event::ffxiv_event::FfxivEvent::Damage;
 use crate::jobs_skill_data::machinist::abilities::make_machinist_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
+use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
@@ -11,7 +12,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::snapshot_status::snapshot_status_infos;
 use crate::types::{ComboType, PlayerIdType, PotencyType, ResourceIdType, ResourceType};
-use crate::types::{IdType, TimeType};
+use crate::types::{SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::{max, min};
 use std::collections::HashMap;
@@ -58,7 +59,7 @@ impl CombatResource for MachinistCombatResources {
         } else if resource_id == 1 {
             self.battery
         } else {
-            -1
+            EMPTY_RESOURCE
         }
     }
 
@@ -74,7 +75,7 @@ impl CombatResource for MachinistCombatResources {
 
     fn trigger_on_event(
         &mut self,
-        skill_id: IdType,
+        skill_id: SkillIdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         debuff_list: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
@@ -148,7 +149,7 @@ impl CombatResource for MachinistCombatResources {
 
     fn trigger_on_crit(&mut self) {}
 
-    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
+    fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, elapsed_time: TimeType) {

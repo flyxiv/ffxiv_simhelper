@@ -12,7 +12,7 @@ use ffxiv_simbot_combat_components::jobs_skill_data::ninja::abilities::bunshin_c
 use ffxiv_simbot_combat_components::live_objects::player::logs::SkillLog;
 use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
 use ffxiv_simbot_combat_components::types::{DpsType, MultiplierType, PlayerIdType};
-use ffxiv_simbot_combat_components::types::{IdType, TimeType};
+use ffxiv_simbot_combat_components::types::{SkillIdType, TimeType};
 use ffxiv_simbot_dps_simulator::simulation_result::SimulationResult;
 use itertools::{izip, Itertools};
 use std::collections::HashMap;
@@ -68,7 +68,7 @@ impl FromWithTime<PlayerDamageAggregate> for SimulationSummaryResponse {
 }
 
 fn create_skill_damage_profile_response(
-    skill_id: IdType,
+    skill_id: SkillIdType,
     skill_damage_aggregate: &SkillDamageAggregate,
     combat_time_millisecond: TimeType,
 ) -> DamageProfileResponse {
@@ -91,7 +91,7 @@ fn create_skill_damage_profile_response(
 }
 
 fn create_status_damage_profile_response(
-    skill_id: IdType,
+    skill_id: SkillIdType,
     status_damage_aggregate: &RaidbuffDamageAggregate,
     combat_time_millisecond: TimeType,
 ) -> DamageProfileResponse {
@@ -111,8 +111,8 @@ fn create_status_damage_profile_response(
 }
 
 fn calculate_damage_profile_response(
-    skill_damage_tables: &HashMap<IdType, SkillDamageAggregate>,
-    status_damage_aggregate: &HashMap<IdType, RaidbuffDamageAggregate>,
+    skill_damage_tables: &HashMap<SkillIdType, SkillDamageAggregate>,
+    status_damage_aggregate: &HashMap<SkillIdType, RaidbuffDamageAggregate>,
     combat_time_millisecond: TimeType,
 ) -> Vec<DamageProfileResponse> {
     let mut damage_profile_responses = vec![];
@@ -138,7 +138,7 @@ fn calculate_damage_profile_response(
 
 fn create_party_contribution_response(
     player_id: PlayerIdType,
-    skill_damage_table: &HashMap<IdType, SkillDamageAggregate>,
+    skill_damage_table: &HashMap<SkillIdType, SkillDamageAggregate>,
     combat_time_millisecond: TimeType,
 ) -> Vec<PartyContributionResponse> {
     let mut party_contribution_responses = vec![];

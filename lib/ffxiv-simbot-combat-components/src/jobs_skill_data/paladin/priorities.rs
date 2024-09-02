@@ -1,6 +1,6 @@
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::{PlayerIdType, SkillIdType};
 use std::cell::RefCell;
 
 use crate::id_entity::IdEntity;
@@ -12,7 +12,7 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 
 #[derive(Clone)]
 pub struct PaladinPriorityTable {
-    turn_count: RefCell<IdType>,
+    turn_count: RefCell<SkillIdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -40,7 +40,7 @@ impl PriorityTable for PaladinPriorityTable {
         *self.turn_count.borrow_mut() += 1;
     }
 
-    fn get_turn_count(&self) -> IdType {
+    fn get_turn_count(&self) -> SkillIdType {
         *self.turn_count.borrow()
     }
 }

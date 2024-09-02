@@ -5,13 +5,14 @@ use crate::jobs_skill_data::ninja::abilities::{
 };
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
+use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
-use crate::types::{IdType, TimeType};
+use crate::types::{SkillIdType, TimeType};
 use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::cmp::min;
@@ -22,7 +23,7 @@ const NINKI_MAX: ResourceType = 100;
 const SHURIKEN_MAX_STACK: ResourceType = 5;
 
 lazy_static! {
-    static ref NINJA_BUNSHIN_COMBO_IDS: Vec<IdType> = vec![1005, 1006, 1007, 1008, 1002];
+    static ref NINJA_BUNSHIN_COMBO_IDS: Vec<SkillIdType> = vec![1005, 1006, 1007, 1008, 1002];
 }
 
 #[derive(Clone)]
@@ -58,7 +59,7 @@ impl CombatResource for NinjaCombatResources {
         } else if resource_id == 1 {
             self.shuriken
         } else {
-            -1
+            EMPTY_RESOURCE
         }
     }
 
@@ -74,7 +75,7 @@ impl CombatResource for NinjaCombatResources {
 
     fn trigger_on_event(
         &mut self,
-        skill_id: IdType,
+        skill_id: SkillIdType,
         buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         current_time_millisecond: TimeType,
@@ -101,7 +102,7 @@ impl CombatResource for NinjaCombatResources {
 
     fn trigger_on_crit(&mut self) {}
 
-    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
+    fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}

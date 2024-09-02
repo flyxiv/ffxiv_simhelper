@@ -22,8 +22,8 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_info::StatusInfo;
 use crate::status::status_timer::StatusTimer;
-use crate::types::{IdType, PlayerIdType, TimeType};
 use crate::types::{MultiplierType, StatusTable};
+use crate::types::{PlayerIdType, SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::collections::HashMap;
@@ -182,7 +182,7 @@ impl FfxivPlayer {
 
     fn use_skill(
         &mut self,
-        skill_id: IdType,
+        skill_id: SkillIdType,
         target_id: Option<PlayerIdType>,
         debuffs: StatusTable<DebuffStatus>,
         combat_time_millisecond: TimeType,
@@ -356,7 +356,7 @@ impl FfxivPlayer {
         self.combat_resources.borrow_mut().trigger_on_crit();
     }
 
-    pub fn print_skill_debug(&self, skill_id: IdType) -> String {
+    pub fn print_skill_debug(&self, skill_id: SkillIdType) -> String {
         if skill_id == AUTO_ATTACK_ID {
             format!(
                 "skill id: {}, name: Auto Attack: player {}",
@@ -478,7 +478,7 @@ impl FfxivPlayer {
     }
     pub fn update_damage_log(
         &mut self,
-        skill_id: IdType,
+        skill_id: SkillIdType,
         damage_profile: &DamageRdpsProfile,
         current_time_millisecond: TimeType,
     ) {

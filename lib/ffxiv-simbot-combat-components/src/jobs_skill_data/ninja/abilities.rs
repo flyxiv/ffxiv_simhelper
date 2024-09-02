@@ -10,7 +10,7 @@ use crate::skill::{make_skill_table, ResourceTable};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::{PlayerIdType, SkillIdType};
 
 pub(crate) struct NinjaDatabase {
     pub(crate) zesho_meppo: AttackSkill,
@@ -1044,14 +1044,14 @@ pub(crate) fn make_ninja_skill_list(player_id: PlayerIdType) -> SkillTable<Attac
 }
 
 #[inline]
-pub fn bunshin_clone_id() -> IdType {
+pub fn bunshin_clone_id() -> SkillIdType {
     let db = NinjaDatabase::new(0);
 
     db.bunshin_stack.id
 }
 
 #[inline]
-pub(crate) fn bunshin_stack_id() -> IdType {
+pub(crate) fn bunshin_stack_id() -> SkillIdType {
     let db = NinjaDatabase::new(0);
     db.bunshin_clone_status.id
 }

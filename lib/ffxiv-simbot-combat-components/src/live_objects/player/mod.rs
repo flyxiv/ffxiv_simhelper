@@ -3,7 +3,7 @@ use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::types::StatusTable;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::{PlayerIdType, SkillIdType};
 
 pub(crate) mod create_player;
 /// If the delay is over 3 * OGCD delay, then it is turn to use a GCD skill,
@@ -18,12 +18,12 @@ pub mod role;
 
 #[derive(Hash, Clone, Copy, PartialEq, Eq, Debug)]
 pub struct StatusKey {
-    pub status_id: IdType,
+    pub status_id: SkillIdType,
     pub player_id: PlayerIdType,
 }
 
 impl StatusKey {
-    pub fn new(status_id: IdType, player_id: PlayerIdType) -> StatusKey {
+    pub fn new(status_id: SkillIdType, player_id: PlayerIdType) -> StatusKey {
         StatusKey {
             status_id,
             player_id,

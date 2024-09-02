@@ -27,8 +27,8 @@ use ffxiv_simbot_combat_components::status::status_holder::StatusHolder;
 use ffxiv_simbot_combat_components::status::status_info::StatusInfo;
 use ffxiv_simbot_combat_components::status::status_timer::StatusTimer;
 use ffxiv_simbot_combat_components::status::Status;
-use ffxiv_simbot_combat_components::types::{IdType, SnapshotTable, TimeType};
 use ffxiv_simbot_combat_components::types::{PlayerIdType, PotencyType};
+use ffxiv_simbot_combat_components::types::{SkillIdType, SnapshotTable, TimeType};
 use log::debug;
 use std::cell::RefCell;
 use std::cmp::Reverse;
@@ -36,7 +36,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 use std::time::SystemTime;
 
-static GLOBAL_TICKER_ID: IdType = 15000;
+static GLOBAL_TICKER_ID: SkillIdType = 15000;
 
 /// The main party combat simulation board for FFXIV. Think of this simulation of one instance of combat.
 /// The DpsSimulator does the following:
@@ -329,7 +329,7 @@ impl FfxivSimulationBoard {
     fn handle_damage_event(
         &self,
         player: Rc<RefCell<FfxivPlayer>>,
-        skill_id: IdType,
+        skill_id: SkillIdType,
         potency: PotencyType,
         trait_percent: PercentType,
         guaranteed_crit: bool,

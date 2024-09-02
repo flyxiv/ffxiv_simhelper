@@ -2,13 +2,14 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::reaper::abilities::make_reaper_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
+use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
-use crate::types::{IdType, TimeType};
+use crate::types::{SkillIdType, TimeType};
 use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::cmp::min;
@@ -16,7 +17,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 lazy_static! {
-    static ref REAPER_NORMAL_GCD_IDS: Vec<IdType> = vec![1200, 1201, 1202];
+    static ref REAPER_NORMAL_GCD_IDS: Vec<SkillIdType> = vec![1200, 1201, 1202];
 }
 
 const SOUL_GAUGE_MAX: ResourceType = 100;
@@ -88,7 +89,7 @@ impl CombatResource for ReaperCombatResources {
         } else if resource_id == 6 {
             self.enshroud_count
         } else {
-            -1
+            EMPTY_RESOURCE
         }
     }
 
@@ -104,7 +105,7 @@ impl CombatResource for ReaperCombatResources {
 
     fn trigger_on_event(
         &mut self,
-        skill_id: IdType,
+        skill_id: SkillIdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         _: TimeType,
@@ -119,7 +120,7 @@ impl CombatResource for ReaperCombatResources {
 
     fn trigger_on_crit(&mut self) {}
 
-    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
+    fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}

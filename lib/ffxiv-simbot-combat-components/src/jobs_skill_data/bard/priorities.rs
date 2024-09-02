@@ -6,13 +6,13 @@ use crate::rotation::priority_table::SkillPrerequisite::{
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
-use crate::types::{IdType, PlayerIdType};
+use crate::types::{PlayerIdType, SkillIdType};
 use std::cell::RefCell;
 use std::rc::Rc;
 
 #[derive(Clone)]
 pub struct BardPriorityTable {
-    turn_count: RefCell<IdType>,
+    turn_count: RefCell<SkillIdType>,
     opener: Vec<Opener>,
 
     gcd_priority_table: Vec<SkillPriorityInfo>,
@@ -40,7 +40,7 @@ impl PriorityTable for BardPriorityTable {
         *self.turn_count.borrow_mut() += 1;
     }
 
-    fn get_turn_count(&self) -> IdType {
+    fn get_turn_count(&self) -> SkillIdType {
         *self.turn_count.borrow()
     }
 }

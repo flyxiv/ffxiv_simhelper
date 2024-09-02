@@ -3,13 +3,14 @@ use crate::consts::SIMULATION_START_TIME_MILLISECOND;
 use crate::jobs_skill_data::black_mage::abilities::make_blackmage_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
+use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
-use crate::types::{IdType, TimeType};
+use crate::types::{SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
@@ -70,7 +71,7 @@ impl CombatResource for BlackmageCombatResources {
         } else if resource_id == 4 {
             self.conversion_to_blizzard_check
         } else {
-            -1
+            EMPTY_RESOURCE
         }
     }
 
@@ -86,7 +87,7 @@ impl CombatResource for BlackmageCombatResources {
 
     fn trigger_on_event(
         &mut self,
-        _: IdType,
+        _: SkillIdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         _: TimeType,
@@ -96,7 +97,7 @@ impl CombatResource for BlackmageCombatResources {
     }
 
     fn trigger_on_crit(&mut self) {}
-    fn get_next_buff_target(&self, _: IdType) -> PlayerIdType {
+    fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
 

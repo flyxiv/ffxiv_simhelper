@@ -1,5 +1,5 @@
-use crate::types::IdType;
+use crate::types::SkillIdType;
 
 pub trait IdEntity {
-    fn get_id(&self) -> IdType;
+    fn get_id(&self) -> SkillIdType;
 }
