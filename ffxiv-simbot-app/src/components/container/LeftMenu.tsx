@@ -92,25 +92,42 @@ export function BasicLeftMenu() {
   );
 }
 
-function NavigationMenu(link: string, text: string) {
+function NavigationMenu(link: string, text: string, iconPath: string) {
   return (
     <LeftMenuNavigationItem sx={{ paddingY: 1 }}>
       <Link href={link} color="inherit" underline="hover">
-        <Typography variant="body2" align="left">
-          {text}
-        </Typography>
+        <Box display="flex" alignItems="center">
+          <Box marginRight={1}>
+            <img src={iconPath} alt={text} height={20} width={20} />
+          </Box>
+          <Typography variant="body2" align="left">
+            {text}
+          </Typography>
+        </Box>
       </Link>
     </LeftMenuNavigationItem>
   );
 }
 
+const HOME_MENU_LOGO_PATH = "/images/icon_home_w.svg";
+const QUICKSIM_MENU_LOGO_PATH = "/images/icon_quick_sim_w.svg";
+const GEAR_COMPARE_MENU_LOGO_PATH = "/images/icon_gear_compare_w.svg";
+const BEST_PARTNER_MENU_LOGO_PATH = "/images/icon_best_partner_w.svg";
+const STAT_WEIGHTS_MENU_LOGO_PATH = "/images/icon_stat_weights_w.svg";
+const LOGO_PATH = "/images/icon_main_top_kupo_w.svg";
+
 function DefaultLeftMenuComponents() {
   return (
     <>
       <LeftMenuLogo>
-        <Typography align="center">
-          <b>FFXIV SIMULATION BOT</b>{" "}
-        </Typography>
+        <Box display="flex" justifyContent={"center"}>
+          <Box marginRight={0.5}>
+            <img src={LOGO_PATH} width={20} height={20} alt="logo" />
+          </Box>
+          <Typography align="center">
+            <b>FFXIV SIMULATION BOT</b>{" "}
+          </Typography>
+        </Box>
       </LeftMenuLogo>
       <LeftMenuNavigationBar paddingY={4} paddingLeft={2}>
         <Typography variant="h3" align="left" sx={{ fontWeight: "bold" }}>
@@ -125,11 +142,27 @@ function DefaultLeftMenuComponents() {
           }}
         />
 
-        {NavigationMenu("/", HOME_PAGE_NAME)}
-        {NavigationMenu(`/${QUICKSIM_URL}`, QUICKSIM_PAGE_NAME)}
-        {NavigationMenu(`/${GEAR_COMPARE_URL}`, GEAR_COMPARE_PAGE_NAME)}
-        {NavigationMenu(`/${BEST_PARTNER_URL}`, BEST_PARTNER_PAGE_NAME)}
-        {NavigationMenu(`/${STAT_WEIGHTS_URL}`, STAT_WEIGHTS_PAGE_NAME)}
+        {NavigationMenu("/", HOME_PAGE_NAME, HOME_MENU_LOGO_PATH)}
+        {NavigationMenu(
+          `/${QUICKSIM_URL}`,
+          QUICKSIM_PAGE_NAME,
+          QUICKSIM_MENU_LOGO_PATH
+        )}
+        {NavigationMenu(
+          `/${GEAR_COMPARE_URL}`,
+          GEAR_COMPARE_PAGE_NAME,
+          GEAR_COMPARE_MENU_LOGO_PATH
+        )}
+        {NavigationMenu(
+          `/${BEST_PARTNER_URL}`,
+          BEST_PARTNER_PAGE_NAME,
+          BEST_PARTNER_MENU_LOGO_PATH
+        )}
+        {NavigationMenu(
+          `/${STAT_WEIGHTS_URL}`,
+          STAT_WEIGHTS_PAGE_NAME,
+          STAT_WEIGHTS_MENU_LOGO_PATH
+        )}
       </LeftMenuNavigationBar>
     </>
   );
