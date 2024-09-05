@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Box, Button, styled } from "@mui/material";
-import { GEAR_COMPARE_URL, GEAR_COMPARE_REQUEST_SAVE_NAME } from "../App";
+import { GEAR_COMPARE_URL, GEAR_COMPARE_REQUEST_SAVE_NAME, BODY_WIDTH } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
 import {
-  MENU_WIDTH_VW,
   LeftMenuWithLoadout,
 } from "../components/container/LeftMenu";
 import { ColorConfigurations } from "../Themes";
@@ -68,8 +67,6 @@ export function GearCompare() {
 
   const [totalState, setTotalState] = useState(mostRecentInput);
 
-  let bodyWidth = 100 - MENU_WIDTH_VW;
-
   return (
     <>
       <Box
@@ -83,7 +80,7 @@ export function GearCompare() {
           totalState,
           setTotalState
         )}
-        <Box width={`${bodyWidth}vw`}>
+        <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box alignContent={"center"}>
             <GearCompareEquipmentInputContainer>

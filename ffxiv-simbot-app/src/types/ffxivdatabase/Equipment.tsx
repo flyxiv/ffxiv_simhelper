@@ -135,6 +135,13 @@ export function readEquipmentData(minItemLevel: number) {
 }
 
 export function equipmentStatDescriptionString(equipment: Equipment) {
+  let fontSize: {
+    xs: 10,
+    sm: 12,
+    md: 14,
+    lg: 16,
+    xl: 18
+  }
   const stats = [];
   if (equipment.weaponDamage > 0) {
     stats.push({ statName: "WD", value: equipment.weaponDamage });

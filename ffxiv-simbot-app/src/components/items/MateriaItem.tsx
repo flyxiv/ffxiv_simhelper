@@ -10,6 +10,22 @@ export function MateriaItem(
   materiaKey: string,
   currentlyEquippedMateria: Materia
 ) {
+  let imageSize = {
+    xs: 15,
+    sm: 20,
+    md: 25,
+    lg: 30,
+    xl: 35,
+  };
+
+  let fontSize = {
+    xs: 10,
+    sm: 12,
+    md: 12,
+    lg: 14,
+    xl: 14,
+  }
+
   let isSelected = toMateriaKey(currentlyEquippedMateria) === materiaKey;
   let isNotFullyUsed =
     isSelected &&
@@ -21,22 +37,23 @@ export function MateriaItem(
       display="flex"
       flexDirection="column"
       alignItems="center"
+      justifyContent="center"
+      height="100%"
     >
-      <Box marginRight={1}>
-        <img
-          src={getMateriaIconPath(materiaKey)}
-          alt={getMateriaIconPath(materiaKey)}
-          width={20}
-          height={20}
-          style={{ verticalAlign: "middle" }}
-        />
-      </Box>
+      <Box component={"img"}
+        src={getMateriaIconPath(materiaKey)}
+        alt={getMateriaIconPath(materiaKey)}
+        sx={{ width: imageSize, height: imageSize }}
+        style={{ verticalAlign: "middle" }}
+      />
       <Box>
         <Typography
           variant="body2"
           alignContent={"center"}
-          fontSize={10}
           color={isNotFullyUsed ? "red" : "white"}
+          sx={{
+            fontSize: fontSize
+          }}
         >
           {isSelected
             ? toMateriaDescription(currentlyEquippedMateria)

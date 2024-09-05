@@ -1,4 +1,4 @@
-import { Box, Divider, Drawer, Link, styled, Typography } from "@mui/material";
+import { Box, Divider, Drawer, Link, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
 import {
   LeftMenuLogoStyle,
   LeftMenuNavigationBarStyle,
@@ -18,10 +18,22 @@ import {
   STAT_WEIGHTS_PAGE_NAME,
   STAT_WEIGHTS_URL,
 } from "../../App";
-import { EquipmentInput } from "src/types/EquipmentInput";
+import { EquipmentInput } from "../../types/EquipmentInput";
 
-export const MENU_WIDTH_VW = 25;
-const MENU_WIDTH_VW_STRING = `${MENU_WIDTH_VW}vw`;
+export const MENU_WIDTH_VW_XS = 50;
+export const MENU_WIDTH_VW_SM = 45;
+export const MENU_WIDTH_VW_MD = 40;
+export const MENU_WIDTH_VW_LG = 30;
+export const MENU_WIDTH_VW_XL = 20;
+
+export const MENU_WIDTH = {
+  xs: `${MENU_WIDTH_VW_XS}vw`,
+  sm: `${MENU_WIDTH_VW_SM}vw`,
+  md: `${MENU_WIDTH_VW_MD}vw`,
+  lg: `${MENU_WIDTH_VW_LG}vw`,
+  xl: `${MENU_WIDTH_VW_XL}vw`,
+};
+
 
 let LeftMenuLogo = styled(Box)`
   ${LeftMenuLogoStyle}
@@ -48,10 +60,10 @@ export function LeftMenuWithLoadout(
   return (
     <Drawer
       sx={{
-        width: MENU_WIDTH_VW_STRING,
+        width: MENU_WIDTH,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: MENU_WIDTH_VW_STRING,
+          width: MENU_WIDTH,
           backgroundColor: `${ColorConfigurations.backgroundOne}`,
         },
       }}
@@ -67,19 +79,18 @@ export function LeftMenuWithLoadout(
           setTotalState
         )}
       </LeftMenuTotalBar>
-    </Drawer>
+    </Drawer >
   );
 }
 
 export function BasicLeftMenu() {
-  let menu_width_string = `${MENU_WIDTH_VW}vw`;
   return (
     <Drawer
       sx={{
-        width: menu_width_string,
+        width: MENU_WIDTH,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: menu_width_string,
+          width: MENU_WIDTH,
           boxSizing: "border-box",
           backgroundColor: `${ColorConfigurations.backgroundOne}`,
         },

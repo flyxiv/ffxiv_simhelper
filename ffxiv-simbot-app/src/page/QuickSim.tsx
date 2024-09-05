@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
-import { QUICKSIM_RESULT_URL, SINGLE_INPUT_SAVE_NAME } from "../App";
+import { BODY_WIDTH, QUICKSIM_RESULT_URL, SINGLE_INPUT_SAVE_NAME } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatPowerSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
 import { EquipmentInput } from "../types/EquipmentInput";
 import { defaultSingleEquipmentInput } from "../const/DefaultSingleEquipmentInput";
 import {
-  MENU_WIDTH_VW,
   LeftMenuWithLoadout,
 } from "../components/container/LeftMenu";
 import { ColorConfigurations } from "../Themes";
@@ -61,8 +60,6 @@ export function QuickSim() {
 
   const [totalState, setTotalState] = useState(mostRecentInput);
 
-  let bodyWidth = 100 - MENU_WIDTH_VW;
-
   return (
     <>
       <Box
@@ -76,7 +73,7 @@ export function QuickSim() {
           totalState,
           setTotalState
         )}
-        <Box width={`${bodyWidth}vw`}>
+        <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box alignContent={"center"}>
             <QuickSimInputContainer justifyContent={"center"}>

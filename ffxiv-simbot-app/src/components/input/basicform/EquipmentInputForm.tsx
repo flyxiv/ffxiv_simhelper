@@ -140,6 +140,11 @@ function EquipmentMenuOfOneSlot(
               },
             },
           }}
+          sx={{
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'transparent', // 포커스된 상태에서의 테두리 색 제거
+            },
+          }}
         >
           {equipmentsAvailableInSlot.map((equipment) => {
             return EquipmentMenuItem(
@@ -150,9 +155,11 @@ function EquipmentMenuOfOneSlot(
           })}
           <Divider />
           <EquipmentMenu value={-1} key={`${id}_${slotLabel}_empty`}>
-            <Typography variant="body2" color="white">
-              Empty
-            </Typography>
+            <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
+              <Typography variant="body2" color="white">
+                Empty
+              </Typography>
+            </Box>
           </EquipmentMenu>
         </Select>
       </CustomFormControl>
@@ -196,15 +203,15 @@ export function EquipmentSelectionMenu(
         <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
           {onlyBuffJobs
             ? MainPlayerJobSelectionOnlyBuffJobs(
-                id,
-                totalEquipmentState,
-                setTotalEquipmentState
-              )
+              id,
+              totalEquipmentState,
+              setTotalEquipmentState
+            )
             : MainPlayerJobSelection(
-                id,
-                totalEquipmentState,
-                setTotalEquipmentState
-              )}
+              id,
+              totalEquipmentState,
+              setTotalEquipmentState
+            )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
       <EquipmentGridItemBox marginBottom={1} key={`${id}_RaceItemBox`}>

@@ -125,7 +125,9 @@ function SingleMateriaMenu(
         })}
         <Divider />
         <MateriaMenu value={"empty"}>
-          <Typography align="center">Empty</Typography>
+          <Box display="flex" justifyContent={"center"} alignItems={"center"} height="100%">
+            <Typography align="center">Empty</Typography>
+          </Box>
         </MateriaMenu>
       </Select>
     </CustomFormControl>

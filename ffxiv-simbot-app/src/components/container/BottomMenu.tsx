@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
 import { ColorConfigurations } from "../../Themes";
-import { MENU_WIDTH_VW } from "./LeftMenu";
 import { StatSummary } from "./StatSummary";
 import { EquipmentInput } from "../../types/EquipmentInput";
-import { QuickSimRequestButton } from "../basic/QuickSimRequestButton";
 import { GEAR_COMPARE_INPUT_CONTAINER_WIDTH } from "../../page/GearCompare";
 import { GearCompareRequestButton } from "../basic/GearCompareRequestButton";
+import { BODY_WIDTH } from "../../App";
+import { MENU_WIDTH } from "./LeftMenu";
 
 export function BasicBottomMenu(
   totalState: EquipmentInput,
@@ -16,12 +16,11 @@ export function BasicBottomMenu(
       sx={{
         position: "fixed",
         bottom: 0,
-        left: `${MENU_WIDTH_VW}vs`,
-        width: `${100 - MENU_WIDTH_VW}vw`,
+        left: MENU_WIDTH,
+        width: BODY_WIDTH,
         backgroundColor: ColorConfigurations.backgroundTwo,
         display: "flex",
         justifyContent: "space-around",
-        alignItems: "center",
         zIndex: 1000,
       }}
     >
@@ -29,7 +28,6 @@ export function BasicBottomMenu(
         paddingY={3}
         display="flex"
         flexDirection="column"
-        alignContent="center"
       >
         {StatSummary(totalState.equipmentDatas[0])}
         <Box display="inline-block" margin="auto" paddingTop={2}>
@@ -46,8 +44,8 @@ export function GearCompareBottomMenu(totalState: EquipmentInput) {
       sx={{
         position: "fixed",
         bottom: 0,
-        left: `${MENU_WIDTH_VW}vs`,
-        width: `${100 - MENU_WIDTH_VW}vw`,
+        left: MENU_WIDTH,
+        width: BODY_WIDTH,
         backgroundColor: ColorConfigurations.backgroundTwo,
         display: "flex",
         justifyContent: "space-around",

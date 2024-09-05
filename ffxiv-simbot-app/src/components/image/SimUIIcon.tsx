@@ -22,10 +22,17 @@ export const SimLinkIcon = (
       </Box>
       <Box>
         <Typography variant="h4" color={color}>
-          {title}
+          <b>{title}</b>
         </Typography>
         <Box marginTop={1}>
-          <Typography variant="body2" fontSize={10} color="white">
+          <Typography variant="body2" sx={{
+            fontSize: {
+              xs: 10,
+              sm: 12,
+              md: 12,
+              lg: 14,
+            }
+          }} color="white">
             {description}
           </Typography>
         </Box>

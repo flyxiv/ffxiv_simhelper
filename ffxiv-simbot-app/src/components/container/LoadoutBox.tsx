@@ -30,7 +30,7 @@ export const inputStyle = {
   },
 };
 
-export const LoadoutInput = styled(TextField)(({}) => inputStyle);
+export const LoadoutInput = styled(TextField)(({ }) => inputStyle);
 
 interface LoadoutMetaData {
   loadoutName: string;
@@ -102,7 +102,7 @@ export function LoadoutBox(
       </Box>
       <Box padding={1} display="flex">
         <LoadoutInput
-          label="New Loadout Name"
+          label="Name"
           value={textFieldInputLoadoutName}
           onChange={(e) => {
             setTextFieldInputLoadoutName(e.target.value);
@@ -141,6 +141,7 @@ function LoadoutOverwriteButton(
   return (
     <Button
       sx={{
+        padding: 0,
         marginX: 1,
         backgroundColor: ColorConfigurations.primary,
         color: "black",

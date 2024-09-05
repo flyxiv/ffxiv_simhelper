@@ -4,9 +4,10 @@ import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { Box, Link } from "@mui/material";
 import { ColorConfigurations } from "../Themes";
-import { BasicLeftMenu, MENU_WIDTH_VW } from "../components/container/LeftMenu";
+import { BasicLeftMenu } from "../components/container/LeftMenu";
 import {
   BEST_PARTNER_URL,
+  BODY_WIDTH,
   GEAR_COMPARE_URL,
   QUICKSIM_URL,
   STAT_WEIGHTS_URL,
@@ -33,17 +34,16 @@ const BEST_PARTNER_DESCRIPTION =
   "Find out the teammates that will contribute the most RDPS for you(buff jobs only).";
 
 export function Home() {
-  let bodyWidth = 100 - MENU_WIDTH_VW;
-
   return (
-    <Box sx={{ backgroundColor: ColorConfigurations.backgroundOne }}>
+    <Box sx={{ backgroundColor: ColorConfigurations.backgroundOne, width: "100vw", height: "100vh" }}>
       <Box display="flex" width="100vw">
         {BasicLeftMenu()}
-        <Box width={`${bodyWidth}vw`}>
+        <Box width="100%">
           {AppHeader()}
           <Box className="HomeBody">
             <Box
               width="40%"
+              height="100%"
               display="flex"
               alignItems={"center"}
               flexDirection={"column"}

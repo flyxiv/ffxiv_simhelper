@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
-import { BEST_PARTNER_INPUT_SAVE_NAME, BEST_PARTNER_URL } from "../App";
+import { BEST_PARTNER_INPUT_SAVE_NAME, BEST_PARTNER_URL, BODY_WIDTH } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatPowerSummary } from "../components/container/StatSummary";
 import { EquipmentInput } from "../types/EquipmentInput";
 import { defaultBestPartnerEquipmentInput } from "../const/DefaultSingleEquipmentInput";
 import {
-  MENU_WIDTH_VW,
   LeftMenuWithLoadout,
 } from "../components/container/LeftMenu";
 import { ColorConfigurations } from "../Themes";
@@ -61,8 +60,6 @@ export function BestPartner() {
 
   const [totalState, setTotalState] = useState(mostRecentInput);
 
-  let bodyWidth = 100 - MENU_WIDTH_VW;
-
   return (
     <>
       <Box
@@ -76,7 +73,7 @@ export function BestPartner() {
           totalState,
           setTotalState
         )}
-        <Box width={`${bodyWidth}vw`}>
+        <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box alignContent={"center"}>
             <StatWeightsInputContainer justifyContent={"center"}>

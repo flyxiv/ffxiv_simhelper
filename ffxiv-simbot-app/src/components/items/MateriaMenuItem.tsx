@@ -17,7 +17,7 @@ export function MateriaMenuItem(
     <MateriaMenu
       value={materiaKey}
       key={`${slotName}_${materiaSlot}_${materiaKey}`}
-      sx={{ align: "left" }}
+      sx={{ align: "center" }}
     >
       {MateriaItem(materiaKey, currentlyEquippedMateria)}
     </MateriaMenu>
