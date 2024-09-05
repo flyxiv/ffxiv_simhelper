@@ -32,7 +32,7 @@ export function MainPlayerJobSelection(
   let key = `Job-${id}`;
 
   return (
-    <CustomFormControl fullWidth sx={{ height: '100%' }}>
+    <CustomFormControl fullWidth>
       <Select
         labelId={key}
         id={key}
@@ -45,11 +45,6 @@ export function MainPlayerJobSelection(
               backgroundColor: ColorConfigurations.backgroundThree,
             },
           },
-        }}
-
-        sx={{
-          height: '100%',
-          display: 'flex',
         }}
       >
         {JobMenuItem("PLD", ALIGN)}

@@ -1,10 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
-import { ITEM_MIN_HEIGHT } from "./Styles";
+import { ITEM_BOTTOM_MENU_MIN_HEIGHT, ITEM_TOP_MENU_MIN_HEIGHT } from "./Styles";
 
-export function JobItem(jobAbbrev: string, align: string) {
+export function JobItem(jobAbbrev: string, align: string, is_top: boolean) {
+  console.log(is_top)
   return (
-    <Box display="flex" justifyContent={align} alignItems={"center"} height={ITEM_MIN_HEIGHT}>
+    <Box display="flex" justifyContent={align} alignItems={"center"} height={is_top ? ITEM_TOP_MENU_MIN_HEIGHT : ITEM_BOTTOM_MENU_MIN_HEIGHT}>
       <Box marginRight={1}>
         <img
           src={jobAbbrevToJobIconPath(jobAbbrev)}

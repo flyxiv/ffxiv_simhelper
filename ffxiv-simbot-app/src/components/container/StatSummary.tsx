@@ -128,7 +128,10 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
       <StatSummaryBox
         sx={{ backgroundColor: ColorConfigurations.backgroundThree }}
       >
-        <SinglePowerBox>{StatSummaryTypography("Name", true)}</SinglePowerBox>
+        <Box display="flex" flexGrow="1">
+
+          <SinglePowerBox sx={{ flexGrow: 1 }}>{StatSummaryTypography("Name", true)}</SinglePowerBox>
+        </Box>
         {POWER_NAMES.map((powerName) => {
           return (
             <SinglePowerBox>

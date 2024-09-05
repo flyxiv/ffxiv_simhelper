@@ -4,6 +4,7 @@ import { RACES } from "../../const/StartStats";
 import { RaceMenuItem } from "../items/RaceMenuItem";
 import { ColorConfigurations } from "../../Themes";
 import { EquipmentInput } from "../../types/EquipmentInput";
+import { updateOnePlayerPower } from "../../types/ffxivdatabase/ItemSet";
 
 export function MainPlayerRaceSelection(
   id: number,
@@ -11,9 +12,9 @@ export function MainPlayerRaceSelection(
   setTotalState: Function
 ) {
   const handleRaceChange = (event: SelectChangeEvent<string>) => {
-    let newState = { ...totalEquipmentState };
-    newState.equipmentDatas[id].race = event.target.value;
-    setTotalState({ newState });
+    let newTotalData = { ...totalEquipmentState };
+    newTotalData.equipmentDatas[id].race = event.target.value;
+    updateOnePlayerPower(id, newTotalData, setTotalState);
   };
 
   let totalState = totalEquipmentState.equipmentDatas[id];
@@ -43,6 +44,11 @@ export function MainPlayerRaceSelection(
             sx: {
               backgroundColor: ColorConfigurations.backgroundThree,
             },
+          },
+        }}
+        sx={{
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'transparent'
           },
         }}
       >

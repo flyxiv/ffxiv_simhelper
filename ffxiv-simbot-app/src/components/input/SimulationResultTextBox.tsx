@@ -3,7 +3,7 @@ import { ColorConfigurations } from "../..//Themes";
 import { InputGridItemStyle } from "./Styles";
 import { CharacterStats } from "../../types/CharacterStates";
 import { EquipmentInput, SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
-import { ITEM_MIN_HEIGHT } from "../items/Styles";
+import { ITEM_BOTTOM_MENU_MIN_HEIGHT, ITEM_TOP_MENU_MIN_HEIGHT } from "../items/Styles";
 
 export interface InputFormProps {
   label: string;
@@ -69,17 +69,22 @@ export const SimulationResultTextBox: React.FC<InputFormProps> = ({
   );
 };
 
-export function SimulationResultTimeTextBox(label: string, totalEquipmentState: EquipmentInput, setTotalState: Function) {
+const TIME_UPPER_LIMIT = 900;
+
+export function SimulationResultTimeTextBox(label: string, totalEquipmentState: EquipmentInput, setTotalState: Function, isTopMenu: boolean) {
   return (
     <Input
       label={label}
       value={totalEquipmentState.equipmentDatas[0].combatTimeMillisecond / 1000}
       onChange={(e) => {
         let newTimeSeconds = parseInt(e.target.value);
+        if (isNaN(newTimeSeconds)) {
+          newTimeSeconds = 0;
+        }
 
         let newTotalState = { ...totalEquipmentState };
         newTotalState.equipmentDatas.forEach((data: SingleEquipmentInputSaveState) => {
-          data.combatTimeMillisecond = newTimeSeconds * 1000;
+          data.combatTimeMillisecond = Math.min(newTimeSeconds, TIME_UPPER_LIMIT) * 1000;
         });
 
         setTotalState({ ...newTotalState });
@@ -87,7 +92,7 @@ export function SimulationResultTimeTextBox(label: string, totalEquipmentState: 
       fullWidth
       sx={{
         '& .MuiInputBase-input': {
-          height: ITEM_MIN_HEIGHT,
+          height: isTopMenu ? ITEM_TOP_MENU_MIN_HEIGHT : ITEM_BOTTOM_MENU_MIN_HEIGHT,
           textAlign: "center",
         },
       }}

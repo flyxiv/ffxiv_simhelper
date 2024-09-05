@@ -77,31 +77,31 @@ export function PartyMemberJobSelection(
           },
         }}
       >
-        {JobMenuItem("PLD", ALIGN)}
-        {JobMenuItem("WAR", ALIGN)}
-        {JobMenuItem("DRK", ALIGN)}
-        {JobMenuItem("GNB", ALIGN)}
+        {JobMenuItem("PLD", ALIGN, false)}
+        {JobMenuItem("WAR", ALIGN, false)}
+        {JobMenuItem("DRK", ALIGN, false)}
+        {JobMenuItem("GNB", ALIGN, false)}
         <Divider />
-        {JobMenuItem("WHM", ALIGN)}
-        {JobMenuItem("AST", ALIGN)}
-        {JobMenuItem("SCH", ALIGN)}
-        {JobMenuItem("SGE", ALIGN)}
+        {JobMenuItem("WHM", ALIGN, false)}
+        {JobMenuItem("AST", ALIGN, false)}
+        {JobMenuItem("SCH", ALIGN, false)}
+        {JobMenuItem("SGE", ALIGN, false)}
         <Divider />
-        {JobMenuItem("DRG", ALIGN)}
-        {JobMenuItem("MNK", ALIGN)}
-        {JobMenuItem("NIN", ALIGN)}
-        {JobMenuItem("SAM", ALIGN)}
-        {JobMenuItem("RPR", ALIGN)}
-        {JobMenuItem("VPR", ALIGN)}
+        {JobMenuItem("DRG", ALIGN, false)}
+        {JobMenuItem("MNK", ALIGN, false)}
+        {JobMenuItem("NIN", ALIGN, false)}
+        {JobMenuItem("SAM", ALIGN, false)}
+        {JobMenuItem("RPR", ALIGN, false)}
+        {JobMenuItem("VPR", ALIGN, false)}
         <Divider />
-        {JobMenuItem("BRD", ALIGN)}
-        {JobMenuItem("MCH", ALIGN)}
-        {JobMenuItem("DNC", ALIGN)}
+        {JobMenuItem("BRD", ALIGN, false)}
+        {JobMenuItem("MCH", ALIGN, false)}
+        {JobMenuItem("DNC", ALIGN, false)}
         <Divider />
-        {JobMenuItem("SMN", ALIGN)}
-        {JobMenuItem("BLM", ALIGN)}
-        {JobMenuItem("RDM", ALIGN)}
-        {JobMenuItem("PCT", ALIGN)}
+        {JobMenuItem("SMN", ALIGN, false)}
+        {JobMenuItem("BLM", ALIGN, false)}
+        {JobMenuItem("RDM", ALIGN, false)}
+        {JobMenuItem("PCT", ALIGN, false)}
         <MenuItem value="Empty">
           <Typography variant="body1" color="white">
             Empty

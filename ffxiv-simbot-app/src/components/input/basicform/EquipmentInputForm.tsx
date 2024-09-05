@@ -265,7 +265,8 @@ export function EquipmentSelectionMenu(
             {SimulationResultTimeTextBox(
               "Combat Time(Seconds)",
               totalEquipmentState,
-              setTotalEquipmentState
+              setTotalEquipmentState,
+              true
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
@@ -376,9 +377,11 @@ function FoodSelection(
             return FoodMenuItem(food);
           })}
           <MenuItem value={-1}>
-            <Typography variant="body2" color="white">
-              Empty
-            </Typography>
+            <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
+              <Typography variant="body2" color="white">
+                Empty
+              </Typography>
+            </Box>
           </MenuItem>
         </Select>
       </CustomFormControl>

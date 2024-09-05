@@ -176,6 +176,7 @@ export const SingleStatBoxStyle = (width: string) => `
   color: white;
   border: 1px solid #201F28;
   width: ${width};
+  white-space: nowrap;
 `;
 
 export const EquipmentSubStatBoxStyle = `

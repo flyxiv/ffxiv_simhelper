@@ -42,7 +42,9 @@ export function HorizontalPartyInput(
               {SimulationResultTimeTextBox(
                 "Combat Time(Seconds)",
                 totalEquipmentState,
-                setTotalEquipmentState)
+                setTotalEquipmentState,
+                false
+              )
               }
             </InputJobBox>
           </InputBox>

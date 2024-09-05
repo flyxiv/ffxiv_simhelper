@@ -1,10 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
-import { ITEM_MIN_HEIGHT } from "./Styles";
+import { ITEM_TOP_MENU_MIN_HEIGHT } from "./Styles";
 
 export function PartnerItem(partyMemberJobId: number, jobAbbrev: string) {
   return (
-    <Box display="flex" justifyContent="left" alignItems={"center"} height={ITEM_MIN_HEIGHT}>
+    <Box display="flex" justifyContent="left" alignItems={"center"} height={ITEM_TOP_MENU_MIN_HEIGHT}>
       <Box marginRight={1}>
         <img
           src={jobAbbrevToJobIconPath(jobAbbrev)}

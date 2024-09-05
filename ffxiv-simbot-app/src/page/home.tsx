@@ -16,7 +16,7 @@ import {
 const quickSimButtonImagePath = "/images/icon_quick_sim_C.svg";
 const QUICK_SIM_TITLE = "Quick Sim";
 const QUICK_SIM_DESCRIPTION =
-  "Quickly get detailed summary of your expected DPS, party member's contribution, and damage proportion.";
+  "Quickly get detailed statistics of your party's DPS expectation.";
 
 const gearCompareSimButtonImagePath = "/images/icon_gear_compare_C.svg";
 const GEAR_COMPARE_TITLE = "Gear Compare";
@@ -43,7 +43,6 @@ export function Home() {
           <Box className="HomeBody">
             <Box
               width="40%"
-              height="100%"
               display="flex"
               alignItems={"center"}
               flexDirection={"column"}
@@ -113,6 +112,7 @@ function LogoBox(
         backgroundColor: ColorConfigurations.backgroundTwo,
         width: "80%",
       }}
+      alignItems={"center"}
       padding={2}
       marginBottom={4}
     >

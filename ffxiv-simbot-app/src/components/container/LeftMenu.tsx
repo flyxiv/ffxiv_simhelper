@@ -1,4 +1,4 @@
-import { Box, Divider, Drawer, Link, styled, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Divider, Drawer, Link, styled, Typography } from "@mui/material";
 import {
   LeftMenuLogoStyle,
   LeftMenuNavigationBarStyle,
