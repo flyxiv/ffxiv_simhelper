@@ -22,7 +22,7 @@ import {
 import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
 
 let INPUT_CONTAINER_WIDTH = "50vw";
-const QUICKSIM_LOADOUT_COUNT = 3;
+const QUICKSIM_LOADOUT_COUNT = 6;
 
 let QuickSimInputContainer = styled(Box)`
   ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}

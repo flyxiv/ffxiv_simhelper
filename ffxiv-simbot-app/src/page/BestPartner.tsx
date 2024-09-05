@@ -25,7 +25,7 @@ export enum JobRole {
 }
 
 let INPUT_CONTAINER_WIDTH = "40vw";
-const BEST_PARTNER_LOADOUT_COUNT = 3;
+const BEST_PARTNER_LOADOUT_COUNT = 6;
 
 let StatWeightsInputContainer = styled(Box)`
   ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}

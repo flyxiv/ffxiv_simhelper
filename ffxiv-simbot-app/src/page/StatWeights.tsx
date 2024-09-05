@@ -22,7 +22,7 @@ import {
 import { StatWeightsRequestButton } from "../components/basic/StatWeightsRequestButton";
 
 let INPUT_CONTAINER_WIDTH = "40vw";
-const STATWEIGHTS_LOADOUT_COUNT = 3;
+const STATWEIGHTS_LOADOUT_COUNT = 6;
 
 let StatWeightsInputContainer = styled(Box)`
   ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}

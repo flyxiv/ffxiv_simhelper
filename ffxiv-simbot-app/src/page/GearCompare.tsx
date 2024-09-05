@@ -22,7 +22,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "70vw";
-const GEAR_COMPARE_LOADOUNT_COUNT = 3;
+const GEAR_COMPARE_LOADOUNT_COUNT = 6;
 
 const PARTY_INPUT_WIDTH = "40vw";
 
@@ -139,7 +139,7 @@ function LoadLeftEquipmentToRightButton(
       endIcon={<ArrowForwardIcon />}
       onClick={() => {
         let newTotalState = { ...totalState };
-        newTotalState.equipmentDatas[1] = { ...totalState.equipmentDatas[0] };
+        newTotalState.equipmentDatas[1] = JSON.parse(JSON.stringify(totalState.equipmentDatas[0]));
         setTotalState(newTotalState);
       }}
     >
@@ -158,7 +158,7 @@ function LoadRightEquipmentToLeftButton(
       startIcon={<ArrowBackIcon />}
       onClick={() => {
         let newTotalState = { ...totalState };
-        newTotalState.equipmentDatas[0] = { ...totalState.equipmentDatas[1] };
+        newTotalState.equipmentDatas[0] = JSON.parse(JSON.stringify(totalState.equipmentDatas[1]));
         setTotalState(newTotalState);
       }}
     >

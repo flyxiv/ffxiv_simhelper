@@ -70,8 +70,6 @@ function SingleMateriaMenu(
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function
 ) {
-  let totalState = totalEquipmentState.equipmentDatas[id];
-
   if (materias === undefined) {
     return <></>;
   }
@@ -88,7 +86,7 @@ function SingleMateriaMenu(
     let materiasOfSlot = newData.gearSetMaterias[slotNameToSlotIndex(slotName)];
 
     updateMateriaList(e.target.value, equipment, materiasOfSlot, materiaSlot);
-    let newGearSetMaterias = [...totalState.gearSetMaterias];
+    let newGearSetMaterias = [...newData.gearSetMaterias];
 
     newGearSetMaterias[slotNameToSlotIndex(slotName)] = materiasOfSlot;
     newData.gearSetMaterias = newGearSetMaterias;
