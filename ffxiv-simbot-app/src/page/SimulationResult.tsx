@@ -7,8 +7,8 @@ import {
   makeBestTeammateData,
 } from "../components/graph/BestTeammateGraph";
 import { DpsSummary } from "../components/container/DpsSummaryBox";
-import { ResultBoardBoxStyle } from "../components/container/Styles";
-import { PlayerInfo } from "../components/container/PlayerInfo";
+import { ResultBoardBoxStyle, ResultBoardTopBoxStyle } from "../components/container/Styles";
+
 import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { DamageProfileGraph } from "../components/graph/DamageProfileGraph";
 import { SkillLogResult } from "../components/container/SkillLog";
@@ -23,6 +23,11 @@ import { ColorConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
+import { PlayerInfo } from "../components/container/PlayerInfo";
+
+const ResultBoardTopBox = styled(Box)`
+  ${ResultBoardTopBoxStyle}
+`;
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -67,6 +72,15 @@ export function SimulationResult() {
     setMainPlayerContributionToOthers
   );
 
+  let partyMemberJobAbbrevs: Array<string> = [];
+  responseJson.simulationData.forEach((simulationData, partyMemberId) => {
+    if (partyMemberId === mainPlayerId) {
+      return;
+    }
+
+    partyMemberJobAbbrevs.push(simulationData.jobAbbrev);
+  })
+
   return (
     <Box
       display="flex"
@@ -80,11 +94,11 @@ export function SimulationResult() {
         {BasicLeftMenu()}
         <Box>
           {AppHeader()}
-          <ResultBoardBox>
+          <ResultBoardTopBox>
             {SimulationTitle("Simulation Result")}
             {DpsSummary(mainPlayerSimulationData)}
-            {PlayerInfo(mainPlayerJob, responseJson.combatTimeMillisecond)}
-          </ResultBoardBox>
+            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs)}
+          </ResultBoardTopBox>
           <Box display="flex" justifyContent={"center"}>
             {ResultPageButtonGroup(
               currentlyToggledView,

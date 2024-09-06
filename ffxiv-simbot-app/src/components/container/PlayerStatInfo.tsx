@@ -10,6 +10,7 @@ import {
   PlayerPower,
 } from "../../types/ffxivdatabase/PlayerPower";
 import { isCaster } from "../../types/ffxivdatabase/ItemSet";
+import { ColorConfigurations } from "../../Themes";
 
 const PlayerStatInfoBox = styled(Box)`
   ${PlayerStatInfoBoxStyle}
@@ -89,7 +90,7 @@ export function StatComparePlayerStatInfo(
   let tenacityColor = "black";
 
   if (targetStat.weaponDamage > compareStat.weaponDamage) {
-    weaponDamageColor = "blue";
+    weaponDamageColor = ColorConfigurations.primary;
   } else if (targetStat.weaponDamage < compareStat.weaponDamage) {
     weaponDamageColor = "red";
   }

@@ -65,6 +65,7 @@ export function LeftMenuWithLoadout(
         "& .MuiDrawer-paper": {
           width: MENU_WIDTH,
           backgroundColor: `${ColorConfigurations.backgroundOne}`,
+          scrollbarWidth: 'none'
         },
       }}
       variant="permanent"
@@ -93,6 +94,7 @@ export function BasicLeftMenu() {
           width: MENU_WIDTH,
           boxSizing: "border-box",
           backgroundColor: `${ColorConfigurations.backgroundOne}`,
+          scrollbarWidth: 'none'
         },
       }}
       variant="permanent"

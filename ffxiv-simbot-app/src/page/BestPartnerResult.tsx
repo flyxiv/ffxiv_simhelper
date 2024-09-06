@@ -1,5 +1,5 @@
 import { Box, styled } from "@mui/material";
-import { ResultBoardBoxStyle } from "../components/container/Styles";
+import { ResultBoardBoxStyle, ResultBoardTopBoxStyle } from "../components/container/Styles";
 import { PlayerInfo } from "../components/container/PlayerInfo";
 import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { BEST_PARTNER_RESPONSE_SAVE_NAME } from "../App";
@@ -19,6 +19,10 @@ import { ContributionByRoleTable } from "../components/graph/ContributionByRoleT
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
+`;
+
+const ResultTopBoardBox = styled(Box)`
+  ${ResultBoardTopBoxStyle}
 `;
 
 const BEST_PARTNERS_BY_ROLE_TEXT = "Best Partner By Role";
@@ -58,10 +62,10 @@ export function BestPartnerResult() {
         {BasicLeftMenu()}
         <Box>
           {AppHeader()}
-          <ResultBoardBox>
+          <ResultTopBoardBox marginBottom="40px">
             {SimulationTitle("Simulation Result")}
-            {PlayerInfo(mainPlayerJob, responseJson.combatTimeMillisecond)}
-          </ResultBoardBox>
+            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond)}
+          </ResultTopBoardBox>
           <ResultBoardBox>
             {SimulationTitle(BEST_PARTNERS_BY_ROLE_TEXT)}
             {ContributionByRoleTable(simulationDataByRole, mainPlayerJob)}

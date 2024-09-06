@@ -1,14 +1,18 @@
 import { Box, styled } from "@mui/material";
 import "./SimulationResult.css";
 import { GearCompareDpsSummary } from "../components/container/DpsSummaryBox";
-import { ResultBoardBoxStyle } from "../components/container/Styles";
+import { ResultBoardTopBoxStyle } from "../components/container/Styles";
 import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { StatComparePlayerInfo } from "../components/container/PlayerInfo";
 import { GEAR_COMPARE_RESPONSE_SAVE_NAME } from "../App";
-import { GearCompareResponse } from "src/types/GearCompareResponse";
+import { GearCompareResponse } from "../types/GearCompareResponse";
+import { ColorConfigurations } from "../Themes";
+import { BasicLeftMenu } from "../components/container/LeftMenu";
+import { AppHeader } from "../components/image/AppHeader";
+import { Footer } from "../components/basic/Footer";
 
-const ResultBoardBox = styled(Box)`
-  ${ResultBoardBoxStyle}
+const ResultBoardTopBox = styled(Box)`
+  ${ResultBoardTopBoxStyle}
 `;
 
 export function GearCompareResult() {
@@ -36,29 +40,60 @@ export function GearCompareResult() {
   let simulationData2 =
     simulationResult2.simulationData[mainPlayerId].simulationSummary;
   let combatTimeMilliseconds = simulationResult1.combatTimeMillisecond;
+  let partyMemberJobAbbrevs: Array<string> = [];
+  simulationResult1.simulationData.forEach((simulationData, partyMemberId) => {
+    if (partyMemberId === mainPlayerId) {
+      return;
+    }
+
+    partyMemberJobAbbrevs.push(simulationData.jobAbbrev);
+  })
+
 
   return (
-    <Box className="SimulationResult">
-      <ResultBoardBox>
-        {SimulationTitle("Simulation1")}
-        {GearCompareDpsSummary(simulationData1, simulationData2)}
-        {StatComparePlayerInfo(
-          mainCharacterJob,
-          simulationResult1.mainPlayerPower,
-          simulationResult2.mainPlayerPower,
-          combatTimeMilliseconds
-        )}
-      </ResultBoardBox>
-      <ResultBoardBox>
-        {SimulationTitle("Simulation2")}
-        {GearCompareDpsSummary(simulationData2, simulationData1)}
-        {StatComparePlayerInfo(
-          mainCharacterJob,
-          simulationResult2.mainPlayerPower,
-          simulationResult1.mainPlayerPower,
-          combatTimeMilliseconds
-        )}
-      </ResultBoardBox>
-    </Box>
+    <Box
+      display="flex"
+      flexDirection={"column"}
+      sx={{ backgroundColor: ColorConfigurations.backgroundOne }}
+      width="100vw"
+      alignItems={"center"}
+      paddingBottom={20}
+    >
+      <Box display="flex">
+        {BasicLeftMenu()}
+        <Box>
+          {AppHeader()}
+          <Box className="SimulationResult" sx={{
+            backgroundColor: ColorConfigurations.backgroundOne
+          }}>
+            <ResultBoardTopBox marginBottom="50px">
+              {SimulationTitle("GearSet1")}
+              {GearCompareDpsSummary(simulationData1, simulationData2)}
+              {StatComparePlayerInfo(
+                mainCharacterJob,
+                simulationResult1.mainPlayerPower,
+                simulationResult2.mainPlayerPower,
+                combatTimeMilliseconds,
+                partyMemberJobAbbrevs
+              )}
+            </ResultBoardTopBox>
+            <ResultBoardTopBox>
+              {SimulationTitle("GearSet2")}
+              {GearCompareDpsSummary(simulationData2, simulationData1)}
+              {StatComparePlayerInfo(
+                mainCharacterJob,
+                simulationResult2.mainPlayerPower,
+                simulationResult1.mainPlayerPower,
+                combatTimeMilliseconds,
+                partyMemberJobAbbrevs
+              )}
+            </ResultBoardTopBox>
+          </Box>
+          {Footer()}
+        </Box>
+
+      </Box>
+
+    </Box >
   );
 }

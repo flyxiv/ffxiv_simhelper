@@ -98,6 +98,7 @@ export function GearCompare() {
                   display={"flex"}
                   flexDirection={"column"}
                   justifyContent={"center"}
+                  marginX={2}
                 >
                   <Box marginBottom={5}>
                     {LoadLeftEquipmentToRightButton(totalState, setTotalState)}

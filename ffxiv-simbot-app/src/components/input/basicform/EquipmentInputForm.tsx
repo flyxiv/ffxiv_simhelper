@@ -187,19 +187,30 @@ function EquipmentMenuOfOneSlot(
   );
 }
 
+const LONG_ITEM_WIDTH = "96%";
+const SHORT_ITEM_WIDTH = "46%";
+
+const EQUIPMENT_ITEM_WIDTH = {
+  xs: LONG_ITEM_WIDTH,
+  sm: LONG_ITEM_WIDTH,
+  md: LONG_ITEM_WIDTH,
+  lg: SHORT_ITEM_WIDTH,
+  xl: SHORT_ITEM_WIDTH
+}
+
 export function EquipmentSelectionMenu(
   id: number,
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function,
   onlyBuffJobs: boolean = false,
-  hasTimeInput: boolean = false
+  hasTimeInput: boolean = false,
 ) {
   let xs = 12;
   let mainCharacterJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
   return (
     <EquipmentGridContainer container>
-      <EquipmentGridItemBox key={`${id}_JobSelectionItemBox`}>
+      <EquipmentGridItemBox key={`${id}_JobSelectionItemBox`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
         <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
           {onlyBuffJobs
             ? MainPlayerJobSelectionOnlyBuffJobs(
@@ -214,7 +225,7 @@ export function EquipmentSelectionMenu(
             )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
-      <EquipmentGridItemBox marginBottom={1} key={`${id}_RaceItemBox`}>
+      <EquipmentGridItemBox marginBottom={1} key={`${id}_RaceItemBox`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
         <InputEquipmentBox item xs={xs} key="Race">
           {MainPlayerRaceSelection(
             id,
@@ -236,7 +247,7 @@ export function EquipmentSelectionMenu(
           return;
         }
         return (
-          <EquipmentGridItemBox key={`${id}_equipment_${slotName}_itembox`}>
+          <EquipmentGridItemBox key={`${id}_equipment_${slotName}_itembox`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
             <InputEquipmentBox
               item
               xs={xs}
@@ -253,14 +264,14 @@ export function EquipmentSelectionMenu(
           </EquipmentGridItemBox>
         );
       })}
-      <EquipmentGridItemBox key={`food_selectionbox_${id}`}>
+      <EquipmentGridItemBox key={`food_selectionbox_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
         <InputEquipmentBox item xs={xs} key={`food_${id}`}>
           {FoodSelection(id, totalEquipmentState, setTotalEquipmentState)}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
       {PartnerSelectionMenu(id, totalEquipmentState, setTotalEquipmentState)}
       {hasTimeInput ? (
-        <EquipmentGridItemBox>
+        <EquipmentGridItemBox sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
           <InputEquipmentBox item xs={xs} key="time">
             {SimulationResultTimeTextBox(
               "Combat Time(Seconds)",
@@ -288,7 +299,7 @@ function PartnerSelectionMenu(
   if (mainPlayerJobAbbrev === "AST") {
     return (
       <>
-        <EquipmentGridItemBox key={`partner_${id}`}>
+        <EquipmentGridItemBox key={`partner_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
           <InputEquipmentBox item xs={12} key={`partner_${id}`}>
             {Partner1Selection(
               id,
@@ -299,7 +310,7 @@ function PartnerSelectionMenu(
           </InputEquipmentBox>
         </EquipmentGridItemBox>
 
-        <EquipmentGridItemBox key={`partner_${id}`}>
+        <EquipmentGridItemBox key={`partner_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
           <InputEquipmentBox item xs={12} key={`partner_${id}`}>
             {Partner2Selection(
               id,
@@ -314,7 +325,7 @@ function PartnerSelectionMenu(
   } else if (mainPlayerJobAbbrev === "DNC") {
     return (
       <EquipmentGridItemBox key={`partner_${id}`}>
-        <InputEquipmentBox item xs={12} key={`partner_${id}`}>
+        <InputEquipmentBox item xs={12} key={`partner_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
           {Partner1Selection(
             id,
             totalEquipmentState,

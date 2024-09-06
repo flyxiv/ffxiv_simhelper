@@ -1,5 +1,5 @@
-import { Box, styled } from "@mui/material";
-import { ResultBoardBoxStyle } from "../components/container/Styles";
+import { Box, styled, Typography } from "@mui/material";
+import { ResultBoardBoxStyle, ResultBoardTopBoxStyle } from "../components/container/Styles";
 import { PlayerInfo } from "../components/container/PlayerInfo";
 import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { STAT_WEIGHTS_RESPONSE_SAVE_NAME } from "../App";
@@ -8,7 +8,7 @@ import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { StatWeightsResponseTable } from "../types/StatWeightsResponse";
-import { StatWeightsGraphContainer } from "../components/graph/StatWeightsGraph";
+import { StatWeightSummary } from "../components/container/StatSummary";
 
 export interface StatWeightsData {
   statName: string;
@@ -19,7 +19,11 @@ const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
 `;
 
-const BEST_PARTNERS_BY_ROLE_TEXT = "Stat Weights Result";
+const ResultBoardTopBox = styled(Box)`
+  ${ResultBoardTopBoxStyle}
+`;
+
+const BEST_PARTNERS_BY_ROLE_TEXT = "RDPS Increase Per Stat Point";
 export const TABLE_WIDTH = "80%";
 
 export function StatWeightsResult() {
@@ -44,13 +48,11 @@ export function StatWeightsResult() {
       return {
         statName: statWeight.statName,
         rdpsIncreasePerPoint:
-          (statWeight.dps - statWeightsBaseline.dps) / statWeight.augmentAmount,
+          Math.max((statWeight.dps - statWeightsBaseline.dps) / statWeight.augmentAmount, 0.01),
       };
     })
     .filter((statWeight) => statWeight.statName !== "")
     .sort((a, b) => b.rdpsIncreasePerPoint - a.rdpsIncreasePerPoint);
-
-  console.log(statWeightsCalculated);
 
   return (
     <Box
@@ -65,13 +67,13 @@ export function StatWeightsResult() {
         {BasicLeftMenu()}
         <Box>
           {AppHeader()}
-          <ResultBoardBox>
-            {SimulationTitle("Simulation Result")}
-            {PlayerInfo(mainPlayerJob, responseJson.combatTimeMillisecond)}
-          </ResultBoardBox>
-          <ResultBoardBox>
+          <ResultBoardTopBox marginBottom="40px">
+            {SimulationTitle("Result")}
+            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, responseJson.partyMemberJobAbbrevs)}
+          </ResultBoardTopBox>
+          <ResultBoardBox sx={{ minHeight: 'unset' }}>
             {SimulationTitle(BEST_PARTNERS_BY_ROLE_TEXT)}
-            {StatWeightsGraphContainer(statWeightsCalculated)}
+            {StatWeightSummary(statWeightsCalculated)}
           </ResultBoardBox>
           {Footer()}
         </Box>

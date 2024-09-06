@@ -31,7 +31,11 @@ function DpsBox(
 
   return (
     <DpsBox>
-      <Box className="DpsTitle" padding={1}>
+      <Box className="DpsTitle" padding={1} sx={{
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+      }}>
         <Typography variant="h6" align="center" fontSize={15}>
           {dpsName}
         </Typography>
@@ -113,7 +117,11 @@ export const GearCompareDpsBox = (
   return (
     <DpsBox>
       <Box className="DpsTitle" padding={1}>
-        <Typography variant="h6">{dpsName}</Typography>
+        <Typography variant="h6" sx={{
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+        }}>{dpsName}</Typography>
       </Box>
       <Box className="Dps">
         <Typography variant="h3">{Math.round(targetDps)}</Typography>

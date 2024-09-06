@@ -10,20 +10,14 @@ export function MateriaItem(
   materiaKey: string,
   currentlyEquippedMateria: Materia
 ) {
-  let imageSize = {
-    xs: 15,
-    sm: 20,
-    md: 25,
-    lg: 30,
-    xl: 35,
-  };
+  let imageSize = "3vh";
 
   let fontSize = {
     xs: 10,
-    sm: 12,
-    md: 12,
-    lg: 14,
-    xl: 14,
+    sm: 10,
+    md: 10,
+    lg: 10,
+    xl: 10,
   }
 
   let isSelected = toMateriaKey(currentlyEquippedMateria) === materiaKey;

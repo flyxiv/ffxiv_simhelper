@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { Food, foodStatDescriptionString } from "../../types/ffxivdatabase/Food";
 import { getFoodIconPath } from "../icon/foodicon/FoodIconFactory";
+import { EQUIPMENT_FOOD_SIZE } from "./EquipmentItem";
 
 export function FoodItem(food: Food) {
   let imageSize = {
@@ -14,14 +15,14 @@ export function FoodItem(food: Food) {
   return (
     <Box
       display="flex"
-      alignContent={"center"}
+      alignItems={"center"}
       height="5vh"
     >
       <Box marginRight={1}>
         <Box component={"img"}
           src={getFoodIconPath(food.name)}
           alt={getFoodIconPath(food.name)}
-          sx={{ width: imageSize, height: imageSize }}
+          sx={{ width: EQUIPMENT_FOOD_SIZE, height: EQUIPMENT_FOOD_SIZE }}
         />
       </Box>
       <Box display="flex" flexDirection="column" justifyContent={"center"} sx={{ height: imageSize }} marginLeft={1}>

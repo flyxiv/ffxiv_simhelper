@@ -62,6 +62,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
       mainPlayerPower: totalState.equipmentDatas[0].power,
       mainPlayerJobAbbrev: totalState.equipmentDatas[0].mainPlayerJobAbbrev,
       statAugmentedSimulationData: [],
+      partyMemberJobAbbrevs: totalState.equipmentDatas[0].partyMemberJobAbbrevs,
     };
 
     let responsePromises = [];

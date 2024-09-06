@@ -9,4 +9,6 @@ export const ColorConfigurations = {
   primaryVariant: "#3700B3",
   secondary: "#03DAC6",
   secondaryVariant: "#018786",
+
+  alert: '#CF6679',
 };

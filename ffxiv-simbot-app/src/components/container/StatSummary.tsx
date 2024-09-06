@@ -11,9 +11,11 @@ import {
   getStatLostByStatName,
   getStatNeededByStatName,
   getStatPower,
+  PlayerPower,
   POWER_NAMES,
 } from "../../types/ffxivdatabase/PlayerPower";
 import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
+import { StatWeightsData } from "../../page/StatWeightsResult";
 
 const STAT_SUMMARY_BOX_WIDTH = "3vw";
 const POWER_SUMMARY_BOX_WIDTH = "4vw";
@@ -43,6 +45,110 @@ export function StatSummaryTypography(text: string, smaller: boolean) {
     </Typography>
   );
 }
+
+export function StatSummaryTypographyCompare(stat: string, compareStat: string, smaller: boolean) {
+  let fontSize = 16;
+
+  if (smaller) {
+    fontSize = 13;
+  }
+
+  let statValue = parseFloat(stat);
+  let compareStatValue = parseFloat(compareStat);
+
+  let color = statValue > compareStatValue ? ColorConfigurations.secondary : statValue < compareStatValue ? ColorConfigurations.alert : "white";
+
+
+  return (
+    <Typography variant="body1" align="center" fontSize={fontSize} color={color}>
+      {stat}
+    </Typography>
+  );
+}
+
+export function SimulationInputSummary(power: PlayerPower, jobAbbrev: string, combatTimeMilliseconds: number) {
+  let simulationInputNames = getStatNames(jobAbbrev);
+
+  return (
+    <Box display="inline-block">
+      <StatSummaryBox
+        sx={{ backgroundColor: ColorConfigurations.backgroundThree }}
+      >
+        <SingleStatBox>{StatSummaryTypography("Name", false)}</SingleStatBox>
+        <SingleStatBox>{StatSummaryTypography("Time(s)", false)}</SingleStatBox>
+        {simulationInputNames.map((statName) => {
+          return (
+            <SingleStatBox>
+              {StatSummaryTypography(statName, false)}
+            </SingleStatBox>
+          );
+        })}
+      </StatSummaryBox>
+
+      <StatSummaryBox
+        sx={{
+          backgroundColor: ColorConfigurations.backgroundFour,
+        }}
+      >
+        <SingleStatBox>{StatSummaryTypography("Value", false)}</SingleStatBox>
+        <SingleStatBox>{StatSummaryTypography(`${combatTimeMilliseconds}`, false)}</SingleStatBox>
+        {simulationInputNames.map((statName) => {
+          return (
+            <SingleStatBox>
+              {StatSummaryTypography(
+                getStatByStatName(power, statName, jobAbbrev),
+                false
+              )}
+            </SingleStatBox>
+          );
+        })}
+      </StatSummaryBox>
+    </Box>
+  );
+}
+
+export function StatSummaryGearCompare(jobAbbrev: string, power: PlayerPower, comparePower: PlayerPower, combatTimeMilliseconds: number) {
+  let jobStatNames = getStatNames(jobAbbrev);
+
+  return (
+    <Box display="inline-block">
+      <StatSummaryBox
+        sx={{ backgroundColor: ColorConfigurations.backgroundThree }}
+      >
+        <SingleStatBox>{StatSummaryTypography("Name", false)}</SingleStatBox>
+        <SingleStatBox>{StatSummaryTypography("Time(s)", false)}</SingleStatBox>
+        {jobStatNames.map((statName) => {
+          return (
+            <SingleStatBox>
+              {StatSummaryTypography(statName, false)}
+            </SingleStatBox>
+          );
+        })}
+      </StatSummaryBox>
+
+      <StatSummaryBox
+        sx={{
+          backgroundColor: ColorConfigurations.backgroundFour,
+        }}
+      >
+        <SingleStatBox>{StatSummaryTypography("Value", false)}</SingleStatBox>
+        <SingleStatBox>{StatSummaryTypography(`${combatTimeMilliseconds / 1000}`, false)}</SingleStatBox>
+        {jobStatNames.map((statName) => {
+          return (
+            <SingleStatBox>
+              {StatSummaryTypographyCompare(
+                getStatByStatName(power, statName, jobAbbrev),
+                getStatByStatName(comparePower, statName, jobAbbrev),
+                false
+              )}
+            </SingleStatBox>
+          );
+        })}
+      </StatSummaryBox>
+    </Box>
+  )
+}
+
 
 export function StatSummary(totalState: SingleEquipmentInputSaveState) {
   let jobStatNames = getStatNames(totalState.mainPlayerJobAbbrev);
@@ -120,6 +226,48 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
   );
 }
 
+export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
+  return (
+    <Box display="inline-block">
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{ backgroundColor: ColorConfigurations.backgroundThree }}
+        >
+          <SingleStatBox>{StatSummaryTypography("Stat", false)}</SingleStatBox>
+
+        </StatSummaryBox>
+        <StatSummaryBox
+          sx={{ backgroundColor: ColorConfigurations.backgroundThree }}
+        >
+          <SingleStatBox>{StatSummaryTypography("Value", false)}</SingleStatBox>
+
+        </StatSummaryBox>
+      </Box>
+
+      {statWeightsData.map((statWeightData) => {
+        return (
+          <Box display="flex">
+            <StatSummaryBox
+              sx={{ backgroundColor: ColorConfigurations.backgroundFour }}
+            >
+              <SingleStatBox>{StatSummaryTypography(statWeightData.statName, false)}</SingleStatBox>
+
+            </StatSummaryBox>
+            <StatSummaryBox
+              sx={{ backgroundColor: ColorConfigurations.backgroundFour }}
+            >
+              <SingleStatBox>{StatSummaryTypography(`${statWeightData.rdpsIncreasePerPoint.toFixed(2)}`, false)}</SingleStatBox>
+
+            </StatSummaryBox>
+          </Box>
+        )
+
+      })}
+    </Box>
+  );
+}
+
+
 export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
   let power = totalState.power;
 
@@ -129,7 +277,7 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
         sx={{ backgroundColor: ColorConfigurations.backgroundThree }}
       >
 
-          <SinglePowerBox sx={{ flexGrow: 1 }}>{StatSummaryTypography("Name", true)}</SinglePowerBox>
+        <SinglePowerBox sx={{ flexGrow: 1 }}>{StatSummaryTypography("Name", true)}</SinglePowerBox>
         {POWER_NAMES.map((powerName) => {
           return (
             <SinglePowerBox>

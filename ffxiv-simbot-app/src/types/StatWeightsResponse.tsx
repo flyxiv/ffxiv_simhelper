@@ -5,6 +5,7 @@ export interface StatWeightsResponseTable {
   mainPlayerPower: PlayerPower;
   mainPlayerJobAbbrev: string;
   statAugmentedSimulationData: Array<StatWeightsResponse>;
+  partyMemberJobAbbrevs: Array<string>;
 }
 
 export interface StatWeightsResponse {

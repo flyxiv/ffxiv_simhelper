@@ -16,11 +16,24 @@ export const ResultBoardBoxStyle = `
   padding-bottom: 100px;
 `;
 
+export const ResultBoardTopBoxStyle = `
+  background-color: ${ColorConfigurations.backgroundTwo};
+  width: 60vw;
+  align-items: center;
+  justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 50px;
+`;
+
 export const TitleBoxStyle = `
   background-color: white;
   color: black;
-  width: 25vh;
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 40px;
+  padding-right: 40px;
+
   margin-top: 20px;
   margin-bottom: 50px;
 `;
@@ -35,10 +48,11 @@ export const DpsSummaryBoxStyle = `
 `;
 
 export const DpsBoxStyle = `
-  width: 8vw;
-  height: 13vh;
+  height: 10vh;
   padding: 10px;
   margin: 0.4vw;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   aspect-ratio: 1 / 1;
@@ -48,6 +62,11 @@ export const PlayerInfoBoxStyle = `
   width: 40vw;
   margin: 1vh;
   background: ${ColorConfigurations.backgroundThree};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 20px;
 `;
 
 export const PlayerInfoJobTitleStyle = `
