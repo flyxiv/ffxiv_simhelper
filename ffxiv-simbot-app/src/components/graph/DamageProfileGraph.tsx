@@ -54,7 +54,7 @@ export const DamageProfileGraph = (response: QuickSimResponse) => {
   let highestDamageOfSingleSkill = damageProfileData[0].pdps;
 
   return (
-    <Box margin="auto">
+    <Box>
       {DamageChartTitle}
       {damageProfileData.map((data) => {
         return SkillDamageProfile(

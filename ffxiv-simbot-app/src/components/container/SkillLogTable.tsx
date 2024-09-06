@@ -64,6 +64,7 @@ const SkillEntity = (
           {combatTimeMillisecondToTimeFormat(combatTimeMillisecond)}
         </Typography>
       </SkillLogCombatTimeBox>
+
       <SkillIconBox>
         <img src={skillIcon} alt={skillIcon} height={30} width={30} />
 
@@ -73,6 +74,7 @@ const SkillEntity = (
           </Typography>
         </Box>
       </SkillIconBox>
+
       <StatusBox>
         {buffs.map((buffId) => {
           let iconPath = StatusIdToIconPathFactory(buffId);

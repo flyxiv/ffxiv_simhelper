@@ -141,7 +141,6 @@ function LoadoutOverwriteButton(
   return (
     <Button
       sx={{
-        padding: 0,
         marginX: 1,
         backgroundColor: ColorConfigurations.primary,
         color: "black",

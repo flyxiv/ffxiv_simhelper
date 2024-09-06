@@ -1,33 +1,35 @@
 import { QuickSimResponse } from "../../types/QuickSimResponse";
 import {
-  SkillIconBoxTitleStyle as SkillIconTitleBoxStyle,
-  SkillLogCombatTimeTitleBoxStyle,
   SkillLogTableStyle,
-  StatusIconTitleBoxStyle,
-  SkillLogRowStyle,
+  SkillLogCombatTimeBoxStyle,
+  SkillIconBoxStyle,
+  StatusIconBoxStyle,
+  statusBoxWidth,
+  SkillEntityBoxStyle,
 } from "./Styles";
 import { SkillLogTable } from "./SkillLogTable";
-import { styled, List, Box, Typography } from "@mui/material";
+import { styled, List, Box, Typography, ListItem } from "@mui/material";
+
+const SkillLogCombatTimeBox = styled(Box)`
+  ${SkillLogCombatTimeBoxStyle}
+`;
+
+const SkillIconBox = styled(Box)`
+  ${SkillIconBoxStyle}
+`;
 
 const SkillLogTableList = styled(List)`
   ${SkillLogTableStyle}
 `;
 
-const SkillLogRowBox = styled(Box)`
-  ${SkillLogRowStyle}
+const StatusBox = styled(Box)`
+    ${StatusIconBoxStyle(statusBoxWidth)}
 `;
 
-const SkillLogCombatTimeTitleBox = styled(Box)`
-  ${SkillLogCombatTimeTitleBoxStyle}
+const SkillEntityBox = styled(Box)`
+  ${SkillEntityBoxStyle}
 `;
 
-const SkillIconTitleBox = styled(Box)`
-  ${SkillIconTitleBoxStyle}
-`;
-
-const StatusIconTitleBox = styled(Box)`
-  ${StatusIconTitleBoxStyle("25vw")}
-`;
 
 export const SkillLogResult = (response: QuickSimResponse) => {
   const mainPlayerId = response.mainPlayerId;
@@ -56,24 +58,29 @@ export const SkillLogResult = (response: QuickSimResponse) => {
 
   return (
     <SkillLogTableList>
-      <SkillLogRowBox>
-        <SkillLogCombatTimeTitleBox>
-          <Typography variant="body1" fontSize={fontSize}>
-            Combat Time
-          </Typography>
-        </SkillLogCombatTimeTitleBox>
-        <SkillIconTitleBox>
-          <Typography variant="body1" fontSize={fontSize}>
-            Ability
-          </Typography>
-        </SkillIconTitleBox>
-        <StatusIconTitleBox>
-          <Typography variant="body1" fontSize={fontSize}>
-            Important Status
-          </Typography>
-        </StatusIconTitleBox>
-      </SkillLogRowBox>
+      <ListItem>
+        <SkillEntityBox>
+          <SkillLogCombatTimeBox>
+            <Typography variant="body1" fontSize={fontSize}>
+              Combat Time
+            </Typography>
+          </SkillLogCombatTimeBox>
+
+          <SkillIconBox>
+            <Typography variant="body1" fontSize={fontSize}>
+              Ability
+            </Typography>
+          </SkillIconBox>
+
+          <StatusBox>
+            <Typography variant="body1" fontSize={fontSize}>
+              Important Status
+            </Typography>
+          </StatusBox>
+
+        </SkillEntityBox>
+      </ListItem>
       {SkillLogTable(mainPlayerRotationLog)}
-    </SkillLogTableList>
+    </SkillLogTableList >
   );
 };

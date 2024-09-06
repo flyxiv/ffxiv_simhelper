@@ -39,7 +39,7 @@ export const BEST_PARTNER_PAGE_NAME = "Best Partner";
 export const STAT_WEIGHTS_PAGE_NAME = "Stat Weights";
 
 export const BODY_WIDTH = {
-  xs: `calc(100vw - 600px)`,
+  xs: `${100 - MENU_WIDTH_VW_XS}vw`,
   sm: `${100 - MENU_WIDTH_VW_SM}vw`,
   md: `${100 - MENU_WIDTH_VW_MD}vw`,
   lg: `${100 - MENU_WIDTH_VW_LG}vw`,

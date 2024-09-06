@@ -8,9 +8,7 @@ import {
   SkillNameStyle,
   SkillPercentageBoxStyle,
   TotalDamageBoxStyle,
-  SkillTitleBoxStyle,
   imageSize,
-  SkillPercentageTitleBoxStyle,
 } from "./Style";
 import { styled, Box, Typography } from "@mui/material";
 
@@ -57,27 +55,34 @@ export function SkillDamageProfile(
 
   return (
     <SkillBox>
-      <SkillIconBox>
-        <img
-          src={data.icon.valueOf()}
-          width={imageSize}
-          height={imageSize}
-          alt="icon"
-        />
-      </SkillIconBox>
-      <SkillNameBox>
-        <Typography variant="body2" fontSize={10}>
-          {data.name}
-        </Typography>
-      </SkillNameBox>
+      <Box display="flex" width="200px">
+        <SkillIconBox>
+          <img
+            src={data.icon.valueOf()}
+            width={imageSize}
+            height={imageSize}
+            alt="icon"
+          />
+        </SkillIconBox>
+        <SkillNameBox>
+          <Box>
+            <Typography variant="body2" fontSize={14} align="right" >
+              {data.name}
+            </Typography>
+          </Box>
+        </SkillNameBox>
+      </Box>
+
       <SkillBarBox>
         <SkillBar />
       </SkillBarBox>
+
       <SkillPercentageBox>
         <Typography variant="body1">
           {Math.round(damageProportion * 10) / 10}%
         </Typography>
       </SkillPercentageBox>
+
       <TotalDamageBox>
         <Typography variant="body1">
           {Math.round((data.pdps * combatTimeMilliseconds) / 1000)}
@@ -90,36 +95,39 @@ export function SkillDamageProfile(
   );
 }
 
-const SkillTitleBar = styled(Box)`
-  ${SkillTitleBoxStyle}
+const SkillPercentBox = styled(Box)`
+  ${SkillPercentageBoxStyle}
 `;
 
-const SkillPercentTitleBox = styled(Box)`
-  ${SkillPercentageTitleBoxStyle}
-`;
-
-const fontSize = 10;
+const fontSize = 14;
 
 export const DamageChartTitle = (
   <SkillBox>
-    <SkillTitleBar>
-      <Typography variant="body1" fontSize={fontSize}>
-        Skill
-      </Typography>
-    </SkillTitleBar>
+    <Box display="flex" width="200px">
+      <SkillIconBox />
+      <SkillNameBox>
+        <Typography variant="body2" fontSize={fontSize}>
+          Skill
+        </Typography>
+      </SkillNameBox>
+    </Box>
+
     <SkillBarBox />
-    <SkillPercentTitleBox>
-      <Typography variant="body1" fontSize={fontSize}>
+
+    <SkillPercentBox>
+      <Typography variant="body1" fontSize={fontSize} align="right">
         Dmg%
       </Typography>
-    </SkillPercentTitleBox>
+    </SkillPercentBox>
+
     <TotalDamageBox>
-      <Typography variant="body1" fontSize={fontSize}>
+      <Typography variant="body1" fontSize={fontSize} align="right">
         Total Dmg
       </Typography>
     </TotalDamageBox>
+
     <SkillCountBox>
-      <Typography variant="body1" fontSize={fontSize}>
+      <Typography variant="body1" fontSize={fontSize} align="right">
         Swing
       </Typography>
     </SkillCountBox>

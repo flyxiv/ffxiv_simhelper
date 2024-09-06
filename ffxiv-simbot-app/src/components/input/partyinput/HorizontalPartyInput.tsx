@@ -71,17 +71,3 @@ export function HorizontalPartyInput(
 }
 
 
-export function HorizontalDefaultInput(
-  totalEquipmentState: EquipmentInput,
-  setTotalEquipmentState: Function,
-) {
-  return (
-    <Box width="50%">
-      {SimulationResultTimeTextBox(
-        "Combat Time(Seconds)",
-        totalEquipmentState,
-        setTotalEquipmentState)
-      }
-    </Box>
-  )
-}

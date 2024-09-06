@@ -6,7 +6,7 @@ import {
 } from "./GraphData";
 import { Box, styled } from "@mui/material";
 import { GraphBoxStyle } from "./Style";
-import { GraphTitleRow, JobBarChartTeammate } from "./JobBarChart";
+import { GraphTitleRow, JOB_BAR_ITEM_HEIGHT, JobBarChartTeammate } from "./JobBarChart";
 import { TABLE_WIDTH } from "../../page/SimulationResult";
 import { QuickSimResponse } from "../../types/QuickSimResponse";
 
@@ -77,7 +77,7 @@ export const makeMainPlayerContributionData = (
     let playerId = statusKey.playerId;
     let contributionData = mainPlayerContributionData[playerId - 1];
     contributionData.jobName = simulationDatas[playerId].jobAbbrev;
-    contributionData.totalRdps = rdps;
+    contributionData.totalRdps += rdps;
     contributionData.rdpsEntry.push({
       statusId: statusKey.statusId,
       rdps: rdps,
@@ -88,6 +88,7 @@ export const makeMainPlayerContributionData = (
     (data) => data.totalRdps > 0
   );
   mainPlayerContributionData.sort((a, b) => b.totalRdps - a.totalRdps);
+  console.log(mainPlayerContributionData)
 
   setMainPlayerContributionToOthers({
     totalRdpsByStatus: totalRdpsByStatus,
@@ -118,7 +119,7 @@ export const MainPlayerContributionGraph = (
   return (
     <Box width={TABLE_WIDTH}>
       {GraphTitleRow()}
-      <GraphBox>
+      <GraphBox height={JOB_BAR_ITEM_HEIGHT}>
         {contributionData.map((data) => {
           return JobBarChartTeammate(data, maxContribution);
         })}

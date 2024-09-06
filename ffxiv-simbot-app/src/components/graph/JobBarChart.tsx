@@ -12,6 +12,10 @@ import { StatusIdToIconPathFactory } from "../icon/abilityicon/StatusIconFactory
 import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
 import { TeammateChartData } from "./GraphData";
 
+export const JOB_BAR_ITEM_HEIGHT = "65px";
+const IMAGE_SIZE = 30;
+const IMAGE_SIZE_PX = `${IMAGE_SIZE}px`;
+
 const PartyMemberBuffBox = styled(Box)`
   ${PartyMemberBuffBoxStyle}
 `;
@@ -50,13 +54,15 @@ export function JobBarChartTeammate(
 
     return (
       <BuffBarBox>
-        {roundedRdps}
-        <Bar paddingY={0.5}>
+        <Box height="25px">
+          {roundedRdps}
+        </Box>
+        <Bar height="40px" display="flex" alignItems="center" justifyContent="center">
           <img
             src={StatusIdToIconPathFactory(entry.statusId)}
             alt={"rdps"}
-            width={25}
-            height={25}
+            width={IMAGE_SIZE_PX}
+            height={IMAGE_SIZE_PX}
           />
         </Bar>
       </BuffBarBox>
@@ -64,12 +70,16 @@ export function JobBarChartTeammate(
   });
 
   return (
-    <PartyMemberBuffBox>
-      <PartyMemberIconBox paddingTop={"1%"}>
-        {JobIconFactory(data.jobName, 25)}
+    <PartyMemberBuffBox height={JOB_BAR_ITEM_HEIGHT}>
+      <PartyMemberIconBox>
+        <Box height="25px" />
+        <Box height="40px" display="flex" alignItems="center">
+          {JobIconFactory(data.jobName, IMAGE_SIZE)}
+        </Box>
       </PartyMemberIconBox>
       <TotalBuffBox>{buffBars}</TotalBuffBox>
       <TotalRdpsBox>
+        <Box height="25px" />
         <Typography variant="h6">{totalRdps}</Typography>
       </TotalRdpsBox>
     </PartyMemberBuffBox>
@@ -85,11 +95,7 @@ export function GraphTitleRow() {
           Member
         </Typography>
       </PartyMemberIconBox>
-      <BuffTitleBar>
-        <Typography variant="h6" fontSize={fontSize}>
-          RDPS Contribution
-        </Typography>
-      </BuffTitleBar>
+      <BuffTitleBar />
       <TotalRdpsBox>
         <Typography variant="h6" fontSize={fontSize}>
           Total

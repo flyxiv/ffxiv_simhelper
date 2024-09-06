@@ -41,8 +41,6 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
     // DRG
     case 800:
       return actionIconDirectory + "/DRG/life_surge.png";
-    case 801:
-      return actionIconDirectory + "/DRG/disembowel.png";
     case 804:
       return actionIconDirectory + "/DRG/lance_charge.png";
     case 807:

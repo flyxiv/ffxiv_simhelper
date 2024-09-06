@@ -6,10 +6,11 @@ export const minusTextColor = "#850B21";
 
 export const statusBoxWidth = "22vw";
 export const ResultBoardBoxStyle = `
+  min-height: 50vh;
   background-color: ${ColorConfigurations.backgroundTwo};
   width: 60vw;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   display: flex;
   flex-direction: column;
   padding-bottom: 100px;
@@ -21,6 +22,7 @@ export const TitleBoxStyle = `
   width: 25vh;
   padding: 10px;
   margin-top: 20px;
+  margin-bottom: 50px;
 `;
 
 export const DpsSummaryBoxStyle = `
