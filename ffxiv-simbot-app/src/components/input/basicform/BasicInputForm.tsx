@@ -1,5 +1,5 @@
 import { Box, TextField, styled, FormControl } from "@mui/material";
-import { ColorConfigurations } from "../../../Themes";
+import { AppConfigurations } from "../../../Themes";
 import { InputGridItemStyle } from "../Styles";
 import { CharacterStats } from "src/types/CharacterStates";
 
@@ -21,12 +21,12 @@ export interface InputTimeFormProps {
 export const inputStyleEquipment = {
   "& .MuiInputBase-input": {
     color: "white",
-    backgroundColor: ColorConfigurations.backgroundThree,
+    backgroundColor: AppConfigurations.backgroundThree,
     textAlign: "right",
     height: "5vh",
   },
   "& .MuiInputLabel-root": {
-    color: ColorConfigurations.primary,
+    color: AppConfigurations.primary,
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {},
@@ -38,12 +38,12 @@ export const inputStyleEquipment = {
 export const inputStyleJob = {
   "& .MuiInputBase-input": {
     color: "white",
-    backgroundColor: ColorConfigurations.backgroundThree,
+    backgroundColor: AppConfigurations.backgroundThree,
     textAlign: "right",
     paddingRight: "30px",
   },
   "& .MuiInputLabel-root": {
-    color: ColorConfigurations.primary,
+    color: AppConfigurations.primary,
   },
   label: {
     padding: "0 16px", // padding을 통해 하이라이트 된 레이블을 조정합니다.
@@ -51,10 +51,10 @@ export const inputStyleJob = {
   },
 };
 
-export const Input = styled(TextField)(({}) => inputStyleEquipment);
+export const Input = styled(TextField)(({ }) => inputStyleEquipment);
 
 export const CustomFormControl = styled(FormControl)(
-  ({}) => inputStyleEquipment
+  ({ }) => inputStyleEquipment
 );
 
 const InputBox = styled(Box)`

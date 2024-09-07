@@ -2,7 +2,7 @@ import { InputLabel, Select, SelectChangeEvent } from "@mui/material";
 import { CustomFormControl } from "../../components/input/basicform/BasicInputForm";
 import { RACES } from "../../const/StartStats";
 import { RaceMenuItem } from "../items/RaceMenuItem";
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { updateOnePlayerPower } from "../../types/ffxivdatabase/ItemSet";
 
@@ -42,7 +42,7 @@ export function MainPlayerRaceSelection(
         MenuProps={{
           PaperProps: {
             sx: {
-              backgroundColor: ColorConfigurations.backgroundThree,
+              backgroundColor: AppConfigurations.backgroundThree,
             },
           },
         }}

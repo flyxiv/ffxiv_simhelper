@@ -1,5 +1,6 @@
 import { PlayerPower } from "./ffxivdatabase/PlayerPower";
 
+export const EMPTY_PARTY_MEMBER = "Empty";
 export interface PartyState {
   combatTime: number;
   combatTimeSetter: Function;

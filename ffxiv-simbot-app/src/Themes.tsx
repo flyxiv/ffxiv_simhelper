@@ -1,4 +1,8 @@
-export const ColorConfigurations = {
+export const ENGLISH_MODE = "en";
+export const KOREAN_MODE = "ko";
+
+
+export const AppConfigurations = {
   backgroundOne: "#121212",
   backgroundTwo: "#201F28",
   backgroundThree: "#2F2D3C",
@@ -11,4 +15,6 @@ export const ColorConfigurations = {
   secondaryVariant: "#018786",
 
   alert: '#CF6679',
+
+  languageMode: ENGLISH_MODE
 };

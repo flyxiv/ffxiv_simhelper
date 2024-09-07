@@ -1,5 +1,5 @@
 import { Box, styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 import { PartyContributionData } from "../graph/GraphData";
 import {
   BEST_TEAMMATE_TEXT,
@@ -13,15 +13,15 @@ type ViewType = "Best Teammate" | "Damage Profile" | "Rotation Log"; // Define p
 const ToggleButtonCustomStyle = {
   "&.Mui-selected, &.Mui-selected:hover": {
     color: "white",
-    backgroundColor: ColorConfigurations.primary,
+    backgroundColor: AppConfigurations.primary,
   },
 
   "&:hover": {
     color: "white",
-    backgroundColor: ColorConfigurations.primary,
+    backgroundColor: AppConfigurations.primary,
   },
 
-  color: ColorConfigurations.primary,
+  color: AppConfigurations.primary,
   backgroundColor: "white",
 };
 
@@ -66,13 +66,13 @@ export function ResultPageButtonGroup(
           {DAMAGE_PROFILE_TEXT}
         </ToggleButtonCustom>
         {teammatesContributionToMyBuffs === null ||
-        teammatesContributionToMyBuffs.contributionData.length > 0 ? (
+          teammatesContributionToMyBuffs.contributionData.length > 0 ? (
           bestTeammateButton
         ) : (
           <Box />
         )}
         {mainPlayerContributionToOthers === null ||
-        mainPlayerContributionToOthers.contributionData.length > 0 ? (
+          mainPlayerContributionToOthers.contributionData.length > 0 ? (
           myContributionsButton
         ) : (
           <Box />

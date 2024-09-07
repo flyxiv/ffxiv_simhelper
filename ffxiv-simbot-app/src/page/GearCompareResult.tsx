@@ -6,7 +6,7 @@ import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { StatComparePlayerInfo } from "../components/container/PlayerInfo";
 import { GEAR_COMPARE_RESPONSE_SAVE_NAME } from "../App";
 import { GearCompareResponse } from "../types/GearCompareResponse";
-import { ColorConfigurations } from "../Themes";
+import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
@@ -53,7 +53,7 @@ export function GearCompareResult() {
     <Box
       display="flex"
       flexDirection={"column"}
-      sx={{ backgroundColor: ColorConfigurations.backgroundOne }}
+      sx={{ backgroundColor: AppConfigurations.backgroundOne }}
       width="100vw"
       alignItems={"center"}
       paddingBottom={20}
@@ -63,7 +63,7 @@ export function GearCompareResult() {
         <Box>
           {AppHeader()}
           <Box className="SimulationResult" sx={{
-            backgroundColor: ColorConfigurations.backgroundOne
+            backgroundColor: AppConfigurations.backgroundOne
           }}>
             <ResultBoardTopBox marginBottom="50px">
               {SimulationTitle("GearSet1")}

@@ -9,7 +9,7 @@ import { defaultSingleEquipmentInput } from "../const/DefaultSingleEquipmentInpu
 import {
   LeftMenuWithLoadout,
 } from "../components/container/LeftMenu";
-import { ColorConfigurations } from "../Themes";
+import { AppConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
 import { SelectionTitle } from "../components/basic/SelectionTitle";
@@ -20,6 +20,7 @@ import {
   InputContainerStyle,
 } from "./Styles";
 import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
+import { PLAYER_POWER_TEXT, QUICK_SIM_INPUT_INFO_TEXT, QUICK_SIM_PARTY_INPUT_INFO_TEXT } from "../const/languageTexts";
 
 let INPUT_CONTAINER_WIDTH = "50vw";
 const QUICKSIM_LOADOUT_COUNT = 6;
@@ -64,7 +65,7 @@ export function QuickSim() {
     <>
       <Box
         display="flex"
-        sx={{ backgroundColor: ColorConfigurations.backgroundOne }}
+        sx={{ backgroundColor: AppConfigurations.backgroundOne }}
         width="100vw"
       >
         {LeftMenuWithLoadout(
@@ -77,21 +78,21 @@ export function QuickSim() {
           {AppHeader()}
           <Box alignContent={"center"}>
             <QuickSimInputContainer justifyContent={"center"}>
-              {SelectionTitle("1. Input Your Info")}
+              {SelectionTitle(QUICK_SIM_INPUT_INFO_TEXT)}
               <EquipmentBoard>
                 {EquipmentSelectionMenu(0, totalState, setTotalState)}
               </EquipmentBoard>
             </QuickSimInputContainer>
 
             <QuickSimInputContainer paddingTop={20}>
-              {SelectionTitle("2. Additional Settings")}
+              {SelectionTitle(QUICK_SIM_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
                 {HorizontalPartyInput(totalState, setTotalState)}
               </CustomizeBoard>
             </QuickSimInputContainer>
 
             <QuickSimInputContainer marginTop={10}>
-              {SelectionTitle("3. Specific Player Power")}
+              {SelectionTitle(PLAYER_POWER_TEXT)}
               <Box
                 display="flex"
                 justifyContent="center"

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { JobMenuItem } from "../../items/JobMenuItem";
 import { CustomFormControl } from "../basicform/BasicInputForm";
-import { ColorConfigurations } from "../../../Themes";
+import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
 import { isHealer, isTank } from "../../../types/ffxivdatabase/PlayerPower";
 import { BUFF_JOBS_LIST, DPS_JOBS, HEALER_JOBS, TANK_JOBS } from "../../../types/ffxivdatabase/PartyCompositionMaker";
@@ -119,7 +119,7 @@ export function PartyMemberJobSelection(
         MenuProps={{
           PaperProps: {
             sx: {
-              backgroundColor: ColorConfigurations.backgroundThree,
+              backgroundColor: AppConfigurations.backgroundThree,
             },
           },
         }}

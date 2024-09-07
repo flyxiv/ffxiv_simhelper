@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 import { StatSummary } from "./StatSummary";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { GEAR_COMPARE_INPUT_CONTAINER_WIDTH } from "../../page/GearCompare";
@@ -18,7 +18,7 @@ export function BasicBottomMenu(
         bottom: 0,
         left: MENU_WIDTH,
         width: BODY_WIDTH,
-        backgroundColor: ColorConfigurations.backgroundTwo,
+        backgroundColor: AppConfigurations.backgroundTwo,
         display: "flex",
         justifyContent: "space-around",
         zIndex: 1000,
@@ -46,7 +46,7 @@ export function GearCompareBottomMenu(totalState: EquipmentInput) {
         bottom: 0,
         left: MENU_WIDTH,
         width: BODY_WIDTH,
-        backgroundColor: ColorConfigurations.backgroundTwo,
+        backgroundColor: AppConfigurations.backgroundTwo,
         display: "flex",
         justifyContent: "space-around",
         alignItems: "center",

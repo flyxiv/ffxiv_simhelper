@@ -1,5 +1,5 @@
 import { Box, TextField, styled } from "@mui/material";
-import { ColorConfigurations } from "../..//Themes";
+import { AppConfigurations } from "../..//Themes";
 import { InputGridItemStyle } from "./Styles";
 import { CharacterStats } from "../../types/CharacterStates";
 import { EquipmentInput, SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
@@ -23,12 +23,12 @@ export interface InputTimeFormProps {
 export const inputStyleSimulationResultTextBox = {
   "& .MuiInputBase-input": {
     color: "white",
-    backgroundColor: ColorConfigurations.backgroundThree,
+    backgroundColor: AppConfigurations.backgroundThree,
     textAlign: "right",
     paddingRight: "30px",
   },
   "& .MuiInputLabel-root": {
-    color: ColorConfigurations.primary,
+    color: AppConfigurations.primary,
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {},

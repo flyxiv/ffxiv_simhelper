@@ -1,20 +1,20 @@
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 
 export const MenuItemStyle = `
   color: white;
   width: 100%;
   height: 5vh;
   justify-content: left;
-  background-color: ${ColorConfigurations.backgroundThree};
+  background-color: ${AppConfigurations.backgroundThree};
 
   &:hover {
-    background-color: ${ColorConfigurations.backgroundTwo};
+    background-color: ${AppConfigurations.backgroundTwo};
   }
   &.Mui-selected {
-    background-color: ${ColorConfigurations.backgroundThree}; 
+    background-color: ${AppConfigurations.backgroundThree}; 
 
     &:hover {
-      background-color: ${ColorConfigurations.backgroundTwo}; 
+      background-color: ${AppConfigurations.backgroundTwo}; 
     }
   }
 

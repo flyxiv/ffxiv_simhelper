@@ -1,4 +1,4 @@
-import { ColorConfigurations } from "../Themes"
+import { AppConfigurations } from "../Themes"
 
 export const CharacterDetailCustomizeBoardStyle = (width: string) => `
     display: flex;
@@ -19,14 +19,14 @@ export const CustomizeBoardStyle = `
     padding-top: 10px;
     padding-bottom: 10px;
     border: 1px solid black;
-    background-color: ${ColorConfigurations.backgroundTwo};
+    background-color: ${AppConfigurations.backgroundTwo};
     width: 100%;
 `
 
 export const EquipmentBoardStyle = `
     align-items: center;
     border: 1px solid black;
-    background-color: ${ColorConfigurations.backgroundTwo};
+    background-color: ${AppConfigurations.backgroundTwo};
 `
 
 export const CustomizeBoardSinglePartyInputStyle = (width: string) => `
@@ -36,6 +36,6 @@ export const CustomizeBoardSinglePartyInputStyle = (width: string) => `
     padding-top: 10px;
     padding-bottom: 10px;
     border: 1px solid black;
-    background-color: ${ColorConfigurations.backgroundTwo};
+    background-color: ${AppConfigurations.backgroundTwo};
     width: ${width};
 `

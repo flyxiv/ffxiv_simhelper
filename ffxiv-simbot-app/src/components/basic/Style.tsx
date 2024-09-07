@@ -1,16 +1,16 @@
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 
 export const requestButtonStyle = `
     font-size: 0.8rem;
     margin: 1rem;
-    background-color: ${ColorConfigurations.backgroundButton};
+    background-color: ${AppConfigurations.backgroundButton};
     color: black;
     padding-top: 10px;
     padding-bottom: 10px;
   `;
 
 export const SelectionTitleStyle = `
-    background-color: ${ColorConfigurations.secondary};
+    background-color: ${AppConfigurations.secondary};
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 20px;

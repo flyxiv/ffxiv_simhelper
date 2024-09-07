@@ -3,11 +3,10 @@ import "./Home.css";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { Box, Link } from "@mui/material";
-import { ColorConfigurations } from "../Themes";
+import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import {
   BEST_PARTNER_URL,
-  BODY_WIDTH,
   GEAR_COMPARE_URL,
   QUICKSIM_URL,
   STAT_WEIGHTS_URL,
@@ -35,7 +34,7 @@ const BEST_PARTNER_DESCRIPTION =
 
 export function Home() {
   return (
-    <Box sx={{ backgroundColor: ColorConfigurations.backgroundOne, width: "100vw", height: "100vh" }}>
+    <Box sx={{ backgroundColor: AppConfigurations.backgroundOne, width: "100vw", height: "100vh" }}>
       <Box display="flex" width="100vw">
         {BasicLeftMenu()}
         <Box width="100%">
@@ -53,7 +52,7 @@ export function Home() {
                 QUICK_SIM_TITLE,
                 QUICK_SIM_TITLE,
                 QUICK_SIM_DESCRIPTION,
-                ColorConfigurations.primary
+                AppConfigurations.primary
               )}
 
               {LogoBox(
@@ -62,7 +61,7 @@ export function Home() {
                 BEST_PARTNER_TITLE,
                 BEST_PARTNER_TITLE,
                 BEST_PARTNER_DESCRIPTION,
-                ColorConfigurations.secondary
+                AppConfigurations.secondary
               )}
             </Box>
             <Box
@@ -77,7 +76,7 @@ export function Home() {
                 GEAR_COMPARE_TITLE,
                 GEAR_COMPARE_TITLE,
                 GEAR_COMPARE_DESCRIPTION,
-                ColorConfigurations.secondary
+                AppConfigurations.secondary
               )}
 
               {LogoBox(
@@ -86,7 +85,7 @@ export function Home() {
                 STAT_WEIGHTS_TITLE,
                 STAT_WEIGHTS_TITLE,
                 STAT_WEIGHTS_DESCRIPTION,
-                ColorConfigurations.primary
+                AppConfigurations.primary
               )}
             </Box>
           </Box>
@@ -109,7 +108,7 @@ function LogoBox(
     <Box
       sx={{
         border: `4px solid ${color}`,
-        backgroundColor: ColorConfigurations.backgroundTwo,
+        backgroundColor: AppConfigurations.backgroundTwo,
         width: "80%",
       }}
       alignItems={"center"}

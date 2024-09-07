@@ -1,5 +1,5 @@
 import { Box, Button, styled, TextField, Typography } from "@mui/material";
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { useState } from "react";
 import { EquipmentInput } from "../../types/EquipmentInput";
@@ -18,7 +18,7 @@ export const inputStyle = {
     height: "0.5vh",
   },
   "& .MuiInputLabel-root": {
-    color: ColorConfigurations.primary,
+    color: AppConfigurations.primary,
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {},
@@ -76,7 +76,7 @@ export function LoadoutBox(
   return (
     <Box
       sx={{
-        backgroundColor: ColorConfigurations.backgroundFour,
+        backgroundColor: AppConfigurations.backgroundFour,
         borderRadius: 4,
         paddingX: 2,
       }}
@@ -84,7 +84,7 @@ export function LoadoutBox(
       <Box sx={{ display: "flex", alignItems: "center", padding: 2 }}>
         <Typography
           variant="h2"
-          color={ColorConfigurations.primary}
+          color={AppConfigurations.primary}
           align="left"
           fontSize={15}
         >
@@ -142,7 +142,7 @@ function LoadoutOverwriteButton(
     <Button
       sx={{
         marginX: 1,
-        backgroundColor: ColorConfigurations.primary,
+        backgroundColor: AppConfigurations.primary,
         color: "black",
         borderRadius: 2,
       }}
@@ -176,7 +176,7 @@ function LoadoutLoadButton(
   return (
     <Button
       sx={{
-        backgroundColor: ColorConfigurations.primary,
+        backgroundColor: AppConfigurations.primary,
         color: "black",
         borderRadius: 2,
       }}

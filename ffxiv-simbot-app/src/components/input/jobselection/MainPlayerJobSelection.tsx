@@ -5,7 +5,7 @@ import {
   slotIndexToSlotName,
   updateAllPlayerPower,
 } from "../../../types/ffxivdatabase/ItemSet";
-import { ColorConfigurations } from "../../../Themes";
+import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput, SingleEquipmentInputSaveState } from "../../../types/EquipmentInput";
 import { EMPTY_EQUIPMENT_ID, EQUIPMENT_DATABASE_BY_KEYS, toEquipmentKeyString } from "../../../types/ffxivdatabase/Equipment";
 import { getRoleByIdAndMainCharacterJob } from "./PartyMemberJobSelection";
@@ -98,7 +98,7 @@ export function MainPlayerJobSelection(
         MenuProps={{
           PaperProps: {
             sx: {
-              backgroundColor: ColorConfigurations.backgroundThree,
+              backgroundColor: AppConfigurations.backgroundThree,
             },
           },
         }}
@@ -165,7 +165,7 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
         MenuProps={{
           PaperProps: {
             sx: {
-              backgroundColor: ColorConfigurations.backgroundThree,
+              backgroundColor: AppConfigurations.backgroundThree,
             },
           },
         }}

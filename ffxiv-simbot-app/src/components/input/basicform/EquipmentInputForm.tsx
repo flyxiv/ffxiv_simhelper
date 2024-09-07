@@ -40,7 +40,7 @@ import { EMPTY_MATERIA, Materia } from "../../../types/ffxivdatabase/Materia";
 import { EquipmentSubStatTable } from "../../../components/container/EquipmentSubStatBox";
 import { MateriaInputTable } from "./MateriaInputForm";
 import { MenuItemStyle } from "../../../components/items/Styles";
-import { ColorConfigurations } from "../../../Themes";
+import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
 import { SimulationResultTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
@@ -156,7 +156,7 @@ function EquipmentMenuOfOneSlot(
           MenuProps={{
             PaperProps: {
               sx: {
-                backgroundColor: ColorConfigurations.backgroundThree,
+                backgroundColor: AppConfigurations.backgroundThree,
               },
             },
           }}
@@ -399,7 +399,7 @@ function FoodSelection(
           MenuProps={{
             PaperProps: {
               sx: {
-                backgroundColor: ColorConfigurations.backgroundThree,
+                backgroundColor: AppConfigurations.backgroundThree,
               },
             },
           }}

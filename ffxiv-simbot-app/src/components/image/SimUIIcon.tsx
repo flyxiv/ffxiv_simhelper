@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 
 export const SimLinkIcon = (
   buttonImagePath: string,

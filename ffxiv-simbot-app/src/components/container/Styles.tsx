@@ -1,4 +1,4 @@
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 export const plusBackgroundColor = "#7B9FD3";
 export const minusBackgroundColor = "#CF6679";
 export const plusTextColor = "#00476F";
@@ -7,7 +7,7 @@ export const minusTextColor = "#850B21";
 export const statusBoxWidth = "22vw";
 export const ResultBoardBoxStyle = `
   min-height: 50vh;
-  background-color: ${ColorConfigurations.backgroundTwo};
+  background-color: ${AppConfigurations.backgroundTwo};
   width: 60vw;
   align-items: center;
   justify-content: flex-start;
@@ -17,7 +17,7 @@ export const ResultBoardBoxStyle = `
 `;
 
 export const ResultBoardTopBoxStyle = `
-  background-color: ${ColorConfigurations.backgroundTwo};
+  background-color: ${AppConfigurations.backgroundTwo};
   width: 60vw;
   align-items: center;
   justify-content: flex-start;
@@ -61,7 +61,7 @@ export const DpsBoxStyle = `
 export const PlayerInfoBoxStyle = `
   width: 40vw;
   margin: 1vh;
-  background: ${ColorConfigurations.backgroundThree};
+  background: ${AppConfigurations.backgroundThree};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -79,7 +79,7 @@ export const PlayerInfoJobTitleStyle = `
 
 export const PlayerStatInfoBoxStyle = `
   width: 40vw;
-  background: ${ColorConfigurations.backgroundThree};
+  background: ${AppConfigurations.backgroundThree};
 `;
 
 export const StatOneLineBoxStyle = `
@@ -108,7 +108,7 @@ export const StatTextBoxStyle = `
 `;
 
 export const SkillLogTableStyle = `
-  background-color: ${ColorConfigurations.backgroundThree};
+  background-color: ${AppConfigurations.backgroundThree};
   display: flex;
   width: 45vw;
   flex-direction: column;
@@ -202,7 +202,7 @@ export const SingleStatBoxStyle = (width: string) => `
 
 export const EquipmentSubStatBoxStyle = `
   width: 80%;
-  background-color: ${ColorConfigurations.backgroundThree};
+  background-color: ${AppConfigurations.backgroundThree};
   display: flex;
 `;
 
@@ -215,7 +215,7 @@ export const EquipmentSingleBoxStyle = `
 `;
 
 export const LeftMenuLogoStyle = `
-  background-color: ${ColorConfigurations.primary};   
+  background-color: ${AppConfigurations.primary};   
   color: white;
   height: 5vh;
   align-content: center;
@@ -223,7 +223,7 @@ export const LeftMenuLogoStyle = `
 `;
 
 export const LeftMenuTotalBarStyle = `
-  background-color: ${ColorConfigurations.backgroundThree};
+  background-color: ${AppConfigurations.backgroundThree};
   color: white;
   margin-left: 10px;
   margin-top: 10px;

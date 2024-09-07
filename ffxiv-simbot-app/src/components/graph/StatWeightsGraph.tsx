@@ -1,6 +1,6 @@
 import { Box, styled, Typography } from "@mui/material";
 import { BestPartnerBuffBarStyle, BuffBarBoxStyle } from "./Style";
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 import { StatWeightsData } from "../../page/StatWeightsResult";
 
 const MAX_RANKINGS = 4;
@@ -29,15 +29,15 @@ function StatWeightsGraph(
   let weightBars = statWeights.map((statWeight, index) => {
     let StatWeightBarBox = styled(Box)`
       ${BuffBarBoxStyle(
-        (100 * statWeight.rdpsIncreasePerPoint) / maxStatWeight
-      )}
+      (100 * statWeight.rdpsIncreasePerPoint) / maxStatWeight
+    )}
     `;
 
     let Bar = styled(Box)`
       ${BestPartnerBuffBarStyle(
-        Math.min(index, MAX_RANKINGS),
-        RANKING_ITEM_HEIGHT
-      )}
+      Math.min(index, MAX_RANKINGS),
+      RANKING_ITEM_HEIGHT
+    )}
     `;
 
     // UI상 표시값 사이 일치를 위해 rounding한 값을 더한 거로 totalRdps를 한 번 정규화해준다.
@@ -76,7 +76,7 @@ function StatWeightsGraph(
       justifyContent={"center"}
       width="90%"
       paddingX="4%"
-      backgroundColor={ColorConfigurations.backgroundThree}
+      backgroundColor={AppConfigurations.backgroundThree}
       marginTop="5%"
       paddingY="5%"
     >

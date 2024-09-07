@@ -3,8 +3,9 @@ import { CustomFormControl } from "./basicform/BasicInputForm";
 import { styled, Box } from "@mui/material";
 import { InputGridItemStyle } from "./Styles";
 import { EquipmentInput } from "../../types/EquipmentInput";
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 import { PartnerMenuItem } from "../items/PartnerMenuItem";
+import { EMPTY_PARTY_MEMBER } from "../../types/PartyStates";
 
 const InputBox = styled(Box)`
   ${InputGridItemStyle}
@@ -21,7 +22,7 @@ export function Partner1Selection(
     let newState = { ...totalEquipmentState };
 
     newState.equipmentDatas.forEach((data) => {
-      if (event.target.value === "empty") {
+      if (event.target.value === EMPTY_PARTY_MEMBER) {
         data.mainPlayerPartner1Id = null;
       } else {
         data.mainPlayerPartner1Id = parseInt(event.target.value);
@@ -57,7 +58,7 @@ export function Partner1Selection(
           MenuProps={{
             PaperProps: {
               sx: {
-                backgroundColor: ColorConfigurations.backgroundThree,
+                backgroundColor: AppConfigurations.backgroundThree,
                 color: "white"
               },
             },
@@ -120,7 +121,7 @@ export function Partner2Selection(
           MenuProps={{
             PaperProps: {
               sx: {
-                backgroundColor: ColorConfigurations.backgroundThree,
+                backgroundColor: AppConfigurations.backgroundThree,
                 color: "white"
               },
             },

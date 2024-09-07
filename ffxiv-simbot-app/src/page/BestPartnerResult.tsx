@@ -3,7 +3,7 @@ import { ResultBoardBoxStyle, ResultBoardTopBoxStyle } from "../components/conta
 import { PlayerInfo } from "../components/container/PlayerInfo";
 import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { BEST_PARTNER_RESPONSE_SAVE_NAME } from "../App";
-import { ColorConfigurations } from "../Themes";
+import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import {
@@ -53,7 +53,7 @@ export function BestPartnerResult() {
     <Box
       display="flex"
       flexDirection={"column"}
-      sx={{ backgroundColor: ColorConfigurations.backgroundOne }}
+      sx={{ backgroundColor: AppConfigurations.backgroundOne }}
       width="100vw"
       alignItems={"center"}
       paddingBottom={20}

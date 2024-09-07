@@ -5,20 +5,16 @@ import {
   LeftMenuNavigationItemStyle,
   LeftMenuTotalBarStyle,
 } from "./Styles";
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 import { LoadoutBox } from "./LoadoutBox";
 import {
-  BEST_PARTNER_PAGE_NAME,
   BEST_PARTNER_URL,
-  GEAR_COMPARE_PAGE_NAME,
   GEAR_COMPARE_URL,
-  HOME_PAGE_NAME,
-  QUICKSIM_PAGE_NAME,
   QUICKSIM_URL,
-  STAT_WEIGHTS_PAGE_NAME,
   STAT_WEIGHTS_URL,
 } from "../../App";
 import { EquipmentInput } from "../../types/EquipmentInput";
+import { BEST_PARTNER_PAGE_NAME, GEAR_COMPARE_PAGE_NAME, HOME_PAGE_NAME, QUICKSIM_PAGE_NAME, STAT_WEIGHTS_PAGE_NAME } from "../../const/languageTexts";
 
 export const MENU_WIDTH_VW_XS = 50;
 export const MENU_WIDTH_VW_SM = 45;
@@ -64,7 +60,7 @@ export function LeftMenuWithLoadout(
         flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: MENU_WIDTH,
-          backgroundColor: `${ColorConfigurations.backgroundOne}`,
+          backgroundColor: `${AppConfigurations.backgroundOne}`,
           scrollbarWidth: 'none'
         },
       }}
@@ -93,7 +89,7 @@ export function BasicLeftMenu() {
         "& .MuiDrawer-paper": {
           width: MENU_WIDTH,
           boxSizing: "border-box",
-          backgroundColor: `${ColorConfigurations.backgroundOne}`,
+          backgroundColor: `${AppConfigurations.backgroundOne}`,
           scrollbarWidth: 'none'
         },
       }}
@@ -151,7 +147,7 @@ function DefaultLeftMenuComponents() {
           sx={{
             borderBottomWidth: 3,
             marginY: 2,
-            bgcolor: `${ColorConfigurations.backgroundTwo}`,
+            bgcolor: `${AppConfigurations.backgroundTwo}`,
           }}
         />
 
@@ -201,7 +197,7 @@ function EquipmentLoadouts(
           sx={{
             borderBottomWidth: 3,
             marginY: 2,
-            bgcolor: `${ColorConfigurations.backgroundTwo}`,
+            bgcolor: `${AppConfigurations.backgroundTwo}`,
           }}
         />
       </Box>

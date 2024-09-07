@@ -6,7 +6,7 @@ import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalP
 import {
   LeftMenuWithLoadout,
 } from "../components/container/LeftMenu";
-import { ColorConfigurations } from "../Themes";
+import { AppConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
 import { SelectionTitle } from "../components/basic/SelectionTitle";
@@ -71,7 +71,7 @@ export function GearCompare() {
     <>
       <Box
         display="flex"
-        sx={{ backgroundColor: ColorConfigurations.backgroundOne }}
+        sx={{ backgroundColor: AppConfigurations.backgroundOne }}
         width="100vw"
       >
         {LeftMenuWithLoadout(

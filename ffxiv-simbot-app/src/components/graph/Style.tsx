@@ -1,11 +1,11 @@
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 const rdpsColors = ["#FF4848", "#FF6C6C", "#FF9999", "#FFB7B7", "#FFDADA"];
 export const imageSize = "30px";
 export const barHeight = "15px";
 
 export const GraphBoxStyle = `
     width: 100%;
-    background-color: ${ColorConfigurations.backgroundTwo};
+    background-color: ${AppConfigurations.backgroundTwo};
     align-items: center;
 `;
 
@@ -110,7 +110,7 @@ export const SkillBarBoxStyle = `
 `;
 export const SkillBarStyle = (portion: number) => `
   width: ${portion}%;
-  background-color: ${ColorConfigurations.primaryVariant};
+  background-color: ${AppConfigurations.primaryVariant};
   height: ${barHeight};
 `;
 

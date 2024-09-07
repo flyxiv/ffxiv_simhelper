@@ -19,7 +19,7 @@ import {
   MainPlayerContributionGraph,
   makeMainPlayerContributionData,
 } from "../components/graph/MainPlayerContributionGraph";
-import { ColorConfigurations } from "../Themes";
+import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
@@ -85,7 +85,7 @@ export function SimulationResult() {
     <Box
       display="flex"
       flexDirection={"column"}
-      sx={{ backgroundColor: ColorConfigurations.backgroundOne }}
+      sx={{ backgroundColor: AppConfigurations.backgroundOne }}
       width="100vw"
       alignItems={"center"}
       paddingBottom={20}

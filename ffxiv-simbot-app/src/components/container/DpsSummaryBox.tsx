@@ -11,7 +11,7 @@ import {
   SimulationData,
   SimulationSummary,
 } from "../../types/CombatSimulationResult";
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 
 const DpsSummaryBox = styled(Box)`
   ${DpsSummaryBoxStyle}
@@ -54,24 +54,24 @@ export const DpsSummary = (props: SimulationData) => {
 
   return (
     <DpsSummaryBox>
-      {DpsBox("DPS", summary.pdps, "white", ColorConfigurations.primary)}
+      {DpsBox("DPS", summary.pdps, "white", AppConfigurations.primary)}
       {DpsBox(
         "RDPS",
         summary.rdps,
         "white",
-        ColorConfigurations.primaryVariant
+        AppConfigurations.primaryVariant
       )}
       {DpsBox(
         "Max RDPS",
         summary.maxRdps,
         "black",
-        ColorConfigurations.secondary
+        AppConfigurations.secondary
       )}
       {DpsBox(
         "EDPS",
         summary.edps,
         "white",
-        ColorConfigurations.secondaryVariant
+        AppConfigurations.secondaryVariant
       )}
     </DpsSummaryBox>
   );

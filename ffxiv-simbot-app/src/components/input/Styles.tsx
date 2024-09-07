@@ -1,19 +1,19 @@
-import { ColorConfigurations } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 
 export const InputGridContainerStyle = `
-  background-color: ${ColorConfigurations.backgroundTwo};
+  background-color: ${AppConfigurations.backgroundTwo};
   spacing: 50;
   width: 100%;
 `;
 
 export const EquipmentGridContainerStyle = `
-  background-color: ${ColorConfigurations.backgroundTwo};
+  background-color: ${AppConfigurations.backgroundTwo};
   width: 100%;
 `;
 
 export const EquipmentGridItemStyle = `
-  background-color: ${ColorConfigurations.backgroundTwo};
-  color: ${ColorConfigurations.primary};
+  background-color: ${AppConfigurations.backgroundTwo};
+  color: ${AppConfigurations.primary};
   width: 46%;
   margin: 2%;
 `;
@@ -25,8 +25,8 @@ export const EquipmentStyle = `
 `;
 
 export const InputGridItemStyle = `
-  background-color: ${ColorConfigurations.backgroundTwo};
-  color: ${ColorConfigurations.primary};
+  background-color: ${AppConfigurations.backgroundTwo};
+  color: ${AppConfigurations.primary};
   width: 100%;
   display: flex;
 `;
@@ -42,13 +42,13 @@ export const FormControlStyle = `
 `;
 
 export const HorizontalInputGridContainerStyle = `
-  background-color: ${ColorConfigurations.backgroundTwo};
+  background-color: ${AppConfigurations.backgroundTwo};
   width: 100%;
 `;
 
 export const HorizontalInputGridItemStyle = `
-  background-color: ${ColorConfigurations.backgroundTwo};
-  color: ${ColorConfigurations.primary};
+  background-color: ${AppConfigurations.backgroundTwo};
+  color: ${AppConfigurations.primary};
   width: 23%;
   display: flex;
   margin: 1%;
@@ -56,12 +56,12 @@ export const HorizontalInputGridItemStyle = `
 
 export const MateriaInputBoxStyle = `
   display: flex;
-  background-color: ${ColorConfigurations.backgroundThree}
+  background-color: ${AppConfigurations.backgroundThree}
 `;
 
 export const EquipmentStatBoxStyle = `
   display: flex;
   align-conte: center;
   justify-content: center;
-  background-color: ${ColorConfigurations.backgroundThree}
+  background-color: ${AppConfigurations.backgroundThree}
 `;

@@ -11,6 +11,11 @@ import { BestPartnerResult } from "./page/BestPartnerResult";
 import { StatWeightsResult } from "./page/StatWeightsResult";
 import { MENU_WIDTH_VW_LG, MENU_WIDTH_VW_XS, MENU_WIDTH_VW_XL, MENU_WIDTH_VW_SM, MENU_WIDTH_VW_MD } from "./components/container/LeftMenu";
 
+export const ENGLISH_MODE = "en";
+export const KOREAN_MODE = "ko";
+
+export let currentLanguage = ENGLISH_MODE;
+
 export const SINGLE_INPUT_SAVE_NAME = "mostRecentSingleInput";
 export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
 export const GEAR_COMPARE_REQUEST_SAVE_NAME = "mostRecentGearCompareRequest";
@@ -32,11 +37,7 @@ export const BEST_PARTNER_RESULT_URL = "bestpartnersimulationresult";
 export const STAT_WEIGHTS_URL = "statweights";
 export const STAT_WEIGHTS_RESULT_URL = "statweightssimulationresult";
 
-export const HOME_PAGE_NAME = "Home";
-export const QUICKSIM_PAGE_NAME = "Quick Sim";
-export const GEAR_COMPARE_PAGE_NAME = "Gear Compare";
-export const BEST_PARTNER_PAGE_NAME = "Best Partner";
-export const STAT_WEIGHTS_PAGE_NAME = "Stat Weights";
+
 
 export const BODY_WIDTH = {
   xs: `${100 - MENU_WIDTH_VW_XS}vw`,
@@ -45,6 +46,7 @@ export const BODY_WIDTH = {
   lg: `${100 - MENU_WIDTH_VW_LG}vw`,
   xl: `${100 - MENU_WIDTH_VW_XL}vw`,
 }
+
 
 function App() {
   return (

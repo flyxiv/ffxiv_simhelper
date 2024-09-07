@@ -8,7 +8,15 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
+export enum LanguageMode {
+  EN,
+  KR
+}
+
+
+
 export const theme = createTheme({
+  language: LanguageMode.EN,
   palette: {
     primary: {
       main: "#BB86FC",

@@ -21,7 +21,7 @@ import {
   updateOnePlayerPower,
 } from "../../../types/ffxivdatabase/ItemSet";
 import { MenuItemStyle } from "../../../components/items/Styles";
-import { ColorConfigurations } from "../../../Themes";
+import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
 
 const MateriaMenu = styled(MenuItem)`
@@ -107,7 +107,7 @@ function SingleMateriaMenu(
         MenuProps={{
           PaperProps: {
             sx: {
-              backgroundColor: ColorConfigurations.backgroundThree,
+              backgroundColor: AppConfigurations.backgroundThree,
             },
           },
         }}
