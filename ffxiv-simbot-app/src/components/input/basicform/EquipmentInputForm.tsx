@@ -81,6 +81,26 @@ function EquipmentMenuOfOneSlot(
   let key = `${slotName}-${id}-equipment`;
   let currentEquipmentId = totalState.itemSet[slotNameToSlotIndex(slotName)];
 
+  if (slotName === "finger1" && totalState.itemSet[slotNameToSlotIndex("finger2")] !== -1) {
+    let ring2 = totalState.itemSet[slotNameToSlotIndex("finger1")];
+    let ring2Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring2);
+    if (ring2Equipment !== undefined && !ring2Equipment.name.includes("Archeo")) {
+      equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
+        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex("finger2")]
+      );
+    }
+  }
+  if (slotName === "finger2" && totalState.itemSet[slotNameToSlotIndex("finger1")] !== -1) {
+    let ring1 = totalState.itemSet[slotNameToSlotIndex("finger1")];
+    let ring1Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring1);
+    if (ring1Equipment !== undefined && !ring1Equipment.name.includes("Archeo")) {
+      equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
+        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex("finger1")]
+      );
+    }
+  }
+
+
   let currentEquipment = PLAYER_EQUIPMENTS.get(currentEquipmentId);
   const updateEquipmentState = (e: SelectChangeEvent<number>) => {
     let newEquipmentId = e.target.value;
