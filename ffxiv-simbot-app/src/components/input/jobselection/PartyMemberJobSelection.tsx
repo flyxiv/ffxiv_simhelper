@@ -10,8 +10,54 @@ import { JobMenuItem } from "../../items/JobMenuItem";
 import { CustomFormControl } from "../basicform/BasicInputForm";
 import { ColorConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
+import { isHealer, isTank } from "../../../types/ffxivdatabase/PlayerPower";
+import { BUFF_JOBS_LIST, DPS_JOBS, HEALER_JOBS, TANK_JOBS } from "../../../types/ffxivdatabase/PartyCompositionMaker";
 
 let ALIGN = "center";
+
+function filterDuplicateBuffJobs(jobList: Array<string>, mainCharacterJob: string, partyMemberJobAbbrevs: Array<string>) {
+  return jobList.filter((jobAbbrev) => {
+    if (!BUFF_JOBS_LIST.includes(jobAbbrev)) {
+      return true
+    }
+
+    return jobAbbrev !== mainCharacterJob && !partyMemberJobAbbrevs.includes(jobAbbrev)
+  })
+}
+
+function getRoleByIdAndMainCharacterJob(id: number, mainCharacterJob: string, partyMemberJobAbbrevs: Array<string>) {
+  let otherPartyMemberJobAbbrevs = partyMemberJobAbbrevs.filter((_, index) => index !== id - 1);
+  let tank_jobs = TANK_JOBS;
+  let healer_jobs = filterDuplicateBuffJobs(HEALER_JOBS, mainCharacterJob, otherPartyMemberJobAbbrevs);
+  let dps_jobs = filterDuplicateBuffJobs(DPS_JOBS, mainCharacterJob, otherPartyMemberJobAbbrevs);
+  console.log(partyMemberJobAbbrevs)
+
+  if (id == 1) {
+    return tank_jobs;
+  }
+
+  if (id == 2) {
+    if (isTank(mainCharacterJob)) {
+      return healer_jobs;
+    } else {
+      return tank_jobs;
+    }
+  }
+
+  if (id == 3) {
+    return healer_jobs;
+  }
+
+  if (id == 4) {
+    if (isTank(mainCharacterJob) || isHealer(mainCharacterJob)) {
+      return dps_jobs;
+    } else {
+      return healer_jobs;
+    }
+  }
+
+  return dps_jobs;
+}
 
 export function PartyMemberJobSelection(
   id: number,
@@ -57,6 +103,8 @@ export function PartyMemberJobSelection(
 
   let key = `job-select-partymember-${id}`;
 
+  let jobAbbrevs = getRoleByIdAndMainCharacterJob(id, totalEquipmentState.equipmentDatas[0].mainPlayerJobAbbrev, totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs);
+
   return (
     <CustomFormControl fullWidth>
       <InputLabel id="JobSelect">{playerId}</InputLabel>
@@ -77,31 +125,11 @@ export function PartyMemberJobSelection(
           },
         }}
       >
-        {JobMenuItem("PLD", ALIGN, false)}
-        {JobMenuItem("WAR", ALIGN, false)}
-        {JobMenuItem("DRK", ALIGN, false)}
-        {JobMenuItem("GNB", ALIGN, false)}
+        {jobAbbrevs.map((jobAbbrev) => {
+          return JobMenuItem(jobAbbrev, ALIGN, false)
+        })}
+
         <Divider />
-        {JobMenuItem("WHM", ALIGN, false)}
-        {JobMenuItem("AST", ALIGN, false)}
-        {JobMenuItem("SCH", ALIGN, false)}
-        {JobMenuItem("SGE", ALIGN, false)}
-        <Divider />
-        {JobMenuItem("DRG", ALIGN, false)}
-        {JobMenuItem("MNK", ALIGN, false)}
-        {JobMenuItem("NIN", ALIGN, false)}
-        {JobMenuItem("SAM", ALIGN, false)}
-        {JobMenuItem("RPR", ALIGN, false)}
-        {JobMenuItem("VPR", ALIGN, false)}
-        <Divider />
-        {JobMenuItem("BRD", ALIGN, false)}
-        {JobMenuItem("MCH", ALIGN, false)}
-        {JobMenuItem("DNC", ALIGN, false)}
-        <Divider />
-        {JobMenuItem("SMN", ALIGN, false)}
-        {JobMenuItem("BLM", ALIGN, false)}
-        {JobMenuItem("RDM", ALIGN, false)}
-        {JobMenuItem("PCT", ALIGN, false)}
         <MenuItem value="Empty">
           <Typography variant="body1" color="white">
             Empty

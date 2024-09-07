@@ -58,7 +58,7 @@ export function calculateWeaponMultiplierPercent(
   jobAbbrev: string
 ) {
   let baseWeaponDamage = BASE_WEAPON_DAMAGE_PER_JOB.get(jobAbbrev);
-  if (baseWeaponDamage === undefined) {
+  if (baseWeaponDamage === undefined || weaponDamage === 0) {
     return 0;
   }
   return baseWeaponDamage + weaponDamage;

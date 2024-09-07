@@ -1,3 +1,8 @@
+export const BUFF_JOBS_LIST = ["AST", "SCH", "DRG", "MNK", "NIN", "RPR", "BRD", "DNC", "SMN", "RDM", "PCT"];
+export const HEALER_JOBS = ["WHM", "AST", "SCH", "SGE"];
+export const TANK_JOBS = ["PLD", "WAR", "DRK", "GNB"];
+export const DPS_JOBS = ["MNK", "DRG", "NIN", "SAM", "RPR", "VPR", "BRD", "MCH", "DNC", "BLM", "SMN", "RDM", "PCT"];
+
 export interface SimulationDataByRole {
   tanks: Array<BestPartnerSimulationData>;
   healers: Array<BestPartnerSimulationData>;

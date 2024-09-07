@@ -184,6 +184,18 @@ export function isTank(jobAbbrev: string) {
   }
 }
 
+export function isHealer(jobAbbrev: string) {
+  switch (jobAbbrev) {
+    case "WHM":
+    case "SCH":
+    case "AST":
+    case "SGE":
+      return true;
+    default:
+      return false;
+  }
+}
+
 export function getSpeedStatByJobAbbrev(
   totalStats: PlayerPower,
   jobAbbrev: string
