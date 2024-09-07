@@ -319,8 +319,8 @@ function PartnerSelectionMenu(
   if (mainPlayerJobAbbrev === "AST") {
     return (
       <>
-        <EquipmentGridItemBox key={`partner_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
-          <InputEquipmentBox item xs={12} key={`partner_${id}`}>
+        <EquipmentGridItemBox key={`partner1_${id}_grid`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+          <InputEquipmentBox item xs={12} key={`partner1_${id}`}>
             {Partner1Selection(
               id,
               totalEquipmentState,
@@ -330,8 +330,8 @@ function PartnerSelectionMenu(
           </InputEquipmentBox>
         </EquipmentGridItemBox>
 
-        <EquipmentGridItemBox key={`partner_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
-          <InputEquipmentBox item xs={12} key={`partner_${id}`}>
+        <EquipmentGridItemBox key={`partner2_${id}_grid`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+          <InputEquipmentBox item xs={12} key={`partner2_${id}`}>
             {Partner2Selection(
               id,
               totalEquipmentState,
@@ -344,8 +344,8 @@ function PartnerSelectionMenu(
     );
   } else if (mainPlayerJobAbbrev === "DNC") {
     return (
-      <EquipmentGridItemBox key={`partner_${id}`}>
-        <InputEquipmentBox item xs={12} key={`partner_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+      <EquipmentGridItemBox key={`partner1_${id}_grid`}>
+        <InputEquipmentBox item xs={12} key={`partner1_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
           {Partner1Selection(
             id,
             totalEquipmentState,
