@@ -8,7 +8,6 @@ export const SimLinkIcon = (
   description: string,
   color: string
 ) => {
-  console.log(buttonImagePath);
   return (
     <Box display="flex">
       <Box className="SimIcon" marginRight={3}>

@@ -88,7 +88,6 @@ export const makeMainPlayerContributionData = (
     (data) => data.totalRdps > 0
   );
   mainPlayerContributionData.sort((a, b) => b.totalRdps - a.totalRdps);
-  console.log(mainPlayerContributionData)
 
   setMainPlayerContributionToOthers({
     totalRdpsByStatus: totalRdpsByStatus,

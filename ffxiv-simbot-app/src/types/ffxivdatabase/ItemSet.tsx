@@ -39,36 +39,80 @@ export const FINGER1_SLOT_ID = 9;
 export const FINGER2_SLOT_ID = 10;
 export const OFFHAND_SLOT_ID = 11;
 
+export const WEAPON_SLOT_NAME = "weapon";
+export const HEAD_SLOT_NAME = "head";
+export const BODY_SLOT_NAME = "body";
+export const HANDS_SLOT_NAME = "hands";
+export const LEGS_SLOT_NAME = "legs";
+export const FEET_SLOT_NAME = "feet";
+export const NECK_SLOT_NAME = "neck";
+export const EAR_SLOT_NAME = "ears";
+export const WRIST_SLOT_NAME = "wrists";
+export const FINGER1_SLOT_NAME = "finger1";
+export const FINGER2_SLOT_NAME = "finger2";
+export const OFFHAND_SLOT_NAME = "offHand";
+
 export type ItemSet = number[];
 
 export function slotNameToSlotIndex(slotName: string): number {
   switch (slotName) {
-    case "weapon":
+    case WEAPON_SLOT_NAME:
       return WEAPON_SLOT_ID;
-    case "head":
+    case HEAD_SLOT_NAME:
       return HEAD_SLOT_ID;
-    case "body":
+    case BODY_SLOT_NAME:
       return BODY_SLOT_ID;
-    case "hands":
+    case HANDS_SLOT_NAME:
       return HANDS_SLOT_ID;
-    case "legs":
+    case LEGS_SLOT_NAME:
       return LEGS_SLOT_ID;
-    case "feet":
+    case FEET_SLOT_NAME:
       return FEET_SLOT_ID;
-    case "neck":
+    case NECK_SLOT_NAME:
       return NECK_SLOT_ID;
-    case "ears":
+    case EAR_SLOT_NAME:
       return EAR_SLOT_ID;
-    case "wrists":
+    case WRIST_SLOT_NAME:
       return WRIST_SLOT_ID;
-    case "finger1":
+    case FINGER1_SLOT_NAME:
       return FINGER1_SLOT_ID;
-    case "finger2":
+    case FINGER2_SLOT_NAME:
       return FINGER2_SLOT_ID;
-    case "offHand":
+    case OFFHAND_SLOT_NAME:
       return OFFHAND_SLOT_ID;
     default:
       return -1;
+  }
+}
+
+export function slotIndexToSlotName(slotIndex: number): string {
+  switch (slotIndex) {
+    case WEAPON_SLOT_ID:
+      return WEAPON_SLOT_NAME;
+    case HEAD_SLOT_ID:
+      return HEAD_SLOT_NAME;
+    case BODY_SLOT_ID:
+      return BODY_SLOT_NAME;
+    case HANDS_SLOT_ID:
+      return HANDS_SLOT_NAME;
+    case LEGS_SLOT_ID:
+      return LEGS_SLOT_NAME;
+    case FEET_SLOT_ID:
+      return FEET_SLOT_NAME;
+    case EAR_SLOT_ID:
+      return EAR_SLOT_NAME;
+    case NECK_SLOT_ID:
+      return NECK_SLOT_NAME;
+    case WRIST_SLOT_ID:
+      return WRIST_SLOT_NAME;
+    case FINGER1_SLOT_ID:
+      return FINGER1_SLOT_NAME;
+    case FINGER2_SLOT_ID:
+      return FINGER2_SLOT_NAME;
+    case OFFHAND_SLOT_ID:
+      return OFFHAND_SLOT_NAME;
+    default:
+      return "";
   }
 }
 
@@ -96,7 +140,6 @@ export function calculatePlayerPowerFromInputs(
     }
 
     let itemStat = convertEquipmentToItemStat(equipment);
-
     power.weaponDamage += itemStat.weaponDamage;
     power.mainStat += itemStat.mainStat;
     power.criticalStrike += itemStat.criticalStrike;

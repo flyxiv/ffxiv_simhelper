@@ -17,7 +17,6 @@ const ResultBoardTopBox = styled(Box)`
 
 export function GearCompareResult() {
   let response = localStorage.getItem(GEAR_COMPARE_RESPONSE_SAVE_NAME);
-  console.log(response);
 
   if (response == null) {
     return (

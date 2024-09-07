@@ -46,7 +46,6 @@ export function isNotValid(input: EquipmentInput) {
 export function BestPartner() {
   let mostRecentInputState = localStorage.getItem(BEST_PARTNER_INPUT_SAVE_NAME);
   let mostRecentInput = null;
-  console.log(mostRecentInputState);
 
   if (mostRecentInputState === null) {
     mostRecentInput = defaultBestPartnerEquipmentInput();

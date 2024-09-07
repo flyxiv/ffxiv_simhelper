@@ -25,12 +25,11 @@ function filterDuplicateBuffJobs(jobList: Array<string>, mainCharacterJob: strin
   })
 }
 
-function getRoleByIdAndMainCharacterJob(id: number, mainCharacterJob: string, partyMemberJobAbbrevs: Array<string>) {
+export function getRoleByIdAndMainCharacterJob(id: number, mainCharacterJob: string, partyMemberJobAbbrevs: Array<string>) {
   let otherPartyMemberJobAbbrevs = partyMemberJobAbbrevs.filter((_, index) => index !== id - 1);
   let tank_jobs = TANK_JOBS;
   let healer_jobs = filterDuplicateBuffJobs(HEALER_JOBS, mainCharacterJob, otherPartyMemberJobAbbrevs);
   let dps_jobs = filterDuplicateBuffJobs(DPS_JOBS, mainCharacterJob, otherPartyMemberJobAbbrevs);
-  console.log(partyMemberJobAbbrevs)
 
   if (id == 1) {
     return tank_jobs;
