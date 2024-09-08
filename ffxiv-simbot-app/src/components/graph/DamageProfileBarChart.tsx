@@ -1,3 +1,4 @@
+import { AppConfigurations } from "../../Themes";
 import { CAST_TEXT, DAMAGE_PERCENTAGE_TEXT, SKILL_TITLE_TEXT, TOTAL_DAMAGE_TEXT } from "../../const/languageTexts";
 import { DamageChartData } from "./GraphData";
 import {
@@ -67,7 +68,7 @@ export function SkillDamageProfile(
         </SkillIconBox>
         <SkillNameBox>
           <Box>
-            <Typography variant="body2" fontSize={14} align="right" >
+            <Typography variant="body2" fontSize={AppConfigurations.body2FontSize} align="right" >
               {data.name}
             </Typography>
           </Box>
@@ -79,18 +80,18 @@ export function SkillDamageProfile(
       </SkillBarBox>
 
       <SkillPercentageBox>
-        <Typography variant="body1">
+        <Typography variant="body1" fontSize={AppConfigurations.body2FontSize}>
           {Math.round(damageProportion * 10) / 10}%
         </Typography>
       </SkillPercentageBox>
 
       <TotalDamageBox>
-        <Typography variant="body1">
+        <Typography variant="body1" fontSize={AppConfigurations.body2FontSize}>
           {Math.round((data.pdps * combatTimeMilliseconds) / 1000)}
         </Typography>
       </TotalDamageBox>
       <SkillCountBox>
-        <Typography variant="body1">{data.castCount}</Typography>
+        <Typography variant="body1" fontSize={AppConfigurations.body2FontSize}>{data.castCount}</Typography>
       </SkillCountBox>
     </SkillBox>
   );
@@ -100,14 +101,12 @@ const SkillPercentBox = styled(Box)`
   ${SkillPercentageBoxStyle}
 `;
 
-const fontSize = 14;
-
 export const DamageChartTitle = (
   <SkillBox>
     <Box display="flex" width="200px">
       <SkillIconBox />
       <SkillNameBox>
-        <Typography variant="body2" fontSize={fontSize}>
+        <Typography variant="body2" fontSize={AppConfigurations.body2FontSize}>
           {SKILL_TITLE_TEXT}
         </Typography>
       </SkillNameBox>
@@ -116,19 +115,19 @@ export const DamageChartTitle = (
     <SkillBarBox />
 
     <SkillPercentBox>
-      <Typography variant="body1" fontSize={fontSize} align="right">
+      <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
         {DAMAGE_PERCENTAGE_TEXT}
       </Typography>
     </SkillPercentBox>
 
     <TotalDamageBox>
-      <Typography variant="body1" fontSize={fontSize} align="right">
+      <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
         {TOTAL_DAMAGE_TEXT}
       </Typography>
     </TotalDamageBox>
 
     <SkillCountBox>
-      <Typography variant="body1" fontSize={fontSize} align="right">
+      <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
         {CAST_TEXT}
       </Typography>
     </SkillCountBox>

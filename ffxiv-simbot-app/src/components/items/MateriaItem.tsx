@@ -5,20 +5,13 @@ import {
   toMateriaKey,
 } from "../../types/ffxivdatabase/Materia";
 import { getMateriaIconPath } from "../icon/materiaicon/MateriaIconFactory";
+import { AppConfigurations } from "../../Themes";
 
 export function MateriaItem(
   materiaKey: string,
   currentlyEquippedMateria: Materia
 ) {
   let imageSize = "3vh";
-
-  let fontSize = {
-    xs: 10,
-    sm: 10,
-    md: 10,
-    lg: 10,
-    xl: 10,
-  }
 
   let isSelected = toMateriaKey(currentlyEquippedMateria) === materiaKey;
   let isNotFullyUsed =
@@ -46,7 +39,7 @@ export function MateriaItem(
           alignContent={"center"}
           color={isNotFullyUsed ? "red" : "white"}
           sx={{
-            fontSize: fontSize
+            fontSize: AppConfigurations.body2FontSize
           }}
         >
           {isSelected

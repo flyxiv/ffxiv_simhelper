@@ -107,7 +107,7 @@ export function PartyMemberJobSelection(
 
   return (
     <CustomFormControl fullWidth>
-      <InputLabel id="JobSelect">{playerId}</InputLabel>
+      <InputLabel id="JobSelect"> <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{playerId}</Typography></InputLabel>
       <Select
         labelId={playerId}
         id={key}
@@ -136,6 +136,6 @@ export function PartyMemberJobSelection(
           </Typography>
         </MenuItem>
       </Select>
-    </CustomFormControl>
+    </CustomFormControl >
   );
 }

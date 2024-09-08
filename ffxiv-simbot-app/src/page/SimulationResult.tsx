@@ -24,7 +24,7 @@ import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { PlayerInfo } from "../components/container/PlayerInfo";
-import { SIMULATION_RESULT_TEXT } from "../const/languageTexts";
+import { BEST_TEAMMATE_BUTTON_TEXT, DAMAGE_PROFILE_BUTTON_TEXT, MY_CONTRIBUTION_BUTTON_TEXT, ROTATION_SAMPLE_BUTTON_TEXT, SIMULATION_RESULT_TEXT } from "../const/languageTexts";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -34,15 +34,11 @@ const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
 `;
 
-export const DAMAGE_PROFILE_TEXT = "Damage Profile";
-export const BEST_TEAMMATE_TEXT = "Best Teammate";
-export const MY_CONTRIBUTIONS_TEXT = "My Contributions";
-export const ROTATION_LOG_TEXT = "Rotation Log";
 export const TABLE_WIDTH = "80%";
 
 export function SimulationResult() {
   let [currentlyToggledView, setCurrentlyToggledView] =
-    useState(DAMAGE_PROFILE_TEXT);
+    useState(DAMAGE_PROFILE_BUTTON_TEXT);
   let response = localStorage.getItem(QUICK_SIM_RESPONSE_SAVE_NAME);
 
   if (response == null) {
@@ -127,31 +123,31 @@ function renderTableBasedOnSelectedButton(
   teammatesContributionToMyBuffs: null | PartyContributionData,
   mainPlayerContributionToOthers: null | PartyContributionData
 ) {
-  if (currentlyToggledView === BEST_TEAMMATE_TEXT) {
+  if (currentlyToggledView === BEST_TEAMMATE_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
-        {SimulationTitle(BEST_TEAMMATE_TEXT)}
+        {SimulationTitle(BEST_TEAMMATE_BUTTON_TEXT)}
         {BestTeammateGraph(teammatesContributionToMyBuffs)}
       </ResultBoardBox>
     );
-  } else if (currentlyToggledView === DAMAGE_PROFILE_TEXT) {
+  } else if (currentlyToggledView === DAMAGE_PROFILE_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
-        {SimulationTitle(DAMAGE_PROFILE_TEXT)}
+        {SimulationTitle(DAMAGE_PROFILE_BUTTON_TEXT)}
         {DamageProfileGraph(responseJson)}
       </ResultBoardBox>
     );
-  } else if (currentlyToggledView == MY_CONTRIBUTIONS_TEXT) {
+  } else if (currentlyToggledView == MY_CONTRIBUTION_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
-        {SimulationTitle(MY_CONTRIBUTIONS_TEXT)}
+        {SimulationTitle(MY_CONTRIBUTION_BUTTON_TEXT)}
         {MainPlayerContributionGraph(mainPlayerContributionToOthers)}
       </ResultBoardBox>
     );
-  } else if (currentlyToggledView === ROTATION_LOG_TEXT) {
+  } else if (currentlyToggledView === ROTATION_SAMPLE_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
-        {SimulationTitle(ROTATION_LOG_TEXT)}
+        {SimulationTitle(ROTATION_SAMPLE_BUTTON_TEXT)}
         {SkillLogResult(responseJson)}
       </ResultBoardBox>
     );

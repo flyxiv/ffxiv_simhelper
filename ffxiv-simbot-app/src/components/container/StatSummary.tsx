@@ -34,14 +34,8 @@ let SingleStatBox = styled(Box)`
 `;
 
 export function StatSummaryTypography(text: string, smaller: boolean) {
-  let fontSize = 16;
-
-  if (smaller) {
-    fontSize = 13;
-  }
-
   return (
-    <Typography variant="body1" align="center" fontSize={fontSize}>
+    <Typography variant="body1" align="center" fontSize={AppConfigurations.body2FontSize}>
       {text}
     </Typography>
   );

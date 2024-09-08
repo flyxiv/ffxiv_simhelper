@@ -4,6 +4,7 @@ import {
 } from "../../types/ffxivdatabase/Equipment";
 import { Box, Typography } from "@mui/material";
 import { getEquipmentIconDirectory } from "../icon/equipmenticon/EquipmentIconFactory";
+import { AppConfigurations } from "../../Themes";
 
 export const EQUIPMENT_FOOD_SIZE = "4vh";
 
@@ -38,13 +39,7 @@ export function EquipmentItem(equipment: Equipment, jobAbbrev: string) {
           variant="body2"
           justifyContent={"center"}
           sx={{
-            fontSize: {
-              xs: 10,
-              sm: 12,
-              md: 14,
-              lg: 16,
-              xl: 18
-            }
+            fontSize: AppConfigurations.body1FontSize
           }}
           color="white"
           align="left"
@@ -52,13 +47,7 @@ export function EquipmentItem(equipment: Equipment, jobAbbrev: string) {
           {equipment.name}
         </Typography>
         <Typography variant="body2" sx={{
-          fontSize: {
-            xs: 8,
-            sm: 10,
-            md: 10,
-            lg: 12,
-            xl: 12
-          }
+          fontSize: AppConfigurations.body2FontSize
         }} color="white" align="left">
           {equipmentStatDescriptionString(equipment)}
         </Typography>

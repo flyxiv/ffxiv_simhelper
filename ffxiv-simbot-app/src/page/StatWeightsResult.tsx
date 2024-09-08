@@ -9,7 +9,7 @@ import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { StatWeightsResponseTable } from "../types/StatWeightsResponse";
 import { StatWeightSummary } from "../components/container/StatSummary";
-import { SIMULATION_RESULT_TEXT } from "../const/languageTexts";
+import { SIMULATION_RESULT_TEXT, STAT_WEIGHTS_TEXT } from "../const/languageTexts";
 
 export interface StatWeightsData {
   statName: string;
@@ -24,7 +24,6 @@ const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
 `;
 
-const BEST_PARTNERS_BY_ROLE_TEXT = "RDPS Increase Per Stat Point";
 export const TABLE_WIDTH = "80%";
 
 export function StatWeightsResult() {
@@ -73,8 +72,7 @@ export function StatWeightsResult() {
             {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, responseJson.partyMemberJobAbbrevs)}
           </ResultBoardTopBox>
           <ResultBoardBox sx={{ minHeight: 'unset' }}>
-            {SimulationTitle(BEST_PARTNERS_BY_ROLE_TEXT)}
-            <Typography variant="h6" color="white" sx={{ marginBottom: '20px' }}>RDPS Increase Per Stat Point</Typography>
+            {SimulationTitle(STAT_WEIGHTS_TEXT)}
             {StatWeightSummary(statWeightsCalculated)}
           </ResultBoardBox>
           {Footer()}

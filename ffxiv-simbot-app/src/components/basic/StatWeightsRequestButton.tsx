@@ -18,7 +18,6 @@ import {
 } from "../../types/EquipmentInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 import {
-  getStatNames,
   getStatWeightNames,
 } from "../../types/ffxivdatabase/Stats";
 import {
@@ -27,6 +26,7 @@ import {
 } from "../../types/StatWeightsResponse";
 import { calculatePowerByStat } from "../../types/ffxivdatabase/ItemSet";
 import { sendRequestAsync } from "./QuickSimRequestButton";
+import { CRIT_STAT_NAME, DET_STAT_NAME, DEX_STAT_NAME, DH_STAT_NAME, INT_STAT_NAME, MIND_STAT_NAME, SKS_STAT_NAME, SPS_STAT_NAME, STR_STAT_NAME, TEN_STAT_NAME, WD_STAT_NAME } from "../../const/languageTexts";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/statweights";
 const WEAPON_DAMAGE_INCREASE = 10;
@@ -134,40 +134,40 @@ function createAugmentedRequest(
   let augmentAmount = 0;
 
   if (augmentStatName !== "") {
-    if (augmentStatName === "WD") {
+    if (augmentStatName === WD_STAT_NAME) {
       augmentAmount = WEAPON_DAMAGE_INCREASE;
       power.weaponDamage += WEAPON_DAMAGE_INCREASE;
     }
     if (
-      augmentStatName === "STR" ||
-      augmentStatName === "DEX" ||
-      augmentStatName === "INT" ||
-      augmentStatName === "MND"
+      augmentStatName === STR_STAT_NAME ||
+      augmentStatName === DEX_STAT_NAME ||
+      augmentStatName === INT_STAT_NAME ||
+      augmentStatName === MIND_STAT_NAME
     ) {
       augmentAmount = MAIN_STAT_INCREASE;
       power.mainStat += MAIN_STAT_INCREASE;
     }
-    if (augmentStatName === "CRT") {
+    if (augmentStatName === CRIT_STAT_NAME) {
       augmentAmount = SUB_STAT_INCREASE;
       power.criticalStrike += SUB_STAT_INCREASE;
     }
-    if (augmentStatName === "DH") {
+    if (augmentStatName === DH_STAT_NAME) {
       augmentAmount = SUB_STAT_INCREASE;
       power.directHit += SUB_STAT_INCREASE;
     }
-    if (augmentStatName === "DET") {
+    if (augmentStatName === DET_STAT_NAME) {
       augmentAmount = SUB_STAT_INCREASE;
       power.determination += SUB_STAT_INCREASE;
     }
-    if (augmentStatName === "SKS") {
+    if (augmentStatName === SKS_STAT_NAME) {
       augmentAmount = SUB_STAT_INCREASE;
       power.skillSpeed += SUB_STAT_INCREASE;
     }
-    if (augmentStatName === "SPS") {
+    if (augmentStatName === SPS_STAT_NAME) {
       augmentAmount = SUB_STAT_INCREASE;
       power.spellSpeed += SUB_STAT_INCREASE;
     }
-    if (augmentStatName === "TEN") {
+    if (augmentStatName === TEN_STAT_NAME) {
       augmentAmount = SUB_STAT_INCREASE;
       power.tenacity += SUB_STAT_INCREASE;
     }

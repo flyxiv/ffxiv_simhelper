@@ -11,6 +11,7 @@ import {
 } from "./Styles";
 import { StatusIdToIconPathFactory } from "../icon/abilityicon/StatusIconFactory";
 import { iconPathToName } from "../Util";
+import { AppConfigurations } from "../../Themes";
 
 const SkillLogRowBox = styled(Box)`
   ${SkillLogRowStyle}
@@ -60,7 +61,7 @@ const SkillEntity = (
   return (
     <SkillEntityBox>
       <SkillLogCombatTimeBox>
-        <Typography variant="body2" color="white">
+        <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body2FontSize }}>
           {combatTimeMillisecondToTimeFormat(combatTimeMillisecond)}
         </Typography>
       </SkillLogCombatTimeBox>
@@ -69,7 +70,7 @@ const SkillEntity = (
         <img src={skillIcon} alt={skillIcon} height={30} width={30} />
 
         <Box marginLeft={2}>
-          <Typography variant="body1" fontSize={12}>
+          <Typography variant="body1" fontSize={AppConfigurations.body2FontSize}>
             {skillName}
           </Typography>
         </Box>

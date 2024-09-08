@@ -43,9 +43,9 @@ import { MateriaInputTable } from "./MateriaInputForm";
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
-import { SimulationResultTimeTextBox } from "../SimulationResultTextBox";
+import { SimulationResultTimeTextBox, SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
-import { AST_MELEE_PARTNER_TEXT, AST_RANGED_PARTNER_TEXT, COMBAT_TIME_TEXT, convertToSlotText, DNC_PARTNER_TEXT, EMPTY_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_TEXT, FOOD_SLOT_TEXT, TIME_INPUT_LABEL_TEXT } from "../../../const/languageTexts";
+import { AST_MELEE_PARTNER_TEXT, AST_RANGED_PARTNER_TEXT, convertToSlotText, DNC_PARTNER_TEXT, EMPTY_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_TEXT, FOOD_SLOT_TEXT, TIME_INPUT_LABEL_TEXT } from "../../../const/languageTexts";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -147,7 +147,7 @@ function EquipmentMenuOfOneSlot(
   return (
     <>
       <CustomFormControl fullWidth>
-        <InputLabel id="SlotSelect" key={`${key}_label`}>
+        <InputLabel id="SlotSelect" key={`${key}_label`} sx={{ fontSize: AppConfigurations.body2FontSize }}>
           {slotLabel}
         </InputLabel>
         <Select
@@ -180,7 +180,7 @@ function EquipmentMenuOfOneSlot(
           <Divider />
           <EquipmentMenu value={-1} key={`${id}_${slotLabel}_empty`}>
             <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
-              <Typography variant="body2" color="white">
+              <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body2FontSize }}>
                 {EMPTY_TEXT}
               </Typography>
             </Box>
@@ -297,7 +297,7 @@ export function EquipmentSelectionMenu(
       {hasTimeInput ? (
         <EquipmentGridItemBox sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
           <InputEquipmentBox item xs={xs} key="time">
-            {SimulationResultTimeTextBox(
+            {SimulationUpperInputTimeTextBox(
               TIME_INPUT_LABEL_TEXT,
               totalEquipmentState,
               setTotalEquipmentState,

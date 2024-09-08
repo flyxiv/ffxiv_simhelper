@@ -129,7 +129,7 @@ function ContributionTableSingleRole(
           </BuffBarBox>
         </Box>
         <Box display="flex" alignItems="center">
-          <Typography variant="body1" fontSize={12}>
+          <Typography variant="body1" fontSize={AppConfigurations.body2FontSize}>
             {roundedRdps}%
           </Typography>
         </Box>

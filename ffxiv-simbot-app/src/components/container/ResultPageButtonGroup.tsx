@@ -1,12 +1,7 @@
 import { Box, styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 import { PartyContributionData } from "../graph/GraphData";
-import {
-  BEST_TEAMMATE_TEXT,
-  DAMAGE_PROFILE_TEXT,
-  MY_CONTRIBUTIONS_TEXT,
-  ROTATION_LOG_TEXT,
-} from "../../page/SimulationResult";
+import { BEST_TEAMMATE_BUTTON_TEXT, DAMAGE_PROFILE_BUTTON_TEXT, MY_CONTRIBUTION_BUTTON_TEXT, ROTATION_SAMPLE_BUTTON_TEXT } from "../../const/languageTexts";
 
 type ViewType = "Best Teammate" | "Damage Profile" | "Rotation Log"; // Define possible view types
 
@@ -43,14 +38,14 @@ export function ResultPageButtonGroup(
   };
 
   let bestTeammateButton = (
-    <ToggleButtonCustom value={BEST_TEAMMATE_TEXT}>
-      {BEST_TEAMMATE_TEXT}
+    <ToggleButtonCustom value={BEST_TEAMMATE_BUTTON_TEXT}>
+      {BEST_TEAMMATE_BUTTON_TEXT}
     </ToggleButtonCustom>
   );
 
   let myContributionsButton = (
-    <ToggleButtonCustom value={MY_CONTRIBUTIONS_TEXT}>
-      {MY_CONTRIBUTIONS_TEXT}
+    <ToggleButtonCustom value={MY_CONTRIBUTION_BUTTON_TEXT}>
+      {MY_CONTRIBUTION_BUTTON_TEXT}
     </ToggleButtonCustom>
   );
 
@@ -62,8 +57,8 @@ export function ResultPageButtonGroup(
         onChange={handleViewChange}
         aria-label="resultPage"
       >
-        <ToggleButtonCustom value="Damage Profile">
-          {DAMAGE_PROFILE_TEXT}
+        <ToggleButtonCustom value={DAMAGE_PROFILE_BUTTON_TEXT}>
+          {DAMAGE_PROFILE_BUTTON_TEXT}
         </ToggleButtonCustom>
         {teammatesContributionToMyBuffs === null ||
           teammatesContributionToMyBuffs.contributionData.length > 0 ? (
@@ -77,8 +72,8 @@ export function ResultPageButtonGroup(
         ) : (
           <Box />
         )}
-        <ToggleButtonCustom value="Rotation Log">
-          {ROTATION_LOG_TEXT}
+        <ToggleButtonCustom value={ROTATION_SAMPLE_BUTTON_TEXT}>
+          {ROTATION_SAMPLE_BUTTON_TEXT}
         </ToggleButtonCustom>
       </ToggleButtonGroup>
     </Box>

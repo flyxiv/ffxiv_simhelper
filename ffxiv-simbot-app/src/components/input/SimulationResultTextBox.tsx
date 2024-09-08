@@ -1,9 +1,11 @@
-import { Box, TextField, styled } from "@mui/material";
+import { Box, InputLabel, Select, TextField, styled } from "@mui/material";
 import { AppConfigurations } from "../..//Themes";
 import { InputGridItemStyle } from "./Styles";
 import { CharacterStats } from "../../types/CharacterStates";
 import { EquipmentInput, SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { ITEM_BOTTOM_MENU_MIN_HEIGHT, ITEM_TOP_MENU_MIN_HEIGHT } from "../items/Styles";
+import { CustomFormControl } from "./basicform/BasicInputForm";
+import { TIME_INPUT_LABEL_TEXT } from "../../const/languageTexts";
 
 export interface InputFormProps {
   label: string;
@@ -95,7 +97,46 @@ export function SimulationResultTimeTextBox(label: string, totalEquipmentState: 
           height: isTopMenu ? ITEM_TOP_MENU_MIN_HEIGHT : ITEM_BOTTOM_MENU_MIN_HEIGHT,
           textAlign: "center",
         },
+        "& .MuiInputLabel-root": {
+          fontSize: AppConfigurations.body1FontSize,
+        },
       }}
     />
+  );
+};
+
+
+export function SimulationUpperInputTimeTextBox(label: string, totalEquipmentState: EquipmentInput, setTotalState: Function, isTopMenu: boolean) {
+  return (
+    <CustomFormControl fullWidth>
+      <InputLabel id="SlotSelect" key={`${label}_label`} sx={{ fontSize: AppConfigurations.body2FontSize }}>
+        {TIME_INPUT_LABEL_TEXT}
+      </InputLabel>
+      <Input
+        id={label}
+        value={totalEquipmentState.equipmentDatas[0].combatTimeMillisecond / 1000}
+        key={label}
+        onChange={(e) => {
+          let newTimeSeconds = parseInt(e.target.value);
+          if (isNaN(newTimeSeconds)) {
+            newTimeSeconds = 0;
+          }
+
+          let newTotalState = { ...totalEquipmentState };
+          newTotalState.equipmentDatas.forEach((data: SingleEquipmentInputSaveState) => {
+            data.combatTimeMillisecond = Math.min(newTimeSeconds, TIME_UPPER_LIMIT) * 1000;
+          });
+
+          setTotalState({ ...newTotalState });
+        }}
+        sx={{
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'transparent',
+          },
+        }}
+      >
+      </Input>
+    </CustomFormControl>
+
   );
 };

@@ -162,7 +162,7 @@ function LoadoutOverwriteButton(
         setTextFieldInputLoadoutName("");
       }}
     >
-      <Typography sx={{ fontWeight: "bold", fontSize: 10 }}>{LOADOUT_WRITE_TEXT}</Typography>
+      <Typography sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}>{LOADOUT_WRITE_TEXT}</Typography>
     </Button>
   );
 }
@@ -201,7 +201,7 @@ function LoadoutLoadButton(
         setTextFieldInputLoadoutName(LOAD_COMPLETE_TEXT);
       }}
     >
-      <Typography sx={{ fontWeight: "bold", fontSize: 10 }}>{LOADOUT_LOAD_TEXT}</Typography>
+      <Typography sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}>{LOADOUT_LOAD_TEXT}</Typography>
     </Button>
   );
 }

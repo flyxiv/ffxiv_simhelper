@@ -144,6 +144,7 @@ function LoadLeftEquipmentToRightButton(
         newTotalState.equipmentDatas[1] = JSON.parse(JSON.stringify(totalState.equipmentDatas[0]));
         setTotalState(newTotalState);
       }}
+      sx={{ fontSize: AppConfigurations.body2FontSize }}
     >
       {COPY_BUTTON_TEXT}
     </Button>
@@ -163,6 +164,8 @@ function LoadRightEquipmentToLeftButton(
         newTotalState.equipmentDatas[0] = JSON.parse(JSON.stringify(totalState.equipmentDatas[1]));
         setTotalState(newTotalState);
       }}
+      sx={{ fontSize: AppConfigurations.body2FontSize }}
+
     >
       {COPY_BUTTON_TEXT}
     </Button>

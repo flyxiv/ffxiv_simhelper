@@ -11,11 +11,6 @@ import { BestPartnerResult } from "./page/BestPartnerResult";
 import { StatWeightsResult } from "./page/StatWeightsResult";
 import { MENU_WIDTH_VW_LG, MENU_WIDTH_VW_XS, MENU_WIDTH_VW_XL, MENU_WIDTH_VW_SM, MENU_WIDTH_VW_MD } from "./components/container/LeftMenu";
 
-export const ENGLISH_MODE = "en";
-export const KOREAN_MODE = "ko";
-
-export let currentLanguage = ENGLISH_MODE;
-
 export const SINGLE_INPUT_SAVE_NAME = "mostRecentSingleInput";
 export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
 export const GEAR_COMPARE_REQUEST_SAVE_NAME = "mostRecentGearCompareRequest";
@@ -47,6 +42,21 @@ export const BODY_WIDTH = {
   xl: `${100 - MENU_WIDTH_VW_XL}vw`,
 }
 
+export const BODY1_FONT_SIZE = {
+  xs: 12,
+  sm: 14,
+  md: 16,
+  lg: 18,
+  xl: 22
+}
+
+export const BODY2_FONT_SIZE = {
+  xs: 8,
+  sm: 12,
+  md: 12,
+  lg: 14,
+  xl: 16
+}
 
 function App() {
   return (

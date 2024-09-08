@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  /* 사용할 폰트의 이름 */
+  font-family: "NotoSansKR";
+  font-display: fallback;
+
+  /* 
+  src: 사용할 폰트의 위치 및 형식 
+     Safari, Android, iOS => ttf
+     Modern Browsers => woff
+     IE6-IE8 => eot
+  */
+  src: url("/fonts/NotoSansKR-Regular.ttf") format("truetype");
+
+  /* 사용할 폰트의 기본 스타일 */
+  font-weight: 400;
+  font-style: normal;
+}
