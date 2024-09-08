@@ -96,7 +96,7 @@ code {
      Modern Browsers => woff
      IE6-IE8 => eot
   */
-  src: url("/fonts/CabinetGrotesk-Variable.ttf") format("truetype");
+  src: url("/fonts/CabinetGrotesk-Bold.otf") format("truetype");
 
   /* 사용할 폰트의 기본 스타일 */
   font-weight: 400;
