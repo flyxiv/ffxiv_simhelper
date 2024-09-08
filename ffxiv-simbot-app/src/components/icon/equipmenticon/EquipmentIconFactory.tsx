@@ -11,7 +11,7 @@ const SCOUTING_CATEGORY_NAME = "Scouting";
 const STRIKING_CATEGORY_NAME = "Striking";
 const SLAYING_CATEGORY_NAME = "Slaying";
 
-const ALL_CATEGORIES = [AIMING_CATEGORY_NAME, CASTING_CATEGORY_NAME, FENDING_CATEGORY_NAME, HEALING_CATEGORY_NAME, MAIMING_CATEGORY_NAME, SCOUTING_CATEGORY_NAME, STRIKING_CATEGORY_NAME, SLAYING_CATEGORY_NAME];
+const ALL_CATEGORIES = [AIMING_CATEGORY_NAME.toLowerCase(), CASTING_CATEGORY_NAME.toLowerCase(), FENDING_CATEGORY_NAME.toLowerCase(), HEALING_CATEGORY_NAME.toLowerCase(), MAIMING_CATEGORY_NAME.toLowerCase(), SCOUTING_CATEGORY_NAME.toLowerCase(), STRIKING_CATEGORY_NAME.toLowerCase(), SLAYING_CATEGORY_NAME.toLowerCase()];
 
 export function getEquipmentIconDirectory(
   slotName: string,
@@ -21,7 +21,7 @@ export function getEquipmentIconDirectory(
   let base_directory = `${IMAGES_DIRECTORY}/equipment`;
   let equipmentIconName = equipmentName.toLowerCase().replace(/ /g, "_");
 
-  let isJobSpecificEquipment = ALL_CATEGORIES.filter((category) => equipmentIconName.includes(category.toLowerCase())).length === 0;
+  let isJobSpecificEquipment = ALL_CATEGORIES.filter((category) => equipmentIconName.includes(category)).length === 0;
 
   if (WEAPONSLOTS.includes(slotName)) {
     return `${base_directory}/${slotName}/${jobAbbrev}/${equipmentIconName}.png`;

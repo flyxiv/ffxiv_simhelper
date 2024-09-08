@@ -156,7 +156,7 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
   let key = `Job-${id}`;
 
   return (
-    <CustomFormControl fullWidth sx={{ height: '100%' }}>
+    <CustomFormControl fullWidth>
       <Select
         labelId={key}
         id={key}
@@ -169,11 +169,6 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
               backgroundColor: AppConfigurations.backgroundThree,
             },
           },
-        }}
-
-        sx={{
-          height: '100%',
-          display: 'flex',
         }}
       >
         {JobMenuItem(AST_EN_NAME, ALIGN)}
