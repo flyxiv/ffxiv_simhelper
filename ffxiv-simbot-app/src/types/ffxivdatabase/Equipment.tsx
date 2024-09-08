@@ -8,6 +8,8 @@ export const RIGHTSLOTS = [WRIST_SLOT_EN_TEXT, EARS_SLOT_EN_TEXT, NECK_SLOT_EN_T
 export const TOTAL_SLOTS = WEAPONSLOTS.concat(LEFTSLOTS).concat(RIGHTSLOTS);
 
 const CURRENT_MIN_ITEM_LEVEL = AppConfigurations.languageMode === ENGLISH_MODE ? 710 : 690;
+const CURRENT_MAX_ITEM_LEVEL = AppConfigurations.languageMode === ENGLISH_MODE ? 730 : 710;
+
 let totalEquipments: Array<Equipment> = [];
 
 totalEquipmentsJson.forEach((element) => {
@@ -38,7 +40,7 @@ totalEquipmentsJson.forEach((element) => {
 export const {
   idDatabase: EQUIPMENT_DATABASE_BY_ID,
   keyDatabase: EQUIPMENT_DATABASE_BY_KEYS,
-} = readEquipmentData(CURRENT_MIN_ITEM_LEVEL);
+} = readEquipmentData(CURRENT_MIN_ITEM_LEVEL, CURRENT_MAX_ITEM_LEVEL);
 
 export interface Equipment {
   id: number;
@@ -83,9 +85,9 @@ export function toEquipmentKeyString(
   return `${keySlotName}-${jobAbbrev}`;
 }
 
-export function readEquipmentData(minItemLevel: number) {
+export function readEquipmentData(minItemLevel: number, maxItemLevel: number) {
   let equipmentDataFiltered = totalEquipments.filter(
-    (equipment) => equipment.itemLevel >= minItemLevel
+    (equipment) => equipment.itemLevel >= minItemLevel && equipment.itemLevel <= maxItemLevel
   );
 
   let equipmentDatabaseById: Map<number, Equipment> = new Map();

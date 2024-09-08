@@ -4,6 +4,7 @@ import { AppConfigurations, ENGLISH_MODE } from "../../Themes";
 
 const totalFood: Array<Food> = [];
 const FOOD_MIN_ILVL = AppConfigurations.languageMode == ENGLISH_MODE ? 710 : 680;
+const FOOD_MAX_ILVL = AppConfigurations.languageMode == ENGLISH_MODE ? 710 : 690;
 
 totalFoodJson.forEach((element) => {
   totalFood.push({
@@ -20,8 +21,8 @@ totalFoodJson.forEach((element) => {
   });
 });
 
-export const FOOD_DATABASE = readFoodData(FOOD_MIN_ILVL);
-export const ALL_FOODS = Array.from(FOOD_DATABASE.values());
+export const FOOD_DATABASE = readFoodData(FOOD_MIN_ILVL, FOOD_MAX_ILVL);
+export const ALL_FOODS = Array.from(FOOD_DATABASE.values()).sort((a, b) => b.itemLevel - a.itemLevel);
 
 export interface Food {
   id: number;
@@ -37,9 +38,9 @@ export interface Food {
   piety: number;
 }
 
-export function readFoodData(minIlvl: number) {
+export function readFoodData(minIlvl: number, maxIlvl: number) {
   let foodDataFiltered = totalFood.filter(
-    (food: Food) => food.itemLevel >= minIlvl
+    (food: Food) => food.itemLevel >= minIlvl && food.itemLevel <= maxIlvl
   );
   let foodDatabase: Map<number, Food> = new Map();
   foodDataFiltered.forEach((food: Food) => {
