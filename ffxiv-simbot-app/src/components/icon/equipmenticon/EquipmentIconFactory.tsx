@@ -11,6 +11,8 @@ const SCOUTING_CATEGORY_NAME = "Scouting";
 const STRIKING_CATEGORY_NAME = "Striking";
 const SLAYING_CATEGORY_NAME = "Slaying";
 
+const ALL_CATEGORIES = [AIMING_CATEGORY_NAME, CASTING_CATEGORY_NAME, FENDING_CATEGORY_NAME, HEALING_CATEGORY_NAME, MAIMING_CATEGORY_NAME, SCOUTING_CATEGORY_NAME, STRIKING_CATEGORY_NAME, SLAYING_CATEGORY_NAME];
+
 export function getEquipmentIconDirectory(
   slotName: string,
   jobAbbrev: string,
@@ -19,7 +21,9 @@ export function getEquipmentIconDirectory(
   let base_directory = `${IMAGES_DIRECTORY}/equipment`;
   let equipmentIconName = equipmentName.toLowerCase().replace(/ /g, "_");
 
-  if (WEAPONSLOTS.includes(slotName)) {
+  let isJobSpecificEquipment = ALL_CATEGORIES.filter((category) => equipmentIconName.includes(category.toLowerCase())).length === 0;
+
+  if (isJobSpecificEquipment) {
     return `${base_directory}/${slotName}/${jobAbbrev}/${equipmentIconName}.png`;
   }
   let category = getEquipmentCategory(slotName, jobAbbrev);

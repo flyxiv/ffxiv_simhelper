@@ -1,7 +1,9 @@
 import { CRIT_STAT_NAME, DET_STAT_NAME, DH_STAT_NAME, PIE_STAT_NAME, SKS_STAT_NAME, SPS_STAT_NAME, TEN_STAT_NAME } from "../../const/languageTexts";
 import totalFoodJson from "../../assets/data/food_data.json";
+import { AppConfigurations, ENGLISH_MODE } from "../../Themes";
 
 const totalFood: Array<Food> = [];
+const FOOD_MIN_ILVL = AppConfigurations.languageMode == ENGLISH_MODE ? 710 : 680;
 
 totalFoodJson.forEach((element) => {
   totalFood.push({
@@ -18,7 +20,7 @@ totalFoodJson.forEach((element) => {
   });
 });
 
-export const FOOD_DATABASE = readFoodData(710);
+export const FOOD_DATABASE = readFoodData(FOOD_MIN_ILVL);
 export const ALL_FOODS = Array.from(FOOD_DATABASE.values());
 
 export interface Food {
