@@ -1,3 +1,4 @@
+import { CRIT_STAT_NAME, DET_STAT_NAME, DH_STAT_NAME, SKS_STAT_NAME, SPS_STAT_NAME, TEN_STAT_NAME } from "../../const/languageTexts";
 import { Equipment } from "./Equipment";
 import {
   convertEquipmentToFinalStat,
@@ -14,21 +15,21 @@ export const EMPTY_MATERIA = {
 };
 
 export const NON_PENTAMELDABLE_MATERIAS = [
-  "CRT+54",
-  "DH+54",
-  "DET+54",
-  "SKS+54",
-  "SPS+54",
-  "TEN+54",
+  `${CRIT_STAT_NAME}+54`,
+  `${DH_STAT_NAME}+54`,
+  `${DET_STAT_NAME}+54`,
+  `${SKS_STAT_NAME}+54`,
+  `${SPS_STAT_NAME}+54`,
+  `${TEN_STAT_NAME}+54`,
 ];
 
 export const PENTAMELDABLE_MATERIAS = [
-  "CRT+18",
-  "DH+18",
-  "DET+18",
-  "SKS+18",
-  "SPS+18",
-  "TEN+18",
+  `${CRIT_STAT_NAME}+18`,
+  `${DH_STAT_NAME}+18`,
+  `${DET_STAT_NAME}+18`,
+  `${SKS_STAT_NAME}+18`,
+  `${SPS_STAT_NAME}+18`,
+  `${TEN_STAT_NAME}+18`,
 ];
 
 export interface Materia {
@@ -42,7 +43,7 @@ export function updateMateriaValueStatToFinalStat(
   materia: Materia
 ) {
   switch (materia.statName) {
-    case "CRT":
+    case CRIT_STAT_NAME:
       if (
         finalStats.criticalStrike + materia.maxValue >
         finalStats.maxSubstat
@@ -55,7 +56,7 @@ export function updateMateriaValueStatToFinalStat(
         materia.effectiveValue = materia.maxValue;
       }
       break;
-    case "DH":
+    case DH_STAT_NAME:
       if (finalStats.directHit + materia.maxValue > finalStats.maxSubstat) {
         materia.effectiveValue = finalStats.maxSubstat - finalStats.directHit;
         finalStats.directHit = finalStats.maxSubstat;
@@ -64,7 +65,7 @@ export function updateMateriaValueStatToFinalStat(
         materia.effectiveValue = materia.maxValue;
       }
       break;
-    case "DET":
+    case DET_STAT_NAME:
       if (finalStats.determination + materia.maxValue > finalStats.maxSubstat) {
         materia.effectiveValue =
           finalStats.maxSubstat - finalStats.determination;
@@ -74,7 +75,7 @@ export function updateMateriaValueStatToFinalStat(
         materia.effectiveValue = materia.maxValue;
       }
       break;
-    case "SKS":
+    case SKS_STAT_NAME:
       if (finalStats.skillSpeed + materia.maxValue > finalStats.maxSubstat) {
         materia.effectiveValue = finalStats.maxSubstat - finalStats.skillSpeed;
         finalStats.skillSpeed = finalStats.maxSubstat;
@@ -83,7 +84,7 @@ export function updateMateriaValueStatToFinalStat(
         materia.effectiveValue = materia.maxValue;
       }
       break;
-    case "SPS":
+    case SPS_STAT_NAME:
       if (finalStats.spellSpeed + materia.maxValue > finalStats.maxSubstat) {
         materia.effectiveValue = finalStats.maxSubstat - finalStats.spellSpeed;
         finalStats.spellSpeed = finalStats.maxSubstat;
@@ -161,7 +162,7 @@ export function toMateriaKey(materia: Materia | null) {
 }
 
 export function toMateriaDescription(materia: Materia) {
-  return `${materia.statName}+${materia.effectiveValue}`;
+  return `${materia.statName} + ${materia.effectiveValue}`;
 }
 
 export function addMateriaStatToTotalStat(
@@ -169,19 +170,19 @@ export function addMateriaStatToTotalStat(
   materia: Materia
 ) {
   switch (materia.statName) {
-    case "CRT":
+    case CRIT_STAT_NAME:
       totalStats.criticalStrike += materia.effectiveValue;
       break;
-    case "DH":
+    case DH_STAT_NAME:
       totalStats.directHit += materia.effectiveValue;
       break;
-    case "DET":
+    case DET_STAT_NAME:
       totalStats.determination += materia.effectiveValue;
       break;
-    case "SKS":
+    case SKS_STAT_NAME:
       totalStats.skillSpeed += materia.effectiveValue;
       break;
-    case "SPS":
+    case SPS_STAT_NAME:
       totalStats.spellSpeed += materia.effectiveValue;
       break;
     default:

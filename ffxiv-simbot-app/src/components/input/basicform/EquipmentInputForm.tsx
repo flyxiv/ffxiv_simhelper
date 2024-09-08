@@ -18,6 +18,7 @@ import {
   MateriaInputBoxStyle,
 } from "../Styles";
 import {
+  EMPTY_EQUIPMENT_ID,
   Equipment,
   EQUIPMENT_DATABASE_BY_ID,
   EQUIPMENT_DATABASE_BY_KEYS,
@@ -44,6 +45,7 @@ import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
 import { SimulationResultTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
+import { AST_MELEE_PARTNER_TEXT, AST_RANGED_PARTNER_TEXT, COMBAT_TIME_TEXT, convertToSlotText, DNC_PARTNER_TEXT, EMPTY_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_TEXT, FOOD_SLOT_TEXT, TIME_INPUT_LABEL_TEXT } from "../../../const/languageTexts";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -79,23 +81,24 @@ function EquipmentMenuOfOneSlot(
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
   let key = `${slotName}-${id}-equipment`;
-  let currentEquipmentId = totalState.itemSet[slotNameToSlotIndex(slotName)];
+  let slotEquipmentId = totalState.itemSet[slotNameToSlotIndex(slotName)];
+  let currentEquipmentId = slotEquipmentId === undefined ? EMPTY_EQUIPMENT_ID : slotEquipmentId;
 
-  if (slotName === "finger1" && totalState.itemSet[slotNameToSlotIndex("finger2")] !== -1) {
-    let ring2 = totalState.itemSet[slotNameToSlotIndex("finger2")];
+  if (slotName === FINGER1_SLOT_TEXT && totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_TEXT)] !== -1) {
+    let ring2 = totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_TEXT)];
     let ring2Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring2);
     if (ring2Equipment !== undefined && !ring2Equipment.name.includes("Archeo")) {
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
-        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex("finger2")]
+        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_TEXT)]
       );
     }
   }
-  if (slotName === "finger2" && totalState.itemSet[slotNameToSlotIndex("finger1")] !== -1) {
-    let ring1 = totalState.itemSet[slotNameToSlotIndex("finger1")];
+  if (slotName === FINGER2_SLOT_TEXT && totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_TEXT)] !== -1) {
+    let ring1 = totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_TEXT)];
     let ring1Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring1);
     if (ring1Equipment !== undefined && !ring1Equipment.name.includes("Archeo")) {
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
-        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex("finger1")]
+        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_TEXT)]
       );
     }
   }
@@ -135,10 +138,11 @@ function EquipmentMenuOfOneSlot(
     updateOnePlayerPower(id, newTotalData, setTotalEquipmentState);
   };
 
-  let slotLabel = slotName;
+  let slotLabel = convertToSlotText(slotName);
   if (currentEquipmentId !== -1) {
     slotLabel = "";
   }
+
 
   return (
     <>
@@ -162,7 +166,7 @@ function EquipmentMenuOfOneSlot(
           }}
           sx={{
             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'transparent', // 포커스된 상태에서의 테두리 색 제거
+              borderColor: 'transparent',
             },
           }}
         >
@@ -177,7 +181,7 @@ function EquipmentMenuOfOneSlot(
           <EquipmentMenu value={-1} key={`${id}_${slotLabel}_empty`}>
             <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
               <Typography variant="body2" color="white">
-                Empty
+                {EMPTY_TEXT}
               </Typography>
             </Box>
           </EquipmentMenu>
@@ -294,7 +298,7 @@ export function EquipmentSelectionMenu(
         <EquipmentGridItemBox sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
           <InputEquipmentBox item xs={xs} key="time">
             {SimulationResultTimeTextBox(
-              "Combat Time(Seconds)",
+              TIME_INPUT_LABEL_TEXT,
               totalEquipmentState,
               setTotalEquipmentState,
               true
@@ -325,7 +329,7 @@ function PartnerSelectionMenu(
               id,
               totalEquipmentState,
               setTotalEquipmentState,
-              "Melee Partner"
+              AST_MELEE_PARTNER_TEXT
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
@@ -336,7 +340,7 @@ function PartnerSelectionMenu(
               id,
               totalEquipmentState,
               setTotalEquipmentState,
-              "Ranged Partner"
+              AST_RANGED_PARTNER_TEXT
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
@@ -350,7 +354,7 @@ function PartnerSelectionMenu(
             id,
             totalEquipmentState,
             setTotalEquipmentState,
-            "Dance Partner"
+            DNC_PARTNER_TEXT
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
@@ -367,7 +371,7 @@ function FoodSelection(
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
 
-  let foodLabel = "food";
+  let foodLabel = FOOD_SLOT_TEXT;
   if (totalState.foodId !== -1) {
     foodLabel = "";
   }
@@ -410,7 +414,7 @@ function FoodSelection(
           <MenuItem value={-1}>
             <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
               <Typography variant="body2" color="white">
-                Empty
+                {EMPTY_TEXT}
               </Typography>
             </Box>
           </MenuItem>

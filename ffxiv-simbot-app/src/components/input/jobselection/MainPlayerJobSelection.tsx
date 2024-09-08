@@ -9,6 +9,7 @@ import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput, SingleEquipmentInputSaveState } from "../../../types/EquipmentInput";
 import { EMPTY_EQUIPMENT_ID, EQUIPMENT_DATABASE_BY_KEYS, toEquipmentKeyString } from "../../../types/ffxivdatabase/Equipment";
 import { getRoleByIdAndMainCharacterJob } from "./PartyMemberJobSelection";
+import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../../const/languageTexts";
 
 let ALIGN = "left";
 
@@ -103,31 +104,31 @@ export function MainPlayerJobSelection(
           },
         }}
       >
-        {JobMenuItem("PLD", ALIGN)}
-        {JobMenuItem("WAR", ALIGN)}
-        {JobMenuItem("DRK", ALIGN)}
-        {JobMenuItem("GNB", ALIGN)}
+        {JobMenuItem(PLD_EN_NAME, ALIGN)}
+        {JobMenuItem(WAR_EN_NAME, ALIGN)}
+        {JobMenuItem(DRK_EN_NAME, ALIGN)}
+        {JobMenuItem(GNB_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem("WHM", ALIGN)}
-        {JobMenuItem("AST", ALIGN)}
-        {JobMenuItem("SCH", ALIGN)}
-        {JobMenuItem("SGE", ALIGN)}
+        {JobMenuItem(WHM_EN_NAME, ALIGN)}
+        {JobMenuItem(AST_EN_NAME, ALIGN)}
+        {JobMenuItem(SCH_EN_NAME, ALIGN)}
+        {JobMenuItem(SGE_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem("DRG", ALIGN)}
-        {JobMenuItem("MNK", ALIGN)}
-        {JobMenuItem("NIN", ALIGN)}
-        {JobMenuItem("SAM", ALIGN)}
-        {JobMenuItem("RPR", ALIGN)}
-        {JobMenuItem("VPR", ALIGN)}
+        {JobMenuItem(DRG_EN_NAME, ALIGN)}
+        {JobMenuItem(MNK_EN_NAME, ALIGN)}
+        {JobMenuItem(NIN_EN_NAME, ALIGN)}
+        {JobMenuItem(SAM_EN_NAME, ALIGN)}
+        {JobMenuItem(RPR_EN_NAME, ALIGN)}
+        {JobMenuItem(VPR_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem("BRD", ALIGN)}
-        {JobMenuItem("MCH", ALIGN)}
-        {JobMenuItem("DNC", ALIGN)}
+        {JobMenuItem(BRD_EN_NAME, ALIGN)}
+        {JobMenuItem(MCH_EN_NAME, ALIGN)}
+        {JobMenuItem(DNC_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem("SMN", ALIGN)}
-        {JobMenuItem("BLM", ALIGN)}
-        {JobMenuItem("RDM", ALIGN)}
-        {JobMenuItem("PCT", ALIGN)}
+        {JobMenuItem(SMN_EN_NAME, ALIGN)}
+        {JobMenuItem(BLM_EN_NAME, ALIGN)}
+        {JobMenuItem(RDM_EN_NAME, ALIGN)}
+        {JobMenuItem(PCT_EN_NAME, ALIGN)}
       </Select>
     </CustomFormControl>
   );
@@ -175,20 +176,20 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
           display: 'flex',
         }}
       >
-        {JobMenuItem("AST", ALIGN)}
-        {JobMenuItem("SCH", ALIGN)}
+        {JobMenuItem(AST_EN_NAME, ALIGN)}
+        {JobMenuItem(SCH_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem("DRG", ALIGN)}
-        {JobMenuItem("MNK", ALIGN)}
-        {JobMenuItem("NIN", ALIGN)}
-        {JobMenuItem("RPR", ALIGN)}
+        {JobMenuItem(DRG_EN_NAME, ALIGN)}
+        {JobMenuItem(MNK_EN_NAME, ALIGN)}
+        {JobMenuItem(NIN_EN_NAME, ALIGN)}
+        {JobMenuItem(RPR_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem("BRD", ALIGN)}
-        {JobMenuItem("DNC", ALIGN)}
+        {JobMenuItem(BRD_EN_NAME, ALIGN)}
+        {JobMenuItem(DNC_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem("SMN", ALIGN)}
-        {JobMenuItem("RDM", ALIGN)}
-        {JobMenuItem("PCT", ALIGN)}
+        {JobMenuItem(SMN_EN_NAME, ALIGN)}
+        {JobMenuItem(RDM_EN_NAME, ALIGN)}
+        {JobMenuItem(PCT_EN_NAME, ALIGN)}
       </Select>
     </CustomFormControl>
   );

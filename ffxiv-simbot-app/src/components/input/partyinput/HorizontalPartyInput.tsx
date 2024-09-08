@@ -10,6 +10,7 @@ import {
   SimulationResultTimeTextBox,
 } from "../SimulationResultTextBox";
 import { EquipmentInput } from "../../../types/EquipmentInput";
+import { TIME_INPUT_LABEL_TEXT } from "../../../const/languageTexts";
 
 const HorizontalInputGridContainer = styled(Grid)`
   ${HorizontalInputGridContainerStyle}
@@ -40,7 +41,7 @@ export function HorizontalPartyInput(
           <InputBox marginBottom={0.5} key={"time"}>
             <InputJobBox item xs={xs} key={`timeinput`} height={"5vh"}>
               {SimulationResultTimeTextBox(
-                "Combat Time(Seconds)",
+                TIME_INPUT_LABEL_TEXT,
                 totalEquipmentState,
                 setTotalEquipmentState,
                 false

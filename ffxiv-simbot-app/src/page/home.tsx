@@ -11,26 +11,12 @@ import {
   QUICKSIM_URL,
   STAT_WEIGHTS_URL,
 } from "../App";
+import { BEST_PARTNER_DESCRIPTION_TEXT, BEST_PARTNER_PAGE_NAME, GEAR_COMPARE_DESCRIPTION_TEXT, GEAR_COMPARE_PAGE_NAME, QUICK_SIM_DESCRIPTION_TEXT, QUICKSIM_PAGE_NAME, STAT_WEIGHTS_DESCRIPTION_TEXT, STAT_WEIGHTS_PAGE_NAME } from "../const/languageTexts";
 
 const quickSimButtonImagePath = "/images/icon_quick_sim_C.svg";
-const QUICK_SIM_TITLE = "Quick Sim";
-const QUICK_SIM_DESCRIPTION =
-  "Quickly get detailed statistics of your party's DPS expectation.";
-
 const gearCompareSimButtonImagePath = "/images/icon_gear_compare_C.svg";
-const GEAR_COMPARE_TITLE = "Gear Compare";
-const GEAR_COMPARE_DESCRIPTION =
-  "Compare which of the two gearsets is better for your damage.";
-
 const statWeightsButtonImagePath = "/images/icon_stat_weights_C.svg";
-const STAT_WEIGHTS_TITLE = "Stat Weights";
-const STAT_WEIGHTS_DESCRIPTION =
-  "Calculate which main/sub stats are more valuable to you.";
-
 const bestPartnerButtonImagePath = "/images/icon_best_partner_C.svg";
-const BEST_PARTNER_TITLE = "Best Partner";
-const BEST_PARTNER_DESCRIPTION =
-  "Find out the teammates that will contribute the most RDPS for you(buff jobs only).";
 
 export function Home() {
   return (
@@ -49,18 +35,18 @@ export function Home() {
               {LogoBox(
                 QUICKSIM_URL,
                 quickSimButtonImagePath,
-                QUICK_SIM_TITLE,
-                QUICK_SIM_TITLE,
-                QUICK_SIM_DESCRIPTION,
+                QUICKSIM_PAGE_NAME,
+                QUICKSIM_PAGE_NAME,
+                QUICK_SIM_DESCRIPTION_TEXT,
                 AppConfigurations.primary
               )}
 
               {LogoBox(
                 BEST_PARTNER_URL,
                 bestPartnerButtonImagePath,
-                BEST_PARTNER_TITLE,
-                BEST_PARTNER_TITLE,
-                BEST_PARTNER_DESCRIPTION,
+                BEST_PARTNER_PAGE_NAME,
+                BEST_PARTNER_PAGE_NAME,
+                BEST_PARTNER_DESCRIPTION_TEXT,
                 AppConfigurations.secondary
               )}
             </Box>
@@ -73,18 +59,18 @@ export function Home() {
               {LogoBox(
                 GEAR_COMPARE_URL,
                 gearCompareSimButtonImagePath,
-                GEAR_COMPARE_TITLE,
-                GEAR_COMPARE_TITLE,
-                GEAR_COMPARE_DESCRIPTION,
+                GEAR_COMPARE_PAGE_NAME,
+                GEAR_COMPARE_PAGE_NAME,
+                GEAR_COMPARE_DESCRIPTION_TEXT,
                 AppConfigurations.secondary
               )}
 
               {LogoBox(
                 STAT_WEIGHTS_URL,
                 statWeightsButtonImagePath,
-                STAT_WEIGHTS_TITLE,
-                STAT_WEIGHTS_TITLE,
-                STAT_WEIGHTS_DESCRIPTION,
+                STAT_WEIGHTS_PAGE_NAME,
+                STAT_WEIGHTS_PAGE_NAME,
+                STAT_WEIGHTS_DESCRIPTION_TEXT,
                 AppConfigurations.primary
               )}
             </Box>

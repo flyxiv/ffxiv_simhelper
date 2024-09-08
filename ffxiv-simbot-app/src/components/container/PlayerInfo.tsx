@@ -5,6 +5,7 @@ import { QUICK_SIM_RESPONSE_SAVE_NAME } from "../../App";
 import { QuickSimResponse } from "../../types/QuickSimResponse";
 import { PlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { SimulationInputSummary, StatSummaryGearCompare } from "./StatSummary";
+import { PARTY_MEMBERS_TEXT } from "../../const/languageTexts";
 
 const PlayerInfoBox = styled(Box)`
   ${PlayerInfoBoxStyle}
@@ -48,7 +49,7 @@ function PartyMemberJobsInfo(partyMemberJobAbbrevs: string[]) {
   return (
     <Box display="flex" alignItems="center" justifyContent="left" marginBottom="30px" border="1px solid black" padding={1}>
       <Box marginRight={2}>
-        <Typography variant="h6" color="white"> Party Members:</Typography>
+        <Typography variant="h6" color="white"> {PARTY_MEMBERS_TEXT} </Typography>
       </Box>
 
       {partyMemberJobAbbrevs.map((partyMemberJobAbbrev) => {

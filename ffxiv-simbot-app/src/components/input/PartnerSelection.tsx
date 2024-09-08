@@ -6,6 +6,7 @@ import { EquipmentInput } from "../../types/EquipmentInput";
 import { AppConfigurations } from "../../Themes";
 import { PartnerMenuItem } from "../items/PartnerMenuItem";
 import { EMPTY_PARTY_MEMBER } from "../../types/PartyStates";
+import { EMPTY_TEXT } from "../../const/languageTexts";
 
 const InputBox = styled(Box)`
   ${InputGridItemStyle}
@@ -67,7 +68,7 @@ export function Partner1Selection(
           {availablePartyIds.map((partyMemberId) => {
             return PartnerMenuItem(id, partyMemberId, totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[partyMemberId - 1]);
           })}
-          {<MenuItem key={`${id}_partner1_empty_menuitem`} value="empty" color="white">Empty</MenuItem>};
+          {<MenuItem key={`${id}_partner1_empty_menuitem`} value="empty" color="white">{EMPTY_TEXT}</MenuItem>};
         </Select>
       </CustomFormControl>
     </InputBox>
@@ -130,7 +131,7 @@ export function Partner2Selection(
           {availablePartyIds.map((partyMemberId) => {
             return PartnerMenuItem(id, partyMemberId, totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[partyMemberId - 1]);
           })}
-          {<MenuItem key={`${id}_partner2_empty_menuitem`} value="empty" color="white">Empty</MenuItem>};
+          {<MenuItem key={`${id}_partner2_empty_menuitem`} value="empty" color="white">{EMPTY_TEXT}</MenuItem>};
         </Select>
       </CustomFormControl>
     </InputBox>

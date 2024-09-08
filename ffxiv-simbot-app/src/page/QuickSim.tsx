@@ -92,7 +92,7 @@ export function QuickSim() {
             </QuickSimInputContainer>
 
             <QuickSimInputContainer marginTop={10}>
-              {SelectionTitle(PLAYER_POWER_TEXT)}
+              {SelectionTitle(`3. ${PLAYER_POWER_TEXT}`)}
               <Box
                 display="flex"
                 justifyContent="center"

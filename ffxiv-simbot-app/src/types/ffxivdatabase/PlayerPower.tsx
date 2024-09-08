@@ -19,26 +19,17 @@ import {
 import { CRIT_BASE_DAMAGE } from "./Stats";
 import { ItemSet } from "./ItemSet";
 import { GearSetMaterias } from "./Materia";
-
-export const WEAPON_MULTIPLIER_NAME = "Weapon";
-export const MAIN_STAT_MULTIPLIER_NAME = "Main Stat";
-export const CRIT_RATE_NAME = "Crit Rate";
-export const CRIT_DAMAGE_NAME = "Crit Dmg";
-export const DH_RATE_NAME = "DH Rate";
-export const DET_MULTIPLIER_NAME = "Det";
-export const SPEED_MULTIPLIER_NAME = "Speed";
-export const TENACITY_MULTIPLIER_NAME = "Tenacity";
-export const GCD_NAME = "GCD";
+import { AST_EN_NAME, BRD_EN_NAME, CRIT_STAT_NAME, CRT_POWER_NAME, CRT_RATE_POWER_NAME, DET_POWER_NAME, DET_STAT_NAME, DEX_STAT_NAME, DH_RATE_POWER_NAME, DH_STAT_NAME, DNC_EN_NAME, DRK_EN_NAME, GCD_NAME, GNB_EN_NAME, INT_STAT_NAME, MAIN_STAT_POWER_NAME, MCH_EN_NAME, MIND_STAT_NAME, MNK_EN_NAME, NIN_EN_NAME, PLD_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SKS_STAT_NAME, SPEED_POWER_NAME, SPS_STAT_NAME, STR_STAT_NAME, TEN_STAT_NAME, TENACITY_POWER_NAME, VPR_EN_NAME, WAR_EN_NAME, WD_POWER_NAME, WD_STAT_NAME, WHM_EN_NAME } from "../../const/languageTexts";
 
 export const POWER_NAMES = [
-  WEAPON_MULTIPLIER_NAME,
-  MAIN_STAT_MULTIPLIER_NAME,
-  CRIT_RATE_NAME,
-  CRIT_DAMAGE_NAME,
-  DH_RATE_NAME,
-  DET_MULTIPLIER_NAME,
-  SPEED_MULTIPLIER_NAME,
-  TENACITY_MULTIPLIER_NAME,
+  WD_POWER_NAME,
+  MAIN_STAT_POWER_NAME,
+  CRT_RATE_POWER_NAME,
+  CRT_POWER_NAME,
+  DH_RATE_POWER_NAME,
+  DET_POWER_NAME,
+  SPEED_POWER_NAME,
+  TENACITY_POWER_NAME,
   GCD_NAME,
 ];
 
@@ -108,26 +99,26 @@ export function getStatByStatName(
   jobAbbrev: string
 ) {
   switch (statName) {
-    case "WD":
+    case WD_STAT_NAME:
       return `${playerPower.weaponDamage}`;
-    case "STR":
-    case "DEX":
-    case "INT":
-    case "MND":
+    case STR_STAT_NAME:
+    case DEX_STAT_NAME:
+    case INT_STAT_NAME:
+    case MIND_STAT_NAME:
       return `${playerPower.mainStat}`;
-    case "CRT":
+    case CRIT_STAT_NAME:
       return `${playerPower.criticalStrike}`;
-    case "DH":
+    case DH_STAT_NAME:
       return `${playerPower.directHit}`;
-    case "DET":
+    case DET_STAT_NAME:
       return `${playerPower.determination}`;
-    case "SKS":
+    case SKS_STAT_NAME:
       return `${playerPower.skillSpeed}`;
-    case "SPS":
+    case SPS_STAT_NAME:
       return `${playerPower.spellSpeed}`;
-    case "TEN":
+    case TEN_STAT_NAME:
       return `${playerPower.tenacity}`;
-    case "GCD": {
+    case GCD_NAME: {
       playerPower.gcd = calculateGCD(
         getSpeedStatByJobAbbrev(playerPower, jobAbbrev)
       );
@@ -140,28 +131,28 @@ export function getStatByStatName(
 
 export function getStatPower(power: PlayerPower, powerName: string) {
   switch (powerName) {
-    case WEAPON_MULTIPLIER_NAME: {
+    case WD_POWER_NAME: {
       return `${(power.weaponDamageMultiplier * 100).toFixed(0)}%`;
     }
-    case MAIN_STAT_MULTIPLIER_NAME: {
+    case MAIN_STAT_POWER_NAME: {
       return `${(power.mainStatMultiplier * 100).toFixed(0)}%`;
     }
-    case CRIT_RATE_NAME: {
+    case CRT_RATE_POWER_NAME: {
       return `+${(power.criticalStrikeRate * 100).toFixed(1)}%`;
     }
-    case CRIT_DAMAGE_NAME: {
+    case CRT_POWER_NAME: {
       return `+${(power.criticalStrikeDamage * 100).toFixed(1)}%`;
     }
-    case DH_RATE_NAME: {
+    case DH_RATE_POWER_NAME: {
       return `${(power.directHitRate * 100).toFixed(1)}%`;
     }
-    case DET_MULTIPLIER_NAME: {
+    case DET_POWER_NAME: {
       return `${(100 * power.determinationMultiplier).toFixed(1)}%`;
     }
-    case SPEED_MULTIPLIER_NAME: {
+    case SPEED_POWER_NAME: {
       return `${(100 * power.speedMultiplier).toFixed(1)}%`;
     }
-    case TENACITY_MULTIPLIER_NAME: {
+    case TENACITY_POWER_NAME: {
       return `${(power.tenacityMultiplier * 100).toFixed(1)}%`;
     }
     case GCD_NAME: {
@@ -174,10 +165,10 @@ export function getStatPower(power: PlayerPower, powerName: string) {
 
 export function isTank(jobAbbrev: string) {
   switch (jobAbbrev) {
-    case "PLD":
-    case "WAR":
-    case "DRK":
-    case "GNB":
+    case PLD_EN_NAME:
+    case WAR_EN_NAME:
+    case DRK_EN_NAME:
+    case GNB_EN_NAME:
       return true;
     default:
       return false;
@@ -186,10 +177,10 @@ export function isTank(jobAbbrev: string) {
 
 export function isHealer(jobAbbrev: string) {
   switch (jobAbbrev) {
-    case "WHM":
-    case "SCH":
-    case "AST":
-    case "SGE":
+    case WHM_EN_NAME:
+    case SCH_EN_NAME:
+    case AST_EN_NAME:
+    case SGE_EN_NAME:
       return true;
     default:
       return false;
@@ -201,19 +192,19 @@ export function getSpeedStatByJobAbbrev(
   jobAbbrev: string
 ) {
   switch (jobAbbrev) {
-    case "PLD":
-    case "WAR":
-    case "DRK":
-    case "GNB":
-    case "DRG":
-    case "MNK":
-    case "SAM":
-    case "RPR":
-    case "NIN":
-    case "VPR":
-    case "BRD":
-    case "MCH":
-    case "DNC":
+    case PLD_EN_NAME:
+    case WAR_EN_NAME:
+    case DRK_EN_NAME:
+    case GNB_EN_NAME:
+    case DRK_EN_NAME:
+    case MNK_EN_NAME:
+    case SAM_EN_NAME:
+    case RPR_EN_NAME:
+    case NIN_EN_NAME:
+    case VPR_EN_NAME:
+    case BRD_EN_NAME:
+    case MCH_EN_NAME:
+    case DNC_EN_NAME:
       return totalStats.skillSpeed;
     default:
       return totalStats.spellSpeed;
@@ -226,54 +217,54 @@ export function getStatLostByStatName(
   jobAbbrev: string
 ) {
   switch (statName) {
-    case "WD":
+    case WD_STAT_NAME:
       return 0;
-    case "STR":
-    case "DEX":
-    case "INT":
-    case "MND":
+    case STR_STAT_NAME:
+    case DEX_STAT_NAME:
+    case INT_STAT_NAME:
+    case MIND_STAT_NAME:
       return (
         getMinNeededStatForCurrentMainStat(
           totalStats.mainStatMultiplier * 100,
           isTank(jobAbbrev)
         ) - totalStats.mainStat
       );
-    case "CRT":
+    case CRIT_STAT_NAME:
       return (
         getMinNeededStatForCurrentCriticalStrike(
           100 * (totalStats.criticalStrikeDamage - CRIT_BASE_DAMAGE)
         ) - totalStats.criticalStrike
       );
-    case "DH":
+    case DH_STAT_NAME:
       return (
         getMinNeededStatForCurrentDirectHit(100 * totalStats.directHitRate) -
         totalStats.directHit
       );
-    case "DET":
+    case DET_STAT_NAME:
       return (
         getMinNeededStatForCurrentDetermination(
           totalStats.determinationMultiplier * 100 - 100
         ) - totalStats.determination
       );
-    case "SKS":
+    case SKS_STAT_NAME:
       return (
         getMinNeededStatForCurrentSpeed(
           totalStats.speedMultiplier * 100 - 100
         ) - totalStats.skillSpeed
       );
-    case "SPS":
+    case SPS_STAT_NAME:
       return (
         getMinNeededStatForCurrentSpeed(
           totalStats.speedMultiplier * 100 - 100
         ) - totalStats.spellSpeed
       );
-    case "TEN":
+    case TEN_STAT_NAME:
       return (
         getMinNeededStatForCurrentTenacity(
           totalStats.tenacityMultiplier * 100 - 100
         ) - totalStats.tenacity
       );
-    case "GCD":
+    case GCD_NAME:
       return (
         getMinNeededStatForCurrentGCD(totalStats.gcd) -
         getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
@@ -289,55 +280,55 @@ export function getStatNeededByStatName(
   jobAbbrev: string
 ) {
   switch (statName) {
-    case "WD":
+    case WD_STAT_NAME:
       return 0;
-    case "STR":
-    case "DEX":
-    case "INT":
-    case "MND":
+    case STR_STAT_NAME:
+    case DEX_STAT_NAME:
+    case INT_STAT_NAME:
+    case MIND_STAT_NAME:
       return (
         getMinNeededStatForCurrentMainStat(
           totalStats.mainStatMultiplier * 100 + 1,
           isTank(jobAbbrev)
         ) - totalStats.mainStat
       );
-    case "CRT":
+    case CRIT_STAT_NAME:
       return (
         getMinNeededStatForCurrentCriticalStrike(
           100 * (totalStats.criticalStrikeDamage - CRIT_BASE_DAMAGE) + 0.1
         ) - totalStats.criticalStrike
       );
-    case "DH":
+    case DH_STAT_NAME:
       return (
         getMinNeededStatForCurrentDirectHit(
           100 * totalStats.directHitRate + 0.1
         ) - totalStats.directHit
       );
-    case "DET":
+    case DET_STAT_NAME:
       return (
         getMinNeededStatForCurrentDetermination(
           totalStats.determinationMultiplier * 100 - 100 + 0.1
         ) - totalStats.determination
       );
-    case "SKS":
+    case SKS_STAT_NAME:
       return (
         getMinNeededStatForCurrentSpeed(
           totalStats.speedMultiplier * 100 - 100 + 0.1
         ) - totalStats.skillSpeed
       );
-    case "SPS":
+    case SPS_STAT_NAME:
       return (
         getMinNeededStatForCurrentSpeed(
           totalStats.speedMultiplier * 100 - 100
         ) - totalStats.spellSpeed
       );
-    case "TEN":
+    case TEN_STAT_NAME:
       return (
         getMinNeededStatForCurrentTenacity(
           totalStats.tenacityMultiplier * 100 - 100 + 0.1
         ) - totalStats.tenacity
       );
-    case "GCD":
+    case GCD_NAME:
       return (
         getMinNeededStatForCurrentGCD(totalStats.gcd - 0.01) -
         getSpeedStatByJobAbbrev(totalStats, jobAbbrev)

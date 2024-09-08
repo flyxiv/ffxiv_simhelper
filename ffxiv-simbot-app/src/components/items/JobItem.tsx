@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { ITEM_BOTTOM_MENU_MIN_HEIGHT, ITEM_TOP_MENU_MIN_HEIGHT } from "./Styles";
+import { convertToJobText } from "../../const/languageTexts";
 
 export function JobItem(jobAbbrev: string, align: string, is_top: boolean) {
   return (
@@ -16,7 +17,7 @@ export function JobItem(jobAbbrev: string, align: string, is_top: boolean) {
       </Box>
       <Box>
         <Typography variant="body1" alignContent={"center"} color="white">
-          {jobAbbrev}
+          {convertToJobText(jobAbbrev)}
         </Typography>
       </Box>
     </Box>

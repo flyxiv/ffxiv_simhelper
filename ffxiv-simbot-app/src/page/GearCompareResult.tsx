@@ -10,6 +10,7 @@ import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
+import { GEARSET1_TEXT, GEARSET2_TEXT } from "../const/languageTexts";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -66,7 +67,7 @@ export function GearCompareResult() {
             backgroundColor: AppConfigurations.backgroundOne
           }}>
             <ResultBoardTopBox marginBottom="50px">
-              {SimulationTitle("GearSet1")}
+              {SimulationTitle(GEARSET1_TEXT)}
               {GearCompareDpsSummary(simulationData1, simulationData2)}
               {StatComparePlayerInfo(
                 mainCharacterJob,
@@ -77,7 +78,7 @@ export function GearCompareResult() {
               )}
             </ResultBoardTopBox>
             <ResultBoardTopBox>
-              {SimulationTitle("GearSet2")}
+              {SimulationTitle(GEARSET2_TEXT)}
               {GearCompareDpsSummary(simulationData2, simulationData1)}
               {StatComparePlayerInfo(
                 mainCharacterJob,

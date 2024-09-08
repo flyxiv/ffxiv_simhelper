@@ -1,3 +1,4 @@
+import { CRIT_STAT_NAME, DET_STAT_NAME, DH_STAT_NAME, PIE_STAT_NAME, SKS_STAT_NAME, SPS_STAT_NAME, TEN_STAT_NAME } from "../../const/languageTexts";
 import totalFoodJson from "../../assets/data/food_data.json";
 
 const totalFood: Array<Food> = [];
@@ -50,25 +51,25 @@ export function foodStatDescriptionString(food: Food) {
   const stats = [];
 
   if (food.criticalStrike > 0) {
-    stats.push({ statName: "CRT", value: food.criticalStrike });
+    stats.push({ statName: CRIT_STAT_NAME, value: food.criticalStrike });
   }
   if (food.directHit > 0) {
-    stats.push({ statName: "DH", value: food.directHit });
+    stats.push({ statName: DH_STAT_NAME, value: food.directHit });
   }
   if (food.determination > 0) {
-    stats.push({ statName: "DET", value: food.determination });
+    stats.push({ statName: DET_STAT_NAME, value: food.determination });
   }
   if (food.skillSpeed > 0) {
-    stats.push({ statName: "SKS", value: food.skillSpeed });
+    stats.push({ statName: SKS_STAT_NAME, value: food.skillSpeed });
   }
   if (food.spellSpeed > 0) {
-    stats.push({ statName: "SPS", value: food.spellSpeed });
+    stats.push({ statName: SPS_STAT_NAME, value: food.spellSpeed });
   }
   if (food.tenacity > 0) {
-    stats.push({ statName: "TEN", value: food.tenacity });
+    stats.push({ statName: TEN_STAT_NAME, value: food.tenacity });
   }
   if (food.piety > 0) {
-    stats.push({ statName: "PIE", value: food.piety });
+    stats.push({ statName: PIE_STAT_NAME, value: food.piety });
   }
 
   let descriptionString = "";

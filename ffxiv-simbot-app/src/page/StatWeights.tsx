@@ -20,6 +20,7 @@ import {
   InputContainerStyle,
 } from "./Styles";
 import { StatWeightsRequestButton } from "../components/basic/StatWeightsRequestButton";
+import { PLAYER_POWER_TEXT, QUICK_SIM_INPUT_INFO_TEXT, QUICK_SIM_PARTY_INPUT_INFO_TEXT } from "../const/languageTexts";
 
 let INPUT_CONTAINER_WIDTH = "40vw";
 const STATWEIGHTS_LOADOUT_COUNT = 6;
@@ -77,21 +78,21 @@ export function StatWeights() {
           {AppHeader()}
           <Box alignContent={"center"}>
             <StatWeightsInputContainer justifyContent={"center"}>
-              {SelectionTitle("1. Input Your Info")}
+              {SelectionTitle(QUICK_SIM_INPUT_INFO_TEXT)}
               <EquipmentBoard>
                 {EquipmentSelectionMenu(0, totalState, setTotalState)}
               </EquipmentBoard>
             </StatWeightsInputContainer>
 
             <StatWeightsInputContainer paddingTop={20}>
-              {SelectionTitle("2. Additional Settings")}
+              {SelectionTitle(QUICK_SIM_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
                 {HorizontalPartyInput(totalState, setTotalState)}
               </CustomizeBoard>
             </StatWeightsInputContainer>
 
             <StatWeightsInputContainer marginTop={10}>
-              {SelectionTitle("3. Specific Player Power")}
+              {SelectionTitle(`3. ${PLAYER_POWER_TEXT}`)}
               <Box
                 display="flex"
                 justifyContent="center"

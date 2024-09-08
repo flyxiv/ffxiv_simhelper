@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { ITEM_TOP_MENU_MIN_HEIGHT } from "./Styles";
+import { PARTY_MEMBER_LABEL_TEXT } from "../../const/languageTexts";
 
 export function PartnerItem(partyMemberJobId: number, jobAbbrev: string) {
   return (
@@ -16,7 +17,7 @@ export function PartnerItem(partyMemberJobId: number, jobAbbrev: string) {
       </Box>
       <Box>
         <Typography variant="body1" alignContent={"center"} color="white">
-          {`Party Member ${partyMemberJobId}`}
+          {`${PARTY_MEMBER_LABEL_TEXT} ${partyMemberJobId}`}
         </Typography>
       </Box>
     </Box>

@@ -24,6 +24,7 @@ import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { PlayerInfo } from "../components/container/PlayerInfo";
+import { SIMULATION_RESULT_TEXT } from "../const/languageTexts";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -95,7 +96,7 @@ export function SimulationResult() {
         <Box>
           {AppHeader()}
           <ResultBoardTopBox>
-            {SimulationTitle("Simulation Result")}
+            {SimulationTitle(SIMULATION_RESULT_TEXT)}
             {DpsSummary(mainPlayerSimulationData)}
             {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs)}
           </ResultBoardTopBox>

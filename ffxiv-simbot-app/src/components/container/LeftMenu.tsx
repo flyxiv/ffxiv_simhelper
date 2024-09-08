@@ -14,7 +14,7 @@ import {
   STAT_WEIGHTS_URL,
 } from "../../App";
 import { EquipmentInput } from "../../types/EquipmentInput";
-import { BEST_PARTNER_PAGE_NAME, GEAR_COMPARE_PAGE_NAME, HOME_PAGE_NAME, QUICKSIM_PAGE_NAME, STAT_WEIGHTS_PAGE_NAME } from "../../const/languageTexts";
+import { BEST_PARTNER_PAGE_NAME, GEAR_COMPARE_PAGE_NAME, HOME_PAGE_NAME, NAVIGATE_TEXT, QUICKSIM_PAGE_NAME, SAVED_GEARSETS_TEXT, STAT_WEIGHTS_PAGE_NAME } from "../../const/languageTexts";
 
 export const MENU_WIDTH_VW_XS = 50;
 export const MENU_WIDTH_VW_SM = 45;
@@ -140,7 +140,7 @@ function DefaultLeftMenuComponents() {
       </LeftMenuLogo>
       <LeftMenuNavigationBar paddingY={4} paddingLeft={2}>
         <Typography variant="h3" align="left" sx={{ fontWeight: "bold" }}>
-          Navigate
+          {NAVIGATE_TEXT}
         </Typography>
 
         <Divider
@@ -191,7 +191,7 @@ function EquipmentLoadouts(
           align="left"
           sx={{ fontWeight: "bold", paddingLeft: 2 }}
         >
-          Saved Gearsets
+          {SAVED_GEARSETS_TEXT}
         </Typography>
         <Divider
           sx={{

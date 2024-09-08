@@ -1,7 +1,9 @@
-export const BUFF_JOBS_LIST = ["AST", "SCH", "DRG", "MNK", "NIN", "RPR", "BRD", "DNC", "SMN", "RDM", "PCT"];
-export const HEALER_JOBS = ["WHM", "AST", "SCH", "SGE"];
-export const TANK_JOBS = ["PLD", "WAR", "DRK", "GNB"];
-export const DPS_JOBS = ["MNK", "DRG", "NIN", "SAM", "RPR", "VPR", "BRD", "MCH", "DNC", "BLM", "SMN", "RDM", "PCT"];
+import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../const/languageTexts";
+
+export const BUFF_JOBS_LIST = [AST_EN_NAME, SCH_EN_NAME, DRG_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, RPR_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, SMN_EN_NAME, RDM_EN_NAME, PCT_EN_NAME];
+export const HEALER_JOBS = [WHM_EN_NAME, AST_EN_NAME, SCH_EN_NAME, SGE_EN_NAME];
+export const TANK_JOBS = [PLD_EN_NAME, WAR_EN_NAME, DRK_EN_NAME, GNB_EN_NAME];
+export const DPS_JOBS = [MNK_EN_NAME, DRG_EN_NAME, NIN_EN_NAME, SAM_EN_NAME, RPR_EN_NAME, VPR_EN_NAME, BRD_EN_NAME, MCH_EN_NAME, DNC_EN_NAME, BLM_EN_NAME, SMN_EN_NAME, RDM_EN_NAME, PCT_EN_NAME];
 
 export interface SimulationDataByRole {
   tanks: Array<BestPartnerSimulationData>;
@@ -37,45 +39,45 @@ export class PartyCompositionMaker {
 
   setMainCharacter(mainPlayerJobAbbrev: string) {
     switch (mainPlayerJobAbbrev) {
-      case "PLD":
-      case "WAR":
-      case "DRK":
-      case "GNB":
+      case PLD_EN_NAME:
+      case WAR_EN_NAME:
+      case DRK_EN_NAME:
+      case GNB_EN_NAME:
         this.tank1 = { jobAbbrev: mainPlayerJobAbbrev, buffContribution: null };
         break;
 
-      case "WHM":
-      case "AST":
-      case "SCH":
-      case "SGE":
+      case WHM_EN_NAME:
+      case AST_EN_NAME:
+      case SCH_EN_NAME:
+      case SGE_EN_NAME:
         this.mainHealer = {
           jobAbbrev: mainPlayerJobAbbrev,
           buffContribution: null,
         };
         break;
 
-      case "MNK":
-      case "DRG":
-      case "NIN":
-      case "SAM":
-      case "RPR":
-      case "VPR":
+      case MNK_EN_NAME:
+      case DRG_EN_NAME:
+      case NIN_EN_NAME:
+      case SAM_EN_NAME:
+      case RPR_EN_NAME:
+      case VPR_EN_NAME:
         this.melee = { jobAbbrev: mainPlayerJobAbbrev, buffContribution: null };
         break;
 
-      case "BRD":
-      case "MCH":
-      case "DNC":
+      case BRD_EN_NAME:
+      case MCH_EN_NAME:
+      case DNC_EN_NAME:
         this.ranged = {
           jobAbbrev: mainPlayerJobAbbrev,
           buffContribution: null,
         };
         break;
 
-      case "BLM":
-      case "SMN":
-      case "RDM":
-      case "PCT":
+      case BLM_EN_NAME:
+      case SMN_EN_NAME:
+      case RDM_EN_NAME:
+      case PCT_EN_NAME:
         this.caster = {
           jobAbbrev: mainPlayerJobAbbrev,
           buffContribution: null,
@@ -214,11 +216,11 @@ export class PartyCompositionMaker {
 
 function getHealerOrder(healerJobAbbrev: string) {
   switch (healerJobAbbrev) {
-    case "WHM":
+    case WHM_EN_NAME:
       return 0;
-    case "AST":
+    case AST_EN_NAME:
       return 1;
-    case "SCH":
+    case SCH_EN_NAME:
       return 2;
     default:
       return 3;

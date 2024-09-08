@@ -1,3 +1,4 @@
+import { CAST_TEXT, DAMAGE_PERCENTAGE_TEXT, SKILL_TITLE_TEXT, TOTAL_DAMAGE_TEXT } from "../../const/languageTexts";
 import { DamageChartData } from "./GraphData";
 import {
   SkillBarBoxStyle,
@@ -107,7 +108,7 @@ export const DamageChartTitle = (
       <SkillIconBox />
       <SkillNameBox>
         <Typography variant="body2" fontSize={fontSize}>
-          Skill
+          {SKILL_TITLE_TEXT}
         </Typography>
       </SkillNameBox>
     </Box>
@@ -116,19 +117,19 @@ export const DamageChartTitle = (
 
     <SkillPercentBox>
       <Typography variant="body1" fontSize={fontSize} align="right">
-        Dmg%
+        {DAMAGE_PERCENTAGE_TEXT}
       </Typography>
     </SkillPercentBox>
 
     <TotalDamageBox>
       <Typography variant="body1" fontSize={fontSize} align="right">
-        Total Dmg
+        {TOTAL_DAMAGE_TEXT}
       </Typography>
     </TotalDamageBox>
 
     <SkillCountBox>
       <Typography variant="body1" fontSize={fontSize} align="right">
-        Swing
+        {CAST_TEXT}
       </Typography>
     </SkillCountBox>
   </SkillBox>

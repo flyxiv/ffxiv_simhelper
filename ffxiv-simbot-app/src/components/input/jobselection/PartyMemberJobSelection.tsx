@@ -12,6 +12,7 @@ import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
 import { isHealer, isTank } from "../../../types/ffxivdatabase/PlayerPower";
 import { BUFF_JOBS_LIST, DPS_JOBS, HEALER_JOBS, TANK_JOBS } from "../../../types/ffxivdatabase/PartyCompositionMaker";
+import { PARTY_MEMBER_LABEL_TEXT } from "../../../const/languageTexts";
 
 let ALIGN = "center";
 
@@ -63,7 +64,7 @@ export function PartyMemberJobSelection(
   totalEquipmentState: EquipmentInput,
   setTotalState: Function
 ) {
-  let playerId = `Party Member ${id}`;
+  let playerId = `${PARTY_MEMBER_LABEL_TEXT} ${id}`;
   const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
     const newJobNames = totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs.map((jobName, i) => {
       if (i === index) {

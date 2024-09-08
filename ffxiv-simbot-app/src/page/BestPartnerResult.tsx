@@ -16,6 +16,7 @@ import {
   SimulationDataByRole,
 } from "../types/ffxivdatabase/PartyCompositionMaker";
 import { ContributionByRoleTable } from "../components/graph/ContributionByRoleTable";
+import { AST_EN_NAME, BEST_PARTNER_BY_ROLE_TEXT, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PLD_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SIMULATION_RESULT_TEXT, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../const/languageTexts";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -24,8 +25,6 @@ const ResultBoardBox = styled(Box)`
 const ResultTopBoardBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
 `;
-
-const BEST_PARTNERS_BY_ROLE_TEXT = "Best Partner By Role";
 
 export const TABLE_WIDTH = "80%";
 
@@ -63,12 +62,12 @@ export function BestPartnerResult() {
         <Box>
           {AppHeader()}
           <ResultTopBoardBox marginBottom="40px">
-            {SimulationTitle("Simulation Result")}
+            {SimulationTitle(SIMULATION_RESULT_TEXT)}
             {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond)}
           </ResultTopBoardBox>
           <ResultBoardBox>
-            {SimulationTitle(BEST_PARTNERS_BY_ROLE_TEXT)}
-            {ContributionByRoleTable(simulationDataByRole, mainPlayerJob)}
+            {SimulationTitle(BEST_PARTNER_BY_ROLE_TEXT)}
+            {ContributionByRoleTable(simulationDataByRole)}
           </ResultBoardBox>
           {Footer()}
         </Box>
@@ -90,41 +89,41 @@ function convertToContributionTable(
 
   for (let data of partnerSimulationData) {
     switch (data.partnerJobAbbrev) {
-      case "PLD":
-      case "WAR":
-      case "DRK":
-      case "GNB":
+      case PLD_EN_NAME:
+      case WAR_EN_NAME:
+      case DRK_EN_NAME:
+      case GNB_EN_NAME:
         table.tanks.push({
           jobAbbrev: data.partnerJobAbbrev,
           buffContribution: data.contributedDps,
         });
         break;
 
-      case "WHM":
-      case "AST":
-      case "SCH":
-      case "SGE":
+      case WHM_EN_NAME:
+      case AST_EN_NAME:
+      case SCH_EN_NAME:
+      case SGE_EN_NAME:
         table.healers.push({
           jobAbbrev: data.partnerJobAbbrev,
           buffContribution: data.contributedDps,
         });
         break;
 
-      case "DRG":
-      case "MNK":
-      case "NIN":
-      case "SAM":
-      case "RPR":
-      case "VPR":
+      case DRG_EN_NAME:
+      case MNK_EN_NAME:
+      case NIN_EN_NAME:
+      case SAM_EN_NAME:
+      case RPR_EN_NAME:
+      case VPR_EN_NAME:
         table.melee.push({
           jobAbbrev: data.partnerJobAbbrev,
           buffContribution: data.contributedDps,
         });
         break;
 
-      case "BRD":
-      case "MCH":
-      case "DNC":
+      case BRD_EN_NAME:
+      case MCH_EN_NAME:
+      case DNC_EN_NAME:
         table.ranged.push({
           jobAbbrev: data.partnerJobAbbrev,
           buffContribution: data.contributedDps,

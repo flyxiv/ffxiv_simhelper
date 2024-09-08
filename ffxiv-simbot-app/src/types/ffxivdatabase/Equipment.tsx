@@ -1,8 +1,9 @@
+import { BODY_SLOT_EN_TEXT, CRIT_STAT_NAME, DET_STAT_NAME, DEX_STAT_NAME, DH_STAT_NAME, EARS_SLOT_EN_TEXT, FEET_SLOT_EN_TEXT, FINGER1_SLOT_EN_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_EN_TEXT, FINGER2_SLOT_TEXT, FINGER_SLOT_EN_TEXT, FINGER_SLOT_TEXT, HANDS_SLOT_EN_TEXT, HEAD_SLOT_EN_TEXT, INT_STAT_NAME, LEGS_SLOT_EN_TEXT, MIND_STAT_NAME, NECK_SLOT_EN_TEXT, OFFHAND_SLOT_EN_TEXT, PIE_STAT_NAME, PLD_JOB_NAME, SKS_STAT_NAME, SPS_STAT_NAME, STR_STAT_NAME, TEN_STAT_NAME, WD_STAT_NAME, WEAPON_SLOT_EN_TEXT, WRIST_SLOT_EN_TEXT } from "../../const/languageTexts";
 import totalEquipmentsJson from "../../assets/data/equipment_data.json";
 
-export const WEAPONSLOTS = ["weapon", "offHand"];
-export const LEFTSLOTS = ["head", "body", "hands", "legs", "feet"];
-export const RIGHTSLOTS = ["wrists", "ears", "neck", "finger1", "finger2"];
+export const WEAPONSLOTS = [WEAPON_SLOT_EN_TEXT, OFFHAND_SLOT_EN_TEXT];
+export const LEFTSLOTS = [HEAD_SLOT_EN_TEXT, BODY_SLOT_EN_TEXT, HANDS_SLOT_EN_TEXT, LEGS_SLOT_EN_TEXT, FEET_SLOT_EN_TEXT];
+export const RIGHTSLOTS = [WRIST_SLOT_EN_TEXT, EARS_SLOT_EN_TEXT, NECK_SLOT_EN_TEXT, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT];
 export const TOTAL_SLOTS = WEAPONSLOTS.concat(LEFTSLOTS).concat(RIGHTSLOTS);
 
 const CURRENT_MIN_ITEM_LEVEL = 710;
@@ -75,8 +76,8 @@ export function toEquipmentKeyString(
   slotName: string
 ): string {
   let keySlotName = slotName;
-  if (slotName === "finger1" || slotName === "finger2") {
-    keySlotName = "finger";
+  if (slotName === FINGER1_SLOT_EN_TEXT || slotName === FINGER2_SLOT_EN_TEXT) {
+    keySlotName = FINGER_SLOT_EN_TEXT;
   }
   return `${keySlotName}-${jobAbbrev}`;
 }
@@ -137,53 +138,53 @@ export function readEquipmentData(minItemLevel: number) {
 export function equipmentStatDescriptionString(equipment: Equipment) {
   const stats = [];
   if (equipment.weaponDamage > 0) {
-    stats.push({ statName: "WD", value: equipment.weaponDamage });
+    stats.push({ statName: WD_STAT_NAME, value: equipment.weaponDamage });
   }
   if (equipment.STR > 0) {
     stats.push({
-      statName: "STR",
+      statName: STR_STAT_NAME,
       value: equipment.STR,
     });
   }
   if (equipment.DEX > 0) {
     stats.push({
-      statName: "DEX",
+      statName: DEX_STAT_NAME,
       value: equipment.DEX,
     });
   }
   if (equipment.INT > 0) {
     stats.push({
-      statName: "INT",
+      statName: INT_STAT_NAME,
       value: equipment.INT,
     });
   }
   if (equipment.MND > 0) {
     stats.push({
-      statName: "MND",
+      statName: MIND_STAT_NAME,
       value: equipment.MND,
     });
   }
 
   if (equipment.criticalStrike > 0) {
-    stats.push({ statName: "CRT", value: equipment.criticalStrike });
+    stats.push({ statName: CRIT_STAT_NAME, value: equipment.criticalStrike });
   }
   if (equipment.directHit > 0) {
-    stats.push({ statName: "DH", value: equipment.directHit });
+    stats.push({ statName: DH_STAT_NAME, value: equipment.directHit });
   }
   if (equipment.determination > 0) {
-    stats.push({ statName: "DET", value: equipment.determination });
+    stats.push({ statName: DET_STAT_NAME, value: equipment.determination });
   }
   if (equipment.skillSpeed > 0) {
-    stats.push({ statName: "SKS", value: equipment.skillSpeed });
+    stats.push({ statName: SKS_STAT_NAME, value: equipment.skillSpeed });
   }
   if (equipment.spellSpeed > 0) {
-    stats.push({ statName: "SPS", value: equipment.spellSpeed });
+    stats.push({ statName: SPS_STAT_NAME, value: equipment.spellSpeed });
   }
   if (equipment.tenacity > 0) {
-    stats.push({ statName: "TEN", value: equipment.tenacity });
+    stats.push({ statName: TEN_STAT_NAME, value: equipment.tenacity });
   }
   if (equipment.piety > 0) {
-    stats.push({ statName: "PIE", value: equipment.piety });
+    stats.push({ statName: PIE_STAT_NAME, value: equipment.piety });
   }
 
   let descriptionString = "";
@@ -195,34 +196,34 @@ export function equipmentStatDescriptionString(equipment: Equipment) {
 }
 
 export function getEquipmentSlotsOfJob(jobAbbrev: string) {
-  if (jobAbbrev === "PLD") {
+  if (jobAbbrev === PLD_JOB_NAME) {
     return [
-      "weapon",
-      "offHand",
-      "head",
-      "ears",
-      "body",
-      "neck",
-      "hands",
-      "wrists",
-      "legs",
-      "finger1",
-      "feet",
-      "finger2",
+      WEAPON_SLOT_EN_TEXT,
+      OFFHAND_SLOT_EN_TEXT,
+      HEAD_SLOT_EN_TEXT,
+      BODY_SLOT_EN_TEXT,
+      HANDS_SLOT_EN_TEXT,
+      LEGS_SLOT_EN_TEXT,
+      FEET_SLOT_EN_TEXT,
+      EARS_SLOT_EN_TEXT,
+      NECK_SLOT_EN_TEXT,
+      WRIST_SLOT_EN_TEXT,
+      FINGER1_SLOT_EN_TEXT,
+      FINGER2_SLOT_EN_TEXT,
     ];
   }
 
   return [
-    "weapon",
-    "ears",
-    "head",
-    "neck",
-    "body",
-    "wrists",
-    "hands",
-    "finger1",
-    "legs",
-    "finger2",
-    "feet",
+    WEAPON_SLOT_EN_TEXT,
+    HEAD_SLOT_EN_TEXT,
+    BODY_SLOT_EN_TEXT,
+    HANDS_SLOT_EN_TEXT,
+    LEGS_SLOT_EN_TEXT,
+    FEET_SLOT_EN_TEXT,
+    EARS_SLOT_EN_TEXT,
+    NECK_SLOT_EN_TEXT,
+    WRIST_SLOT_EN_TEXT,
+    FINGER1_SLOT_EN_TEXT,
+    FINGER2_SLOT_EN_TEXT,
   ];
 }

@@ -1,3 +1,4 @@
+import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../const/languageTexts";
 import {
   DEFAULT_CRITICAL_STRIKE,
   DEFAULT_DETERMINATION,
@@ -21,27 +22,27 @@ const SPEED_SLOPE = 130;
 const TENACITY_SLOPE = 112;
 
 const BASE_WEAPON_DAMAGE_PER_JOB = new Map([
-  ["PLD", 44],
-  ["WAR", 46],
-  ["DRK", 46],
-  ["GNB", 44],
-  ["WHM", 50],
-  ["SCH", 50],
-  ["AST", 50],
-  ["SGE", 50],
-  ["DRG", 50],
-  ["MNK", 48],
-  ["NIN", 48],
-  ["SAM", 49],
-  ["RPR", 50],
-  ["VPR", 48],
-  ["BRD", 50],
-  ["MCH", 50],
-  ["DNC", 50],
-  ["BLM", 50],
-  ["SMN", 50],
-  ["RDM", 50],
-  ["PCT", 50],
+  [PLD_EN_NAME, 44],
+  [WAR_EN_NAME, 46],
+  [DRK_EN_NAME, 46],
+  [GNB_EN_NAME, 44],
+  [WHM_EN_NAME, 50],
+  [SCH_EN_NAME, 50],
+  [AST_EN_NAME, 50],
+  [SGE_EN_NAME, 50],
+  [DRG_EN_NAME, 50],
+  [MNK_EN_NAME, 48],
+  [NIN_EN_NAME, 48],
+  [SAM_EN_NAME, 49],
+  [RPR_EN_NAME, 50],
+  [VPR_EN_NAME, 48],
+  [BRD_EN_NAME, 50],
+  [MCH_EN_NAME, 50],
+  [DNC_EN_NAME, 50],
+  [BLM_EN_NAME, 50],
+  [SMN_EN_NAME, 50],
+  [RDM_EN_NAME, 50],
+  [PCT_EN_NAME, 50],
 ]);
 
 // returns the percent increase of a stat

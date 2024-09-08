@@ -8,6 +8,7 @@ import {
   defaultSingleEquipmentInput,
 } from "../../const/DefaultSingleEquipmentInput";
 import { BEST_PARTNER_URL } from "../../App";
+import { DEFAULT_LOADOUT_TEXT, LOAD_COMPLETE_TEXT, LOADOUT_LOAD_TEXT, LOADOUT_WRITE_TEXT, NAME_TEXT, PLD_EN_NAME, SCH_EN_NAME } from "../../const/languageTexts";
 
 export const inputStyle = {
   width: "60%",
@@ -39,15 +40,15 @@ interface LoadoutMetaData {
 
 export function DefaultLoadoutMetadata(): LoadoutMetaData {
   return {
-    loadoutName: "Default Loadout",
-    jobAbbrev: "PLD",
+    loadoutName: DEFAULT_LOADOUT_TEXT,
+    jobAbbrev: PLD_EN_NAME,
   };
 }
 
 export function DefaultBestPartnerLoadoutMetadata(): LoadoutMetaData {
   return {
-    loadoutName: "Default Loadout",
-    jobAbbrev: "SCH",
+    loadoutName: DEFAULT_LOADOUT_TEXT,
+    jobAbbrev: SCH_EN_NAME,
   };
 }
 
@@ -102,7 +103,7 @@ export function LoadoutBox(
       </Box>
       <Box padding={1} display="flex">
         <LoadoutInput
-          label="Name"
+          label={NAME_TEXT}
           value={textFieldInputLoadoutName}
           onChange={(e) => {
             setTextFieldInputLoadoutName(e.target.value);
@@ -161,7 +162,7 @@ function LoadoutOverwriteButton(
         setTextFieldInputLoadoutName("");
       }}
     >
-      <Typography sx={{ fontWeight: "bold", fontSize: 10 }}>Write</Typography>
+      <Typography sx={{ fontWeight: "bold", fontSize: 10 }}>{LOADOUT_WRITE_TEXT}</Typography>
     </Button>
   );
 }
@@ -197,10 +198,10 @@ function LoadoutLoadButton(
         }
 
         setTotalState(savedLoadoutData);
-        setTextFieldInputLoadoutName("Load Complete");
+        setTextFieldInputLoadoutName(LOAD_COMPLETE_TEXT);
       }}
     >
-      <Typography sx={{ fontWeight: "bold", fontSize: 10 }}>Load</Typography>
+      <Typography sx={{ fontWeight: "bold", fontSize: 10 }}>{LOADOUT_LOAD_TEXT}</Typography>
     </Button>
   );
 }

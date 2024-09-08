@@ -25,6 +25,7 @@ import {
 } from "./StatCalculator";
 import { CRIT_BASE_DAMAGE, CRIT_BASE_PERCENT } from "./Stats";
 import { EquipmentInput, SingleEquipmentInputSaveState } from "../EquipmentInput";
+import { AST_JOB_NAME, BLM_JOB_NAME, BODY_SLOT_EN_TEXT, BODY_SLOT_TEXT, EARS_SLOT_EN_TEXT, EARS_SLOT_TEXT, FEET_SLOT_EN_TEXT, FEET_SLOT_TEXT, FINGER1_SLOT_EN_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_EN_TEXT, FINGER2_SLOT_TEXT, HANDS_SLOT_EN_TEXT, HANDS_SLOT_TEXT, HEAD_SLOT_EN_TEXT, HEAD_SLOT_TEXT, LEGS_SLOT_EN_TEXT, LEGS_SLOT_TEXT, NECK_SLOT_EN_TEXT, NECK_SLOT_TEXT, OFFHAND_SLOT_EN_TEXT, OFFHAND_SLOT_TEXT, PCT_JOB_NAME, RDM_JOB_NAME, SCH_JOB_NAME, SGE_JOB_NAME, SMN_JOB_NAME, WEAPON_SLOT_EN_TEXT, WEAPON_SLOT_TEXT, WHM_JOB_NAME, WRIST_SLOT_EN_TEXT, WRIST_SLOT_TEXT } from "../../const/languageTexts";
 
 export const WEAPON_SLOT_ID = 0;
 export const HEAD_SLOT_ID = 1;
@@ -39,78 +40,66 @@ export const FINGER1_SLOT_ID = 9;
 export const FINGER2_SLOT_ID = 10;
 export const OFFHAND_SLOT_ID = 11;
 
-export const WEAPON_SLOT_NAME = "weapon";
-export const HEAD_SLOT_NAME = "head";
-export const BODY_SLOT_NAME = "body";
-export const HANDS_SLOT_NAME = "hands";
-export const LEGS_SLOT_NAME = "legs";
-export const FEET_SLOT_NAME = "feet";
-export const NECK_SLOT_NAME = "neck";
-export const EAR_SLOT_NAME = "ears";
-export const WRIST_SLOT_NAME = "wrists";
-export const FINGER1_SLOT_NAME = "finger1";
-export const FINGER2_SLOT_NAME = "finger2";
-export const OFFHAND_SLOT_NAME = "offHand";
 
 export type ItemSet = number[];
 
 export function slotNameToSlotIndex(slotName: string): number {
   switch (slotName) {
-    case WEAPON_SLOT_NAME:
+    case WEAPON_SLOT_EN_TEXT:
       return WEAPON_SLOT_ID;
-    case HEAD_SLOT_NAME:
+    case HEAD_SLOT_EN_TEXT:
       return HEAD_SLOT_ID;
-    case BODY_SLOT_NAME:
+    case BODY_SLOT_EN_TEXT:
       return BODY_SLOT_ID;
-    case HANDS_SLOT_NAME:
+    case HANDS_SLOT_EN_TEXT:
       return HANDS_SLOT_ID;
-    case LEGS_SLOT_NAME:
+    case LEGS_SLOT_EN_TEXT:
       return LEGS_SLOT_ID;
-    case FEET_SLOT_NAME:
+    case FEET_SLOT_EN_TEXT:
       return FEET_SLOT_ID;
-    case NECK_SLOT_NAME:
+    case NECK_SLOT_EN_TEXT:
       return NECK_SLOT_ID;
-    case EAR_SLOT_NAME:
+    case EARS_SLOT_EN_TEXT:
       return EAR_SLOT_ID;
-    case WRIST_SLOT_NAME:
+    case WRIST_SLOT_EN_TEXT:
       return WRIST_SLOT_ID;
-    case FINGER1_SLOT_NAME:
+    case FINGER1_SLOT_EN_TEXT:
       return FINGER1_SLOT_ID;
-    case FINGER2_SLOT_NAME:
+    case FINGER2_SLOT_EN_TEXT:
       return FINGER2_SLOT_ID;
-    case OFFHAND_SLOT_NAME:
+    case OFFHAND_SLOT_EN_TEXT:
       return OFFHAND_SLOT_ID;
     default:
-      return -1;
+      return EMPTY_EQUIPMENT_ID;
   }
 }
 
 export function slotIndexToSlotName(slotIndex: number): string {
   switch (slotIndex) {
     case WEAPON_SLOT_ID:
-      return WEAPON_SLOT_NAME;
+      return WEAPON_SLOT_TEXT;
     case HEAD_SLOT_ID:
-      return HEAD_SLOT_NAME;
+      return HEAD_SLOT_TEXT;
     case BODY_SLOT_ID:
-      return BODY_SLOT_NAME;
+      return BODY_SLOT_TEXT;
     case HANDS_SLOT_ID:
-      return HANDS_SLOT_NAME;
+      return HANDS_SLOT_TEXT;
     case LEGS_SLOT_ID:
-      return LEGS_SLOT_NAME;
+      return LEGS_SLOT_TEXT;
     case FEET_SLOT_ID:
-      return FEET_SLOT_NAME;
+      return FEET_SLOT_TEXT;
     case EAR_SLOT_ID:
-      return EAR_SLOT_NAME;
+      return EARS_SLOT_TEXT;
     case NECK_SLOT_ID:
-      return NECK_SLOT_NAME;
+      return NECK_SLOT_TEXT;
     case WRIST_SLOT_ID:
-      return WRIST_SLOT_NAME;
+      return WRIST_SLOT_TEXT;
     case FINGER1_SLOT_ID:
-      return FINGER1_SLOT_NAME;
+      return FINGER1_SLOT_TEXT;
     case FINGER2_SLOT_ID:
-      return FINGER2_SLOT_NAME;
+      return FINGER2_SLOT_TEXT;
     case OFFHAND_SLOT_ID:
-      return OFFHAND_SLOT_NAME;
+      return OFFHAND_SLOT_TEXT;
     default:
       return "";
   }
@@ -216,14 +205,14 @@ export function calculatePowerByStat(power: PlayerPower, jobAbbrev: string) {
 
 export function isCaster(jobAbbrev: string) {
   switch (jobAbbrev) {
-    case "WHM":
-    case "SCH":
-    case "AST":
-    case "SGE":
-    case "BLM":
-    case "SMN":
-    case "RDM":
-    case "PCT":
+    case WHM_JOB_NAME:
+    case SCH_JOB_NAME:
+    case AST_JOB_NAME:
+    case SGE_JOB_NAME:
+    case BLM_JOB_NAME:
+    case SMN_JOB_NAME:
+    case RDM_JOB_NAME:
+    case PCT_JOB_NAME:
       return true;
     default:
       return false;

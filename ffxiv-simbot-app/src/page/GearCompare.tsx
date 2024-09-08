@@ -20,6 +20,7 @@ import { defaultDoubleEquipmentInput } from "../const/DefaultDoubleEquipmentInpu
 import { EquipmentInput } from "../types/EquipmentInput";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { COPY_BUTTON_TEXT, GEAR_COMPARE_INPUT_INFO_TEXT, QUICK_SIM_PARTY_INPUT_INFO_TEXT } from "../const/languageTexts";
 
 export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "70vw";
 const GEAR_COMPARE_LOADOUNT_COUNT = 6;
@@ -84,7 +85,7 @@ export function GearCompare() {
           {AppHeader()}
           <Box alignContent={"center"}>
             <GearCompareEquipmentInputContainer>
-              {SelectionTitle("1. Input Gearsets You Want to Compare")}
+              {SelectionTitle(GEAR_COMPARE_INPUT_INFO_TEXT)}
               <Box
                 display="flex"
                 justifyContent="space-evenly"
@@ -115,7 +116,7 @@ export function GearCompare() {
             </GearCompareEquipmentInputContainer>
 
             <GearComparePartyInputContainer paddingTop={20} paddingBottom={40}>
-              {SelectionTitle("2. Additional Settings")}
+              {SelectionTitle(QUICK_SIM_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
                 {HorizontalPartyInput(totalState, setTotalState)}
               </CustomizeBoard>
@@ -144,7 +145,7 @@ function LoadLeftEquipmentToRightButton(
         setTotalState(newTotalState);
       }}
     >
-      Copy
+      {COPY_BUTTON_TEXT}
     </Button>
   );
 }
@@ -163,7 +164,7 @@ function LoadRightEquipmentToLeftButton(
         setTotalState(newTotalState);
       }}
     >
-      Copy
+      {COPY_BUTTON_TEXT}
     </Button>
   );
 }

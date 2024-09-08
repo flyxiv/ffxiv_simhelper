@@ -9,6 +9,7 @@ import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { StatWeightsResponseTable } from "../types/StatWeightsResponse";
 import { StatWeightSummary } from "../components/container/StatSummary";
+import { SIMULATION_RESULT_TEXT } from "../const/languageTexts";
 
 export interface StatWeightsData {
   statName: string;
@@ -68,7 +69,7 @@ export function StatWeightsResult() {
         <Box>
           {AppHeader()}
           <ResultBoardTopBox marginBottom="40px">
-            {SimulationTitle("Result")}
+            {SimulationTitle(SIMULATION_RESULT_TEXT)}
             {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, responseJson.partyMemberJobAbbrevs)}
           </ResultBoardTopBox>
           <ResultBoardBox sx={{ minHeight: 'unset' }}>

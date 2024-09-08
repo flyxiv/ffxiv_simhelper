@@ -9,6 +9,7 @@ import {
 } from "./Styles";
 import { SkillLogTable } from "./SkillLogTable";
 import { styled, List, Box, Typography, ListItem } from "@mui/material";
+import { ABILITY_TEXT, COMBAT_TIME_TEXT, IMPORTANT_STATUS_TEXT } from "../../const/languageTexts";
 
 const SkillLogCombatTimeBox = styled(Box)`
   ${SkillLogCombatTimeBoxStyle}
@@ -62,19 +63,19 @@ export const SkillLogResult = (response: QuickSimResponse) => {
         <SkillEntityBox>
           <SkillLogCombatTimeBox>
             <Typography variant="body1" fontSize={fontSize}>
-              Combat Time
+              {COMBAT_TIME_TEXT}
             </Typography>
           </SkillLogCombatTimeBox>
 
           <SkillIconBox>
             <Typography variant="body1" fontSize={fontSize}>
-              Ability
+              {ABILITY_TEXT}
             </Typography>
           </SkillIconBox>
 
           <StatusBox>
             <Typography variant="body1" fontSize={fontSize}>
-              Important Status
+              {IMPORTANT_STATUS_TEXT}
             </Typography>
           </StatusBox>
 

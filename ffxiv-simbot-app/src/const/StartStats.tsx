@@ -1,3 +1,5 @@
+import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DEX_STAT_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, DUNESFOLK_LALAFELL_NAME, DUNESFOLK_LALAFELL_NAME_EN, DUSKWIGHT_ELEZEN_NAME, DUSKWIGHT_ELEZEN_NAME_EN, GNB_EN_NAME, HELIONS_HROTHGAR_NAME, HELIONS_HROTHGAR_NAME_EN, HELLSGUARD_ROEGADYN_NAME, HELLSGUARD_ROEGADYN_NAME_EN, HIGHLANDER_HYUR_NAME, HIGHLANDER_HYUR_NAME_EN, INT_STAT_NAME, KEEPER_OF_THE_MOON_MIQOTE_NAME, KEEPER_OF_THE_MOON_MIQOTE_NAME_EN, MCH_EN_NAME, MIDLANDER_HYUR_NAME, MIDLANDER_HYUR_NAME_EN, MIND_STAT_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLAINSFOLK_LALAFELL_NAME, PLAINSFOLK_LALAFELL_NAME_EN, PLD_EN_NAME, RAEN_AU_RA_NAME, RAEN_AU_RA_NAME_EN, RAVA_VIERA_NAME, RAVA_VIERA_NAME_EN, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SEA_WOLVES_ROEGADYN_NAME, SEA_WOLVES_ROEGADYN_NAME_EN, SEEKER_OF_THE_SUN_MIQOTE_NAME, SEEKER_OF_THE_SUN_MIQOTE_NAME_EN, SGE_EN_NAME, SMN_EN_NAME, STR_STAT_NAME, THE_LOST_HROTHGAR_NAME_EN, VEENA_VIERA_NAME, VEENA_VIERA_NAME_EN, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME, WILDWOOD_ELEZEN_NAME, WILDWOOD_ELEZEN_NAME_EN, XAELA_AU_RA_NAME, XAELA_AU_RA_NAME_EN } from "./languageTexts";
+
 interface RaceInfo {
   STR: number;
   DEX: number;
@@ -6,27 +8,27 @@ interface RaceInfo {
 }
 
 const MAIN_STAT_BASE_PER_JOB = new Map([
-  ["PLD", 100],
-  ["WAR", 105],
-  ["DRK", 105],
-  ["GNB", 100],
-  ["WHM", 115],
-  ["SCH", 115],
-  ["AST", 115],
-  ["SGE", 115],
-  ["MNK", 110],
-  ["DRG", 115],
-  ["NIN", 110],
-  ["SAM", 112],
-  ["RPR", 115],
-  ["VPR", 100],
-  ["BRD", 115],
-  ["MCH", 115],
-  ["DNC", 115],
-  ["BLM", 115],
-  ["SMN", 115],
-  ["RDM", 115],
-  ["PCT", 115],
+  [PLD_EN_NAME, 100],
+  [WAR_EN_NAME, 105],
+  [DRK_EN_NAME, 105],
+  [GNB_EN_NAME, 100],
+  [WHM_EN_NAME, 115],
+  [SCH_EN_NAME, 115],
+  [AST_EN_NAME, 115],
+  [SGE_EN_NAME, 115],
+  [MNK_EN_NAME, 110],
+  [DRG_EN_NAME, 115],
+  [NIN_EN_NAME, 110],
+  [SAM_EN_NAME, 112],
+  [RPR_EN_NAME, 115],
+  [VPR_EN_NAME, 100],
+  [BRD_EN_NAME, 115],
+  [MCH_EN_NAME, 115],
+  [DNC_EN_NAME, 115],
+  [BLM_EN_NAME, 115],
+  [SMN_EN_NAME, 115],
+  [RDM_EN_NAME, 115],
+  [PCT_EN_NAME, 115],
 ]);
 
 interface RaceInfo {
@@ -36,32 +38,14 @@ interface RaceInfo {
   MND: number;
 }
 
-export const RACES = [
-  "Midlander Hyur",
-  "Highlander Hyur",
-  "Wildwood Elezen",
-  "Duskwight Elezen",
-  "Plainsfolk Lalafell",
-  "Dunesfolk Lalafell",
-  "Seeker of the Sun Miqo'te",
-  "Keeper of the Moon Miqo'te",
-  "Sea Wolves Roegadyn",
-  "Hellsguard Roegadyn",
-  "Raen Au Ra",
-  "Xaela Au Ra",
-  "Helions Hrothgar",
-  "The Lost Hrothgar",
-  "Rava Viera",
-  "Veena Viera",
-];
 
 export const RACE_MAIN_STAT = new Map([
-  ["Midlander Hyur", { STR: 22, DEX: 19, INT: 23, MND: 19 }],
-  ["Highlander Hyur", { STR: 23, DEX: 20, INT: 18, MND: 20 }],
-  ["Wildwood Elezen", { STR: 20, DEX: 23, INT: 22, MND: 19 }],
-  ["Duskwight Elezen", { STR: 20, DEX: 22, INT: 23, MND: 21 }],
+  [MIDLANDER_HYUR_NAME_EN, { STR: 22, DEX: 19, INT: 23, MND: 19 }],
+  [HIGHLANDER_HYUR_NAME_EN, { STR: 23, DEX: 20, INT: 18, MND: 20 }],
+  [WILDWOOD_ELEZEN_NAME_EN, { STR: 20, DEX: 23, INT: 22, MND: 19 }],
+  [DUSKWIGHT_ELEZEN_NAME_EN, { STR: 20, DEX: 22, INT: 23, MND: 21 }],
   [
-    "Plainsfolk Lalafell",
+    PLAINSFOLK_LALAFELL_NAME_EN,
     {
       STR: 19,
       DEX: 23,
@@ -69,9 +53,9 @@ export const RACE_MAIN_STAT = new Map([
       MND: 20,
     },
   ],
-  ["Dunesfolk Lalafell", { STR: 19, DEX: 21, INT: 22, MND: 23 }],
+  [DUNESFOLK_LALAFELL_NAME_EN, { STR: 19, DEX: 21, INT: 22, MND: 23 }],
   [
-    "Seeker of the Sun Miqo'te",
+    SEEKER_OF_THE_SUN_MIQOTE_NAME_EN,
     {
       STR: 22,
       DEX: 23,
@@ -80,7 +64,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    "Keeper of the Moon Miqo'te",
+    KEEPER_OF_THE_MOON_MIQOTE_NAME_EN,
     {
       STR: 19,
       DEX: 22,
@@ -89,7 +73,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    "Sea Wolves Roegadyn",
+    SEA_WOLVES_ROEGADYN_NAME_EN,
     {
       STR: 22,
       DEX: 19,
@@ -98,7 +82,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    "Hellsguard Roegadyn",
+    HELLSGUARD_ROEGADYN_NAME_EN,
     {
       STR: 20,
       DEX: 18,
@@ -107,7 +91,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    "Raen Au Ra",
+    RAEN_AU_RA_NAME_EN,
     {
       STR: 19,
       DEX: 22,
@@ -116,7 +100,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    "Xaela Au Ra",
+    XAELA_AU_RA_NAME_EN,
     {
       STR: 23,
       DEX: 20,
@@ -125,7 +109,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    "Helions Hrothgar",
+    HELIONS_HROTHGAR_NAME_EN,
     {
       STR: 23,
       DEX: 17,
@@ -134,7 +118,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    "The Lost Hrothgar",
+    THE_LOST_HROTHGAR_NAME_EN,
     {
       STR: 23,
       DEX: 17,
@@ -143,7 +127,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    "Rava Viera",
+    RAVA_VIERA_NAME_EN,
     {
       STR: 20,
       DEX: 23,
@@ -152,7 +136,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    "Veena Viera",
+    VEENA_VIERA_NAME_EN,
     {
       STR: 19,
       DEX: 20,
@@ -191,11 +175,11 @@ export function getMainStatOfRace(race: string, mainStatName: string): number {
 
 function getRaceMainStatByName(mainStatName: string, stats: RaceInfo): number {
   switch (mainStatName) {
-    case "STR":
+    case STR_STAT_NAME:
       return stats.STR;
-    case "DEX":
+    case DEX_STAT_NAME:
       return stats.DEX;
-    case "INT":
+    case INT_STAT_NAME:
       return stats.INT;
     default:
       return stats.MND;
@@ -204,27 +188,27 @@ function getRaceMainStatByName(mainStatName: string, stats: RaceInfo): number {
 
 export function getMainStatNameByJob(job: string): string {
   switch (job) {
-    case "PLD":
-    case "WAR":
-    case "DRK":
-    case "GNB":
-    case "MNK":
-    case "DRG":
-    case "SAM":
-    case "RPR":
-      return "STR";
-    case "NIN":
-    case "VPR":
-    case "BRD":
-    case "MCH":
-    case "DNC":
-      return "DEX";
-    case "WHM":
-    case "AST":
-    case "SCH":
-    case "SGE":
-      return "MND";
+    case PLD_EN_NAME:
+    case WAR_EN_NAME:
+    case DRK_EN_NAME:
+    case GNB_EN_NAME:
+    case MNK_EN_NAME:
+    case DRG_EN_NAME:
+    case SAM_EN_NAME:
+    case RPR_EN_NAME:
+      return STR_STAT_NAME;
+    case NIN_EN_NAME:
+    case VPR_EN_NAME:
+    case BRD_EN_NAME:
+    case MCH_EN_NAME:
+    case DNC_EN_NAME:
+      return DEX_STAT_NAME;
+    case WHM_EN_NAME:
+    case SCH_EN_NAME:
+    case AST_EN_NAME:
+    case SGE_EN_NAME:
+      return MIND_STAT_NAME;
     default:
-      return "INT";
+      return INT_STAT_NAME;
   }
 }

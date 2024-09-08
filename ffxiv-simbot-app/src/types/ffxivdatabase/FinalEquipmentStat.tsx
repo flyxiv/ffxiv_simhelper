@@ -1,3 +1,4 @@
+import { CRIT_STAT_NAME, DET_STAT_NAME, DH_STAT_NAME, SKS_STAT_NAME, SPS_STAT_NAME } from "../../const/languageTexts";
 import { Equipment } from "./Equipment";
 import { Materia, updateMateriaValueStatToFinalStat } from "./Materia";
 
@@ -52,19 +53,19 @@ export function addMateriaMaxValueToEquipment(
   }
   materias.forEach((materia) => {
     switch (materia.statName) {
-      case "CRT":
+      case CRIT_STAT_NAME:
         finalEquipmentStat.criticalStrike += materia.maxValue;
         break;
-      case "DH":
+      case DH_STAT_NAME:
         finalEquipmentStat.directHit += materia.maxValue;
         break;
-      case "DET":
+      case DET_STAT_NAME:
         finalEquipmentStat.determination += materia.maxValue;
         break;
-      case "SKS":
+      case SKS_STAT_NAME:
         finalEquipmentStat.skillSpeed += materia.maxValue;
         break;
-      case "SPS":
+      case SPS_STAT_NAME:
         finalEquipmentStat.spellSpeed += materia.maxValue;
         break;
       default:
@@ -121,15 +122,15 @@ export function accessSubStatByKey(
   key: string
 ) {
   switch (key) {
-    case "CRT":
+    case CRIT_STAT_NAME:
       return finalStats.criticalStrike;
-    case "DH":
+    case DH_STAT_NAME:
       return finalStats.directHit;
-    case "DET":
+    case DET_STAT_NAME:
       return finalStats.determination;
-    case "SKS":
+    case SKS_STAT_NAME:
       return finalStats.skillSpeed;
-    case "SPS":
+    case SPS_STAT_NAME:
       return finalStats.spellSpeed;
     default:
       return finalStats.tenacity;

@@ -16,13 +16,12 @@ export function StatWeightsGraphContainer(statWeights: Array<StatWeightsData>) {
         color: "white",
       }}
     >
-      {StatWeightsGraph("RDPS Increase per point", statWeights, maxStatWeight)}
+      {StatWeightsGraph(statWeights, maxStatWeight)}
     </Box>
   );
 }
 
 function StatWeightsGraph(
-  descriptionString: string,
   statWeights: Array<StatWeightsData>,
   maxStatWeight: number
 ) {
@@ -80,9 +79,6 @@ function StatWeightsGraph(
       marginTop="5%"
       paddingY="5%"
     >
-      <Typography variant="h6" align="center">
-        {descriptionString}
-      </Typography>
       {weightBars}
     </Box>
   );

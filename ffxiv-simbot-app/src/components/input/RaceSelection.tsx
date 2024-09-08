@@ -1,10 +1,10 @@
 import { InputLabel, Select, SelectChangeEvent } from "@mui/material";
 import { CustomFormControl } from "../../components/input/basicform/BasicInputForm";
-import { RACES } from "../../const/StartStats";
 import { RaceMenuItem } from "../items/RaceMenuItem";
 import { AppConfigurations } from "../../Themes";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { updateOnePlayerPower } from "../../types/ffxivdatabase/ItemSet";
+import { RACES } from "../../const/languageTexts";
 
 export function MainPlayerRaceSelection(
   id: number,

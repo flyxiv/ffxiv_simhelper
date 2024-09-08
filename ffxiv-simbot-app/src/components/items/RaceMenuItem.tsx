@@ -1,5 +1,6 @@
 import { MenuItem } from "@mui/material";
 import { RaceItem } from "./RaceItem";
+import { convertToEnglishRaceName } from "../../const/languageTexts";
 
 export function RaceMenuItem(race: string, jobAbbrev: string) {
   return (
