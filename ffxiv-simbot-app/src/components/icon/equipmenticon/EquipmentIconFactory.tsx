@@ -23,8 +23,12 @@ export function getEquipmentIconDirectory(
 
   let isJobSpecificEquipment = ALL_CATEGORIES.filter((category) => equipmentIconName.includes(category.toLowerCase())).length === 0;
 
-  if (isJobSpecificEquipment) {
+  if (WEAPONSLOTS.includes(slotName)) {
     return `${base_directory}/${slotName}/${jobAbbrev}/${equipmentIconName}.png`;
+  }
+
+  if (isJobSpecificEquipment) {
+    return `${base_directory}/${slotName}/JobSpecific/${jobAbbrev}/${equipmentIconName}.png`;
   }
   let category = getEquipmentCategory(slotName, jobAbbrev);
 

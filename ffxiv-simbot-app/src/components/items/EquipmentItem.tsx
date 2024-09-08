@@ -44,7 +44,7 @@ export function EquipmentItem(equipment: Equipment, jobAbbrev: string) {
           color="white"
           align="left"
         >
-          {equipment.name}
+          {`${equipment.name} (${equipment.itemLevel})`}
         </Typography>
         <Typography variant="body2" sx={{
           fontSize: AppConfigurations.body2FontSize

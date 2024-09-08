@@ -35,7 +35,7 @@ export function FoodItem(food: Food) {
           color="white"
           align="left"
         >
-          {food.name}
+          {`${food.name} (${food.itemLevel})`}
         </Typography>
         <Box>
           <Typography
