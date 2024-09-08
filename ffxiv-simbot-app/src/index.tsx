@@ -19,8 +19,9 @@ export const theme = createTheme({
       main: "#03DAC6",
     },
   },
+
   typography: AppConfigurations.languageMode === ENGLISH_MODE ? {
-    fontFamily: "Arial",
+    fontFamily: "Cabinet, Oraniembaum, Oligopoly, Redwing, Arial",
     h1: {
       fontSize: "3rem",
       fontWeight: 900,
@@ -33,17 +34,8 @@ export const theme = createTheme({
       fontSize: "1.5rem",
       fontWeight: 600,
     },
-    body2: {
-      fontSize: {
-        xs: 14,
-        sm: 16,
-        md: 18,
-        lg: 20,
-        xl: 22
-      }
-    }
   } : {
-    fontFamily: "NotoSansKR",
+    fontFamily: "NotoSansKR, Arial",
     h1: {
       fontSize: "3rem",
       fontWeight: 900,
@@ -57,15 +49,6 @@ export const theme = createTheme({
       fontWeight: 600,
     },
 
-    body2: {
-      fontSize: {
-        xs: 14,
-        sm: 16,
-        md: 18,
-        lg: 20,
-        xl: 22
-      }
-    }
   },
 
   components: {
