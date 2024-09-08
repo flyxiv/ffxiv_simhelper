@@ -46,6 +46,7 @@ export function PlayerInfo(power: PlayerPower, job: string, combatTimeMillisecon
 }
 
 function PartyMemberJobsInfo(partyMemberJobAbbrevs: string[]) {
+  console.log(partyMemberJobAbbrevs);
   return (
     <Box display="flex" alignItems="center" justifyContent="left" marginBottom="30px" border="1px solid black" padding={1}>
       <Box marginRight={2}>

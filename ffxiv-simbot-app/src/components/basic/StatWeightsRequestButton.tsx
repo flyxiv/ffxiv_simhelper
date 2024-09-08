@@ -27,11 +27,17 @@ import {
 import { calculatePowerByStat } from "../../types/ffxivdatabase/ItemSet";
 import { sendRequestAsync } from "./QuickSimRequestButton";
 import { CRIT_STAT_NAME, DET_STAT_NAME, DEX_STAT_NAME, DH_STAT_NAME, INT_STAT_NAME, MIND_STAT_NAME, SKS_STAT_NAME, SPS_STAT_NAME, STR_STAT_NAME, TEN_STAT_NAME, WD_STAT_NAME } from "../../const/languageTexts";
+import { getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/statweights";
 const WEAPON_DAMAGE_INCREASE = 10;
 const MAIN_STAT_INCREASE = 100;
-const SUB_STAT_INCREASE = 300;
+const CRIT_INCREASE_AMOUNT = 20;
+const DH_INCREASE_AMOUNT = 80;
+const DET_INCREASE_AMOUNT = 20;
+const SKS_INCREASE_AMOUNT = 5;
+const SPS_INCREASE_AMOUNT = 5;
+const TEN_INCREASE_AMOUNT = 20;
 
 export function StatWeightsRequestButton(totalState: EquipmentInput) {
   let RequestButton = styled(Button)`
@@ -148,28 +154,29 @@ function createAugmentedRequest(
       power.mainStat += MAIN_STAT_INCREASE;
     }
     if (augmentStatName === CRIT_STAT_NAME) {
-      augmentAmount = SUB_STAT_INCREASE;
-      power.criticalStrike += SUB_STAT_INCREASE;
+      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, CRIT_INCREASE_AMOUNT);
+      power.criticalStrike += augmentAmount;
+      console.log("CRIT_INCREASE_AMOUNT: ", augmentAmount);
     }
     if (augmentStatName === DH_STAT_NAME) {
-      augmentAmount = SUB_STAT_INCREASE;
-      power.directHit += SUB_STAT_INCREASE;
+      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, DH_INCREASE_AMOUNT);
+      power.directHit += augmentAmount;
     }
     if (augmentStatName === DET_STAT_NAME) {
-      augmentAmount = SUB_STAT_INCREASE;
-      power.determination += SUB_STAT_INCREASE;
+      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, DET_INCREASE_AMOUNT);
+      power.determination += augmentAmount;
     }
     if (augmentStatName === SKS_STAT_NAME) {
-      augmentAmount = SUB_STAT_INCREASE;
-      power.skillSpeed += SUB_STAT_INCREASE;
+      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, SKS_INCREASE_AMOUNT);
+      power.skillSpeed += augmentAmount;
     }
     if (augmentStatName === SPS_STAT_NAME) {
-      augmentAmount = SUB_STAT_INCREASE;
-      power.spellSpeed += SUB_STAT_INCREASE;
+      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, SPS_INCREASE_AMOUNT);
+      power.spellSpeed += augmentAmount;
     }
     if (augmentStatName === TEN_STAT_NAME) {
-      augmentAmount = SUB_STAT_INCREASE;
-      power.tenacity += SUB_STAT_INCREASE;
+      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, TEN_INCREASE_AMOUNT);
+      power.tenacity += augmentAmount;
     }
 
     calculatePowerByStat(power, jobAbbrev);

@@ -10,6 +10,7 @@ import { Footer } from "../components/basic/Footer";
 import { StatWeightsResponseTable } from "../types/StatWeightsResponse";
 import { StatWeightSummary } from "../components/container/StatSummary";
 import { SIMULATION_RESULT_TEXT, STAT_WEIGHTS_TEXT } from "../const/languageTexts";
+import { EMPTY_PARTY_MEMBER } from "../types/PartyStates";
 
 export interface StatWeightsData {
   statName: string;
@@ -39,6 +40,7 @@ export function StatWeightsResult() {
 
   let responseJson = JSON.parse(response) as StatWeightsResponseTable;
   let mainPlayerJob = responseJson.mainPlayerJobAbbrev;
+  let partyMemberJobAbbrevs = responseJson.partyMemberJobAbbrevs.filter((job) => job !== EMPTY_PARTY_MEMBER);
   let statWeightsTable = responseJson.statAugmentedSimulationData;
   let statWeightsBaseline = statWeightsTable.filter(
     (statWeight) => statWeight.statName === ""
@@ -69,9 +71,9 @@ export function StatWeightsResult() {
           {AppHeader()}
           <ResultBoardTopBox marginBottom="40px">
             {SimulationTitle(SIMULATION_RESULT_TEXT)}
-            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, responseJson.partyMemberJobAbbrevs)}
+            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs)}
           </ResultBoardTopBox>
-          <ResultBoardBox sx={{ minHeight: 'unset' }}>
+          <ResultBoardBox >
             {SimulationTitle(STAT_WEIGHTS_TEXT)}
             {StatWeightSummary(statWeightsCalculated)}
           </ResultBoardBox>

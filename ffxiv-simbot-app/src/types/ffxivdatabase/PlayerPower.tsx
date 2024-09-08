@@ -319,7 +319,7 @@ export function getStatNeededByStatName(
     case SPS_STAT_NAME:
       return (
         getMinNeededStatForCurrentSpeed(
-          totalStats.speedMultiplier * 100 - 100
+          totalStats.speedMultiplier * 100 - 100 + 0.1
         ) - totalStats.spellSpeed
       );
     case TEN_STAT_NAME:
@@ -331,6 +331,62 @@ export function getStatNeededByStatName(
     case GCD_NAME:
       return (
         getMinNeededStatForCurrentGCD(totalStats.gcd - 0.01) -
+        getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
+      );
+    default:
+      return -1;
+  }
+}
+
+
+export function getStatNeededByStatNameLadderAmount(
+  totalStats: PlayerPower,
+  statName: string,
+  jobAbbrev: string,
+  amount: number
+) {
+  switch (statName) {
+    case WD_STAT_NAME:
+      return 0;
+    case STR_STAT_NAME:
+    case DEX_STAT_NAME:
+    case INT_STAT_NAME:
+    case MIND_STAT_NAME:
+      return (
+        getMinNeededStatForCurrentMainStat(
+          totalStats.mainStatMultiplier * 100 + 1 * amount,
+          isTank(jobAbbrev)
+        ) - totalStats.mainStat
+      );
+    case CRIT_STAT_NAME:
+      return (
+        getMinNeededStatForCurrentCriticalStrike(
+          100 * (totalStats.criticalStrikeDamage - CRIT_BASE_DAMAGE) + 0.1 * amount
+        ) - totalStats.criticalStrike
+      );
+    case DH_STAT_NAME:
+      return (
+        getMinNeededStatForCurrentDirectHit(
+          100 * totalStats.directHitRate + 0.1 * amount
+        ) - totalStats.directHit
+      );
+    case DET_STAT_NAME:
+      return (
+        getMinNeededStatForCurrentDetermination(
+          totalStats.determinationMultiplier * 100 - 100 + 0.1 * amount
+        ) - totalStats.determination
+      );
+    case TEN_STAT_NAME:
+      return (
+        getMinNeededStatForCurrentTenacity(
+          totalStats.tenacityMultiplier * 100 - 100 + 0.1 * amount
+        ) - totalStats.tenacity
+      );
+    case SKS_STAT_NAME:
+    case SPS_STAT_NAME:
+    case GCD_NAME:
+      return (
+        getMinNeededStatForCurrentGCD(totalStats.gcd - 0.01 * amount) -
         getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
       );
     default:
