@@ -42,10 +42,10 @@ import { EquipmentSubStatTable } from "../../../components/container/EquipmentSu
 import { MateriaInputTable } from "./MateriaInputForm";
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { AppConfigurations } from "../../../Themes";
-import { EquipmentInput } from "../../../types/EquipmentInput";
-import { SimulationResultTimeTextBox, SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
+import { EquipmentInput, NO_POT_STRING, USE_POT_STRING } from "../../../types/EquipmentInput";
+import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
-import { AST_MELEE_PARTNER_TEXT, AST_RANGED_PARTNER_TEXT, convertToSlotText, DNC_PARTNER_TEXT, EMPTY_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_TEXT, FOOD_SLOT_TEXT, TIME_INPUT_LABEL_TEXT } from "../../../const/languageTexts";
+import { AST_EN_NAME, AST_MELEE_PARTNER_TEXT, AST_RANGED_PARTNER_TEXT, convertToSlotText, DNC_EN_NAME, DNC_PARTNER_TEXT, EMPTY_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_TEXT, FOOD_SLOT_TEXT, NO_POT_TEXT, POT_LABEL_TEXT, TIME_INPUT_LABEL_TEXT, USE_POT_TEXT } from "../../../const/languageTexts";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -227,7 +227,7 @@ export function EquipmentSelectionMenu(
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function,
   onlyBuffJobs: boolean = false,
-  hasTimeInput: boolean = false,
+  hasTimeInput: boolean = true,
 ) {
   let xs = 12;
   let mainCharacterJobAbbrev =
@@ -293,15 +293,21 @@ export function EquipmentSelectionMenu(
           {FoodSelection(id, totalEquipmentState, setTotalEquipmentState)}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
+
+      <EquipmentGridItemBox key={`pot_selectionbox_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+        <InputEquipmentBox item xs={xs} key={`pot_${id}`}>
+          {PotSelection(id, totalEquipmentState, setTotalEquipmentState)}
+        </InputEquipmentBox>
+      </EquipmentGridItemBox>
+
       {PartnerSelectionMenu(id, totalEquipmentState, setTotalEquipmentState)}
       {hasTimeInput ? (
-        <EquipmentGridItemBox sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
-          <InputEquipmentBox item xs={xs} key="time">
+        <EquipmentGridItemBox>
+          <InputEquipmentBox item xs={xs}>
             {SimulationUpperInputTimeTextBox(
               TIME_INPUT_LABEL_TEXT,
               totalEquipmentState,
               setTotalEquipmentState,
-              true
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
@@ -320,7 +326,7 @@ function PartnerSelectionMenu(
   let mainPlayerJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
 
-  if (mainPlayerJobAbbrev === "AST") {
+  if (mainPlayerJobAbbrev === AST_EN_NAME) {
     return (
       <>
         <EquipmentGridItemBox key={`partner1_${id}_grid`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
@@ -346,7 +352,7 @@ function PartnerSelectionMenu(
         </EquipmentGridItemBox>
       </>
     );
-  } else if (mainPlayerJobAbbrev === "DNC") {
+  } else if (mainPlayerJobAbbrev === DNC_EN_NAME) {
     return (
       <EquipmentGridItemBox key={`partner1_${id}_grid`}>
         <InputEquipmentBox item xs={12} key={`partner1_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
@@ -415,6 +421,71 @@ function FoodSelection(
             <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
               <Typography variant="body2" color="white">
                 {EMPTY_TEXT}
+              </Typography>
+            </Box>
+          </MenuItem>
+        </Select>
+      </CustomFormControl>
+    </>
+  );
+}
+
+
+function PotSelection(
+  id: number,
+  totalEquipmentState: EquipmentInput,
+  setTotalEquipmentState: Function
+) {
+  let totalState = totalEquipmentState.equipmentDatas[id];
+
+  let label = POT_LABEL_TEXT;
+
+  const updateUsePot = (e: SelectChangeEvent<number>) => {
+    let newState = { ...totalEquipmentState };
+    let usePot = e.target.value;
+    if (typeof usePot === "string") {
+      usePot = parseInt(usePot);
+    }
+
+    newState.equipmentDatas.forEach((data) => {
+      data.usePot = usePot;
+    })
+
+    setTotalEquipmentState(newState);
+  };
+
+  let key = `pot-${id}`;
+
+  return (
+    <>
+      <CustomFormControl fullWidth>
+        <InputLabel id="FoodSelect">{label}</InputLabel>
+        <Select
+          labelId={key}
+          id={key}
+          value={totalState.usePot}
+          key={key}
+          label={key}
+          onChange={updateUsePot}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                backgroundColor: AppConfigurations.backgroundThree,
+              },
+            },
+          }}
+        >
+          <MenuItem value={USE_POT_STRING}>
+            <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
+              <Typography variant="body2" color="white">
+                {USE_POT_TEXT}
+              </Typography>
+            </Box>
+          </MenuItem>
+          <MenuItem value={NO_POT_STRING}>
+            <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
+              <Typography variant="body2" color="white">
+                {NO_POT_TEXT}
               </Typography>
             </Box>
           </MenuItem>

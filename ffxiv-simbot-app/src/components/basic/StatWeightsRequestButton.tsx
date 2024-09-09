@@ -1,6 +1,7 @@
 import { styled, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
+  calculateIlvlAdjustment,
   mapJobAbbrevToJobDefaultStat,
   playerStatToPlayerPower,
 } from "../../const/StatValue";
@@ -15,6 +16,7 @@ import { requestButtonStyle } from "./Style";
 import {
   EquipmentInput,
   SingleEquipmentInputSaveState,
+  USE_POT_STRING,
 } from "../../types/EquipmentInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 import {
@@ -156,7 +158,6 @@ function createAugmentedRequest(
     if (augmentStatName === CRIT_STAT_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, CRIT_INCREASE_AMOUNT);
       power.criticalStrike += augmentAmount;
-      console.log("CRIT_INCREASE_AMOUNT: ", augmentAmount);
     }
     if (augmentStatName === DH_STAT_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, DH_INCREASE_AMOUNT);
@@ -225,5 +226,7 @@ function createAugmentedRequest(
     party: partyInfo,
     statName: augmentStatName,
     augmentAmount: augmentAmount,
+    usePot: totalState.usePot === USE_POT_STRING,
+    partyIlvlAdjustment: calculateIlvlAdjustment(totalState.partyMemberIlvl),
   };
 }

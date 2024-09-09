@@ -1,7 +1,7 @@
 import { defaultPlayerPower } from "../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs, defaultItemSet } from "../types/ffxivdatabase/ItemSet";
 import { GearSetMaterias } from "../types/ffxivdatabase/Materia";
-import { EquipmentInput, SingleEquipmentInputSaveState } from "../types/EquipmentInput";
+import { EquipmentInput, SingleEquipmentInputSaveState, USE_POT_STRING } from "../types/EquipmentInput";
 import { BLM_EN_NAME, BRD_EN_NAME, DRG_EN_NAME, MIDLANDER_HYUR_NAME_EN, NIN_EN_NAME, PLD_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "./languageTexts";
 
 export const DEFAULT_GEARSET_MATERIAS: GearSetMaterias = [
@@ -33,7 +33,9 @@ export function defaultSingleEquipmentInput(): EquipmentInput {
     combatTimeMillisecond: 300000,
     partyMemberJobAbbrevs: partyMemberJobs,
     partyMemberIds: [1, 2, 3, 4, 5, 6, 7],
+    partyMemberIlvl: 730,
     foodId: -1,
+    usePot: USE_POT_STRING,
     power: defaultPlayerPower()
   };
 
@@ -58,7 +60,9 @@ export function defaultBestPartnerEquipmentInput(): EquipmentInput {
     combatTimeMillisecond: 300000,
     partyMemberJobAbbrevs: partyMemberJobs,
     partyMemberIds: [1, 2, 3, 4, 5, 6, 7],
+    partyMemberIlvl: 730,
     foodId: -1,
+    usePot: USE_POT_STRING,
     power: defaultPlayerPower()
   };
 

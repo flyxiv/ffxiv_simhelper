@@ -427,6 +427,10 @@ export const STAT_WEIGHTS_PAGE_NAME = AppConfigurations.languageMode === ENGLISH
 
 export const PLAYER_POWER_TEXT = AppConfigurations.languageMode === ENGLISH_MODE ? "Specific Player Power" : "스탯별 결과 수치";
 export const QUICK_SIM_PARTY_INPUT_INFO_TEXT = AppConfigurations.languageMode === ENGLISH_MODE ? "2. Additional Settings" : "2. 파티 관련 설정을 입력해주세요";
+export const PARTY_MEMBER_ILVL_TEXT = AppConfigurations.languageMode === ENGLISH_MODE ? "Party Members iLvl" : "파티원 템렙";
+export const POT_LABEL_TEXT = AppConfigurations.languageMode === ENGLISH_MODE ? "Pot" : "탕약";
+export const USE_POT_TEXT = AppConfigurations.languageMode === ENGLISH_MODE ? "O(Use)" : "O(사용)";
+export const NO_POT_TEXT = AppConfigurations.languageMode === ENGLISH_MODE ? "X(No)" : "X(미사용)";
 
 // Home
 export const QUICK_SIM_DESCRIPTION_TEXT = AppConfigurations.languageMode === ENGLISH_MODE ? "Quickly get analyze DPS of your input gearset." : "당신의 장비셋을 입력하고 빠르게 분석해보세요.";

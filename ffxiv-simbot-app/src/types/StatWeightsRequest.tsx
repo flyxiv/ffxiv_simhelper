@@ -6,4 +6,5 @@ export interface StatWeightsRequest {
   party: Array<PartyInfo>;
   statName: string;
   augmentAmount: number;
+  partyIlvlAdjustment: number;
 }

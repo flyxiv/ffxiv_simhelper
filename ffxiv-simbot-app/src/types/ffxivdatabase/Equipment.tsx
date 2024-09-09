@@ -7,8 +7,8 @@ export const LEFTSLOTS = [HEAD_SLOT_EN_TEXT, BODY_SLOT_EN_TEXT, HANDS_SLOT_EN_TE
 export const RIGHTSLOTS = [WRIST_SLOT_EN_TEXT, EARS_SLOT_EN_TEXT, NECK_SLOT_EN_TEXT, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT];
 export const TOTAL_SLOTS = WEAPONSLOTS.concat(LEFTSLOTS).concat(RIGHTSLOTS);
 
-const CURRENT_MIN_ITEM_LEVEL = AppConfigurations.languageMode === ENGLISH_MODE ? 710 : 690;
-const CURRENT_MAX_ITEM_LEVEL = AppConfigurations.languageMode === ENGLISH_MODE ? 730 : 710;
+export const CURRENT_MIN_ITEM_LEVEL = AppConfigurations.languageMode === ENGLISH_MODE ? 710 : 690;
+export const CURRENT_MAX_ITEM_LEVEL = AppConfigurations.languageMode === ENGLISH_MODE ? 730 : 710;
 
 let totalEquipments: Array<Equipment> = [];
 

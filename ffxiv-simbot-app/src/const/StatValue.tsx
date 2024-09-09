@@ -1,3 +1,4 @@
+import { CURRENT_MAX_ITEM_LEVEL } from "../types/ffxivdatabase/Equipment";
 import { calculatePowerByStat, isCaster } from "../types/ffxivdatabase/ItemSet";
 import { defaultPlayerPower } from "../types/ffxivdatabase/PlayerPower";
 
@@ -9,6 +10,10 @@ export const DEFAULT_DIRECT_HIT = 420;
 export const DEFAULT_DETERMINATION = 440;
 export const DEFAULT_SPEED = 420;
 export const DEFAULT_TENACITY = 420;
+
+export function calculateIlvlAdjustment(partyiLvl: number) {
+  return (1 - (CURRENT_MAX_ITEM_LEVEL - partyiLvl) / 100);
+}
 
 export const mapJobAbbrevToJobDefaultStat = (jobAbbrev: string) => {
   switch (jobAbbrev) {

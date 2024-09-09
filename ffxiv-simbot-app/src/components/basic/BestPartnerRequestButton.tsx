@@ -1,6 +1,7 @@
 import { styled, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
+  calculateIlvlAdjustment,
   mapJobAbbrevToJobDefaultStat,
   playerStatToPlayerPower,
 } from "../../const/StatValue";
@@ -15,6 +16,7 @@ import { requestButtonStyle } from "./Style";
 import {
   EquipmentInput,
   SingleEquipmentInputSaveState,
+  USE_POT_STRING,
 } from "../../types/EquipmentInput";
 import {
   ALL_PLAYER_JOBS,
@@ -172,6 +174,8 @@ function createBestPartnerRequest(
     mainPlayerId: 0,
     combatTimeMillisecond: totalState.combatTimeMillisecond,
     party: partyInfo,
+    partyIlvlAdjustment: calculateIlvlAdjustment(totalState.partyMemberIlvl),
+    usePot: totalState.usePot === USE_POT_STRING
   };
 }
 

@@ -1,6 +1,7 @@
 import { styled, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
+  calculateIlvlAdjustment,
   mapJobAbbrevToJobDefaultStat,
   playerStatToPlayerPower,
 } from "../../const/StatValue";
@@ -95,16 +96,20 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
     let maxIndex = 0;
 
     damageSummaries.forEach((summary, index) => {
-      totalDps += summary.pdps;
-      totalRdps += summary.rdps;
-      totalEdps += summary.edps;
+      let rdps = summary.rdps;
+      let pdps = summary.pdps;
+      let edps = summary.edps;
 
-      if (maxRdps < summary.rdps) {
-        maxRdps = summary.rdps;
+      totalDps += pdps;
+      totalRdps += rdps;
+      totalEdps += edps;
+
+      if (maxRdps < rdps) {
+        maxRdps = rdps;
         maxIndex = index;
       }
-      if (maxDps < summary.pdps) {
-        maxDps = summary.pdps;
+      if (maxDps < pdps) {
+        maxDps = pdps;
       }
     });
 
@@ -117,13 +122,6 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
     response.simulationData[mainPlayerId].simulationSummary.rdps = averageRdps;
     response.simulationData[mainPlayerId].simulationSummary.edps = averageEdps;
     response.simulationData[mainPlayerId].simulationSummary.maxRdps = maxRdps;
-    response.simulationData[mainPlayerId].partyContributionTable.forEach(
-      (contribution) => {
-        console.log(
-          `status: ${contribution.statusId}, skill: ${contribution.skillId}, ${contribution.contributedRdps}`
-        );
-      }
-    );
 
     const responseString = JSON.stringify(response);
     localStorage.setItem(QUICK_SIM_RESPONSE_SAVE_NAME, responseString);
@@ -138,7 +136,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
 }
 
 export function createQuickSimRequest(
-  totalState: SingleEquipmentInputSaveState
+  totalState: SingleEquipmentInputSaveState,
 ) {
   let jobAbbrev = totalState.mainPlayerJobAbbrev;
   let partner1Id = totalState.mainPlayerPartner1Id;
@@ -192,12 +190,14 @@ export function createQuickSimRequest(
     mainPlayerId: 0,
     combatTimeMillisecond: totalState.combatTimeMillisecond,
     party: partyInfo,
+    partyIlvlAdjustment: calculateIlvlAdjustment(totalState.partyMemberIlvl),
+    usePot: totalState.usePot,
   };
 }
 
 export function sendRequestAsync(
   requestBody: string,
-  request_url: string
+  requestUrl: string
 ): Promise<Response> {
   return new Promise(async (resolve, reject) => {
     try {
@@ -207,7 +207,7 @@ export function sendRequestAsync(
         reject(new Error("Request timeout"));
       }, 300000);
 
-      const response = await fetch(request_url, {
+      const response = await fetch(requestUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

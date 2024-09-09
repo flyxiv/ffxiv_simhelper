@@ -6,6 +6,9 @@ export interface EquipmentInput {
   equipmentDatas: Array<SingleEquipmentInputSaveState>;
 }
 
+export const USE_POT_STRING = 1;
+export const NO_POT_STRING = 0;
+
 export interface SingleEquipmentInputSaveState {
   mainPlayerJobAbbrev: string;
   race: string;
@@ -17,6 +20,8 @@ export interface SingleEquipmentInputSaveState {
   combatTimeMillisecond: number;
   partyMemberJobAbbrevs: string[];
   partyMemberIds: number[];
+  partyMemberIlvl: number;
+  usePot: number;
   power: PlayerPower
 }
 

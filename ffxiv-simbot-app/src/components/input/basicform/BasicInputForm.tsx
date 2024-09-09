@@ -35,6 +35,22 @@ export const inputStyleEquipment = {
   },
 };
 
+export const inputStyleTime = {
+  "& .MuiInputBase-input": {
+    color: "white",
+    backgroundColor: AppConfigurations.backgroundThree,
+    textAlign: "right",
+  },
+  "& .MuiInputLabel-root": {
+    color: AppConfigurations.primary,
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {},
+    "&:hover fieldset": {},
+    notched: false,
+  },
+};
+
 export const inputStyleJob = {
   "& .MuiInputBase-input": {
     color: "white",
@@ -55,6 +71,10 @@ export const Input = styled(TextField)(({ }) => inputStyleEquipment);
 
 export const CustomFormControl = styled(FormControl)(
   ({ }) => inputStyleEquipment
+);
+
+export const CustomTimeFormControl = styled(FormControl)(
+  ({ }) => inputStyleTime
 );
 
 const InputBox = styled(Box)`

@@ -4,4 +4,6 @@ export interface SimulationApiRequest {
   mainPlayerId: number;
   combatTimeMillisecond: number;
   party: Array<PartyInfo>;
+  partyIlvlAdjustment: number;
+  usePot: boolean;
 }
