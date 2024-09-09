@@ -48,19 +48,47 @@ impl PriorityTable for SummonerPriorityTable {
 }
 
 impl SummonerPriorityTable {
-    pub fn new(player_id: PlayerIdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+    pub fn new(
+        player_id: PlayerIdType,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        use_pots: bool,
+    ) -> Self {
         let db = SummonerDatabase::new(player_id, ffxiv_event_queue);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_summoner_opener(&db),
+            opener: make_summoner_opener(&db, use_pots),
             gcd_priority_table: make_summoner_gcd_priority_table(&db),
-            ogcd_priority_table: make_summoner_ogcd_priority_table(&db),
+            ogcd_priority_table: make_summoner_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_summoner_opener(db: &SummonerDatabase) -> Vec<Opener> {
-    vec![
+pub(crate) fn make_summoner_opener(db: &SummonerDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            GcdOpener(db.ruin_iii.get_id()),
+            OgcdOpener((None, None)),
+            GcdOpener(db.ruin_iii.get_id()),
+            OgcdOpener((None, None)),
+            GcdOpener(db.ruin_iii.get_id()),
+            OgcdOpener((Some(db.searing_light.get_id()), None)),
+            GcdOpener(db.summon_solar_bahamut.get_id()),
+            OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            GcdOpener(db.ruin_iii.get_id()),
+            OgcdOpener((None, None)),
+            GcdOpener(db.ruin_iii.get_id()),
+            OgcdOpener((None, None)),
+            GcdOpener(db.ruin_iii.get_id()),
+            OgcdOpener((Some(db.searing_light.get_id()), None)),
+            GcdOpener(db.summon_solar_bahamut.get_id()),
+            OgcdOpener((None, None)),
+        ]
+    };
+
+    openers.extend(vec![
         GcdOpener(db.ruin_iii.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.ruin_iii.get_id()),
@@ -81,7 +109,9 @@ pub(crate) fn make_summoner_opener(db: &SummonerDatabase) -> Vec<Opener> {
         )),
         GcdOpener(db.umbral_impulse.get_id()),
         OgcdOpener((Some(db.necrotize.get_id()), Some(db.sunflare.get_id()))),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<SkillPriorityInfo> {
@@ -157,12 +187,20 @@ pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<Ski
     ]
 }
 
-pub(crate) fn make_summoner_ogcd_priority_table(db: &SummonerDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_summoner_ogcd_priority_table(
+    db: &SummonerDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.searing_light.get_id(),
             prerequisite: None,
@@ -207,5 +245,7 @@ pub(crate) fn make_summoner_ogcd_priority_table(db: &SummonerDatabase) -> Vec<Sk
             skill_id: db.necrotize.get_id(),
             prerequisite: None,
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

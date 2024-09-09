@@ -48,23 +48,35 @@ impl PriorityTable for DragoonPriorityTable {
 }
 
 impl DragoonPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = DragoonDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_dragoon_opener(&db),
+            opener: make_dragoon_opener(&db, use_pots),
             gcd_priority_table: make_dragoon_gcd_priority_table(&db),
-            ogcd_priority_table: make_dragoon_ogcd_priority_table(&db),
+            ogcd_priority_table: make_dragoon_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_dragoon_opener(db: &DragoonDatabase) -> Vec<Opener> {
-    let dragoon_opener: Vec<Opener> = vec![
-        GcdOpener(db.true_thrust.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.spiral_blow.get_id()),
-        OgcdOpener((None, Some(db.potion.get_id()))),
+pub(crate) fn make_dragoon_opener(db: &DragoonDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut opener = if use_pots {
+        vec![
+            GcdOpener(db.true_thrust.get_id()),
+            OgcdOpener((None, None)),
+            GcdOpener(db.spiral_blow.get_id()),
+            OgcdOpener((None, Some(db.potion.get_id()))),
+        ]
+    } else {
+        vec![
+            GcdOpener(db.true_thrust.get_id()),
+            OgcdOpener((None, None)),
+            GcdOpener(db.spiral_blow.get_id()),
+            OgcdOpener((None, None)),
+        ]
+    };
+
+    opener.extend(vec![
         GcdOpener(db.chaotic_spring.get_id()),
         OgcdOpener((
             Some(db.lance_charge.get_id()),
@@ -92,9 +104,9 @@ pub(crate) fn make_dragoon_opener(db: &DragoonDatabase) -> Vec<Opener> {
         OgcdOpener((Some(db.nastrond.get_id()), None)),
         GcdOpener(db.raiden_thrust.get_id()),
         OgcdOpener((Some(db.wyrmwind_thrust.get_id()), None)),
-    ];
+    ]);
 
-    dragoon_opener
+    opener
 }
 
 pub(crate) fn make_dragoon_gcd_priority_table(db: &DragoonDatabase) -> Vec<SkillPriorityInfo> {
@@ -155,12 +167,20 @@ pub(crate) fn make_dragoon_gcd_priority_table(db: &DragoonDatabase) -> Vec<Skill
     ]
 }
 
-pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_dragoon_ogcd_priority_table(
+    db: &DragoonDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.wyrmwind_thrust.get_id(),
             prerequisite: Some(Or(
@@ -225,5 +245,7 @@ pub(crate) fn make_dragoon_ogcd_priority_table(db: &DragoonDatabase) -> Vec<Skil
             skill_id: db.stardiver.get_id(),
             prerequisite: None,
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

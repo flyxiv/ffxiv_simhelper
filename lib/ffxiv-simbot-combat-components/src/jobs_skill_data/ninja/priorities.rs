@@ -44,23 +44,35 @@ impl PriorityTable for NinjaPriorityTable {
 }
 
 impl NinjaPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = NinjaDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_ninja_opener(&db),
+            opener: make_ninja_opener(&db, use_pots),
             gcd_priority_table: make_ninja_gcd_priority_table(&db),
-            ogcd_priority_table: make_ninja_ogcd_priority_table(&db),
+            ogcd_priority_table: make_ninja_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_ninja_opener(db: &NinjaDatabase) -> Vec<Opener> {
-    vec![
-        Opener::GcdOpener(db.suiton.get_id()),
-        Opener::OgcdOpener((Some(db.kassatsu.get_id()), None)),
-        Opener::GcdOpener(db.spinning_edge.get_id()),
-        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+pub(crate) fn make_ninja_opener(db: &NinjaDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            Opener::GcdOpener(db.suiton.get_id()),
+            Opener::OgcdOpener((Some(db.kassatsu.get_id()), None)),
+            Opener::GcdOpener(db.spinning_edge.get_id()),
+            Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            Opener::GcdOpener(db.suiton.get_id()),
+            Opener::OgcdOpener((Some(db.kassatsu.get_id()), None)),
+            Opener::GcdOpener(db.spinning_edge.get_id()),
+            Opener::OgcdOpener((None, None)),
+        ]
+    };
+
+    openers.extend(vec![
         Opener::GcdOpener(db.gust_slash.get_id()),
         Opener::OgcdOpener((Some(db.dokumori.get_id()), Some(db.bunshin.get_id()))),
         Opener::GcdOpener(db.phantom_kamaitachi.get_id()),
@@ -83,7 +95,9 @@ pub(crate) fn make_ninja_opener(db: &NinjaDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((Some(db.bhavacakra.get_id()), None)),
         Opener::GcdOpener(db.raiton.get_id()),
         Opener::OgcdOpener((None, None)),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPriorityInfo> {
@@ -183,13 +197,20 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
     ]
 }
 
-pub(crate) fn make_ninja_ogcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPriorityInfo> {
-    // TODO: calculate future ninki
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_ninja_ogcd_priority_table(
+    db: &NinjaDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(SkillPrerequisite::MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.bunshin.get_id(),
             prerequisite: Some(HasResource(0, 50)),
@@ -241,5 +262,7 @@ pub(crate) fn make_ninja_ogcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPri
             skill_id: db.tenchijin.get_id(),
             prerequisite: None,
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

@@ -47,23 +47,35 @@ impl PriorityTable for WarriorPriorityTable {
 }
 
 impl WarriorPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = WarriorDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_warrior_opener(&db),
+            opener: make_warrior_opener(&db, use_pots),
             gcd_priority_table: make_warrior_gcd_priority_table(&db),
-            ogcd_priority_table: make_warrior_ogcd_priority_table(&db),
+            ogcd_priority_table: make_warrior_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_warrior_opener(db: &WarriorDatabase) -> Vec<Opener> {
-    vec![
-        GcdOpener(db.heavy_swing.get_id()),
-        OgcdOpener((Some(db.infuriate.get_id()), None)),
-        GcdOpener(db.maim.get_id()),
-        OgcdOpener((Some(db.potion.get_id()), None)),
+pub(crate) fn make_warrior_opener(db: &WarriorDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            GcdOpener(db.heavy_swing.get_id()),
+            OgcdOpener((Some(db.infuriate.get_id()), None)),
+            GcdOpener(db.maim.get_id()),
+            OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            GcdOpener(db.heavy_swing.get_id()),
+            OgcdOpener((Some(db.infuriate.get_id()), None)),
+            GcdOpener(db.maim.get_id()),
+            OgcdOpener((None, None)),
+        ]
+    };
+
+    openers.extend(vec![
         GcdOpener(db.storms_eye.get_id()),
         OgcdOpener((Some(db.inner_release.get_id()), None)),
         GcdOpener(db.inner_chaos.get_id()),
@@ -79,7 +91,9 @@ pub(crate) fn make_warrior_opener(db: &WarriorDatabase) -> Vec<Opener> {
         GcdOpener(db.fell_cleave_inner.get_id()),
         OgcdOpener((Some(db.primal_wrath.get_id()), None)),
         GcdOpener(db.primal_ruination.get_id()),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_warrior_gcd_priority_table(db: &WarriorDatabase) -> Vec<SkillPriorityInfo> {
@@ -126,12 +140,20 @@ pub(crate) fn make_warrior_gcd_priority_table(db: &WarriorDatabase) -> Vec<Skill
     ]
 }
 
-pub(crate) fn make_warrior_ogcd_priority_table(db: &WarriorDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_warrior_ogcd_priority_table(
+    db: &WarriorDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.inner_release.get_id(),
             prerequisite: None,
@@ -161,5 +183,7 @@ pub(crate) fn make_warrior_ogcd_priority_table(db: &WarriorDatabase) -> Vec<Skil
                 Box::new(Not(Box::new(MillisecondsBeforeBurst(85000)))),
             )),
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

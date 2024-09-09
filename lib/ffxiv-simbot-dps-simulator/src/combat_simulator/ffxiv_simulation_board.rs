@@ -44,6 +44,8 @@ static GLOBAL_TICKER_ID: SkillIdType = 15000;
 /// Keeps RDPS contribution for all buffs that are in the party.
 pub struct FfxivSimulationBoard {
     raw_damage_calculator: FfxivRawDamageCalculator,
+    party_ilvl_adjustment: f64,
+    use_pot: bool,
 
     pub main_player_id: PlayerIdType,
 
@@ -358,7 +360,7 @@ impl FfxivSimulationBoard {
                 })
         }
 
-        let (damage_rdps_profile, is_crit) = self.raw_damage_calculator.calculate_total_damage(
+        let (mut damage_rdps_profile, is_crit) = self.raw_damage_calculator.calculate_total_damage(
             player_id,
             potency,
             damage_category,
@@ -371,6 +373,16 @@ impl FfxivSimulationBoard {
 
         if is_crit {
             player.borrow_mut().update_on_crit();
+        }
+
+        if player.borrow().get_id() != self.main_player_id {
+            damage_rdps_profile.final_damage =
+                damage_rdps_profile.final_damage * self.party_ilvl_adjustment;
+            damage_rdps_profile.raw_damage =
+                damage_rdps_profile.raw_damage * self.party_ilvl_adjustment;
+            for (_, rdps) in damage_rdps_profile.rdps_contribution.iter_mut() {
+                *rdps = *rdps * self.party_ilvl_adjustment;
+            }
         }
 
         player.borrow_mut().update_damage_log(
@@ -446,6 +458,8 @@ impl FfxivSimulationBoard {
         target: Rc<RefCell<FfxivTarget>>,
         event_queue: Rc<RefCell<FfxivEventQueue>>,
         finish_combat_time_millisecond: TimeType,
+        party_ilvl_adjustment: f64,
+        use_pot: bool,
     ) -> Self {
         let tickers: RefCell<HashMap<TickerKey, FfxivEventTicker>> =
             RefCell::new(Default::default());
@@ -467,6 +481,8 @@ impl FfxivSimulationBoard {
             finish_combat_time_millisecond,
             event_queue: event_queue.clone(),
             tickers,
+            party_ilvl_adjustment,
+            use_pot,
         }
     }
 

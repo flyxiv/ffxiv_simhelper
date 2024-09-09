@@ -49,6 +49,8 @@ fn create_simulation_board(
         target,
         event_queue.clone(),
         combat_time_millisecond,
+        request.party_ilvl_adjustment,
+        request.use_pot,
     );
 
     let composition_buff_percent = if apply_composition_buff {
@@ -74,6 +76,7 @@ fn create_simulation_board(
             composition_buff_percent as BuffIncreasePercentType,
             &player_jobs,
             event_queue.clone(),
+            request.use_pot,
         )?;
 
         simulation_board.register_player(Rc::new(RefCell::new(player)));

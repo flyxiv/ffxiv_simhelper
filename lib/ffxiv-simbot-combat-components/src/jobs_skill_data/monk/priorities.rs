@@ -46,23 +46,35 @@ impl PriorityTable for MonkPriorityTable {
 }
 
 impl MonkPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = MonkDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_monk_opener(&db),
+            opener: make_monk_opener(&db, use_pots),
             gcd_priority_table: make_monk_gcd_priority_table(&db),
-            ogcd_priority_table: make_monk_ogcd_priority_table(&db),
+            ogcd_priority_table: make_monk_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_monk_opener(db: &MonkDatabase) -> Vec<Opener> {
-    vec![
-        GcdOpener(db.dragon_kick.get_id()),
-        OgcdOpener((Some(db.perfect_balance.get_id()), None)),
-        GcdOpener(db.perfect_leaping_opo.get_id()),
-        OgcdOpener((Some(db.potion.get_id()), None)),
+pub(crate) fn make_monk_opener(db: &MonkDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            GcdOpener(db.dragon_kick.get_id()),
+            OgcdOpener((Some(db.perfect_balance.get_id()), None)),
+            GcdOpener(db.perfect_leaping_opo.get_id()),
+            OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            GcdOpener(db.dragon_kick.get_id()),
+            OgcdOpener((Some(db.perfect_balance.get_id()), None)),
+            GcdOpener(db.perfect_leaping_opo.get_id()),
+            OgcdOpener((None, None)),
+        ]
+    };
+
+    openers.extend(vec![
         GcdOpener(db.perfect_dragon_kick.get_id()),
         OgcdOpener((
             Some(db.brotherhood.get_id()),
@@ -73,7 +85,9 @@ pub(crate) fn make_monk_opener(db: &MonkDatabase) -> Vec<Opener> {
             Some(db.the_forbidden_chakra.get_id()),
             Some(db.riddle_of_wind.get_id()),
         )),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriorityInfo> {
@@ -192,8 +206,59 @@ pub(crate) fn make_monk_gcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriori
     ]
 }
 
-pub(crate) fn make_monk_ogcd_priority_table(db: &MonkDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
+pub(crate) fn make_monk_ogcd_priority_table(
+    db: &MonkDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pots {
+        vec![
+            SkillPriorityInfo {
+                skill_id: db.perfect_balance.get_id(),
+                prerequisite: Some(And(
+                    Box::new(And(
+                        Box::new(Not(Box::new(HasResource(9, 1)))),
+                        Box::new(Combo(Some(2))),
+                    )),
+                    Box::new(Or(
+                        Box::new(RelatedSkillCooldownLessOrEqualThan(
+                            db.riddle_of_fire.get_id(),
+                            7000,
+                        )),
+                        Box::new(Not(Box::new(BufforDebuffLessThan(
+                            db.riddle_of_fire_buff.get_id(),
+                            6000,
+                        )))),
+                    )),
+                )),
+            },
+            SkillPriorityInfo {
+                skill_id: db.potion.get_id(),
+                prerequisite: Some(MillisecondsBeforeBurst(9000)),
+            },
+        ]
+    } else {
+        vec![SkillPriorityInfo {
+            skill_id: db.perfect_balance.get_id(),
+            prerequisite: Some(And(
+                Box::new(And(
+                    Box::new(Not(Box::new(HasResource(9, 1)))),
+                    Box::new(Combo(Some(2))),
+                )),
+                Box::new(Or(
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.riddle_of_fire.get_id(),
+                        7000,
+                    )),
+                    Box::new(Not(Box::new(BufforDebuffLessThan(
+                        db.riddle_of_fire_buff.get_id(),
+                        6000,
+                    )))),
+                )),
+            )),
+        }]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.perfect_balance.get_id(),
             prerequisite: Some(And(
@@ -233,5 +298,7 @@ pub(crate) fn make_monk_ogcd_priority_table(db: &MonkDatabase) -> Vec<SkillPrior
             skill_id: db.the_forbidden_chakra.get_id(),
             prerequisite: Some(HasResource(0, 5)),
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

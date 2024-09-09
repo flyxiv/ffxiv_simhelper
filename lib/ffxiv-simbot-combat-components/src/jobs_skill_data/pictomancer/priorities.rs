@@ -48,19 +48,39 @@ impl PriorityTable for PictomancerPriorityTable {
 }
 
 impl PictomancerPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = PictomancerDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_pictomancer_opener(&db),
+            opener: make_pictomancer_opener(&db, use_pots),
             gcd_priority_table: make_pictomancer_gcd_priority_table(&db),
-            ogcd_priority_table: make_pictomancer_ogcd_priority_table(&db),
+            ogcd_priority_table: make_pictomancer_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_pictomancer_opener(db: &PictomancerDatabase) -> Vec<Opener> {
-    vec![
+pub(crate) fn make_pictomancer_opener(db: &PictomancerDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            Opener::GcdOpener(db.rainbow_drip.get_id()),
+            Opener::OgcdOpener((Some(db.living_muse.get_id()), None)),
+            Opener::GcdOpener(db.winged_motif.get_id()),
+            Opener::OgcdOpener((None, None)),
+            Opener::GcdOpener(db.holy_in_white.get_id()),
+            Opener::OgcdOpener((Some(db.potion.get_id()), Some(db.starry_muse.get_id()))),
+        ]
+    } else {
+        vec![
+            Opener::GcdOpener(db.rainbow_drip.get_id()),
+            Opener::OgcdOpener((Some(db.living_muse.get_id()), None)),
+            Opener::GcdOpener(db.winged_motif.get_id()),
+            Opener::OgcdOpener((None, None)),
+            Opener::GcdOpener(db.holy_in_white.get_id()),
+            Opener::OgcdOpener((Some(db.starry_muse.get_id()), None)),
+        ]
+    };
+
+    openers.extend(vec![
         Opener::GcdOpener(db.rainbow_drip.get_id()),
         Opener::OgcdOpener((Some(db.living_muse.get_id()), None)),
         Opener::GcdOpener(db.winged_motif.get_id()),
@@ -90,7 +110,9 @@ pub(crate) fn make_pictomancer_opener(db: &PictomancerDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.hammer_motif.get_id()),
         Opener::OgcdOpener((Some(db.striking_muse.get_id()), None)),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_pictomancer_gcd_priority_table(
@@ -205,12 +227,18 @@ pub(crate) fn make_pictomancer_gcd_priority_table(
 
 pub(crate) fn make_pictomancer_ogcd_priority_table(
     db: &PictomancerDatabase,
+    use_pots: bool,
 ) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+    let mut ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.starry_muse.get_id(),
             prerequisite: None,
@@ -251,5 +279,7 @@ pub(crate) fn make_pictomancer_ogcd_priority_table(
                 Box::new(HasResourceExactly(HARD_GCD_STACK_ID, 0)),
             )),
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

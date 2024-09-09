@@ -3,7 +3,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::PlayerIdType;
+use crate::types::{PlayerIdType, TimeType};
 
 pub(crate) mod astrologian;
 pub(crate) mod bard;
@@ -53,6 +53,7 @@ impl PotionSkill {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![],
         };
+
         let potion = AttackSkill {
             id: 1,
             name: String::from("Potion"),

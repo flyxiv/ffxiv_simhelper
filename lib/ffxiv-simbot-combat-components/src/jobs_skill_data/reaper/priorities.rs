@@ -46,21 +46,31 @@ impl PriorityTable for ReaperPriorityTable {
 }
 
 impl ReaperPriorityTable {
-    pub fn new(player_id: PlayerIdType, player_count: usize) -> Self {
+    pub fn new(player_id: PlayerIdType, player_count: usize, use_pots: bool) -> Self {
         let db = ReaperDatabase::new(player_id, player_count);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_reaper_opener(&db),
+            opener: make_reaper_opener(&db, use_pots),
             gcd_priority_table: make_reaper_gcd_priority_table(&db),
-            ogcd_priority_table: make_reaper_ogcd_priority_table(&db),
+            ogcd_priority_table: make_reaper_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_reaper_opener(db: &ReaperDatabase) -> Vec<Opener> {
-    vec![
-        GcdOpener(db.shadow_of_death.get_id()),
-        OgcdOpener((Some(db.potion.get_id()), None)),
+pub(crate) fn make_reaper_opener(db: &ReaperDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            GcdOpener(db.shadow_of_death.get_id()),
+            OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            GcdOpener(db.shadow_of_death.get_id()),
+            OgcdOpener((None, None)),
+        ]
+    };
+
+    openers.extend(vec![
         GcdOpener(db.soul_slice.get_id()),
         OgcdOpener((Some(db.arcane_circle.get_id()), None)),
         GcdOpener(db.soul_slice.get_id()),
@@ -89,7 +99,9 @@ pub(crate) fn make_reaper_opener(db: &ReaperDatabase) -> Vec<Opener> {
         GcdOpener(db.executioners_gibbet.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.harvest_moon.get_id()),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPriorityInfo> {
@@ -187,16 +199,29 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
     ]
 }
 
-pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_reaper_ogcd_priority_table(
+    db: &ReaperDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pots {
+        vec![
+            SkillPriorityInfo {
+                skill_id: db.enshroud_host.get_id(),
+                prerequisite: None,
+            },
+            SkillPriorityInfo {
+                skill_id: db.potion.get_id(),
+                prerequisite: Some(MillisecondsBeforeBurst(9000)),
+            },
+        ]
+    } else {
+        vec![SkillPriorityInfo {
             skill_id: db.enshroud_host.get_id(),
             prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.potion.get_id(),
-            prerequisite: Some(MillisecondsBeforeBurst(7000)),
-        },
+        }]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.sacrificium.get_id(),
             prerequisite: Some(HasBufforDebuff(db.arcane_circle_buff.get_id())),
@@ -267,5 +292,7 @@ pub(crate) fn make_reaper_ogcd_priority_table(db: &ReaperDatabase) -> Vec<SkillP
                 )),
             )),
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

@@ -46,21 +46,27 @@ impl PriorityTable for AstrologianPriorityTable {
 }
 
 impl AstrologianPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = AstrologianDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_astrologian_opener(&db),
+            opener: make_astrologian_opener(&db, use_pots),
             gcd_priority_table: make_astrologian_gcd_priority_table(&db),
-            ogcd_priority_table: make_astrologian_ogcd_priority_table(&db),
+            ogcd_priority_table: make_astrologian_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_astrologian_opener(db: &AstrologianDatabase) -> Vec<Opener> {
-    vec![
+pub(crate) fn make_astrologian_opener(db: &AstrologianDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = vec![
         OgcdOpener((Some(db.earthly_star.get_id()), None)),
         GcdOpener(db.fall_malefic.get_id()),
+    ];
+
+    if use_pots {
+        openers.push(OgcdOpener((Some(db.potion.get_id()), None)));
+    }
+    openers.extend(vec![
         OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.combust_iii.get_id()),
         OgcdOpener((Some(db.lightspeed.get_id()), None)),
@@ -75,7 +81,9 @@ pub(crate) fn make_astrologian_opener(db: &AstrologianDatabase) -> Vec<Opener> {
         )),
         GcdOpener(db.fall_malefic_lightspeed.get_id()),
         OgcdOpener((Some(db.the_spear.get_id()), Some(db.oracle.get_id()))),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_astrologian_gcd_priority_table(
@@ -102,12 +110,18 @@ pub(crate) fn make_astrologian_gcd_priority_table(
 
 pub(crate) fn make_astrologian_ogcd_priority_table(
     db: &AstrologianDatabase,
+    use_pots: bool,
 ) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+    let mut skill_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    skill_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.divination.get_id(),
             prerequisite: None,
@@ -167,5 +181,7 @@ pub(crate) fn make_astrologian_ogcd_priority_table(
             skill_id: db.oracle.get_id(),
             prerequisite: None,
         },
-    ]
+    ]);
+
+    skill_priorities
 }

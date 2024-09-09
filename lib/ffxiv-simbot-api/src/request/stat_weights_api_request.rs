@@ -10,6 +10,8 @@ pub struct StatWeightsApiRequest {
     pub party: Vec<PlayerInfoRequest>,
     pub stat_name: String,
     pub augment_amount: StatType,
+    pub party_ilvl_adjustment: f64,
+    pub use_pot: bool,
 }
 
 impl From<&StatWeightsApiRequest> for SimulationApiRequest {
@@ -18,6 +20,8 @@ impl From<&StatWeightsApiRequest> for SimulationApiRequest {
             main_player_id: request.main_player_id,
             combat_time_millisecond: request.combat_time_millisecond,
             party: request.party.clone(),
+            use_pot: request.use_pot,
+            party_ilvl_adjustment: request.party_ilvl_adjustment,
         }
     }
 }

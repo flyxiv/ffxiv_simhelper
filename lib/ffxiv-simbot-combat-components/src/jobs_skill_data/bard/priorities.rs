@@ -46,20 +46,37 @@ impl PriorityTable for BardPriorityTable {
 }
 
 impl BardPriorityTable {
-    pub fn new(player_id: PlayerIdType, ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>) -> Self {
+    pub fn new(
+        player_id: PlayerIdType,
+        ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
+        use_pots: bool,
+    ) -> Self {
         let db = BardDatabase::new(player_id, ffxiv_event_queue);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_bard_opener(&db),
+            opener: make_bard_opener(&db, use_pots),
             gcd_priority_table: make_bard_gcd_priority_table(&db),
-            ogcd_priority_table: make_bard_ogcd_priority_table(&db),
+            ogcd_priority_table: make_bard_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_bard_opener(db: &BardDatabase) -> Vec<Opener> {
-    let bard_opener: Vec<Opener> = vec![
-        Opener::GcdOpener(db.caustic_bite.get_id()),
+pub(crate) fn make_bard_opener(db: &BardDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut bard_opener: Vec<Opener> = vec![Opener::GcdOpener(db.caustic_bite.get_id())];
+
+    if use_pots {
+        bard_opener.push(Opener::OgcdOpener((
+            Some(db.wanderers_minuet.get_id()),
+            Some(db.potion.get_id()),
+        )));
+    } else {
+        bard_opener.push(Opener::OgcdOpener((
+            Some(db.wanderers_minuet.get_id()),
+            None,
+        )));
+    }
+
+    bard_opener.extend(vec![
         Opener::OgcdOpener((Some(db.wanderers_minuet.get_id()), Some(db.potion.get_id()))),
         Opener::GcdOpener(db.burst_shot.get_id()),
         Opener::OgcdOpener((
@@ -76,7 +93,7 @@ pub(crate) fn make_bard_opener(db: &BardDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.radiant_encore1.get_id()),
         Opener::OgcdOpener((Some(db.barrage.get_id()), Some(db.heartbreak_shot.get_id()))),
         Opener::GcdOpener(db.iron_jaws.get_id()),
-    ];
+    ]);
 
     bard_opener
 }
@@ -140,12 +157,20 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
     bard_gcd_priority_table
 }
 
-pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPriorityInfo> {
-    let bard_ogcd_table: Vec<SkillPriorityInfo> = vec![
-        SkillPriorityInfo {
+pub(crate) fn make_bard_ogcd_priority_table(
+    db: &BardDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut bard_ogcd_table: Vec<SkillPriorityInfo> = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    bard_ogcd_table.extend(vec![
         SkillPriorityInfo {
             skill_id: db.battle_voice.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(700)),
@@ -223,7 +248,7 @@ pub(crate) fn make_bard_ogcd_priority_table(db: &BardDatabase) -> Vec<SkillPrior
             skill_id: db.heartbreak_shot.get_id(),
             prerequisite: Some(HasSkillStacks(1303, 2)),
         },
-    ];
+    ]);
 
     bard_ogcd_table
 }

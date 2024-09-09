@@ -44,23 +44,34 @@ impl PriorityTable for ScholarPriorityTable {
 }
 
 impl ScholarPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = ScholarDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_scholar_opener(&db),
+            opener: make_scholar_opener(&db, use_pots),
             gcd_priority_table: make_scholar_gcd_priority_table(&db),
-            ogcd_priority_table: make_scholar_ogcd_priority_table(&db),
+            ogcd_priority_table: make_scholar_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_scholar_opener(db: &ScholarDatabase) -> Vec<Opener> {
-    vec![
-        Opener::GcdOpener(db.broil_iv.get_id()),
-        Opener::OgcdOpener((Some(db.dissipation.get_id()), None)),
-        Opener::GcdOpener(db.biolysis.get_id()),
-        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+pub(crate) fn make_scholar_opener(db: &ScholarDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            Opener::GcdOpener(db.broil_iv.get_id()),
+            Opener::OgcdOpener((Some(db.dissipation.get_id()), None)),
+            Opener::GcdOpener(db.biolysis.get_id()),
+            Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            Opener::GcdOpener(db.broil_iv.get_id()),
+            Opener::OgcdOpener((Some(db.dissipation.get_id()), None)),
+            Opener::GcdOpener(db.biolysis.get_id()),
+            Opener::OgcdOpener((None, None)),
+        ]
+    };
+    openers.extend(vec![
         Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
@@ -81,7 +92,9 @@ pub(crate) fn make_scholar_opener(db: &ScholarDatabase) -> Vec<Opener> {
         Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((Some(db.baneful_impaction.get_id()), None)),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_scholar_gcd_priority_table(db: &ScholarDatabase) -> Vec<SkillPriorityInfo> {
@@ -103,12 +116,19 @@ pub(crate) fn make_scholar_gcd_priority_table(db: &ScholarDatabase) -> Vec<Skill
     ]
 }
 
-pub(crate) fn make_scholar_ogcd_priority_table(db: &ScholarDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_scholar_ogcd_priority_table(
+    db: &ScholarDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: None,
-        },
+        }]
+    } else {
+        vec![]
+    };
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.dissipation.get_id(),
             prerequisite: None,
@@ -141,5 +161,7 @@ pub(crate) fn make_scholar_ogcd_priority_table(db: &ScholarDatabase) -> Vec<Skil
             skill_id: db.baneful_impaction.get_id(),
             prerequisite: None,
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

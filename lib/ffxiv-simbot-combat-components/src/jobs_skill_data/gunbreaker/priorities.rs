@@ -47,21 +47,28 @@ impl PriorityTable for GunbreakerPriorityTable {
 }
 
 impl GunbreakerPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = GunbreakerDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_gunbreaker_opener(&db),
+            opener: make_gunbreaker_opener(&db, use_pots),
             gcd_priority_table: make_gunbreaker_gcd_priority_table(&db),
-            ogcd_priority_table: make_gunbreaker_ogcd_priority_table(&db),
+            ogcd_priority_table: make_gunbreaker_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_gunbreaker_opener(db: &GunbreakerDatabase) -> Vec<Opener> {
-    vec![
-        GcdOpener(db.keen_edge.get_id()),
-        OgcdOpener((Some(db.potion.get_id()), None)),
+pub(crate) fn make_gunbreaker_opener(db: &GunbreakerDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut opener = if use_pots {
+        vec![
+            GcdOpener(db.keen_edge.get_id()),
+            OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![GcdOpener(db.keen_edge.get_id()), OgcdOpener((None, None))]
+    };
+
+    opener.extend(vec![
         GcdOpener(db.brutal_shell.get_id()),
         OgcdOpener((Some(db.no_mercy.get_id()), Some(db.bloodfest.get_id()))),
         GcdOpener(db.gnashing_fang.get_id()),
@@ -75,7 +82,9 @@ pub(crate) fn make_gunbreaker_opener(db: &GunbreakerDatabase) -> Vec<Opener> {
         GcdOpener(db.wicked_talon.get_id()),
         OgcdOpener((Some(db.eye_gouge.get_id()), None)),
         GcdOpener(db.reign_of_beasts.get_id()),
-    ]
+    ]);
+
+    opener
 }
 
 pub(crate) fn make_gunbreaker_gcd_priority_table(
@@ -151,12 +160,18 @@ pub(crate) fn make_gunbreaker_gcd_priority_table(
 
 pub(crate) fn make_gunbreaker_ogcd_priority_table(
     db: &GunbreakerDatabase,
+    use_pots: bool,
 ) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+    let mut skill_ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    skill_ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.no_mercy.get_id(),
             prerequisite: None,
@@ -189,5 +204,7 @@ pub(crate) fn make_gunbreaker_ogcd_priority_table(
             skill_id: db.bow_shock.get_id(),
             prerequisite: None,
         },
-    ]
+    ]);
+
+    skill_ogcd_priorities
 }

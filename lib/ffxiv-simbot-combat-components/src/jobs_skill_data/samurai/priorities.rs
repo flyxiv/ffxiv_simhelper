@@ -47,19 +47,33 @@ impl PriorityTable for SamuraiPriorityTable {
 }
 
 impl SamuraiPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = SamuraiDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_samurai_opener(&db),
+            opener: make_samurai_opener(&db, use_pots),
             gcd_priority_table: make_samurai_gcd_priority_table(&db),
-            ogcd_priority_table: make_samurai_ogcd_priority_table(&db),
+            ogcd_priority_table: make_samurai_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_samurai_opener(db: &SamuraiDatabase) -> Vec<Opener> {
-    vec![
+pub(crate) fn make_samurai_opener(db: &SamuraiDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            OgcdOpener((Some(db.meikyo_shisui.get_id()), None)),
+            GcdOpener(db.gekko_meikyo.get_id()),
+            OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            OgcdOpener((Some(db.meikyo_shisui.get_id()), None)),
+            GcdOpener(db.gekko_meikyo.get_id()),
+            OgcdOpener((None, None)),
+        ]
+    };
+
+    openers.extend(vec![
         OgcdOpener((Some(db.meikyo_shisui.get_id()), None)),
         GcdOpener(db.gekko_meikyo.get_id()),
         OgcdOpener((Some(db.potion.get_id()), None)),
@@ -90,7 +104,9 @@ pub(crate) fn make_samurai_opener(db: &SamuraiDatabase) -> Vec<Opener> {
         GcdOpener(db.tendo_setsugekka.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.kaeshi_tendo_setsugekka.get_id()),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_samurai_gcd_priority_table(db: &SamuraiDatabase) -> Vec<SkillPriorityInfo> {
@@ -273,7 +289,10 @@ pub(crate) fn make_samurai_gcd_priority_table(db: &SamuraiDatabase) -> Vec<Skill
 }
 
 #[allow(unused)]
-pub(crate) fn make_samurai_ogcd_priority_table(db: &SamuraiDatabase) -> Vec<SkillPriorityInfo> {
+pub(crate) fn make_samurai_ogcd_priority_table(
+    db: &SamuraiDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
     let has_no_sen = And(
         Box::new(Not(Box::new(HasResource(2, 1)))),
         Box::new(And(
@@ -346,11 +365,16 @@ pub(crate) fn make_samurai_ogcd_priority_table(db: &SamuraiDatabase) -> Vec<Skil
         )),
     );
 
-    vec![
-        SkillPriorityInfo {
+    let mut skill_ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(7000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    skill_ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.ikishoten.get_id(),
             prerequisite: None,
@@ -393,5 +417,7 @@ pub(crate) fn make_samurai_ogcd_priority_table(db: &SamuraiDatabase) -> Vec<Skil
                 Box::new(HasResource(0, 50)),
             )),
         },
-    ]
+    ]);
+
+    skill_ogcd_priorities
 }
