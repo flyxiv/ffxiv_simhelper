@@ -40,30 +40,41 @@ impl PriorityTable for SagePriorityTable {
 }
 
 impl SagePriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = SageDatabase::new(player_id);
 
         Self {
             turn_count: RefCell::new(0),
-            opener: make_sage_opener(&db),
+            opener: make_sage_opener(&db, use_pots),
             gcd_priority_list: make_sage_gcd_priority_db(&db),
-            ogcd_priority_list: make_sage_ogcd_priority_db(&db),
+            ogcd_priority_list: make_sage_ogcd_priority_db(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_sage_opener(db: &SageDatabase) -> Vec<Opener> {
-    let sage_opener: Vec<Opener> = vec![
-        Opener::GcdOpener(db.gcd.get_id()),
-        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+pub(crate) fn make_sage_opener(db: &SageDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            Opener::GcdOpener(db.gcd.get_id()),
+            Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            Opener::GcdOpener(db.gcd.get_id()),
+            Opener::OgcdOpener((None, None)),
+        ]
+    };
+    openers.extend(vec![
         Opener::GcdOpener(db.dot.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.gcd.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.gcd.get_id()),
-    ];
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.phlegma.get_id()),
+    ]);
 
-    sage_opener
+    openers
 }
 
 pub(crate) fn make_sage_gcd_priority_db(db: &SageDatabase) -> Vec<SkillPriorityInfo> {
@@ -88,15 +99,25 @@ pub(crate) fn make_sage_gcd_priority_db(db: &SageDatabase) -> Vec<SkillPriorityI
     sage_priority_list
 }
 
-pub(crate) fn make_sage_ogcd_priority_db(db: &SageDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
-            skill_id: db.potion.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
+pub(crate) fn make_sage_ogcd_priority_db(
+    db: &SageDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    if use_pots {
+        vec![
+            SkillPriorityInfo {
+                skill_id: db.potion.get_id(),
+                prerequisite: None,
+            },
+            SkillPriorityInfo {
+                skill_id: db.psyche.get_id(),
+                prerequisite: None,
+            },
+        ]
+    } else {
+        vec![SkillPriorityInfo {
             skill_id: db.psyche.get_id(),
             prerequisite: None,
-        },
-    ]
+        }]
+    }
 }

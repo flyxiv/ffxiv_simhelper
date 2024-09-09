@@ -48,23 +48,35 @@ impl PriorityTable for RedmagePriorityTable {
 }
 
 impl RedmagePriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = RedmageDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_redmage_opener(&db),
+            opener: make_redmage_opener(&db, use_pots),
             gcd_priority_table: make_redmage_gcd_priority_table(&db),
-            ogcd_priority_table: make_redmage_ogcd_priority_table(&db),
+            ogcd_priority_table: make_redmage_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_redmage_opener(db: &RedmageDatabase) -> Vec<Opener> {
-    vec![
-        Opener::GcdOpener(db.veraero_iii.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.verthunder_iii_dual.get_id()),
-        Opener::OgcdOpener((Some(db.swiftcast.get_id()), Some(db.potion.get_id()))),
+pub(crate) fn make_redmage_opener(db: &RedmageDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            Opener::GcdOpener(db.veraero_iii.get_id()),
+            Opener::OgcdOpener((None, None)),
+            Opener::GcdOpener(db.verthunder_iii_dual.get_id()),
+            Opener::OgcdOpener((Some(db.swiftcast.get_id()), Some(db.potion.get_id()))),
+        ]
+    } else {
+        vec![
+            Opener::GcdOpener(db.veraero_iii.get_id()),
+            Opener::OgcdOpener((None, None)),
+            Opener::GcdOpener(db.verthunder_iii_dual.get_id()),
+            Opener::OgcdOpener((Some(db.swiftcast.get_id()), None)),
+        ]
+    };
+
+    openers.extend(vec![
         Opener::GcdOpener(db.grand_impact.get_id()),
         Opener::OgcdOpener((Some(db.fleche.get_id()), Some(db.acceleration.get_id()))),
         Opener::GcdOpener(db.verthunder_iii_swift.get_id()),
@@ -84,7 +96,9 @@ pub(crate) fn make_redmage_opener(db: &RedmageDatabase) -> Vec<Opener> {
         )),
         Opener::GcdOpener(db.manafication_resolution.get_id()),
         Opener::OgcdOpener((Some(db.prefulgence.get_id()), None)),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_redmage_gcd_priority_table(db: &RedmageDatabase) -> Vec<SkillPriorityInfo> {
@@ -213,12 +227,20 @@ pub(crate) fn make_redmage_gcd_priority_table(db: &RedmageDatabase) -> Vec<Skill
     priority
 }
 
-pub(crate) fn make_redmage_ogcd_priority_table(db: &RedmageDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_redmage_ogcd_priority_table(
+    db: &RedmageDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(4000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.manafication.get_id(),
             prerequisite: Some(HasBufforDebuff(db.finish_ready.get_id())),
@@ -282,7 +304,9 @@ pub(crate) fn make_redmage_ogcd_priority_table(db: &RedmageDatabase) -> Vec<Skil
                 )),
             )),
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }
 
 fn make_magic_pair_priority(

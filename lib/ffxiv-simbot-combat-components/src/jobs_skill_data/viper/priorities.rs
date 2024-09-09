@@ -47,19 +47,39 @@ impl PriorityTable for ViperPriorityTable {
 }
 
 impl ViperPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = ViperDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_viper_opener(&db),
+            opener: make_viper_opener(&db, use_pots),
             gcd_priority_table: make_viper_gcd_priority_table(&db),
-            ogcd_priority_table: make_viper_ogcd_priority_table(&db),
+            ogcd_priority_table: make_viper_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_viper_opener(db: &ViperDatabase) -> Vec<Opener> {
-    vec![
+pub(crate) fn make_viper_opener(db: &ViperDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut opener = if use_pots {
+        vec![
+            GcdOpener(db.dread_fangs.get_id()),
+            OgcdOpener((None, None)),
+            GcdOpener(db.swiftskins_sting.get_id()),
+            OgcdOpener((Some(db.serpents_ire.get_id()), None)),
+            GcdOpener(db.dreadwinder.get_id()),
+            OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            GcdOpener(db.dread_fangs.get_id()),
+            OgcdOpener((None, None)),
+            GcdOpener(db.swiftskins_sting.get_id()),
+            OgcdOpener((Some(db.serpents_ire.get_id()), None)),
+            GcdOpener(db.dreadwinder.get_id()),
+            OgcdOpener((None, None)),
+        ]
+    };
+
+    opener.extend(vec![
         GcdOpener(db.dread_fangs.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.swiftskins_sting.get_id()),
@@ -90,7 +110,9 @@ pub(crate) fn make_viper_opener(db: &ViperDatabase) -> Vec<Opener> {
         OgcdOpener((None, None)),
         GcdOpener(db.hindsting_strike.get_id()),
         OgcdOpener((Some(db.normal_filler1.get_id()), None)),
-    ]
+    ]);
+
+    opener
 }
 
 pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPriorityInfo> {
@@ -189,12 +211,20 @@ pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPrio
     ]
 }
 
-pub(crate) fn make_viper_ogcd_priority_table(db: &ViperDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_viper_ogcd_priority_table(
+    db: &ViperDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.reawaken_filler.get_id(),
             prerequisite: None,
@@ -215,5 +245,7 @@ pub(crate) fn make_viper_ogcd_priority_table(db: &ViperDatabase) -> Vec<SkillPri
             skill_id: db.serpents_ire.get_id(),
             prerequisite: None,
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

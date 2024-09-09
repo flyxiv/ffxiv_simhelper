@@ -42,30 +42,44 @@ impl PriorityTable for WhitemagePriorityTable {
 }
 
 impl WhitemagePriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = WhitemageDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_whitemage_opener(&db),
+            opener: make_whitemage_opener(&db, use_pots),
             gcd_priority_table: make_whitemage_gcd_priority_table(&db),
-            ogcd_priority_table: make_whitemage_ogcd_priority_table(&db),
+            ogcd_priority_table: make_whitemage_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_whitemage_opener(db: &WhitemageDatabase) -> Vec<Opener> {
-    vec![
-        Opener::GcdOpener(db.glare3.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.dia.get_id()),
-        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+pub(crate) fn make_whitemage_opener(db: &WhitemageDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            Opener::GcdOpener(db.glare3.get_id()),
+            Opener::OgcdOpener((None, None)),
+            Opener::GcdOpener(db.dia.get_id()),
+            Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            Opener::GcdOpener(db.glare3.get_id()),
+            Opener::OgcdOpener((None, None)),
+            Opener::GcdOpener(db.dia.get_id()),
+            Opener::OgcdOpener((None, None)),
+        ]
+    };
+
+    openers.extend(vec![
         Opener::GcdOpener(db.glare3.get_id()),
         Opener::OgcdOpener((Some(db.presence_of_mind.get_id()), None)),
         Opener::GcdOpener(db.glare3.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.glare3.get_id()),
         Opener::OgcdOpener((Some(db.assize.get_id()), None)),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_whitemage_gcd_priority_table(db: &WhitemageDatabase) -> Vec<SkillPriorityInfo> {
@@ -102,12 +116,20 @@ pub(crate) fn make_whitemage_gcd_priority_table(db: &WhitemageDatabase) -> Vec<S
     ]
 }
 
-pub(crate) fn make_whitemage_ogcd_priority_table(db: &WhitemageDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_whitemage_ogcd_priority_table(
+    db: &WhitemageDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: None,
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.presence_of_mind.get_id(),
             prerequisite: None,
@@ -116,5 +138,7 @@ pub(crate) fn make_whitemage_ogcd_priority_table(db: &WhitemageDatabase) -> Vec<
             skill_id: db.assize.get_id(),
             prerequisite: None,
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

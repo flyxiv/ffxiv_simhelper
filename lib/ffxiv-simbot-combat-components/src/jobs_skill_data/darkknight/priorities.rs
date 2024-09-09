@@ -46,21 +46,31 @@ impl PriorityTable for DarkknightPriorityTable {
 }
 
 impl DarkknightPriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = DarkknightDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_darkknight_opener(&db),
+            opener: make_darkknight_opener(&db, use_pots),
             gcd_priority_table: make_darkknight_gcd_priority_table(&db),
-            ogcd_priority_table: make_darkknight_ogcd_priority_table(&db),
+            ogcd_priority_table: make_darkknight_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_darkknight_opener(db: &DarkknightDatabase) -> Vec<Opener> {
-    vec![
-        GcdOpener(db.hard_slash.get_id()),
-        OgcdOpener((Some(db.edge_of_shadow.get_id()), Some(db.potion.get_id()))),
+pub(crate) fn make_darkknight_opener(db: &DarkknightDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut openers = if use_pots {
+        vec![
+            GcdOpener(db.hard_slash.get_id()),
+            OgcdOpener((Some(db.edge_of_shadow.get_id()), Some(db.potion.get_id()))),
+        ]
+    } else {
+        vec![
+            GcdOpener(db.hard_slash.get_id()),
+            OgcdOpener((Some(db.edge_of_shadow.get_id()), None)),
+        ]
+    };
+
+    openers.extend(vec![
         GcdOpener(db.syphon_strike.get_id()),
         OgcdOpener((Some(db.living_shadow.get_id()), None)),
         GcdOpener(db.souleater.get_id()),
@@ -86,7 +96,9 @@ pub(crate) fn make_darkknight_opener(db: &DarkknightDatabase) -> Vec<Opener> {
             Some(db.edge_of_shadow.get_id()),
         )),
         GcdOpener(db.bloodspiller.get_id()),
-    ]
+    ]);
+
+    openers
 }
 
 pub(crate) fn make_darkknight_gcd_priority_table(
@@ -129,12 +141,18 @@ pub(crate) fn make_darkknight_gcd_priority_table(
 
 pub(crate) fn make_darkknight_ogcd_priority_table(
     db: &DarkknightDatabase,
+    use_pots: bool,
 ) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+    let mut ogcd_priorities = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.living_shadow.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(2000)),
@@ -174,5 +192,7 @@ pub(crate) fn make_darkknight_ogcd_priority_table(
                 Box::new(BufforDebuffLessThan(db.darkside.get_id(), 3000)),
             )),
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

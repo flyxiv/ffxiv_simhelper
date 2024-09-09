@@ -45,19 +45,19 @@ impl PriorityTable for BlackmagePriorityTable {
 }
 
 impl BlackmagePriorityTable {
-    pub fn new(player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, use_pot: bool) -> Self {
         let db = BlackmageDatabase::new(player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_blackmage_opener(&db),
+            opener: make_blackmage_opener(&db, use_pot),
             gcd_priority_table: make_blackmage_gcd_priority_table(&db),
-            ogcd_priority_table: make_blackmage_ogcd_priority_table(&db),
+            ogcd_priority_table: make_blackmage_ogcd_priority_table(&db, use_pot),
         }
     }
 }
 
-pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase) -> Vec<Opener> {
-    vec![
+pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase, use_pot: bool) -> Vec<Opener> {
+    let mut opener = vec![
         Opener::GcdOpener(db.blizzard3_opener.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.high_thunder.get_id()),
@@ -69,9 +69,16 @@ pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase) -> Vec<Opener> {
         Opener::GcdOpener(db.fire4_triplecast.get_id()),
         Opener::OgcdOpener((Some(db.leylines.get_id()), Some(db.amplifier.get_id()))),
         Opener::GcdOpener(db.fire4_triplecast.get_id()),
-        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
-        Opener::GcdOpener(db.fire4_triplecast.get_id()),
-    ]
+    ];
+
+    if use_pot {
+        opener.push(Opener::OgcdOpener((Some(db.potion.get_id()), None)));
+    } else {
+        opener.push(Opener::OgcdOpener((None, None)));
+    }
+    opener.push(Opener::GcdOpener(db.fire4_triplecast.get_id()));
+
+    opener
 }
 
 pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<SkillPriorityInfo> {
@@ -178,12 +185,19 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
     ]
 }
 
-pub(crate) fn make_blackmage_ogcd_priority_table(db: &BlackmageDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_blackmage_ogcd_priority_table(
+    db: &BlackmageDatabase,
+    use_pot: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorities = if use_pot {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: None,
-        },
+        }]
+    } else {
+        vec![]
+    };
+    ogcd_priorities.extend(vec![
         SkillPriorityInfo {
             skill_id: db.manafont.get_id(),
             prerequisite: None,
@@ -224,5 +238,7 @@ pub(crate) fn make_blackmage_ogcd_priority_table(db: &BlackmageDatabase) -> Vec<
                 Box::new(Not(Box::new(HasBufforDebuff(db.triplecast_buff.get_id())))),
             )),
         },
-    ]
+    ]);
+
+    ogcd_priorities
 }

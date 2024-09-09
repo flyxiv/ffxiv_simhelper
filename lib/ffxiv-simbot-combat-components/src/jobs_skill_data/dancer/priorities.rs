@@ -44,27 +44,39 @@ impl PriorityTable for DancerPriorityTable {
 }
 
 impl DancerPriorityTable {
-    pub fn new(player_id: PlayerIdType, partner_player_id: PlayerIdType) -> Self {
+    pub fn new(player_id: PlayerIdType, partner_player_id: PlayerIdType, use_pots: bool) -> Self {
         let db = DancerDatabase::new(player_id, partner_player_id);
         Self {
             turn_count: RefCell::new(0),
-            opener: make_dancer_opener(&db),
+            opener: make_dancer_opener(&db, use_pots),
             gcd_priority_table: make_dancer_gcd_priority_table(&db),
-            ogcd_priority_table: make_dancer_ogcd_priority_table(&db),
+            ogcd_priority_table: make_dancer_ogcd_priority_table(&db, use_pots),
         }
     }
 }
 
-pub(crate) fn make_dancer_opener(db: &DancerDatabase) -> Vec<Opener> {
-    vec![
-        Opener::GcdOpener(db.standard_opener.get_id()),
-        Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+pub(crate) fn make_dancer_opener(db: &DancerDatabase, use_pots: bool) -> Vec<Opener> {
+    let mut opener = if use_pots {
+        vec![
+            Opener::GcdOpener(db.standard_opener.get_id()),
+            Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
+    } else {
+        vec![
+            Opener::GcdOpener(db.standard_opener.get_id()),
+            Opener::OgcdOpener((None, None)),
+        ]
+    };
+
+    opener.extend(vec![
         Opener::GcdOpener(db.technical_step.get_id()),
         Opener::OgcdOpener((Some(db.devilment.get_id()), None)),
         Opener::GcdOpener(db.last_dance.get_id()),
         Opener::OgcdOpener((Some(db.flourish.get_id()), None)),
         Opener::GcdOpener(db.starfall_dance.get_id()),
-    ]
+    ]);
+
+    opener
 }
 
 pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPriorityInfo> {
@@ -132,12 +144,20 @@ pub(crate) fn make_dancer_gcd_priority_table(db: &DancerDatabase) -> Vec<SkillPr
     ]
 }
 
-pub(crate) fn make_dancer_ogcd_priority_table(db: &DancerDatabase) -> Vec<SkillPriorityInfo> {
-    vec![
-        SkillPriorityInfo {
+pub(crate) fn make_dancer_ogcd_priority_table(
+    db: &DancerDatabase,
+    use_pots: bool,
+) -> Vec<SkillPriorityInfo> {
+    let mut ogcd_priorites = if use_pots {
+        vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
             prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
+        }]
+    } else {
+        vec![]
+    };
+
+    ogcd_priorites.extend(vec![
         SkillPriorityInfo {
             skill_id: db.devilment.get_id(),
             prerequisite: None,
@@ -161,5 +181,7 @@ pub(crate) fn make_dancer_ogcd_priority_table(db: &DancerDatabase) -> Vec<SkillP
             skill_id: db.fan_dance4.get_id(),
             prerequisite: None,
         },
-    ]
+    ]);
+
+    ogcd_priorites
 }

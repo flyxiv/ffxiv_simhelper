@@ -9,6 +9,8 @@ pub struct SimulationApiRequest {
     pub main_player_id: PlayerIdType,
     pub combat_time_millisecond: TimeType,
     pub party: Vec<PlayerInfoRequest>,
+    pub party_ilvl_adjustment: f64,
+    pub use_pot: bool,
 }
 
 /// Data of individual players needed to simulate their DPS

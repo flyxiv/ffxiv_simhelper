@@ -64,6 +64,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -71,7 +72,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Paladin(PaladinPriorityTable::new(player_id)),
+            FfxivPriorityTable::Paladin(PaladinPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -90,6 +91,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -97,7 +99,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Warrior(WarriorPriorityTable::new(player_id)),
+            FfxivPriorityTable::Warrior(WarriorPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -116,6 +118,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -123,7 +126,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Darkknight(DarkknightPriorityTable::new(player_id)),
+            FfxivPriorityTable::Darkknight(DarkknightPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -141,6 +144,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -148,7 +152,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Gunbreaker(GunbreakerPriorityTable::new(player_id)),
+            FfxivPriorityTable::Gunbreaker(GunbreakerPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -167,6 +171,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -174,7 +179,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Whitemage(WhitemagePriorityTable::new(player_id)),
+            FfxivPriorityTable::Whitemage(WhitemagePriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -193,6 +198,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -200,7 +206,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Scholar(ScholarPriorityTable::new(player_id)),
+            FfxivPriorityTable::Scholar(ScholarPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -220,6 +226,7 @@ impl FfxivPlayer {
         partner_id2: PlayerIdType,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -227,7 +234,7 @@ impl FfxivPlayer {
             power,
             Some(partner_id1),
             Some(partner_id2),
-            FfxivPriorityTable::Astrologian(AstrologianPriorityTable::new(player_id)),
+            FfxivPriorityTable::Astrologian(AstrologianPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -246,6 +253,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -253,7 +261,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Sage(SagePriorityTable::new(player_id)),
+            FfxivPriorityTable::Sage(SagePriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -272,6 +280,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -279,7 +288,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Dragoon(DragoonPriorityTable::new(player_id)),
+            FfxivPriorityTable::Dragoon(DragoonPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -298,11 +307,12 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         let greased_lightning_iv: BuffStatus = BuffStatus {
             id: 909,
             owner_id: player_id,
-            duration_left_millisecond: 999999999,
+            duration_left_millisecond: TimeType::MAX,
             status_info: vec![StatusInfo::SpeedPercent(20)],
             duration_millisecond: 999999999,
             is_raidwide: false,
@@ -318,7 +328,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Monk(MonkPriorityTable::new(player_id)),
+            FfxivPriorityTable::Monk(MonkPriorityTable::new(player_id, use_pots)),
             HashMap::from([(StatusKey::new(909, player_id), greased_lightning_iv)]),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -336,6 +346,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         let huton_status: BuffStatus = {
             BuffStatus {
@@ -358,7 +369,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Ninja(NinjaPriorityTable::new(player_id)),
+            FfxivPriorityTable::Ninja(NinjaPriorityTable::new(player_id, use_pots)),
             HashMap::from([(
                 StatusKey::new(huton_status.get_id(), player_id),
                 huton_status,
@@ -380,6 +391,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -387,7 +399,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Samurai(SamuraiPriorityTable::new(player_id)),
+            FfxivPriorityTable::Samurai(SamuraiPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -406,6 +418,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -413,7 +426,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Reaper(ReaperPriorityTable::new(player_id, player_count)),
+            FfxivPriorityTable::Reaper(ReaperPriorityTable::new(player_id, player_count, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -432,6 +445,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -439,7 +453,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Viper(ViperPriorityTable::new(player_id)),
+            FfxivPriorityTable::Viper(ViperPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -458,6 +472,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -465,7 +480,11 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Bard(BardPriorityTable::new(player_id, ffxiv_event_queue.clone())),
+            FfxivPriorityTable::Bard(BardPriorityTable::new(
+                player_id,
+                ffxiv_event_queue.clone(),
+                use_pots,
+            )),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -484,6 +503,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -491,7 +511,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Machinist(MachinistPriorityTable::new(player_id)),
+            FfxivPriorityTable::Machinist(MachinistPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -510,6 +530,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -517,7 +538,11 @@ impl FfxivPlayer {
             power,
             Some(partner_player_id),
             None,
-            FfxivPriorityTable::Dancer(DancerPriorityTable::new(player_id, partner_player_id)),
+            FfxivPriorityTable::Dancer(DancerPriorityTable::new(
+                player_id,
+                partner_player_id,
+                use_pots,
+            )),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -536,13 +561,14 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         let enochian: BuffStatus = BuffStatus {
             id: 1907,
             owner_id: player_id,
-            duration_left_millisecond: 999999999,
+            duration_left_millisecond: TimeType::MAX,
             status_info: vec![StatusInfo::DamagePercent(33)],
-            duration_millisecond: 999999999,
+            duration_millisecond: TimeType::MAX,
             is_raidwide: false,
             name: "Enochian".to_string(),
             stacks: 1,
@@ -556,7 +582,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Blackmage(BlackmagePriorityTable::new(player_id)),
+            FfxivPriorityTable::Blackmage(BlackmagePriorityTable::new(player_id, use_pots)),
             HashMap::from([(StatusKey::new(1707, player_id), enochian)]),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -575,6 +601,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -585,6 +612,7 @@ impl FfxivPlayer {
             FfxivPriorityTable::Summoner(SummonerPriorityTable::new(
                 player_id,
                 ffxiv_event_queue.clone(),
+                use_pots,
             )),
             Default::default(),
             ffxiv_event_queue,
@@ -604,6 +632,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -611,7 +640,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Redmage(RedmagePriorityTable::new(player_id)),
+            FfxivPriorityTable::Redmage(RedmagePriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
@@ -630,6 +659,7 @@ impl FfxivPlayer {
         power: PlayerPower,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
         player_count: usize,
+        use_pots: bool,
     ) -> FfxivPlayer {
         Self::new(
             player_id,
@@ -637,7 +667,7 @@ impl FfxivPlayer {
             power,
             None,
             None,
-            FfxivPriorityTable::Pictomancer(PictomancerPriorityTable::new(player_id)),
+            FfxivPriorityTable::Pictomancer(PictomancerPriorityTable::new(player_id, use_pots)),
             Default::default(),
             ffxiv_event_queue,
             FfxivEvent::PlayerTurn(
