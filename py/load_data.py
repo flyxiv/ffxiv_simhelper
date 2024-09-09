@@ -174,13 +174,13 @@ def convert_equipments(equipments):
         List of converted combat items
     """
 
-    equipments_only_max_level_equipments = [
-        equipment for equipment in equipments if equipment['level'] == 100
+    equipments_only_relevant_level_equipments = [
+        equipment for equipment in equipments if equipment['level'] >= 99
     ]
 
     equipments_only_combat_items = []
 
-    for equipment in equipments_only_max_level_equipments:
+    for equipment in equipments_only_relevant_level_equipments:
         if is_combat_item(equipment):
             equipments_only_combat_items.append(equipment)
 
@@ -288,7 +288,7 @@ def convert_foods(foods):
     """
 
     combat_foods = [food for food in foods if is_combat_food(food)]
-    return [convert_food(food) for food in combat_foods if food['itemLevel'] >= 710]
+    return [convert_food(food) for food in combat_foods if food['itemLevel'] >= 680]
 
 
 def convert_clans(clans):
