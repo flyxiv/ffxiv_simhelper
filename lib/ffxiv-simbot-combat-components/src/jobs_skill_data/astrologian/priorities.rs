@@ -65,9 +65,10 @@ pub(crate) fn make_astrologian_opener(db: &AstrologianDatabase, use_pots: bool) 
 
     if use_pots {
         openers.push(OgcdOpener((Some(db.potion.get_id()), None)));
+    } else {
+        openers.push(OgcdOpener((None, None)));
     }
     openers.extend(vec![
-        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.combust_iii.get_id()),
         OgcdOpener((Some(db.lightspeed.get_id()), None)),
         GcdOpener(db.fall_malefic_lightspeed.get_id()),

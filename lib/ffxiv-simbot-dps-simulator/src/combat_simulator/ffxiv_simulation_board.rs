@@ -45,7 +45,6 @@ static GLOBAL_TICKER_ID: SkillIdType = 15000;
 pub struct FfxivSimulationBoard {
     raw_damage_calculator: FfxivRawDamageCalculator,
     party_ilvl_adjustment: f64,
-    use_pot: bool,
 
     pub main_player_id: PlayerIdType,
 
@@ -482,7 +481,6 @@ impl FfxivSimulationBoard {
             event_queue: event_queue.clone(),
             tickers,
             party_ilvl_adjustment,
-            use_pot,
         }
     }
 

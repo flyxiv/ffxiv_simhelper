@@ -62,7 +62,7 @@ impl BardPriorityTable {
 }
 
 pub(crate) fn make_bard_opener(db: &BardDatabase, use_pots: bool) -> Vec<Opener> {
-    let mut bard_opener: Vec<Opener> = vec![Opener::GcdOpener(db.caustic_bite.get_id())];
+    let mut bard_opener: Vec<Opener> = vec![Opener::GcdOpener(db.storm_bite.get_id())];
 
     if use_pots {
         bard_opener.push(Opener::OgcdOpener((
@@ -77,13 +77,12 @@ pub(crate) fn make_bard_opener(db: &BardDatabase, use_pots: bool) -> Vec<Opener>
     }
 
     bard_opener.extend(vec![
-        Opener::OgcdOpener((Some(db.wanderers_minuet.get_id()), Some(db.potion.get_id()))),
-        Opener::GcdOpener(db.burst_shot.get_id()),
+        Opener::GcdOpener(db.caustic_bite.get_id()),
         Opener::OgcdOpener((
             Some(db.raging_strike.get_id()),
             Some(db.empyreal_arrow.get_id()),
         )),
-        Opener::GcdOpener(db.storm_bite.get_id()),
+        Opener::GcdOpener(db.burst_shot.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.burst_shot.get_id()),
         Opener::OgcdOpener((

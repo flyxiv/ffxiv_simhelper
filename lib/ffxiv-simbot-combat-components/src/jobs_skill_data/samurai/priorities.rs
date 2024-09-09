@@ -74,9 +74,6 @@ pub(crate) fn make_samurai_opener(db: &SamuraiDatabase, use_pots: bool) -> Vec<O
     };
 
     openers.extend(vec![
-        OgcdOpener((Some(db.meikyo_shisui.get_id()), None)),
-        GcdOpener(db.gekko_meikyo.get_id()),
-        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.kasha_meikyo.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.yukikaze.get_id()),

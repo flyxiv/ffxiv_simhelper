@@ -391,7 +391,7 @@ impl SummonerDatabase {
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyRaidBuff(player_id, searing_light_buff.clone(), 30000, 30000, 0),
+                ApplyRaidBuff(player_id, searing_light_buff.clone(), 20000, 20000, 0),
                 ApplyBuff(player_id, player_id, rubys_glimmer.clone(), 30000, 30000, 0),
             ],
             proc_events: vec![],
