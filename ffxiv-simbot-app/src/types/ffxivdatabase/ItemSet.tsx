@@ -1,6 +1,8 @@
 import {
   EMPTY_EQUIPMENT_ID,
   EQUIPMENT_DATABASE_BY_ID,
+  EQUIPMENT_DATABASE_BY_KEYS,
+  toEquipmentKeyString,
   TOTAL_SLOTS,
 } from "./Equipment";
 import { convertEquipmentToItemStat } from "./ItemStats";
@@ -105,12 +107,17 @@ export function slotIndexToSlotName(slotIndex: number): string {
   }
 }
 
-export function defaultItemSet(): ItemSet {
+export function defaultItemSet(jobAbbrev: string): ItemSet {
   let itemSet: number[] = [];
 
   TOTAL_SLOTS.forEach((_) => {
     itemSet.push(EMPTY_EQUIPMENT_ID);
   });
+
+  let weaponsOfJob = EQUIPMENT_DATABASE_BY_KEYS.get(toEquipmentKeyString(jobAbbrev, WEAPON_SLOT_EN_TEXT));
+  if (weaponsOfJob !== undefined) {
+    itemSet[WEAPON_SLOT_ID] = weaponsOfJob[0].id;
+  }
 
   return itemSet;
 }

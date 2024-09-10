@@ -3,6 +3,7 @@ import { calculatePlayerPowerFromInputs, defaultItemSet } from "../types/ffxivda
 import { GearSetMaterias } from "../types/ffxivdatabase/Materia";
 import { EquipmentInput, SingleEquipmentInputSaveState, USE_POT_STRING } from "../types/EquipmentInput";
 import { BLM_EN_NAME, BRD_EN_NAME, DRG_EN_NAME, MIDLANDER_HYUR_NAME_EN, NIN_EN_NAME, PLD_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "./languageTexts";
+import { CURRENT_MAX_ITEM_LEVEL } from "../types/ffxivdatabase/Equipment";
 
 export const DEFAULT_GEARSET_MATERIAS: GearSetMaterias = [
   [],
@@ -28,12 +29,12 @@ export function defaultSingleEquipmentInput(): EquipmentInput {
     race: MIDLANDER_HYUR_NAME_EN,
     mainPlayerPartner1Id: null,
     mainPlayerPartner2Id: null,
-    itemSet: defaultItemSet(),
+    itemSet: defaultItemSet(PLD_EN_NAME),
     gearSetMaterias: defaultMaterias,
     combatTimeMillisecond: 300000,
     partyMemberJobAbbrevs: partyMemberJobs,
     partyMemberIds: [1, 2, 3, 4, 5, 6, 7],
-    partyMemberIlvl: 730,
+    partyMemberIlvl: CURRENT_MAX_ITEM_LEVEL,
     foodId: -1,
     usePot: USE_POT_STRING,
     power: defaultPlayerPower()
@@ -55,12 +56,12 @@ export function defaultBestPartnerEquipmentInput(): EquipmentInput {
     race: MIDLANDER_HYUR_NAME_EN,
     mainPlayerPartner1Id: null,
     mainPlayerPartner2Id: null,
-    itemSet: defaultItemSet(),
+    itemSet: defaultItemSet(PLD_EN_NAME),
     gearSetMaterias: defaultMaterias,
     combatTimeMillisecond: 300000,
     partyMemberJobAbbrevs: partyMemberJobs,
     partyMemberIds: [1, 2, 3, 4, 5, 6, 7],
-    partyMemberIlvl: 730,
+    partyMemberIlvl: CURRENT_MAX_ITEM_LEVEL,
     foodId: -1,
     usePot: USE_POT_STRING,
     power: defaultPlayerPower()

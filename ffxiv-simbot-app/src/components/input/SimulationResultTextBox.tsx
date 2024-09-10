@@ -1,9 +1,9 @@
-import { Box, InputLabel, Select, TextField, Typography, styled } from "@mui/material";
-import { AppConfigurations } from "../..//Themes";
+import { Box, InputLabel, TextField, styled } from "@mui/material";
+import { AppConfigurations } from "../../Themes";
 import { InputGridItemStyle } from "./Styles";
 import { CharacterStats } from "../../types/CharacterStates";
 import { EquipmentInput, SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
-import { CustomFormControl, CustomTimeFormControl } from "./basicform/BasicInputForm";
+import { CustomTimeFormControl } from "./basicform/BasicInputForm";
 import { TIME_INPUT_LABEL_TEXT } from "../../const/languageTexts";
 
 export interface InputFormProps {
@@ -105,4 +105,4 @@ export function SimulationUpperInputTimeTextBox(label: string, totalEquipmentSta
     </CustomTimeFormControl>
 
   );
-}
+};

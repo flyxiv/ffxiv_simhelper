@@ -4,12 +4,14 @@ import { JobMenuItem } from "../../items/JobMenuItem";
 import {
   slotIndexToSlotName,
   updateAllPlayerPower,
+  WEAPON_SLOT_ID,
 } from "../../../types/ffxivdatabase/ItemSet";
 import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput, SingleEquipmentInputSaveState } from "../../../types/EquipmentInput";
 import { EMPTY_EQUIPMENT_ID, EQUIPMENT_DATABASE_BY_KEYS, toEquipmentKeyString } from "../../../types/ffxivdatabase/Equipment";
 import { getRoleByIdAndMainCharacterJob } from "./PartyMemberJobSelection";
-import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../../const/languageTexts";
+import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WEAPON_SLOT_EN_TEXT, WHM_EN_NAME } from "../../../const/languageTexts";
+import { EMPTY_MATERIA, Materia } from "../../../types/ffxivdatabase/Materia";
 
 let ALIGN = "left";
 
@@ -75,13 +77,42 @@ export function MainPlayerJobSelection(
 ) {
   const handleJobChange = (event: SelectChangeEvent<string>) => {
     let newJobAbbrev = event.target.value;
+    let weaponsForNewJob = EQUIPMENT_DATABASE_BY_KEYS.get(toEquipmentKeyString(newJobAbbrev, WEAPON_SLOT_EN_TEXT));
+
     let newTotalState = { ...totalEquipmentState };
 
     newTotalState.equipmentDatas.forEach((data: SingleEquipmentInputSaveState) => {
       data.mainPlayerJobAbbrev = newJobAbbrev;
       resetOnlyUnequippableEquipment(data);
       resetInvalidPartnersForNewJob(data);
+
+      if (weaponsForNewJob !== undefined) {
+        let newSet = [...data.itemSet];
+        let currentEquipment = weaponsForNewJob[0];
+
+        newSet[WEAPON_SLOT_ID] = currentEquipment.id;
+        data.itemSet = newSet;
+
+        let newGearSetMaterias = [...data.gearSetMaterias];
+
+        let materiaSlotCount = 0;
+        if (currentEquipment !== undefined) {
+          materiaSlotCount = currentEquipment.pentameldable
+            ? 5
+            : currentEquipment.materiaSlotCount;
+          let defaultMaterias: Materia[] = [];
+          for (let i = 0; i < materiaSlotCount; i++) {
+            defaultMaterias.push(EMPTY_MATERIA);
+          }
+          newGearSetMaterias[WEAPON_SLOT_ID] = defaultMaterias;
+        } else {
+          newGearSetMaterias[WEAPON_SLOT_ID] = [];
+        }
+
+        data.gearSetMaterias = newGearSetMaterias;
+      }
     });
+
 
     updateAllPlayerPower(newTotalState, setTotalState);
   };

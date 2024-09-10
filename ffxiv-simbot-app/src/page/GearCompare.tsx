@@ -43,8 +43,18 @@ let EquipmentBoard = styled(Box)`
 `;
 
 export function isNotValid(input: EquipmentInput) {
-  if (input.equipmentDatas === null) {
+  if (input.equipmentDatas === null || input.equipmentDatas === undefined) {
     return true;
+  }
+
+  for (let i = 0; i < input.equipmentDatas.length; i++) {
+    if (input.equipmentDatas[i].partyMemberIlvl === undefined) {
+      return true;
+    }
+
+    if (input.equipmentDatas[i].usePot === undefined) {
+      return true;
+    }
   }
 
   return false;

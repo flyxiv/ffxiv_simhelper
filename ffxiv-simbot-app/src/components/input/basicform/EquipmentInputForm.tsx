@@ -45,7 +45,7 @@ import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput, NO_POT_STRING, USE_POT_STRING } from "../../../types/EquipmentInput";
 import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
-import { AST_EN_NAME, AST_MELEE_PARTNER_TEXT, AST_RANGED_PARTNER_TEXT, convertToSlotText, DNC_EN_NAME, DNC_PARTNER_TEXT, EMPTY_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_TEXT, FOOD_SLOT_TEXT, NO_POT_TEXT, POT_LABEL_TEXT, TIME_INPUT_LABEL_TEXT, USE_POT_TEXT } from "../../../const/languageTexts";
+import { AST_EN_NAME, AST_MELEE_PARTNER_TEXT, AST_RANGED_PARTNER_TEXT, convertToSlotText, DNC_EN_NAME, DNC_PARTNER_TEXT, EMPTY_TEXT, FINGER1_SLOT_EN_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_EN_TEXT, FINGER2_SLOT_TEXT, FOOD_SLOT_TEXT, NO_POT_TEXT, POT_LABEL_TEXT, TIME_INPUT_LABEL_TEXT, USE_POT_TEXT, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -84,25 +84,24 @@ function EquipmentMenuOfOneSlot(
   let slotEquipmentId = totalState.itemSet[slotNameToSlotIndex(slotName)];
   let currentEquipmentId = slotEquipmentId === undefined ? EMPTY_EQUIPMENT_ID : slotEquipmentId;
 
-  if (slotName === FINGER1_SLOT_TEXT && totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_TEXT)] !== -1) {
-    let ring2 = totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_TEXT)];
+  if (slotName === FINGER1_SLOT_EN_TEXT && totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)] !== -1) {
+    let ring2 = totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)];
     let ring2Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring2);
     if (ring2Equipment !== undefined && !ring2Equipment.name.includes("Archeo")) {
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
-        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_TEXT)]
+        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)]
       );
     }
   }
-  if (slotName === FINGER2_SLOT_TEXT && totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_TEXT)] !== -1) {
-    let ring1 = totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_TEXT)];
+  if (slotName === FINGER2_SLOT_EN_TEXT && totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)] !== -1) {
+    let ring1 = totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)];
     let ring1Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring1);
     if (ring1Equipment !== undefined && !ring1Equipment.name.includes("Archeo")) {
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
-        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_TEXT)]
+        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)]
       );
     }
   }
-
 
   let currentEquipment = PLAYER_EQUIPMENTS.get(currentEquipmentId);
   const updateEquipmentState = (e: SelectChangeEvent<number>) => {
@@ -178,13 +177,18 @@ function EquipmentMenuOfOneSlot(
             );
           })}
           <Divider />
-          <EquipmentMenu value={-1} key={`${id}_${slotLabel}_empty`}>
-            <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
-              <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body2FontSize }}>
-                {EMPTY_TEXT}
-              </Typography>
-            </Box>
-          </EquipmentMenu>
+          {slotName !== WEAPON_SLOT_EN_TEXT
+            ?
+            <EquipmentMenu value={-1} key={`${id}_${slotLabel}_empty`}>
+              <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
+                <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body2FontSize }}>
+                  {EMPTY_TEXT}
+                </Typography>
+              </Box>
+            </EquipmentMenu>
+            :
+            (<Box></Box>)
+          }
         </Select>
       </CustomFormControl>
       <MateriaBox>

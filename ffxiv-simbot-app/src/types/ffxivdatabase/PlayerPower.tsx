@@ -7,6 +7,7 @@ import {
 } from "../../const/StatValue";
 import {
   calculateGCD,
+  calculateModifiedGCD,
   DEFAULT_GCD,
   getMinNeededStatForCurrentCriticalStrike,
   getMinNeededStatForCurrentDetermination,
@@ -304,7 +305,7 @@ export function getStatLostByStatName(
       );
     case GCD_NAME:
       return (
-        getMinNeededStatForCurrentGCD(totalStats.gcd, jobAbbrev) -
+        Math.max(getMinNeededStatForCurrentGCD(totalStats.gcd, jobAbbrev), DEFAULT_SPEED) -
         getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
       );
     default:
@@ -399,7 +400,7 @@ export function getStatNeededByStatNameLadderAmount(
       return (
         getMinNeededStatForCurrentCriticalStrike(
           100 * (totalStats.criticalStrikeDamage - CRIT_BASE_DAMAGE) +
-            0.1 * amount
+          0.1 * amount
         ) - totalStats.criticalStrike
       );
     case DH_STAT_NAME:

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 35a2bc44 (added defaults)
 import { styled, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
