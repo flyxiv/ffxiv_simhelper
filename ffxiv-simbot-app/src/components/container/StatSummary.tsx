@@ -194,7 +194,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
               : minusBackgroundColor;
           return (
             <SingleStatBox>
-              <Typography variant="body1" color={color} align="center">
+              <Typography variant="body1" color={color} align="center" fontSize={AppConfigurations.body2FontSize}>
                 <b>{lostStat}</b>
               </Typography>
             </SingleStatBox>

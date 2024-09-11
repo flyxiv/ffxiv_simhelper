@@ -16,7 +16,7 @@ export const inputStyle = {
     color: "black",
     backgroundColor: "white",
     textAlign: "left",
-    height: "0.5vh",
+    height: "1.5vh",
   },
   "& .MuiInputLabel-root": {
     color: AppConfigurations.primary,

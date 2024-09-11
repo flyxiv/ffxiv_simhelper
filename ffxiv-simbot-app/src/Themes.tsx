@@ -19,18 +19,18 @@ export const AppConfigurations = {
   languageMode: KOREAN_MODE,
 
   body1FontSize: {
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl: 22
+    xs: "2vh",
+    sm: "2vh",
+    md: "2vh",
+    lg: "2vh",
+    xl: "2vh"
   },
 
   body2FontSize: {
-    xs: 8,
-    sm: 12,
-    md: 12,
-    lg: 14,
-    xl: 16
+    xs: "1.5vh",
+    sm: "1.5vh",
+    md: "1.5vh",
+    lg: "1.5vh",
+    xl: "1.5vh",
   }
 };
