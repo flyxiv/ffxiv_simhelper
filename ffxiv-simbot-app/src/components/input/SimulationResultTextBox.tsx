@@ -105,4 +105,4 @@ export function SimulationUpperInputTimeTextBox(label: string, totalEquipmentSta
     </CustomTimeFormControl>
 
   );
-};
+}

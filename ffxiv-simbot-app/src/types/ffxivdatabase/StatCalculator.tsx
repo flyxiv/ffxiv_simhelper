@@ -1,4 +1,26 @@
-import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../const/languageTexts";
+import {
+  AST_EN_NAME,
+  BLM_EN_NAME,
+  BRD_EN_NAME,
+  DNC_EN_NAME,
+  DRG_EN_NAME,
+  DRK_EN_NAME,
+  GNB_EN_NAME,
+  MCH_EN_NAME,
+  MNK_EN_NAME,
+  NIN_EN_NAME,
+  PCT_EN_NAME,
+  PLD_EN_NAME,
+  RDM_EN_NAME,
+  RPR_EN_NAME,
+  SAM_EN_NAME,
+  SCH_EN_NAME,
+  SGE_EN_NAME,
+  SMN_EN_NAME,
+  VPR_EN_NAME,
+  WAR_EN_NAME,
+  WHM_EN_NAME,
+} from "../../const/languageTexts";
 import {
   DEFAULT_CRITICAL_STRIKE,
   DEFAULT_DETERMINATION,
@@ -11,6 +33,12 @@ import {
 
 const DEFAULT_DIVIDEND = 2780.0;
 export const DEFAULT_GCD = 250;
+
+export const NIN_GCD_SPEED_BUFF = 0.85;
+export const MNK_GCD_SPEED_BUFF = 0.8;
+export const VPR_GCD_SPEED_BUFF = 0.85;
+export const SAM_GCD_SPEED_BUFF = 0.87;
+
 export const AUTO_DH_SLOPE = 140;
 
 const MAIN_STAT_SLOPE_NON_TANK = 237 / 440;
@@ -44,6 +72,21 @@ const BASE_WEAPON_DAMAGE_PER_JOB = new Map([
   [RDM_EN_NAME, 50],
   [PCT_EN_NAME, 50],
 ]);
+
+export function calculateModifiedGCD(gcd: number, jobAbbrev: string) {
+  switch (jobAbbrev) {
+    case NIN_EN_NAME:
+      return gcd * NIN_GCD_SPEED_BUFF;
+    case MNK_EN_NAME:
+      return gcd * MNK_GCD_SPEED_BUFF;
+    case VPR_EN_NAME:
+      return gcd * VPR_GCD_SPEED_BUFF;
+    case SAM_EN_NAME:
+      return gcd * SAM_GCD_SPEED_BUFF;
+    default:
+      return gcd;
+  }
+}
 
 // returns the percent increase of a stat
 export function calculateMultiplierPercentIncrease(
@@ -120,9 +163,12 @@ export function calculateGCDByMultiplier(speedMultiplier: number) {
   return Math.floor(DEFAULT_GCD / speedMultiplier) / 100;
 }
 
-export function calculateGCD(speedStat: number) {
+export function calculateGCD(speedStat: number, jobAbbrev: string) {
   let speedMultiplier = 1 + calculateSpeedPercentIncrease(speedStat) / 100;
-  return Math.floor(DEFAULT_GCD / speedMultiplier) / 100;
+  return (
+    Math.floor(calculateModifiedGCD(DEFAULT_GCD, jobAbbrev) / speedMultiplier) /
+    100
+  );
 }
 
 export function getMinNeededStatForStatLadder(
@@ -193,9 +239,13 @@ export function getMinNeededStatForCurrentSpeed(currentPercent: number) {
   );
 }
 
-export function getMinNeededStatForCurrentGCD(currentGCD: number) {
-  let defaultGcdMinutes = DEFAULT_GCD / 100;
-  if (currentGCD >= DEFAULT_GCD / 100) {
+export function getMinNeededStatForCurrentGCD(
+  currentGCD: number,
+  jobAbbrev: string
+) {
+  let base_gcd = calculateModifiedGCD(DEFAULT_GCD, jobAbbrev);
+  let defaultGcdMinutes = base_gcd / 100;
+  if (currentGCD >= base_gcd / 100) {
     return DEFAULT_SPEED;
   }
   let minimumNeededSpeedMultiplierPercentForGcd =

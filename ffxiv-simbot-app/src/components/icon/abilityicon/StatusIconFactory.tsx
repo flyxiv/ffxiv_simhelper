@@ -14,10 +14,6 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
     case 100:
       return actionIconDirectory + "/WAR/storm's_eye.png";
 
-    // DRK
-    case 200:
-      return actionIconDirectory + "/DRK/edge_of_darkness.png";
-
     // GNB
     case 300:
       return actionIconDirectory + "/GNB/no_mercy.png";
@@ -122,8 +118,9 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
 
     case 0:
       return actionIconDirectory + "/BLM/MagicalRangedRollAction/swiftcast.png";
-    case 10001:
-      return actionIconDirectory + "/auto-attack.png";
+    case 1:
+      return actionIconDirectory + "/pot.png";
+
     default:
       return `unknown skill id: ${statusId}`;
   }

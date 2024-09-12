@@ -19,7 +19,44 @@ import {
 import { CRIT_BASE_DAMAGE } from "./Stats";
 import { ItemSet } from "./ItemSet";
 import { GearSetMaterias } from "./Materia";
-import { AST_EN_NAME, BRD_EN_NAME, CRIT_STAT_NAME, CRT_POWER_NAME, CRT_RATE_POWER_NAME, DET_POWER_NAME, DET_STAT_NAME, DEX_STAT_NAME, DH_RATE_POWER_NAME, DH_STAT_NAME, DNC_EN_NAME, DRK_EN_NAME, GCD_NAME, GNB_EN_NAME, INT_STAT_NAME, MAIN_STAT_POWER_NAME, MCH_EN_NAME, MIND_STAT_NAME, MNK_EN_NAME, NIN_EN_NAME, PLD_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SKS_STAT_NAME, SPEED_POWER_NAME, SPS_STAT_NAME, STR_STAT_NAME, TEN_STAT_NAME, TENACITY_POWER_NAME, VPR_EN_NAME, WAR_EN_NAME, WD_POWER_NAME, WD_STAT_NAME, WHM_EN_NAME } from "../../const/languageTexts";
+import {
+  AST_EN_NAME,
+  BRD_EN_NAME,
+  CRIT_STAT_NAME,
+  CRT_POWER_NAME,
+  CRT_RATE_POWER_NAME,
+  DET_POWER_NAME,
+  DET_STAT_NAME,
+  DEX_STAT_NAME,
+  DH_RATE_POWER_NAME,
+  DH_STAT_NAME,
+  DNC_EN_NAME,
+  DRK_EN_NAME,
+  GCD_NAME,
+  GNB_EN_NAME,
+  INT_STAT_NAME,
+  MAIN_STAT_POWER_NAME,
+  MCH_EN_NAME,
+  MIND_STAT_NAME,
+  MNK_EN_NAME,
+  NIN_EN_NAME,
+  PLD_EN_NAME,
+  RPR_EN_NAME,
+  SAM_EN_NAME,
+  SCH_EN_NAME,
+  SGE_EN_NAME,
+  SKS_STAT_NAME,
+  SPEED_POWER_NAME,
+  SPS_STAT_NAME,
+  STR_STAT_NAME,
+  TEN_STAT_NAME,
+  TENACITY_POWER_NAME,
+  VPR_EN_NAME,
+  WAR_EN_NAME,
+  WD_POWER_NAME,
+  WD_STAT_NAME,
+  WHM_EN_NAME,
+} from "../../const/languageTexts";
 
 export const POWER_NAMES = [
   WD_POWER_NAME,
@@ -120,7 +157,8 @@ export function getStatByStatName(
       return `${playerPower.tenacity}`;
     case GCD_NAME: {
       playerPower.gcd = calculateGCD(
-        getSpeedStatByJobAbbrev(playerPower, jobAbbrev)
+        getSpeedStatByJobAbbrev(playerPower, jobAbbrev),
+        jobAbbrev
       );
       return `${playerPower.gcd.toFixed(2)}`;
     }
@@ -266,7 +304,7 @@ export function getStatLostByStatName(
       );
     case GCD_NAME:
       return (
-        getMinNeededStatForCurrentGCD(totalStats.gcd) -
+        getMinNeededStatForCurrentGCD(totalStats.gcd, jobAbbrev) -
         getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
       );
     default:
@@ -330,14 +368,13 @@ export function getStatNeededByStatName(
       );
     case GCD_NAME:
       return (
-        getMinNeededStatForCurrentGCD(totalStats.gcd - 0.01) -
+        getMinNeededStatForCurrentGCD(totalStats.gcd - 0.01, jobAbbrev) -
         getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
       );
     default:
       return -1;
   }
 }
-
 
 export function getStatNeededByStatNameLadderAmount(
   totalStats: PlayerPower,
@@ -361,7 +398,8 @@ export function getStatNeededByStatNameLadderAmount(
     case CRIT_STAT_NAME:
       return (
         getMinNeededStatForCurrentCriticalStrike(
-          100 * (totalStats.criticalStrikeDamage - CRIT_BASE_DAMAGE) + 0.1 * amount
+          100 * (totalStats.criticalStrikeDamage - CRIT_BASE_DAMAGE) +
+            0.1 * amount
         ) - totalStats.criticalStrike
       );
     case DH_STAT_NAME:
@@ -386,8 +424,10 @@ export function getStatNeededByStatNameLadderAmount(
     case SPS_STAT_NAME:
     case GCD_NAME:
       return (
-        getMinNeededStatForCurrentGCD(totalStats.gcd - 0.01 * amount) -
-        getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
+        getMinNeededStatForCurrentGCD(
+          totalStats.gcd - 0.01 * amount,
+          jobAbbrev
+        ) - getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
       );
     default:
       return -1;

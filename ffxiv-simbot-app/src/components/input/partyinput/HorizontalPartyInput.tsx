@@ -69,5 +69,3 @@ export function HorizontalPartyInput(
     </HorizontalInputGridContainer>
   );
 }
-
-
