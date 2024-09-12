@@ -101,9 +101,14 @@ function LogoBox(
       padding={2}
       marginBottom={4}
     >
-      <Link href={`/${linkUrl}`} underline="none">
+      <Link href={convertToLinkUrl(linkUrl)} underline="none">
         {SimLinkIcon(buttonImagePath, altText, title, description, color)}
       </Link>
     </Box>
   );
+}
+
+
+export function convertToLinkUrl(urlName: string): string {
+  return AppConfigurations.electron ? `/index.html#/${urlName}` : `/${urlName}`;
 }

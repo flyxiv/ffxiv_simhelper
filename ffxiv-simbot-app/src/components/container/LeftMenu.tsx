@@ -15,6 +15,7 @@ import {
 } from "../../App";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { BEST_PARTNER_PAGE_NAME, GEAR_COMPARE_PAGE_NAME, HOME_PAGE_NAME, NAVIGATE_TEXT, QUICKSIM_PAGE_NAME, SAVED_GEARSETS_TEXT, STAT_WEIGHTS_PAGE_NAME } from "../../const/languageTexts";
+import { convertToLinkUrl } from "../../page/home";
 
 export const MENU_WIDTH_VW_XS = 50;
 export const MENU_WIDTH_VW_SM = 45;
@@ -153,22 +154,22 @@ function DefaultLeftMenuComponents() {
 
         {NavigationMenu("/", HOME_PAGE_NAME, HOME_MENU_LOGO_PATH)}
         {NavigationMenu(
-          `/${QUICKSIM_URL}`,
+          convertToLinkUrl(QUICKSIM_URL),
           QUICKSIM_PAGE_NAME,
           QUICKSIM_MENU_LOGO_PATH
         )}
         {NavigationMenu(
-          `/${GEAR_COMPARE_URL}`,
+          convertToLinkUrl(GEAR_COMPARE_URL),
           GEAR_COMPARE_PAGE_NAME,
           GEAR_COMPARE_MENU_LOGO_PATH
         )}
         {NavigationMenu(
-          `/${BEST_PARTNER_URL}`,
+          convertToLinkUrl(BEST_PARTNER_URL),
           BEST_PARTNER_PAGE_NAME,
           BEST_PARTNER_MENU_LOGO_PATH
         )}
         {NavigationMenu(
-          `/${STAT_WEIGHTS_URL}`,
+          convertToLinkUrl(STAT_WEIGHTS_URL),
           STAT_WEIGHTS_PAGE_NAME,
           STAT_WEIGHTS_MENU_LOGO_PATH
         )}

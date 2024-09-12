@@ -15,8 +15,9 @@ import {
   createQuickSimRequest,
   sendRequestAsync,
 } from "./QuickSimRequestButton";
-import { GearCompareResponse } from "src/types/GearCompareResponse";
-import { SimulationSummary } from "src/types/CombatSimulationResult";
+import { GearCompareResponse } from "../..//types/GearCompareResponse";
+import { SimulationSummary } from "../../types/CombatSimulationResult";
+import { convertToLinkUrl } from "../../page/home";
 
 const TOTAL_REQUEST_COUNT = 1000;
 const REQUEST_URL = "http://localhost:13406/api/v1/gearcompare";
@@ -108,7 +109,7 @@ export function GearCompareRequestButton(totalState: EquipmentInput) {
     const responseString = JSON.stringify(response);
     localStorage.setItem(GEAR_COMPARE_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(`/${GEAR_COMPARE_RESULT_URL}`);
+    navigate(convertToLinkUrl(GEAR_COMPARE_RESULT_URL));
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>

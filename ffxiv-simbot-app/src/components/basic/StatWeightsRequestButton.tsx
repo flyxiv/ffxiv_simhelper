@@ -30,6 +30,7 @@ import { calculatePowerByStat } from "../../types/ffxivdatabase/ItemSet";
 import { sendRequestAsync } from "./QuickSimRequestButton";
 import { CRIT_STAT_NAME, DET_STAT_NAME, DEX_STAT_NAME, DH_STAT_NAME, INT_STAT_NAME, MIND_STAT_NAME, SKS_STAT_NAME, SPS_STAT_NAME, STR_STAT_NAME, TEN_STAT_NAME, WD_STAT_NAME } from "../../const/languageTexts";
 import { getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
+import { convertToLinkUrl } from "../../page/home";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/statweights";
 const WEAPON_DAMAGE_INCREASE = 10;
@@ -115,7 +116,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
 
     localStorage.setItem(STAT_WEIGHTS_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(`/${STAT_WEIGHTS_RESULT_URL}`);
+    navigate(convertToLinkUrl(STAT_WEIGHTS_RESULT_URL));
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>

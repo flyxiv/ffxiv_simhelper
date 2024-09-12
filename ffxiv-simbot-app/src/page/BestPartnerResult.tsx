@@ -12,7 +12,6 @@ import {
 } from "../types/BestPartnerResponse";
 import { Footer } from "../components/basic/Footer";
 import {
-  PartyCompositionMaker,
   SimulationDataByRole,
 } from "../types/ffxivdatabase/PartyCompositionMaker";
 import { ContributionByRoleTable } from "../components/graph/ContributionByRoleTable";
@@ -43,10 +42,6 @@ export function BestPartnerResult() {
   let mainPlayerJob = responseJson.mainPlayerJobAbbrev;
   let contributionTable = responseJson.partnerSimulationData;
   let simulationDataByRole = convertToContributionTable(contributionTable);
-  let partyCompositionMaker = new PartyCompositionMaker(
-    mainPlayerJob,
-    simulationDataByRole
-  );
 
   return (
     <Box

@@ -56,7 +56,6 @@ export const SkillLogResult = (response: QuickSimResponse) => {
       </div>
     );
   }
-  let fontSize = 10;
 
   return (
     <SkillLogTableList>

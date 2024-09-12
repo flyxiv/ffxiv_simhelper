@@ -1,8 +1,6 @@
 import { PlayerInfoBoxStyle, PlayerInfoJobTitleStyle } from "./Styles";
 import { Typography, styled, Box } from "@mui/material";
 import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
-import { QUICK_SIM_RESPONSE_SAVE_NAME } from "../../App";
-import { QuickSimResponse } from "../../types/QuickSimResponse";
 import { PlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { SimulationInputSummary, StatSummaryGearCompare } from "./StatSummary";
 import { PARTY_MEMBERS_TEXT } from "../../const/languageTexts";
@@ -16,17 +14,6 @@ const PlayerInfoJobTitle = styled(Box)`
 `;
 
 export function PlayerInfo(power: PlayerPower, job: string, combatTimeMilliseconds: number, partyMemberJobAbbrevs: string[] | null = null) {
-  let mostRecentResponseState = localStorage.getItem(
-    QUICK_SIM_RESPONSE_SAVE_NAME
-  );
-  let mostRecentResponse = null;
-  if (mostRecentResponseState == null) {
-    return;
-  } else {
-    mostRecentResponse = JSON.parse(
-      mostRecentResponseState
-    ) as QuickSimResponse;
-  }
 
   return (
     <PlayerInfoBox>

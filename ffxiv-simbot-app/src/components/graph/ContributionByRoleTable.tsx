@@ -144,7 +144,7 @@ function ContributionTableSingleRole(
       justifyContent={"center"}
       width="90%"
       paddingX="4%"
-      backgroundColor={AppConfigurations.backgroundThree}
+      sx={{ backgroundColor: AppConfigurations.backgroundThree }}
     >
       <Typography variant="h6" align="center">
         {role}

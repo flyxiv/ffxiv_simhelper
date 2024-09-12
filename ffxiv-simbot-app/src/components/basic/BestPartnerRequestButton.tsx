@@ -32,6 +32,7 @@ import {
   BestPartnerResponse,
   BestPartnerResponseTable,
 } from "../../types/BestPartnerResponse";
+import { convertToLinkUrl } from "../../page/home";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
 
@@ -117,8 +118,7 @@ export function BestPartnerRequestButton(totalState: EquipmentInput) {
 
     localStorage.setItem(BEST_PARTNER_RESPONSE_SAVE_NAME, responseString);
 
-    console.log(responseString);
-    navigate(`/${BEST_PARTNER_RESULT_URL}`);
+    navigate(convertToLinkUrl(BEST_PARTNER_RESULT_URL));
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>

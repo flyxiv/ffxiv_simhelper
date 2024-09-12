@@ -1,4 +1,4 @@
-import { Box, styled, Typography } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { ResultBoardBoxStyle, ResultBoardTopBoxStyle } from "../components/container/Styles";
 import { PlayerInfo } from "../components/container/PlayerInfo";
 import { SimulationTitle } from "../components/basic/SimulationTitle";

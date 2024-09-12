@@ -1,5 +1,4 @@
-import {app, BrowserWindow} from 'electron' ;
-import path from 'path';
+import { app, BrowserWindow } from 'electron';
 import url from 'url';
 
 function createWindow() {
@@ -7,8 +6,8 @@ function createWindow() {
     * 넓이 1920에 높이 1080의 FHD 풀스크린 앱을 실행시킵니다.
     * */
     const win = new BrowserWindow({
-        width:1920,
-        height:1080
+        width: 1920,
+        height: 1080
     });
 
     /*
@@ -17,7 +16,7 @@ function createWindow() {
     * 빌드되는 build 폴더의 index.html 파일을 로드합니다.
     * */
     const startUrl = process.env.ELECTRON_START_URL || url.format({
-        pathname: path.join("..", 'index.html'),
+        pathname: 'index.html',
         protocol: 'file:',
         slashes: true
     });
@@ -32,5 +31,5 @@ function createWindow() {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  app.quit()
+    app.quit()
 })

@@ -7,7 +7,6 @@ import {
 } from "../../const/StatValue";
 import {
   calculateGCD,
-  calculateModifiedGCD,
   DEFAULT_GCD,
   getMinNeededStatForCurrentCriticalStrike,
   getMinNeededStatForCurrentDetermination,

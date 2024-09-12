@@ -15,7 +15,7 @@ import { SelectionTitle } from "../components/basic/SelectionTitle";
 import { BasicBottomMenu } from "../components/container/BottomMenu";
 import { EquipmentBoardStyle, InputContainerStyle } from "./Styles";
 import { BestPartnerRequestButton } from "../components/basic/BestPartnerRequestButton";
-import { AST_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PLAYER_POWER_TEXT, PLD_EN_NAME, QUICK_SIM_INPUT_INFO_TEXT, QUICK_SIM_PARTY_INPUT_INFO_TEXT, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../const/languageTexts";
+import { AST_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PLAYER_POWER_TEXT, PLD_EN_NAME, QUICK_SIM_INPUT_INFO_TEXT, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../const/languageTexts";
 
 export enum JobRole {
   TANK,

@@ -1,6 +1,5 @@
 import { Box, Grid, styled, Typography } from "@mui/material";
 import {
-  PlayerStatInfoBoxStyle,
   StatBoxStyle,
   StatTextBoxStyle,
   StatTitleTextBoxStyle,

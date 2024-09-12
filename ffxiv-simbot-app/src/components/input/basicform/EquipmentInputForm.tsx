@@ -45,7 +45,7 @@ import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput, NO_POT_STRING, USE_POT_STRING } from "../../../types/EquipmentInput";
 import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
-import { AST_EN_NAME, AST_MELEE_PARTNER_TEXT, AST_RANGED_PARTNER_TEXT, convertToSlotText, DNC_EN_NAME, DNC_PARTNER_TEXT, EMPTY_TEXT, FINGER1_SLOT_EN_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_EN_TEXT, FINGER2_SLOT_TEXT, FOOD_SLOT_TEXT, NO_POT_TEXT, POT_LABEL_TEXT, TIME_INPUT_LABEL_TEXT, USE_POT_TEXT, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
+import { AST_EN_NAME, AST_MELEE_PARTNER_TEXT, AST_RANGED_PARTNER_TEXT, convertToSlotText, DNC_EN_NAME, DNC_PARTNER_TEXT, EMPTY_TEXT, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, FOOD_SLOT_TEXT, NO_POT_TEXT, POT_LABEL_TEXT, TIME_INPUT_LABEL_TEXT, USE_POT_TEXT, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}

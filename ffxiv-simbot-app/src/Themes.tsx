@@ -32,5 +32,7 @@ export const AppConfigurations = {
     md: "1.5vh",
     lg: "1.5vh",
     xl: "1.5vh",
-  }
+  },
+
+  electron: true
 };

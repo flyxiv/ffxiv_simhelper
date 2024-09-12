@@ -75,9 +75,9 @@ function StatWeightsGraph(
       justifyContent={"center"}
       width="90%"
       paddingX="4%"
-      backgroundColor={AppConfigurations.backgroundThree}
       marginTop="5%"
       paddingY="5%"
+      sx={{ backgroundColor: AppConfigurations.backgroundThree }}
     >
       {weightBars}
     </Box>

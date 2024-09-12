@@ -1,5 +1,5 @@
-import { Equipment } from "src/types/ffxivdatabase/Equipment";
-import { Materia } from "src/types/ffxivdatabase/Materia";
+import { Equipment } from "../../../types/ffxivdatabase/Equipment";
+import { Materia } from "../../../types/ffxivdatabase/Materia";
 import { getPossibleMateriasForEquipmentSlot } from "../../../types/ffxivdatabase/Materia";
 import {
   SelectChangeEvent,

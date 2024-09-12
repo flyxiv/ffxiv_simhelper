@@ -89,7 +89,6 @@ export function JobBarChartTeammate(
 }
 
 export function GraphTitleRow() {
-  let fontSize = 14;
   return (
     <PartyMemberBuffBox>
       <PartyMemberIconBox>

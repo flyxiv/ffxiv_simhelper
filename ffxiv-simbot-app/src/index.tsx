@@ -37,10 +37,11 @@ export const theme = createTheme({
   } : {
     fontFamily: "NotoSansKR, Arial",
     h1: {
-      fontSize: "3%", fontWeight: 900,
+      fontSize: "3rem",
+      fontWeight: 900,
     },
     h2: {
-      fontSize: "3rem",
+      fontSize: "1.75rem",
       fontWeight: 600,
     },
     h3: {

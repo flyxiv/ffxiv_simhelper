@@ -1,4 +1,4 @@
-import { EquipmentInput } from "src/types/EquipmentInput";
+import { EquipmentInput } from "../types/EquipmentInput";
 import { defaultSingleEquipmentInput } from "./DefaultSingleEquipmentInput";
 
 export function defaultDoubleEquipmentInput(): EquipmentInput {

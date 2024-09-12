@@ -1,7 +1,7 @@
 import { Box, TextField, styled, FormControl } from "@mui/material";
 import { AppConfigurations } from "../../../Themes";
 import { InputGridItemStyle } from "../Styles";
-import { CharacterStats } from "src/types/CharacterStates";
+import { CharacterStats } from "../../../types/CharacterStates";
 
 export interface InputFormProps {
   label: string;

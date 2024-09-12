@@ -19,6 +19,7 @@ import {
   SingleEquipmentInputSaveState,
 } from "../../types/EquipmentInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
+import { convertToLinkUrl } from "../../page/home";
 
 const totalRequestCount = 1000;
 const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
@@ -113,7 +114,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
       }
     });
 
-    let averageDps = totalDps / totalRequestCount;
+    //    let averageDps = totalDps / totalRequestCount;
     let averageRdps = totalRdps / totalRequestCount;
     let averageEdps = totalEdps / totalRequestCount;
 
@@ -126,7 +127,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
     const responseString = JSON.stringify(response);
     localStorage.setItem(QUICK_SIM_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(`/${QUICKSIM_RESULT_URL}`);
+    navigate(convertToLinkUrl(QUICKSIM_RESULT_URL));
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>
