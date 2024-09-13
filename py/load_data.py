@@ -69,8 +69,11 @@ def load_etro_json_data_if_not_loaded(py_directory, file_name):
 def filter_low_jobs(job_name):
     jobs_list = job_name.split(' ')
 
-    valid_jobs = ["PLD", "WAR", "GNB", "DRK", "WHM", "SCH", "AST", "SGE", "MNK", "DRG", "NIN", "SAM", "RPR", "BRD",
-                  "MCH", "DNC", "BLM", "RDM", "SMN"]
+    valid_jobs = ["PLD", "WAR", "GNB", "DRK",
+                  "WHM", "SCH", "AST", "SGE",
+                  "MNK", "DRG", "NIN", "SAM", "RPR", "VPR",
+                  "BRD", "MCH", "DNC",
+                  "BLM", "SMN", "RDM", "PCT"]
     return [job for job in jobs_list if job in valid_jobs]
 
 
