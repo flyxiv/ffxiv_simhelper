@@ -150,7 +150,7 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
         },
         SkillPriorityInfo {
             skill_id: db.raiju.get_id(),
-            prerequisite: None,
+            prerequisite: Some(HasBufforDebuff(db.bunshin_clone_status.get_id())),
         },
         SkillPriorityInfo {
             skill_id: db.raiton.get_id(),
@@ -163,6 +163,17 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
                     )))),
                 )),
                 Box::new(Not(Box::new(HasBufforDebuff(db.kassatsu_status.get_id())))),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.raiju.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.raiton.get_id(),
+            prerequisite: Some(RelatedSkillCooldownLessOrEqualThan(
+                db.kunais_bane.get_id(),
+                40000,
             )),
         },
         SkillPriorityInfo {
