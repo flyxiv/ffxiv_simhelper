@@ -456,7 +456,7 @@ impl MachinistDatabase {
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 120000,
             resource_required: vec![],
-            resource_created: HashMap::from([(0, 50)]),
+            resource_created: Default::default(),
             current_cooldown_millisecond: 0,
             stacks: 1,
             stack_skill_id: None,

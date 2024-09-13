@@ -119,6 +119,13 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
             prerequisite: Some(HasBufforDebuff(db.kunais_bane_status.get_id())),
         },
         SkillPriorityInfo {
+            skill_id: db.phantom_kamaitachi.get_id(),
+            prerequisite: Some(Or(
+                Box::new(SkillPrerequisite::BufforDebuffLessThan(1007, 3000)),
+                Box::new(HasBufforDebuff(db.dokumori_status.get_id())),
+            )),
+        },
+        SkillPriorityInfo {
             skill_id: db.suiton.get_id(),
             prerequisite: Some(And(
                 Box::new(RelatedSkillCooldownLessOrEqualThan(1010, 17000)),
@@ -145,10 +152,6 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
             )),
         },
         SkillPriorityInfo {
-            skill_id: db.phantom_kamaitachi.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(1007, 3000)),
-        },
-        SkillPriorityInfo {
             skill_id: db.raiju.get_id(),
             prerequisite: Some(HasBufforDebuff(db.bunshin_clone_status.get_id())),
         },
@@ -171,10 +174,10 @@ pub(crate) fn make_ninja_gcd_priority_table(db: &NinjaDatabase) -> Vec<SkillPrio
         },
         SkillPriorityInfo {
             skill_id: db.raiton.get_id(),
-            prerequisite: Some(RelatedSkillCooldownLessOrEqualThan(
+            prerequisite: Some(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
                 db.kunais_bane.get_id(),
                 40000,
-            )),
+            )))),
         },
         SkillPriorityInfo {
             skill_id: db.phantom_kamaitachi.get_id(),
@@ -223,8 +226,16 @@ pub(crate) fn make_ninja_ogcd_priority_table(
 
     ogcd_priorities.extend(vec![
         SkillPriorityInfo {
-            skill_id: db.bunshin.get_id(),
-            prerequisite: Some(HasResource(0, 50)),
+            skill_id: db.dokumori.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.kunais_bane.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.tenri_jindo.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.zesho_meppo_meisui.get_id(),
@@ -239,38 +250,30 @@ pub(crate) fn make_ninja_ogcd_priority_table(
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.bhavacakra.get_id(),
-            prerequisite: Some(Or(
-                Box::new(HasResource(0, 80)),
-                Box::new(Not(Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)))),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.dokumori.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.kunais_bane.get_id(),
+            skill_id: db.dream.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.meisui.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.kunais_bane_status.get_id())),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.bhavacakra.get_id(),
+            prerequisite: Some(Or(
+                Box::new(HasResource(0, 80)),
+                Box::new(HasBufforDebuff(db.kunais_bane_status.get_id())),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.tenchijin.get_id(),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.kassatsu.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.dream.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.tenri_jindo.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.tenchijin.get_id(),
+            skill_id: db.bunshin.get_id(),
             prerequisite: None,
         },
     ]);

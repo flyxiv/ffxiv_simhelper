@@ -43,6 +43,7 @@ pub(crate) struct NinjaDatabase {
     pub(crate) kunais_bane_status: DebuffStatus,
     pub(crate) kassatsu_status: BuffStatus,
     pub(crate) bunshin_clone_status: BuffStatus,
+    pub(crate) dokumori_status: DebuffStatus,
 
     pub(crate) potion: AttackSkill,
 }
@@ -812,10 +813,10 @@ impl NinjaDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: false,
             cooldown_reduced_by_speed: false,
-            cooldown_millisecond: 0,
+            cooldown_millisecond: 120000,
             resource_required: vec![UseBuff(1002)],
             resource_created: ResourceTable::from([(0, 50)]),
-            current_cooldown_millisecond: 120000,
+            current_cooldown_millisecond: 0,
             stacks: 1,
             stack_skill_id: None,
             is_guaranteed_crit: false,
@@ -985,6 +986,7 @@ impl NinjaDatabase {
             kunais_bane_status,
             kassatsu_status,
             bunshin_clone_status,
+            dokumori_status,
 
             potion: potion_skill.potion,
         }
