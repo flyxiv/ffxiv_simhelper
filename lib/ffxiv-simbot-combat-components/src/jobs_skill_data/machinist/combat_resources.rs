@@ -18,7 +18,7 @@ use std::cmp::{max, min};
 use std::collections::HashMap;
 use std::rc::Rc;
 
-const QUEEN_BASE_POTENCY: PotencyType = 1330;
+const QUEEN_BASE_POTENCY: PotencyType = 1000;
 const QUEEN_DELAY_MILLISECOND: TimeType = 5000;
 const QUEEN_POTENCY_PER_STACK: PotencyType = 200;
 const HEAT_MAX: ResourceType = 100;
