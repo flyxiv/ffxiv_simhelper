@@ -28,7 +28,6 @@ import {
   BestPartnerResponse,
   BestPartnerResponseTable,
 } from "../../types/BestPartnerResponse";
-import { convertToLinkUrl } from "../../page/home";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
 

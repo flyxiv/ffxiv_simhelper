@@ -17,7 +17,6 @@ import {
 } from "./QuickSimRequestButton";
 import { GearCompareResponse } from "../..//types/GearCompareResponse";
 import { SimulationSummary } from "../../types/CombatSimulationResult";
-import { convertToLinkUrl } from "../../page/home";
 
 const TOTAL_REQUEST_COUNT = 1000;
 const REQUEST_URL = "http://localhost:13406/api/v1/gearcompare";

@@ -40,7 +40,6 @@ import {
   WD_STAT_NAME,
 } from "../../const/languageTexts";
 import { getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
-import { convertToLinkUrl } from "../../page/home";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/statweights";
 const WEAPON_DAMAGE_INCREASE = 10;
