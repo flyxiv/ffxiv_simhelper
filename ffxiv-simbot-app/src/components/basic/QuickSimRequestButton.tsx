@@ -20,7 +20,6 @@ import {
   USE_POT_VAL,
 } from "../../types/EquipmentInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
-import { convertToLinkUrl } from "../../page/home";
 
 const totalRequestCount = 1000;
 const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
