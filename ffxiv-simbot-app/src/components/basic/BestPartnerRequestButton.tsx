@@ -114,7 +114,7 @@ export function BestPartnerRequestButton(totalState: EquipmentInput) {
 
     localStorage.setItem(BEST_PARTNER_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(convertToLinkUrl(BEST_PARTNER_RESULT_URL));
+    navigate(`/${BEST_PARTNER_RESULT_URL}`);
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>

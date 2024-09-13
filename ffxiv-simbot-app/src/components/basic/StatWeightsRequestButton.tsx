@@ -126,7 +126,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
 
     localStorage.setItem(STAT_WEIGHTS_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(convertToLinkUrl(STAT_WEIGHTS_RESULT_URL));
+    navigate(`/${STAT_WEIGHTS_RESULT_URL}`);
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>

@@ -128,7 +128,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
     const responseString = JSON.stringify(response);
     localStorage.setItem(QUICK_SIM_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(convertToLinkUrl(QUICKSIM_RESULT_URL));
+    navigate(`/${QUICKSIM_RESULT_URL}`);
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>

@@ -109,7 +109,7 @@ export function GearCompareRequestButton(totalState: EquipmentInput) {
     const responseString = JSON.stringify(response);
     localStorage.setItem(GEAR_COMPARE_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(convertToLinkUrl(GEAR_COMPARE_RESULT_URL));
+    navigate(`/${GEAR_COMPARE_RESULT_URL}`);
   };
   return (
     <RequestButton variant="contained" onClick={handleClick}>
