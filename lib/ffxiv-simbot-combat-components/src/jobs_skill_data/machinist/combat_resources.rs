@@ -20,7 +20,7 @@ use std::rc::Rc;
 
 const QUEEN_BASE_POTENCY: PotencyType = 1330;
 const QUEEN_DELAY_MILLISECOND: TimeType = 5000;
-const QUEEN_POTENCY_PER_STACK: PotencyType = 266;
+const QUEEN_POTENCY_PER_STACK: PotencyType = 200;
 const HEAT_MAX: ResourceType = 100;
 const BATTERY_MAX: ResourceType = 10;
 const WILDFIRE_POTENCY_PER_STACK: PotencyType = 240;
