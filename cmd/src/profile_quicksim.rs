@@ -64,6 +64,8 @@ fn main() {
         main_player_id: 0,
         combat_time_millisecond: 600000,
         party,
+        party_ilvl_adjustment: 100.0,
+        use_pot: true,
     };
 
     let response = quicksim(request);

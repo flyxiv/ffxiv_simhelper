@@ -353,7 +353,7 @@ impl FfxivPlayer {
                 id: 1000,
                 name: String::from("Huton"),
                 owner_id: player_id,
-                duration_left_millisecond: 0,
+                duration_left_millisecond: i32::MAX,
                 status_info: vec![StatusInfo::SpeedPercent(15)],
                 duration_millisecond: i32::MAX,
                 is_raidwide: false,

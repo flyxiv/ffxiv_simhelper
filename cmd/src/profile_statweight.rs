@@ -68,6 +68,8 @@ fn main() {
         party,
         stat_name: "DET".to_string(),
         augment_amount: 500,
+        party_ilvl_adjustment: 100.0,
+        use_pot: true,
     };
 
     let new = Instant::now();
