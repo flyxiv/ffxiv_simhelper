@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 35a2bc44 (added defaults)
 import { styled, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
@@ -20,7 +16,7 @@ import { requestButtonStyle } from "./Style";
 import {
   EquipmentInput,
   SingleEquipmentInputSaveState,
-  USE_POT_STRING,
+  USE_POT_VAL,
 } from "../../types/EquipmentInput";
 import {
   ALL_PLAYER_JOBS,
@@ -179,7 +175,7 @@ function createBestPartnerRequest(
     combatTimeMillisecond: totalState.combatTimeMillisecond,
     party: partyInfo,
     partyIlvlAdjustment: calculateIlvlAdjustment(totalState.partyMemberIlvl),
-    usePot: totalState.usePot === USE_POT_STRING
+    usePot: totalState.usePot === USE_POT_VAL,
   };
 }
 

@@ -6,8 +6,8 @@ export interface EquipmentInput {
   equipmentDatas: Array<SingleEquipmentInputSaveState>;
 }
 
-export const USE_POT_STRING = 1;
-export const NO_POT_STRING = 0;
+export const USE_POT_VAL = 1;
+export const NO_POT_VAL = 0;
 
 export interface SingleEquipmentInputSaveState {
   mainPlayerJobAbbrev: string;
@@ -22,11 +22,10 @@ export interface SingleEquipmentInputSaveState {
   partyMemberIds: number[];
   partyMemberIlvl: number;
   usePot: number;
-  power: PlayerPower
+  power: PlayerPower;
 }
 
-
 export interface SingleEquipmentSetLoadoutData {
-  equipmentData: SingleEquipmentInputSaveState,
-  loadoutName: string,
+  equipmentData: SingleEquipmentInputSaveState;
+  loadoutName: string;
 }

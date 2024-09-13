@@ -17,6 +17,7 @@ import { requestButtonStyle } from "./Style";
 import {
   EquipmentInput,
   SingleEquipmentInputSaveState,
+  USE_POT_VAL,
 } from "../../types/EquipmentInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 import { convertToLinkUrl } from "../../page/home";
@@ -137,7 +138,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
 }
 
 export function createQuickSimRequest(
-  totalState: SingleEquipmentInputSaveState,
+  totalState: SingleEquipmentInputSaveState
 ) {
   let jobAbbrev = totalState.mainPlayerJobAbbrev;
   let partner1Id = totalState.mainPlayerPartner1Id;
@@ -192,7 +193,7 @@ export function createQuickSimRequest(
     combatTimeMillisecond: totalState.combatTimeMillisecond,
     party: partyInfo,
     partyIlvlAdjustment: calculateIlvlAdjustment(totalState.partyMemberIlvl),
-    usePot: totalState.usePot,
+    usePot: totalState.usePot === USE_POT_VAL,
   };
 }
 

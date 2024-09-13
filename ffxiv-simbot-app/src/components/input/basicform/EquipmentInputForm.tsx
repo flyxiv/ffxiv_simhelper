@@ -42,10 +42,30 @@ import { EquipmentSubStatTable } from "../../../components/container/EquipmentSu
 import { MateriaInputTable } from "./MateriaInputForm";
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { AppConfigurations } from "../../../Themes";
-import { EquipmentInput, NO_POT_STRING, USE_POT_STRING } from "../../../types/EquipmentInput";
+import {
+  EquipmentInput,
+  NO_POT_VAL,
+  USE_POT_VAL,
+} from "../../../types/EquipmentInput";
 import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
-import { AST_EN_NAME, AST_MELEE_PARTNER_TEXT, AST_RANGED_PARTNER_TEXT, convertToSlotText, DNC_EN_NAME, DNC_PARTNER_TEXT, EMPTY_TEXT, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, FOOD_SLOT_TEXT, NO_POT_TEXT, POT_LABEL_TEXT, TIME_INPUT_LABEL_TEXT, USE_POT_TEXT, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
+import {
+  AST_EN_NAME,
+  AST_MELEE_PARTNER_TEXT,
+  AST_RANGED_PARTNER_TEXT,
+  convertToSlotText,
+  DNC_EN_NAME,
+  DNC_PARTNER_TEXT,
+  EMPTY_TEXT,
+  FINGER1_SLOT_EN_TEXT,
+  FINGER2_SLOT_EN_TEXT,
+  FOOD_SLOT_TEXT,
+  NO_POT_TEXT,
+  POT_LABEL_TEXT,
+  TIME_INPUT_LABEL_TEXT,
+  USE_POT_TEXT,
+  WEAPON_SLOT_EN_TEXT,
+} from "../../../const/languageTexts";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -82,23 +102,40 @@ function EquipmentMenuOfOneSlot(
   let totalState = totalEquipmentState.equipmentDatas[id];
   let key = `${slotName}-${id}-equipment`;
   let slotEquipmentId = totalState.itemSet[slotNameToSlotIndex(slotName)];
-  let currentEquipmentId = slotEquipmentId === undefined ? EMPTY_EQUIPMENT_ID : slotEquipmentId;
+  let currentEquipmentId =
+    slotEquipmentId === undefined ? EMPTY_EQUIPMENT_ID : slotEquipmentId;
 
-  if (slotName === FINGER1_SLOT_EN_TEXT && totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)] !== -1) {
+  if (
+    slotName === FINGER1_SLOT_EN_TEXT &&
+    totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)] !== -1
+  ) {
     let ring2 = totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)];
     let ring2Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring2);
-    if (ring2Equipment !== undefined && !ring2Equipment.name.includes("Archeo")) {
+    if (
+      ring2Equipment !== undefined &&
+      !ring2Equipment.name.includes("Archeo")
+    ) {
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
-        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)]
+        (equipment) =>
+          equipment.id !==
+          totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)]
       );
     }
   }
-  if (slotName === FINGER2_SLOT_EN_TEXT && totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)] !== -1) {
+  if (
+    slotName === FINGER2_SLOT_EN_TEXT &&
+    totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)] !== -1
+  ) {
     let ring1 = totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)];
     let ring1Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring1);
-    if (ring1Equipment !== undefined && !ring1Equipment.name.includes("Archeo")) {
+    if (
+      ring1Equipment !== undefined &&
+      !ring1Equipment.name.includes("Archeo")
+    ) {
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
-        (equipment) => equipment.id !== totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)]
+        (equipment) =>
+          equipment.id !==
+          totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)]
       );
     }
   }
@@ -142,11 +179,14 @@ function EquipmentMenuOfOneSlot(
     slotLabel = "";
   }
 
-
   return (
     <>
       <CustomFormControl fullWidth>
-        <InputLabel id="SlotSelect" key={`${key}_label`} sx={{ fontSize: AppConfigurations.body2FontSize }}>
+        <InputLabel
+          id="SlotSelect"
+          key={`${key}_label`}
+          sx={{ fontSize: AppConfigurations.body2FontSize }}
+        >
           {slotLabel}
         </InputLabel>
         <Select
@@ -164,8 +204,8 @@ function EquipmentMenuOfOneSlot(
             },
           }}
           sx={{
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'transparent',
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "transparent",
             },
           }}
         >
@@ -177,18 +217,26 @@ function EquipmentMenuOfOneSlot(
             );
           })}
           <Divider />
-          {slotName !== WEAPON_SLOT_EN_TEXT
-            ?
+          {slotName !== WEAPON_SLOT_EN_TEXT ? (
             <EquipmentMenu value={-1} key={`${id}_${slotLabel}_empty`}>
-              <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
-                <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body2FontSize }}>
+              <Box
+                display="flex"
+                height="100%"
+                alignItems="center"
+                justifyContent="flex-end"
+              >
+                <Typography
+                  variant="body2"
+                  color="white"
+                  sx={{ fontSize: AppConfigurations.body2FontSize }}
+                >
                   {EMPTY_TEXT}
                 </Typography>
               </Box>
             </EquipmentMenu>
-            :
-            (<Box></Box>)
-          }
+          ) : (
+            <Box></Box>
+          )}
         </Select>
       </CustomFormControl>
       <MateriaBox>
@@ -223,37 +271,44 @@ const EQUIPMENT_ITEM_WIDTH = {
   sm: LONG_ITEM_WIDTH,
   md: LONG_ITEM_WIDTH,
   lg: SHORT_ITEM_WIDTH,
-  xl: SHORT_ITEM_WIDTH
-}
+  xl: SHORT_ITEM_WIDTH,
+};
 
 export function EquipmentSelectionMenu(
   id: number,
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function,
   onlyBuffJobs: boolean = false,
-  hasTimeInput: boolean = true,
+  hasTimeInput: boolean = true
 ) {
   let xs = 12;
   let mainCharacterJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
   return (
     <EquipmentGridContainer container>
-      <EquipmentGridItemBox key={`${id}_JobSelectionItemBox`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+      <EquipmentGridItemBox
+        key={`${id}_JobSelectionItemBox`}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+      >
         <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
           {onlyBuffJobs
             ? MainPlayerJobSelectionOnlyBuffJobs(
-              id,
-              totalEquipmentState,
-              setTotalEquipmentState
-            )
+                id,
+                totalEquipmentState,
+                setTotalEquipmentState
+              )
             : MainPlayerJobSelection(
-              id,
-              totalEquipmentState,
-              setTotalEquipmentState
-            )}
+                id,
+                totalEquipmentState,
+                setTotalEquipmentState
+              )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
-      <EquipmentGridItemBox marginBottom={1} key={`${id}_RaceItemBox`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+      <EquipmentGridItemBox
+        marginBottom={1}
+        key={`${id}_RaceItemBox`}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+      >
         <InputEquipmentBox item xs={xs} key="Race">
           {MainPlayerRaceSelection(
             id,
@@ -275,7 +330,10 @@ export function EquipmentSelectionMenu(
           return;
         }
         return (
-          <EquipmentGridItemBox key={`${id}_equipment_${slotName}_itembox`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+          <EquipmentGridItemBox
+            key={`${id}_equipment_${slotName}_itembox`}
+            sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+          >
             <InputEquipmentBox
               item
               xs={xs}
@@ -292,13 +350,19 @@ export function EquipmentSelectionMenu(
           </EquipmentGridItemBox>
         );
       })}
-      <EquipmentGridItemBox key={`food_selectionbox_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+      <EquipmentGridItemBox
+        key={`food_selectionbox_${id}`}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+      >
         <InputEquipmentBox item xs={xs} key={`food_${id}`}>
           {FoodSelection(id, totalEquipmentState, setTotalEquipmentState)}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
 
-      <EquipmentGridItemBox key={`pot_selectionbox_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+      <EquipmentGridItemBox
+        key={`pot_selectionbox_${id}`}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+      >
         <InputEquipmentBox item xs={xs} key={`pot_${id}`}>
           {PotSelection(id, totalEquipmentState, setTotalEquipmentState)}
         </InputEquipmentBox>
@@ -311,7 +375,7 @@ export function EquipmentSelectionMenu(
             {SimulationUpperInputTimeTextBox(
               TIME_INPUT_LABEL_TEXT,
               totalEquipmentState,
-              setTotalEquipmentState,
+              setTotalEquipmentState
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
@@ -333,7 +397,10 @@ function PartnerSelectionMenu(
   if (mainPlayerJobAbbrev === AST_EN_NAME) {
     return (
       <>
-        <EquipmentGridItemBox key={`partner1_${id}_grid`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+        <EquipmentGridItemBox
+          key={`partner1_${id}_grid`}
+          sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+        >
           <InputEquipmentBox item xs={12} key={`partner1_${id}`}>
             {Partner1Selection(
               id,
@@ -344,7 +411,10 @@ function PartnerSelectionMenu(
           </InputEquipmentBox>
         </EquipmentGridItemBox>
 
-        <EquipmentGridItemBox key={`partner2_${id}_grid`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+        <EquipmentGridItemBox
+          key={`partner2_${id}_grid`}
+          sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+        >
           <InputEquipmentBox item xs={12} key={`partner2_${id}`}>
             {Partner2Selection(
               id,
@@ -359,7 +429,12 @@ function PartnerSelectionMenu(
   } else if (mainPlayerJobAbbrev === DNC_EN_NAME) {
     return (
       <EquipmentGridItemBox key={`partner1_${id}_grid`}>
-        <InputEquipmentBox item xs={12} key={`partner1_${id}`} sx={{ width: EQUIPMENT_ITEM_WIDTH }}>
+        <InputEquipmentBox
+          item
+          xs={12}
+          key={`partner1_${id}`}
+          sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+        >
           {Partner1Selection(
             id,
             totalEquipmentState,
@@ -422,7 +497,12 @@ function FoodSelection(
             return FoodMenuItem(food);
           })}
           <MenuItem value={-1}>
-            <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
+            <Box
+              display="flex"
+              height="100%"
+              alignItems="center"
+              justifyContent="flex-end"
+            >
               <Typography variant="body2" color="white">
                 {EMPTY_TEXT}
               </Typography>
@@ -433,7 +513,6 @@ function FoodSelection(
     </>
   );
 }
-
 
 function PotSelection(
   id: number,
@@ -453,7 +532,7 @@ function PotSelection(
 
     newState.equipmentDatas.forEach((data) => {
       data.usePot = usePot;
-    })
+    });
 
     setTotalEquipmentState(newState);
   };
@@ -479,15 +558,25 @@ function PotSelection(
             },
           }}
         >
-          <MenuItem value={USE_POT_STRING}>
-            <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
+          <MenuItem value={USE_POT_VAL}>
+            <Box
+              display="flex"
+              height="100%"
+              alignItems="center"
+              justifyContent="flex-end"
+            >
               <Typography variant="body2" color="white">
                 {USE_POT_TEXT}
               </Typography>
             </Box>
           </MenuItem>
-          <MenuItem value={NO_POT_STRING}>
-            <Box display="flex" height="100%" alignItems="center" justifyContent="flex-end">
+          <MenuItem value={NO_POT_VAL}>
+            <Box
+              display="flex"
+              height="100%"
+              alignItems="center"
+              justifyContent="flex-end"
+            >
               <Typography variant="body2" color="white">
                 {NO_POT_TEXT}
               </Typography>

@@ -16,19 +16,29 @@ import { requestButtonStyle } from "./Style";
 import {
   EquipmentInput,
   SingleEquipmentInputSaveState,
-  USE_POT_STRING,
+  USE_POT_VAL,
 } from "../../types/EquipmentInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
-import {
-  getStatWeightNames,
-} from "../../types/ffxivdatabase/Stats";
+import { getStatWeightNames } from "../../types/ffxivdatabase/Stats";
 import {
   StatWeightsResponse,
   StatWeightsResponseTable,
 } from "../../types/StatWeightsResponse";
 import { calculatePowerByStat } from "../../types/ffxivdatabase/ItemSet";
 import { sendRequestAsync } from "./QuickSimRequestButton";
-import { CRIT_STAT_NAME, DET_STAT_NAME, DEX_STAT_NAME, DH_STAT_NAME, INT_STAT_NAME, MIND_STAT_NAME, SKS_STAT_NAME, SPS_STAT_NAME, STR_STAT_NAME, TEN_STAT_NAME, WD_STAT_NAME } from "../../const/languageTexts";
+import {
+  CRIT_STAT_NAME,
+  DET_STAT_NAME,
+  DEX_STAT_NAME,
+  DH_STAT_NAME,
+  INT_STAT_NAME,
+  MIND_STAT_NAME,
+  SKS_STAT_NAME,
+  SPS_STAT_NAME,
+  STR_STAT_NAME,
+  TEN_STAT_NAME,
+  WD_STAT_NAME,
+} from "../../const/languageTexts";
 import { getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
 import { convertToLinkUrl } from "../../page/home";
 
@@ -157,27 +167,57 @@ function createAugmentedRequest(
       power.mainStat += MAIN_STAT_INCREASE;
     }
     if (augmentStatName === CRIT_STAT_NAME) {
-      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, CRIT_INCREASE_AMOUNT);
+      augmentAmount = getStatNeededByStatNameLadderAmount(
+        power,
+        augmentStatName,
+        jobAbbrev,
+        CRIT_INCREASE_AMOUNT
+      );
       power.criticalStrike += augmentAmount;
     }
     if (augmentStatName === DH_STAT_NAME) {
-      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, DH_INCREASE_AMOUNT);
+      augmentAmount = getStatNeededByStatNameLadderAmount(
+        power,
+        augmentStatName,
+        jobAbbrev,
+        DH_INCREASE_AMOUNT
+      );
       power.directHit += augmentAmount;
     }
     if (augmentStatName === DET_STAT_NAME) {
-      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, DET_INCREASE_AMOUNT);
+      augmentAmount = getStatNeededByStatNameLadderAmount(
+        power,
+        augmentStatName,
+        jobAbbrev,
+        DET_INCREASE_AMOUNT
+      );
       power.determination += augmentAmount;
     }
     if (augmentStatName === SKS_STAT_NAME) {
-      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, SKS_INCREASE_AMOUNT);
+      augmentAmount = getStatNeededByStatNameLadderAmount(
+        power,
+        augmentStatName,
+        jobAbbrev,
+        SKS_INCREASE_AMOUNT
+      );
       power.skillSpeed += augmentAmount;
     }
     if (augmentStatName === SPS_STAT_NAME) {
-      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, SPS_INCREASE_AMOUNT);
+      augmentAmount = getStatNeededByStatNameLadderAmount(
+        power,
+        augmentStatName,
+        jobAbbrev,
+        SPS_INCREASE_AMOUNT
+      );
       power.spellSpeed += augmentAmount;
     }
     if (augmentStatName === TEN_STAT_NAME) {
-      augmentAmount = getStatNeededByStatNameLadderAmount(power, augmentStatName, jobAbbrev, TEN_INCREASE_AMOUNT);
+      augmentAmount = getStatNeededByStatNameLadderAmount(
+        power,
+        augmentStatName,
+        jobAbbrev,
+        TEN_INCREASE_AMOUNT
+      );
       power.tenacity += augmentAmount;
     }
 
@@ -227,7 +267,7 @@ function createAugmentedRequest(
     party: partyInfo,
     statName: augmentStatName,
     augmentAmount: augmentAmount,
-    usePot: totalState.usePot === USE_POT_STRING,
+    usePot: totalState.usePot === USE_POT_VAL,
     partyIlvlAdjustment: calculateIlvlAdjustment(totalState.partyMemberIlvl),
   };
 }
