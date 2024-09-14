@@ -80,12 +80,6 @@ pub(crate) fn make_viper_opener(db: &ViperDatabase, use_pots: bool) -> Vec<Opene
     };
 
     opener.extend(vec![
-        GcdOpener(db.dread_fangs.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.swiftskins_sting.get_id()),
-        OgcdOpener((Some(db.serpents_ire.get_id()), None)),
-        GcdOpener(db.dreadwinder.get_id()),
-        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.hunters_coil.get_id()),
         OgcdOpener((
             Some(db.normal_filler1.get_id()),
@@ -168,7 +162,7 @@ pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPrio
         },
         SkillPriorityInfo {
             skill_id: db.dreadwinder.get_id(),
-            prerequisite: None,
+            prerequisite: Some(Not(Box::new(MillisecondsBeforeBurst(10000)))),
         },
         SkillPriorityInfo {
             skill_id: db.flankstings_strike.get_id(),
