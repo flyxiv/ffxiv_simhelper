@@ -77,11 +77,14 @@ pub(crate) fn make_samurai_opener(db: &SamuraiDatabase, use_pots: bool) -> Vec<O
         GcdOpener(db.kasha_meikyo.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.yukikaze.get_id()),
-        OgcdOpener((Some(db.ikishoten.get_id()), None)),
+        OgcdOpener((None, None)),
         GcdOpener(db.tendo_setsugekka.get_id()),
         OgcdOpener((Some(db.meikyo_shisui.get_id()), None)),
         GcdOpener(db.gekko_meikyo.get_id()),
-        OgcdOpener((Some(db.hissatsu_senei.get_id()), None)),
+        OgcdOpener((
+            Some(db.ikishoten.get_id()),
+            Some(db.hissatsu_senei.get_id()),
+        )),
         GcdOpener(db.higanbana.get_id()),
         OgcdOpener((Some(db.zanshin.get_id()), None)),
         GcdOpener(db.kaeshi_tendo_setsugekka.get_id()),
@@ -405,7 +408,7 @@ pub(crate) fn make_samurai_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.zanshin.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {
             skill_id: db.hissatsu_shinten.get_id(),

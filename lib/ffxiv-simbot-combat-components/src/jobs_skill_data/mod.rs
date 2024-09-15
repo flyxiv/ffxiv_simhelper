@@ -3,7 +3,7 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::use_type::UseType;
 use crate::status::buff_status::BuffStatus;
 use crate::status::status_info::StatusInfo;
-use crate::types::{PlayerIdType, TimeType};
+use crate::types::PlayerIdType;
 
 pub(crate) mod astrologian;
 pub(crate) mod bard;

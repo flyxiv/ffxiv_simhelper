@@ -31,6 +31,7 @@ pub(crate) struct TruncatedDebuffStatus {
 #[derive(Clone)]
 pub(crate) struct TruncatedAttackSkill {
     pub(crate) id: StatusIdType,
+    pub(crate) stack_skill_id: Option<StatusIdType>,
     pub(crate) stacks: StackType,
     pub(crate) current_cooldown_millisecond: TimeType,
     pub(crate) cooldown_millisecond: TimeType,
@@ -62,6 +63,7 @@ impl From<&AttackSkill> for TruncatedAttackSkill {
     fn from(skill: &AttackSkill) -> TruncatedAttackSkill {
         TruncatedAttackSkill {
             id: skill.get_id(),
+            stack_skill_id: skill.stack_skill_id,
             stacks: skill.stacks,
             current_cooldown_millisecond: skill.current_cooldown_millisecond,
             cooldown_millisecond: skill.cooldown_millisecond,

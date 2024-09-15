@@ -245,7 +245,7 @@ impl SamuraiDatabase {
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 2500,
             charging_time_millisecond: 0,
-            is_speed_buffed: false,
+            is_speed_buffed: true,
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 0,
             resource_required: vec![],

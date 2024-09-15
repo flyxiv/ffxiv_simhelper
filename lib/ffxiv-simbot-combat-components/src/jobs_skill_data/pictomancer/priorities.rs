@@ -81,12 +81,6 @@ pub(crate) fn make_pictomancer_opener(db: &PictomancerDatabase, use_pots: bool) 
     };
 
     openers.extend(vec![
-        Opener::GcdOpener(db.rainbow_drip.get_id()),
-        Opener::OgcdOpener((Some(db.living_muse.get_id()), None)),
-        Opener::GcdOpener(db.winged_motif.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.holy_in_white.get_id()),
-        Opener::OgcdOpener((Some(db.potion.get_id()), Some(db.starry_muse.get_id()))),
         Opener::GcdOpener(db.star_prism.get_id()),
         Opener::OgcdOpener((Some(db.subtractive_pallete_proc.get_id()), None)),
         Opener::GcdOpener(db.comet_in_black_hyperphantasia.get_id()),

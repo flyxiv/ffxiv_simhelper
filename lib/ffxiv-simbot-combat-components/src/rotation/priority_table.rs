@@ -657,8 +657,17 @@ pub(crate) trait PriorityTable: Sized + Clone {
             .skill_list
             .get(&skill_priority.skill_id)
             .unwrap();
+        let stack_skill_stacks = if let Some(stack_skill_id) = skill.stack_skill_id {
+            priority_simulation_data
+                .skill_list
+                .get(&stack_skill_id)
+                .unwrap()
+                .stacks
+        } else {
+            skill.stacks
+        };
 
-        if skill.stacks == 0
+        if stack_skill_stacks == 0
             || !self.meets_requirements(priority_simulation_data, skill, player.get_id())
         {
             return false;

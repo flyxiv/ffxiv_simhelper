@@ -89,14 +89,6 @@ pub(crate) fn make_summoner_opener(db: &SummonerDatabase, use_pots: bool) -> Vec
     };
 
     openers.extend(vec![
-        GcdOpener(db.ruin_iii.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.ruin_iii.get_id()),
-        OgcdOpener((None, None)),
-        GcdOpener(db.ruin_iii.get_id()),
-        OgcdOpener((Some(db.searing_light.get_id()), None)),
-        GcdOpener(db.summon_solar_bahamut.get_id()),
-        OgcdOpener((Some(db.potion.get_id()), None)),
         GcdOpener(db.umbral_impulse.get_id()),
         OgcdOpener((
             Some(db.energy_drain.get_id()),
