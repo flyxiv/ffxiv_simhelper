@@ -1,5 +1,9 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::sage::abilities::SageDatabase;
+use crate::rotation::priority_table::SkillPrerequisite::{
+    And, BufforDebuffLessThan, MillisecondsBeforeBurst, Not, Or,
+    RelatedSkillCooldownLessOrEqualThan,
+};
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;
 use crate::types::{PlayerIdType, SkillIdType};
@@ -71,6 +75,8 @@ pub(crate) fn make_sage_opener(db: &SageDatabase, use_pots: bool) -> Vec<Opener>
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.gcd.get_id()),
         Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.gcd.get_id()),
+        Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.phlegma.get_id()),
     ]);
 
@@ -83,12 +89,18 @@ pub(crate) fn make_sage_gcd_priority_db(db: &SageDatabase) -> Vec<SkillPriorityI
             skill_id: db.phlegma.get_id(),
             prerequisite: Some(SkillPrerequisite::Or(
                 Box::new(SkillPrerequisite::HasSkillStacks(702, 2)),
-                Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+                Box::new(And(
+                    Box::new(SkillPrerequisite::MillisecondsBeforeBurst(0)),
+                    Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.psyche.get_id(),
+                        50000,
+                    )))),
+                )),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.dot.get_id(),
-            prerequisite: Some(SkillPrerequisite::BufforDebuffLessThan(700, 3000)),
+            prerequisite: Some(BufforDebuffLessThan(700, 3000)),
         },
         SkillPriorityInfo {
             skill_id: db.gcd.get_id(),

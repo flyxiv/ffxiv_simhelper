@@ -44,7 +44,7 @@ impl SageDatabase {
             use_type: UseType::UseOnTarget,
             trait_percent: 130,
             additional_skill_events: vec![FfxivEvent::ApplyDebuff(
-                0,
+                player_id,
                 eukrasian_dosis_iii_dot.clone(),
                 30000,
                 30000,
