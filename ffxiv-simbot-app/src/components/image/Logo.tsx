@@ -1,14 +1,17 @@
+import { Box } from "@mui/material";
 import "./Logo.css";
 import { Link } from "react-router-dom";
+
+export const LOGO_SIZE = "15vh";
 
 export const Logo = () => {
   return (
     <Link to="/">
-      <img
-        src='/images/logo_dark.svg'
+      <Box
+        component={"img"}
+        src="/images/logo_dark.svg"
         alt="logo"
-        height="100px"
-        width="200px"
+        sx={{ height: LOGO_SIZE }}
         className="LogoImg"
       />
     </Link>

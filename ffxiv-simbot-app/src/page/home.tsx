@@ -11,7 +11,16 @@ import {
   QUICKSIM_URL,
   STAT_WEIGHTS_URL,
 } from "../App";
-import { BEST_PARTNER_DESCRIPTION_TEXT, BEST_PARTNER_PAGE_NAME, GEAR_COMPARE_DESCRIPTION_TEXT, GEAR_COMPARE_PAGE_NAME, QUICK_SIM_DESCRIPTION_TEXT, QUICKSIM_PAGE_NAME, STAT_WEIGHTS_DESCRIPTION_TEXT, STAT_WEIGHTS_PAGE_NAME } from "../const/languageTexts";
+import {
+  BEST_PARTNER_DESCRIPTION_TEXT,
+  BEST_PARTNER_PAGE_NAME,
+  GEAR_COMPARE_DESCRIPTION_TEXT,
+  GEAR_COMPARE_PAGE_NAME,
+  QUICK_SIM_DESCRIPTION_TEXT,
+  QUICKSIM_PAGE_NAME,
+  STAT_WEIGHTS_DESCRIPTION_TEXT,
+  STAT_WEIGHTS_PAGE_NAME,
+} from "../const/languageTexts";
 
 const quickSimButtonImagePath = "/images/icon_quick_sim_C.svg";
 const gearCompareSimButtonImagePath = "/images/icon_gear_compare_C.svg";
@@ -20,12 +29,18 @@ const bestPartnerButtonImagePath = "/images/icon_best_partner_C.svg";
 
 export function Home() {
   return (
-    <Box sx={{ backgroundColor: AppConfigurations.backgroundOne, width: "100vw", height: "100vh" }}>
+    <Box
+      sx={{
+        backgroundColor: AppConfigurations.backgroundOne,
+        width: "100vw",
+        height: "100vh",
+      }}
+    >
       <Box display="flex" width="100vw">
         {BasicLeftMenu()}
         <Box width="100%">
           {AppHeader()}
-          <Box className="HomeBody">
+          <Box className="HomeBody" height="70vh">
             <Box
               width="40%"
               display="flex"
@@ -95,8 +110,10 @@ function LogoBox(
       sx={{
         border: `4px solid ${color}`,
         backgroundColor: AppConfigurations.backgroundTwo,
-        width: "80%",
+        width: "85%",
+        height: "15vh",
       }}
+      display="flex"
       alignItems={"center"}
       padding={2}
       marginBottom={4}
@@ -107,7 +124,6 @@ function LogoBox(
     </Box>
   );
 }
-
 
 export function convertToLinkUrl(urlName: string): string {
   return AppConfigurations.electron ? `/index.html#/${urlName}` : `/${urlName}`;

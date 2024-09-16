@@ -228,7 +228,7 @@ function EquipmentMenuOfOneSlot(
                 <Typography
                   variant="body2"
                   color="white"
-                  sx={{ fontSize: AppConfigurations.body2FontSize }}
+                  sx={{ fontSize: AppConfigurations.body1FontSize }}
                 >
                   {EMPTY_TEXT}
                 </Typography>

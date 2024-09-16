@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
-import { BEST_PARTNER_INPUT_SAVE_NAME, BEST_PARTNER_URL, BODY_WIDTH } from "../App";
+import {
+  BEST_PARTNER_INPUT_SAVE_NAME,
+  BEST_PARTNER_URL,
+  BODY_WIDTH,
+} from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatPowerSummary } from "../components/container/StatSummary";
 import { EquipmentInput } from "../types/EquipmentInput";
 import { defaultBestPartnerEquipmentInput } from "../const/DefaultSingleEquipmentInput";
-import {
-  LeftMenuWithLoadout,
-} from "../components/container/LeftMenu";
+import { LeftMenuWithLoadout } from "../components/container/LeftMenu";
 import { AppConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
@@ -15,7 +17,27 @@ import { SelectionTitle } from "../components/basic/SelectionTitle";
 import { BasicBottomMenu } from "../components/container/BottomMenu";
 import { EquipmentBoardStyle, InputContainerStyle } from "./Styles";
 import { BestPartnerRequestButton } from "../components/basic/BestPartnerRequestButton";
-import { AST_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PLAYER_POWER_TEXT, PLD_EN_NAME, QUICK_SIM_INPUT_INFO_TEXT, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../const/languageTexts";
+import {
+  AST_EN_NAME,
+  BRD_EN_NAME,
+  DNC_EN_NAME,
+  DRG_EN_NAME,
+  DRK_EN_NAME,
+  GNB_EN_NAME,
+  MCH_EN_NAME,
+  MNK_EN_NAME,
+  NIN_EN_NAME,
+  PLAYER_POWER_TEXT,
+  PLD_EN_NAME,
+  QUICK_SIM_INPUT_INFO_TEXT,
+  RPR_EN_NAME,
+  SAM_EN_NAME,
+  SCH_EN_NAME,
+  SGE_EN_NAME,
+  VPR_EN_NAME,
+  WAR_EN_NAME,
+  WHM_EN_NAME,
+} from "../const/languageTexts";
 
 export enum JobRole {
   TANK,
@@ -25,7 +47,7 @@ export enum JobRole {
   CASTER,
 }
 
-let INPUT_CONTAINER_WIDTH = "40vw";
+let INPUT_CONTAINER_WIDTH = "70%";
 const BEST_PARTNER_LOADOUT_COUNT = 6;
 
 let StatWeightsInputContainer = styled(Box)`
@@ -104,7 +126,7 @@ export function BestPartner() {
               <Box
                 display="flex"
                 justifyContent="center"
-                paddingBottom={"20vh"}
+                paddingBottom={"30vh"}
               >
                 {StatPowerSummary(totalState.equipmentDatas[0])}
               </Box>

@@ -6,9 +6,7 @@ import { StatPowerSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
 import { EquipmentInput } from "../types/EquipmentInput";
 import { defaultSingleEquipmentInput } from "../const/DefaultSingleEquipmentInput";
-import {
-  LeftMenuWithLoadout,
-} from "../components/container/LeftMenu";
+import { LeftMenuWithLoadout } from "../components/container/LeftMenu";
 import { AppConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
@@ -20,9 +18,13 @@ import {
   InputContainerStyle,
 } from "./Styles";
 import { StatWeightsRequestButton } from "../components/basic/StatWeightsRequestButton";
-import { PLAYER_POWER_TEXT, QUICK_SIM_INPUT_INFO_TEXT, QUICK_SIM_PARTY_INPUT_INFO_TEXT } from "../const/languageTexts";
+import {
+  PLAYER_POWER_TEXT,
+  QUICK_SIM_INPUT_INFO_TEXT,
+  QUICK_SIM_PARTY_INPUT_INFO_TEXT,
+} from "../const/languageTexts";
 
-let INPUT_CONTAINER_WIDTH = "40vw";
+let INPUT_CONTAINER_WIDTH = "70%";
 const STATWEIGHTS_LOADOUT_COUNT = 6;
 
 let StatWeightsInputContainer = styled(Box)`
@@ -106,7 +108,7 @@ export function StatWeights() {
               <Box
                 display="flex"
                 justifyContent="center"
-                paddingBottom={"20vh"}
+                paddingBottom={"30vh"}
               >
                 {StatPowerSummary(totalState.equipmentDatas[0])}
               </Box>

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Box, Button, styled } from "@mui/material";
-import { GEAR_COMPARE_URL, GEAR_COMPARE_REQUEST_SAVE_NAME, BODY_WIDTH } from "../App";
+import {
+  GEAR_COMPARE_URL,
+  GEAR_COMPARE_REQUEST_SAVE_NAME,
+  BODY_WIDTH,
+} from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
-import {
-  LeftMenuWithLoadout,
-} from "../components/container/LeftMenu";
+import { LeftMenuWithLoadout } from "../components/container/LeftMenu";
 import { AppConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
@@ -20,12 +22,16 @@ import { defaultDoubleEquipmentInput } from "../const/DefaultDoubleEquipmentInpu
 import { EquipmentInput } from "../types/EquipmentInput";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { COPY_BUTTON_TEXT, GEAR_COMPARE_INPUT_INFO_TEXT, QUICK_SIM_PARTY_INPUT_INFO_TEXT } from "../const/languageTexts";
+import {
+  COPY_BUTTON_TEXT,
+  GEAR_COMPARE_INPUT_INFO_TEXT,
+  QUICK_SIM_PARTY_INPUT_INFO_TEXT,
+} from "../const/languageTexts";
 
-export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "70vw";
+export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "98%";
 const GEAR_COMPARE_LOADOUNT_COUNT = 6;
 
-const PARTY_INPUT_WIDTH = "40vw";
+const PARTY_INPUT_WIDTH = "80%";
 
 let GearCompareEquipmentInputContainer = styled(Box)`
   ${InputContainerStyle(GEAR_COMPARE_INPUT_CONTAINER_WIDTH)}
@@ -93,13 +99,14 @@ export function GearCompare() {
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
-          <Box alignContent={"center"}>
+          <Box display="flex" flexDirection="column" justifyContent={"center"}>
             <GearCompareEquipmentInputContainer>
               {SelectionTitle(GEAR_COMPARE_INPUT_INFO_TEXT)}
               <Box
                 display="flex"
                 justifyContent="space-evenly"
                 width={GEAR_COMPARE_INPUT_CONTAINER_WIDTH}
+                padding="1%"
               >
                 <EquipmentBoard>
                   {EquipmentSelectionMenu(0, totalState, setTotalState)}
@@ -125,7 +132,7 @@ export function GearCompare() {
               </Box>
             </GearCompareEquipmentInputContainer>
 
-            <GearComparePartyInputContainer paddingTop={20} paddingBottom={40}>
+            <GearComparePartyInputContainer paddingTop={10} paddingBottom={40}>
               {SelectionTitle(QUICK_SIM_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
                 {HorizontalPartyInput(totalState, setTotalState)}
@@ -151,7 +158,9 @@ function LoadLeftEquipmentToRightButton(
       endIcon={<ArrowForwardIcon />}
       onClick={() => {
         let newTotalState = { ...totalState };
-        newTotalState.equipmentDatas[1] = JSON.parse(JSON.stringify(totalState.equipmentDatas[0]));
+        newTotalState.equipmentDatas[1] = JSON.parse(
+          JSON.stringify(totalState.equipmentDatas[0])
+        );
         setTotalState(newTotalState);
       }}
       sx={{ fontSize: AppConfigurations.body2FontSize }}
@@ -171,11 +180,12 @@ function LoadRightEquipmentToLeftButton(
       startIcon={<ArrowBackIcon />}
       onClick={() => {
         let newTotalState = { ...totalState };
-        newTotalState.equipmentDatas[0] = JSON.parse(JSON.stringify(totalState.equipmentDatas[1]));
+        newTotalState.equipmentDatas[0] = JSON.parse(
+          JSON.stringify(totalState.equipmentDatas[1])
+        );
         setTotalState(newTotalState);
       }}
       sx={{ fontSize: AppConfigurations.body2FontSize }}
-
     >
       {COPY_BUTTON_TEXT}
     </Button>

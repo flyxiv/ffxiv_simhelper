@@ -24,11 +24,7 @@ export function BasicBottomMenu(
         zIndex: 1000,
       }}
     >
-      <Box
-        paddingY={3}
-        display="flex"
-        flexDirection="column"
-      >
+      <Box paddingY={3} display="flex" flexDirection="column">
         {StatSummary(totalState.equipmentDatas[0])}
         <Box display="inline-block" margin="auto" paddingTop={2}>
           {buttonComponentFunction(totalState)}
@@ -62,7 +58,7 @@ export function GearCompareBottomMenu(totalState: EquipmentInput) {
         <Box
           display="flex"
           justifyContent="space-evenly"
-          width={GEAR_COMPARE_INPUT_CONTAINER_WIDTH}
+          sx={{ width: BODY_WIDTH }}
         >
           {StatSummary(totalState.equipmentDatas[0])}
           {StatSummary(totalState.equipmentDatas[1])}

@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
-import { BODY_WIDTH, QUICKSIM_RESULT_URL, SINGLE_INPUT_SAVE_NAME } from "../App";
+import {
+  BODY_WIDTH,
+  QUICKSIM_RESULT_URL,
+  SINGLE_INPUT_SAVE_NAME,
+} from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatPowerSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
 import { EquipmentInput } from "../types/EquipmentInput";
 import { defaultSingleEquipmentInput } from "../const/DefaultSingleEquipmentInput";
-import {
-  LeftMenuWithLoadout,
-} from "../components/container/LeftMenu";
+import { LeftMenuWithLoadout } from "../components/container/LeftMenu";
 import { AppConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
@@ -20,9 +22,13 @@ import {
   InputContainerStyle,
 } from "./Styles";
 import { QuickSimRequestButton } from "../components/basic/QuickSimRequestButton";
-import { PLAYER_POWER_TEXT, QUICK_SIM_INPUT_INFO_TEXT, QUICK_SIM_PARTY_INPUT_INFO_TEXT } from "../const/languageTexts";
+import {
+  PLAYER_POWER_TEXT,
+  QUICK_SIM_INPUT_INFO_TEXT,
+  QUICK_SIM_PARTY_INPUT_INFO_TEXT,
+} from "../const/languageTexts";
 
-let INPUT_CONTAINER_WIDTH = "50vw";
+export const INPUT_CONTAINER_WIDTH = "70%";
 const QUICKSIM_LOADOUT_COUNT = 6;
 
 let QuickSimInputContainer = styled(Box)`
