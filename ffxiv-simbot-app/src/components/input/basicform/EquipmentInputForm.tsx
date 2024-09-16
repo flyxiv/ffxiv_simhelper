@@ -185,7 +185,7 @@ function EquipmentMenuOfOneSlot(
         <InputLabel
           id="SlotSelect"
           key={`${key}_label`}
-          sx={{ fontSize: AppConfigurations.body2FontSize }}
+          sx={{ fontSize: AppConfigurations.body1FontSize }}
         >
           {slotLabel}
         </InputLabel>

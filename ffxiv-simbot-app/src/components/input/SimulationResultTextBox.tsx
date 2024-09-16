@@ -2,7 +2,10 @@ import { Box, InputLabel, TextField, styled } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 import { InputGridItemStyle } from "./Styles";
 import { CharacterStats } from "../../types/CharacterStates";
-import { EquipmentInput, SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
+import {
+  EquipmentInput,
+  SingleEquipmentInputSaveState,
+} from "../../types/EquipmentInput";
 import { CustomTimeFormControl } from "./basicform/BasicInputForm";
 import { TIME_INPUT_LABEL_TEXT } from "../../const/languageTexts";
 
@@ -42,7 +45,7 @@ export const inputStyleSimulationResultTextBox = {
 };
 
 export const Input = styled(TextField)(
-  ({ }) => inputStyleSimulationResultTextBox
+  ({}) => inputStyleSimulationResultTextBox
 );
 
 const InputBox = styled(Box)`
@@ -72,15 +75,25 @@ export const SimulationResultTextBox: React.FC<InputFormProps> = ({
 
 const TIME_UPPER_LIMIT = 900;
 
-export function SimulationUpperInputTimeTextBox(label: string, totalEquipmentState: EquipmentInput, setTotalState: Function) {
+export function SimulationUpperInputTimeTextBox(
+  label: string,
+  totalEquipmentState: EquipmentInput,
+  setTotalState: Function
+) {
   return (
     <CustomTimeFormControl fullWidth>
-      <InputLabel id="SlotSelect" key={`${label}_label`} sx={{ fontSize: AppConfigurations.body2FontSize }}>
+      <InputLabel
+        id="SlotSelect"
+        key={`${label}_label`}
+        sx={{ fontSize: AppConfigurations.body1FontSize }}
+      >
         {TIME_INPUT_LABEL_TEXT}
       </InputLabel>
       <Input
         id={label}
-        value={totalEquipmentState.equipmentDatas[0].combatTimeMillisecond / 1000}
+        value={
+          totalEquipmentState.equipmentDatas[0].combatTimeMillisecond / 1000
+        }
         key={label}
         onChange={(e) => {
           let newTimeSeconds = parseInt(e.target.value);
@@ -89,20 +102,21 @@ export function SimulationUpperInputTimeTextBox(label: string, totalEquipmentSta
           }
 
           let newTotalState = { ...totalEquipmentState };
-          newTotalState.equipmentDatas.forEach((data: SingleEquipmentInputSaveState) => {
-            data.combatTimeMillisecond = Math.min(newTimeSeconds, TIME_UPPER_LIMIT) * 1000;
-          });
+          newTotalState.equipmentDatas.forEach(
+            (data: SingleEquipmentInputSaveState) => {
+              data.combatTimeMillisecond =
+                Math.min(newTimeSeconds, TIME_UPPER_LIMIT) * 1000;
+            }
+          );
 
           setTotalState({ ...newTotalState });
         }}
         sx={{
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'transparent',
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "transparent",
           },
         }}
-      >
-      </Input>
+      ></Input>
     </CustomTimeFormControl>
-
   );
-};
+}
