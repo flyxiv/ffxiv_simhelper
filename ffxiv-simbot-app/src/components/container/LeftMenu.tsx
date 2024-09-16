@@ -14,14 +14,22 @@ import {
   STAT_WEIGHTS_URL,
 } from "../../App";
 import { EquipmentInput } from "../../types/EquipmentInput";
-import { BEST_PARTNER_PAGE_NAME, GEAR_COMPARE_PAGE_NAME, HOME_PAGE_NAME, NAVIGATE_TEXT, QUICKSIM_PAGE_NAME, SAVED_GEARSETS_TEXT, STAT_WEIGHTS_PAGE_NAME } from "../../const/languageTexts";
+import {
+  BEST_PARTNER_PAGE_NAME,
+  GEAR_COMPARE_PAGE_NAME,
+  HOME_PAGE_NAME,
+  NAVIGATE_TEXT,
+  QUICKSIM_PAGE_NAME,
+  SAVED_GEARSETS_TEXT,
+  STAT_WEIGHTS_PAGE_NAME,
+} from "../../const/languageTexts";
 import { convertToLinkUrl } from "../../page/home";
 
-export const MENU_WIDTH_VW_XS = 50;
-export const MENU_WIDTH_VW_SM = 45;
-export const MENU_WIDTH_VW_MD = 40;
-export const MENU_WIDTH_VW_LG = 30;
-export const MENU_WIDTH_VW_XL = 20;
+export const MENU_WIDTH_VW_XS = 35;
+export const MENU_WIDTH_VW_SM = 30;
+export const MENU_WIDTH_VW_MD = 25;
+export const MENU_WIDTH_VW_LG = 20;
+export const MENU_WIDTH_VW_XL = 15;
 
 export const MENU_WIDTH = {
   xs: `${MENU_WIDTH_VW_XS}vw`,
@@ -30,7 +38,6 @@ export const MENU_WIDTH = {
   lg: `${MENU_WIDTH_VW_LG}vw`,
   xl: `${MENU_WIDTH_VW_XL}vw`,
 };
-
 
 let LeftMenuLogo = styled(Box)`
   ${LeftMenuLogoStyle}
@@ -62,7 +69,7 @@ export function LeftMenuWithLoadout(
         "& .MuiDrawer-paper": {
           width: MENU_WIDTH,
           backgroundColor: `${AppConfigurations.backgroundOne}`,
-          scrollbarWidth: 'none'
+          scrollbarWidth: "none",
         },
       }}
       variant="permanent"
@@ -77,7 +84,7 @@ export function LeftMenuWithLoadout(
           setTotalState
         )}
       </LeftMenuTotalBar>
-    </Drawer >
+    </Drawer>
   );
 }
 
@@ -91,7 +98,7 @@ export function BasicLeftMenu() {
           width: MENU_WIDTH,
           boxSizing: "border-box",
           backgroundColor: `${AppConfigurations.backgroundOne}`,
-          scrollbarWidth: 'none'
+          scrollbarWidth: "none",
         },
       }}
       variant="permanent"

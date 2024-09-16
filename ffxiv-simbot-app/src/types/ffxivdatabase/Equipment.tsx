@@ -17,7 +17,7 @@ import {
   NECK_SLOT_EN_TEXT,
   OFFHAND_SLOT_EN_TEXT,
   PIE_STAT_NAME,
-  PLD_JOB_NAME,
+  PLD_EN_NAME,
   SKS_STAT_NAME,
   SPS_STAT_NAME,
   STR_STAT_NAME,
@@ -49,7 +49,7 @@ export const TOTAL_SLOTS = WEAPONSLOTS.concat(LEFTSLOTS).concat(RIGHTSLOTS);
 export const CURRENT_MIN_ITEM_LEVEL =
   AppConfigurations.languageMode === ENGLISH_MODE ? 710 : 690;
 export const CURRENT_MAX_ITEM_LEVEL =
-  AppConfigurations.languageMode === ENGLISH_MODE ? 730 : 710;
+  AppConfigurations.languageMode === ENGLISH_MODE ? 735 : 735;
 
 let totalEquipments: Array<Equipment> = [];
 
@@ -241,7 +241,7 @@ export function equipmentStatDescriptionString(equipment: Equipment) {
 }
 
 export function getEquipmentSlotsOfJob(jobAbbrev: string) {
-  if (jobAbbrev === PLD_JOB_NAME) {
+  if (jobAbbrev === PLD_EN_NAME) {
     return [
       WEAPON_SLOT_EN_TEXT,
       OFFHAND_SLOT_EN_TEXT,

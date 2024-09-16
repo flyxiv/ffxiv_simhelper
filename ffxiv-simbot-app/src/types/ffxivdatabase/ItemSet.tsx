@@ -10,11 +10,7 @@ import { getBaseMainStat } from "../../const/StartStats";
 
 import { FOOD_DATABASE } from "./Food";
 import { addMateriaStatToTotalStat } from "./Materia";
-import {
-  defaultPlayerPower,
-  isTank,
-  PlayerPower,
-} from "./PlayerPower";
+import { defaultPlayerPower, isTank, PlayerPower } from "./PlayerPower";
 import {
   calculateAutoDirectHitIncrease,
   calculateCriticalStrikePercentIncrease,
@@ -26,8 +22,32 @@ import {
   calculateWeaponMultiplierPercent,
 } from "./StatCalculator";
 import { CRIT_BASE_DAMAGE, CRIT_BASE_PERCENT } from "./Stats";
-import { EquipmentInput, SingleEquipmentInputSaveState } from "../EquipmentInput";
-import { AST_JOB_NAME, BLM_JOB_NAME, BODY_SLOT_EN_TEXT, BODY_SLOT_TEXT, EARS_SLOT_EN_TEXT, EARS_SLOT_TEXT, FEET_SLOT_EN_TEXT, FEET_SLOT_TEXT, FINGER1_SLOT_EN_TEXT, FINGER1_SLOT_TEXT, FINGER2_SLOT_EN_TEXT, FINGER2_SLOT_TEXT, HANDS_SLOT_EN_TEXT, HANDS_SLOT_TEXT, HEAD_SLOT_EN_TEXT, HEAD_SLOT_TEXT, LEGS_SLOT_EN_TEXT, LEGS_SLOT_TEXT, NECK_SLOT_EN_TEXT, NECK_SLOT_TEXT, OFFHAND_SLOT_EN_TEXT, OFFHAND_SLOT_TEXT, PCT_JOB_NAME, RDM_JOB_NAME, SCH_JOB_NAME, SGE_JOB_NAME, SMN_JOB_NAME, WEAPON_SLOT_EN_TEXT, WEAPON_SLOT_TEXT, WHM_JOB_NAME, WRIST_SLOT_EN_TEXT, WRIST_SLOT_TEXT } from "../../const/languageTexts";
+import {
+  EquipmentInput,
+  SingleEquipmentInputSaveState,
+} from "../EquipmentInput";
+import {
+  AST_EN_NAME,
+  BLM_EN_NAME,
+  BODY_SLOT_EN_TEXT,
+  EARS_SLOT_EN_TEXT,
+  FEET_SLOT_EN_TEXT,
+  FINGER1_SLOT_EN_TEXT,
+  FINGER2_SLOT_EN_TEXT,
+  HANDS_SLOT_EN_TEXT,
+  HEAD_SLOT_EN_TEXT,
+  LEGS_SLOT_EN_TEXT,
+  NECK_SLOT_EN_TEXT,
+  OFFHAND_SLOT_EN_TEXT,
+  PCT_EN_NAME,
+  RDM_EN_NAME,
+  SCH_EN_NAME,
+  SGE_EN_NAME,
+  SMN_EN_NAME,
+  WEAPON_SLOT_EN_TEXT,
+  WHM_EN_NAME,
+  WRIST_SLOT_EN_TEXT,
+} from "../../const/languageTexts";
 
 export const WEAPON_SLOT_ID = 0;
 export const HEAD_SLOT_ID = 1;
@@ -41,7 +61,6 @@ export const WRIST_SLOT_ID = 8;
 export const FINGER1_SLOT_ID = 9;
 export const FINGER2_SLOT_ID = 10;
 export const OFFHAND_SLOT_ID = 11;
-
 
 export type ItemSet = number[];
 
@@ -79,29 +98,29 @@ export function slotNameToSlotIndex(slotName: string): number {
 export function slotIndexToSlotName(slotIndex: number): string {
   switch (slotIndex) {
     case WEAPON_SLOT_ID:
-      return WEAPON_SLOT_TEXT;
+      return WEAPON_SLOT_EN_TEXT;
     case HEAD_SLOT_ID:
-      return HEAD_SLOT_TEXT;
+      return HEAD_SLOT_EN_TEXT;
     case BODY_SLOT_ID:
-      return BODY_SLOT_TEXT;
+      return BODY_SLOT_EN_TEXT;
     case HANDS_SLOT_ID:
-      return HANDS_SLOT_TEXT;
+      return HANDS_SLOT_EN_TEXT;
     case LEGS_SLOT_ID:
-      return LEGS_SLOT_TEXT;
+      return LEGS_SLOT_EN_TEXT;
     case FEET_SLOT_ID:
-      return FEET_SLOT_TEXT;
+      return FEET_SLOT_EN_TEXT;
     case EAR_SLOT_ID:
-      return EARS_SLOT_TEXT;
+      return EARS_SLOT_EN_TEXT;
     case NECK_SLOT_ID:
-      return NECK_SLOT_TEXT;
+      return NECK_SLOT_EN_TEXT;
     case WRIST_SLOT_ID:
-      return WRIST_SLOT_TEXT;
+      return WRIST_SLOT_EN_TEXT;
     case FINGER1_SLOT_ID:
-      return FINGER1_SLOT_TEXT;
+      return FINGER1_SLOT_EN_TEXT;
     case FINGER2_SLOT_ID:
-      return FINGER2_SLOT_TEXT;
+      return FINGER2_SLOT_EN_TEXT;
     case OFFHAND_SLOT_ID:
-      return OFFHAND_SLOT_TEXT;
+      return OFFHAND_SLOT_EN_TEXT;
     default:
       return "";
   }
@@ -114,7 +133,9 @@ export function defaultItemSet(jobAbbrev: string): ItemSet {
     itemSet.push(EMPTY_EQUIPMENT_ID);
   });
 
-  let weaponsOfJob = EQUIPMENT_DATABASE_BY_KEYS.get(toEquipmentKeyString(jobAbbrev, WEAPON_SLOT_EN_TEXT));
+  let weaponsOfJob = EQUIPMENT_DATABASE_BY_KEYS.get(
+    toEquipmentKeyString(jobAbbrev, WEAPON_SLOT_EN_TEXT)
+  );
   if (weaponsOfJob !== undefined) {
     itemSet[WEAPON_SLOT_ID] = weaponsOfJob[0].id;
   }
@@ -127,7 +148,10 @@ export function calculatePlayerPowerFromInputs(
 ): PlayerPower {
   let power: PlayerPower = defaultPlayerPower();
 
-  power.mainStat += getBaseMainStat(totalState.mainPlayerJobAbbrev, totalState.race);
+  power.mainStat += getBaseMainStat(
+    totalState.mainPlayerJobAbbrev,
+    totalState.race
+  );
 
   totalState.itemSet.forEach((equipmentId) => {
     let equipment = EQUIPMENT_DATABASE_BY_ID.get(equipmentId);
@@ -212,14 +236,14 @@ export function calculatePowerByStat(power: PlayerPower, jobAbbrev: string) {
 
 export function isCaster(jobAbbrev: string) {
   switch (jobAbbrev) {
-    case WHM_JOB_NAME:
-    case SCH_JOB_NAME:
-    case AST_JOB_NAME:
-    case SGE_JOB_NAME:
-    case BLM_JOB_NAME:
-    case SMN_JOB_NAME:
-    case RDM_JOB_NAME:
-    case PCT_JOB_NAME:
+    case WHM_EN_NAME:
+    case SCH_EN_NAME:
+    case AST_EN_NAME:
+    case SGE_EN_NAME:
+    case BLM_EN_NAME:
+    case SMN_EN_NAME:
+    case RDM_EN_NAME:
+    case PCT_EN_NAME:
       return true;
     default:
       return false;
@@ -239,7 +263,7 @@ export function updateOnePlayerPower(
   newTotalState.equipmentDatas[id].power = updatedPower;
 
   setTotalState({
-    ...newTotalState
+    ...newTotalState,
   });
 }
 
@@ -252,11 +276,13 @@ export function updateAllPlayerPower(
   );
 
   let newTotalState = { ...totalState };
-  newTotalState.equipmentDatas.forEach((data: SingleEquipmentInputSaveState) => {
-    data.power = updatedPower;
-  })
+  newTotalState.equipmentDatas.forEach(
+    (data: SingleEquipmentInputSaveState) => {
+      data.power = updatedPower;
+    }
+  );
 
   setTotalState({
-    ...newTotalState
+    ...newTotalState,
   });
 }

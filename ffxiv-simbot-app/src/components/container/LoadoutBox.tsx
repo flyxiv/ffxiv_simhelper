@@ -8,7 +8,15 @@ import {
   defaultSingleEquipmentInput,
 } from "../../const/DefaultSingleEquipmentInput";
 import { BEST_PARTNER_URL } from "../../App";
-import { DEFAULT_LOADOUT_TEXT, LOAD_COMPLETE_TEXT, LOADOUT_LOAD_TEXT, LOADOUT_WRITE_TEXT, NAME_TEXT, PLD_EN_NAME, SCH_EN_NAME } from "../../const/languageTexts";
+import {
+  DEFAULT_LOADOUT_TEXT,
+  LOAD_COMPLETE_TEXT,
+  LOADOUT_LOAD_TEXT,
+  LOADOUT_WRITE_TEXT,
+  NAME_TEXT,
+  PLD_EN_NAME,
+  SCH_EN_NAME,
+} from "../../const/languageTexts";
 
 export const inputStyle = {
   width: "60%",
@@ -31,7 +39,7 @@ export const inputStyle = {
   },
 };
 
-export const LoadoutInput = styled(TextField)(({ }) => inputStyle);
+export const LoadoutInput = styled(TextField)(({}) => inputStyle);
 
 interface LoadoutMetaData {
   loadoutName: string;
@@ -82,7 +90,14 @@ export function LoadoutBox(
         paddingX: 2,
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", padding: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          padding: 2,
+          width: "100%",
+        }}
+      >
         <Typography
           variant="h2"
           color={AppConfigurations.primary}
@@ -101,7 +116,7 @@ export function LoadoutBox(
           />
         </Box>
       </Box>
-      <Box padding={1} display="flex">
+      <Box>
         <LoadoutInput
           label={NAME_TEXT}
           value={textFieldInputLoadoutName}
@@ -109,23 +124,26 @@ export function LoadoutBox(
             setTextFieldInputLoadoutName(e.target.value);
           }}
           fullWidth
-          sx={{ backgroundColor: "white" }}
+          sx={{ backgroundColor: "white", width: "100%" }}
         />
-        {LoadoutOverwriteButton(
-          loadoutSaveKey,
-          loadoutMetadataSaveKey,
-          textFieldInputLoadoutName,
-          totalState,
-          setLoadoutMetadata,
-          setTextFieldInputLoadoutName
-        )}
-        {LoadoutLoadButton(
-          loadoutSaveKey,
-          simulationName,
-          setTotalState,
-          setTextFieldInputLoadoutName,
-          numberOfEquipmentSets
-        )}
+
+        <Box padding={1} display="flex" justifyContent="space-evenly">
+          {LoadoutOverwriteButton(
+            loadoutSaveKey,
+            loadoutMetadataSaveKey,
+            textFieldInputLoadoutName,
+            totalState,
+            setLoadoutMetadata,
+            setTextFieldInputLoadoutName
+          )}
+          {LoadoutLoadButton(
+            loadoutSaveKey,
+            simulationName,
+            setTotalState,
+            setTextFieldInputLoadoutName,
+            numberOfEquipmentSets
+          )}
+        </Box>
       </Box>
     </Box>
   );
@@ -142,7 +160,6 @@ function LoadoutOverwriteButton(
   return (
     <Button
       sx={{
-        marginX: 1,
         backgroundColor: AppConfigurations.primary,
         color: "black",
         borderRadius: 2,
@@ -162,7 +179,11 @@ function LoadoutOverwriteButton(
         setTextFieldInputLoadoutName("");
       }}
     >
-      <Typography sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}>{LOADOUT_WRITE_TEXT}</Typography>
+      <Typography
+        sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}
+      >
+        {LOADOUT_WRITE_TEXT}
+      </Typography>
     </Button>
   );
 }
@@ -201,7 +222,11 @@ function LoadoutLoadButton(
         setTextFieldInputLoadoutName(LOAD_COMPLETE_TEXT);
       }}
     >
-      <Typography sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}>{LOADOUT_LOAD_TEXT}</Typography>
+      <Typography
+        sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}
+      >
+        {LOADOUT_LOAD_TEXT}
+      </Typography>
     </Button>
   );
 }
