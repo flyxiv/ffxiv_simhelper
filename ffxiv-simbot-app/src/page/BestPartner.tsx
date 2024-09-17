@@ -116,7 +116,8 @@ export function BestPartner() {
                   totalState,
                   setTotalState,
                   true,
-                  true
+                  true,
+                  false
                 )}
               </EquipmentBoard>
             </StatWeightsInputContainer>

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Box, styled } from "@mui/material";
 import {
   BODY_WIDTH,
-  SINGLE_INPUT_SAVE_NAME,
   STAT_WEIGHTS_REQUEST_SAVE_NAME,
   STAT_WEIGHTS_URL,
 } from "../App";

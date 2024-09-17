@@ -230,12 +230,43 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
 ) {
   const handleJobChange = (event: SelectChangeEvent<string>) => {
     let newJobAbbrev = event.target.value;
+    let weaponsForNewJob = EQUIPMENT_DATABASE_BY_KEYS.get(
+      toEquipmentKeyString(newJobAbbrev, WEAPON_SLOT_EN_TEXT)
+    );
+
     let newTotalState = { ...totalEquipmentState };
 
     newTotalState.equipmentDatas.forEach(
       (data: SingleEquipmentInputSaveState) => {
-        resetOnlyUnequippableEquipment(data);
         data.mainPlayerJobAbbrev = newJobAbbrev;
+        resetOnlyUnequippableEquipment(data);
+        resetInvalidPartnersForNewJob(data);
+
+        if (weaponsForNewJob !== undefined) {
+          let newSet = [...data.itemSet];
+          let currentEquipment = weaponsForNewJob[0];
+
+          newSet[WEAPON_SLOT_ID] = currentEquipment.id;
+          data.itemSet = newSet;
+
+          let newGearSetMaterias = [...data.gearSetMaterias];
+
+          let materiaSlotCount = 0;
+          if (currentEquipment !== undefined) {
+            materiaSlotCount = currentEquipment.pentameldable
+              ? 5
+              : currentEquipment.materiaSlotCount;
+            let defaultMaterias: Materia[] = [];
+            for (let i = 0; i < materiaSlotCount; i++) {
+              defaultMaterias.push(EMPTY_MATERIA);
+            }
+            newGearSetMaterias[WEAPON_SLOT_ID] = defaultMaterias;
+          } else {
+            newGearSetMaterias[WEAPON_SLOT_ID] = [];
+          }
+
+          data.gearSetMaterias = newGearSetMaterias;
+        }
       }
     );
 

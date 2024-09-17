@@ -76,7 +76,8 @@ function SingleMateriaMenu(
   }
   let possibleMaterias = getPossibleMateriasForEquipmentSlot(
     equipment,
-    materiaSlot
+    materiaSlot,
+    totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev
   );
   let key = `${id}-${equipment.slotName}-${equipment.id}-materia-${materiaSlot}`;
 

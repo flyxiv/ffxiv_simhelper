@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 
 export function StopButton() {

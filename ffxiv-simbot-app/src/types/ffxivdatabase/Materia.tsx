@@ -171,13 +171,16 @@ export function getPossibleMateriasForEquipmentSlot(
 
     if (statName === firstSubStat) {
       possibleMaterias.splice(i, 1);
+      i = i - 1;
     }
 
     if (!casterJob && statName === SPS_STAT_NAME) {
       possibleMaterias.splice(i, 1);
+      i = i - 1;
     }
     if (casterJob && statName === SKS_STAT_NAME) {
       possibleMaterias.splice(i, 1);
+      i = i - 1;
     }
 
     if (statName === secondSubStat) {
@@ -185,11 +188,9 @@ export function getPossibleMateriasForEquipmentSlot(
     }
   }
 
-  if (secondSubStatIdx > 0) {
-    let tmp = possibleMaterias[secondSubStatIdx];
-    possibleMaterias[secondSubStatIdx] =
-      possibleMaterias[possibleMaterias.length - 1];
-    possibleMaterias[possibleMaterias.length - 1] = tmp;
+  if (secondSubStatIdx >= 0) {
+    possibleMaterias.push(possibleMaterias[secondSubStatIdx]);
+    possibleMaterias = possibleMaterias.slice(1, possibleMaterias.length);
   }
 
   return possibleMaterias;
