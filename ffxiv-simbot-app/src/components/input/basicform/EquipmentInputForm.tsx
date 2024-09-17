@@ -266,12 +266,22 @@ function EquipmentMenuOfOneSlot(
 const LONG_ITEM_WIDTH = "96%";
 const SHORT_ITEM_WIDTH = "46%";
 
-const EQUIPMENT_ITEM_WIDTH = {
-  xs: LONG_ITEM_WIDTH,
-  sm: LONG_ITEM_WIDTH,
-  md: LONG_ITEM_WIDTH,
-  lg: SHORT_ITEM_WIDTH,
-  xl: SHORT_ITEM_WIDTH,
+const EQUIPMENT_ITEM_WIDTH = (itemCount: number) => {
+  return itemCount > 1
+    ? {
+        xs: LONG_ITEM_WIDTH,
+        sm: LONG_ITEM_WIDTH,
+        md: LONG_ITEM_WIDTH,
+        lg: LONG_ITEM_WIDTH,
+        xl: LONG_ITEM_WIDTH,
+      }
+    : {
+        xs: LONG_ITEM_WIDTH,
+        sm: LONG_ITEM_WIDTH,
+        md: LONG_ITEM_WIDTH,
+        lg: SHORT_ITEM_WIDTH,
+        xl: SHORT_ITEM_WIDTH,
+      };
 };
 
 export function EquipmentSelectionMenu(
@@ -279,16 +289,19 @@ export function EquipmentSelectionMenu(
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function,
   onlyBuffJobs: boolean = false,
-  hasTimeInput: boolean = true
+  hasTimeInput: boolean = true,
+  isDouble: boolean = false
 ) {
   let xs = 12;
   let mainCharacterJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
+  let inputCount = isDouble ? 2 : 1;
+
   return (
     <EquipmentGridContainer container>
       <EquipmentGridItemBox
         key={`${id}_JobSelectionItemBox`}
-        sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
         <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
           {onlyBuffJobs
@@ -307,7 +320,7 @@ export function EquipmentSelectionMenu(
       <EquipmentGridItemBox
         marginBottom={1}
         key={`${id}_RaceItemBox`}
-        sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
         <InputEquipmentBox item xs={xs} key="Race">
           {MainPlayerRaceSelection(
@@ -332,7 +345,7 @@ export function EquipmentSelectionMenu(
         return (
           <EquipmentGridItemBox
             key={`${id}_equipment_${slotName}_itembox`}
-            sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+            sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
           >
             <InputEquipmentBox
               item
@@ -352,7 +365,7 @@ export function EquipmentSelectionMenu(
       })}
       <EquipmentGridItemBox
         key={`food_selectionbox_${id}`}
-        sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
         <InputEquipmentBox item xs={xs} key={`food_${id}`}>
           {FoodSelection(id, totalEquipmentState, setTotalEquipmentState)}
@@ -361,7 +374,7 @@ export function EquipmentSelectionMenu(
 
       <EquipmentGridItemBox
         key={`pot_selectionbox_${id}`}
-        sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
         <InputEquipmentBox item xs={xs} key={`pot_${id}`}>
           {PotSelection(id, totalEquipmentState, setTotalEquipmentState)}
@@ -370,7 +383,10 @@ export function EquipmentSelectionMenu(
 
       {PartnerSelectionMenu(id, totalEquipmentState, setTotalEquipmentState)}
       {hasTimeInput ? (
-        <EquipmentGridItemBox>
+        <EquipmentGridItemBox
+          key={`${id}_timeinput`}
+          sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
+        >
           <InputEquipmentBox item xs={xs}>
             {SimulationUpperInputTimeTextBox(
               TIME_INPUT_LABEL_TEXT,
@@ -393,13 +409,14 @@ function PartnerSelectionMenu(
 ) {
   let mainPlayerJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
+  let inputCount = totalEquipmentState.equipmentDatas.length;
 
   if (mainPlayerJobAbbrev === AST_EN_NAME) {
     return (
       <>
         <EquipmentGridItemBox
           key={`partner1_${id}_grid`}
-          sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+          sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
         >
           <InputEquipmentBox item xs={12} key={`partner1_${id}`}>
             {Partner1Selection(
@@ -413,7 +430,7 @@ function PartnerSelectionMenu(
 
         <EquipmentGridItemBox
           key={`partner2_${id}_grid`}
-          sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+          sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
         >
           <InputEquipmentBox item xs={12} key={`partner2_${id}`}>
             {Partner2Selection(
@@ -433,7 +450,7 @@ function PartnerSelectionMenu(
           item
           xs={12}
           key={`partner1_${id}`}
-          sx={{ width: EQUIPMENT_ITEM_WIDTH }}
+          sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
         >
           {Partner1Selection(
             id,

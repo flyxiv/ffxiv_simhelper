@@ -1,7 +1,6 @@
 export const ENGLISH_MODE = "en";
 export const KOREAN_MODE = "ko";
 
-
 export const AppConfigurations = {
   backgroundOne: "#121212",
   backgroundTwo: "#201F28",
@@ -14,7 +13,7 @@ export const AppConfigurations = {
   secondary: "#03DAC6",
   secondaryVariant: "#018786",
 
-  alert: '#CF6679',
+  alert: "#CF6679",
 
   languageMode: KOREAN_MODE,
 
@@ -23,7 +22,7 @@ export const AppConfigurations = {
     sm: "2vh",
     md: "2vh",
     lg: "2vh",
-    xl: "2vh"
+    xl: "2vh",
   },
 
   body2FontSize: {
@@ -34,5 +33,5 @@ export const AppConfigurations = {
     xl: "1.5vh",
   },
 
-  electron: true
+  electron: true,
 };

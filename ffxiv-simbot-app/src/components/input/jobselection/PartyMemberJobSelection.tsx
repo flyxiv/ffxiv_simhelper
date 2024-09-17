@@ -11,26 +11,59 @@ import { CustomFormControl } from "../basicform/BasicInputForm";
 import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
 import { isHealer, isTank } from "../../../types/ffxivdatabase/PlayerPower";
-import { BUFF_JOBS_LIST, DPS_JOBS, HEALER_JOBS, TANK_JOBS } from "../../../types/ffxivdatabase/PartyCompositionMaker";
-import { PARTY_MEMBER_LABEL_TEXT } from "../../../const/languageTexts";
+import {
+  BUFF_JOBS_LIST,
+  DPS_JOBS,
+  HEALER_JOBS,
+  TANK_JOBS,
+} from "../../../types/ffxivdatabase/PartyCompositionMaker";
+import {
+  DPS_TEXT,
+  HEALER_TEXT,
+  PARTY_MEMBER_LABEL_TEXT,
+  PLD_EN_NAME,
+  SCH_EN_NAME,
+  TANK_TEXT,
+} from "../../../const/languageTexts";
 
 let ALIGN = "center";
 
-function filterDuplicateBuffJobs(jobList: Array<string>, mainCharacterJob: string, partyMemberJobAbbrevs: Array<string>) {
+function filterDuplicateBuffJobs(
+  jobList: Array<string>,
+  mainCharacterJob: string,
+  partyMemberJobAbbrevs: Array<string>
+) {
   return jobList.filter((jobAbbrev) => {
     if (!BUFF_JOBS_LIST.includes(jobAbbrev)) {
-      return true
+      return true;
     }
 
-    return jobAbbrev !== mainCharacterJob && !partyMemberJobAbbrevs.includes(jobAbbrev)
-  })
+    return (
+      jobAbbrev !== mainCharacterJob &&
+      !partyMemberJobAbbrevs.includes(jobAbbrev)
+    );
+  });
 }
 
-export function getRoleByIdAndMainCharacterJob(id: number, mainCharacterJob: string, partyMemberJobAbbrevs: Array<string>) {
-  let otherPartyMemberJobAbbrevs = partyMemberJobAbbrevs.filter((_, index) => index !== id - 1);
+export function getRoleByIdAndMainCharacterJob(
+  id: number,
+  mainCharacterJob: string,
+  partyMemberJobAbbrevs: Array<string>
+) {
+  let otherPartyMemberJobAbbrevs = partyMemberJobAbbrevs.filter(
+    (_, index) => index !== id - 1
+  );
   let tank_jobs = TANK_JOBS;
-  let healer_jobs = filterDuplicateBuffJobs(HEALER_JOBS, mainCharacterJob, otherPartyMemberJobAbbrevs);
-  let dps_jobs = filterDuplicateBuffJobs(DPS_JOBS, mainCharacterJob, otherPartyMemberJobAbbrevs);
+  let healer_jobs = filterDuplicateBuffJobs(
+    HEALER_JOBS,
+    mainCharacterJob,
+    otherPartyMemberJobAbbrevs
+  );
+  let dps_jobs = filterDuplicateBuffJobs(
+    DPS_JOBS,
+    mainCharacterJob,
+    otherPartyMemberJobAbbrevs
+  );
 
   if (id == 1) {
     return tank_jobs;
@@ -66,14 +99,18 @@ export function PartyMemberJobSelection(
 ) {
   let playerId = `${PARTY_MEMBER_LABEL_TEXT} ${id}`;
   const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
-    const newJobNames = totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs.map((jobName, i) => {
-      if (i === index) {
-        return e.target.value;
-      }
-      return jobName;
-    });
+    const newJobNames =
+      totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs.map(
+        (jobName, i) => {
+          if (i === index) {
+            return e.target.value;
+          }
+          return jobName;
+        }
+      );
 
-    let newAvailablePartyIds = totalEquipmentState.equipmentDatas[0].partyMemberIds;
+    let newAvailablePartyIds =
+      totalEquipmentState.equipmentDatas[0].partyMemberIds;
     newAvailablePartyIds = newAvailablePartyIds.filter(
       (partyId) => partyId !== id
     );
@@ -88,7 +125,7 @@ export function PartyMemberJobSelection(
     newTotalState.equipmentDatas.forEach((data) => {
       data.partyMemberJobAbbrevs = newJobNames;
       data.partyMemberIds = newAvailablePartyIds;
-    })
+    });
 
     if (newTotalState.equipmentDatas[0].mainPlayerPartner1Id === id) {
       newTotalState.equipmentDatas[0].mainPlayerPartner1Id = null;
@@ -103,15 +140,31 @@ export function PartyMemberJobSelection(
 
   let key = `job-select-partymember-${id}`;
 
-  let jobAbbrevs = getRoleByIdAndMainCharacterJob(id, totalEquipmentState.equipmentDatas[0].mainPlayerJobAbbrev, totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs);
+  let jobAbbrevs = getRoleByIdAndMainCharacterJob(
+    id,
+    totalEquipmentState.equipmentDatas[0].mainPlayerJobAbbrev,
+    totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs
+  );
+
+  let playerLabel = jobAbbrevs.includes(SCH_EN_NAME)
+    ? HEALER_TEXT
+    : jobAbbrevs.includes(PLD_EN_NAME)
+    ? TANK_TEXT
+    : DPS_TEXT;
 
   return (
     <CustomFormControl fullWidth>
-      <InputLabel id="JobSelect"> <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{playerId}</Typography></InputLabel>
+      <InputLabel id="JobSelect">
+        <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
+          {playerLabel}
+        </Typography>
+      </InputLabel>
       <Select
         labelId={playerId}
         id={key}
-        value={totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[id - 1]}
+        value={
+          totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[id - 1]
+        }
         key={key}
         label="Job Name"
         onChange={(event) => {
@@ -126,7 +179,7 @@ export function PartyMemberJobSelection(
         }}
       >
         {jobAbbrevs.map((jobAbbrev) => {
-          return JobMenuItem(jobAbbrev, ALIGN, false)
+          return JobMenuItem(jobAbbrev, ALIGN, false);
         })}
 
         <Divider />
@@ -136,6 +189,6 @@ export function PartyMemberJobSelection(
           </Typography>
         </MenuItem>
       </Select>
-    </CustomFormControl >
+    </CustomFormControl>
   );
 }

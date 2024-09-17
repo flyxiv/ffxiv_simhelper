@@ -1,9 +1,9 @@
 import { styled, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
-  SINGLE_INPUT_SAVE_NAME,
   GEAR_COMPARE_RESULT_URL,
   GEAR_COMPARE_RESPONSE_SAVE_NAME,
+  GEAR_COMPARE_REQUEST_SAVE_NAME,
 } from "../../App";
 import { useState } from "react";
 import { requestButtonStyle } from "./Style";
@@ -38,7 +38,7 @@ export function GearCompareRequestButton(totalState: EquipmentInput) {
   const handleClick = async () => {
     setButtonText(loadingButtonText(requestCount));
     let inputJson = JSON.stringify(totalState);
-    localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
+    localStorage.setItem(GEAR_COMPARE_REQUEST_SAVE_NAME, inputJson);
 
     let request = createGearCompareRequest(
       totalState.equipmentDatas[0],

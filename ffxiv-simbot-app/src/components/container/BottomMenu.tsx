@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 import { StatSummary } from "./StatSummary";
 import { EquipmentInput } from "../../types/EquipmentInput";
-import { GEAR_COMPARE_INPUT_CONTAINER_WIDTH } from "../../page/GearCompare";
 import { GearCompareRequestButton } from "../basic/GearCompareRequestButton";
 import { BODY_WIDTH } from "../../App";
 import { MENU_WIDTH } from "./LeftMenu";

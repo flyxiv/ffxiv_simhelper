@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
-import { BODY_WIDTH, SINGLE_INPUT_SAVE_NAME, STAT_WEIGHTS_URL } from "../App";
+import {
+  BODY_WIDTH,
+  SINGLE_INPUT_SAVE_NAME,
+  STAT_WEIGHTS_REQUEST_SAVE_NAME,
+  STAT_WEIGHTS_URL,
+} from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatPowerSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
@@ -52,13 +57,19 @@ export function isNotValid(input: EquipmentInput) {
     if (input.equipmentDatas[i].usePot === undefined) {
       return true;
     }
+
+    if (input.equipmentDatas[i].partyMemberJobAbbrevs.length === 0) {
+      return true;
+    }
   }
 
   return false;
 }
 
 export function StatWeights() {
-  let mostRecentInputState = localStorage.getItem(SINGLE_INPUT_SAVE_NAME);
+  let mostRecentInputState = localStorage.getItem(
+    STAT_WEIGHTS_REQUEST_SAVE_NAME
+  );
   let mostRecentInput = null;
 
   if (mostRecentInputState === null) {

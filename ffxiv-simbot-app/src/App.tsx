@@ -1,4 +1,9 @@
-import { HashRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import "./App.css";
 import { SimulationResult } from "./page/SimulationResult";
 import { QuickSim } from "./page/QuickSim";
@@ -9,12 +14,19 @@ import { BestPartner } from "./page/BestPartner";
 import { GearCompareResult } from "./page/GearCompareResult";
 import { BestPartnerResult } from "./page/BestPartnerResult";
 import { StatWeightsResult } from "./page/StatWeightsResult";
-import { MENU_WIDTH_VW_LG, MENU_WIDTH_VW_XS, MENU_WIDTH_VW_XL, MENU_WIDTH_VW_SM, MENU_WIDTH_VW_MD } from "./components/container/LeftMenu";
+import {
+  MENU_WIDTH_VW_LG,
+  MENU_WIDTH_VW_XS,
+  MENU_WIDTH_VW_XL,
+  MENU_WIDTH_VW_SM,
+  MENU_WIDTH_VW_MD,
+} from "./components/container/LeftMenu";
 import { useEffect } from "react";
 
 export const SINGLE_INPUT_SAVE_NAME = "mostRecentSingleInput";
 export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
 export const GEAR_COMPARE_REQUEST_SAVE_NAME = "mostRecentGearCompareRequest";
+export const STAT_WEIGHTS_REQUEST_SAVE_NAME = "mostRecentStatWeightsRequest";
 
 export const QUICK_SIM_RESPONSE_SAVE_NAME = "mostRecentQuickSimResponse";
 export const GEAR_COMPARE_RESPONSE_SAVE_NAME = "mostRecentGearCompareResponse";
@@ -33,16 +45,13 @@ export const BEST_PARTNER_RESULT_URL = "bestpartnersimulationresult";
 export const STAT_WEIGHTS_URL = "statweights";
 export const STAT_WEIGHTS_RESULT_URL = "statweightssimulationresult";
 
-
-
 export const BODY_WIDTH = {
   xs: `${100 - MENU_WIDTH_VW_XS}vw`,
   sm: `${100 - MENU_WIDTH_VW_SM}vw`,
   md: `${100 - MENU_WIDTH_VW_MD}vw`,
   lg: `${100 - MENU_WIDTH_VW_LG}vw`,
   xl: `${100 - MENU_WIDTH_VW_XL}vw`,
-}
-
+};
 
 function App() {
   return (

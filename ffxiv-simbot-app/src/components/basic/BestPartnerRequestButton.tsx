@@ -7,9 +7,9 @@ import {
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
 import {
+  BEST_PARTNER_INPUT_SAVE_NAME,
   BEST_PARTNER_RESPONSE_SAVE_NAME,
   BEST_PARTNER_RESULT_URL,
-  SINGLE_INPUT_SAVE_NAME,
 } from "../../App";
 import { useState } from "react";
 import { requestButtonStyle } from "./Style";
@@ -59,7 +59,7 @@ export function BestPartnerRequestButton(totalState: EquipmentInput) {
   const handleClick = async () => {
     setButtonText(loadingButtonText(requestCount));
     let inputJson = JSON.stringify(totalState);
-    localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
+    localStorage.setItem(BEST_PARTNER_INPUT_SAVE_NAME, inputJson);
 
     let bestPartnerResponseTable: BestPartnerResponseTable = {
       combatTimeMillisecond: totalState.equipmentDatas[0].combatTimeMillisecond,

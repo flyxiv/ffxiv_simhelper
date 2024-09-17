@@ -4,9 +4,9 @@ import { EquipmentInput } from "../../types/EquipmentInput";
 import { AppConfigurations, ENGLISH_MODE } from "../../Themes";
 import { ITEM_BOTTOM_MENU_MIN_HEIGHT } from "../items/Styles";
 
-const PARTY_MIN_ILVL =
+export const PARTY_MIN_ILVL =
   AppConfigurations.languageMode === ENGLISH_MODE ? 710 : 690;
-const PARTY_MAX_ILVL =
+export const PARTY_MAX_ILVL =
   AppConfigurations.languageMode === ENGLISH_MODE ? 730 : 730;
 
 export function PartyMemberIlvlSelection(

@@ -7,7 +7,7 @@ import {
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
 import {
-  SINGLE_INPUT_SAVE_NAME,
+  STAT_WEIGHTS_REQUEST_SAVE_NAME,
   STAT_WEIGHTS_RESPONSE_SAVE_NAME,
   STAT_WEIGHTS_RESULT_URL,
 } from "../../App";
@@ -73,7 +73,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
   const handleClick = async () => {
     setButtonText(loadingButtonText(requestCount));
     let inputJson = JSON.stringify(totalState);
-    localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
+    localStorage.setItem(STAT_WEIGHTS_REQUEST_SAVE_NAME, inputJson);
 
     let statWeightsResponseTable: StatWeightsResponseTable = {
       combatTimeMillisecond: totalState.equipmentDatas[0].combatTimeMillisecond,

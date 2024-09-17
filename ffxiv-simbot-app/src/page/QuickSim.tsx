@@ -56,6 +56,10 @@ export function isNotValid(input: EquipmentInput) {
     if (input.equipmentDatas[i].usePot === undefined) {
       return true;
     }
+
+    if (input.equipmentDatas[i].partyMemberJobAbbrevs.length === 0) {
+      return true;
+    }
   }
 
   return false;
@@ -74,6 +78,7 @@ export function QuickSim() {
   if (isNotValid(mostRecentInput)) {
     mostRecentInput = defaultSingleEquipmentInput();
   }
+  console.log(mostRecentInput);
 
   const [totalState, setTotalState] = useState(mostRecentInput);
 

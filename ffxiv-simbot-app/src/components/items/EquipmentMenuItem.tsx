@@ -7,7 +7,11 @@ const EquipmentMenu = styled(MenuItem)`
   ${MenuItemStyle}
 `;
 
-export function EquipmentMenuItem(id: number, equipment: Equipment, jobAbbrev: string) {
+export function EquipmentMenuItem(
+  id: number,
+  equipment: Equipment,
+  jobAbbrev: string
+) {
   return (
     <EquipmentMenu value={equipment.id} key={`${id}_${equipment.name}_select`}>
       {EquipmentItem(equipment, jobAbbrev)}

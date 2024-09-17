@@ -126,8 +126,9 @@ export function slotIndexToSlotName(slotIndex: number): string {
   }
 }
 
-export function defaultItemSet(jobAbbrev: string): ItemSet {
+export function defaultItemSet(jobAbbrev: string): [ItemSet, number] {
   let itemSet: number[] = [];
+  let materiaCount = 0;
 
   TOTAL_SLOTS.forEach((_) => {
     itemSet.push(EMPTY_EQUIPMENT_ID);
@@ -138,9 +139,12 @@ export function defaultItemSet(jobAbbrev: string): ItemSet {
   );
   if (weaponsOfJob !== undefined) {
     itemSet[WEAPON_SLOT_ID] = weaponsOfJob[0].id;
+    materiaCount = weaponsOfJob[0].pentameldable
+      ? 5
+      : weaponsOfJob[0].materiaSlotCount;
   }
 
-  return itemSet;
+  return [itemSet, materiaCount];
 }
 
 export function calculatePlayerPowerFromInputs(

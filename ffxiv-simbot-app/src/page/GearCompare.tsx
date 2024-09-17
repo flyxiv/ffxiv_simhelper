@@ -49,7 +49,11 @@ let EquipmentBoard = styled(Box)`
 `;
 
 export function isNotValid(input: EquipmentInput) {
-  if (input.equipmentDatas === null || input.equipmentDatas === undefined) {
+  if (
+    input.equipmentDatas === null ||
+    input.equipmentDatas === undefined ||
+    input.equipmentDatas.length !== 2
+  ) {
     return true;
   }
 
@@ -70,6 +74,7 @@ export function GearCompare() {
   let mostRecentInputState = localStorage.getItem(
     GEAR_COMPARE_REQUEST_SAVE_NAME
   );
+  console.log(mostRecentInputState);
   let mostRecentInput = null;
 
   if (mostRecentInputState === null) {
@@ -109,7 +114,14 @@ export function GearCompare() {
                 padding="1%"
               >
                 <EquipmentBoard>
-                  {EquipmentSelectionMenu(0, totalState, setTotalState)}
+                  {EquipmentSelectionMenu(
+                    0,
+                    totalState,
+                    setTotalState,
+                    false,
+                    true,
+                    true
+                  )}
                 </EquipmentBoard>
 
                 <Box
@@ -127,7 +139,14 @@ export function GearCompare() {
                 </Box>
 
                 <EquipmentBoard>
-                  {EquipmentSelectionMenu(1, totalState, setTotalState)}
+                  {EquipmentSelectionMenu(
+                    1,
+                    totalState,
+                    setTotalState,
+                    false,
+                    true,
+                    true
+                  )}
                 </EquipmentBoard>
               </Box>
             </GearCompareEquipmentInputContainer>

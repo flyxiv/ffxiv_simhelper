@@ -25,8 +25,6 @@ const totalRequestCount = 1000;
 const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
 
 export function QuickSimRequestButton(totalState: EquipmentInput) {
-  let [simulating, setSimulating] = useState(false);
-
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
   `;
@@ -41,14 +39,9 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
   let count = 0;
 
   const handleClick = async () => {
-    setSimulating(!simulating);
-
-    if (!simulating) {
-      window.location.reload();
-    }
-
     setButtonText(loadingButtonText(requestCount));
     let inputJson = JSON.stringify(totalState);
+    console.log(inputJson);
     localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
     let request = createQuickSimRequest(totalState.equipmentDatas[0]);
