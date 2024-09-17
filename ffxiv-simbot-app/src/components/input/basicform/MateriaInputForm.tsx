@@ -124,7 +124,12 @@ function SingleMateriaMenu(
         })}
         <Divider />
         <MateriaMenu value={"empty"}>
-          <Box display="flex" justifyContent={"center"} alignItems={"center"} height="100%">
+          <Box
+            display="flex"
+            justifyContent={"center"}
+            alignItems={"center"}
+            height="100%"
+          >
             <Typography align="center">{EMPTY_TEXT}</Typography>
           </Box>
         </MateriaMenu>

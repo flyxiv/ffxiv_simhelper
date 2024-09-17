@@ -1,4 +1,4 @@
-import { styled, Button } from "@mui/material";
+import { styled, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   calculateIlvlAdjustment,
@@ -20,11 +20,14 @@ import {
   USE_POT_VAL,
 } from "../../types/EquipmentInput";
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
+import { StopButton } from "./StopButton";
+import { aggregateDamageStatisticsFromSampleRuns } from "./GearCompareRequestButton";
 
 const totalRequestCount = 1000;
 const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
 
 export function QuickSimRequestButton(totalState: EquipmentInput) {
+  let [isRunning, setIsRunning] = useState(false);
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
   `;
@@ -39,9 +42,10 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
   let count = 0;
 
   const handleClick = async () => {
+    setIsRunning(true);
+
     setButtonText(loadingButtonText(requestCount));
     let inputJson = JSON.stringify(totalState);
-    console.log(inputJson);
     localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
     let request = createQuickSimRequest(totalState.equipmentDatas[0]);
@@ -90,40 +94,11 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
       (response) => response.simulationData[mainPlayerId].simulationSummary
     );
 
-    let maxDps = 0;
-    let totalDps = 0;
-    let maxRdps = 0;
-    let totalRdps = 0;
-    let totalEdps = 0;
-    let maxIndex = 0;
+    let damageSummary =
+      aggregateDamageStatisticsFromSampleRuns(damageSummaries);
 
-    damageSummaries.forEach((summary, index) => {
-      let rdps = summary.rdps;
-      let pdps = summary.pdps;
-      let edps = summary.edps;
-
-      totalDps += pdps;
-      totalRdps += rdps;
-      totalEdps += edps;
-
-      if (maxRdps < rdps) {
-        maxRdps = rdps;
-        maxIndex = index;
-      }
-      if (maxDps < pdps) {
-        maxDps = pdps;
-      }
-    });
-
-    //    let averageDps = totalDps / totalRequestCount;
-    let averageRdps = totalRdps / totalRequestCount;
-    let averageEdps = totalEdps / totalRequestCount;
-
-    response = finalResponses[maxIndex];
-    response.simulationData[mainPlayerId].simulationSummary.pdps = maxDps;
-    response.simulationData[mainPlayerId].simulationSummary.rdps = averageRdps;
-    response.simulationData[mainPlayerId].simulationSummary.edps = averageEdps;
-    response.simulationData[mainPlayerId].simulationSummary.maxRdps = maxRdps;
+    response = finalResponses[0];
+    response.simulationData[mainPlayerId].simulationSummary = damageSummary;
 
     const responseString = JSON.stringify(response);
     localStorage.setItem(QUICK_SIM_RESPONSE_SAVE_NAME, responseString);
@@ -131,9 +106,12 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
     navigate(`/${QUICKSIM_RESULT_URL}`);
   };
   return (
-    <RequestButton variant="contained" onClick={handleClick}>
-      {buttonText}
-    </RequestButton>
+    <Box display="flex" alignItems={"center"}>
+      <RequestButton variant="contained" onClick={handleClick}>
+        {buttonText}
+      </RequestButton>
+      {isRunning ? StopButton() : <Box />}
+    </Box>
   );
 }
 

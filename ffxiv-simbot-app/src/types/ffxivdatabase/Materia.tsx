@@ -1,9 +1,17 @@
-import { CRIT_STAT_NAME, DET_STAT_NAME, DH_STAT_NAME, SKS_STAT_NAME, SPS_STAT_NAME, TEN_STAT_NAME } from "../../const/languageTexts";
-import { Equipment } from "./Equipment";
+import {
+  CRIT_STAT_NAME,
+  DET_STAT_NAME,
+  DH_STAT_NAME,
+  SKS_STAT_NAME,
+  SPS_STAT_NAME,
+  TEN_STAT_NAME,
+} from "../../const/languageTexts";
+import { Equipment, getFirstSecondSubStat } from "./Equipment";
 import {
   convertEquipmentToFinalStat,
   FinalEquipmentStat,
 } from "./FinalEquipmentStat";
+import { isCaster } from "./ItemSet";
 import { PlayerPower } from "./PlayerPower";
 
 export type GearSetMaterias = Materia[][];
@@ -139,19 +147,52 @@ export function updateMateriaList(
 
 export function getPossibleMateriasForEquipmentSlot(
   equipment: Equipment,
-  materiaSlot: number
+  materiaSlot: number,
+  jobAbbrev: string
 ) {
+  let possibleMaterias: Array<string> = [];
   if (materiaSlot < equipment.materiaSlotCount) {
-    return NON_PENTAMELDABLE_MATERIAS;
+    possibleMaterias = [...NON_PENTAMELDABLE_MATERIAS];
   } else if (equipment.pentameldable && materiaSlot <= 5) {
     if (materiaSlot === equipment.materiaSlotCount) {
-      return NON_PENTAMELDABLE_MATERIAS;
+      possibleMaterias = [...NON_PENTAMELDABLE_MATERIAS];
     } else {
-      return PENTAMELDABLE_MATERIAS;
+      possibleMaterias = [...PENTAMELDABLE_MATERIAS];
     }
   }
 
-  return [];
+  let [firstSubStat, secondSubStat] = getFirstSecondSubStat(equipment);
+
+  let secondSubStatIdx = -1;
+  let casterJob = isCaster(jobAbbrev);
+
+  for (let i = 0; i < possibleMaterias.length; i++) {
+    let [statName, _] = possibleMaterias[i].split("+");
+
+    if (statName === firstSubStat) {
+      possibleMaterias.splice(i, 1);
+    }
+
+    if (!casterJob && statName === SPS_STAT_NAME) {
+      possibleMaterias.splice(i, 1);
+    }
+    if (casterJob && statName === SKS_STAT_NAME) {
+      possibleMaterias.splice(i, 1);
+    }
+
+    if (statName === secondSubStat) {
+      secondSubStatIdx = i;
+    }
+  }
+
+  if (secondSubStatIdx > 0) {
+    let tmp = possibleMaterias[secondSubStatIdx];
+    possibleMaterias[secondSubStatIdx] =
+      possibleMaterias[possibleMaterias.length - 1];
+    possibleMaterias[possibleMaterias.length - 1] = tmp;
+  }
+
+  return possibleMaterias;
 }
 
 export function toMateriaKey(materia: Materia | null) {

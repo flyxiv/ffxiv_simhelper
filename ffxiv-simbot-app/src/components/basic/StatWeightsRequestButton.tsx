@@ -1,4 +1,4 @@
-import { styled, Button } from "@mui/material";
+import { styled, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   calculateIlvlAdjustment,
@@ -40,6 +40,7 @@ import {
   WD_STAT_NAME,
 } from "../../const/languageTexts";
 import { getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
+import { StopButton } from "./StopButton";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/statweights";
 const WEAPON_DAMAGE_INCREASE = 10;
@@ -52,6 +53,8 @@ const SPS_INCREASE_AMOUNT = 5;
 const TEN_INCREASE_AMOUNT = 20;
 
 export function StatWeightsRequestButton(totalState: EquipmentInput) {
+  let [isRunning, setIsRunning] = useState(false);
+
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
   `;
@@ -71,6 +74,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
   let count = 0;
 
   const handleClick = async () => {
+    setIsRunning(true);
     setButtonText(loadingButtonText(requestCount));
     let inputJson = JSON.stringify(totalState);
     localStorage.setItem(STAT_WEIGHTS_REQUEST_SAVE_NAME, inputJson);
@@ -128,9 +132,12 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
     navigate(`/${STAT_WEIGHTS_RESULT_URL}`);
   };
   return (
-    <RequestButton variant="contained" onClick={handleClick}>
-      {buttonText}
-    </RequestButton>
+    <Box display="flex" alignItems="center">
+      <RequestButton variant="contained" onClick={handleClick}>
+        {buttonText}
+      </RequestButton>
+      {isRunning ? StopButton() : <Box />}
+    </Box>
   );
 }
 

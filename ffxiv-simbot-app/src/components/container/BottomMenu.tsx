@@ -23,7 +23,12 @@ export function BasicBottomMenu(
         zIndex: 1000,
       }}
     >
-      <Box paddingY={3} display="flex" flexDirection="column">
+      <Box
+        paddingY={3}
+        display="flex"
+        flexDirection="column"
+        sx={{ backgroundColor: AppConfigurations.backgroundTwo }}
+      >
         {StatSummary(totalState.equipmentDatas[0])}
         <Box display="inline-block" margin="auto" paddingTop={2}>
           {buttonComponentFunction(totalState)}

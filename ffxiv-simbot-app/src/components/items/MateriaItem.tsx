@@ -15,7 +15,6 @@ export function MateriaItem(
 
   let isSelected = toMateriaKey(currentlyEquippedMateria) === materiaKey;
   let isNotFullyUsed =
-    isSelected &&
     currentlyEquippedMateria.effectiveValue < currentlyEquippedMateria.maxValue;
 
   return (
@@ -27,7 +26,8 @@ export function MateriaItem(
       justifyContent="center"
       height="100%"
     >
-      <Box component={"img"}
+      <Box
+        component={"img"}
         src={getMateriaIconPath(materiaKey)}
         alt={getMateriaIconPath(materiaKey)}
         sx={{ width: imageSize, height: imageSize }}
@@ -39,7 +39,7 @@ export function MateriaItem(
           alignContent={"center"}
           color={isNotFullyUsed ? "red" : "white"}
           sx={{
-            fontSize: AppConfigurations.body2FontSize
+            fontSize: AppConfigurations.body2FontSize,
           }}
         >
           {isSelected

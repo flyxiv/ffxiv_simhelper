@@ -1,4 +1,4 @@
-import { styled, Button } from "@mui/material";
+import { styled, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   calculateIlvlAdjustment,
@@ -28,6 +28,7 @@ import {
   BestPartnerResponse,
   BestPartnerResponseTable,
 } from "../../types/BestPartnerResponse";
+import { StopButton } from "./StopButton";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
 
@@ -37,6 +38,7 @@ interface PartnerKey {
 }
 
 export function BestPartnerRequestButton(totalState: EquipmentInput) {
+  let [isRunning, setIsRunning] = useState(false);
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
   `;
@@ -57,6 +59,7 @@ export function BestPartnerRequestButton(totalState: EquipmentInput) {
   let count = 0;
 
   const handleClick = async () => {
+    setIsRunning(true);
     setButtonText(loadingButtonText(requestCount));
     let inputJson = JSON.stringify(totalState);
     localStorage.setItem(BEST_PARTNER_INPUT_SAVE_NAME, inputJson);
@@ -116,9 +119,12 @@ export function BestPartnerRequestButton(totalState: EquipmentInput) {
     navigate(`/${BEST_PARTNER_RESULT_URL}`);
   };
   return (
-    <RequestButton variant="contained" onClick={handleClick}>
-      {buttonText}
-    </RequestButton>
+    <Box display="flex" alignItems="center">
+      <RequestButton variant="contained" onClick={handleClick}>
+        {buttonText}
+      </RequestButton>
+      {isRunning ? StopButton() : <Box />}
+    </Box>
   );
 }
 

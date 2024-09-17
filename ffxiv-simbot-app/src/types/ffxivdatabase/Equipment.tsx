@@ -272,3 +272,65 @@ export function getEquipmentSlotsOfJob(jobAbbrev: string) {
     FINGER2_SLOT_EN_TEXT,
   ];
 }
+
+export function getFirstSecondSubStat(equipment: Equipment) {
+  let firstSubStat = CRIT_STAT_NAME;
+  let secondSubStat = DH_STAT_NAME;
+  if (equipment.criticalStrike > 0) {
+    if (equipment.criticalStrike === equipment.maxSubstat) {
+      firstSubStat = CRIT_STAT_NAME;
+    } else {
+      secondSubStat = CRIT_STAT_NAME;
+    }
+  }
+
+  if (equipment.directHit > 0) {
+    if (equipment.directHit === equipment.maxSubstat) {
+      firstSubStat = DH_STAT_NAME;
+    } else {
+      secondSubStat = DH_STAT_NAME;
+    }
+  }
+
+  if (equipment.determination > 0) {
+    if (equipment.determination === equipment.maxSubstat) {
+      firstSubStat = DET_STAT_NAME;
+    } else {
+      secondSubStat = DET_STAT_NAME;
+    }
+  }
+
+  if (equipment.skillSpeed > 0) {
+    if (equipment.skillSpeed === equipment.maxSubstat) {
+      firstSubStat = SKS_STAT_NAME;
+    } else {
+      secondSubStat = SKS_STAT_NAME;
+    }
+  }
+
+  if (equipment.spellSpeed > 0) {
+    if (equipment.spellSpeed === equipment.maxSubstat) {
+      firstSubStat = SPS_STAT_NAME;
+    } else {
+      secondSubStat = SPS_STAT_NAME;
+    }
+  }
+
+  if (equipment.tenacity > 0) {
+    if (equipment.tenacity === equipment.maxSubstat) {
+      firstSubStat = TEN_STAT_NAME;
+    } else {
+      secondSubStat = TEN_STAT_NAME;
+    }
+  }
+
+  if (equipment.piety > 0) {
+    if (equipment.piety === equipment.maxSubstat) {
+      firstSubStat = PIE_STAT_NAME;
+    } else {
+      secondSubStat = PIE_STAT_NAME;
+    }
+  }
+
+  return [firstSubStat, secondSubStat];
+}

@@ -16,10 +16,17 @@ import {
 } from "../../types/ffxivdatabase/PlayerPower";
 import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { StatWeightsData } from "../../page/StatWeightsResult";
-import { NAME_TEXT, NEXT_TEXT, PREV_TEXT, STAT_TEXT, TIME_TEXT, VALUES_TEXT } from "../../const/languageTexts";
+import {
+  NAME_TEXT,
+  NEXT_TEXT,
+  PREV_TEXT,
+  STAT_TEXT,
+  TIME_TEXT,
+  VALUES_TEXT,
+} from "../../const/languageTexts";
 
 const STAT_SUMMARY_BOX_WIDTH = "3vw";
-const POWER_SUMMARY_BOX_WIDTH = "4vw";
+const POWER_SUMMARY_BOX_WIDTH = "6vw";
 
 let StatSummaryBox = styled(Box)`
   ${StatSummaryBoxStyle}
@@ -35,13 +42,21 @@ let SingleStatBox = styled(Box)`
 
 export function StatSummaryTypography(text: string) {
   return (
-    <Typography variant="body1" align="center" fontSize={AppConfigurations.body2FontSize}>
+    <Typography
+      variant="body1"
+      align="center"
+      fontSize={AppConfigurations.body2FontSize}
+    >
       {text}
     </Typography>
   );
 }
 
-export function StatSummaryTypographyCompare(stat: string, compareStat: string, smaller: boolean) {
+export function StatSummaryTypographyCompare(
+  stat: string,
+  compareStat: string,
+  smaller: boolean
+) {
   let fontSize = 16;
 
   if (smaller) {
@@ -51,17 +66,30 @@ export function StatSummaryTypographyCompare(stat: string, compareStat: string, 
   let statValue = parseFloat(stat);
   let compareStatValue = parseFloat(compareStat);
 
-  let color = statValue > compareStatValue ? AppConfigurations.secondary : statValue < compareStatValue ? AppConfigurations.alert : "white";
-
+  let color =
+    statValue > compareStatValue
+      ? AppConfigurations.secondary
+      : statValue < compareStatValue
+      ? AppConfigurations.alert
+      : "white";
 
   return (
-    <Typography variant="body1" align="center" fontSize={fontSize} color={color}>
+    <Typography
+      variant="body1"
+      align="center"
+      fontSize={fontSize}
+      color={color}
+    >
       {stat}
     </Typography>
   );
 }
 
-export function SimulationInputSummary(power: PlayerPower, jobAbbrev: string, combatTimeMilliseconds: number) {
+export function SimulationInputSummary(
+  power: PlayerPower,
+  jobAbbrev: string,
+  combatTimeMilliseconds: number
+) {
   let simulationInputNames = getStatNames(jobAbbrev);
 
   return (
@@ -73,9 +101,7 @@ export function SimulationInputSummary(power: PlayerPower, jobAbbrev: string, co
         <SingleStatBox>{StatSummaryTypography(TIME_TEXT)}</SingleStatBox>
         {simulationInputNames.map((statName) => {
           return (
-            <SingleStatBox>
-              {StatSummaryTypography(statName)}
-            </SingleStatBox>
+            <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
           );
         })}
       </StatSummaryBox>
@@ -86,7 +112,9 @@ export function SimulationInputSummary(power: PlayerPower, jobAbbrev: string, co
         }}
       >
         <SingleStatBox>{StatSummaryTypography(VALUES_TEXT)}</SingleStatBox>
-        <SingleStatBox>{StatSummaryTypography(`${combatTimeMilliseconds}`)}</SingleStatBox>
+        <SingleStatBox>
+          {StatSummaryTypography(`${combatTimeMilliseconds}`)}
+        </SingleStatBox>
         {simulationInputNames.map((statName) => {
           return (
             <SingleStatBox>
@@ -101,7 +129,12 @@ export function SimulationInputSummary(power: PlayerPower, jobAbbrev: string, co
   );
 }
 
-export function StatSummaryGearCompare(jobAbbrev: string, power: PlayerPower, comparePower: PlayerPower, combatTimeMilliseconds: number) {
+export function StatSummaryGearCompare(
+  jobAbbrev: string,
+  power: PlayerPower,
+  comparePower: PlayerPower,
+  combatTimeMilliseconds: number
+) {
   let jobStatNames = getStatNames(jobAbbrev);
 
   return (
@@ -113,9 +146,7 @@ export function StatSummaryGearCompare(jobAbbrev: string, power: PlayerPower, co
         <SingleStatBox>{StatSummaryTypography(TIME_TEXT)}</SingleStatBox>
         {jobStatNames.map((statName) => {
           return (
-            <SingleStatBox>
-              {StatSummaryTypography(statName)}
-            </SingleStatBox>
+            <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
           );
         })}
       </StatSummaryBox>
@@ -126,7 +157,9 @@ export function StatSummaryGearCompare(jobAbbrev: string, power: PlayerPower, co
         }}
       >
         <SingleStatBox>{StatSummaryTypography(VALUES_TEXT)}</SingleStatBox>
-        <SingleStatBox>{StatSummaryTypography(`${combatTimeMilliseconds / 1000}`)}</SingleStatBox>
+        <SingleStatBox>
+          {StatSummaryTypography(`${combatTimeMilliseconds / 1000}`)}
+        </SingleStatBox>
         {jobStatNames.map((statName) => {
           return (
             <SingleStatBox>
@@ -140,25 +173,22 @@ export function StatSummaryGearCompare(jobAbbrev: string, power: PlayerPower, co
         })}
       </StatSummaryBox>
     </Box>
-  )
+  );
 }
-
 
 export function StatSummary(totalState: SingleEquipmentInputSaveState) {
   let jobStatNames = getStatNames(totalState.mainPlayerJobAbbrev);
   let power = totalState.power;
   let jobAbbrev = totalState.mainPlayerJobAbbrev;
   return (
-    <Box display="inline-block">
+    <Box display="flex" flexDirection={"column"}>
       <StatSummaryBox
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
         <SingleStatBox>{StatSummaryTypography(NAME_TEXT)}</SingleStatBox>
         {jobStatNames.map((statName) => {
           return (
-            <SingleStatBox>
-              {StatSummaryTypography(statName)}
-            </SingleStatBox>
+            <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
           );
         })}
       </StatSummaryBox>
@@ -187,12 +217,15 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
         {jobStatNames.map((statName) => {
           let lostStat = getStatLostByStatName(power, statName, jobAbbrev);
           let color =
-            lostStat === 0
-              ? AppConfigurations.secondary
-              : minusBackgroundColor;
+            lostStat === 0 ? AppConfigurations.secondary : minusBackgroundColor;
           return (
             <SingleStatBox>
-              <Typography variant="body1" color={color} align="center" fontSize={AppConfigurations.body2FontSize}>
+              <Typography
+                variant="body1"
+                color={color}
+                align="center"
+                fontSize={AppConfigurations.body2FontSize}
+              >
                 <b>{lostStat}</b>
               </Typography>
             </SingleStatBox>
@@ -226,13 +259,11 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
           sx={{ backgroundColor: AppConfigurations.backgroundThree }}
         >
           <SingleStatBox>{StatSummaryTypography(STAT_TEXT)}</SingleStatBox>
-
         </StatSummaryBox>
         <StatSummaryBox
           sx={{ backgroundColor: AppConfigurations.backgroundThree }}
         >
           <SingleStatBox>{StatSummaryTypography(VALUES_TEXT)}</SingleStatBox>
-
         </StatSummaryBox>
       </Box>
 
@@ -242,23 +273,25 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
             <StatSummaryBox
               sx={{ backgroundColor: AppConfigurations.backgroundFour }}
             >
-              <SingleStatBox>{StatSummaryTypography(statWeightData.statName)}</SingleStatBox>
-
+              <SingleStatBox>
+                {StatSummaryTypography(statWeightData.statName)}
+              </SingleStatBox>
             </StatSummaryBox>
             <StatSummaryBox
               sx={{ backgroundColor: AppConfigurations.backgroundFour }}
             >
-              <SingleStatBox>{StatSummaryTypography(`${statWeightData.rdpsIncreasePerPoint.toFixed(2)}`)}</SingleStatBox>
-
+              <SingleStatBox>
+                {StatSummaryTypography(
+                  `${statWeightData.rdpsIncreasePerPoint.toFixed(2)}`
+                )}
+              </SingleStatBox>
             </StatSummaryBox>
           </Box>
-        )
-
+        );
       })}
     </Box>
   );
 }
-
 
 export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
   let power = totalState.power;
@@ -268,13 +301,12 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
       <StatSummaryBox
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
-
-        <SinglePowerBox sx={{ flexGrow: 1 }}>{StatSummaryTypography(NAME_TEXT)}</SinglePowerBox>
+        <SinglePowerBox sx={{ flexGrow: 1 }}>
+          {StatSummaryTypography(NAME_TEXT)}
+        </SinglePowerBox>
         {POWER_NAMES.map((powerName) => {
           return (
-            <SinglePowerBox>
-              {StatSummaryTypography(powerName)}
-            </SinglePowerBox>
+            <SinglePowerBox>{StatSummaryTypography(powerName)}</SinglePowerBox>
           );
         })}
       </StatSummaryBox>
