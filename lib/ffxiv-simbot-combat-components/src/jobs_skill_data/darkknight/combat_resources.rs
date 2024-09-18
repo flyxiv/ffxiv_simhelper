@@ -3,7 +3,6 @@ use crate::event::ffxiv_event::FfxivEvent::Damage;
 use crate::jobs_skill_data::darkknight::abilities::make_darkknight_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
@@ -11,25 +10,31 @@ use crate::skill::SkillEvents;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::status::snapshot_status::snapshot_status_infos;
-use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
+use crate::types::{ComboType, PlayerIdType, PotencyType, ResourceIdType, ResourceType};
 use crate::types::{SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::{max, min};
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const DARK_KNIGHT_STACKS_COUNT: usize = 2;
+
 const MANA_MAX: ResourceType = 10000;
 const BLACK_BLOOD_MAX: ResourceType = 100;
-const BLOOD_WEAPON_STACK_MAX: ResourceType = 5;
+
+const LIVING_SHADOW_DELAY: TimeType = 5000;
+const LIVING_SHADOW_POTENCY: PotencyType = 2250;
+const LIVING_SHADOW_ID: SkillIdType = 211;
+
+const DARK_KNIGHT_MAX_STACKS: [ResourceType; DARK_KNIGHT_STACKS_COUNT] =
+    [MANA_MAX, BLACK_BLOOD_MAX];
 
 #[derive(Clone)]
 pub(crate) struct DarkknightCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: PlayerIdType,
     current_combo: ComboType,
-    mana: ResourceType,
-    black_blood: ResourceType,
-    blood_weapon_stack: ResourceType,
+    resources: [ResourceType; DARK_KNIGHT_STACKS_COUNT],
     living_shadow_delay: Option<TimeType>,
 }
 
@@ -43,25 +48,15 @@ impl CombatResource for DarkknightCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, amount: ResourceType) {
-        if resource_id == 0 {
-            self.mana = min(self.mana + amount, MANA_MAX);
-        } else if resource_id == 1 {
-            self.black_blood = min(self.black_blood + amount, BLACK_BLOOD_MAX);
-        } else if resource_id == 2 {
-            self.blood_weapon_stack = min(self.blood_weapon_stack + amount, BLOOD_WEAPON_STACK_MAX);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            DARK_KNIGHT_MAX_STACKS[resource_id],
+            self.resources[resource_id] + amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.mana
-        } else if resource_id == 1 {
-            self.black_blood
-        } else if resource_id == 2 {
-            self.blood_weapon_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -86,14 +81,14 @@ impl CombatResource for DarkknightCombatResources {
         let ffxiv_internal_events = vec![];
 
         if skill_id == 211 {
-            self.living_shadow_delay = Some(5000);
+            self.living_shadow_delay = Some(LIVING_SHADOW_DELAY);
         }
 
         if matches!(self.living_shadow_delay, Some(0)) {
             ffxiv_events.push(Damage(
                 self.player_id,
-                211,
-                2250,
+                LIVING_SHADOW_ID,
+                LIVING_SHADOW_POTENCY,
                 100,
                 false,
                 false,
@@ -125,9 +120,7 @@ impl DarkknightCombatResources {
             skills: make_darkknight_skill_list(player_id),
             player_id,
             current_combo: None,
-            mana: MANA_MAX,
-            black_blood: 0,
-            blood_weapon_stack: 0,
+            resources: [MANA_MAX, 0],
             living_shadow_delay: None,
         }
     }

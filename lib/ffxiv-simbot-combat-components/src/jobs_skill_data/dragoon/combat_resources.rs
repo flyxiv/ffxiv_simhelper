@@ -15,8 +15,13 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const DRAGOON_STACKS_COUNT: usize = 2;
+
 const NASTROND_MAX_STACK: ResourceType = 3;
 const FIRSTMIND_MAX_STACK: ResourceType = 2;
+
+const DRAGOON_MAX_STACKS: [ResourceType; DRAGOON_STACKS_COUNT] =
+    [NASTROND_MAX_STACK, FIRSTMIND_MAX_STACK];
 
 #[derive(Clone)]
 pub(crate) struct DragoonCombatResources {
@@ -25,8 +30,7 @@ pub(crate) struct DragoonCombatResources {
     #[allow(unused)]
     player_id: PlayerIdType,
     current_combo: ComboType,
-    nastrond_stack: ResourceType,
-    firstmind_focus: ResourceType,
+    resources: [ResourceType; DRAGOON_STACKS_COUNT],
 }
 
 impl CombatResource for DragoonCombatResources {
@@ -39,21 +43,15 @@ impl CombatResource for DragoonCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.nastrond_stack = min(NASTROND_MAX_STACK, self.nastrond_stack + resource_amount);
-        } else if resource_id == 1 {
-            self.firstmind_focus = min(FIRSTMIND_MAX_STACK, self.firstmind_focus + resource_amount);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            DRAGOON_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.nastrond_stack
-        } else if resource_id == 1 {
-            self.firstmind_focus
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -90,8 +88,7 @@ impl DragoonCombatResources {
             skills: make_dragoon_skill_list(player_id),
             player_id,
             current_combo: None,
-            nastrond_stack: 0,
-            firstmind_focus: 0,
+            resources: [0; DRAGOON_STACKS_COUNT],
         }
     }
 }

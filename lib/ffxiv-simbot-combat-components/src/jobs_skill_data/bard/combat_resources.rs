@@ -4,7 +4,6 @@ use crate::event::FfxivEventQueue;
 use crate::jobs_skill_data::bard::abilities::make_bard_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -24,23 +23,35 @@ lazy_static! {
     static ref BARD_SONG_SKILL_IDS: Vec<SkillIdType> = vec![1312, 1313, 1314];
 }
 
+const BARD_STACK_COUNT: usize = 5;
+
+/// 1 of these stacks = 5 Apex Arrow points in real game.
 const APEX_MAX_STACK: ResourceType = 20;
+
 const WANDERER_MAX_STACK: ResourceType = 3;
 const ARMY_MAX_STACK: ResourceType = 4;
 const SONG_MAX_STACK: ResourceType = 3;
 const RADIANT_MAX_STACK: ResourceType = 3;
 
+const WANDERER_STACK_ID: ResourceIdType = 1;
+const ARMY_STACK_ID: ResourceIdType = 2;
+const SONG_STACK_ID: ResourceIdType = 3;
+
+const RESOURCE_MAX_STACKS: [ResourceType; BARD_STACK_COUNT] = [
+    APEX_MAX_STACK,
+    WANDERER_MAX_STACK,
+    ARMY_MAX_STACK,
+    SONG_MAX_STACK,
+    RADIANT_MAX_STACK,
+];
+
 #[derive(Clone)]
 pub(crate) struct BardCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: PlayerIdType,
-    // 1-20
-    apex_stack: ResourceType,
-    wanderer_stack: ResourceType,
-    army_stack: ResourceType,
-    song_stack: ResourceType,
+
+    resources: [ResourceType; BARD_STACK_COUNT],
     armys_muse: BuffStatus,
-    radiant_stack: ResourceType,
 }
 
 impl CombatResource for BardCombatResources {
@@ -53,33 +64,16 @@ impl CombatResource for BardCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.apex_stack = min(APEX_MAX_STACK, self.apex_stack + resource_amount);
-        } else if resource_id == 1 {
-            self.wanderer_stack = min(WANDERER_MAX_STACK, self.wanderer_stack + resource_amount);
-        } else if resource_id == 2 {
-            self.army_stack = min(ARMY_MAX_STACK, self.army_stack + resource_amount);
-        } else if resource_id == 3 {
-            self.song_stack = min(SONG_MAX_STACK, self.song_stack + resource_amount);
-        } else if resource_id == 4 {
-            self.radiant_stack = min(RADIANT_MAX_STACK, self.radiant_stack + resource_amount);
-        }
+        let resource_id = resource_id as usize;
+
+        self.resources[resource_id] = min(
+            RESOURCE_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.apex_stack
-        } else if resource_id == 1 {
-            self.wanderer_stack
-        } else if resource_id == 2 {
-            self.army_stack
-        } else if resource_id == 3 {
-            self.song_stack
-        } else if resource_id == 4 {
-            self.radiant_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -101,7 +95,7 @@ impl CombatResource for BardCombatResources {
 
         if BARD_SONG_SKILL_IDS.contains(&skill_id) {
             if skill_id == 1312 {
-                let army_paeon_stacks = self.army_stack;
+                let army_paeon_stacks = self.get_resource(ARMY_STACK_ID);
 
                 if army_paeon_stacks > 0 {
                     let mut muse = self.armys_muse.clone();
@@ -119,7 +113,7 @@ impl CombatResource for BardCombatResources {
             }
 
             self.reset_song_stacks();
-            self.song_stack = min(SONG_MAX_STACK, self.song_stack + 1);
+            self.add_resource(SONG_STACK_ID, 1);
         }
 
         (skill_events, skill_internal_events)
@@ -135,8 +129,8 @@ impl CombatResource for BardCombatResources {
 
 impl BardCombatResources {
     fn reset_song_stacks(&mut self) {
-        self.wanderer_stack = 0;
-        self.army_stack = 0;
+        self.resources[WANDERER_STACK_ID as usize] = 0;
+        self.resources[ARMY_STACK_ID as usize] = 0;
     }
 }
 
@@ -148,10 +142,7 @@ impl BardCombatResources {
         Self {
             skills: make_bard_skill_list(player_id, ffxiv_event_queue),
             player_id,
-            apex_stack: 0,
-            wanderer_stack: 0,
-            army_stack: 0,
-            song_stack: 0,
+            resources: [0; BARD_STACK_COUNT],
             armys_muse: BuffStatus {
                 id: 1313,
                 name: String::from("Army's Muse"),
@@ -164,7 +155,6 @@ impl BardCombatResources {
                 max_stacks: 4,
                 trigger_proc_event_on_gcd: vec![],
             },
-            radiant_stack: 0,
         }
     }
 }

@@ -15,16 +15,19 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const DANCER_STACK_COUNT: usize = 2;
+
 const ESPRIT_MAX_STACK: ResourceType = 100;
 const FEATHER_MAX_STACK: ResourceType = 4;
+
+const DANCER_MAX_STACKS: [ResourceType; DANCER_STACK_COUNT] = [ESPRIT_MAX_STACK, FEATHER_MAX_STACK];
 
 #[derive(Clone)]
 pub(crate) struct DancerCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
     partner_player_id: PlayerIdType,
-    esprit: ResourceType,
-    feather: ResourceType,
+    resources: [ResourceType; DANCER_STACK_COUNT],
 }
 
 impl CombatResource for DancerCombatResources {
@@ -37,21 +40,15 @@ impl CombatResource for DancerCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.esprit = min(ESPRIT_MAX_STACK, self.esprit + resource_amount);
-        } else if resource_id == 1 {
-            self.feather = min(FEATHER_MAX_STACK, self.feather + resource_amount);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            DANCER_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.esprit
-        } else if resource_id == 1 {
-            self.feather
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -88,8 +85,7 @@ impl DancerCombatResources {
             skills: make_dancer_skill_list(player_id, partner_player_id),
             current_combo: None,
             partner_player_id,
-            esprit: 0,
-            feather: 0,
+            resources: [EMPTY_RESOURCE; DANCER_STACK_COUNT],
         }
     }
 }

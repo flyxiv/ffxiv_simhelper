@@ -3,7 +3,6 @@ use crate::event::ffxiv_event::FfxivEvent::Damage;
 use crate::jobs_skill_data::astrologian::abilities::make_astrologian_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
@@ -18,7 +17,10 @@ use std::cmp::{max, min};
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const ASTROLOGIAN_STACK_COUNT: usize = 1;
+
 const LUNAR_STACK_MAX: ResourceType = 1;
+const LUNAR_STACK_INITIAL_VALUE: ResourceType = 1;
 const STELLAR_TIMER: TimeType = 20000;
 
 #[derive(Clone)]
@@ -26,7 +28,7 @@ pub(crate) struct AstrologianCombatResources {
     skills: SkillTable<AttackSkill>,
     player_id: PlayerIdType,
     current_combo: ComboType,
-    lunar_stack: ResourceType,
+    resources: [ResourceType; ASTROLOGIAN_STACK_COUNT],
     stellar_timer: Option<TimeType>,
     melee_partner: PlayerIdType,
     ranged_partner: PlayerIdType,
@@ -42,17 +44,15 @@ impl CombatResource for AstrologianCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.lunar_stack = min(LUNAR_STACK_MAX, self.lunar_stack + resource_amount);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            LUNAR_STACK_MAX,
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.lunar_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -130,7 +130,7 @@ impl AstrologianCombatResources {
             skills: make_astrologian_skill_list(player_id),
             player_id,
             current_combo: None,
-            lunar_stack: 1,
+            resources: [LUNAR_STACK_INITIAL_VALUE],
             stellar_timer: None,
             melee_partner,
             ranged_partner,

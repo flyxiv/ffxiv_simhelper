@@ -5,10 +5,10 @@ use std::collections::HashMap;
 
 pub mod cooldown_timer;
 pub(crate) mod ffxiv_priority_table;
+mod information_needed_for_rotation_decision;
 pub(crate) mod priority_simulation_data;
 pub(crate) mod priority_table;
-mod simulate_status;
-mod simulated_combat_resource;
+pub(crate) mod skill_simulation_event;
 
 pub(crate) type SkillTable<S> = HashMap<SkillIdType, S>;
 #[derive(Clone)]

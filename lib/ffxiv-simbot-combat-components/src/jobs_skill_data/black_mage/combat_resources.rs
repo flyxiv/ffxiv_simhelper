@@ -3,7 +3,6 @@ use crate::consts::SIMULATION_START_TIME_MILLISECOND;
 use crate::jobs_skill_data::black_mage::abilities::make_blackmage_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -16,19 +15,30 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const BLACK_MAGE_STACK_COUNT: usize = 5;
+
 const POLYGLOT_STACK_INTERVAL_MILLISECOND: TimeType = 30000;
 const POLYGLOT_MAX_STACK: ResourceType = 3;
 const PARADOX_GAUGE_MAX_STACK: ResourceType = 1;
+const FIRE4_FLARESTAR_MAX_STACK: ResourceType = 6;
 const FLARESTAR_MAX_STACK: ResourceType = 1;
+const CONVERSION_TO_BLIZZARD_MAX_STACK: ResourceType = 1;
+
+const POLYGLOT_STACK_ID: ResourceIdType = 0;
+
+const RESOURCE_MAX_STACKS: [ResourceType; BLACK_MAGE_STACK_COUNT] = [
+    POLYGLOT_MAX_STACK,
+    PARADOX_GAUGE_MAX_STACK,
+    FIRE4_FLARESTAR_MAX_STACK,
+    FLARESTAR_MAX_STACK,
+    CONVERSION_TO_BLIZZARD_MAX_STACK,
+];
+
 #[derive(Clone)]
 pub(crate) struct BlackmageCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
-    polyglot_stack: ResourceType,
-    paradox_gauge_stack: ResourceType,
-    fire4_stack: ResourceType,
-    flarestar_stack: ResourceType,
-    conversion_to_blizzard_check: ResourceType,
+    resources: [ResourceType; BLACK_MAGE_STACK_COUNT],
     next_polyglot_time: TimeType,
 }
 
@@ -42,37 +52,16 @@ impl CombatResource for BlackmageCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.polyglot_stack = min(POLYGLOT_MAX_STACK, self.polyglot_stack + resource_amount);
-        } else if resource_id == 1 {
-            self.paradox_gauge_stack = min(
-                PARADOX_GAUGE_MAX_STACK,
-                self.paradox_gauge_stack + resource_amount,
-            );
-        } else if resource_id == 2 {
-            self.fire4_stack = min(6, self.fire4_stack + resource_amount);
-        } else if resource_id == 3 {
-            self.flarestar_stack = min(FLARESTAR_MAX_STACK, self.flarestar_stack + resource_amount);
-        } else if resource_id == 4 {
-            self.conversion_to_blizzard_check =
-                min(1, self.conversion_to_blizzard_check + resource_amount);
-        }
+        let resource_id = resource_id as usize;
+
+        self.resources[resource_id] = min(
+            RESOURCE_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.polyglot_stack
-        } else if resource_id == 1 {
-            self.paradox_gauge_stack
-        } else if resource_id == 2 {
-            self.fire4_stack
-        } else if resource_id == 3 {
-            self.flarestar_stack
-        } else if resource_id == 4 {
-            self.conversion_to_blizzard_check
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -103,8 +92,7 @@ impl CombatResource for BlackmageCombatResources {
 
     fn update_stack_timer(&mut self, elapsed_time_millisecond: TimeType) {
         if elapsed_time_millisecond >= self.next_polyglot_time {
-            let polyglot_stack = self.polyglot_stack;
-            self.polyglot_stack = min(POLYGLOT_MAX_STACK, polyglot_stack + 1);
+            self.add_resource(POLYGLOT_STACK_ID, 1);
             self.next_polyglot_time += POLYGLOT_STACK_INTERVAL_MILLISECOND;
         }
 
@@ -117,11 +105,7 @@ impl BlackmageCombatResources {
         Self {
             skills: make_blackmage_skill_list(player_id),
             current_combo: None,
-            polyglot_stack: 0,
-            paradox_gauge_stack: 0,
-            fire4_stack: 0,
-            flarestar_stack: 0,
-            conversion_to_blizzard_check: 0,
+            resources: [0; BLACK_MAGE_STACK_COUNT],
             next_polyglot_time: POLYGLOT_STACK_INTERVAL_MILLISECOND
                 + TimeType::abs(SIMULATION_START_TIME_MILLISECOND),
         }

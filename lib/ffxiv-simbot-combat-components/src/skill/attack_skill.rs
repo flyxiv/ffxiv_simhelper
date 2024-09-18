@@ -8,6 +8,7 @@ use crate::live_objects::player::player_turn_calculator::SkillTimeInfo;
 use crate::live_objects::player::StatusKey;
 use crate::owner_tracker::OwnerTracker;
 use crate::rotation::cooldown_timer::CooldownTimer;
+use crate::rotation::skill_simulation_event::SkillSimulationEvent;
 use crate::skill::damage_category::DamageCategory;
 use crate::skill::use_type::UseType;
 use crate::skill::{
@@ -360,6 +361,27 @@ impl AttackSkill {
         }
 
         proc_events
+    }
+
+    pub(crate) fn stack_in_future(
+        &self,
+        simulation_events: &[SkillSimulationEvent],
+        time_offset: TimeType,
+    ) -> StackType {
+        let mut future_cooldown = max(0, self.current_cooldown_millisecond - time_offset);
+
+        for simulation_event in simulation_events {
+            match simulation_event {
+                SkillSimulationEvent::ReduceCooldown(skill_id, time) => {
+                    if *skill_id == self.id {
+                        future_cooldown = max(future_cooldown - *time, 0);
+                    }
+                }
+                _ => {}
+            }
+        }
+
+        f64::ceil(future_cooldown as f64 / self.cooldown_millisecond as f64) as StackType
     }
 
     pub fn new(
