@@ -19,7 +19,6 @@ use ffxiv_simbot_combat_components::live_objects::player::Player;
 use ffxiv_simbot_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
 use ffxiv_simbot_combat_components::live_objects::target::Target;
 use ffxiv_simbot_combat_components::live_objects::turn_type::FfxivTurnType;
-use ffxiv_simbot_combat_components::rotation::cooldown_timer::CooldownTimer;
 use ffxiv_simbot_combat_components::skill::attack_skill::AttackSkill;
 use ffxiv_simbot_combat_components::skill::damage_category::DamageCategory;
 use ffxiv_simbot_combat_components::skill::AUTO_ATTACK_ID;
@@ -458,7 +457,6 @@ impl FfxivSimulationBoard {
         event_queue: Rc<RefCell<FfxivEventQueue>>,
         finish_combat_time_millisecond: TimeType,
         party_ilvl_adjustment: f64,
-        use_pot: bool,
     ) -> Self {
         let tickers: RefCell<HashMap<TickerKey, FfxivEventTicker>> =
             RefCell::new(Default::default());

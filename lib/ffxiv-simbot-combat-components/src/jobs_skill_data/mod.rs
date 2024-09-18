@@ -83,6 +83,7 @@ impl PotionSkill {
             cooldown_millisecond: 270000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -138,6 +139,7 @@ impl CasterGlobalSkill {
             cooldown_millisecond: 40000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };

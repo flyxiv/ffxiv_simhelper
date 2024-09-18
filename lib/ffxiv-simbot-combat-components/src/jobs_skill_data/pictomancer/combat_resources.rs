@@ -35,7 +35,11 @@ pub(crate) const HARD_GCD_STACK_ID: ResourceIdType = 5;
 pub(crate) const SHOT_MOOGLE_ID: ResourceIdType = 6;
 pub(crate) const HAMMER_READY_ID: ResourceIdType = 7;
 pub(crate) const HYPERPHANTASIA_STACK_ID: ResourceIdType = 8;
+
+/// Already has creature muse
 pub(crate) const HAS_CREATURE_ID: ResourceIdType = 9;
+
+/// 0, 4: creature, 1: wing, 2: maw, 3: claw
 pub(crate) const CREATURE_STACK_ID: ResourceIdType = 10;
 
 const PICTOMANCER_MAX_STACKS: [ResourceType; PICTOMANCER_STACK_COUNT] = [
@@ -115,7 +119,7 @@ impl PictomancerCombatResources {
         Self {
             skills: make_pictomancer_skill_list(player_id),
             current_combo: None,
-            resources: [0; PICTOMANCER_STACK_COUNT],
+            resources: [0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0],
         }
     }
 }

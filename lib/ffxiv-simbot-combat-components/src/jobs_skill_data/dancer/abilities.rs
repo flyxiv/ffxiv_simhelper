@@ -279,6 +279,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -308,6 +309,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -375,6 +377,7 @@ impl DancerDatabase {
             cooldown_millisecond: 30000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -428,6 +431,7 @@ impl DancerDatabase {
             cooldown_millisecond: 120000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -479,6 +483,7 @@ impl DancerDatabase {
             cooldown_millisecond: 120000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -546,6 +551,7 @@ impl DancerDatabase {
             cooldown_millisecond: 60000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -582,6 +588,7 @@ impl DancerDatabase {
             cooldown_millisecond: 1000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -608,6 +615,7 @@ impl DancerDatabase {
             cooldown_millisecond: 1000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -633,6 +641,7 @@ impl DancerDatabase {
             cooldown_millisecond: 1000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -662,6 +671,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -690,6 +700,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -715,6 +726,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -741,6 +753,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -770,6 +783,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -799,6 +813,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -858,6 +873,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -883,6 +899,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -915,6 +932,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(standard_step.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -943,6 +961,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -1010,6 +1029,7 @@ impl DancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(standard_step.get_id()),
             use_type: UseType::NoTarget,
         };

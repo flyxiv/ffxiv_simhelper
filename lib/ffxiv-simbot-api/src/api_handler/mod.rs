@@ -50,7 +50,6 @@ fn create_simulation_board(
         event_queue.clone(),
         combat_time_millisecond,
         request.party_ilvl_adjustment,
-        request.use_pot,
     );
 
     let composition_buff_percent = if apply_composition_buff {

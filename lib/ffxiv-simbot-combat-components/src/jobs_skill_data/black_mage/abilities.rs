@@ -80,8 +80,8 @@ impl BlackmageDatabase {
             duration_millisecond: 30000,
             is_raidwide: false,
             stacks: 1,
-            snapshotted_infos: Default::default(),
             max_stacks: 1,
+            snapshotted_infos: Default::default(),
         };
         let thunderhead: BuffStatus = BuffStatus {
             id: 1702,
@@ -181,6 +181,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 5000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -213,6 +214,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -242,6 +244,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 5000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -267,6 +270,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -293,6 +297,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(fire_iv.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -326,6 +331,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -361,6 +367,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(fire_iii_ice.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -394,6 +401,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -426,6 +434,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(despair.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -452,6 +461,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -488,6 +498,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -520,6 +531,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -545,6 +557,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -577,6 +590,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 60000,
             current_cooldown_millisecond: 0,
             stacks: 2,
+            max_stacks: 2,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -610,6 +624,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 120000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -646,6 +661,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 90000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -671,6 +687,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 120000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -704,6 +721,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(fire_iii_ice.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -737,6 +755,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(blizzard_iii.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -762,6 +781,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -790,6 +810,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(blizzard_iii.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -816,6 +837,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(flare_star.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -845,6 +867,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(blizzard_iii.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -877,6 +900,7 @@ impl BlackmageDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(fire_iii_ice.get_id()),
             use_type: UseType::UseOnTarget,
         };

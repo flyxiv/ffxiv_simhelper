@@ -208,16 +208,11 @@ pub(crate) trait PriorityTable: Sized + Clone {
 
             if first_skill_start_time <= latest_time_to_use {
                 let mut first_skill_offset_time = skill_cooldown;
-                let simulated_events = extract_skill_simulation_event(
-                    skill,
-                    first_skill_offset_time,
-                    information_needed.player_id,
-                );
 
                 if self.can_use_skill(
                     information_needed,
                     skill_priority,
-                    &simulated_events,
+                    &[],
                     first_skill_offset_time,
                 ) {
                     if best_one_ogcd.is_none() {
@@ -229,6 +224,11 @@ pub(crate) trait PriorityTable: Sized + Clone {
                             priority_number: priority_number as SkillIdType,
                         }]);
                     }
+                    let simulated_events = extract_skill_simulation_event(
+                        skill,
+                        first_skill_offset_time,
+                        information_needed.player_id,
+                    );
 
                     let second_skill_start_time = first_skill_start_time + skill_delay_millisecond;
 
@@ -361,7 +361,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
             skill
         };
 
-        if stack_skill.stack_in_future(simulation_events, time_offset) > 0
+        if stack_skill.stack_in_future(simulation_events, time_offset) == 0
             || !self.meets_requirements(information_needed, simulation_events, skill, time_offset)
         {
             return false;

@@ -130,6 +130,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -156,6 +157,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -182,6 +184,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -207,6 +210,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 40000,
             current_cooldown_millisecond: 0,
             stacks: 3,
+            max_stacks: 3,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -232,6 +236,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 30000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -258,6 +263,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(creature_shot.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -284,6 +290,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -303,12 +310,13 @@ impl PictomancerDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             resource_required: vec![Resource(CREATURE_STACK_ID, 1)],
-            resource_created: HashMap::from([(3, 1)]),
+            resource_created: HashMap::from([(SHOT_STACK_ID, 1)]),
             is_guaranteed_crit: false,
             is_guaranteed_direct_hit: false,
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(living_muse.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -335,6 +343,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -360,6 +369,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(living_muse.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -386,6 +396,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -412,6 +423,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -437,6 +449,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 60000,
             current_cooldown_millisecond: 0,
             stacks: 2,
+            max_stacks: 2,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -462,6 +475,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -487,6 +501,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -513,6 +528,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -539,6 +555,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -583,6 +600,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 120000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -609,6 +627,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -635,6 +654,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -660,6 +680,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -685,6 +706,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -711,6 +733,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -736,6 +759,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -762,6 +786,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -788,6 +813,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -813,6 +839,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(living_muse.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -839,6 +866,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -864,6 +892,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(living_muse.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -893,6 +922,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: Some(creature_shot.get_id()),
             use_type: UseType::UseOnTarget,
         };
@@ -922,6 +952,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -948,6 +979,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -977,6 +1009,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -1006,6 +1039,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -1035,6 +1069,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -1064,6 +1099,7 @@ impl PictomancerDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };

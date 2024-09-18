@@ -58,6 +58,7 @@ pub struct AttackSkill {
     pub(crate) cooldown_millisecond: TimeType,
     pub(crate) current_cooldown_millisecond: TimeType,
     pub(crate) stacks: StackType,
+    pub(crate) max_stacks: StackType,
     pub(crate) stack_skill_id: Option<SkillIdType>,
     pub(crate) use_type: UseType,
 }
@@ -341,9 +342,12 @@ impl AttackSkill {
     }
 
     #[inline]
-    fn get_stack(&self) -> StackType {
-        f64::ceil(self.current_cooldown_millisecond as f64 / self.cooldown_millisecond as f64)
-            as StackType
+    fn calculate_stack(&self) -> StackType {
+        let used_stack =
+            f64::ceil(self.current_cooldown_millisecond as f64 / self.cooldown_millisecond as f64)
+                as StackType;
+
+        max(0, self.max_stacks - used_stack)
     }
 
     pub(crate) fn generate_proc_event(
@@ -368,6 +372,11 @@ impl AttackSkill {
         simulation_events: &[SkillSimulationEvent],
         time_offset: TimeType,
     ) -> StackType {
+        if self.current_cooldown_millisecond == 0 {
+            return self.stacks;
+        }
+
+        let current_stack = self.stacks;
         let mut future_cooldown = max(0, self.current_cooldown_millisecond - time_offset);
 
         for simulation_event in simulation_events {
@@ -381,7 +390,10 @@ impl AttackSkill {
             }
         }
 
-        f64::ceil(future_cooldown as f64 / self.cooldown_millisecond as f64) as StackType
+        let future_used_stack =
+            f64::ceil(future_cooldown as f64 / self.cooldown_millisecond as f64) as StackType;
+
+        max(0, self.max_stacks - future_used_stack)
     }
 
     pub fn new(
@@ -412,6 +424,7 @@ impl AttackSkill {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 0,
+            max_stacks: 0,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         }
@@ -430,14 +443,9 @@ impl CooldownTimer for AttackSkill {
             return;
         }
 
-        let past_stack = self.get_stack();
         self.current_cooldown_millisecond =
             max(0, self.current_cooldown_millisecond - elapsed_time);
 
-        let current_stack = self.get_stack();
-
-        if past_stack != current_stack {
-            self.stacks += 1;
-        }
+        self.stacks = self.calculate_stack();
     }
 }

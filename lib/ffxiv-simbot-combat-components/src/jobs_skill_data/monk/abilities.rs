@@ -153,6 +153,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -179,6 +180,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -205,6 +207,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -231,6 +234,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -257,6 +261,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -283,6 +288,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -309,6 +315,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -335,6 +342,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -360,6 +368,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -389,6 +398,7 @@ impl MonkDatabase {
             cooldown_millisecond: 120000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -431,6 +441,7 @@ impl MonkDatabase {
             cooldown_millisecond: 60000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -473,6 +484,7 @@ impl MonkDatabase {
             cooldown_millisecond: 90000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -506,6 +518,7 @@ impl MonkDatabase {
             cooldown_millisecond: 40000,
             current_cooldown_millisecond: 0,
             stacks: 2,
+            max_stacks: 2,
             stack_skill_id: None,
             use_type: UseType::NoTarget,
         };
@@ -532,6 +545,7 @@ impl MonkDatabase {
             cooldown_millisecond: 1000,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -558,6 +572,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -584,6 +599,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -610,6 +626,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -636,6 +653,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -662,6 +680,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -688,6 +707,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -713,6 +733,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
@@ -738,6 +759,7 @@ impl MonkDatabase {
             cooldown_millisecond: 0,
             current_cooldown_millisecond: 0,
             stacks: 1,
+            max_stacks: 1,
             stack_skill_id: None,
             use_type: UseType::UseOnTarget,
         };
