@@ -4,9 +4,7 @@ use crate::live_objects::player::StatusKey;
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
 use crate::types::{PlayerIdType, TimeType};
-use std::cell::RefCell;
 use std::collections::HashMap;
-use std::rc::Rc;
 
 #[derive(Clone, Copy)]
 pub(crate) struct InformationNeededForRotationDecision<'a> {

@@ -3,7 +3,6 @@ use crate::event::ffxiv_event::FfxivEvent;
 use crate::jobs_skill_data::ninja::abilities::make_ninja_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -17,11 +16,15 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const NINJA_STACK_COUNT: usize = 2;
+
 pub const BUNSHIN_STACK_ID: StatusIdType = 1022;
 pub const BUNSHIN_CLONE_ID: SkillIdType = 1011;
 
 const NINKI_MAX: ResourceType = 100;
 const SHURIKEN_MAX_STACK: ResourceType = 5;
+
+const NINJA_MAX_STACKS: [ResourceType; NINJA_STACK_COUNT] = [NINKI_MAX, SHURIKEN_MAX_STACK];
 
 lazy_static! {
     static ref NINJA_BUNSHIN_COMBO_IDS: Vec<SkillIdType> = vec![1005, 1006, 1007, 1008, 1002];
@@ -30,8 +33,7 @@ lazy_static! {
 #[derive(Clone)]
 pub(crate) struct NinjaCombatResources {
     skills: SkillTable<AttackSkill>,
-    ninki: ResourceType,
-    shuriken: ResourceType,
+    resources: [ResourceType; NINJA_STACK_COUNT],
     current_combo: ComboType,
 }
 
@@ -45,23 +47,15 @@ impl CombatResource for NinjaCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_type: ResourceType) {
-        if resource_id == 0 {
-            let ninki = self.ninki;
-            self.ninki = min(NINKI_MAX, ninki + resource_type);
-        } else if resource_id == 1 {
-            let shuriken = self.shuriken;
-            self.shuriken = min(SHURIKEN_MAX_STACK, shuriken + resource_type);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            NINJA_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_type,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.ninki
-        } else if resource_id == 1 {
-            self.shuriken
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -113,8 +107,7 @@ impl NinjaCombatResources {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_ninja_skill_list(player_id),
-            ninki: 0,
-            shuriken: 0,
+            resources: [0; NINJA_STACK_COUNT],
             current_combo: None,
         }
     }

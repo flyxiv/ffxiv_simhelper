@@ -1,8 +1,7 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::sage::abilities::SageDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BufforDebuffLessThan, MillisecondsBeforeBurst, Not, Or,
-    RelatedSkillCooldownLessOrEqualThan,
+    And, BufforDebuffLessThan, Not, RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable, SkillPrerequisite};
 use crate::rotation::SkillPriorityInfo;

@@ -3,7 +3,6 @@ use crate::event::ffxiv_event::FfxivEvent::Damage;
 use crate::jobs_skill_data::machinist::abilities::make_machinist_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
@@ -18,20 +17,29 @@ use std::cmp::{max, min};
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const MACHINIST_STACKS_COUNT: usize = 2;
+
 const QUEEN_BASE_POTENCY: PotencyType = 1000;
 const QUEEN_DELAY_MILLISECOND: TimeType = 5000;
 const QUEEN_POTENCY_PER_STACK: PotencyType = 200;
 const HEAT_MAX: ResourceType = 100;
 const BATTERY_MAX: ResourceType = 10;
+
+const WILDFIRE_ID: SkillIdType = 1410;
+const AUTOMATON_QUEEN_ID: SkillIdType = 1413;
+
 const WILDFIRE_POTENCY_PER_STACK: PotencyType = 240;
 const WILDFIRE_DELAY_MILLISECOND: TimeType = 10000;
+
+const BATTERY_ID: ResourceIdType = 1;
+
+const MACHINIST_MAX_STACKS: [ResourceType; MACHINIST_STACKS_COUNT] = [HEAT_MAX, BATTERY_MAX];
 
 #[derive(Clone)]
 pub(crate) struct MachinistCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
-    heat: ResourceType,
-    battery: ResourceType,
+    resources: [ResourceType; MACHINIST_STACKS_COUNT],
     queen_damage_incoming: Option<(PotencyType, TimeType)>,
     wildfire_damage_incoming: Option<(PotencyType, TimeType)>,
 }
@@ -46,21 +54,15 @@ impl CombatResource for MachinistCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_type: ResourceType) {
-        if resource_id == 0 {
-            self.heat = min(HEAT_MAX, self.heat + resource_type);
-        } else if resource_id == 1 {
-            self.battery = min(BATTERY_MAX, self.battery + resource_type);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            MACHINIST_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_type,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.heat
-        } else if resource_id == 1 {
-            self.battery
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -89,7 +91,7 @@ impl CombatResource for MachinistCombatResources {
             if delay == 0 {
                 ffxiv_events.push(Damage(
                     player.get_id(),
-                    1410,
+                    WILDFIRE_ID,
                     potency,
                     120,
                     false,
@@ -103,7 +105,11 @@ impl CombatResource for MachinistCombatResources {
                     current_time_millisecond,
                 ));
                 self.wildfire_damage_incoming = None;
-            } else if skill_id == 1409 {
+            }
+
+            let skill = self.skills.get(&skill_id).unwrap();
+
+            if skill.gcd_cooldown_millisecond > 0 {
                 self.wildfire_damage_incoming = Some((potency + WILDFIRE_POTENCY_PER_STACK, delay));
             }
         }
@@ -114,7 +120,7 @@ impl CombatResource for MachinistCombatResources {
             if delay == 0 {
                 ffxiv_events.push(Damage(
                     player.get_id(),
-                    1413,
+                    AUTOMATON_QUEEN_ID,
                     potency,
                     120,
                     false,
@@ -133,11 +139,12 @@ impl CombatResource for MachinistCombatResources {
         }
 
         if skill_id == 1413 {
-            let current_stack = self.battery;
+            let current_stack = self.get_resource(BATTERY_ID);
             let potency =
                 QUEEN_BASE_POTENCY + QUEEN_POTENCY_PER_STACK * (current_stack as PotencyType - 5);
             self.queen_damage_incoming = Some((potency, QUEEN_DELAY_MILLISECOND));
-            self.battery = 0;
+
+            self.resources[BATTERY_ID as usize] = 0;
         }
 
         if skill_id == 1410 {
@@ -168,8 +175,7 @@ impl MachinistCombatResources {
         Self {
             skills: make_machinist_skill_list(player_id),
             current_combo: None,
-            heat: 0,
-            battery: 0,
+            resources: [0; MACHINIST_STACKS_COUNT],
             queen_damage_incoming: None,
             wildfire_damage_incoming: None,
         }

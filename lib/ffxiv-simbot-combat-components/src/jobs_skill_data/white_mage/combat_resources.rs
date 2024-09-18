@@ -3,7 +3,6 @@ use crate::consts::SIMULATION_START_TIME_MILLISECOND;
 use crate::jobs_skill_data::white_mage::abilities::make_whitemage_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -16,17 +15,21 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const WHITEMAGE_STACK_COUNT: usize = 3;
+
+const LILY_STACK_ID: ResourceIdType = 1;
 const LILY_STACK_INTERVAL_MILLISECOND: TimeType = 20000;
 const LILY_MAX_STACK: ResourceType = 3;
 const GLARE4_MAX_STACK: ResourceType = 3;
 const BLOOD_LILY_MAX_STACK: ResourceType = 3;
 
+const WHITEMAGE_MAX_STACKS: [ResourceType; WHITEMAGE_STACK_COUNT] =
+    [LILY_MAX_STACK, GLARE4_MAX_STACK, BLOOD_LILY_MAX_STACK];
+
 #[derive(Clone)]
 pub(crate) struct WhitemageCombatResources {
     skills: SkillTable<AttackSkill>,
-    blood_lily_stack: ResourceType,
-    lily_stack: ResourceType,
-    glare4_stack: ResourceType,
+    resources: [ResourceType; WHITEMAGE_STACK_COUNT],
     next_lily_time: TimeType,
 }
 
@@ -40,28 +43,15 @@ impl CombatResource for WhitemageCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.blood_lily_stack = min(
-                BLOOD_LILY_MAX_STACK,
-                self.blood_lily_stack + resource_amount,
-            );
-        } else if resource_id == 1 {
-            self.lily_stack = min(LILY_MAX_STACK, self.lily_stack + resource_amount);
-        } else if resource_id == 2 {
-            self.glare4_stack = min(GLARE4_MAX_STACK, self.glare4_stack + resource_amount);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            WHITEMAGE_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.blood_lily_stack
-        } else if resource_id == 1 {
-            self.lily_stack
-        } else if resource_id == 2 {
-            self.glare4_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -87,7 +77,7 @@ impl CombatResource for WhitemageCombatResources {
     }
     fn update_stack_timer(&mut self, elapsed_time_millisecond: TimeType) {
         if elapsed_time_millisecond >= self.next_lily_time {
-            self.lily_stack = min(LILY_MAX_STACK, self.lily_stack + 1);
+            self.add_resource(LILY_STACK_ID, 1);
             self.next_lily_time += LILY_STACK_INTERVAL_MILLISECOND;
         }
 
@@ -99,9 +89,7 @@ impl WhitemageCombatResources {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_whitemage_skill_list(player_id),
-            blood_lily_stack: 0,
-            lily_stack: 0,
-            glare4_stack: 0,
+            resources: [0; WHITEMAGE_STACK_COUNT],
             next_lily_time: LILY_STACK_INTERVAL_MILLISECOND
                 + TimeType::abs(SIMULATION_START_TIME_MILLISECOND),
         }

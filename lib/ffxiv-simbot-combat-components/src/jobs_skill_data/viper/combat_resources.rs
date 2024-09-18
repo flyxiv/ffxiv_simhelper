@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::viper::abilities::make_viper_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -15,9 +14,23 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const VIPER_STACK_COUNT: usize = 9;
+
 const SERPENT_OFFERINGS_MAX: ResourceType = 100;
 const RATTLING_COIL_MAX: ResourceType = 3;
 const REAWAKEN_STACK_MAX: ResourceType = 5;
+
+const VIPER_MAX_STACKS: [ResourceType; VIPER_STACK_COUNT] = [
+    SERPENT_OFFERINGS_MAX,
+    1,
+    1,
+    1,
+    RATTLING_COIL_MAX,
+    1,
+    1,
+    REAWAKEN_STACK_MAX,
+    1,
+];
 
 #[derive(Clone)]
 #[allow(unused)]
@@ -26,15 +39,7 @@ pub(crate) struct ViperCombatResources {
     player_id: PlayerIdType,
     current_combo: ComboType,
 
-    serpent_offering_stack: ResourceType,
-    filler_stack1: ResourceType,
-    filler_stack2: ResourceType,
-    reawaken_filler_stack: ResourceType,
-    rattling_coil_stack: ResourceType,
-    hunters_coil_stack: ResourceType,
-    swiftskin_coil_stack: ResourceType,
-    reawaken_stack: ResourceType,
-    death_rattle_stack: ResourceType,
+    resources: [ResourceType; VIPER_STACK_COUNT],
 }
 
 impl CombatResource for ViperCombatResources {
@@ -47,50 +52,15 @@ impl CombatResource for ViperCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, amount: ResourceType) {
-        if resource_id == 0 {
-            self.serpent_offering_stack =
-                min(self.serpent_offering_stack + amount, SERPENT_OFFERINGS_MAX);
-        } else if resource_id == 1 {
-            self.filler_stack1 = min(self.filler_stack1 + amount, 1);
-        } else if resource_id == 2 {
-            self.filler_stack2 = min(self.filler_stack2 + amount, 1);
-        } else if resource_id == 3 {
-            self.reawaken_filler_stack = min(self.reawaken_filler_stack + amount, 1);
-        } else if resource_id == 4 {
-            self.rattling_coil_stack = min(self.rattling_coil_stack + amount, RATTLING_COIL_MAX);
-        } else if resource_id == 5 {
-            self.hunters_coil_stack = min(self.hunters_coil_stack + amount, 1);
-        } else if resource_id == 6 {
-            self.swiftskin_coil_stack = min(self.swiftskin_coil_stack + amount, 1);
-        } else if resource_id == 7 {
-            self.reawaken_stack = min(self.reawaken_stack + amount, REAWAKEN_STACK_MAX);
-        } else if resource_id == 8 {
-            self.death_rattle_stack = min(self.death_rattle_stack + amount, 1);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            VIPER_MAX_STACKS[resource_id],
+            self.resources[resource_id] + amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.serpent_offering_stack
-        } else if resource_id == 1 {
-            self.filler_stack1
-        } else if resource_id == 2 {
-            self.filler_stack2
-        } else if resource_id == 3 {
-            self.reawaken_filler_stack
-        } else if resource_id == 4 {
-            self.rattling_coil_stack
-        } else if resource_id == 5 {
-            self.hunters_coil_stack
-        } else if resource_id == 6 {
-            self.swiftskin_coil_stack
-        } else if resource_id == 7 {
-            self.reawaken_stack
-        } else if resource_id == 8 {
-            self.death_rattle_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -128,15 +98,7 @@ impl ViperCombatResources {
             player_id,
             current_combo: None,
 
-            serpent_offering_stack: 0,
-            filler_stack1: 0,
-            filler_stack2: 0,
-            reawaken_filler_stack: 0,
-            rattling_coil_stack: 0,
-            hunters_coil_stack: 0,
-            swiftskin_coil_stack: 0,
-            reawaken_stack: 0,
-            death_rattle_stack: 0,
+            resources: [0; VIPER_STACK_COUNT],
         }
     }
 }

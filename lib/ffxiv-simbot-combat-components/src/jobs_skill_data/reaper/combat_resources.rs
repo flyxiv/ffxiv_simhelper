@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::reaper::abilities::make_reaper_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -20,12 +19,26 @@ lazy_static! {
     static ref REAPER_NORMAL_GCD_IDS: Vec<SkillIdType> = vec![1200, 1201, 1202];
 }
 
+const REAPER_STACK_COUNT: usize = 7;
+
+const ENSHROUD_COUNT_ID: ResourceIdType = 6;
+
 const SOUL_GAUGE_MAX: ResourceType = 100;
 const ENSHROUD_GAUGE_MAX: ResourceType = 100;
 const SOUL_REAVER_MAX: ResourceType = 1;
 const ENSHROUD_STACK_MAX: ResourceType = 5;
 const LEMURES_STACK_MAX: ResourceType = 4;
 const EXECUTIONER_STACK_MAX: ResourceType = 2;
+
+const REAPER_MAX_STACKS: [ResourceType; REAPER_STACK_COUNT] = [
+    SOUL_GAUGE_MAX,
+    ENSHROUD_GAUGE_MAX,
+    SOUL_REAVER_MAX,
+    ENSHROUD_STACK_MAX,
+    LEMURES_STACK_MAX,
+    EXECUTIONER_STACK_MAX,
+    100,
+];
 
 #[derive(Clone)]
 pub(crate) struct ReaperCombatResources {
@@ -34,13 +47,7 @@ pub(crate) struct ReaperCombatResources {
     #[allow(unused)]
     player_id: PlayerIdType,
     current_combo: ComboType,
-    soul_gauge: ResourceType,
-    enshroud_gauge: ResourceType,
-    soul_reaver_stack: ResourceType,
-    enshroud_stack: ResourceType,
-    lemures_stack: ResourceType,
-    executioner_stack: ResourceType,
-    enshroud_count: ResourceType,
+    resources: [ResourceType; REAPER_STACK_COUNT],
 }
 
 impl CombatResource for ReaperCombatResources {
@@ -53,44 +60,15 @@ impl CombatResource for ReaperCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.soul_gauge = min(SOUL_GAUGE_MAX, self.soul_gauge + resource_amount);
-        } else if resource_id == 1 {
-            self.enshroud_gauge = min(ENSHROUD_GAUGE_MAX, self.enshroud_gauge + resource_amount);
-        } else if resource_id == 2 {
-            self.soul_reaver_stack = min(SOUL_REAVER_MAX, self.soul_reaver_stack + resource_amount);
-        } else if resource_id == 3 {
-            self.enshroud_stack = min(ENSHROUD_STACK_MAX, self.enshroud_stack + resource_amount);
-        } else if resource_id == 4 {
-            self.lemures_stack = min(LEMURES_STACK_MAX, self.lemures_stack + resource_amount);
-        } else if resource_id == 5 {
-            self.executioner_stack = min(
-                EXECUTIONER_STACK_MAX,
-                self.executioner_stack + resource_amount,
-            );
-        } else if resource_id == 6 {
-            self.enshroud_count = self.enshroud_count + resource_amount;
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            REAPER_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.soul_gauge
-        } else if resource_id == 1 {
-            self.enshroud_gauge
-        } else if resource_id == 2 {
-            self.soul_reaver_stack
-        } else if resource_id == 3 {
-            self.enshroud_stack
-        } else if resource_id == 4 {
-            self.lemures_stack
-        } else if resource_id == 5 {
-            self.executioner_stack
-        } else if resource_id == 6 {
-            self.enshroud_count
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -112,7 +90,7 @@ impl CombatResource for ReaperCombatResources {
         _: &FfxivPlayer,
     ) -> SkillEvents {
         if REAPER_NORMAL_GCD_IDS.contains(&skill_id) {
-            self.enshroud_count = 0;
+            self.resources[ENSHROUD_COUNT_ID as usize] = 0;
         }
 
         (vec![], vec![])
@@ -132,13 +110,7 @@ impl ReaperCombatResources {
             skills: make_reaper_skill_list(player_id, player_count),
             player_id,
             current_combo: None,
-            soul_gauge: 0,
-            enshroud_gauge: 0,
-            soul_reaver_stack: 0,
-            enshroud_stack: 0,
-            lemures_stack: 0,
-            executioner_stack: 0,
-            enshroud_count: 0,
+            resources: [0; REAPER_STACK_COUNT],
         }
     }
 }

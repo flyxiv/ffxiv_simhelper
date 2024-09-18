@@ -42,7 +42,6 @@ pub(crate) trait CombatResource: Clone + Sized {
     }
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_type: ResourceType);
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType;
-
     fn get_current_combo(&self) -> ComboType;
     fn update_combo(&mut self, combo: &ComboType);
     fn start_cooldown(&mut self, skill_id: SkillIdType, player: &FfxivPlayer) {

@@ -6,7 +6,6 @@ use std::collections::HashMap;
 pub mod cooldown_timer;
 pub(crate) mod ffxiv_priority_table;
 mod information_needed_for_rotation_decision;
-pub(crate) mod priority_simulation_data;
 pub(crate) mod priority_table;
 pub(crate) mod skill_simulation_event;
 

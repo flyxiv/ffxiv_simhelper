@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::dragoon::abilities::make_dragoon_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;

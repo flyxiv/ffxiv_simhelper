@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::scholar::abilities::make_scholar_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -42,7 +41,7 @@ impl CombatResource for ScholarCombatResources {
         if resource_id == 0 {
             self.aether_stack
         } else {
-            EMPTY_RESOURCE
+            -100
         }
     }
 

@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::pictomancer::abilities::make_pictomancer_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -15,6 +14,8 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const PICTOMANCER_STACK_COUNT: usize = 11;
+
 const PALLETE_STACK_MAX: ResourceType = 100;
 const HAMMER_STACK_MAX: ResourceType = 3;
 const HARD_GCD_STACK_MAX: ResourceType = 3;
@@ -25,31 +26,38 @@ const SHOT_STACK_MAX: ResourceType = 2;
 
 pub(crate) const HAMMER_STACK_ID: ResourceIdType = 1;
 pub(crate) const STARRY_SKY_STACK_ID: ResourceIdType = 2;
+/// Up whenever using creature muse
 pub(crate) const SHOT_STACK_ID: ResourceIdType = 3;
-pub(crate) const BLACK_PAINT_STACK_ID: ResourceIdType = 7;
-pub(crate) const HARD_GCD_STACK_ID: ResourceIdType = 8;
-pub(crate) const SHOT_MOOGLE_ID: ResourceIdType = 11;
-pub(crate) const HAMMER_READY_ID: ResourceIdType = 12;
-pub(crate) const HYPERPHANTASIA_STACK_ID: ResourceIdType = 13;
-pub(crate) const HAS_CREATURE_ID: ResourceIdType = 14;
-pub(crate) const CREATURE_STACK_ID: ResourceIdType = 15;
+pub(crate) const BLACK_PAINT_STACK_ID: ResourceIdType = 4;
+/// CYM stack
+pub(crate) const HARD_GCD_STACK_ID: ResourceIdType = 5;
+/// Mog of the ages used flag
+pub(crate) const SHOT_MOOGLE_ID: ResourceIdType = 6;
+pub(crate) const HAMMER_READY_ID: ResourceIdType = 7;
+pub(crate) const HYPERPHANTASIA_STACK_ID: ResourceIdType = 8;
+pub(crate) const HAS_CREATURE_ID: ResourceIdType = 9;
+pub(crate) const CREATURE_STACK_ID: ResourceIdType = 10;
+
+const PICTOMANCER_MAX_STACKS: [ResourceType; PICTOMANCER_STACK_COUNT] = [
+    PALLETE_STACK_MAX,
+    HAMMER_STACK_MAX,
+    1,
+    SHOT_STACK_MAX,
+    1,
+    HARD_GCD_STACK_MAX,
+    1,
+    1,
+    HYPERPHANTASIA_STACK_MAX,
+    1,
+    CREATURE_STACK_MAX,
+];
 
 #[derive(Clone)]
 pub(crate) struct PictomancerCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
 
-    pallete_stack: ResourceType,
-    hammer_stack: ResourceType,
-    starry_sky_stack: ResourceType,
-    shot_stack: ResourceType,
-    black_paint_stack: ResourceType,
-    hard_gcd_stack: ResourceType,
-    shot_moogle: ResourceType,
-    hammer_ready: ResourceType,
-    hyperphantasia_stack: ResourceType,
-    has_creature: ResourceType,
-    creature_stack: ResourceType,
+    resources: [ResourceType; PICTOMANCER_STACK_COUNT],
 }
 
 impl CombatResource for PictomancerCombatResources {
@@ -62,60 +70,15 @@ impl CombatResource for PictomancerCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.pallete_stack = min(PALLETE_STACK_MAX, self.pallete_stack + resource_amount);
-        } else if resource_id == HAMMER_STACK_ID {
-            self.hammer_stack = min(HAMMER_STACK_MAX, self.hammer_stack + resource_amount);
-        } else if resource_id == STARRY_SKY_STACK_ID {
-            self.starry_sky_stack = min(1, self.starry_sky_stack + resource_amount);
-        } else if resource_id == SHOT_STACK_ID {
-            self.shot_stack = min(SHOT_STACK_MAX, self.shot_stack + resource_amount);
-        } else if resource_id == BLACK_PAINT_STACK_ID {
-            self.black_paint_stack = min(1, self.black_paint_stack + resource_amount);
-        } else if resource_id == HARD_GCD_STACK_ID {
-            self.hard_gcd_stack = min(HARD_GCD_STACK_MAX, self.hard_gcd_stack + resource_amount);
-        } else if resource_id == SHOT_MOOGLE_ID {
-            self.shot_moogle = min(1, self.shot_moogle + resource_amount);
-        } else if resource_id == HAMMER_READY_ID {
-            self.hammer_ready = min(1, self.hammer_ready + resource_amount);
-        } else if resource_id == HYPERPHANTASIA_STACK_ID {
-            self.hyperphantasia_stack = min(
-                HYPERPHANTASIA_STACK_MAX,
-                self.hyperphantasia_stack + resource_amount,
-            );
-        } else if resource_id == HAS_CREATURE_ID {
-            self.has_creature = min(1, self.has_creature + resource_amount);
-        } else if resource_id == CREATURE_STACK_ID {
-            self.creature_stack = min(CREATURE_STACK_MAX, self.creature_stack + resource_amount);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            PICTOMANCER_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.pallete_stack
-        } else if resource_id == HAMMER_STACK_ID {
-            self.hammer_stack
-        } else if resource_id == STARRY_SKY_STACK_ID {
-            self.starry_sky_stack
-        } else if resource_id == SHOT_STACK_ID {
-            self.shot_stack
-        } else if resource_id == BLACK_PAINT_STACK_ID {
-            self.black_paint_stack
-        } else if resource_id == HARD_GCD_STACK_ID {
-            self.hard_gcd_stack
-        } else if resource_id == SHOT_MOOGLE_ID {
-            self.shot_moogle
-        } else if resource_id == HAMMER_READY_ID {
-            self.hammer_ready
-        } else if resource_id == HYPERPHANTASIA_STACK_ID {
-            self.hyperphantasia_stack
-        } else if resource_id == HAS_CREATURE_ID {
-            self.has_creature
-        } else if resource_id == CREATURE_STACK_ID {
-            self.creature_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -152,17 +115,7 @@ impl PictomancerCombatResources {
         Self {
             skills: make_pictomancer_skill_list(player_id),
             current_combo: None,
-            pallete_stack: 0,
-            hammer_stack: 0,
-            starry_sky_stack: 1,
-            shot_stack: 0,
-            black_paint_stack: 0,
-            hard_gcd_stack: 0,
-            shot_moogle: 0,
-            hammer_ready: 1,
-            hyperphantasia_stack: 0,
-            has_creature: 1,
-            creature_stack: 0,
+            resources: [0; PICTOMANCER_STACK_COUNT],
         }
     }
 }

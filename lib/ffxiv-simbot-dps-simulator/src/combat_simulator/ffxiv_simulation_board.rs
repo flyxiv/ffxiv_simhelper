@@ -133,23 +133,23 @@ impl FfxivSimulationBoard {
                     *time,
                 );
             }
-            FfxivEvent::ApplyBuff(_, target_id, status, _, _, time) => {
+            FfxivEvent::ApplyBuff(_, target_player_id, status, _, _, time) => {
                 debug!(
                     "time: {}, apply buff event: status id {}",
                     *time,
                     status.get_name().as_str(),
                 );
-                let player = self.get_player_data(*target_id);
+                let player = self.get_player_data(*target_player_id);
                 let debuffs = self.target.borrow().get_status_table();
                 player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
             }
-            FfxivEvent::ApplyBuffStack(_, target_id, status, _, _, time) => {
+            FfxivEvent::ApplyBuffStack(_, target_player_id, status, _, _, time) => {
                 debug!(
                     "time: {}, apply buff stack event: status {}",
                     *time,
                     status.get_name().as_str()
                 );
-                let player = self.get_player_data(*target_id);
+                let player = self.get_player_data(*target_player_id);
                 let debuffs = self.target.borrow().get_status_table();
                 player.borrow_mut().handle_ffxiv_event(ffxiv_event, debuffs);
             }
@@ -412,7 +412,12 @@ impl FfxivSimulationBoard {
             return;
         }
 
-        self.update_player_target_time_informations(elapsed_time);
+        self.update_target_time_informations(elapsed_time);
+
+        for player in self.party.clone() {
+            player.borrow_mut().elapsed_time += elapsed_time;
+        }
+
         self.update_combat_time(elapsed_time);
         self.update_ticker_time(elapsed_time);
     }
@@ -443,12 +448,7 @@ impl FfxivSimulationBoard {
         next_event_time_millisecond - *self.current_combat_time_millisecond.borrow()
     }
 
-    fn update_player_target_time_informations(&self, elapsed_time: TimeType) {
-        for player in self.party.clone() {
-            player.borrow_mut().update_status_time(elapsed_time);
-            player.borrow_mut().update_cooldown(elapsed_time);
-        }
-
+    fn update_target_time_informations(&self, elapsed_time: TimeType) {
         self.target.borrow_mut().update_status_time(elapsed_time);
     }
 

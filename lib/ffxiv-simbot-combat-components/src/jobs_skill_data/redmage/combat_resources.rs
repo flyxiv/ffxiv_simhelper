@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::redmage::abilities::make_redmage_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -15,18 +14,21 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const RED_MAGE_STACK_COUNT: usize = 4;
+
 const MANA_MAX: ResourceType = 100;
 const VERSTACK_MAX: ResourceType = 3;
 const MANAFICATION_MAX: ResourceType = 6;
 
+const RED_MAGE_MAX_STACKS: [ResourceType; RED_MAGE_STACK_COUNT] =
+    [MANA_MAX, MANA_MAX, VERSTACK_MAX, MANAFICATION_MAX];
+
 #[derive(Clone)]
 pub(crate) struct RedmageCombatResources {
     skills: SkillTable<AttackSkill>,
-    white_mana: ResourceType,
-    black_mana: ResourceType,
-    verstack: ResourceType,
-    manafication_stack: ResourceType,
     current_combo: ComboType,
+
+    resources: [ResourceType; RED_MAGE_STACK_COUNT],
 }
 
 impl CombatResource for RedmageCombatResources {
@@ -39,30 +41,15 @@ impl CombatResource for RedmageCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_type: ResourceType) {
-        if resource_id == 0 {
-            self.white_mana = min(self.white_mana + resource_type, MANA_MAX);
-        } else if resource_id == 1 {
-            self.black_mana = min(self.black_mana + resource_type, MANA_MAX);
-        } else if resource_id == 2 {
-            self.verstack = min(self.verstack + resource_type, VERSTACK_MAX);
-        } else if resource_id == 3 {
-            self.manafication_stack =
-                min(self.manafication_stack + resource_type, MANAFICATION_MAX);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            RED_MAGE_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_type,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.white_mana
-        } else if resource_id == 1 {
-            self.black_mana
-        } else if resource_id == 2 {
-            self.verstack
-        } else if resource_id == 3 {
-            self.manafication_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -98,11 +85,8 @@ impl RedmageCombatResources {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_redmage_skill_list(player_id),
-            white_mana: 0,
-            black_mana: 0,
             current_combo: None,
-            verstack: 0,
-            manafication_stack: 0,
+            resources: [0, 0, 0, 0],
         }
     }
 }

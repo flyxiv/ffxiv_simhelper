@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::warrior::abilities::make_warrior_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -15,15 +14,19 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const WARRIOR_STACK_COUNT: usize = 2;
+
 const BEAST_GAUGE_MAX_STACK: ResourceType = 100;
 const BURGEONING_FURY_MAX_STACK: ResourceType = 3;
+
+const WARRIOR_MAX_STACKS: [ResourceType; WARRIOR_STACK_COUNT] =
+    [BEAST_GAUGE_MAX_STACK, BURGEONING_FURY_MAX_STACK];
 
 #[derive(Clone)]
 pub(crate) struct WarriorCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
-    beast_gauge: ResourceType,
-    burgeoning_fury: ResourceType,
+    resources: [ResourceType; WARRIOR_STACK_COUNT],
 }
 
 impl CombatResource for WarriorCombatResources {
@@ -36,24 +39,15 @@ impl CombatResource for WarriorCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.beast_gauge = min(BEAST_GAUGE_MAX_STACK, self.beast_gauge + resource_amount);
-        } else if resource_id == 1 {
-            self.burgeoning_fury = min(
-                BURGEONING_FURY_MAX_STACK,
-                self.burgeoning_fury + resource_amount,
-            );
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            WARRIOR_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.beast_gauge
-        } else if resource_id == 1 {
-            self.burgeoning_fury
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -89,8 +83,7 @@ impl WarriorCombatResources {
         Self {
             skills: make_warrior_skill_list(player_id),
             current_combo: None,
-            beast_gauge: 0,
-            burgeoning_fury: 0,
+            resources: [0; WARRIOR_STACK_COUNT],
         }
     }
 }

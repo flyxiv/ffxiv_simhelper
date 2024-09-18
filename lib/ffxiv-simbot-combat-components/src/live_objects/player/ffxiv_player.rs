@@ -53,6 +53,8 @@ pub struct FfxivPlayer {
     pub damage_logs: Vec<DamageLog>,
     pub skill_logs: Vec<SkillLog>,
     pub start_turn: FfxivEvent,
+
+    pub elapsed_time: TimeType,
 }
 
 impl Clone for FfxivPlayer {
@@ -70,6 +72,7 @@ impl Clone for FfxivPlayer {
             damage_logs: Default::default(),
             skill_logs: Default::default(),
             start_turn: self.start_turn.clone(),
+            elapsed_time: self.elapsed_time,
         }
     }
 }
@@ -83,6 +86,9 @@ impl Player for FfxivPlayer {
     }
 
     fn handle_ffxiv_event(&mut self, event: FfxivEvent, debuffs: StatusTable<DebuffStatus>) {
+        if self.elapsed_time > 0 {
+            self.update_player_time_informations();
+        }
         let debuffs_table = debuffs.clone();
         match event {
             FfxivEvent::PlayerTurn(_, turn_type, max_time, event_time) => {
@@ -136,6 +142,14 @@ impl FfxivPlayer {
     pub fn get_id(&self) -> PlayerIdType {
         self.id
     }
+
+    fn update_player_time_informations(&mut self) {
+        let elapsed_time = self.elapsed_time;
+        self.update_status_time(elapsed_time);
+        self.update_cooldown(elapsed_time);
+        self.elapsed_time = 0;
+    }
+
     fn use_turn(
         &mut self,
         turn_info: TurnInfo,
@@ -474,6 +488,7 @@ impl FfxivPlayer {
             damage_logs: vec![],
             skill_logs: vec![],
             start_turn,
+            elapsed_time: 0,
         }
     }
     pub fn update_damage_log(

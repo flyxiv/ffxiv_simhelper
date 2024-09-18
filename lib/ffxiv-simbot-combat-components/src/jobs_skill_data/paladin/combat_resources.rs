@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::paladin::abilities::make_paladin_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -19,7 +18,7 @@ use std::rc::Rc;
 pub(crate) struct PaladinCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
-    blade_of_honor_stack: ResourceType,
+    resources: [ResourceType; 1],
 }
 
 impl CombatResource for PaladinCombatResources {
@@ -33,16 +32,12 @@ impl CombatResource for PaladinCombatResources {
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
         if resource_id == 0 {
-            self.blade_of_honor_stack = min(1, resource_amount + self.blade_of_honor_stack);
+            self.resources[0] = min(1, resource_amount + self.resources[0]);
         }
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.blade_of_honor_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -78,7 +73,7 @@ impl PaladinCombatResources {
         Self {
             skills: make_paladin_skill_list(player_id),
             current_combo: None,
-            blade_of_honor_stack: 0,
+            resources: [0],
         }
     }
 }

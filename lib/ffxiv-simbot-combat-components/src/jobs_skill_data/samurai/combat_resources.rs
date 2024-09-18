@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::samurai::abilities::make_samurai_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -15,6 +14,8 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const SAMURAI_STACK_COUNT: usize = 6;
+
 const GENKI_MAX_STACK: ResourceType = 100;
 const MEDITATION_MAX_STACK: ResourceType = 3;
 const SEN_1_MAX_STACK: ResourceType = 1;
@@ -22,16 +23,20 @@ const SEN_2_MAX_STACK: ResourceType = 1;
 const SEN_3_MAX_STACK: ResourceType = 1;
 const FILLER_MAX_STACK: ResourceType = 1;
 
+const SAMURAI_MAX_STACKS: [ResourceType; SAMURAI_STACK_COUNT] = [
+    GENKI_MAX_STACK,
+    MEDITATION_MAX_STACK,
+    SEN_1_MAX_STACK,
+    SEN_2_MAX_STACK,
+    SEN_3_MAX_STACK,
+    FILLER_MAX_STACK,
+];
+
 #[derive(Clone)]
 pub(crate) struct SamuraiCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
-    genki_stack: ResourceType,
-    meditation_stack: ResourceType,
-    sen_1_stack: ResourceType,
-    sen_2_stack: ResourceType,
-    sen_3_stack: ResourceType,
-    filler_stack: ResourceType,
+    resources: [ResourceType; SAMURAI_STACK_COUNT],
 }
 
 impl CombatResource for SamuraiCombatResources {
@@ -44,40 +49,15 @@ impl CombatResource for SamuraiCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.genki_stack = min(GENKI_MAX_STACK, self.genki_stack + resource_amount);
-        } else if resource_id == 1 {
-            self.meditation_stack = min(
-                MEDITATION_MAX_STACK,
-                self.meditation_stack + resource_amount,
-            );
-        } else if resource_id == 2 {
-            self.sen_1_stack = min(SEN_1_MAX_STACK, self.sen_1_stack + resource_amount);
-        } else if resource_id == 3 {
-            self.sen_2_stack = min(SEN_2_MAX_STACK, self.sen_2_stack + resource_amount);
-        } else if resource_id == 4 {
-            self.sen_3_stack = min(SEN_3_MAX_STACK, self.sen_3_stack + resource_amount);
-        } else if resource_id == 5 {
-            self.filler_stack = min(FILLER_MAX_STACK, self.filler_stack + resource_amount);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            SAMURAI_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.genki_stack
-        } else if resource_id == 1 {
-            self.meditation_stack
-        } else if resource_id == 2 {
-            self.sen_1_stack
-        } else if resource_id == 3 {
-            self.sen_2_stack
-        } else if resource_id == 4 {
-            self.sen_3_stack
-        } else if resource_id == 5 {
-            self.filler_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -114,12 +94,7 @@ impl SamuraiCombatResources {
         Self {
             skills: make_samurai_skill_list(player_id),
             current_combo: None,
-            genki_stack: 120,
-            meditation_stack: 0,
-            sen_1_stack: 0,
-            sen_2_stack: 0,
-            sen_3_stack: 0,
-            filler_stack: 3,
+            resources: [120, 0, 0, 0, 0, 0],
         }
     }
 }

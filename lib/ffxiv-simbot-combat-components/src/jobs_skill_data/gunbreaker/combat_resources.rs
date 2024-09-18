@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::gunbreaker::abilities::make_gunbreaker_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -15,15 +14,20 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const GUNBREAKER_STACK_COUNT: usize = 3;
+
 const SOIL_MAX: ResourceType = 3;
+const NOBLE_BLOOD_STACK_MAX: ResourceType = 1;
+const LION_HEART_STACK_MAX: ResourceType = 1;
+
+const GUNBREAKER_MAX_STACKS: [ResourceType; GUNBREAKER_STACK_COUNT] =
+    [SOIL_MAX, NOBLE_BLOOD_STACK_MAX, LION_HEART_STACK_MAX];
 
 #[derive(Clone)]
 pub(crate) struct GunbreakerCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
-    soil: ResourceType,
-    noble_blood_stack: ResourceType,
-    lion_heart_stack: ResourceType,
+    resources: [ResourceType; GUNBREAKER_STACK_COUNT],
 }
 
 impl CombatResource for GunbreakerCombatResources {
@@ -36,25 +40,15 @@ impl CombatResource for GunbreakerCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, amount: ResourceType) {
-        if resource_id == 0 {
-            self.soil = min(self.soil + amount, SOIL_MAX);
-        } else if resource_id == 1 {
-            self.noble_blood_stack = min(self.noble_blood_stack + amount, 1);
-        } else if resource_id == 2 {
-            self.lion_heart_stack = min(self.lion_heart_stack + amount, 1);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            GUNBREAKER_MAX_STACKS[resource_id],
+            self.resources[resource_id] + amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.soil
-        } else if resource_id == 1 {
-            self.noble_blood_stack
-        } else if resource_id == 2 {
-            self.lion_heart_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -90,9 +84,7 @@ impl GunbreakerCombatResources {
         Self {
             skills: make_gunbreaker_skill_list(player_id),
             current_combo: None,
-            soil: 0,
-            noble_blood_stack: 0,
-            lion_heart_stack: 0,
+            resources: [0; GUNBREAKER_STACK_COUNT],
         }
     }
 }

@@ -3,7 +3,6 @@ use crate::event::FfxivEventQueue;
 use crate::jobs_skill_data::summoner::abilities::make_summoner_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -16,6 +15,8 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+const SUMMONER_STACK_COUNT: usize = 6;
+
 const ENERGY_MAX_STACK: ResourceType = 2;
 const IFRIT_MAX_STACK: ResourceType = 1;
 const TITAN_MAX_STACK: ResourceType = 1;
@@ -23,16 +24,20 @@ const GARUDA_MAX_STACK: ResourceType = 1;
 const TRANCE_MAX_STACK: ResourceType = 1;
 const SOLAR_BAHAMUT_MAX_STACK: ResourceType = 1;
 
+const SUMMONER_MAX_STACKS: [ResourceType; SUMMONER_STACK_COUNT] = [
+    ENERGY_MAX_STACK,
+    IFRIT_MAX_STACK,
+    TITAN_MAX_STACK,
+    GARUDA_MAX_STACK,
+    TRANCE_MAX_STACK,
+    SOLAR_BAHAMUT_MAX_STACK,
+];
+
 #[derive(Clone)]
 pub(crate) struct SummonerCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
-    energy_stack: ResourceType,
-    ifrit_stack: ResourceType,
-    titan_stack: ResourceType,
-    garuda_stack: ResourceType,
-    trance_stack: ResourceType,
-    solar_bahamut_stack: ResourceType,
+    resources: [ResourceType; SUMMONER_STACK_COUNT],
 }
 
 impl CombatResource for SummonerCombatResources {
@@ -45,40 +50,15 @@ impl CombatResource for SummonerCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.energy_stack = min(ENERGY_MAX_STACK, self.energy_stack + resource_amount);
-        } else if resource_id == 1 {
-            self.ifrit_stack = min(IFRIT_MAX_STACK, self.ifrit_stack + resource_amount);
-        } else if resource_id == 2 {
-            self.titan_stack = min(TITAN_MAX_STACK, self.titan_stack + resource_amount);
-        } else if resource_id == 3 {
-            self.garuda_stack = min(GARUDA_MAX_STACK, self.garuda_stack + resource_amount);
-        } else if resource_id == 4 {
-            self.trance_stack = min(TRANCE_MAX_STACK, self.trance_stack + resource_amount);
-        } else if resource_id == 5 {
-            self.solar_bahamut_stack = min(
-                SOLAR_BAHAMUT_MAX_STACK,
-                self.solar_bahamut_stack + resource_amount,
-            );
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(
+            SUMMONER_MAX_STACKS[resource_id],
+            self.resources[resource_id] + resource_amount,
+        );
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
-        if resource_id == 0 {
-            self.energy_stack
-        } else if resource_id == 1 {
-            self.ifrit_stack
-        } else if resource_id == 2 {
-            self.titan_stack
-        } else if resource_id == 3 {
-            self.garuda_stack
-        } else if resource_id == 4 {
-            self.trance_stack
-        } else if resource_id == 5 {
-            self.solar_bahamut_stack
-        } else {
-            EMPTY_RESOURCE
-        }
+        self.resources[resource_id as usize]
     }
 
     fn get_current_combo(&self) -> ComboType {
@@ -118,12 +98,7 @@ impl SummonerCombatResources {
         Self {
             skills: make_summoner_skill_list(player_id, ffxiv_event_queue),
             current_combo: None,
-            energy_stack: 0,
-            ifrit_stack: 0,
-            titan_stack: 0,
-            garuda_stack: 0,
-            trance_stack: 0,
-            solar_bahamut_stack: 1,
+            resources: [0, 0, 0, 0, 0, 0],
         }
     }
 }

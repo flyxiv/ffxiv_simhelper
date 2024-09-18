@@ -5,11 +5,7 @@ use crate::id_entity::IdEntity;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
 use crate::live_objects::turn_type::FfxivTurnType;
-use crate::rotation::cooldown_timer::CooldownTimer;
 use crate::rotation::information_needed_for_rotation_decision::InformationNeededForRotationDecision;
-use crate::rotation::priority_simulation_data::{
-    PriorityDecisionTable, TruncatedBuffStatus, TruncatedDebuffStatus,
-};
 use crate::rotation::skill_simulation_event::{
     extract_skill_simulation_event, simulate_resources, SkillSimulationEvent,
 };
@@ -17,7 +13,7 @@ use crate::rotation::SkillPriorityInfo;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{ResourceRequirements, NON_GCD_DELAY_MILLISECOND};
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, PlayerIdType, ResourceIdType, SkillIdType, StatusIdType, TimeType};
+use crate::types::{ComboType, ResourceIdType, SkillIdType, StatusIdType, TimeType};
 use crate::types::{ResourceType, StackType};
 use itertools::Itertools;
 use std::cell::RefCell;
@@ -347,56 +343,6 @@ pub(crate) trait PriorityTable: Sized + Clone {
         return vec![];
     }
 
-    fn meets_requirements_gcd(
-        &self,
-        buff_list: &HashMap<StatusKey, TruncatedBuffStatus>,
-        debuff_list: &HashMap<StatusKey, TruncatedDebuffStatus>,
-        combat_resource: &FfxivCombatResources,
-        skill: &AttackSkill,
-        player_id: PlayerIdType,
-    ) -> bool {
-        for resource_required in &skill.resource_required {
-            match resource_required {
-                ResourceRequirements::Resource(id, resource) => {
-                    if combat_resource.get_resource(*id) < *resource {
-                        return false;
-                    }
-                }
-                ResourceRequirements::UseBuff(status_id) => {
-                    if !self.has_status_gcd(buff_list, debuff_list, *status_id, player_id) {
-                        return false;
-                    }
-                }
-                ResourceRequirements::UseDebuff(status_id) => {
-                    if !self.has_status_gcd(buff_list, debuff_list, *status_id, player_id) {
-                        return false;
-                    }
-                }
-                ResourceRequirements::CheckStatus(status_id) => {
-                    if !self.has_status_gcd(buff_list, debuff_list, *status_id, player_id) {
-                        return false;
-                    }
-                }
-                _ => {}
-            }
-        }
-
-        true
-    }
-
-    #[inline]
-    fn has_status_gcd(
-        &self,
-        buff_list: &HashMap<StatusKey, TruncatedBuffStatus>,
-        debuff_list: &HashMap<StatusKey, TruncatedDebuffStatus>,
-        status_id: StatusIdType,
-        player_id: PlayerIdType,
-    ) -> bool {
-        let key = StatusKey::new(status_id, player_id);
-
-        buff_list.get(&key).is_some() || debuff_list.get(&key).is_some()
-    }
-
     fn can_use_skill(
         &self,
         information_needed: InformationNeededForRotationDecision,
@@ -527,10 +473,10 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 for simulation_event in simulation_events {
                     match simulation_event {
                         SkillSimulationEvent::UpdateCombo(update_combo_id) => {
-                            if let Some(combo_id) = combo_id {
-                                *update_combo_id == *combo_id;
+                            return if let Some(combo_id) = combo_id {
+                                *update_combo_id == *combo_id
                             } else {
-                                return false;
+                                false
                             }
                         }
                         _ => {}
@@ -662,7 +608,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 for simulation_event in simulation_events {
                     match simulation_event {
                         SkillSimulationEvent::AddResource(resource_id, amount) => {
-                            /// TODO: add max resource API?
+                            // TODO: add max resource API?
                             if *resource_id == *greater_resource_id {
                                 greater_resource += amount;
                             } else if *resource_id == *lesser_resource_id {
@@ -734,7 +680,6 @@ pub(crate) trait PriorityTable: Sized + Clone {
         }
     }
 
-    #[inline]
     fn has_status(
         &self,
         information_needed: InformationNeededForRotationDecision,
@@ -756,6 +701,16 @@ pub(crate) trait PriorityTable: Sized + Clone {
                         return true;
                     }
                 }
+                SkillSimulationEvent::RemoveBuff(buff_id) => {
+                    if *buff_id == status_id {
+                        return false;
+                    }
+                }
+                SkillSimulationEvent::RemoveDebuff(debuff_id) => {
+                    if *debuff_id == status_id {
+                        return false;
+                    }
+                }
 
                 _ => {}
             }
@@ -774,29 +729,6 @@ pub(crate) trait PriorityTable: Sized + Clone {
 
     fn increment_turn(&self);
     fn get_turn_count(&self) -> SkillIdType;
-}
-
-fn advance_time(priority_simulation_data: &mut PriorityDecisionTable, elapsed_time: TimeType) {
-    for buff in priority_simulation_data.buff_list.values_mut() {
-        buff.duration_left_millisecond -= elapsed_time;
-    }
-
-    for debuff in priority_simulation_data.debuff_list.values_mut() {
-        debuff.duration_left_millisecond -= elapsed_time;
-    }
-
-    priority_simulation_data
-        .buff_list
-        .retain(|_, buff| buff.duration_left_millisecond > 0);
-    priority_simulation_data
-        .debuff_list
-        .retain(|_, debuff| debuff.duration_left_millisecond > 0);
-    priority_simulation_data.milliseconds_before_burst = max(
-        priority_simulation_data.milliseconds_before_burst - elapsed_time,
-        0,
-    );
-
-    priority_simulation_data.update_cooldown(elapsed_time);
 }
 
 fn has_important_skill(ogcd_plans: &Option<Vec<OgcdPlan>>) -> bool {

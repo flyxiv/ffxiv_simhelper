@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::dancer::abilities::make_dancer_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -85,7 +84,7 @@ impl DancerCombatResources {
             skills: make_dancer_skill_list(player_id, partner_player_id),
             current_combo: None,
             partner_player_id,
-            resources: [EMPTY_RESOURCE; DANCER_STACK_COUNT],
+            resources: [0; DANCER_STACK_COUNT],
         }
     }
 }

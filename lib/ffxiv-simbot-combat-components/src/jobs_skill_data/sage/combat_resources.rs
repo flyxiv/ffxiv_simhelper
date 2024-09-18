@@ -2,7 +2,6 @@ use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::sage::abilities::make_sage_skills;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;
-use crate::rotation::priority_simulation_data::EMPTY_RESOURCE;
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::SkillEvents;
@@ -31,7 +30,7 @@ impl CombatResource for SageCombatResources {
     fn add_resource(&mut self, _: ResourceIdType, _: ResourceType) {}
 
     fn get_resource(&self, _: ResourceIdType) -> ResourceType {
-        EMPTY_RESOURCE
+        -100
     }
 
     fn get_current_combo(&self) -> ComboType {
