@@ -5,5 +5,5 @@ use serde::Serialize;
 #[serde(rename_all = "camelCase")]
 pub struct BestPartnerApiResponse {
     pub partner_job_abbrev: String,
-    pub contributed_dps: DpsType,
+    pub contributed_dps: Vec<i32>,
 }

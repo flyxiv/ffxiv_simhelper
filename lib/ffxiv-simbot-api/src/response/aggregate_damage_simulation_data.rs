@@ -1,10 +1,17 @@
 use crate::response::CountType;
 use ffxiv_simbot_combat_components::live_objects::player::logs::DamageLog;
 use ffxiv_simbot_combat_components::live_objects::player::StatusKey;
-use ffxiv_simbot_combat_components::types::MultiplierType;
+use ffxiv_simbot_combat_components::types::{MultiplierType, TimeType};
 use ffxiv_simbot_combat_components::types::{PlayerIdType, SkillIdType};
 use itertools::izip;
 use std::collections::HashMap;
+
+const MINUTE_IN_MILLISECOND: TimeType = 60000;
+
+/// standard step, wanderer, mages ballad and armys paeon
+const PASSIVE_RAIDBUFFS: [SkillIdType; 4] = [1500, 1304, 1306, 1308];
+const PASSIVE_END_MILLISECOND: TimeType = 30000;
+const PASSIVE_START_MILLISECOND: TimeType = 4000;
 
 /// Sum up all damage profile for each skill.
 #[derive(Clone)]
@@ -54,19 +61,39 @@ impl Default for SkillDamageAggregate {
 /// for each skill unit.
 pub(crate) fn aggregate_skill_damage(
     damage_logs_of_party: &[Vec<DamageLog>],
-) -> Vec<HashMap<SkillIdType, SkillDamageAggregate>> {
+) -> (
+    Vec<HashMap<SkillIdType, SkillDamageAggregate>>,
+    Vec<HashMap<SkillIdType, HashMap<(StatusKey, TimeType), MultiplierType>>>,
+) {
     let mut skill_damage_tables = vec![];
+    let mut skill_burst_damage_tables = vec![];
 
     for damage_logs_of_single_player in damage_logs_of_party {
         let mut skill_damage_table = HashMap::new();
+        let mut skill_burst_damage_table = HashMap::new();
 
         for damage_log in damage_logs_of_single_player.iter() {
+            let damage_time_milliseconds = damage_log.time;
+            let damage_minute = damage_time_milliseconds / MINUTE_IN_MILLISECOND;
+
+            /// only consider passive raidbuffs at even minutes:4 seconds to 30 seconds
+            let time_key =
+                if PASSIVE_RAIDBUFFS.contains(&damage_log.skill_id) && damage_minute % 2 == 0 {
+                    let time_offset = damage_time_milliseconds % MINUTE_IN_MILLISECOND;
+                    if time_offset >= PASSIVE_START_MILLISECOND
+                        && time_offset <= PASSIVE_END_MILLISECOND
+                    {
+                        Some(damage_minute)
+                    } else {
+                        None
+                    }
+                } else {
+                    Some(damage_minute)
+                };
+
             let skill_damage_entry = skill_damage_table
                 .entry(damage_log.skill_id)
                 .or_insert(SkillDamageAggregate::default());
-
-            skill_damage_entry.total_raw_damage += damage_log.raw_damage;
-            skill_damage_entry.cast_count += 1;
 
             for rdps_contribution in damage_log.rdps_contribution.iter() {
                 let status_key = StatusKey::new(
@@ -80,13 +107,26 @@ pub(crate) fn aggregate_skill_damage(
                     .or_insert(0.0);
 
                 *rdps_contribution_entry += rdps_contribution.contributed_damage;
+
+                if let Some(minute) = time_key {
+                    let skill_burst_damage_entry = skill_burst_damage_table
+                        .entry(damage_log.skill_id)
+                        .or_insert(HashMap::new());
+
+                    let burst_rdps_contribution_entry = skill_burst_damage_entry
+                        .entry((status_key, minute))
+                        .or_insert(0.0);
+
+                    *burst_rdps_contribution_entry += rdps_contribution.contributed_damage;
+                }
             }
         }
 
         skill_damage_tables.push(skill_damage_table);
+        skill_burst_damage_tables.push(skill_burst_damage_table);
     }
 
-    skill_damage_tables
+    (skill_damage_tables, skill_burst_damage_tables)
 }
 
 /// Aggregate the total number of buff contribution for each player in player units.
@@ -138,6 +178,10 @@ pub(crate) fn aggregate_player_damage_statistics(
     party_damage_aggregate
 }
 
+/// Aggregates total raw/raid damage a player has given to each raidbuff
+/// Vec[player_id] contains raidbuff damage aggregate for each player.
+/// HashMap<SkillIdType, RaidbuffDamageAggregate> contains the total raw/raid damage a player has given to each raidbuff.
+/// HashMap<(SkillIdType, TimeType), RaidbuffDamageAggregate> contains the total raw/raid damage a player has given at each burst time.
 pub(crate) fn aggregate_status_damages(
     skill_damage_tables: &[HashMap<SkillIdType, SkillDamageAggregate>],
 ) -> Vec<HashMap<SkillIdType, RaidbuffDamageAggregate>> {

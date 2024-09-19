@@ -4,13 +4,14 @@ use crate::response::aggregate_damage_simulation_data::{
 };
 use crate::response::from_with_time::FromWithTime;
 use crate::response::simulation_api_response::{
-    DamageProfileResponse, PartyContributionResponse, SimulationApiResponse,
-    SimulationDataResponse, SimulationSummaryResponse, SkillLogResponse, SKILL_ENTITY_STRING,
-    STATUS_ENTITY_STRING,
+    DamageProfileResponse, PartyBurstContributionResponse, PartyContributionResponse,
+    SimulationApiResponse, SimulationDataResponse, SimulationSummaryResponse, SkillLogResponse,
+    SKILL_ENTITY_STRING, STATUS_ENTITY_STRING,
 };
 use ffxiv_simbot_combat_components::jobs_skill_data::ninja::combat_resources::BUNSHIN_CLONE_ID;
 use ffxiv_simbot_combat_components::live_objects::player::logs::SkillLog;
 use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
+use ffxiv_simbot_combat_components::live_objects::player::StatusKey;
 use ffxiv_simbot_combat_components::types::{DpsType, MultiplierType, PlayerIdType};
 use ffxiv_simbot_combat_components::types::{SkillIdType, TimeType};
 use ffxiv_simbot_dps_simulator::simulation_result::SimulationResult;
@@ -166,6 +167,35 @@ fn create_party_contribution_response(
     party_contribution_responses
 }
 
+fn create_party_burst_contribution_response(
+    player_id: PlayerIdType,
+    skill_burst_damage_table: &HashMap<SkillIdType, HashMap<(StatusKey, TimeType), MultiplierType>>,
+    combat_time_millisecond: TimeType,
+) -> Vec<PartyBurstContributionResponse> {
+    let mut party_contribution_responses = vec![];
+
+    for (skill_id, skill_burst_damage_aggregate) in skill_burst_damage_table {
+        for ((status_key, minute), contributed_damage) in skill_burst_damage_aggregate.iter() {
+            let party_member_id = status_key.player_id;
+            let contributed_rdps = damage_to_dps(*contributed_damage, combat_time_millisecond);
+
+            if party_member_id == player_id {
+                continue;
+            }
+
+            party_contribution_responses.push(PartyBurstContributionResponse {
+                skill_id: *skill_id,
+                party_member_id,
+                status_id: status_key.status_id,
+                contributed_rdps,
+                minute: *minute,
+            })
+        }
+    }
+
+    party_contribution_responses
+}
+
 pub(crate) fn create_response_from_simulation_result(
     simulation_result: SimulationResult,
     main_player_power: PlayerPower,
@@ -179,7 +209,8 @@ pub(crate) fn create_response_from_simulation_result(
         .map(|party_simulation_result| party_simulation_result.damage_log.clone())
         .collect_vec();
 
-    let skill_damage_tables = aggregate_skill_damage(&damage_logs_of_all_players);
+    let (skill_damage_tables, skill_burst_damage_tables) =
+        aggregate_skill_damage(&damage_logs_of_all_players);
 
     let status_damage_aggregates = aggregate_status_damages(&skill_damage_tables);
     let party_damage_contribution_table = skill_damage_tables
@@ -222,6 +253,18 @@ pub(crate) fn create_response_from_simulation_result(
         })
         .collect_vec();
 
+    let party_burst_contribution_responses = skill_burst_damage_tables
+        .iter()
+        .enumerate()
+        .map(|(player_id, skill_burst_damage_tables)| {
+            create_party_burst_contribution_response(
+                player_id as PlayerIdType,
+                skill_burst_damage_tables,
+                combat_time_millisecond,
+            )
+        })
+        .collect_vec();
+
     let rotation_log_responses = simulation_result
         .party_simulation_results
         .iter()
@@ -241,12 +284,14 @@ pub(crate) fn create_response_from_simulation_result(
         party_simulation_result,
         summary,
         party_contribution_response,
+        party_burst_contribution_response,
         damage_profile_response,
         rotation_log_response,
     ) in izip!(
         &simulation_result.party_simulation_results,
         summaries,
         party_contribution_responses,
+        party_burst_contribution_responses,
         damage_profile_responses,
         rotation_log_responses
     ) {
@@ -257,6 +302,7 @@ pub(crate) fn create_response_from_simulation_result(
             simulation_summary: summary,
             party_contribution_table: party_contribution_response,
             damage_profile_table: damage_profile_response,
+            party_burst_contribution_table: party_burst_contribution_response,
             rotation_log: rotation_log_response,
         });
     }

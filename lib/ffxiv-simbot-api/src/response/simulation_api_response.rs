@@ -27,6 +27,7 @@ pub struct SimulationDataResponse {
     pub simulation_summary: SimulationSummaryResponse,
     pub party_contribution_table: Vec<PartyContributionResponse>,
     pub damage_profile_table: Vec<DamageProfileResponse>,
+    pub party_burst_contribution_table: Vec<PartyBurstContributionResponse>,
     pub rotation_log: Vec<SkillLogResponse>,
 }
 
@@ -57,6 +58,16 @@ pub struct SimulationSummaryResponse {
 #[serde(rename_all = "camelCase")]
 pub struct PartyContributionResponse {
     pub skill_id: SkillIdType,
+    pub party_member_id: PlayerIdType,
+    pub status_id: SkillIdType,
+    pub contributed_rdps: DpsType,
+}
+
+#[derive(Debug, Serialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct PartyBurstContributionResponse {
+    pub skill_id: SkillIdType,
+    pub minute: TimeType,
     pub party_member_id: PlayerIdType,
     pub status_id: SkillIdType,
     pub contributed_rdps: DpsType,

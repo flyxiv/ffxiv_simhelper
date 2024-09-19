@@ -17,13 +17,16 @@ pub(crate) async fn best_partner_api_handler(
     Ok(Json(best_partner(request)?))
 }
 
+const ARRAY_REPEAT_VALUE: Vec<i32> = Vec::new();
+
 pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiResponse> {
     let main_player_id = request.main_player_id;
     let main_player_power = request.party[main_player_id as usize].power.clone();
     let main_player_job_abbrev = request.party[main_player_id as usize].job_abbrev.clone();
 
-    let mut partner_contributions: [i32; BEST_PARTNER_SIMULATION_COUNT] =
-        [0; BEST_PARTNER_SIMULATION_COUNT];
+    /// first contains total, after that contains contribution at every burst phase
+    let mut partner_contributions: [Vec<i32>; BEST_PARTNER_SIMULATION_COUNT] =
+        [ARRAY_REPEAT_VALUE; BEST_PARTNER_SIMULATION_COUNT];
 
     for simulation_idx in 0..BEST_PARTNER_SIMULATION_COUNT {
         let simulation_board = create_simulation_board(request.clone(), false)?;
@@ -38,8 +41,14 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
 
         let partner_contribution = response.simulation_data[1].simulation_summary.edps
             - response.simulation_data[1].simulation_summary.rdps;
+        let partner_contribution_each_burst = response.simulation_data[1]
+            .party_burst_contribution_table
+            .iter()
+            .map(|response| response.contributed_rdps as i32)
+            .collect_vec();
 
-        partner_contributions[simulation_idx] = partner_contribution as i32;
+        partner_contributions[simulation_idx].push(partner_contribution as i32);
+        partner_contributions[simulation_idx].extend(partner_contribution_each_burst);
     }
 
     Ok(BestPartnerApiResponse {
@@ -47,7 +56,7 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
             .into_iter()
             .sorted()
             .nth((WANTED_CONTRIBUTION_PERCENTILE * BEST_PARTNER_SIMULATION_COUNT as f64) as usize)
-            .unwrap() as DpsType,
+            .unwrap(),
         partner_job_abbrev: request.party[1].job_abbrev.clone(),
     })
 }

@@ -29,7 +29,7 @@ pub fn init(log_level: LevelFilter) -> Result<(), SetLoggerError> {
 }
 
 fn main() {
-    let party_members = vec!["PLD", "NIN", "WAR", "WHM", "SGE", "DRG", "BRD", "BLM"];
+    let party_members = vec!["PLD", "NIN", "WAR", "WHM", "SGE", "DRG", "BRD", "PCT"];
     let party = party_members
         .iter()
         .enumerate()
