@@ -59,11 +59,13 @@ impl Default for SkillDamageAggregate {
 /// Aggregate the total number of raw damage
 /// and the total number of buff contribution for each raidbuff.
 /// for each skill unit.
+/// first hashmap: detailed dps profile of each skill(how much each skill contributed + raw damage)
+/// second hashmap: burst profile: how much each player contributed to each player at each burst periods.
 pub(crate) fn aggregate_skill_damage(
     damage_logs_of_party: &[Vec<DamageLog>],
 ) -> (
     Vec<HashMap<SkillIdType, SkillDamageAggregate>>,
-    Vec<HashMap<SkillIdType, HashMap<(StatusKey, TimeType), MultiplierType>>>,
+    Vec<HashMap<(PlayerIdType, TimeType), MultiplierType>>,
 ) {
     let mut skill_damage_tables = vec![];
     let mut skill_burst_damage_tables = vec![];
@@ -76,9 +78,23 @@ pub(crate) fn aggregate_skill_damage(
             let damage_time_milliseconds = damage_log.time;
             let damage_minute = damage_time_milliseconds / MINUTE_IN_MILLISECOND;
 
-            /// only consider passive raidbuffs at even minutes:4 seconds to 30 seconds
-            let time_key =
-                if PASSIVE_RAIDBUFFS.contains(&damage_log.skill_id) && damage_minute % 2 == 0 {
+            let skill_damage_entry = skill_damage_table
+                .entry(damage_log.skill_id)
+                .or_insert(SkillDamageAggregate::default());
+
+            skill_damage_entry.total_raw_damage += damage_log.raw_damage;
+            skill_damage_entry.cast_count += 1;
+
+            for rdps_contribution in damage_log.rdps_contribution.iter() {
+                let status_key = StatusKey::new(
+                    rdps_contribution.raid_buff_status_id,
+                    rdps_contribution.player_id,
+                );
+
+                /// only consider passive raidbuffs at even minutes:4 seconds to 30 seconds
+                let time_key = if PASSIVE_RAIDBUFFS.contains(&rdps_contribution.raid_buff_status_id)
+                    && damage_minute % 2 == 0
+                {
                     let time_offset = damage_time_milliseconds % MINUTE_IN_MILLISECOND;
                     if time_offset >= PASSIVE_START_MILLISECOND
                         && time_offset <= PASSIVE_END_MILLISECOND
@@ -91,16 +107,6 @@ pub(crate) fn aggregate_skill_damage(
                     Some(damage_minute)
                 };
 
-            let skill_damage_entry = skill_damage_table
-                .entry(damage_log.skill_id)
-                .or_insert(SkillDamageAggregate::default());
-
-            for rdps_contribution in damage_log.rdps_contribution.iter() {
-                let status_key = StatusKey::new(
-                    rdps_contribution.raid_buff_status_id,
-                    rdps_contribution.player_id,
-                );
-
                 let rdps_contribution_entry = skill_damage_entry
                     .total_rdps_contribution
                     .entry(status_key)
@@ -110,14 +116,10 @@ pub(crate) fn aggregate_skill_damage(
 
                 if let Some(minute) = time_key {
                     let skill_burst_damage_entry = skill_burst_damage_table
-                        .entry(damage_log.skill_id)
-                        .or_insert(HashMap::new());
-
-                    let burst_rdps_contribution_entry = skill_burst_damage_entry
-                        .entry((status_key, minute))
+                        .entry((rdps_contribution.player_id, minute))
                         .or_insert(0.0);
 
-                    *burst_rdps_contribution_entry += rdps_contribution.contributed_damage;
+                    *skill_burst_damage_entry += rdps_contribution.contributed_damage;
                 }
             }
         }

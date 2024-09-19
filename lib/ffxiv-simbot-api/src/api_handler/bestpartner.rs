@@ -4,12 +4,11 @@ use crate::request::simulation_api_request::SimulationApiRequest;
 use crate::response::best_partner_api_response::BestPartnerApiResponse;
 use crate::response::convert_simulation_result::create_response_from_simulation_result;
 use axum::Json;
-use ffxiv_simbot_combat_components::types::DpsType;
 use ffxiv_simbot_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
 
-const BEST_PARTNER_SIMULATION_COUNT: usize = 100;
-const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.95;
+const BEST_PARTNER_SIMULATION_COUNT: usize = 1000;
+const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.75;
 
 pub(crate) async fn best_partner_api_handler(
     Json(request): Json<SimulationApiRequest>,
@@ -51,12 +50,33 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
         partner_contributions[simulation_idx].extend(partner_contribution_each_burst);
     }
 
-    Ok(BestPartnerApiResponse {
-        contributed_dps: partner_contributions
+    let burst_count = partner_contributions[0].len();
+
+    let mut contributed_dps: Vec<i32> = Vec::with_capacity(burst_count);
+
+    for burst_idx in 0..burst_count {
+        let mut burst_contributions: Vec<i32> = partner_contributions
+            .iter()
+            .map(|contributions| {
+                if contributions.len() > burst_idx {
+                    contributions[burst_idx]
+                } else {
+                    0
+                }
+            })
+            .collect();
+
+        let mut burst_contribution_top_nth_percentile = burst_contributions
             .into_iter()
             .sorted()
             .nth((WANTED_CONTRIBUTION_PERCENTILE * BEST_PARTNER_SIMULATION_COUNT as f64) as usize)
-            .unwrap(),
+            .unwrap();
+
+        contributed_dps.push(burst_contribution_top_nth_percentile);
+    }
+
+    Ok(BestPartnerApiResponse {
+        contributed_dps,
         partner_job_abbrev: request.party[1].job_abbrev.clone(),
     })
 }

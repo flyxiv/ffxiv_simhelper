@@ -169,28 +169,24 @@ fn create_party_contribution_response(
 
 fn create_party_burst_contribution_response(
     player_id: PlayerIdType,
-    skill_burst_damage_table: &HashMap<SkillIdType, HashMap<(StatusKey, TimeType), MultiplierType>>,
+    skill_burst_damage_table: &HashMap<(PlayerIdType, TimeType), MultiplierType>,
     combat_time_millisecond: TimeType,
 ) -> Vec<PartyBurstContributionResponse> {
     let mut party_contribution_responses = vec![];
 
-    for (skill_id, skill_burst_damage_aggregate) in skill_burst_damage_table {
-        for ((status_key, minute), contributed_damage) in skill_burst_damage_aggregate.iter() {
-            let party_member_id = status_key.player_id;
-            let contributed_rdps = damage_to_dps(*contributed_damage, combat_time_millisecond);
+    for ((party_member_id, minute), skill_burst_damage_aggregate) in skill_burst_damage_table {
+        let contributed_rdps =
+            damage_to_dps(*skill_burst_damage_aggregate, combat_time_millisecond);
 
-            if party_member_id == player_id {
-                continue;
-            }
-
-            party_contribution_responses.push(PartyBurstContributionResponse {
-                skill_id: *skill_id,
-                party_member_id,
-                status_id: status_key.status_id,
-                contributed_rdps,
-                minute: *minute,
-            })
+        if *party_member_id == player_id {
+            continue;
         }
+
+        party_contribution_responses.push(PartyBurstContributionResponse {
+            party_member_id: *party_member_id,
+            contributed_rdps,
+            minute: *minute,
+        })
     }
 
     party_contribution_responses

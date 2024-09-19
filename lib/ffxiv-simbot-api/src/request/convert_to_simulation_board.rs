@@ -16,13 +16,13 @@ enum PartnerCategory {
 
 lazy_static! {
     static ref ALL_PARTNER_PRIORITY: Vec<&'static str> = vec![
-        "VPR", "PCT", "SAM", "NIN", "MNK", "DRG", "RPR", "BLM", "SMN", "RDM", "MCH", "DNC", "BRD",
-        "DRK", "PLD", "WAR", "GNB", "WHM", "SGE", "SCH", "AST",
+        "PCT", "SAM", "MNK", "NIN", "VPR", "RPR", "DRG", "RDM", "SMN", "BLM", "MCH", "BRD", "DRK",
+        "GNB", "WAR", "PLB", "WHM", "SGE", "SCH", "AST", "DNC"
     ];
     static ref MELEE_PRIORITY: Vec<&'static str> =
-        vec!["VPR", "SAM", "NIN", "MNK", "DRG", "RPR", "DRK", "PLD", "WAR", "GNB",];
+        vec!["SAM", "MNK", "NIN", "VPR", "RPR", "DRG", "DRK", "GNB", "WAR", "PLD",];
     static ref RANGED_PRIORITY: Vec<&'static str> =
-        vec!["PCT", "BLM", "SMN", "DNC", "RDM", "MCH", "BRD", "WHM", "SGE", "SCH", "AST",];
+        vec!["PCT", "RDM", "SMN", "DNC", "BLM", "MCH", "BRD", "WHM", "SGE", "SCH", "AST",];
 }
 
 pub(crate) fn create_player(
@@ -224,7 +224,7 @@ fn get_partner_id(
 
             for job in partner_priority_table {
                 for (id, job_name) in party_jobs {
-                    if job_name == *job {
+                    if job_name == *job && *id != 0 {
                         return *id;
                     }
                 }

@@ -66,10 +66,8 @@ pub struct PartyContributionResponse {
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PartyBurstContributionResponse {
-    pub skill_id: SkillIdType,
     pub minute: TimeType,
     pub party_member_id: PlayerIdType,
-    pub status_id: SkillIdType,
     pub contributed_rdps: DpsType,
 }
 
