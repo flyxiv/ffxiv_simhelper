@@ -1,5 +1,8 @@
 import { Box, styled } from "@mui/material";
-import { ResultBoardBoxStyle, ResultBoardTopBoxStyle } from "../components/container/Styles";
+import {
+  ResultBoardBoxStyle,
+  ResultBoardTopBoxStyle,
+} from "../components/container/Styles";
 import { PlayerInfo } from "../components/container/PlayerInfo";
 import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { BEST_PARTNER_RESPONSE_SAVE_NAME } from "../App";
@@ -7,15 +10,37 @@ import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import {
-  BestPartnerResponse,
   BestPartnerResponseTable,
+  BestPartnerSingleBurst,
 } from "../types/BestPartnerResponse";
 import { Footer } from "../components/basic/Footer";
-import {
-  SimulationDataByRole,
-} from "../types/ffxivdatabase/PartyCompositionMaker";
+import { SimulationDataByRole } from "../types/ffxivdatabase/PartyCompositionMaker";
 import { ContributionByRoleTable } from "../components/graph/ContributionByRoleTable";
-import { AST_EN_NAME, BEST_PARTNER_BY_ROLE_TEXT, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PLD_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SIMULATION_RESULT_TEXT, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../const/languageTexts";
+import {
+  AST_EN_NAME,
+  BEST_PARTNER_BY_ROLE_TEXT,
+  BRD_EN_NAME,
+  BURST_SECTION_TITLE_TEXT,
+  BURST_TEXT,
+  DNC_EN_NAME,
+  DRG_EN_NAME,
+  DRK_EN_NAME,
+  GNB_EN_NAME,
+  MCH_EN_NAME,
+  MNK_EN_NAME,
+  NIN_EN_NAME,
+  OVERALL_TEXT,
+  PLD_EN_NAME,
+  RPR_EN_NAME,
+  SAM_EN_NAME,
+  SCH_EN_NAME,
+  SGE_EN_NAME,
+  SIMULATION_RESULT_TEXT,
+  TOTAL_TEXT,
+  VPR_EN_NAME,
+  WAR_EN_NAME,
+  WHM_EN_NAME,
+} from "../const/languageTexts";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -41,7 +66,23 @@ export function BestPartnerResult() {
   let responseJson = JSON.parse(response) as BestPartnerResponseTable;
   let mainPlayerJob = responseJson.mainPlayerJobAbbrev;
   let contributionTable = responseJson.partnerSimulationData;
-  let simulationDataByRole = convertToContributionTable(contributionTable);
+
+  let burst_count = contributionTable[0].contributedDps.length;
+
+  let simulationDataByRoles: Array<SimulationDataByRole> = [];
+
+  for (let i = 0; i < burst_count; i++) {
+    let singleBurstResponses = contributionTable.map((response) => {
+      return {
+        partnerJobAbbrev: response.partnerJobAbbrev,
+        contributedDps: response.contributedDps[i],
+        minute: (i - 1) * 2,
+      };
+    });
+    simulationDataByRoles.push(
+      convertToContributionTable(singleBurstResponses)
+    );
+  }
 
   return (
     <Box
@@ -58,11 +99,26 @@ export function BestPartnerResult() {
           {AppHeader()}
           <ResultTopBoardBox marginBottom="40px">
             {SimulationTitle(SIMULATION_RESULT_TEXT)}
-            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond)}
+            {PlayerInfo(
+              responseJson.mainPlayerPower,
+              mainPlayerJob,
+              responseJson.combatTimeMillisecond
+            )}
           </ResultTopBoardBox>
           <ResultBoardBox>
-            {SimulationTitle(BEST_PARTNER_BY_ROLE_TEXT)}
-            {ContributionByRoleTable(simulationDataByRole)}
+            {SimulationTitle(OVERALL_TEXT)}
+            {ContributionByRoleTable(simulationDataByRoles[0])}
+
+            {simulationDataByRoles.slice(1).map((table, index) => {
+              let burstMinute = index * 2;
+
+              return (
+                <>
+                  {SimulationTitle(BURST_TEXT(burstMinute))}
+                  {ContributionByRoleTable(table)};
+                </>
+              );
+            })}
           </ResultBoardBox>
           {Footer()}
         </Box>
@@ -72,7 +128,7 @@ export function BestPartnerResult() {
 }
 
 function convertToContributionTable(
-  partnerSimulationData: Array<BestPartnerResponse>
+  partnerSimulationData: Array<BestPartnerSingleBurst>
 ) {
   let table: SimulationDataByRole = {
     tanks: [],

@@ -78,7 +78,6 @@ export function QuickSim() {
   if (isNotValid(mostRecentInput)) {
     mostRecentInput = defaultSingleEquipmentInput();
   }
-  console.log(mostRecentInput);
 
   const [totalState, setTotalState] = useState(mostRecentInput);
 

@@ -17,7 +17,7 @@ enum PartnerCategory {
 lazy_static! {
     static ref ALL_PARTNER_PRIORITY: Vec<&'static str> = vec![
         "PCT", "SAM", "MNK", "NIN", "VPR", "RPR", "DRG", "RDM", "SMN", "BLM", "MCH", "BRD", "DRK",
-        "GNB", "WAR", "PLB", "WHM", "SGE", "SCH", "AST", "DNC"
+        "GNB", "WAR", "PLD", "WHM", "SGE", "SCH", "AST", "DNC"
     ];
     static ref MELEE_PRIORITY: Vec<&'static str> =
         vec!["SAM", "MNK", "NIN", "VPR", "RPR", "DRG", "DRK", "GNB", "WAR", "PLD",];

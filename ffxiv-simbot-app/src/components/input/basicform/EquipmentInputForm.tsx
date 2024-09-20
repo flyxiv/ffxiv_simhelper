@@ -445,13 +445,11 @@ function PartnerSelectionMenu(
     );
   } else if (mainPlayerJobAbbrev === DNC_EN_NAME) {
     return (
-      <EquipmentGridItemBox key={`partner1_${id}_grid`}>
-        <InputEquipmentBox
-          item
-          xs={12}
-          key={`partner1_${id}`}
-          sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
-        >
+      <EquipmentGridItemBox
+        key={`partner1_${id}_grid`}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
+      >
+        <InputEquipmentBox item key={`partner1_${id}`}>
           {Partner1Selection(
             id,
             totalEquipmentState,

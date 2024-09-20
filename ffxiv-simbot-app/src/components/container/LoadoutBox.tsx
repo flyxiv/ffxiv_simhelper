@@ -35,7 +35,7 @@ export const inputStyle = {
     notched: false,
   },
   label: {
-    transform: "translate(0, -1.5vh) scale(0.8)", // 레이블이 Input 내에 위치하도록 합니다.
+    transform: "translate(0, -2.3vh)",
   },
 };
 
@@ -118,6 +118,11 @@ export function LoadoutBox(
       </Box>
       <Box>
         <LoadoutInput
+          InputLabelProps={{
+            sx: {
+              fontSize: "1.6vh",
+            },
+          }}
           label={NAME_TEXT}
           value={textFieldInputLoadoutName}
           onChange={(e) => {

@@ -182,6 +182,10 @@ export function getPossibleMateriasForEquipmentSlot(
       possibleMaterias.splice(i, 1);
       i = i - 1;
     }
+  }
+
+  for (let i = 0; i < possibleMaterias.length; i++) {
+    let [statName, _] = possibleMaterias[i].split("+");
 
     if (statName === secondSubStat) {
       secondSubStatIdx = i;
@@ -190,7 +194,7 @@ export function getPossibleMateriasForEquipmentSlot(
 
   if (secondSubStatIdx >= 0) {
     possibleMaterias.push(possibleMaterias[secondSubStatIdx]);
-    possibleMaterias = possibleMaterias.slice(1, possibleMaterias.length);
+    possibleMaterias.splice(secondSubStatIdx, 1);
   }
 
   return possibleMaterias;

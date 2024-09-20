@@ -9,5 +9,11 @@ export interface BestPartnerResponseTable {
 
 export interface BestPartnerResponse {
   partnerJobAbbrev: string;
+  contributedDps: Array<number>;
+}
+
+export interface BestPartnerSingleBurst {
+  partnerJobAbbrev: string;
   contributedDps: number;
+  minute: number;
 }

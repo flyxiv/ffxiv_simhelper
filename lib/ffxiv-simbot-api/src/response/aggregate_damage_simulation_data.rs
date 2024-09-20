@@ -9,7 +9,7 @@ use std::collections::HashMap;
 const MINUTE_IN_MILLISECOND: TimeType = 60000;
 
 /// standard step, wanderer, mages ballad and armys paeon
-const PASSIVE_RAIDBUFFS: [SkillIdType; 4] = [1500, 1304, 1306, 1308];
+const PASSIVE_RAIDBUFFS: [SkillIdType; 4] = [1500, 1302, 1304, 1306];
 const PASSIVE_END_MILLISECOND: TimeType = 30000;
 const PASSIVE_START_MILLISECOND: TimeType = 4000;
 
@@ -93,11 +93,11 @@ pub(crate) fn aggregate_skill_damage(
 
                 /// only consider passive raidbuffs at even minutes:4 seconds to 30 seconds
                 let time_key = if PASSIVE_RAIDBUFFS.contains(&rdps_contribution.raid_buff_status_id)
-                    && damage_minute % 2 == 0
                 {
                     let time_offset = damage_time_milliseconds % MINUTE_IN_MILLISECOND;
                     if time_offset >= PASSIVE_START_MILLISECOND
                         && time_offset <= PASSIVE_END_MILLISECOND
+                        && damage_minute % 2 == 0
                     {
                         Some(damage_minute)
                     } else {

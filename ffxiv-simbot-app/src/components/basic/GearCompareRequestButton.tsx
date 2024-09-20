@@ -19,7 +19,7 @@ import { GearCompareResponse } from "../..//types/GearCompareResponse";
 import { SimulationSummary } from "../../types/CombatSimulationResult";
 import { StopButton } from "./StopButton";
 
-const TOTAL_REQUEST_COUNT = 1000;
+const TOTAL_REQUEST_COUNT = 4000;
 const REQUEST_URL = "http://localhost:13406/api/v1/gearcompare";
 
 export function GearCompareRequestButton(totalState: EquipmentInput) {
@@ -99,10 +99,14 @@ export function GearCompareRequestButton(totalState: EquipmentInput) {
         response.simulationGear2.simulationData[mainPlayerId].simulationSummary
     );
 
-    let aggregatedDamageSummary1 =
-      aggregateDamageStatisticsFromSampleRuns(damageSummaries1);
-    let aggregatedDamageSummary2 =
-      aggregateDamageStatisticsFromSampleRuns(damageSummaries2);
+    let aggregatedDamageSummary1 = aggregateDamageStatisticsFromSampleRuns(
+      damageSummaries1,
+      TOTAL_REQUEST_COUNT
+    );
+    let aggregatedDamageSummary2 = aggregateDamageStatisticsFromSampleRuns(
+      damageSummaries2,
+      TOTAL_REQUEST_COUNT
+    );
 
     response.simulationGear1.simulationData[mainPlayerId].simulationSummary =
       aggregatedDamageSummary1;
@@ -135,7 +139,8 @@ function createGearCompareRequest(
 }
 
 export function aggregateDamageStatisticsFromSampleRuns(
-  damageSummaries: SimulationSummary[]
+  damageSummaries: SimulationSummary[],
+  totalRequestCount: number
 ) {
   let totalDps: Array<number> = [];
   let maxRdps = 0;
@@ -149,10 +154,11 @@ export function aggregateDamageStatisticsFromSampleRuns(
     maxRdps = Math.max(maxRdps, summary.rdps);
   });
 
-  let medianIndex = Math.floor(TOTAL_REQUEST_COUNT / 2);
   totalDps.sort((a, b) => a - b);
   totalRdps.sort((a, b) => a - b);
   totalEdps.sort((a, b) => a - b);
+
+  let medianIndex = Math.floor(totalRequestCount / 2);
 
   let medianDps = totalDps[medianIndex];
   let medianRdps = totalRdps[medianIndex];

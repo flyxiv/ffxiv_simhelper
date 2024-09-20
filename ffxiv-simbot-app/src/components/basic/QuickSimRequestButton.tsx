@@ -23,7 +23,7 @@ import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 import { StopButton } from "./StopButton";
 import { aggregateDamageStatisticsFromSampleRuns } from "./GearCompareRequestButton";
 
-const totalRequestCount = 1000;
+const TOTAL_REQUEST_COUNT = 1000;
 const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
 
 export function QuickSimRequestButton(totalState: EquipmentInput) {
@@ -35,7 +35,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
   let [buttonText, setButtonText] = useState("Simulate");
   let [requestCount, setRequestCount] = useState(0);
   const loadingButtonText = (requestCount: number) => {
-    return `Simulating... ${requestCount}/${totalRequestCount}`;
+    return `Simulating... ${requestCount}/${TOTAL_REQUEST_COUNT}`;
   };
 
   let navigate = useNavigate();
@@ -64,7 +64,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
       setButtonText(loadingButtonText(count));
     };
 
-    for (let i = 0; i < totalRequestCount; i++) {
+    for (let i = 0; i < TOTAL_REQUEST_COUNT; i++) {
       responsePromises.push(
         sendRequestAsync(body, REQUEST_URL)
           .then((response) => {
@@ -94,8 +94,10 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
       (response) => response.simulationData[mainPlayerId].simulationSummary
     );
 
-    let damageSummary =
-      aggregateDamageStatisticsFromSampleRuns(damageSummaries);
+    let damageSummary = aggregateDamageStatisticsFromSampleRuns(
+      damageSummaries,
+      TOTAL_REQUEST_COUNT
+    );
 
     response = finalResponses[0];
     response.simulationData[mainPlayerId].simulationSummary = damageSummary;

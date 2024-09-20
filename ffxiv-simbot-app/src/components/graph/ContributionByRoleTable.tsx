@@ -12,7 +12,7 @@ const MAX_RANKINGS = 4;
 const RANKING_ITEM_HEIGHT = "4vh";
 
 export function ContributionByRoleTable(
-  simulationDataByRole: SimulationDataByRole,
+  simulationDataByRole: SimulationDataByRole
 ) {
   let tankPartnerData = simulationDataByRole.tanks;
   let healerPartnerData = simulationDataByRole.healers;
@@ -105,9 +105,9 @@ function ContributionTableSingleRole(
 
     let Bar = styled(Box)`
       ${BestPartnerBuffBarStyle(
-      Math.min(index, MAX_RANKINGS),
-      RANKING_ITEM_HEIGHT
-    )}
+        Math.min(index, MAX_RANKINGS),
+        RANKING_ITEM_HEIGHT
+      )}
     `;
 
     // UI상 표시값 사이 일치를 위해 rounding한 값을 더한 거로 totalRdps를 한 번 정규화해준다.
@@ -129,7 +129,10 @@ function ContributionTableSingleRole(
           </BuffBarBox>
         </Box>
         <Box display="flex" alignItems="center">
-          <Typography variant="body1" fontSize={AppConfigurations.body2FontSize}>
+          <Typography
+            variant="body1"
+            fontSize={AppConfigurations.body2FontSize}
+          >
             {roundedRdps}%
           </Typography>
         </Box>

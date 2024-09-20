@@ -11,6 +11,14 @@ export interface PartyContribution {
   contributedRdps: number;
 }
 
+export interface PartyBurstContribution {
+  skillId: number;
+  minute: number;
+  partyMemberId: number;
+  statusId: number;
+  contributedRdps: number;
+}
+
 export interface DamageProfile {
   id: number;
   entity: String;
@@ -32,6 +40,7 @@ export interface SimulationData {
   role: string;
   simulationSummary: SimulationSummary;
   partyContributionTable: Array<PartyContribution>;
+  partyBurstContributionTable: Array<PartyBurstContribution>;
   damageProfileTable: Array<DamageProfile>;
   rotationLog: Array<SkillLog>;
 }

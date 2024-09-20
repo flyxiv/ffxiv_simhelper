@@ -1,9 +1,57 @@
-import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../const/languageTexts";
+import {
+  AST_EN_NAME,
+  BLM_EN_NAME,
+  BRD_EN_NAME,
+  DNC_EN_NAME,
+  DRG_EN_NAME,
+  DRK_EN_NAME,
+  GNB_EN_NAME,
+  MCH_EN_NAME,
+  MNK_EN_NAME,
+  NIN_EN_NAME,
+  PCT_EN_NAME,
+  PLD_EN_NAME,
+  RDM_EN_NAME,
+  RPR_EN_NAME,
+  SAM_EN_NAME,
+  SCH_EN_NAME,
+  SGE_EN_NAME,
+  SMN_EN_NAME,
+  VPR_EN_NAME,
+  WAR_EN_NAME,
+  WHM_EN_NAME,
+} from "../../const/languageTexts";
 
-export const BUFF_JOBS_LIST = [AST_EN_NAME, SCH_EN_NAME, DRG_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, RPR_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, SMN_EN_NAME, RDM_EN_NAME, PCT_EN_NAME];
+export const BUFF_JOBS_LIST = [
+  AST_EN_NAME,
+  SCH_EN_NAME,
+  DRG_EN_NAME,
+  MNK_EN_NAME,
+  NIN_EN_NAME,
+  RPR_EN_NAME,
+  BRD_EN_NAME,
+  DNC_EN_NAME,
+  SMN_EN_NAME,
+  RDM_EN_NAME,
+  PCT_EN_NAME,
+];
 export const HEALER_JOBS = [WHM_EN_NAME, AST_EN_NAME, SCH_EN_NAME, SGE_EN_NAME];
 export const TANK_JOBS = [PLD_EN_NAME, WAR_EN_NAME, DRK_EN_NAME, GNB_EN_NAME];
-export const DPS_JOBS = [MNK_EN_NAME, DRG_EN_NAME, NIN_EN_NAME, SAM_EN_NAME, RPR_EN_NAME, VPR_EN_NAME, BRD_EN_NAME, MCH_EN_NAME, DNC_EN_NAME, BLM_EN_NAME, SMN_EN_NAME, RDM_EN_NAME, PCT_EN_NAME];
+export const DPS_JOBS = [
+  MNK_EN_NAME,
+  DRG_EN_NAME,
+  NIN_EN_NAME,
+  SAM_EN_NAME,
+  RPR_EN_NAME,
+  VPR_EN_NAME,
+  BRD_EN_NAME,
+  MCH_EN_NAME,
+  DNC_EN_NAME,
+  BLM_EN_NAME,
+  SMN_EN_NAME,
+  RDM_EN_NAME,
+  PCT_EN_NAME,
+];
 
 export interface SimulationDataByRole {
   tanks: Array<BestPartnerSimulationData>;
@@ -43,7 +91,10 @@ export class PartyCompositionMaker {
       case WAR_EN_NAME:
       case DRK_EN_NAME:
       case GNB_EN_NAME:
-        this.tank1 = { jobAbbrev: mainPlayerJobAbbrev, buffContribution: null };
+        this.tank1 = {
+          jobAbbrev: mainPlayerJobAbbrev,
+          buffContribution: null,
+        };
         break;
 
       case WHM_EN_NAME:
@@ -62,7 +113,10 @@ export class PartyCompositionMaker {
       case SAM_EN_NAME:
       case RPR_EN_NAME:
       case VPR_EN_NAME:
-        this.melee = { jobAbbrev: mainPlayerJobAbbrev, buffContribution: null };
+        this.melee = {
+          jobAbbrev: mainPlayerJobAbbrev,
+          buffContribution: null,
+        };
         break;
 
       case BRD_EN_NAME:

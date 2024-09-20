@@ -66,7 +66,7 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
             })
             .collect();
 
-        let mut burst_contribution_top_nth_percentile = burst_contributions
+        let burst_contribution_top_nth_percentile = burst_contributions
             .into_iter()
             .sorted()
             .nth((WANTED_CONTRIBUTION_PERCENTILE * BEST_PARTNER_SIMULATION_COUNT as f64) as usize)
