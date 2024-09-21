@@ -372,6 +372,13 @@ export function EquipmentSelectionMenu(
         </InputEquipmentBox>
       </EquipmentGridItemBox>
 
+      {PartnerSelectionMenu(
+        id,
+        totalEquipmentState,
+        setTotalEquipmentState,
+        inputCount
+      )}
+
       <EquipmentGridItemBox
         key={`pot_selectionbox_${id}`}
         sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
@@ -381,7 +388,6 @@ export function EquipmentSelectionMenu(
         </InputEquipmentBox>
       </EquipmentGridItemBox>
 
-      {PartnerSelectionMenu(id, totalEquipmentState, setTotalEquipmentState)}
       {hasTimeInput ? (
         <EquipmentGridItemBox
           key={`${id}_timeinput`}
@@ -405,11 +411,11 @@ export function EquipmentSelectionMenu(
 function PartnerSelectionMenu(
   id: number,
   totalEquipmentState: EquipmentInput,
-  setTotalEquipmentState: Function
+  setTotalEquipmentState: Function,
+  inputCount: number
 ) {
   let mainPlayerJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
-  let inputCount = totalEquipmentState.equipmentDatas.length;
 
   if (mainPlayerJobAbbrev === AST_EN_NAME) {
     return (
@@ -449,7 +455,7 @@ function PartnerSelectionMenu(
         key={`partner1_${id}_grid`}
         sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
-        <InputEquipmentBox item key={`partner1_${id}`}>
+        <InputEquipmentBox item xs={12} key={`partner1_${id}`}>
           {Partner1Selection(
             id,
             totalEquipmentState,

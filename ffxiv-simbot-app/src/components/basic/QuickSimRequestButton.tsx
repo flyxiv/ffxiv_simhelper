@@ -22,6 +22,7 @@ import {
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 import { StopButton } from "./StopButton";
 import { aggregateDamageStatisticsFromSampleRuns } from "./GearCompareRequestButton";
+import { AppConfigurations } from "../../Themes";
 
 const TOTAL_REQUEST_COUNT = 1000;
 const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
@@ -35,7 +36,10 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
   let [buttonText, setButtonText] = useState("Simulate");
   let [requestCount, setRequestCount] = useState(0);
   const loadingButtonText = (requestCount: number) => {
-    return `Simulating... ${requestCount}/${TOTAL_REQUEST_COUNT}`;
+    return `Simulating... ${(
+      (requestCount / TOTAL_REQUEST_COUNT) *
+      100
+    ).toFixed(0)}%`;
   };
 
   let navigate = useNavigate();
@@ -109,7 +113,17 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
   };
   return (
     <Box display="flex" alignItems={"center"}>
-      <RequestButton variant="contained" onClick={handleClick}>
+      <RequestButton
+        variant="contained"
+        onClick={handleClick}
+        disabled={isRunning}
+        sx={{
+          "&:disabled": {
+            backgroundColor: AppConfigurations.primary,
+            color: "black",
+          },
+        }}
+      >
         {buttonText}
       </RequestButton>
       {isRunning ? StopButton() : <Box />}

@@ -18,8 +18,9 @@ import {
 import { GearCompareResponse } from "../..//types/GearCompareResponse";
 import { SimulationSummary } from "../../types/CombatSimulationResult";
 import { StopButton } from "./StopButton";
+import { AppConfigurations } from "../../Themes";
 
-const TOTAL_REQUEST_COUNT = 4000;
+const TOTAL_REQUEST_COUNT = 1000;
 const REQUEST_URL = "http://localhost:13406/api/v1/gearcompare";
 
 export function GearCompareRequestButton(totalState: EquipmentInput) {
@@ -32,7 +33,10 @@ export function GearCompareRequestButton(totalState: EquipmentInput) {
   let [buttonText, setButtonText] = useState("Simulate");
   let [requestCount, setRequestCount] = useState(0);
   const loadingButtonText = (requestCount: number) => {
-    return `Simulating... ${requestCount}/${TOTAL_REQUEST_COUNT}`;
+    return `Simulating... ${(
+      (requestCount / TOTAL_REQUEST_COUNT) *
+      100
+    ).toFixed(0)}%`;
   };
 
   let navigate = useNavigate();
@@ -120,7 +124,17 @@ export function GearCompareRequestButton(totalState: EquipmentInput) {
   };
   return (
     <Box display="flex" alignItems={"center"}>
-      <RequestButton variant="contained" onClick={handleClick}>
+      <RequestButton
+        variant="contained"
+        onClick={handleClick}
+        disabled={isRunning}
+        sx={{
+          "&:disabled": {
+            backgroundColor: AppConfigurations.primary,
+            color: "black",
+          },
+        }}
+      >
         {buttonText}
       </RequestButton>
       {isRunning ? StopButton() : <Box />}
@@ -138,12 +152,14 @@ function createGearCompareRequest(
   };
 }
 
+const HIGHEST_PERCENTILE = 0.95;
+
 export function aggregateDamageStatisticsFromSampleRuns(
   damageSummaries: SimulationSummary[],
   totalRequestCount: number
 ) {
   let totalDps: Array<number> = [];
-  let maxRdps = 0;
+  let highRdps = 0;
   let totalRdps: Array<number> = [];
   let totalEdps: Array<number> = [];
 
@@ -151,7 +167,6 @@ export function aggregateDamageStatisticsFromSampleRuns(
     totalDps.push(summary.pdps);
     totalRdps.push(summary.rdps);
     totalEdps.push(summary.edps);
-    maxRdps = Math.max(maxRdps, summary.rdps);
   });
 
   totalDps.sort((a, b) => a - b);
@@ -159,15 +174,17 @@ export function aggregateDamageStatisticsFromSampleRuns(
   totalEdps.sort((a, b) => a - b);
 
   let medianIndex = Math.floor(totalRequestCount / 2);
+  let percentileIndex = Math.floor(totalRequestCount * HIGHEST_PERCENTILE);
 
   let medianDps = totalDps[medianIndex];
   let medianRdps = totalRdps[medianIndex];
   let medianEdps = totalEdps[medianIndex];
+  highRdps = totalRdps[percentileIndex];
 
   return {
     pdps: medianDps,
     rdps: medianRdps,
     edps: medianEdps,
-    maxRdps: maxRdps,
+    maxRdps: highRdps,
   };
 }

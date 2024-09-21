@@ -57,6 +57,9 @@ export function ContributionByRoleTable(
       sx={{
         width: "95%",
         color: "white",
+        marginBottom: "50px",
+        border: `1px solid white`,
+        padding: "10px",
       }}
     >
       <Grid container item xs={6} direction="column" spacing={3}>

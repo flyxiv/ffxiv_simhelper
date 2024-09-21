@@ -35,7 +35,7 @@ export const TitleBoxStyle = `
   padding-right: 40px;
 
   margin-top: 20px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 `;
 
 export const DpsSummaryBoxStyle = `
@@ -48,14 +48,14 @@ export const DpsSummaryBoxStyle = `
 `;
 
 export const DpsBoxStyle = `
-  height: 10vh;
+  width: 6vw;
+  height: 6vw;
   padding: 10px;
   margin: 0.4vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1 / 1;
 `;
 
 export const PlayerInfoBoxStyle = `

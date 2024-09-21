@@ -31,12 +31,20 @@ function DpsBox(
 
   return (
     <DpsBox>
-      <Box className="DpsTitle" padding={1} sx={{
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-      }}>
-        <Typography variant="h6" align="center" fontSize={15}>
+      <Box
+        className="DpsTitle"
+        padding={1}
+        sx={{
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
+        <Typography
+          variant="h6"
+          align="center"
+          sx={{ fontSize: AppConfigurations.body2FontSize }}
+        >
           {dpsName}
         </Typography>
       </Box>
@@ -55,14 +63,9 @@ export const DpsSummary = (props: SimulationData) => {
   return (
     <DpsSummaryBox>
       {DpsBox("DPS", summary.pdps, "white", AppConfigurations.primary)}
+      {DpsBox("RDPS", summary.rdps, "white", AppConfigurations.primaryVariant)}
       {DpsBox(
-        "RDPS",
-        summary.rdps,
-        "white",
-        AppConfigurations.primaryVariant
-      )}
-      {DpsBox(
-        "Max RDPS",
+        "95% RDPS",
         summary.maxRdps,
         "black",
         AppConfigurations.secondary
@@ -117,11 +120,17 @@ export const GearCompareDpsBox = (
   return (
     <DpsBox>
       <Box className="DpsTitle" padding={1}>
-        <Typography variant="h6" sx={{
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}>{dpsName}</Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            fontSize: "1vw",
+          }}
+        >
+          {dpsName}
+        </Typography>
       </Box>
       <Box className="Dps">
         <Typography variant="h3">{Math.round(targetDps)}</Typography>
@@ -129,7 +138,7 @@ export const GearCompareDpsBox = (
       <Box className="DpsCompare">
         <Typography
           variant="h5"
-          fontSize={14}
+          fontSize={"1vw"}
           color={percentColor}
           fontWeight="bold"
         >
@@ -148,7 +157,7 @@ export const GearCompareDpsSummary = (
     <DpsSummaryBox>
       {GearCompareDpsBox("DPS", target.pdps, compare.pdps)}
       {GearCompareDpsBox("RDPS", target.rdps, compare.rdps)}
-      {GearCompareDpsBox("Max RDPS", target.maxRdps, compare.maxRdps)}
+      {GearCompareDpsBox("95% RDPS", target.maxRdps, compare.maxRdps)}
       {GearCompareDpsBox("EDPS", target.edps, compare.edps)}
     </DpsSummaryBox>
   );

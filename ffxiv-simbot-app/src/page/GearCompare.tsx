@@ -74,7 +74,6 @@ export function GearCompare() {
   let mostRecentInputState = localStorage.getItem(
     GEAR_COMPARE_REQUEST_SAVE_NAME
   );
-  console.log(mostRecentInputState);
   let mostRecentInput = null;
 
   if (mostRecentInputState === null) {

@@ -55,7 +55,7 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
     let mut contributed_dps: Vec<i32> = Vec::with_capacity(burst_count);
 
     for burst_idx in 0..burst_count {
-        let mut burst_contributions: Vec<i32> = partner_contributions
+        let burst_contributions: Vec<i32> = partner_contributions
             .iter()
             .map(|contributions| {
                 if contributions.len() > burst_idx {

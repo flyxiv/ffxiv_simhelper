@@ -13,6 +13,7 @@ import {
   ABILITY_TEXT,
   COMBAT_TIME_TEXT,
   IMPORTANT_STATUS_TEXT,
+  ROTATION_SAMPLE_WARNING_TEXT,
 } from "../../const/languageTexts";
 import { AppConfigurations } from "../../Themes";
 
@@ -65,8 +66,7 @@ export const SkillLogResult = (response: QuickSimResponse) => {
       <Typography
         sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}
       >
-        !!!This is a sample of the engine's simulation log, not a guide to
-        playing the job. analyze with care.
+        {ROTATION_SAMPLE_WARNING_TEXT}
       </Typography>
       <SkillLogTableList>
         <ListItem>

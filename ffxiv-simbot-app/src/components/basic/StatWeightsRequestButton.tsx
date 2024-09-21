@@ -41,6 +41,7 @@ import {
 } from "../../const/languageTexts";
 import { getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
 import { StopButton } from "./StopButton";
+import { AppConfigurations } from "../../Themes";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/statweights";
 const WEAPON_DAMAGE_INCREASE = 10;
@@ -133,7 +134,17 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
   };
   return (
     <Box display="flex" alignItems="center">
-      <RequestButton variant="contained" onClick={handleClick}>
+      <RequestButton
+        variant="contained"
+        onClick={handleClick}
+        disabled={isRunning}
+        sx={{
+          "&:disabled": {
+            backgroundColor: AppConfigurations.primary,
+            color: "black",
+          },
+        }}
+      >
         {buttonText}
       </RequestButton>
       {isRunning ? StopButton() : <Box />}

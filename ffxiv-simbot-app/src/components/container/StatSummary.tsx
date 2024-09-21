@@ -26,6 +26,7 @@ import {
 } from "../../const/languageTexts";
 
 const STAT_SUMMARY_BOX_WIDTH = "3vw";
+const STAT_SUMMARY_TIME_BOX_WIDTH = "6vw";
 const POWER_SUMMARY_BOX_WIDTH = "6vw";
 
 let StatSummaryBox = styled(Box)`
@@ -40,13 +41,13 @@ let SingleStatBox = styled(Box)`
   ${SingleStatBoxStyle(STAT_SUMMARY_BOX_WIDTH)}
 `;
 
+let SingleStatCombatTimeBox = styled(Box)`
+  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH)}
+`;
+
 export function StatSummaryTypography(text: string) {
   return (
-    <Typography
-      variant="body1"
-      align="center"
-      fontSize={AppConfigurations.body2FontSize}
-    >
+    <Typography variant="body1" align="center" fontSize={"1vw"}>
       {text}
     </Typography>
   );
@@ -54,15 +55,8 @@ export function StatSummaryTypography(text: string) {
 
 export function StatSummaryTypographyCompare(
   stat: string,
-  compareStat: string,
-  smaller: boolean
+  compareStat: string
 ) {
-  let fontSize = 16;
-
-  if (smaller) {
-    fontSize = 13;
-  }
-
   let statValue = parseFloat(stat);
   let compareStatValue = parseFloat(compareStat);
 
@@ -74,12 +68,7 @@ export function StatSummaryTypographyCompare(
       : "white";
 
   return (
-    <Typography
-      variant="body1"
-      align="center"
-      fontSize={fontSize}
-      color={color}
-    >
+    <Typography variant="body1" align="center" fontSize={"1vw"} color={color}>
       {stat}
     </Typography>
   );
@@ -98,7 +87,9 @@ export function SimulationInputSummary(
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
         <SingleStatBox>{StatSummaryTypography(NAME_TEXT)}</SingleStatBox>
-        <SingleStatBox>{StatSummaryTypography(TIME_TEXT)}</SingleStatBox>
+        <SingleStatCombatTimeBox>
+          {StatSummaryTypography(TIME_TEXT)}
+        </SingleStatCombatTimeBox>
         {simulationInputNames.map((statName) => {
           return (
             <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
@@ -112,9 +103,9 @@ export function SimulationInputSummary(
         }}
       >
         <SingleStatBox>{StatSummaryTypography(VALUES_TEXT)}</SingleStatBox>
-        <SingleStatBox>
+        <SingleStatCombatTimeBox>
           {StatSummaryTypography(`${combatTimeMilliseconds}`)}
-        </SingleStatBox>
+        </SingleStatCombatTimeBox>
         {simulationInputNames.map((statName) => {
           return (
             <SingleStatBox>
@@ -143,7 +134,9 @@ export function StatSummaryGearCompare(
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
         <SingleStatBox>{StatSummaryTypography(NAME_TEXT)}</SingleStatBox>
-        <SingleStatBox>{StatSummaryTypography(TIME_TEXT)}</SingleStatBox>
+        <SingleStatCombatTimeBox>
+          {StatSummaryTypography(TIME_TEXT)}
+        </SingleStatCombatTimeBox>
         {jobStatNames.map((statName) => {
           return (
             <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
@@ -157,16 +150,15 @@ export function StatSummaryGearCompare(
         }}
       >
         <SingleStatBox>{StatSummaryTypography(VALUES_TEXT)}</SingleStatBox>
-        <SingleStatBox>
+        <SingleStatCombatTimeBox>
           {StatSummaryTypography(`${combatTimeMilliseconds / 1000}`)}
-        </SingleStatBox>
+        </SingleStatCombatTimeBox>
         {jobStatNames.map((statName) => {
           return (
             <SingleStatBox>
               {StatSummaryTypographyCompare(
                 getStatByStatName(power, statName, jobAbbrev),
-                getStatByStatName(comparePower, statName, jobAbbrev),
-                false
+                getStatByStatName(comparePower, statName, jobAbbrev)
               )}
             </SingleStatBox>
           );

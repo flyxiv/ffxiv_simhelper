@@ -657,6 +657,11 @@ export const MY_CONTRIBUTION_BUTTON_TEXT =
     ? "My Contributions"
     : "나의 기여도";
 
+export const ROTATION_SAMPLE_WARNING_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE
+    ? "!!!This is a sample of the engine's simulation log, not a guide to playing the job. analyze with care."
+    : "!!!이건 직업에 대한 가이드가 아닌, 시뮬레이션 엔진의 샘플 결과일 뿐입니다. 이를 감안하고 분석할 때 주의해주세요.";
+
 export const ROTATION_SAMPLE_BUTTON_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "Rotation Sample"

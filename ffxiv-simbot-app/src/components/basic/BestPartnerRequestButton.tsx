@@ -29,6 +29,7 @@ import {
   BestPartnerResponseTable,
 } from "../../types/BestPartnerResponse";
 import { StopButton } from "./StopButton";
+import { AppConfigurations } from "../../Themes";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
 
@@ -120,7 +121,17 @@ export function BestPartnerRequestButton(totalState: EquipmentInput) {
   };
   return (
     <Box display="flex" alignItems="center">
-      <RequestButton variant="contained" onClick={handleClick}>
+      <RequestButton
+        variant="contained"
+        onClick={handleClick}
+        disabled={isRunning}
+        sx={{
+          "&:disabled": {
+            backgroundColor: AppConfigurations.primary,
+            color: "black",
+          },
+        }}
+      >
         {buttonText}
       </RequestButton>
       {isRunning ? StopButton() : <Box />}
