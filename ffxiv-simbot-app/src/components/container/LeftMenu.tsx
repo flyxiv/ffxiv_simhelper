@@ -142,7 +142,7 @@ function DefaultLeftMenuComponents() {
             <img src={LOGO_PATH} width={20} height={20} alt="logo" />
           </Box>
           <Typography align="center">
-            <b>FFXIV SIMULATION BOT</b>{" "}
+            <b>FFXIV SIMHELPER</b>
           </Typography>
         </Box>
       </LeftMenuLogo>
@@ -159,7 +159,7 @@ function DefaultLeftMenuComponents() {
           }}
         />
 
-        {NavigationMenu("/", HOME_PAGE_NAME, HOME_MENU_LOGO_PATH)}
+        {NavigationMenu("/index.html", HOME_PAGE_NAME, HOME_MENU_LOGO_PATH)}
         {NavigationMenu(
           convertToLinkUrl(QUICKSIM_URL),
           QUICKSIM_PAGE_NAME,
