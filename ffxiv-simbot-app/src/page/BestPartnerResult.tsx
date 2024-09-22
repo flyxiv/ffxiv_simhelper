@@ -18,9 +18,7 @@ import { SimulationDataByRole } from "../types/ffxivdatabase/PartyCompositionMak
 import { ContributionByRoleTable } from "../components/graph/ContributionByRoleTable";
 import {
   AST_EN_NAME,
-  BEST_PARTNER_BY_ROLE_TEXT,
   BRD_EN_NAME,
-  BURST_SECTION_TITLE_TEXT,
   BURST_TEXT,
   DNC_EN_NAME,
   DRG_EN_NAME,
@@ -36,7 +34,6 @@ import {
   SCH_EN_NAME,
   SGE_EN_NAME,
   SIMULATION_RESULT_TEXT,
-  TOTAL_TEXT,
   VPR_EN_NAME,
   WAR_EN_NAME,
   WHM_EN_NAME,

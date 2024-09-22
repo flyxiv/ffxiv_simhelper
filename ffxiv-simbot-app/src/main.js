@@ -1,3 +1,4 @@
+import { spawn } from 'child_process';
 import { app, BrowserWindow } from 'electron';
 import url from 'url';
 
@@ -25,6 +26,14 @@ function createWindow() {
     * startUrl에 배정되는 url을 맨 위에서 생성한 BrowserWindow에서 실행시킵니다.
     * */
     win.loadURL(startUrl);
+
+    const exePath = "./ffxiv_simhelper_x86_64.exe";
+    const backendProcess = spawn(exePath, [], {
+        detached: true,
+        stdio: 'ignore', // 이 옵션 설정 시 콘솔 창을 띄우지 않음
+    });
+
+    backendProcess.unref(); // 부모 프로세스와 연결을 끊음
 
 }
 

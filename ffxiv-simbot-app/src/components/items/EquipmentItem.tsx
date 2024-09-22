@@ -11,7 +11,6 @@ export const EQUIPMENT_FOOD_SIZE = "4vh";
 export function EquipmentItem(
   equipment: Equipment,
   jobAbbrev: string,
-  idCount: number
 ) {
   return (
     <Box display="flex" alignContent={"center"} height="5vh">
