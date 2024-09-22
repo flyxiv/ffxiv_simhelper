@@ -1,8 +1,8 @@
-use ffxiv_simbot_api::api_handler::statweights::stat_weights;
-use ffxiv_simbot_api::request::simulation_api_request::PlayerInfoRequest;
-use ffxiv_simbot_api::request::stat_weights_api_request::StatWeightsApiRequest;
-use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
-use ffxiv_simbot_combat_components::types::PlayerIdType;
+use ffxiv_simhelper_api::api_handler::statweights::stat_weights;
+use ffxiv_simhelper_api::request::simulation_api_request::PlayerInfoRequest;
+use ffxiv_simhelper_api::request::stat_weights_api_request::StatWeightsApiRequest;
+use ffxiv_simhelper_combat_components::live_objects::player::player_power::PlayerPower;
+use ffxiv_simhelper_combat_components::types::PlayerIdType;
 use itertools::Itertools;
 use log::{Level, LevelFilter, Metadata, Record, SetLoggerError};
 use tokio::time::Instant;

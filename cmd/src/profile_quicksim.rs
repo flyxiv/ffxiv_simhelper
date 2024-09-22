@@ -1,7 +1,9 @@
-use ffxiv_simbot_api::api_handler::quicksim::quicksim;
-use ffxiv_simbot_api::request::simulation_api_request::{PlayerInfoRequest, SimulationApiRequest};
-use ffxiv_simbot_combat_components::live_objects::player::player_power::PlayerPower;
-use ffxiv_simbot_combat_components::types::PlayerIdType;
+use ffxiv_simhelper_api::api_handler::quicksim::quicksim;
+use ffxiv_simhelper_api::request::simulation_api_request::{
+    PlayerInfoRequest, SimulationApiRequest,
+};
+use ffxiv_simhelper_combat_components::live_objects::player::player_power::PlayerPower;
+use ffxiv_simhelper_combat_components::types::PlayerIdType;
 use itertools::Itertools;
 use log::{Level, LevelFilter, Metadata, Record, SetLoggerError};
 

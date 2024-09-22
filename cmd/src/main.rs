@@ -1,7 +1,7 @@
 mod profile_quicksim;
 mod profile_statweight;
 
-use ffxiv_simbot_api::api_server::api_router::create_ffxiv_simbot_service_router;
+use ffxiv_simhelper_api::api_server::api_router::create_ffxiv_simhelper_service_router;
 use log::LevelFilter::Info;
 use log::{info, Level, LevelFilter, Metadata, Record, SetLoggerError};
 
@@ -33,7 +33,7 @@ async fn main() {
     info!("Loading Logger");
     init(Info).expect("failed to load logger");
 
-    let app = create_ffxiv_simbot_service_router();
+    let app = create_ffxiv_simhelper_service_router();
 
     info!("Started Server at port {}", PORT_NUMBER);
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", PORT_NUMBER))
