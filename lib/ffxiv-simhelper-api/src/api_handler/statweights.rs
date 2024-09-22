@@ -9,7 +9,7 @@ use ffxiv_simhelper_combat_components::types::DpsType;
 use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
 
-const STAT_WEIGHTS_SIMULATION_COUNT: usize = 1000;
+const STAT_WEIGHTS_SIMULATION_COUNT: usize = 4000;
 const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.50;
 
 pub(crate) async fn stat_weights_api_handler(

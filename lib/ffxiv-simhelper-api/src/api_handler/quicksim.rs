@@ -7,7 +7,7 @@ use axum::Json;
 use ffxiv_simhelper_combat_components::types::DpsType;
 use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 
-const NUMBER_OF_ITERATIONS_PER_REQUEST: usize = 4;
+const NUMBER_OF_ITERATIONS_PER_REQUEST: usize = 8;
 
 pub(crate) async fn quicksim_api_handler(
     Json(request): Json<SimulationApiRequest>,

@@ -7,7 +7,7 @@ use axum::Json;
 use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
 
-const BEST_PARTNER_SIMULATION_COUNT: usize = 1000;
+const BEST_PARTNER_SIMULATION_COUNT: usize = 4000;
 const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.75;
 
 pub(crate) async fn best_partner_api_handler(
