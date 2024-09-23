@@ -49,8 +49,8 @@ const MAIN_STAT_INCREASE = 100;
 const CRIT_INCREASE_AMOUNT = 20;
 const DH_INCREASE_AMOUNT = 80;
 const DET_INCREASE_AMOUNT = 20;
-const SKS_INCREASE_AMOUNT = 5;
-const SPS_INCREASE_AMOUNT = 5;
+const SKS_INCREASE_AMOUNT = 2;
+const SPS_INCREASE_AMOUNT = 2;
 const TEN_INCREASE_AMOUNT = 20;
 
 export function StatWeightsRequestButton(totalState: EquipmentInput) {

@@ -1,4 +1,4 @@
-import { InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { CustomFormControl } from "./basicform/BasicInputForm";
 import { styled, Box } from "@mui/material";
 import { InputGridItemStyle } from "./Styles";
@@ -50,7 +50,8 @@ export function Partner1Selection(
     <InputBox>
       <CustomFormControl fullWidth>
         <InputLabel id="partner-selection" key={`${id}_partner1_inputlabel`}>
-          {currentPartnerId === null ? labelText : ""}
+          <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}> {currentPartnerId === null ? labelText : ""} </Typography>
+
         </InputLabel>
         <Select
           value={currentPartnerId === null ? "empty" : currentPartnerId.toString()}
@@ -68,7 +69,7 @@ export function Partner1Selection(
           {availablePartyIds.map((partyMemberId) => {
             return PartnerMenuItem(id, partyMemberId, totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[partyMemberId - 1]);
           })}
-          {<MenuItem key={`${id}_partner1_empty_menuitem`} value="empty" color="white">{EMPTY_TEXT}</MenuItem>};
+          {<MenuItem key={`${id}_partner1_empty_menuitem`} value="empty" color="white"><Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{EMPTY_TEXT}</Typography></MenuItem>};
         </Select>
       </CustomFormControl>
     </InputBox>
@@ -113,7 +114,7 @@ export function Partner2Selection(
     <InputBox>
       <CustomFormControl fullWidth>
         <InputLabel id="partner-selection" key={`${id}_partner1_inputlabel`}>
-          {currentPartnerId === null ? labelText : ""}
+          <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}> {currentPartnerId === null ? labelText : ""} </Typography>
         </InputLabel>
         <Select
           value={currentPartnerId === null ? "empty" : currentPartnerId.toString()}
@@ -131,7 +132,7 @@ export function Partner2Selection(
           {availablePartyIds.map((partyMemberId) => {
             return PartnerMenuItem(id, partyMemberId, totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[partyMemberId - 1]);
           })}
-          {<MenuItem key={`${id}_partner2_empty_menuitem`} value="empty" color="white">{EMPTY_TEXT}</MenuItem>};
+          {<MenuItem key={`${id}_partner2_empty_menuitem`} value="empty" color="white"><Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{EMPTY_TEXT}</Typography></MenuItem>};
         </Select>
       </CustomFormControl>
     </InputBox>

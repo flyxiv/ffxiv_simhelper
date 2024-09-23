@@ -1,5 +1,5 @@
 {
-  "name": "ffxiv-simbot-app",
+  "name": "ffxiv-simhelper-app",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,6 +13,9 @@
   "main": "src/main.js",
   "home": ".",
   "version": "0.0.0",
+  "build": {
+    "icon": "build/icon.png"
+  },
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",

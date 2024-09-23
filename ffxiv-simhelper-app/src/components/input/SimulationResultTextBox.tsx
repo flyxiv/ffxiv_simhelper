@@ -30,6 +30,7 @@ export const inputStyleSimulationResultTextBox = {
     backgroundColor: AppConfigurations.backgroundThree,
     textAlign: "right",
     paddingRight: "30px",
+    fontSize: AppConfigurations.body1FontSize,
   },
   "& .MuiInputLabel-root": {
     color: AppConfigurations.primary,
@@ -45,7 +46,7 @@ export const inputStyleSimulationResultTextBox = {
 };
 
 export const Input = styled(TextField)(
-  ({}) => inputStyleSimulationResultTextBox
+  ({ }) => inputStyleSimulationResultTextBox
 );
 
 const InputBox = styled(Box)`
@@ -116,6 +117,7 @@ export function SimulationUpperInputTimeTextBox(
             borderColor: "transparent",
           },
         }}
+        InputProps={{ sx: { fontSize: AppConfigurations.body1FontSize } }}
       ></Input>
     </CustomTimeFormControl>
   );

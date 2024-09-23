@@ -13,7 +13,6 @@ import {
   LOAD_COMPLETE_TEXT,
   LOADOUT_LOAD_TEXT,
   LOADOUT_WRITE_TEXT,
-  NAME_TEXT,
   PLD_EN_NAME,
   SCH_EN_NAME,
 } from "../../const/languageTexts";
@@ -39,7 +38,7 @@ export const inputStyle = {
   },
 };
 
-export const LoadoutInput = styled(TextField)(({}) => inputStyle);
+export const LoadoutInput = styled(TextField)(({ }) => inputStyle);
 
 interface LoadoutMetaData {
   loadoutName: string;
@@ -102,7 +101,7 @@ export function LoadoutBox(
           variant="h2"
           color={AppConfigurations.primary}
           align="left"
-          fontSize={15}
+          fontSize={AppConfigurations.body2FontSize}
         >
           {loadoutId}. {loadoutMetadata.loadoutName}
         </Typography>
@@ -123,7 +122,6 @@ export function LoadoutBox(
               fontSize: "1.6vh",
             },
           }}
-          label={NAME_TEXT}
           value={textFieldInputLoadoutName}
           onChange={(e) => {
             setTextFieldInputLoadoutName(e.target.value);

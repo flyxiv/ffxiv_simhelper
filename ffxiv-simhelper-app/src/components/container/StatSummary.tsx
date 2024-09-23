@@ -64,8 +64,8 @@ export function StatSummaryTypographyCompare(
     statValue > compareStatValue
       ? AppConfigurations.secondary
       : statValue < compareStatValue
-      ? AppConfigurations.alert
-      : "white";
+        ? AppConfigurations.alert
+        : "white";
 
   return (
     <Typography variant="body1" align="center" fontSize={"1vw"} color={color}>
@@ -216,10 +216,11 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
                 variant="body1"
                 color={color}
                 align="center"
-                fontSize={AppConfigurations.body2FontSize}
+                fontSize={"1vw"}
               >
                 <b>{lostStat}</b>
               </Typography>
+
             </SingleStatBox>
           );
         })}

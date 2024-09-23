@@ -8,7 +8,7 @@ function createWindow() {
     * */
     const win = new BrowserWindow({
         width: 1920,
-        height: 1080
+        height: 1080,
     });
 
     /*
@@ -32,9 +32,6 @@ function createWindow() {
         detached: true,
         stdio: 'ignore', // 이 옵션 설정 시 콘솔 창을 띄우지 않음
     });
-
-    backendProcess.unref(); // 부모 프로세스와 연결을 끊음
-
 }
 
 app.on('ready', createWindow);

@@ -8,7 +8,7 @@ export function AppHeader() {
       display="flex"
       width="100%"
       justifyContent="center"
-      sx={{ height: LOGO_SIZE }}
+      sx={{ height: LOGO_SIZE, marginY: "30px" }}
     >
       <Link href="/">
         <Logo />
