@@ -22,6 +22,8 @@ import { AppConfigurations } from "../../Themes";
 
 const TOTAL_REQUEST_COUNT = 500;
 const TOTAL_ITERATION_COUNT = 8;
+const HIGH_PERCENTILE = 0.95;
+
 const REQUEST_URL = "http://localhost:13406/api/v1/gearcompare";
 
 export function GearCompareRequestButton(totalState: EquipmentInput) {
@@ -106,11 +108,13 @@ export function GearCompareRequestButton(totalState: EquipmentInput) {
 
     let aggregatedDamageSummary1 = aggregateDamageStatisticsFromSampleRuns(
       damageSummaries1,
-      TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT
+      TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT,
+      HIGH_PERCENTILE
     );
     let aggregatedDamageSummary2 = aggregateDamageStatisticsFromSampleRuns(
       damageSummaries2,
-      TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT
+      TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT,
+      HIGH_PERCENTILE
     );
 
     response.simulationGear1.simulationData[mainPlayerId].simulationSummary =
@@ -153,11 +157,10 @@ function createGearCompareRequest(
   };
 }
 
-const HIGHEST_PERCENTILE = 0.95;
-
 export function aggregateDamageStatisticsFromSampleRuns(
   damageSummaries: SimulationSummary[],
-  totalRequestCount: number
+  totalRequestCount: number,
+  highPercentile: number
 ) {
   let totalDps: Array<number> = [];
   let highRdps = 0;
@@ -175,12 +178,12 @@ export function aggregateDamageStatisticsFromSampleRuns(
   totalEdps.sort((a, b) => a - b);
 
   let medianIndex = Math.floor(totalRequestCount / 2);
-  let percentileIndex = Math.floor(totalRequestCount * HIGHEST_PERCENTILE);
+  let percentileIndex = Math.floor(totalRequestCount * highPercentile) - 1;
 
   let medianDps = totalDps[medianIndex];
   let medianRdps = totalRdps[medianIndex];
   let medianEdps = totalEdps[medianIndex];
-  highRdps = totalRdps[percentileIndex];
+  highRdps = totalRdps[percentileIndex >= 0 ? percentileIndex : 0];
 
   return {
     pdps: [medianDps],

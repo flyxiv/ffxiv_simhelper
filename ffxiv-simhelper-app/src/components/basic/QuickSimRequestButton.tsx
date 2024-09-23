@@ -101,7 +101,8 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
 
     let damageSummary = aggregateDamageStatisticsFromSampleRuns(
       damageSummaries,
-      TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT
+      TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT,
+      1.0
     );
 
     response = finalResponses[0];

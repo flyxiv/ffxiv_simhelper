@@ -9,6 +9,7 @@ function createWindow() {
     const win = new BrowserWindow({
         width: 1920,
         height: 1080,
+        icon: './images/icon.png',
     });
 
     /*

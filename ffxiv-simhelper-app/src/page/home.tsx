@@ -106,7 +106,10 @@ function LogoBox(
   color: string
 ) {
   return (
+
     <Box
+      component={Link}
+      href={convertToLinkUrl(linkUrl)}
       sx={{
         border: `4px solid ${color}`,
         backgroundColor: AppConfigurations.backgroundTwo,
@@ -117,11 +120,12 @@ function LogoBox(
       alignItems={"center"}
       padding={2}
       marginBottom={4}
+      borderRadius={10}
+      underline="none"
     >
-      <Link href={convertToLinkUrl(linkUrl)} underline="none">
-        {SimLinkIcon(buttonImagePath, altText, title, description, color)}
-      </Link>
-    </Box>
+
+      {SimLinkIcon(buttonImagePath, altText, title, description, color)}
+    </Box >
   );
 }
 

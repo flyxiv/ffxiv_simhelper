@@ -49,6 +49,8 @@ export function ResultPageButtonGroup(
     </ToggleButtonCustom>
   );
 
+  console.log(teammatesContributionToMyBuffs);
+
   return (
     <Box marginTop={4} marginBottom={2}>
       <ToggleButtonGroup
@@ -60,14 +62,12 @@ export function ResultPageButtonGroup(
         <ToggleButtonCustom value={DAMAGE_PROFILE_BUTTON_TEXT}>
           {DAMAGE_PROFILE_BUTTON_TEXT}
         </ToggleButtonCustom>
-        {teammatesContributionToMyBuffs === null ||
-          teammatesContributionToMyBuffs.contributionData.length > 0 ? (
+        {isValidContributions(teammatesContributionToMyBuffs) ? (
           bestTeammateButton
         ) : (
           <Box />
         )}
-        {mainPlayerContributionToOthers === null ||
-          mainPlayerContributionToOthers.contributionData.length > 0 ? (
+        {isValidContributions(mainPlayerContributionToOthers) ? (
           myContributionsButton
         ) : (
           <Box />
@@ -78,4 +78,20 @@ export function ResultPageButtonGroup(
       </ToggleButtonGroup>
     </Box>
   );
+}
+
+function isValidContributions(
+  contributionData: PartyContributionData | null,
+) {
+  if (contributionData === null) {
+    return false;
+  }
+
+  for (let data of contributionData.contributionData) {
+    if (data.totalRdps > 0) {
+      return true;
+    }
+  }
+
+  return false;
 }
