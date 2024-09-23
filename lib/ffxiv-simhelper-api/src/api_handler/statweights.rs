@@ -38,7 +38,7 @@ pub fn stat_weights(request: StatWeightsApiRequest) -> Result<StatWeightsApiResp
 
         let dps_result = response.simulation_data[main_player_id as usize]
             .simulation_summary
-            .rdps;
+            .rdps[0];
         dps_results[simulation_idx] = dps_result as i32;
     }
 

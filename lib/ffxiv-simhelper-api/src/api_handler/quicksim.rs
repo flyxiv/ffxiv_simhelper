@@ -26,13 +26,6 @@ pub fn quicksim(
     let main_player_power = request.party[main_player_id as usize].power.clone();
     let main_player_job_abbrev = request.party[main_player_id as usize].job_abbrev.clone();
 
-    let mut simulation_results = Vec::with_capacity(NUMBER_OF_ITERATIONS_PER_REQUEST);
-
-    let mut pdps = Vec::with_capacity(number_of_iterations);
-    let mut adps = Vec::with_capacity(number_of_iterations);
-    let mut rdps = Vec::with_capacity(number_of_iterations);
-    let mut edps = Vec::with_capacity(number_of_iterations);
-
     let simulation_board = create_simulation_board(request.clone(), true)?;
     simulation_board.run_simulation();
     let simulation_result = simulation_board.create_simulation_result();

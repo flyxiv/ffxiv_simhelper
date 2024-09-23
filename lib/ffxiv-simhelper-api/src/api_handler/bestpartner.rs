@@ -38,8 +38,8 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
             main_player_job_abbrev.clone(),
         );
 
-        let partner_contribution = response.simulation_data[1].simulation_summary.edps
-            - response.simulation_data[1].simulation_summary.rdps;
+        let partner_contribution = response.simulation_data[1].simulation_summary.edps[0]
+            - response.simulation_data[1].simulation_summary.rdps[0];
         let partner_contribution_each_burst = response.simulation_data[1]
             .party_burst_contribution_table
             .iter()
