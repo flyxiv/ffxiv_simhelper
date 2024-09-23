@@ -62,17 +62,22 @@ export const DpsSummary = (props: SimulationData) => {
 
   return (
     <DpsSummaryBox>
-      {DpsBox("DPS", summary.pdps, "white", AppConfigurations.primary)}
-      {DpsBox("RDPS", summary.rdps, "white", AppConfigurations.primaryVariant)}
+      {DpsBox("DPS", summary.pdps[0], "white", AppConfigurations.primary)}
+      {DpsBox(
+        "RDPS",
+        summary.rdps[0],
+        "white",
+        AppConfigurations.primaryVariant
+      )}
       {DpsBox(
         "95% RDPS",
-        summary.maxRdps,
+        summary.maxRdps[0],
         "black",
         AppConfigurations.secondary
       )}
       {DpsBox(
         "EDPS",
-        summary.edps,
+        summary.edps[0],
         "white",
         AppConfigurations.secondaryVariant
       )}
@@ -155,9 +160,9 @@ export const GearCompareDpsSummary = (
 ) => {
   return (
     <DpsSummaryBox>
-      {GearCompareDpsBox("DPS", target.pdps, compare.pdps)}
-      {GearCompareDpsBox("RDPS", target.rdps, compare.rdps)}
-      {GearCompareDpsBox("EDPS", target.edps, compare.edps)}
+      {GearCompareDpsBox("DPS", target.pdps[0], compare.pdps[0])}
+      {GearCompareDpsBox("RDPS", target.rdps[0], compare.rdps[0])}
+      {GearCompareDpsBox("EDPS", target.edps[0], compare.edps[0])}
     </DpsSummaryBox>
   );
 };

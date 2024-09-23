@@ -25,6 +25,7 @@ import { aggregateDamageStatisticsFromSampleRuns } from "./GearCompareRequestBut
 import { AppConfigurations } from "../../Themes";
 
 const TOTAL_REQUEST_COUNT = 1000;
+const TOTAL_ITERATION_COUNT = 2;
 const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
 
 export function QuickSimRequestButton(totalState: EquipmentInput) {
@@ -100,7 +101,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
 
     let damageSummary = aggregateDamageStatisticsFromSampleRuns(
       damageSummaries,
-      TOTAL_REQUEST_COUNT
+      TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT
     );
 
     response = finalResponses[0];
