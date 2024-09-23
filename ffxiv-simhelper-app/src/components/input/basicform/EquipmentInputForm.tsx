@@ -269,19 +269,19 @@ const SHORT_ITEM_WIDTH = "46%";
 const EQUIPMENT_ITEM_WIDTH = (itemCount: number) => {
   return itemCount > 1
     ? {
-        xs: LONG_ITEM_WIDTH,
-        sm: LONG_ITEM_WIDTH,
-        md: LONG_ITEM_WIDTH,
-        lg: LONG_ITEM_WIDTH,
-        xl: LONG_ITEM_WIDTH,
-      }
+      xs: LONG_ITEM_WIDTH,
+      sm: LONG_ITEM_WIDTH,
+      md: LONG_ITEM_WIDTH,
+      lg: LONG_ITEM_WIDTH,
+      xl: LONG_ITEM_WIDTH,
+    }
     : {
-        xs: LONG_ITEM_WIDTH,
-        sm: LONG_ITEM_WIDTH,
-        md: LONG_ITEM_WIDTH,
-        lg: SHORT_ITEM_WIDTH,
-        xl: SHORT_ITEM_WIDTH,
-      };
+      xs: LONG_ITEM_WIDTH,
+      sm: LONG_ITEM_WIDTH,
+      md: LONG_ITEM_WIDTH,
+      lg: SHORT_ITEM_WIDTH,
+      xl: SHORT_ITEM_WIDTH,
+    };
 };
 
 export function EquipmentSelectionMenu(
@@ -306,15 +306,15 @@ export function EquipmentSelectionMenu(
         <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
           {onlyBuffJobs
             ? MainPlayerJobSelectionOnlyBuffJobs(
-                id,
-                totalEquipmentState,
-                setTotalEquipmentState
-              )
+              id,
+              totalEquipmentState,
+              setTotalEquipmentState
+            )
             : MainPlayerJobSelection(
-                id,
-                totalEquipmentState,
-                setTotalEquipmentState
-              )}
+              id,
+              totalEquipmentState,
+              setTotalEquipmentState
+            )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
       <EquipmentGridItemBox
@@ -498,7 +498,8 @@ function FoodSelection(
   return (
     <>
       <CustomFormControl fullWidth>
-        <InputLabel id="FoodSelect">{foodLabel}</InputLabel>
+        <InputLabel id="FoodSelect">
+          <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{foodLabel} </Typography></InputLabel>
         <Select
           labelId={key}
           id={key}
@@ -524,7 +525,7 @@ function FoodSelection(
               alignItems="center"
               justifyContent="flex-end"
             >
-              <Typography variant="body2" color="white">
+              <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
                 {EMPTY_TEXT}
               </Typography>
             </Box>
@@ -563,7 +564,7 @@ function PotSelection(
   return (
     <>
       <CustomFormControl fullWidth>
-        <InputLabel id="FoodSelect">{label}</InputLabel>
+        <InputLabel id="FoodSelect"><Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{label}</Typography></InputLabel>
         <Select
           labelId={key}
           id={key}
@@ -586,7 +587,7 @@ function PotSelection(
               alignItems="center"
               justifyContent="flex-end"
             >
-              <Typography variant="body2" color="white">
+              <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
                 {USE_POT_TEXT}
               </Typography>
             </Box>
@@ -598,7 +599,7 @@ function PotSelection(
               alignItems="center"
               justifyContent="flex-end"
             >
-              <Typography variant="body2" color="white">
+              <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
                 {NO_POT_TEXT}
               </Typography>
             </Box>

@@ -157,7 +157,6 @@ export const GearCompareDpsSummary = (
     <DpsSummaryBox>
       {GearCompareDpsBox("DPS", target.pdps, compare.pdps)}
       {GearCompareDpsBox("RDPS", target.rdps, compare.rdps)}
-      {GearCompareDpsBox("95% RDPS", target.maxRdps, compare.maxRdps)}
       {GearCompareDpsBox("EDPS", target.edps, compare.edps)}
     </DpsSummaryBox>
   );

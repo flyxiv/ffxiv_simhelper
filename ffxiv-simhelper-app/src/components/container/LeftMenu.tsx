@@ -131,7 +131,7 @@ const QUICKSIM_MENU_LOGO_PATH = "/images/icon_quick_sim_w.svg";
 const GEAR_COMPARE_MENU_LOGO_PATH = "/images/icon_gear_compare_w.svg";
 const BEST_PARTNER_MENU_LOGO_PATH = "/images/icon_best_partner_w.svg";
 const STAT_WEIGHTS_MENU_LOGO_PATH = "/images/icon_stat_weights_w.svg";
-const LOGO_PATH = "/images/icon_main_top_kupo_w.svg";
+const LOGO_PATH = "/images/left_menu_logo.svg";
 
 function DefaultLeftMenuComponents() {
   return (
