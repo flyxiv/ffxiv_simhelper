@@ -7,63 +7,56 @@ use axum::Json;
 use ffxiv_simhelper_combat_components::types::DpsType;
 use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 
-const NUMBER_OF_ITERATIONS_PER_REQUEST: usize = 8;
+const NUMBER_OF_ITERATIONS_PER_REQUEST_QUICKSIM: usize = 2;
 
 pub(crate) async fn quicksim_api_handler(
     Json(request): Json<SimulationApiRequest>,
 ) -> Result<Json<SimulationApiResponse>> {
-    Ok(Json(quicksim(request)?))
+    Ok(Json(quicksim(
+        request,
+        NUMBER_OF_ITERATIONS_PER_REQUEST_QUICKSIM,
+    )?))
 }
 
-pub fn quicksim(request: SimulationApiRequest) -> Result<SimulationApiResponse> {
+pub fn quicksim(
+    request: SimulationApiRequest,
+    number_of_iterations: usize,
+) -> Result<SimulationApiResponse> {
     let main_player_id = request.main_player_id;
     let main_player_power = request.party[main_player_id as usize].power.clone();
     let main_player_job_abbrev = request.party[main_player_id as usize].job_abbrev.clone();
 
     let mut simulation_results = Vec::with_capacity(NUMBER_OF_ITERATIONS_PER_REQUEST);
 
-    for _ in 0..NUMBER_OF_ITERATIONS_PER_REQUEST {
+    let mut pdps = Vec::with_capacity(number_of_iterations);
+    let mut adps = Vec::with_capacity(number_of_iterations);
+    let mut rdps = Vec::with_capacity(number_of_iterations);
+    let mut edps = Vec::with_capacity(number_of_iterations);
+
+    let simulation_board = create_simulation_board(request.clone(), true)?;
+    simulation_board.run_simulation();
+    let simulation_result = simulation_board.create_simulation_result();
+    let mut response = create_response_from_simulation_result(
+        simulation_result,
+        main_player_power.clone(),
+        main_player_job_abbrev.clone(),
+    );
+
+    for _ in 1..number_of_iterations {
         let simulation_board = create_simulation_board(request.clone(), true)?;
         simulation_board.run_simulation();
 
         let simulation_result = simulation_board.create_simulation_result();
-        simulation_results.push(create_response_from_simulation_result(
+        let iteration_response = create_response_from_simulation_result(
             simulation_result,
             main_player_power.clone(),
             main_player_job_abbrev.clone(),
-        ));
+        );
+
+        response.simulation_data[0]
+            .simulation_summary
+            .drain(&iteration_response.simulation_data[0].simulation_summary);
     }
 
-    let mut avg_pdps = 0.0;
-    let mut avg_adps = 0.0;
-    let mut avg_rdps = 0.0;
-    let mut avg_edps = 0.0;
-
-    simulation_results.iter().for_each(|simulation_result| {
-        let simulation_summary = &simulation_result.simulation_data[0].simulation_summary;
-        avg_pdps += simulation_summary.pdps;
-        avg_adps += simulation_summary.adps;
-        avg_rdps += simulation_summary.rdps;
-        avg_edps += simulation_summary.edps;
-    });
-
-    avg_pdps = avg_pdps / NUMBER_OF_ITERATIONS_PER_REQUEST as DpsType;
-    avg_adps = avg_adps / NUMBER_OF_ITERATIONS_PER_REQUEST as DpsType;
-    avg_rdps = avg_rdps / NUMBER_OF_ITERATIONS_PER_REQUEST as DpsType;
-    avg_edps = avg_edps / NUMBER_OF_ITERATIONS_PER_REQUEST as DpsType;
-
-    simulation_results[0].simulation_data[0]
-        .simulation_summary
-        .pdps = avg_pdps;
-    simulation_results[0].simulation_data[0]
-        .simulation_summary
-        .adps = avg_adps;
-    simulation_results[0].simulation_data[0]
-        .simulation_summary
-        .rdps = avg_rdps;
-    simulation_results[0].simulation_data[0]
-        .simulation_summary
-        .edps = avg_edps;
-
-    Ok(simulation_results[0].clone())
+    Ok(response)
 }

@@ -11,7 +11,6 @@ use crate::response::simulation_api_response::{
 use ffxiv_simhelper_combat_components::jobs_skill_data::ninja::combat_resources::BUNSHIN_CLONE_ID;
 use ffxiv_simhelper_combat_components::live_objects::player::logs::SkillLog;
 use ffxiv_simhelper_combat_components::live_objects::player::player_power::PlayerPower;
-use ffxiv_simhelper_combat_components::live_objects::player::StatusKey;
 use ffxiv_simhelper_combat_components::types::{DpsType, MultiplierType, PlayerIdType};
 use ffxiv_simhelper_combat_components::types::{SkillIdType, TimeType};
 use ffxiv_simhelper_dps_simulator::simulation_result::SimulationResult;
@@ -44,26 +43,26 @@ impl FromWithTime<PlayerDamageAggregate> for SimulationSummaryResponse {
             .sum::<DpsType>();
 
         SimulationSummaryResponse {
-            rdps: damage_to_dps(
+            rdps: vec![damage_to_dps(
                 (player_damage_aggregate.total_raw_damage
                     + player_damage_aggregate.total_contributions_received)
                     as DpsType,
                 combat_time_millisecond,
-            ),
-            adps: damage_to_dps(
+            )],
+            adps: vec![damage_to_dps(
                 (player_damage_aggregate.total_raw_damage + given_contributions) as DpsType,
                 combat_time_millisecond,
-            ),
-            pdps: damage_to_dps(
+            )],
+            pdps: vec![damage_to_dps(
                 player_damage_aggregate.total_raw_damage + given_contributions,
                 combat_time_millisecond,
-            ),
-            edps: damage_to_dps(
+            )],
+            edps: vec![damage_to_dps(
                 player_damage_aggregate.total_raw_damage
                     + player_damage_aggregate.total_contributions_received
                     + given_contributions,
                 combat_time_millisecond,
-            ),
+            )],
         }
     }
 }

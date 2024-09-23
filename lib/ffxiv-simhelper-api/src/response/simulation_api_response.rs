@@ -40,16 +40,25 @@ pub struct SimulationDataResponse {
 #[serde(rename_all = "camelCase")]
 pub struct SimulationSummaryResponse {
     /// Raw Damage + Received Contribution
-    pub rdps: DpsType,
+    pub rdps: Vec<DpsType>,
     /// Raw Damage + Given Contribution - Received Contribution
-    pub adps: DpsType,
+    pub adps: Vec<DpsType>,
     /// Raw Damage + Given Contribution
     /// Which is equal to the actual DPS that is shown in the damage meters.
-    pub pdps: DpsType,
+    pub pdps: Vec<DpsType>,
     /// Effective Dps
     /// The best metric for comparing how useful DPS performance was overall.
     /// raw damage + Given Contribution + Received Contribution
-    pub edps: DpsType,
+    pub edps: Vec<DpsType>,
+}
+
+impl SimulationSummaryResponse {
+    pub(crate) fn drain(&mut self, other: &Self) {
+        self.rdps.extend(other.rdps.iter().cloned());
+        self.adps.extend(other.adps.iter().cloned());
+        self.pdps.extend(other.pdps.iter().cloned());
+        self.edps.extend(other.edps.iter().cloned());
+    }
 }
 
 /// Records the damage contribution of each skill

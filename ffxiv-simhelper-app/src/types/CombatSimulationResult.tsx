@@ -1,8 +1,8 @@
 export interface SimulationSummary {
-  rdps: number;
-  pdps: number;
-  edps: number;
-  maxRdps: number;
+  rdps: Array<number>;
+  pdps: Array<number>;
+  edps: Array<number>;
+  maxRdps: Array<number>;
 }
 export interface PartyContribution {
   skillId: number;

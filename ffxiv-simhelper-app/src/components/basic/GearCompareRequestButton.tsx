@@ -164,9 +164,9 @@ export function aggregateDamageStatisticsFromSampleRuns(
   let totalEdps: Array<number> = [];
 
   damageSummaries.forEach((summary) => {
-    totalDps.push(summary.pdps);
-    totalRdps.push(summary.rdps);
-    totalEdps.push(summary.edps);
+    totalDps.concat(summary.pdps);
+    totalRdps.concat(summary.rdps);
+    totalEdps.concat(summary.edps);
   });
 
   totalDps.sort((a, b) => a - b);
