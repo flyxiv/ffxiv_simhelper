@@ -70,7 +70,7 @@ fn main() {
         use_pot: true,
     };
 
-    let response = quicksim(request);
+    let response = quicksim(request, 1);
     println!(
         "{:?}",
         response
