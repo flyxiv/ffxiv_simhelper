@@ -57,7 +57,7 @@ function DpsBox(
   );
 }
 
-export const DpsSummary = (props: SimulationData) => {
+export const DpsSummary = (props: SimulationData, highestDpsText: string) => {
   const summary = props.simulationSummary;
 
   return (
@@ -70,7 +70,7 @@ export const DpsSummary = (props: SimulationData) => {
         AppConfigurations.primaryVariant
       )}
       {DpsBox(
-        "95% RDPS",
+        highestDpsText,
         summary.maxRdps[0],
         "black",
         AppConfigurations.secondary
