@@ -170,7 +170,7 @@ impl SummonerDatabase {
             stacks: 1,
             max_stacks: 1,
             owner_id: player_id,
-            damage_skill_id: Some(1619),
+            damage_skill_id: Some(1631),
             potency: Some(30),
             trait_percent: Some(130),
             damage_category: Some(DamageCategory::MagicalDot),

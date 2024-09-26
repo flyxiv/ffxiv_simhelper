@@ -104,7 +104,7 @@ impl AstrologianDatabase {
             stacks: 1,
             max_stacks: 1,
             owner_id: player_id,
-            damage_skill_id: Some(501),
+            damage_skill_id: Some(514),
             potency: Some(70),
             trait_percent: Some(130),
             damage_category: Some(DamageCategory::MagicalDot),

@@ -33,7 +33,7 @@ impl WhitemageDatabase {
             potency: Some(75),
             trait_percent: Some(130),
             damage_category: Some(DamageCategory::MagicalDot),
-            damage_skill_id: Some(401),
+            damage_skill_id: Some(407),
             duration_left_millisecond: 0,
             status_info: vec![],
             duration_millisecond: 30000,

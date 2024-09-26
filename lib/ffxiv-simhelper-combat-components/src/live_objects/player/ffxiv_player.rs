@@ -498,10 +498,138 @@ impl FfxivPlayer {
         current_time_millisecond: TimeType,
     ) {
         self.damage_logs.push(DamageLog::new(
-            skill_id,
+            FfxivPlayer::convert_related_skill_ids(skill_id),
             damage_profile,
             current_time_millisecond,
         ));
+    }
+
+    /// buffed skills like ley line fire IV, life surge buffed heaven's thrust
+    /// are treated as separate skills by the engine, but is the same skill to the
+    /// app user.
+    /// Merge these buffed skills to the un-buffed original skills
+    fn convert_related_skill_ids(skill_id: SkillIdType) -> SkillIdType {
+        match skill_id {
+            /// WAR
+            /// fell cleave + inner release
+            111 => 104,
+
+            /// DRG
+            /// heavens thrust + surge
+            812 => 805,
+            /// drakesbane + surge
+            813 => 809,
+
+            /// MNK
+            /// perfect leaping opo -> leaping opo
+            914 => 900,
+            /// perfect rising raptor -> rising raptor
+            915 => 901,
+            /// perfect pouncing coeurl -> pouncing coeurl
+            916 => 902,
+            /// perfect twin snakes -> twin snakes
+            917 => 903,
+            /// perfect demolish -> demolish
+            918 => 904,
+            /// perfect dragon kick -> dragon kick
+            919 => 905,
+
+            /// NIN
+            /// bhavacakra meisui -> bhavacakra
+            1021 => 1012,
+            /// zesho meppo meisui -> zesho meppo
+            1025 => 1000,
+
+            /// SAM
+            /// gekko meikyo
+            1110 => 1102,
+            /// kasha meikyo
+            1111 => 1104,
+            /// yuki meikyo
+            1112 => 1105,
+            /// higanbana two(kasha sen)
+            1119 => 1118,
+            /// higanbana three(yuki sen)
+            1120 => 1118,
+
+            /// RPR
+            /// refresh slice -> slice
+            1223 => 1200,
+            /// refresh waxing slice -> waxing slice
+            1224 => 1201,
+            /// refresh infernal slice -> infernal slice
+            1225 => 1202,
+
+            /// MCH
+            /// drill reassemble -> drill
+            1414 => 1403,
+            /// air anchor reassemble -> air anchor
+            1415 => 1404,
+            /// chain saw reassemble -> chain saw
+            1416 => 1405,
+            /// excavator reassemble -> excavator
+            1419 => 1417,
+
+            /// BLM
+            /// Fire 4 Triplecast -> Fire 4
+            1704 => 1703,
+            /// Fire 3 astral fire 1 -> Fire 3 umbral ice 3
+            1706 => 1705,
+            /// Fire 3 Opener -> Fire 3 umbral ice 3
+            1718 => 1705,
+            /// Fire 3 -> Fire 3 umbral ice 3
+
+            /// Despair Triplecast -> Despair
+            1708 => 1707,
+
+            /// Blizzard 3 Opener -> Blizzard 3
+            1719 => 1712,
+            /// Blizzard 3 transpose triplecast -> Blizzard 3
+            1721 => 1712,
+            /// Blizzard 3 transpose swiftcast -> Blizzard 3
+            1723 => 1712,
+
+            /// flarestar triplecast -> flarestar
+            1722 => 1720,
+
+            /// RDM
+            /// veraero swiftcast -> veraero
+            1802 => 1801,
+            /// veraero dualcast -> veraero
+            1803 => 1801,
+            /// veraero acceleration -> veraero
+            1804 => 1801,
+            /// verthunder dualcast -> verthunder swiftcast
+            1806 => 1805,
+            /// verthunder acceleration -> verthunder swiftcast
+            1807 => 1805,
+            /// riposte manafication -> enchanted riposte
+            1827 => 1815,
+            /// zwerchhau manafication -> enchanted zwerchhau
+            1828 => 1816,
+            /// redoublement manafication -> enchanted redoublement
+            1829 => 1817,
+            /// verholy manafication -> verholy
+            1830 => 1818,
+            /// verflare manafication -> verflare
+            1831 => 1819,
+            /// scorch manafication -> scorch
+            1832 => 1822,
+            /// resolution manafication -> resolution
+            1833 => 1823,
+
+            /// PCT
+            /// Comet in Black Hyperphantasia -> Comet in Black
+            2032 => 2022,
+            /// Blizzard in Cyan Hyperphantasia -> Blizzard in Cyan
+            2033 => 2013,
+            /// Stone in Yellow Hyperphantasia -> Stone in Yellow
+            2034 => 2014,
+            /// Thunder in Magenta Hyperphantasia -> Thunder in Magenta
+            2035 => 2015,
+
+            _ => skill_id,
+        }
     }
 
     pub fn is_melee(&self) -> bool {
