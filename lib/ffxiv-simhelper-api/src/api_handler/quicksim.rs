@@ -9,6 +9,9 @@ use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 
 const NUMBER_OF_ITERATIONS_PER_REQUEST_QUICKSIM: usize = 2;
 
+/// QuickSim API Request Handler
+/// The most basic simulation of FFXIV SimHelper
+/// 1) In-depth analysis of character's DPS
 pub(crate) async fn quicksim_api_handler(
     Json(request): Json<SimulationApiRequest>,
 ) -> Result<Json<SimulationApiResponse>> {

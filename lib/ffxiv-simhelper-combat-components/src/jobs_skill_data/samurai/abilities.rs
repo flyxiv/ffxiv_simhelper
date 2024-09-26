@@ -114,7 +114,7 @@ impl SamuraiDatabase {
             stacks: 1,
             max_stacks: 1,
             owner_id: player_id,
-            damage_skill_id: Some(1119),
+            damage_skill_id: Some(1125),
             potency: Some(50),
             trait_percent: Some(100),
             damage_category: Some(DamageCategory::PhysicalDot),

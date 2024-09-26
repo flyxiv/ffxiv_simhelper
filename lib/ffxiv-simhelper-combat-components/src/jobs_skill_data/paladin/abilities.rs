@@ -86,7 +86,7 @@ impl PaladinDatabase {
             potency: Some(30),
             trait_percent: Some(100),
             damage_category: Some(DamageCategory::PhysicalDot),
-            damage_skill_id: Some(1902),
+            damage_skill_id: Some(1919),
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
             duration_millisecond: 15000,

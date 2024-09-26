@@ -163,7 +163,7 @@ impl DragoonDatabase {
             id: 810,
             name: String::from("Chaotic Spring"),
             owner_id: player_id,
-            damage_skill_id: Some(806),
+            damage_skill_id: Some(826),
             trait_percent: Some(100),
             potency: Some(45),
             damage_category: Some(DamageCategory::PhysicalDot),

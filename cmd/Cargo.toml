@@ -1,10 +1,10 @@
 [package]
-name = "ffxiv-simbot-cmd"
+name = "ffxiv-simhelper-cmd"
 version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "ffxiv-simbot"
+name = "ffxiv-simhelper"
 path = "src/main.rs"
 doc = false
 
@@ -18,17 +18,17 @@ name = "profile-statweight"
 path = "src/profile_statweight.rs"
 doc = false
 
-[dependencies.ffxiv-simbot-dps-simulator]
+[dependencies.ffxiv-simhelper-dps-simulator]
 version = "0.1.0"
-path = "../lib/ffxiv-simbot-dps-simulator"
+path = "../lib/ffxiv-simhelper-dps-simulator"
 
-[dependencies.ffxiv-simbot-combat-components]
+[dependencies.ffxiv-simhelper-combat-components]
 version = "0.1.0"
-path = "../lib/ffxiv-simbot-combat-components"
+path = "../lib/ffxiv-simhelper-combat-components"
 
-[dependencies.ffxiv-simbot-api]
+[dependencies.ffxiv-simhelper-api]
 version = "0.1.0"
-path = "../lib/ffxiv-simbot-api"
+path = "../lib/ffxiv-simhelper-api"
 
 [dependencies]
 axum = "0.7"

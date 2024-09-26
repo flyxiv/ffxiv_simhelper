@@ -74,7 +74,7 @@ impl BlackmageDatabase {
             potency: Some(60),
             trait_percent: Some(130),
             damage_category: Some(MagicalDot),
-            damage_skill_id: Some(1701),
+            damage_skill_id: Some(1725),
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
             duration_millisecond: 30000,

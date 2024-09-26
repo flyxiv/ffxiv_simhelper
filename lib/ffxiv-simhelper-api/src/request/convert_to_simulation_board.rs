@@ -11,22 +11,34 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 enum PartnerCategory {
-    MeleePartner,
-    RangedPartner,
+    /// DNC Dance Partner
     AllPartner,
+
+    /// AST Melee Partner
+    MeleePartner,
+
+    /// AST Ranged Partner
+    RangedPartner,
 }
 
 lazy_static! {
+    /// Priority for Dance Partner
     static ref ALL_PARTNER_PRIORITY: Vec<&'static str> = vec![
         "PCT", "SAM", "MNK", "NIN", "VPR", "RPR", "DRG", "RDM", "SMN", "BLM", "MCH", "BRD", "DRK",
         "GNB", "WAR", "PLD", "WHM", "SGE", "SCH", "AST", "DNC"
     ];
+
+    /// Priority for AST Melee Partner
     static ref MELEE_PRIORITY: Vec<&'static str> =
         vec!["SAM", "MNK", "NIN", "VPR", "RPR", "DRG", "DRK", "GNB", "WAR", "PLD",];
+
+    /// Priority for AST Ranged Partner
     static ref RANGED_PRIORITY: Vec<&'static str> =
         vec!["PCT", "RDM", "SMN", "DNC", "BLM", "MCH", "BRD", "WHM", "SGE", "SCH", "AST",];
 }
 
+/// Create Player Entity from given request input'ss
+/// Stat power and jobs
 pub(crate) fn create_player(
     player_info: PlayerInfoRequest,
     composition_buff_percent: BuffIncreasePercentType,

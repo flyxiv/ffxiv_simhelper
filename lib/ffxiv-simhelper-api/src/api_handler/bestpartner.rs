@@ -7,7 +7,7 @@ use axum::Json;
 use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
 
-const BEST_PARTNER_SIMULATION_COUNT: usize = 4000;
+const BEST_PARTNER_SIMULATION_COUNT: usize = 500;
 const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.75;
 
 pub(crate) async fn best_partner_api_handler(
@@ -23,7 +23,7 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
     let main_player_power = request.party[main_player_id as usize].power.clone();
     let main_player_job_abbrev = request.party[main_player_id as usize].job_abbrev.clone();
 
-    /// first contains total, after that contains contribution at every burst phase
+    // first contains total, after that contains contribution at every burst phase
     let mut partner_contributions: [Vec<i32>; BEST_PARTNER_SIMULATION_COUNT] =
         [ARRAY_REPEAT_VALUE; BEST_PARTNER_SIMULATION_COUNT];
 
