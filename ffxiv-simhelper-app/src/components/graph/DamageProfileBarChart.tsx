@@ -68,7 +68,7 @@ export function SkillDamageProfile(
         </SkillIconBox>
         <SkillNameBox>
           <Box>
-            <Typography variant="body2" fontSize={AppConfigurations.body2FontSize} align="right" >
+            <Typography variant="body2" fontSize={"min(1.2vh, 0.8vw)"} align="right" >
               {data.name}
             </Typography>
           </Box>
