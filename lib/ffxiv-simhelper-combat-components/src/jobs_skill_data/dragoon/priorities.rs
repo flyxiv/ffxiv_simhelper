@@ -65,43 +65,43 @@ pub(crate) fn make_dragoon_opener(db: &DragoonDatabase, use_pots: bool) -> Vec<O
             GcdOpener(db.true_thrust.get_id()),
             OgcdOpener((None, None)),
             GcdOpener(db.spiral_blow.get_id()),
-            OgcdOpener((None, Some(db.potion.get_id()))),
+            OgcdOpener((Some(db.lance_charge.get_id()), Some(db.potion.get_id()))),
         ]
     } else {
         vec![
             GcdOpener(db.true_thrust.get_id()),
             OgcdOpener((None, None)),
             GcdOpener(db.spiral_blow.get_id()),
-            OgcdOpener((None, None)),
+            OgcdOpener((Some(db.lance_charge.get_id()), None)),
         ]
     };
 
     opener.extend(vec![
         GcdOpener(db.chaotic_spring.get_id()),
         OgcdOpener((
-            Some(db.lance_charge.get_id()),
             Some(db.battle_litany.get_id()),
+            Some(db.geirskogul.get_id()),
         )),
         GcdOpener(db.wheeling_thrust.get_id()),
         OgcdOpener((Some(db.high_jump.get_id()), Some(db.life_surge.get_id()))),
         GcdOpener(db.drakesbane_surge.get_id()),
         OgcdOpener((
-            Some(db.geirskogul.get_id()),
             Some(db.dragonfire_dive.get_id()),
+            Some(db.nastrond.get_id()),
         )),
         GcdOpener(db.raiden_thrust.get_id()),
         OgcdOpener((Some(db.stardiver.get_id()), None)),
         GcdOpener(db.lance_barrage.get_id()),
         OgcdOpener((Some(db.life_surge.get_id()), Some(db.starcross.get_id()))),
-        GcdOpener(db.heavens_thrust.get_id()),
+        GcdOpener(db.heavens_thrust_surge.get_id()),
         OgcdOpener((
             Some(db.nastrond.get_id()),
-            Some(db.life_of_the_dragon.get_id()),
+            Some(db.rise_of_the_dragon.get_id()),
         )),
         GcdOpener(db.fang_and_claw.get_id()),
         OgcdOpener((Some(db.nastrond.get_id()), Some(db.mirage_dive.get_id()))),
         GcdOpener(db.drakesbane.get_id()),
-        OgcdOpener((Some(db.nastrond.get_id()), None)),
+        OgcdOpener((None, None)),
         GcdOpener(db.raiden_thrust.get_id()),
         OgcdOpener((Some(db.wyrmwind_thrust.get_id()), None)),
     ]);

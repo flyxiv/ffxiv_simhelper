@@ -135,6 +135,10 @@ pub(crate) fn make_machinist_gcd_priority_table(db: &MachinistDatabase) -> Vec<S
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.full_metal_field.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.heated_clean_shot.get_id(),
             prerequisite: Some(Combo(Some(3))),
         },

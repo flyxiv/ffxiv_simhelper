@@ -105,12 +105,12 @@ impl CombatResource for MachinistCombatResources {
                     current_time_millisecond,
                 ));
                 self.wildfire_damage_incoming = None;
-            }
-
-            let skill = self.skills.get(&skill_id).unwrap();
-
-            if skill.gcd_cooldown_millisecond > 0 {
-                self.wildfire_damage_incoming = Some((potency + WILDFIRE_POTENCY_PER_STACK, delay));
+            } else {
+                let skill = self.skills.get(&skill_id).unwrap();
+                if skill.gcd_cooldown_millisecond > 0 {
+                    self.wildfire_damage_incoming =
+                        Some((potency + WILDFIRE_POTENCY_PER_STACK, delay));
+                }
             }
         }
 
@@ -138,7 +138,7 @@ impl CombatResource for MachinistCombatResources {
             }
         }
 
-        if skill_id == 1413 {
+        if skill_id == AUTOMATON_QUEEN_ID {
             let current_stack = self.get_resource(BATTERY_ID);
             let potency =
                 QUEEN_BASE_POTENCY + QUEEN_POTENCY_PER_STACK * (current_stack as PotencyType - 5);
@@ -147,7 +147,7 @@ impl CombatResource for MachinistCombatResources {
             self.resources[BATTERY_ID as usize] = 0;
         }
 
-        if skill_id == 1410 {
+        if skill_id == WILDFIRE_ID {
             self.wildfire_damage_incoming = Some((0, WILDFIRE_DELAY_MILLISECOND));
         }
 
