@@ -58,17 +58,11 @@ impl BlackmagePriorityTable {
 
 pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase, use_pot: bool) -> Vec<Opener> {
     let mut opener = vec![
-        Opener::GcdOpener(db.blizzard3_opener.get_id()),
+        Opener::GcdOpener(db.fire3_opener.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.high_thunder.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.blizzard4.get_id()),
-        Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.fire3_ice.get_id()),
-        Opener::OgcdOpener((Some(db.triplecast.get_id()), None)),
-        Opener::GcdOpener(db.fire4_triplecast.get_id()),
-        Opener::OgcdOpener((Some(db.leylines.get_id()), Some(db.amplifier.get_id()))),
-        Opener::GcdOpener(db.fire4_triplecast.get_id()),
+        Opener::OgcdOpener((Some(db.swiftcast.get_id()), Some(db.amplifier.get_id()))),
+        Opener::GcdOpener(db.fire4_swiftcast.get_id()),
     ];
 
     if use_pot {
@@ -76,7 +70,40 @@ pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase, use_pot: bool) -> Ve
     } else {
         opener.push(Opener::OgcdOpener((None, None)));
     }
-    opener.push(Opener::GcdOpener(db.fire4_triplecast.get_id()));
+
+    opener.extend(vec![
+        Opener::GcdOpener(db.fire4.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.xenoglossy.get_id()),
+        Opener::OgcdOpener((Some(db.triplecast.get_id()), Some(db.leylines.get_id()))),
+        Opener::GcdOpener(db.fire4_triplecast.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.fire4_triplecast.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.despair_triplecast.get_id()),
+        Opener::OgcdOpener((Some(db.manafont.get_id()), Some(db.triplecast.get_id()))),
+        Opener::GcdOpener(db.fire4_triplecast.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.fire4_triplecast.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.flare_star_triplecast.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.fire4.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.high_thunder.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.paradox.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.fire4.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.fire4.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.fire4.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.despair.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.blizzard3.get_id()),
+    ]);
 
     opener
 }

@@ -7,8 +7,8 @@ use axum::Json;
 use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
 
-const BEST_PARTNER_SIMULATION_COUNT: usize = 500;
-const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.75;
+const BEST_PARTNER_SIMULATION_COUNT: usize = 1000;
+const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.50;
 
 pub(crate) async fn best_partner_api_handler(
     Json(request): Json<SimulationApiRequest>,
@@ -50,7 +50,15 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
         partner_contributions[simulation_idx].extend(partner_contribution_each_burst);
     }
 
-    let burst_count = partner_contributions[0].len();
+    let mut max_len = 0;
+
+    partner_contributions.iter().for_each(|contributions| {
+        if contributions.len() > max_len {
+            max_len = contributions.len();
+        }
+    });
+
+    let burst_count = max_len;
 
     let mut contributed_dps: Vec<i32> = Vec::with_capacity(burst_count);
 

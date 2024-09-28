@@ -18,8 +18,8 @@ use std::rc::Rc;
 
 const NINJA_STACK_COUNT: usize = 2;
 
-pub const BUNSHIN_STACK_ID: StatusIdType = 1022;
-pub const BUNSHIN_CLONE_ID: SkillIdType = 1011;
+pub const BUNSHIN_STACK_ID: StatusIdType = 1011;
+pub const BUNSHIN_CLONE_ID: SkillIdType = 1022;
 
 const NINKI_MAX: ResourceType = 100;
 const SHURIKEN_MAX_STACK: ResourceType = 5;

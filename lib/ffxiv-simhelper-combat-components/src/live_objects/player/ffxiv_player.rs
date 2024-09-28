@@ -573,6 +573,9 @@ impl FfxivPlayer {
             /// BLM
             /// Fire 4 Triplecast -> Fire 4
             1704 => 1703,
+            /// Fire 4 Swiftcast -> Fire 4
+            1719 => 1703,
+
             /// Fire 3 astral fire 1 -> Fire 3 umbral ice 3
             1706 => 1705,
             /// Fire 3 Opener -> Fire 3 umbral ice 3
@@ -582,8 +585,6 @@ impl FfxivPlayer {
             /// Despair Triplecast -> Despair
             1708 => 1707,
 
-            /// Blizzard 3 Opener -> Blizzard 3
-            1719 => 1712,
             /// Blizzard 3 transpose triplecast -> Blizzard 3
             1721 => 1712,
             /// Blizzard 3 transpose swiftcast -> Blizzard 3

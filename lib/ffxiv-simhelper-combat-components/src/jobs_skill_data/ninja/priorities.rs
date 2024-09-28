@@ -230,6 +230,10 @@ pub(crate) fn make_ninja_ogcd_priority_table(
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.bunshin.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
             skill_id: db.kunais_bane.get_id(),
             prerequisite: None,
         },
@@ -260,8 +264,14 @@ pub(crate) fn make_ninja_ogcd_priority_table(
         SkillPriorityInfo {
             skill_id: db.bhavacakra.get_id(),
             prerequisite: Some(Or(
-                Box::new(HasResource(0, 80)),
-                Box::new(HasBufforDebuff(db.kunais_bane_status.get_id())),
+                Box::new(HasResource(0, 85)),
+                Box::new(Or(
+                    Box::new(HasBufforDebuff(db.kunais_bane_status.get_id())),
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.dokumori.get_id(),
+                        3000,
+                    )),
+                )),
             )),
         },
         SkillPriorityInfo {
@@ -270,10 +280,6 @@ pub(crate) fn make_ninja_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.kassatsu.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.bunshin.get_id(),
             prerequisite: None,
         },
     ]);
