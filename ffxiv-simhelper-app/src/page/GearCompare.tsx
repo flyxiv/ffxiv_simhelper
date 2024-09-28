@@ -25,6 +25,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {
   COPY_BUTTON_TEXT,
   GEAR_COMPARE_INPUT_INFO_TEXT,
+  GEAR_COMPARE_PAGE_NAME,
   QUICK_SIM_PARTY_INPUT_INFO_TEXT,
 } from "../const/languageTexts";
 
@@ -98,6 +99,7 @@ export function GearCompare() {
         {LeftMenuWithLoadout(
           GEAR_COMPARE_LOADOUNT_COUNT,
           GEAR_COMPARE_URL,
+          GEAR_COMPARE_PAGE_NAME,
           totalState,
           setTotalState
         )}

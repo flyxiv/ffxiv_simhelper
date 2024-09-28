@@ -9,7 +9,7 @@ import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { StatWeightsResponseTable } from "../types/StatWeightsResponse";
 import { StatWeightSummary } from "../components/container/StatSummary";
-import { SIMULATION_RESULT_TEXT, STAT_WEIGHTS_TEXT } from "../const/languageTexts";
+import { SIMULATION_RESULT_TEXT, STAT_WEIGHTS_PAGE_NAME, STAT_WEIGHTS_TEXT } from "../const/languageTexts";
 import { EMPTY_PARTY_MEMBER } from "../types/PartyStates";
 
 export interface StatWeightsData {
@@ -66,7 +66,7 @@ export function StatWeightsResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu()}
+        {BasicLeftMenu(STAT_WEIGHTS_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultBoardTopBox marginBottom="40px">

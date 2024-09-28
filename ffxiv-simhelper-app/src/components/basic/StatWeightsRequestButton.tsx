@@ -2,8 +2,7 @@ import { styled, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   calculateIlvlAdjustment,
-  mapJobAbbrevToJobDefaultStat,
-  playerStatToPlayerPower,
+  mapJobAbbrevToJobBisEquipments,
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
 import {
@@ -24,7 +23,7 @@ import {
   StatWeightsResponse,
   StatWeightsResponseTable,
 } from "../../types/StatWeightsResponse";
-import { calculatePowerByStat } from "../../types/ffxivdatabase/ItemSet";
+import { calculatePlayerPowerFromInputs, calculatePowerByStat } from "../../types/ffxivdatabase/ItemSet";
 import { sendRequestAsync } from "./QuickSimRequestButton";
 import {
   CRIT_STAT_NAME,
@@ -32,6 +31,7 @@ import {
   DEX_STAT_NAME,
   DH_STAT_NAME,
   INT_STAT_NAME,
+  MIDLANDER_HYUR_NAME_EN,
   MIND_STAT_NAME,
   SKS_STAT_NAME,
   SPS_STAT_NAME,
@@ -39,7 +39,7 @@ import {
   TEN_STAT_NAME,
   WD_STAT_NAME,
 } from "../../const/languageTexts";
-import { getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
+import { defaultPlayerPower, getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
 import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
 
@@ -254,25 +254,42 @@ function createAugmentedRequest(
   let playerCount = 0;
   for (let i = 0; i < totalState.partyMemberJobAbbrevs.length; i++) {
     let jobAbbrev = totalState.partyMemberJobAbbrevs[i];
-    let defaultStat = mapJobAbbrevToJobDefaultStat(jobAbbrev);
+    let bisEquipments = mapJobAbbrevToJobBisEquipments(jobAbbrev);
 
-    if (defaultStat === undefined) {
+    if (bisEquipments === undefined) {
       continue;
     }
 
-    let power = playerStatToPlayerPower(defaultStat, jobAbbrev);
+    let playerTotalState = {
+      mainPlayerJobAbbrev: jobAbbrev,
+      race: MIDLANDER_HYUR_NAME_EN,
+      foodId: bisEquipments.foodId,
+      mainPlayerPartner1Id: null,
+      mainPlayerPartner2Id: null,
+      itemSet: bisEquipments.itemSet,
+      gearSetMaterias: bisEquipments.gearSetMaterias,
+      combatTimeMillisecond: 0,
+      partyMemberJobAbbrevs: [],
+      partyMemberIds: [],
+      partyMemberIlvl: 0,
+      usePot: 1,
+      power: defaultPlayerPower(),
+    }
+
+    let bisPower = calculatePlayerPowerFromInputs(playerTotalState);
+
     let autoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
     if (autoAttackDelays === undefined) {
       autoAttackDelays = 0;
     }
-    power.autoAttackDelays = autoAttackDelays;
+    bisPower.autoAttackDelays = autoAttackDelays;
 
     partyInfo.push({
       playerId: playerCount + 1,
       partner1Id: null,
       partner2Id: null,
       jobAbbrev: jobAbbrev,
-      power: power,
+      power: bisPower,
     });
 
     playerCount++;

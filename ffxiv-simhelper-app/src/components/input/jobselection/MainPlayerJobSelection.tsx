@@ -39,39 +39,13 @@ import {
   SPEED_LABEL_TEXT,
   VPR_EN_NAME,
   WAR_EN_NAME,
-  WEAPON_SLOT_EN_TEXT,
   WHM_EN_NAME,
 } from "../../../const/languageTexts";
-import { EMPTY_MATERIA, Materia } from "../../../types/ffxivdatabase/Materia";
 import { calculateModifiedGCD, DEFAULT_GCD } from "../../../types/ffxivdatabase/StatCalculator";
+import { mapJobAbbrevToJobBisEquipments } from "../../../const/StatValue";
 
 let ALIGN = "left";
 
-function resetOnlyUnequippableEquipment(data: SingleEquipmentInputSaveState) {
-  for (let slotIndex = 0; slotIndex < data.itemSet.length; slotIndex++) {
-    let newPossibleEquipments = EQUIPMENT_DATABASE_BY_KEYS.get(
-      toEquipmentKeyString(
-        data.mainPlayerJobAbbrev,
-        slotIndexToSlotName(slotIndex)
-      )
-    );
-
-    if (newPossibleEquipments === undefined) {
-      data.itemSet[slotIndex] = -1;
-      data.gearSetMaterias[slotIndex] = [];
-    } else {
-      let newPossibleEquipmentsId = newPossibleEquipments.map(
-        (equipment) => equipment.id
-      );
-
-      // if the switched job can still equip the currently selected equipment, leave the state as it is
-      if (!newPossibleEquipmentsId.includes(data.itemSet[slotIndex])) {
-        data.itemSet[slotIndex] = EMPTY_EQUIPMENT_ID;
-        data.gearSetMaterias[slotIndex] = [];
-      }
-    }
-  }
-}
 
 function resetInvalidPartnersForNewJob(data: SingleEquipmentInputSaveState) {
   let partyMemberJobAbbrevs = data.partyMemberJobAbbrevs;
@@ -134,45 +108,20 @@ export function MainPlayerJobSelection(
 ) {
   const handleJobChange = (event: SelectChangeEvent<string>) => {
     let newJobAbbrev = event.target.value;
-    let weaponsForNewJob = EQUIPMENT_DATABASE_BY_KEYS.get(
-      toEquipmentKeyString(newJobAbbrev, WEAPON_SLOT_EN_TEXT)
-    );
 
     let newTotalState = { ...totalEquipmentState };
+    let bisForNewJob = mapJobAbbrevToJobBisEquipments(newJobAbbrev);
 
-    newTotalState.equipmentDatas.forEach(
-      (data: SingleEquipmentInputSaveState) => {
-        data.mainPlayerJobAbbrev = newJobAbbrev;
-        resetOnlyUnequippableEquipment(data);
-        resetInvalidPartnersForNewJob(data);
+    if (bisForNewJob === undefined) {
+      return;
+    }
 
-        if (weaponsForNewJob !== undefined) {
-          let newSet = [...data.itemSet];
-          let currentEquipment = weaponsForNewJob[0];
+    newTotalState.equipmentDatas[id].mainPlayerJobAbbrev = newJobAbbrev;
+    newTotalState.equipmentDatas[id].itemSet = bisForNewJob.itemSet;
+    newTotalState.equipmentDatas[id].gearSetMaterias = bisForNewJob.gearSetMaterias;
+    newTotalState.equipmentDatas[id].foodId = bisForNewJob.foodId;
 
-          newSet[WEAPON_SLOT_ID] = currentEquipment.id;
-          data.itemSet = newSet;
-
-          let newGearSetMaterias = [...data.gearSetMaterias];
-
-          let materiaSlotCount = 0;
-          if (currentEquipment !== undefined) {
-            materiaSlotCount = currentEquipment.pentameldable
-              ? 5
-              : currentEquipment.materiaSlotCount;
-            let defaultMaterias: Materia[] = [];
-            for (let i = 0; i < materiaSlotCount; i++) {
-              defaultMaterias.push(EMPTY_MATERIA);
-            }
-            newGearSetMaterias[WEAPON_SLOT_ID] = defaultMaterias;
-          } else {
-            newGearSetMaterias[WEAPON_SLOT_ID] = [];
-          }
-
-          data.gearSetMaterias = newGearSetMaterias;
-        }
-      }
-    );
+    resetInvalidPartnersForNewJob(newTotalState.equipmentDatas[id]);
 
     updateAllPlayerPower(newTotalState, setTotalState);
   };

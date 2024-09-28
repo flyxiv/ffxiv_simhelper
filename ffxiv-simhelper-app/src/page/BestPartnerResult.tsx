@@ -18,6 +18,7 @@ import { SimulationDataByRole } from "../types/ffxivdatabase/PartyCompositionMak
 import { ContributionByRoleTable } from "../components/graph/ContributionByRoleTable";
 import {
   AST_EN_NAME,
+  BEST_PARTNER_PAGE_NAME,
   BRD_EN_NAME,
   BURST_TEXT,
   DNC_EN_NAME,
@@ -91,7 +92,7 @@ export function BestPartnerResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu()}
+        {BasicLeftMenu(BEST_PARTNER_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultTopBoardBox marginBottom="40px">

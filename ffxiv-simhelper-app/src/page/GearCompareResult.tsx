@@ -10,7 +10,7 @@ import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
-import { GEARSET1_TEXT, GEARSET2_TEXT } from "../const/languageTexts";
+import { GEAR_COMPARE_PAGE_NAME, GEARSET1_TEXT, GEARSET2_TEXT } from "../const/languageTexts";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -60,7 +60,7 @@ export function GearCompareResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu()}
+        {BasicLeftMenu(GEAR_COMPARE_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <Box className="SimulationResult" sx={{

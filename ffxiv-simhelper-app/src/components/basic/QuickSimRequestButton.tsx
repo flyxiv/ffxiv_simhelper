@@ -2,7 +2,7 @@ import { styled, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   calculateIlvlAdjustment,
-  mapJobAbbrevToJobDefaultStat,
+  mapJobAbbrevToJobBisEquipments,
   playerStatToPlayerPower,
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
@@ -23,6 +23,9 @@ import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 import { StopButton } from "./StopButton";
 import { aggregateDamageStatisticsFromSampleRuns } from "./GearCompareRequestButton";
 import { AppConfigurations } from "../../Themes";
+import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
+import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
+import { MIDLANDER_HYUR_NAME_EN } from "../../const/languageTexts";
 
 const TOTAL_REQUEST_COUNT = 1000;
 const TOTAL_ITERATION_COUNT = 2;
@@ -160,18 +163,35 @@ export function createQuickSimRequest(
   let playerCount = 0;
   for (let i = 0; i < totalState.partyMemberJobAbbrevs.length; i++) {
     let jobAbbrev = totalState.partyMemberJobAbbrevs[i];
-    let defaultStat = mapJobAbbrevToJobDefaultStat(jobAbbrev);
+    let bisEquipments = mapJobAbbrevToJobBisEquipments(jobAbbrev);
 
-    if (defaultStat === undefined) {
+    if (bisEquipments === undefined) {
       continue;
     }
 
-    let power = playerStatToPlayerPower(defaultStat, jobAbbrev);
+    let playerTotalState = {
+      mainPlayerJobAbbrev: jobAbbrev,
+      race: MIDLANDER_HYUR_NAME_EN,
+      foodId: bisEquipments.foodId,
+      mainPlayerPartner1Id: null,
+      mainPlayerPartner2Id: null,
+      itemSet: bisEquipments.itemSet,
+      gearSetMaterias: bisEquipments.gearSetMaterias,
+      combatTimeMillisecond: 0,
+      partyMemberJobAbbrevs: [],
+      partyMemberIds: [],
+      partyMemberIlvl: 0,
+      usePot: 1,
+      power: defaultPlayerPower(),
+    }
+
+    let bisPower = calculatePlayerPowerFromInputs(playerTotalState);
+
     let autoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
     if (autoAttackDelays === undefined) {
       autoAttackDelays = 0;
     }
-    power.autoAttackDelays = autoAttackDelays;
+    bisPower.autoAttackDelays = autoAttackDelays;
 
     partyInfo.push({
       playerId: playerCount + 1,

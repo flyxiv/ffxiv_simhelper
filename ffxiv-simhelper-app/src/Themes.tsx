@@ -15,7 +15,7 @@ export const AppConfigurations = {
 
   alert: "#CF6679",
 
-  languageMode: KOREAN_MODE,
+  languageMode: ENGLISH_MODE,
 
   body1FontSize: {
     xs: "2vh",

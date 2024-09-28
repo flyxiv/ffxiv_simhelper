@@ -16,6 +16,7 @@ import {
   BEST_PARTNER_PAGE_NAME,
   GEAR_COMPARE_DESCRIPTION_TEXT,
   GEAR_COMPARE_PAGE_NAME,
+  HOME_PAGE_NAME,
   QUICK_SIM_DESCRIPTION_TEXT,
   QUICKSIM_PAGE_NAME,
   STAT_WEIGHTS_DESCRIPTION_TEXT,
@@ -37,7 +38,7 @@ export function Home() {
       }}
     >
       <Box display="flex" width="100vw">
-        {BasicLeftMenu()}
+        {BasicLeftMenu(HOME_PAGE_NAME)}
         <Box width="100%">
           {AppHeader()}
           <Box className="HomeBody" height="70vh">

@@ -5,6 +5,9 @@ import {
   AST_EN_NAME,
   BLM_EN_NAME,
   BRD_EN_NAME,
+  CRIT_STAT_NAME,
+  DET_STAT_NAME,
+  DH_STAT_NAME,
   DNC_EN_NAME,
   DRG_EN_NAME,
   DRK_EN_NAME,
@@ -19,7 +22,9 @@ import {
   SAM_EN_NAME,
   SCH_EN_NAME,
   SGE_EN_NAME,
+  SKS_STAT_NAME,
   SMN_EN_NAME,
+  SPS_STAT_NAME,
   VPR_EN_NAME,
   WAR_EN_NAME,
   WHM_EN_NAME,
@@ -38,52 +43,52 @@ export function calculateIlvlAdjustment(partyiLvl: number) {
   return 1 - (CURRENT_MAX_ITEM_LEVEL - partyiLvl) / 100;
 }
 
-export const mapJobAbbrevToJobDefaultStat = (jobAbbrev: string) => {
+export const mapJobAbbrevToJobBisEquipments = (jobAbbrev: string) => {
   switch (jobAbbrev) {
     case PLD_EN_NAME:
-      return PLD_BIS_STATS;
+      return copyBisSettings(PLD_BIS_SETTINGS);
     case WAR_EN_NAME:
-      return WAR_BIS_STATS;
+      return copyBisSettings(WAR_BIS_SETTINGS);
     case DRK_EN_NAME:
-      return DRK_BIS_STATS;
+      return copyBisSettings(DRK_BIS_SETTINGS);
     case GNB_EN_NAME:
-      return GNB_BIS_STATS;
+      return copyBisSettings(GNB_BIS_SETTINGS);
     case WHM_EN_NAME:
-      return WHM_BIS_STATS;
+      return copyBisSettings(WHM_BIS_SETTINGS);
     case SCH_EN_NAME:
-      return SCH_BIS_STATS;
+      return copyBisSettings(SCH_BIS_SETTINGS);
     case AST_EN_NAME:
-      return AST_BIS_STATS;
+      return copyBisSettings(AST_BIS_SETTINGS);
     case SGE_EN_NAME:
-      return SGE_BIS_STATS;
+      return copyBisSettings(SGE_BIS_SETTINGS);
     case DRG_EN_NAME:
-      return DRG_BIS_STATS;
+      return copyBisSettings(DRG_BIS_SETTINGS);
     case MNK_EN_NAME:
-      return MNK_BIS_STATS;
+      return copyBisSettings(MNK_BIS_SETTINGS);
     case NIN_EN_NAME:
-      return NIN_BIS_STATS;
+      return copyBisSettings(NIN_BIS_SETTINGS);
     case SAM_EN_NAME:
-      return SAM_BIS_STATS;
+      return copyBisSettings(SAM_BIS_SETTINGS);
     case RPR_EN_NAME:
-      return RPR_BIS_STATS;
+      return copyBisSettings(RPR_BIS_SETTINGS);
     case VPR_EN_NAME:
-      return VPR_BIS_STATS;
+      return copyBisSettings(VPR_BIS_SETTINGS);
     case BRD_EN_NAME:
-      return BRD_BIS_STATS;
+      return copyBisSettings(BRD_BIS_SETTINGS);
     case DNC_EN_NAME:
-      return DNC_BIS_STATS;
+      return copyBisSettings(DNC_BIS_SETTINGS);
     case MCH_EN_NAME:
-      return MCH_BIS_STATS;
+      return copyBisSettings(MCH_BIS_SETTINGS);
     case BLM_EN_NAME:
-      return BLM_BIS_STATS;
+      return copyBisSettings(BLM_BIS_SETTINGS);
     case SMN_EN_NAME:
-      return SMN_BIS_STAT;
+      return copyBisSettings(SMN_BIS_SETTINGS);
     case RDM_EN_NAME:
-      return RDM_BIS_STATS;
+      return copyBisSettings(RDM_BIS_SETTINGS);
     case PCT_EN_NAME:
-      return PCT_BIS_STATS;
+      return copyBisSettings(PCT_BIS_SETTINGS);
     default:
-      Error("Invalid job abbreviation");
+      return undefined;
   }
 };
 
@@ -97,214 +102,1178 @@ export interface PlayerStats {
   tenacity: number;
 }
 
-export const PLD_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4820,
-  criticalStrike: 3174,
-  directHit: 1470,
-  determination: 2310,
-  speed: 420,
-  tenacity: 868,
-};
+interface BisSettings {
+  foodId: number;
+  itemSet: number[];
+  gearSetMaterias: { statName: string; maxValue: number; effectiveValue: number }[][];
+}
 
-export const WAR_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4842,
-  criticalStrike: 3174,
-  directHit: 1470,
-  determination: 2310,
-  speed: 420,
-  tenacity: 868,
-};
+function copyBisSettings(bisSettings: BisSettings) {
+  return {
+    foodId: bisSettings.foodId,
+    itemSet: [...bisSettings.itemSet],
+    gearSetMaterias: bisSettings.gearSetMaterias.map((materia) => [...materia]),
+  };
+}
 
-export const DRK_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 5084,
-  criticalStrike: 3174,
-  directHit: 1470,
-  determination: 2310,
-  speed: 420,
-  tenacity: 868,
-};
+export const PLD_BIS_SETTINGS = {
+  foodId: 652,
+  itemSet: [43101, 43123, 43047, 43125, 43126, 43050, 43081, 43163, 43091, 43096, 43173, 43122],
+  gearSetMaterias: [
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
 
-export const GNB_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4820,
-  criticalStrike: 3174,
-  directHit: 1470,
-  determination: 2310,
-  speed: 420,
-  tenacity: 868,
-};
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
 
-export const WHM_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4886,
-  criticalStrike: 3147,
-  directHit: 1320,
-  determination: 2803,
-  speed: 420,
-  tenacity: DEFAULT_TENACITY,
-};
+    ]
+  ]
+}
 
-export const SCH_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4886,
-  criticalStrike: 3090,
-  directHit: 636,
-  determination: 2329,
-  speed: 1251,
-  tenacity: DEFAULT_TENACITY,
-};
+export const WAR_BIS_SETTINGS = {
+  foodId: 652,
+  itemSet: [43103, 43123, 43047, 43125, 43126, 43050, 43081, 43163, 43091, 43096, 43173, -1],
+  gearSetMaterias: [
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
 
-export const AST_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4886,
-  criticalStrike: 2922,
-  directHit: 1158,
-  determination: 3043,
-  speed: 420,
-  tenacity: DEFAULT_TENACITY,
-};
+    ]
+  ]
+}
 
-export const SGE_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4886,
-  criticalStrike: 3041,
-  directHit: 906,
-  determination: 2831,
-  speed: 900,
-  tenacity: DEFAULT_TENACITY,
-};
 
-export const DRG_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4886,
-  criticalStrike: 3120,
-  directHit: 2132,
-  determination: 2150,
-  speed: DEFAULT_SPEED,
-  tenacity: DEFAULT_TENACITY,
-};
+export const DRK_BIS_SETTINGS = {
+  foodId: 652,
+  itemSet: [43111, 43123, 43047, 43125, 43126, 43050, 43081, 43163, 43091, 43096, 43173, -1],
+  gearSetMaterias: [
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
 
-export const MNK_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4860,
-  criticalStrike: 3156,
-  directHit: 1639,
-  determination: 2071,
-  speed: 956,
-  tenacity: DEFAULT_TENACITY,
-};
+    ]
+  ]
+}
 
-export const NIN_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4861,
-  criticalStrike: 3173,
-  directHit: 1842,
-  determination: 2387,
-  speed: 420,
-  tenacity: DEFAULT_TENACITY,
-};
+export const GNB_BIS_SETTINGS = {
+  foodId: 652,
+  itemSet: [43116, 43123, 43047, 43125, 43126, 43050, 43081, 43163, 43091, 43096, 43173, -1],
+  gearSetMaterias: [
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
 
-export const SAM_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4872,
-  criticalStrike: 3103,
-  directHit: 1933,
-  determination: 2093,
-  speed: 693,
-  tenacity: DEFAULT_TENACITY,
-};
+    ]
+  ]
+}
 
-export const RPR_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4882,
-  criticalStrike: 3120,
-  directHit: 2078,
-  determination: 2150,
-  speed: 474,
-  tenacity: DEFAULT_TENACITY,
-};
-export const VPR_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4861,
-  criticalStrike: 3173,
-  directHit: 1734,
-  determination: 2387,
-  speed: 528,
-  tenacity: DEFAULT_TENACITY,
-};
 
-export const BRD_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4886,
-  criticalStrike: 3177,
-  directHit: 2134,
-  determination: 2091,
-  speed: 420,
-  tenacity: DEFAULT_TENACITY,
-};
+export const WHM_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43106, 43071, 43149, 42919, 43074, 43152, 43161, 43089, 43171, 43099, 43176, -1],
+  gearSetMaterias: [
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 }
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    []
+  ]
+}
 
-export const DNC_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4886,
-  criticalStrike: 3177,
-  directHit: 2134,
-  determination: 2091,
-  speed: 420,
-  tenacity: DEFAULT_TENACITY,
-};
+export const SCH_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43109, 43071, 43149, 42919, 43074, 43152, 43161, 43089, 43171, 43099, 43176, -1],
+  gearSetMaterias: [
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 }
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    []
+  ]
+}
 
-export const MCH_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4886,
-  criticalStrike: 3177,
-  directHit: 2134,
-  determination: 2091,
-  speed: 420,
-  tenacity: DEFAULT_TENACITY,
-};
 
-export const BLM_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4882,
-  criticalStrike: 3193,
-  directHit: 1666,
-  determination: 1751,
-  speed: 1212,
-  tenacity: DEFAULT_TENACITY,
-};
+export const AST_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43113, 43071, 43149, 42919, 43074, 43152, 43161, 43089, 43171, 43099, 43176, -1],
+  gearSetMaterias: [
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 }
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    []
+  ]
+}
 
-export const SMN_BIS_STAT = {
-  weaponDamage: 146,
-  mainStat: 4883,
-  criticalStrike: 3061,
-  directHit: 2125,
-  determination: 2108,
-  speed: 528,
-  tenacity: DEFAULT_TENACITY,
-};
 
-export const RDM_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4883,
-  criticalStrike: 3149,
-  directHit: 1993,
-  determination: 2269,
-  speed: 420,
-  tenacity: DEFAULT_TENACITY,
-};
+export const SGE_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43119, 43071, 43149, 42919, 43074, 43152, 43161, 43089, 43171, 43099, 43176, -1],
+  gearSetMaterias: [
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 }
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    []
+  ]
+}
 
-export const PCT_BIS_STATS = {
-  weaponDamage: 146,
-  mainStat: 4883,
-  criticalStrike: 3140,
-  directHit: 1993,
-  determination: 2269,
-  speed: 420,
-  tenacity: DEFAULT_TENACITY,
-};
+export const DRG_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43104, 43051, 43129, 43053, 43054, 43132, 43159, 43087, 43169, 43097, 43174, -1],
+  gearSetMaterias: [
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+
+export const MNK_BIS_SETTINGS = {
+  foodId: 654,
+  itemSet: [43102, 43056, 43057, 43058, 43136, 43137, 43082, 43087, 43169, 43174, 43097, -1],
+  gearSetMaterias: [
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+
+export const NIN_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43110, 43143, 43144, 43068, 43069, 43147, 43083, 43165, 43093, 43098, 43175, -1],
+  gearSetMaterias: [
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+
+export const SAM_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43114, 43056, 43057, 43058, 43136, 43137, 43159, 43087, 43169, 43174, 43097, -1],
+  gearSetMaterias: [
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+
+export const RPR_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43118, 43051, 43129, 43053, 43054, 43132, 43159, 43087, 43169, 43097, 43174, -1],
+  gearSetMaterias: [
+    [
+      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+
+
+export const VPR_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43120, 43143, 43144, 43068, 43069, 43147, 43083, 43165, 43093, 43098, 43175, -1],
+  gearSetMaterias: [
+    [
+      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+export const BRD_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43105, 43138, 43062, 43063, 43141, 43142, 43083, 43165, 43093, 43098, 43175, -1],
+  gearSetMaterias: [
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+export const DNC_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43117, 43138, 43062, 43063, 43141, 43142, 43083, 43165, 43093, 43098, 43175, -1],
+  gearSetMaterias: [
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+
+export const MCH_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43112, 43138, 43062, 43063, 43141, 43142, 43083, 43165, 43093, 43098, 43175, -1],
+  gearSetMaterias: [
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+export const BLM_BIS_SETTINGS = {
+  foodId: 659,
+  itemSet: [43107, 43076, 43154, 43155, 43079, 43080, 43162, 43090, 43172, 43100, 43177, -1],
+  gearSetMaterias: [
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: SPS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: SPS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+export const SMN_BIS_SETTINGS = {
+  foodId: 652,
+  itemSet: [43108, 43076, 43154, 43078, 43079, 43157, 43162, 43090, 43172, 43100, 43177, -1],
+  gearSetMaterias: [
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: SPS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SPS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+
+export const RDM_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43115, 43076, 43154, 43078, 43079, 43157, 43162, 43090, 43172, 43100, 43177, -1],
+  gearSetMaterias: [
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
+
+
+export const PCT_BIS_SETTINGS = {
+  foodId: 655,
+  itemSet: [43121, 43076, 43154, 43078, 43079, 43157, 43162, 43090, 43172, 43100, 43177, -1],
+  gearSetMaterias: [
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+
+    ]
+  ]
+}
 
 export function playerStatToPlayerPower(
   playerStats: PlayerStats,
