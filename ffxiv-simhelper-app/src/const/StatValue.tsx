@@ -530,15 +530,15 @@ export const SGE_BIS_SETTINGS = {
       { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-    ],
-    [
       { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
       { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
       { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+    ],
+    [
+      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
       { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
@@ -641,13 +641,12 @@ export const MNK_BIS_SETTINGS = {
       { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
     ],
-
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
       { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
