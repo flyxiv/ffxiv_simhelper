@@ -26,6 +26,8 @@ export function ContributionByRoleTable(
     return bContribution - aContribution;
   });
 
+  console.log(dpsPartnerData);
+
   let maxTankContribution = Math.max.apply(
     null,
     tankPartnerData.map((data) =>
@@ -50,6 +52,8 @@ export function ContributionByRoleTable(
     maxHealerContribution,
     maxDpsContribution
   );
+
+  console.log(maxTankContribution, maxHealerContribution, maxDpsContribution);
 
   return (
     <Grid
@@ -108,9 +112,9 @@ function ContributionTableSingleRole(
 
     let Bar = styled(Box)`
       ${BestPartnerBuffBarStyle(
-        Math.min(index, MAX_RANKINGS),
-        RANKING_ITEM_HEIGHT
-      )}
+      Math.min(index, MAX_RANKINGS),
+      RANKING_ITEM_HEIGHT
+    )}
     `;
 
     // UI상 표시값 사이 일치를 위해 rounding한 값을 더한 거로 totalRdps를 한 번 정규화해준다.

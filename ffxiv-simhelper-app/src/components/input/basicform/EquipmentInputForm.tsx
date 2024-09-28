@@ -31,6 +31,7 @@ import {
 } from "../../../types/ffxivdatabase/ItemSet";
 import { EquipmentMenuItem } from "../../../components/items/EquipmentMenuItem";
 import {
+  MainPlayerGcdSelection,
   MainPlayerJobSelection,
   MainPlayerJobSelectionOnlyBuffJobs,
 } from "../jobselection/MainPlayerJobSelection";
@@ -404,6 +405,59 @@ export function EquipmentSelectionMenu(
       ) : (
         <Box></Box>
       )}
+    </EquipmentGridContainer>
+  );
+}
+
+
+export function BestPartnerInputMenu(
+  id: number,
+  totalEquipmentState: EquipmentInput,
+  setTotalEquipmentState: Function,
+) {
+  let xs = 12;
+  let inputCount = 1;
+
+  return (
+    <EquipmentGridContainer container>
+      <EquipmentGridItemBox
+        key={`${id}_JobSelectionItemBox`}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
+      >
+        <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
+          {
+            MainPlayerJobSelectionOnlyBuffJobs(
+              id,
+              totalEquipmentState,
+              setTotalEquipmentState
+            )
+          }
+        </InputEquipmentBox>
+      </EquipmentGridItemBox>
+      <EquipmentGridItemBox
+        key={`${id}_timeinput`}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
+      >
+        <InputEquipmentBox item xs={xs}>
+          {MainPlayerGcdSelection(
+            0,
+            totalEquipmentState,
+            setTotalEquipmentState
+          )}
+        </InputEquipmentBox>
+      </EquipmentGridItemBox>
+      <EquipmentGridItemBox
+        key={`${id}_timeinput`}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
+      >
+        <InputEquipmentBox item xs={xs}>
+          {SimulationUpperInputTimeTextBox(
+            TIME_INPUT_LABEL_TEXT,
+            totalEquipmentState,
+            setTotalEquipmentState
+          )}
+        </InputEquipmentBox>
+      </EquipmentGridItemBox>
     </EquipmentGridContainer>
   );
 }

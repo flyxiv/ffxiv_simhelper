@@ -143,7 +143,7 @@ function convertToContributionTable(
       case GNB_EN_NAME:
         table.tanks.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps,
+          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
@@ -153,7 +153,7 @@ function convertToContributionTable(
       case SGE_EN_NAME:
         table.healers.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps,
+          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
@@ -165,7 +165,7 @@ function convertToContributionTable(
       case VPR_EN_NAME:
         table.melee.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps,
+          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
@@ -174,14 +174,14 @@ function convertToContributionTable(
       case DNC_EN_NAME:
         table.ranged.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps,
+          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
       default:
         table.casters.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps,
+          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
     }

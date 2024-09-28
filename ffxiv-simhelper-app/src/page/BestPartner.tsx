@@ -5,8 +5,7 @@ import {
   BEST_PARTNER_URL,
   BODY_WIDTH,
 } from "../App";
-import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
-import { StatPowerSummary } from "../components/container/StatSummary";
+import { BestPartnerInputMenu } from "../components/input/basicform/EquipmentInputForm";
 import { EquipmentInput } from "../types/EquipmentInput";
 import { defaultBestPartnerEquipmentInput } from "../const/DefaultSingleEquipmentInput";
 import { LeftMenuWithLoadout } from "../components/container/LeftMenu";
@@ -19,6 +18,7 @@ import { EquipmentBoardStyle, InputContainerStyle } from "./Styles";
 import { BestPartnerRequestButton } from "../components/basic/BestPartnerRequestButton";
 import {
   AST_EN_NAME,
+  BEST_PARTNER_INPUT_INFO_TEXT,
   BRD_EN_NAME,
   DNC_EN_NAME,
   DRG_EN_NAME,
@@ -107,33 +107,21 @@ export function BestPartner() {
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
-          <Box alignContent={"center"}>
+          <Box alignContent={"center"} minHeight={"60vh"}>
             <StatWeightsInputContainer justifyContent={"center"}>
-              {SelectionTitle(QUICK_SIM_INPUT_INFO_TEXT)}
+              {SelectionTitle(BEST_PARTNER_INPUT_INFO_TEXT)}
               <EquipmentBoard>
-                {EquipmentSelectionMenu(
+                {BestPartnerInputMenu(
                   0,
                   totalState,
                   setTotalState,
-                  true,
-                  true,
-                  false
                 )}
               </EquipmentBoard>
             </StatWeightsInputContainer>
 
-            <StatWeightsInputContainer marginTop={10}>
-              {SelectionTitle(`2. ${PLAYER_POWER_TEXT}`)}
-              <Box
-                display="flex"
-                justifyContent="center"
-                paddingBottom={"30vh"}
-              >
-                {StatPowerSummary(totalState.equipmentDatas[0])}
-              </Box>
-            </StatWeightsInputContainer>
-
-            {BasicBottomMenu(totalState, BestPartnerRequestButton)}
+            <Box display="flex" justifyContent={"center"} paddingTop={2}>
+              {BestPartnerRequestButton(totalState)}
+            </Box>
           </Box>
           {Footer()}
         </Box>

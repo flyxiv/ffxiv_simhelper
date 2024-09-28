@@ -1,4 +1,4 @@
-import { Divider, Select, SelectChangeEvent } from "@mui/material";
+import { Box, Divider, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { CustomFormControl } from "../basicform/BasicInputForm";
 import { JobMenuItem } from "../../items/JobMenuItem";
 import {
@@ -36,12 +36,14 @@ import {
   SCH_EN_NAME,
   SGE_EN_NAME,
   SMN_EN_NAME,
+  SPEED_LABEL_TEXT,
   VPR_EN_NAME,
   WAR_EN_NAME,
   WEAPON_SLOT_EN_TEXT,
   WHM_EN_NAME,
 } from "../../../const/languageTexts";
 import { EMPTY_MATERIA, Materia } from "../../../types/ffxivdatabase/Materia";
+import { calculateModifiedGCD, DEFAULT_GCD } from "../../../types/ffxivdatabase/StatCalculator";
 
 let ALIGN = "left";
 
@@ -230,47 +232,13 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
 ) {
   const handleJobChange = (event: SelectChangeEvent<string>) => {
     let newJobAbbrev = event.target.value;
-    let weaponsForNewJob = EQUIPMENT_DATABASE_BY_KEYS.get(
-      toEquipmentKeyString(newJobAbbrev, WEAPON_SLOT_EN_TEXT)
-    );
+    let newTotalEquipmentState = { ...totalEquipmentState };
 
-    let newTotalState = { ...totalEquipmentState };
+    newTotalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev = newJobAbbrev;
+    newTotalEquipmentState.equipmentDatas[id].power.speedMultiplier = 1;
+    newTotalEquipmentState.equipmentDatas[id].power.gcd = Math.floor(calculateModifiedGCD(DEFAULT_GCD, newJobAbbrev))
 
-    newTotalState.equipmentDatas.forEach(
-      (data: SingleEquipmentInputSaveState) => {
-        data.mainPlayerJobAbbrev = newJobAbbrev;
-        resetOnlyUnequippableEquipment(data);
-        resetInvalidPartnersForNewJob(data);
-
-        if (weaponsForNewJob !== undefined) {
-          let newSet = [...data.itemSet];
-          let currentEquipment = weaponsForNewJob[0];
-
-          newSet[WEAPON_SLOT_ID] = currentEquipment.id;
-          data.itemSet = newSet;
-
-          let newGearSetMaterias = [...data.gearSetMaterias];
-
-          let materiaSlotCount = 0;
-          if (currentEquipment !== undefined) {
-            materiaSlotCount = currentEquipment.pentameldable
-              ? 5
-              : currentEquipment.materiaSlotCount;
-            let defaultMaterias: Materia[] = [];
-            for (let i = 0; i < materiaSlotCount; i++) {
-              defaultMaterias.push(EMPTY_MATERIA);
-            }
-            newGearSetMaterias[WEAPON_SLOT_ID] = defaultMaterias;
-          } else {
-            newGearSetMaterias[WEAPON_SLOT_ID] = [];
-          }
-
-          data.gearSetMaterias = newGearSetMaterias;
-        }
-      }
-    );
-
-    updateAllPlayerPower(newTotalState, setTotalState);
+    setTotalState(newTotalEquipmentState);
   };
 
   let key = `Job-${id}`;
@@ -305,6 +273,87 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
         {JobMenuItem(SMN_EN_NAME, ALIGN)}
         {JobMenuItem(RDM_EN_NAME, ALIGN)}
         {JobMenuItem(PCT_EN_NAME, ALIGN)}
+      </Select>
+    </CustomFormControl>
+  );
+}
+
+
+const GCD_OPTION_COUNT = 30;
+
+function getGcdOptions(jobAbbrev: string) {
+  let maxGcd = Math.floor(calculateModifiedGCD(DEFAULT_GCD, jobAbbrev))
+  let gcdOptions = [];
+
+  for (let i = 0; i < GCD_OPTION_COUNT; i++) {
+    let gcd = (maxGcd - i);
+    gcdOptions.push(gcd);
+  }
+
+  return gcdOptions;
+}
+
+
+export function MainPlayerGcdSelection(
+  id: number,
+  totalEquipmentState: EquipmentInput,
+  setTotalState: Function
+) {
+  let key = `Job-${id}`;
+  let jobAbbrev = totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
+  let gcdOptions = getGcdOptions(jobAbbrev);
+
+  return (
+    <CustomFormControl fullWidth>
+      <InputLabel
+        id="SlotSelect"
+        key={`${key}_label`}
+        sx={{ fontSize: AppConfigurations.body1FontSize }}
+      >
+        <Box display="flex" sx={{ height: "4vh" }} alignItems={"center"} justifyContent={"flex-end"}>
+          <Typography sx={{ fontSize: "0.8vw" }}>
+            {SPEED_LABEL_TEXT}
+          </Typography>
+        </Box>
+      </InputLabel>
+
+      <Select
+        labelId={key}
+        id={key}
+        value={(totalEquipmentState.equipmentDatas[id].power.gcd).toFixed(0)}
+        label={key}
+        onChange={(e) => {
+          let newGcd = parseInt(e.target.value);
+          let newTotalState = { ...totalEquipmentState };
+          let maxGcd = Math.floor(calculateModifiedGCD(DEFAULT_GCD, jobAbbrev))
+          let newSpeedMultiplier = Math.floor(maxGcd / newGcd * 1000) / 1000;
+
+          newTotalState.equipmentDatas[id].power.gcd = newGcd;
+          newTotalState.equipmentDatas[id].power.speedMultiplier = newSpeedMultiplier;
+          setTotalState(newTotalState);
+        }}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              backgroundColor: AppConfigurations.backgroundThree,
+            },
+          },
+        }}
+      >
+        {
+          gcdOptions.map((gcd) => {
+            return (
+              <MenuItem value={gcd.toFixed(0)}>
+                <Box display="flex" sx={{ height: "4vh" }} alignItems={"center"} justifyContent={"flex-end"}>
+                  <Typography sx={{ fontSize: "0.8vw", color: "white" }}>
+                    {`${(gcd / 100).toFixed(2)}`}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            )
+          })
+        }
+
       </Select>
     </CustomFormControl>
   );

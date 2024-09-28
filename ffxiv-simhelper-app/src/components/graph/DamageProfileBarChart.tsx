@@ -42,6 +42,12 @@ const SkillBarBox = styled(Box)`
   ${SkillBarBoxStyle}
 `;
 
+// One row of Damage Profile column in QuickSim Result
+// 1. Skill Icon
+// 2. Skill Name
+// 3. Skill Damage Bar + Percentage of Total Damage
+// 4. Total Damage
+// 5. Cast Count
 export function SkillDamageProfile(
   data: DamageChartData,
   totalDamage: number,

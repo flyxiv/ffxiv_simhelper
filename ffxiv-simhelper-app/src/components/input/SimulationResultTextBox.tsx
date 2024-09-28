@@ -7,7 +7,8 @@ import {
   SingleEquipmentInputSaveState,
 } from "../../types/EquipmentInput";
 import { CustomTimeFormControl } from "./basicform/BasicInputForm";
-import { TIME_INPUT_LABEL_TEXT } from "../../const/languageTexts";
+import { SPEED_LABEL_TEXT, TIME_INPUT_LABEL_TEXT } from "../../const/languageTexts";
+import { DEFAULT_GCD } from "../../types/ffxivdatabase/StatCalculator";
 
 export interface InputFormProps {
   label: string;
@@ -89,6 +90,68 @@ export function SimulationUpperInputTimeTextBox(
         sx={{ fontSize: AppConfigurations.body1FontSize }}
       >
         {TIME_INPUT_LABEL_TEXT}
+      </InputLabel>
+      <Input
+        id={label}
+        value={
+          totalEquipmentState.equipmentDatas[0].combatTimeMillisecond / 1000
+        }
+        key={label}
+        onChange={(e) => {
+          let newTimeSeconds = parseInt(e.target.value);
+          if (isNaN(newTimeSeconds)) {
+            newTimeSeconds = 0;
+          }
+
+          let newTotalState = { ...totalEquipmentState };
+          newTotalState.equipmentDatas.forEach(
+            (data: SingleEquipmentInputSaveState) => {
+              data.combatTimeMillisecond =
+                Math.min(newTimeSeconds, TIME_UPPER_LIMIT) * 1000;
+            }
+          );
+
+          setTotalState({ ...newTotalState });
+        }}
+        sx={{
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "transparent",
+          },
+        }}
+        InputProps={{ sx: { fontSize: AppConfigurations.body1FontSize } }}
+      ></Input>
+    </CustomTimeFormControl>
+  );
+}
+
+function maxGcdPerJob(jobAbbrev: string) {
+  switch (jobAbbrev) {
+    case "NIN":
+      return 2.12
+    case "VPR":
+      return 2.12
+    case "SAM":
+      return 2.17
+    case "MNK":
+      return 2.00
+    default:
+      return DEFAULT_GCD
+  }
+}
+
+export function BestPartnerSpeedInput(
+  label: string,
+  totalEquipmentState: EquipmentInput,
+  setTotalState: Function
+) {
+  return (
+    <CustomTimeFormControl fullWidth>
+      <InputLabel
+        id="SlotSelect"
+        key={`${label}_label`}
+        sx={{ fontSize: AppConfigurations.body1FontSize }}
+      >
+        {SPEED_LABEL_TEXT}
       </InputLabel>
       <Input
         id={label}
