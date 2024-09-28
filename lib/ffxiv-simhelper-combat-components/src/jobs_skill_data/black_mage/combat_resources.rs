@@ -25,6 +25,10 @@ const FLARESTAR_MAX_STACK: ResourceType = 1;
 const CONVERSION_TO_BLIZZARD_MAX_STACK: ResourceType = 1;
 
 const POLYGLOT_STACK_ID: ResourceIdType = 0;
+const FIRE4_FLARESTAR_STACK_ID: ResourceIdType = 2;
+const FLARESTAR_STACK_ID: ResourceIdType = 3;
+
+const BLIZZARD_III_IDS: [SkillIdType; 3] = [1712, 1721, 1723];
 
 const RESOURCE_MAX_STACKS: [ResourceType; BLACK_MAGE_STACK_COUNT] = [
     POLYGLOT_MAX_STACK,
@@ -76,12 +80,16 @@ impl CombatResource for BlackmageCombatResources {
 
     fn trigger_on_event(
         &mut self,
-        _: SkillIdType,
+        skill_id: SkillIdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         _: TimeType,
         _: &FfxivPlayer,
     ) -> SkillEvents {
+        if BLIZZARD_III_IDS.contains(&skill_id) {
+            self.resources[FIRE4_FLARESTAR_STACK_ID as usize] = 0;
+            self.resources[FLARESTAR_STACK_ID as usize] = 0;
+        }
         (vec![], vec![])
     }
 
@@ -105,7 +113,7 @@ impl BlackmageCombatResources {
         Self {
             skills: make_blackmage_skill_list(player_id),
             current_combo: None,
-            resources: [0; BLACK_MAGE_STACK_COUNT],
+            resources: [0, 0, 0, 0, 1],
             next_polyglot_time: POLYGLOT_STACK_INTERVAL_MILLISECOND
                 + TimeType::abs(SIMULATION_START_TIME_MILLISECOND),
         }

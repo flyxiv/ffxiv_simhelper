@@ -6,8 +6,8 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::viper::abilities::ViperDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BuffGreaterDurationThan, Combo, HasResource, HasResourceExactly, MillisecondsBeforeBurst,
-    Not, Or,
+    And, BuffGreaterDurationThan, BufforDebuffLessThan, Combo, HasResource, HasResourceExactly,
+    MillisecondsBeforeBurst, Not, Or,
 };
 use crate::types::{PlayerIdType, SkillIdType};
 
@@ -155,6 +155,14 @@ pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPrio
                     Box::new(MillisecondsBeforeBurst(0)),
                 )),
             )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.steel_fangs.get_id(),
+            prerequisite: Some(BufforDebuffLessThan(db.honed_steels.get_id(), 7000)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.dread_fangs.get_id(),
+            prerequisite: Some(BufforDebuffLessThan(db.honed_reavers.get_id(), 7000)),
         },
         SkillPriorityInfo {
             skill_id: db.uncoiled_fury.get_id(),
