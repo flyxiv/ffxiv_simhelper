@@ -16,6 +16,7 @@ import {
   calculateCriticalStrikePercentIncrease,
   calculateDeterminationPercentIncrease,
   calculateDirectHitPercentIncrease,
+  calculateGCDPercentIncrease,
   calculateMainStatPercentIncrease,
   calculateSpeedPercentIncrease,
   calculateTenacityPercentIncrease,
@@ -233,6 +234,10 @@ export function calculatePowerByStat(power: PlayerPower, jobAbbrev: string) {
   power.speedMultiplier = isCaster(jobAbbrev)
     ? 1 + calculateSpeedPercentIncrease(power.spellSpeed) / 100
     : 1 + calculateSpeedPercentIncrease(power.skillSpeed) / 100;
+
+  power.gcdMultiplier = isCaster(jobAbbrev)
+    ? 1 + calculateGCDPercentIncrease(power.spellSpeed) / 100
+    : 1 + calculateGCDPercentIncrease(power.skillSpeed) / 100;
 
   power.tenacityMultiplier =
     1 + calculateTenacityPercentIncrease(power.tenacity) / 100;
