@@ -1,0 +1,1 @@
+.\win-unpacked\ffxiv-simhelper-app.exe

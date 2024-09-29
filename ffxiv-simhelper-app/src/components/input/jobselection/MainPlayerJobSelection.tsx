@@ -2,20 +2,13 @@ import { Box, Divider, InputLabel, MenuItem, Select, SelectChangeEvent, Typograp
 import { CustomFormControl } from "../basicform/BasicInputForm";
 import { JobMenuItem } from "../../items/JobMenuItem";
 import {
-  slotIndexToSlotName,
   updateAllPlayerPower,
-  WEAPON_SLOT_ID,
 } from "../../../types/ffxivdatabase/ItemSet";
 import { AppConfigurations } from "../../../Themes";
 import {
   EquipmentInput,
   SingleEquipmentInputSaveState,
 } from "../../../types/EquipmentInput";
-import {
-  EMPTY_EQUIPMENT_ID,
-  EQUIPMENT_DATABASE_BY_KEYS,
-  toEquipmentKeyString,
-} from "../../../types/ffxivdatabase/Equipment";
 import { getRoleByIdAndMainCharacterJob } from "./PartyMemberJobSelection";
 import {
   AST_EN_NAME,
@@ -185,7 +178,7 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
 
     newTotalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev = newJobAbbrev;
     newTotalEquipmentState.equipmentDatas[id].power.speedMultiplier = 1;
-    newTotalEquipmentState.equipmentDatas[id].power.gcd = Math.floor(calculateHasteBuff(DEFAULT_GCD, newJobAbbrev))
+    newTotalEquipmentState.equipmentDatas[id].power.gcd = Math.floor(DEFAULT_GCD * calculateHasteBuff(newJobAbbrev) / 100)
 
     setTotalState(newTotalEquipmentState);
   };
@@ -231,7 +224,7 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
 const GCD_OPTION_COUNT = 30;
 
 function getGcdOptions(jobAbbrev: string) {
-  let maxGcd = Math.floor(calculateHasteBuff(DEFAULT_GCD, jobAbbrev))
+  let maxGcd = Math.floor(DEFAULT_GCD * calculateHasteBuff(jobAbbrev) / 100)
   let gcdOptions = [];
 
   for (let i = 0; i < GCD_OPTION_COUNT; i++) {
@@ -274,7 +267,7 @@ export function MainPlayerGcdSelection(
         onChange={(e) => {
           let newGcd = parseInt(e.target.value);
           let newTotalState = { ...totalEquipmentState };
-          let maxGcd = Math.floor(calculateHasteBuff(DEFAULT_GCD, jobAbbrev))
+          let maxGcd = Math.floor(DEFAULT_GCD * calculateHasteBuff(jobAbbrev) / 100)
           let newSpeedMultiplier = Math.floor(maxGcd / newGcd * 1000) / 1000;
 
           newTotalState.equipmentDatas[id].power.gcd = newGcd;
