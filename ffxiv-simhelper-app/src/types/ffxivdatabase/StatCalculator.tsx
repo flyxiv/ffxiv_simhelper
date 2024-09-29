@@ -30,6 +30,7 @@ import {
   DEFAULT_SPEED,
   DEFAULT_TENACITY,
 } from "../../const/StatValue";
+import { PlayerPower } from "./PlayerPower";
 
 const DEFAULT_DIVIDEND = 2780.0;
 export const DEFAULT_GCD = 250;
@@ -97,6 +98,15 @@ export function calculateMultiplierPercentIncrease(
   return Math.floor((slope * (stat - baseValue)) / DEFAULT_DIVIDEND) / 10;
 }
 
+
+export function calculateGCDMultiplierPercentIncrease(
+  stat: number,
+  baseValue: number,
+  slope: number
+) {
+  return Math.floor((slope * (baseValue - stat)) / DEFAULT_DIVIDEND) / 10;
+}
+
 export function calculateWeaponMultiplierPercent(
   weaponDamage: number,
   jobAbbrev: string
@@ -159,14 +169,80 @@ export function calculateSpeedPercentIncrease(speedStat: number) {
     SPEED_SLOPE
   );
 }
+
+// MNK Speed doesn't match the formula. Just hard coding it.
+export function MONK_SKS_TIER(gcd: number) {
+  switch (gcd) {
+    case 200:
+      return 420;
+    case 199:
+      return 442;
+    case 198:
+      return 527;
+    case 197:
+      return 656;
+    case 196:
+      return 741;
+    case 195:
+      return 870;
+    case 194:
+      return 955;
+    case 193:
+      return 1083;
+    case 192:
+      return 1169;
+    case 191:
+      return 1297;
+    case 190:
+      return 1383;
+    case 189:
+      return 1511;
+    case 188:
+      return 1597;
+    case 187:
+      return 1725;
+    case 186:
+      return 1810;
+    case 185:
+      return 1939;
+    case 184:
+      return 2024;
+    case 183:
+      return 2153;
+    case 182:
+      return 2238;
+    case 181:
+      return 2366;
+    case 180:
+      return 2452;
+    case 179:
+      return 2580;
+    case 178:
+      return 2666;
+    case 177:
+      return 2794;
+    default:
+      return 2880;
+
+  }
+}
+
+
+export function calculateGCDPercentIncrease(speedStat: number) {
+  return calculateGCDMultiplierPercentIncrease(
+    speedStat,
+    DEFAULT_SPEED,
+    SPEED_SLOPE
+  );
+}
+
 export function calculateGCDByMultiplier(speedMultiplier: number) {
   return Math.floor(DEFAULT_GCD / speedMultiplier) / 100;
 }
 
-export function calculateGCD(speedStat: number, jobAbbrev: string) {
-  let speedMultiplier = 1 + calculateSpeedPercentIncrease(speedStat) / 100;
+export function calculateGCD(power: PlayerPower, jobAbbrev: string) {
   return (
-    Math.floor(calculateModifiedGCD(DEFAULT_GCD, jobAbbrev) / speedMultiplier) /
+    Math.floor(calculateModifiedGCD(DEFAULT_GCD, jobAbbrev) * power.gcdMultiplier) /
     100
   );
 }
@@ -243,16 +319,32 @@ export function getMinNeededStatForCurrentGCD(
   currentGCD: number,
   jobAbbrev: string
 ) {
+  if (jobAbbrev === MNK_EN_NAME) {
+    return MONK_SKS_TIER(currentGCD * 100);
+  }
+
   let base_gcd = calculateModifiedGCD(DEFAULT_GCD, jobAbbrev);
-  let defaultGcdMinutes = base_gcd / 100;
-  if (currentGCD >= base_gcd / 100) {
+  let defaultGcdSeconds = base_gcd / 100;
+  if (currentGCD >= defaultGcdSeconds) {
     return DEFAULT_SPEED;
   }
-  let minimumNeededSpeedMultiplierPercentForGcd =
-    Math.floor((defaultGcdMinutes / (currentGCD + 0.01) - 1) * 1000) / 10 + 0.1;
-  return getMinNeededStatForCurrentSpeed(
-    minimumNeededSpeedMultiplierPercentForGcd
-  );
+
+  let speedMultiplier = 0;
+
+  while (speedMultiplier < 500) {
+    let nextSpeedLadderStat = getMinNeededStatForCurrentSpeed(speedMultiplier / 10);
+    let nextGCDMultiplier = 1 + calculateGCDPercentIncrease(nextSpeedLadderStat) / 100;
+
+    let nextGCD = Math.floor(base_gcd * nextGCDMultiplier) / 100;
+
+    if (nextGCD <= currentGCD) {
+      return nextSpeedLadderStat;
+    }
+
+    speedMultiplier += 1;
+  }
+
+  return DEFAULT_SPEED;
 }
 
 export function calculateAutoDirectHitIncrease(directHit: number) {

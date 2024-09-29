@@ -2,23 +2,22 @@ import { useState } from "react";
 import { Box, styled } from "@mui/material";
 import {
   BEST_PARTNER_INPUT_SAVE_NAME,
-  BEST_PARTNER_URL,
   BODY_WIDTH,
 } from "../App";
-import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
-import { StatPowerSummary } from "../components/container/StatSummary";
+import { BestPartnerInputMenu } from "../components/input/basicform/EquipmentInputForm";
 import { EquipmentInput } from "../types/EquipmentInput";
 import { defaultBestPartnerEquipmentInput } from "../const/DefaultSingleEquipmentInput";
-import { LeftMenuWithLoadout } from "../components/container/LeftMenu";
+import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppConfigurations } from "../Themes";
 import { Footer } from "../components/basic/Footer";
 import { AppHeader } from "../components/image/AppHeader";
 import { SelectionTitle } from "../components/basic/SelectionTitle";
-import { BasicBottomMenu } from "../components/container/BottomMenu";
 import { EquipmentBoardStyle, InputContainerStyle } from "./Styles";
 import { BestPartnerRequestButton } from "../components/basic/BestPartnerRequestButton";
 import {
   AST_EN_NAME,
+  BEST_PARTNER_INPUT_INFO_TEXT,
+  BEST_PARTNER_PAGE_NAME,
   BRD_EN_NAME,
   DNC_EN_NAME,
   DRG_EN_NAME,
@@ -27,9 +26,7 @@ import {
   MCH_EN_NAME,
   MNK_EN_NAME,
   NIN_EN_NAME,
-  PLAYER_POWER_TEXT,
   PLD_EN_NAME,
-  QUICK_SIM_INPUT_INFO_TEXT,
   RPR_EN_NAME,
   SAM_EN_NAME,
   SCH_EN_NAME,
@@ -48,7 +45,6 @@ export enum JobRole {
 }
 
 let INPUT_CONTAINER_WIDTH = "70%";
-const BEST_PARTNER_LOADOUT_COUNT = 6;
 
 let StatWeightsInputContainer = styled(Box)`
   ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}
@@ -99,41 +95,26 @@ export function BestPartner() {
         sx={{ backgroundColor: AppConfigurations.backgroundOne }}
         width="100vw"
       >
-        {LeftMenuWithLoadout(
-          BEST_PARTNER_LOADOUT_COUNT,
-          BEST_PARTNER_URL,
-          totalState,
-          setTotalState
+        {BasicLeftMenu(
+          BEST_PARTNER_PAGE_NAME,
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
-          <Box alignContent={"center"}>
+          <Box alignContent={"center"} minHeight={"60vh"}>
             <StatWeightsInputContainer justifyContent={"center"}>
-              {SelectionTitle(QUICK_SIM_INPUT_INFO_TEXT)}
+              {SelectionTitle(BEST_PARTNER_INPUT_INFO_TEXT)}
               <EquipmentBoard>
-                {EquipmentSelectionMenu(
+                {BestPartnerInputMenu(
                   0,
                   totalState,
                   setTotalState,
-                  true,
-                  true,
-                  false
                 )}
               </EquipmentBoard>
             </StatWeightsInputContainer>
 
-            <StatWeightsInputContainer marginTop={10}>
-              {SelectionTitle(`2. ${PLAYER_POWER_TEXT}`)}
-              <Box
-                display="flex"
-                justifyContent="center"
-                paddingBottom={"30vh"}
-              >
-                {StatPowerSummary(totalState.equipmentDatas[0])}
-              </Box>
-            </StatWeightsInputContainer>
-
-            {BasicBottomMenu(totalState, BestPartnerRequestButton)}
+            <Box display="flex" justifyContent={"center"} paddingTop={2}>
+              {BestPartnerRequestButton(totalState)}
+            </Box>
           </Box>
           {Footer()}
         </Box>

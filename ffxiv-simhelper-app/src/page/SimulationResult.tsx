@@ -24,7 +24,7 @@ import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { PlayerInfo } from "../components/container/PlayerInfo";
-import { BEST_TEAMMATE_BUTTON_TEXT, DAMAGE_PROFILE_BUTTON_TEXT, MY_CONTRIBUTION_BUTTON_TEXT, ROTATION_SAMPLE_BUTTON_TEXT, SIMULATION_RESULT_TEXT } from "../const/languageTexts";
+import { BEST_TEAMMATE_BUTTON_TEXT, DAMAGE_PROFILE_BUTTON_TEXT, MY_CONTRIBUTION_BUTTON_TEXT, QUICKSIM_PAGE_NAME, ROTATION_SAMPLE_BUTTON_TEXT, SIMULATION_RESULT_TEXT } from "../const/languageTexts";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -88,7 +88,7 @@ export function SimulationResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu()}
+        {BasicLeftMenu(QUICKSIM_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultBoardTopBox>

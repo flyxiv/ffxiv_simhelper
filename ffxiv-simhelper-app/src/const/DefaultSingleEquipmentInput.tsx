@@ -23,6 +23,7 @@ import {
   WHM_EN_NAME,
 } from "./languageTexts";
 import { PARTY_MAX_ILVL } from "../components/input/PartyMemberIlvlSelection";
+import { mapJobAbbrevToJobBisEquipments } from "./StatValue";
 
 export const DEFAULT_GEARSET_MATERIAS: GearSetMaterias = [
   [],
@@ -55,6 +56,10 @@ export function defaultSingleEquipmentInput(): EquipmentInput {
     EMPTY_MATERIA
   );
 
+  let mainPlayerJobAbbrev = PLD_EN_NAME;
+
+  let bisGear = mapJobAbbrevToJobBisEquipments(mainPlayerJobAbbrev);
+
   let singleEquipmentInput: SingleEquipmentInputSaveState = {
     mainPlayerJobAbbrev: PLD_EN_NAME,
     race: MIDLANDER_HYUR_NAME_EN,
@@ -70,6 +75,12 @@ export function defaultSingleEquipmentInput(): EquipmentInput {
     usePot: USE_POT_VAL,
     power: defaultPlayerPower(),
   };
+
+  if (bisGear !== undefined) {
+    singleEquipmentInput.itemSet = bisGear.itemSet;
+    singleEquipmentInput.gearSetMaterias = bisGear.gearSetMaterias;
+    singleEquipmentInput.foodId = bisGear.foodId;
+  }
 
   singleEquipmentInput.power =
     calculatePlayerPowerFromInputs(singleEquipmentInput);

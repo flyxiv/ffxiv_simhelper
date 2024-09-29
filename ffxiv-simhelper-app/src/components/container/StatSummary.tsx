@@ -21,6 +21,7 @@ import {
   NEXT_TEXT,
   PREV_TEXT,
   STAT_TEXT,
+  STAT_WEIGHTS_NAME_TEXT,
   TIME_TEXT,
   VALUES_TEXT,
 } from "../../const/languageTexts";
@@ -86,7 +87,6 @@ export function SimulationInputSummary(
       <StatSummaryBox
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
-        <SingleStatBox>{StatSummaryTypography(NAME_TEXT)}</SingleStatBox>
         <SingleStatCombatTimeBox>
           {StatSummaryTypography(TIME_TEXT)}
         </SingleStatCombatTimeBox>
@@ -102,7 +102,6 @@ export function SimulationInputSummary(
           backgroundColor: AppConfigurations.backgroundFour,
         }}
       >
-        <SingleStatBox>{StatSummaryTypography(VALUES_TEXT)}</SingleStatBox>
         <SingleStatCombatTimeBox>
           {StatSummaryTypography(`${combatTimeMilliseconds}`)}
         </SingleStatCombatTimeBox>
@@ -256,7 +255,7 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
         <StatSummaryBox
           sx={{ backgroundColor: AppConfigurations.backgroundThree }}
         >
-          <SingleStatBox>{StatSummaryTypography(VALUES_TEXT)}</SingleStatBox>
+          <SingleStatBox sx={{ width: "15vw" }}>{StatSummaryTypography(STAT_WEIGHTS_NAME_TEXT)}</SingleStatBox>
         </StatSummaryBox>
       </Box>
 
@@ -271,9 +270,9 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
               </SingleStatBox>
             </StatSummaryBox>
             <StatSummaryBox
-              sx={{ backgroundColor: AppConfigurations.backgroundFour }}
+              sx={{ backgroundColor: AppConfigurations.backgroundFour, width: "15vw" }}
             >
-              <SingleStatBox>
+              <SingleStatBox sx={{ width: "15vw" }}>
                 {StatSummaryTypography(
                   `${statWeightData.rdpsIncreasePerPoint.toFixed(2)}`
                 )}

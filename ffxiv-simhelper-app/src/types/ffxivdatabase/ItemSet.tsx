@@ -16,6 +16,7 @@ import {
   calculateCriticalStrikePercentIncrease,
   calculateDeterminationPercentIncrease,
   calculateDirectHitPercentIncrease,
+  calculateGCDPercentIncrease,
   calculateMainStatPercentIncrease,
   calculateSpeedPercentIncrease,
   calculateTenacityPercentIncrease,
@@ -55,8 +56,8 @@ export const BODY_SLOT_ID = 2;
 export const HANDS_SLOT_ID = 3;
 export const LEGS_SLOT_ID = 4;
 export const FEET_SLOT_ID = 5;
-export const NECK_SLOT_ID = 6;
-export const EAR_SLOT_ID = 7;
+export const EAR_SLOT_ID = 6;
+export const NECK_SLOT_ID = 7;
 export const WRIST_SLOT_ID = 8;
 export const FINGER1_SLOT_ID = 9;
 export const FINGER2_SLOT_ID = 10;
@@ -78,10 +79,10 @@ export function slotNameToSlotIndex(slotName: string): number {
       return LEGS_SLOT_ID;
     case FEET_SLOT_EN_TEXT:
       return FEET_SLOT_ID;
-    case NECK_SLOT_EN_TEXT:
-      return NECK_SLOT_ID;
     case EARS_SLOT_EN_TEXT:
       return EAR_SLOT_ID;
+    case NECK_SLOT_EN_TEXT:
+      return NECK_SLOT_ID;
     case WRIST_SLOT_EN_TEXT:
       return WRIST_SLOT_ID;
     case FINGER1_SLOT_EN_TEXT:
@@ -175,6 +176,12 @@ export function calculatePlayerPowerFromInputs(
     power.piety += itemStat.piety;
   });
 
+  totalState.gearSetMaterias.forEach((materiasInSlot) => {
+    materiasInSlot.forEach((materia) => {
+      addMateriaStatToTotalStat(power, materia);
+    });
+  });
+
   let food = FOOD_DATABASE.get(totalState.foodId);
   if (food !== undefined) {
     power.criticalStrike += Math.min(
@@ -200,11 +207,7 @@ export function calculatePlayerPowerFromInputs(
     power.tenacity += Math.min(food.tenacity, Math.floor(power.tenacity / 10));
   }
 
-  totalState.gearSetMaterias.forEach((materiasInSlot) => {
-    materiasInSlot.forEach((materia) => {
-      addMateriaStatToTotalStat(power, materia);
-    });
-  });
+
 
   calculatePowerByStat(power, totalState.mainPlayerJobAbbrev);
 
@@ -231,6 +234,10 @@ export function calculatePowerByStat(power: PlayerPower, jobAbbrev: string) {
   power.speedMultiplier = isCaster(jobAbbrev)
     ? 1 + calculateSpeedPercentIncrease(power.spellSpeed) / 100
     : 1 + calculateSpeedPercentIncrease(power.skillSpeed) / 100;
+
+  power.gcdMultiplier = isCaster(jobAbbrev)
+    ? 1 + calculateGCDPercentIncrease(power.spellSpeed) / 100
+    : 1 + calculateGCDPercentIncrease(power.skillSpeed) / 100;
 
   power.tenacityMultiplier =
     1 + calculateTenacityPercentIncrease(power.tenacity) / 100;

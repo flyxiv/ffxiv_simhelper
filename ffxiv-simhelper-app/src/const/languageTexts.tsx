@@ -619,6 +619,15 @@ export const GEAR_COMPARE_INPUT_INFO_TEXT =
 export const COPY_BUTTON_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE ? "Copy" : "복사";
 
+// Best Partner
+export const BEST_PARTNER_INPUT_INFO_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE
+    ? "1. Input Your Info"
+    : "1. 필요한 정보를 입력해주세요";
+
+export const SPEED_LABEL_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE ? "GCD" : "글쿨";
+
 // Results Text
 export const SIMULATION_RESULT_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
@@ -687,9 +696,9 @@ export const BEST_PARTNER_BY_ROLE_TEXT =
     ? "Best Partner By Role"
     : "역할군별 최고 파트너";
 export const TANK_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Tanks" : "탱커";
+  AppConfigurations.languageMode === ENGLISH_MODE ? "Tank" : "탱커";
 export const HEALER_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Healers" : "힐러";
+  AppConfigurations.languageMode === ENGLISH_MODE ? "Healer" : "힐러";
 export const DPS_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE ? "DPS" : "딜러";
 
@@ -703,7 +712,7 @@ export const BURST_SECTION_TITLE_TEXT =
     : "버스트마다의 기여도";
 export const BURST_TEXT = (burst_minute: number) =>
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? `${burst_minute} Minute Burst}`
+    ? `${burst_minute} Minute Burst`
     : `${burst_minute}분 버스트`;
 
 // Stat Weights Results
@@ -711,6 +720,11 @@ export const STAT_WEIGHTS_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "RDPS Increase Per Stat Point"
     : "스탯 1당 RDPS 증가 기대값";
+
+export const STAT_WEIGHTS_NAME_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE
+    ? "RDPS Increase / 1 Stat Point"
+    : "RDPS 증가 / 1 스탯 포인트";
 
 export const EMPTY_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE ? "Empty" : "없음";

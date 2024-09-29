@@ -26,6 +26,7 @@ import {
   PLAYER_POWER_TEXT,
   QUICK_SIM_INPUT_INFO_TEXT,
   QUICK_SIM_PARTY_INPUT_INFO_TEXT,
+  QUICKSIM_PAGE_NAME,
 } from "../const/languageTexts";
 
 export const INPUT_CONTAINER_WIDTH = "70%";
@@ -45,6 +46,10 @@ let EquipmentBoard = styled(Box)`
 
 export function isNotValid(input: EquipmentInput) {
   if (input.equipmentDatas === null || input.equipmentDatas === undefined) {
+    return true;
+  }
+
+  if (input.equipmentDatas.length !== 1) {
     return true;
   }
 
@@ -80,6 +85,7 @@ export function QuickSim() {
   }
 
   const [totalState, setTotalState] = useState(mostRecentInput);
+  console.log(totalState);
 
   return (
     <>
@@ -91,6 +97,7 @@ export function QuickSim() {
         {LeftMenuWithLoadout(
           QUICKSIM_LOADOUT_COUNT,
           QUICKSIM_RESULT_URL,
+          QUICKSIM_PAGE_NAME,
           totalState,
           setTotalState
         )}

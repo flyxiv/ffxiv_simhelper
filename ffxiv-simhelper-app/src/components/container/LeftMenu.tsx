@@ -58,6 +58,7 @@ let LeftMenuNavigationItem = styled(Box)`
 export function LeftMenuWithLoadout(
   loadoutCount: number,
   loadoutType: string,
+  currentSimulationPage: string,
   totalState: EquipmentInput,
   setTotalState: Function
 ) {
@@ -76,7 +77,7 @@ export function LeftMenuWithLoadout(
       anchor="left"
     >
       <LeftMenuTotalBar>
-        {DefaultLeftMenuComponents()}
+        {DefaultLeftMenuComponents(currentSimulationPage)}
         {EquipmentLoadouts(
           loadoutCount,
           loadoutType,
@@ -88,7 +89,7 @@ export function LeftMenuWithLoadout(
   );
 }
 
-export function BasicLeftMenu() {
+export function BasicLeftMenu(currentSimulationPage: string) {
   return (
     <Drawer
       sx={{
@@ -104,16 +105,16 @@ export function BasicLeftMenu() {
       variant="permanent"
       anchor="left"
     >
-      <LeftMenuTotalBar>{DefaultLeftMenuComponents()}</LeftMenuTotalBar>
+      <LeftMenuTotalBar>{DefaultLeftMenuComponents(currentSimulationPage)}</LeftMenuTotalBar>
     </Drawer>
   );
 }
 
-function NavigationMenu(link: string, text: string, iconPath: string) {
+function NavigationMenu(link: string, text: string, iconPath: string, currentSimulationPage: string) {
   return (
     <LeftMenuNavigationItem sx={{ paddingY: 1 }}>
       <Link href={link} color="inherit" underline="hover">
-        <Box display="flex" alignItems="center">
+        <Box display="flex" alignItems="center" sx={{ backgroundColor: currentSimulationPage === text ? AppConfigurations.backgroundFour : AppConfigurations.backgroundThree, width: "80%" }}>
           <Box marginRight={1}>
             <img src={iconPath} alt={text} height={20} width={20} />
           </Box>
@@ -133,7 +134,7 @@ const BEST_PARTNER_MENU_LOGO_PATH = "/images/icon_best_partner_w.svg";
 const STAT_WEIGHTS_MENU_LOGO_PATH = "/images/icon_stat_weights_w.svg";
 const LOGO_PATH = "/images/left_menu_logo.svg";
 
-function DefaultLeftMenuComponents() {
+function DefaultLeftMenuComponents(currentSimulationPage: string) {
   return (
     <>
       <LeftMenuLogo>
@@ -159,26 +160,31 @@ function DefaultLeftMenuComponents() {
           }}
         />
 
-        {NavigationMenu("/index.html", HOME_PAGE_NAME, HOME_MENU_LOGO_PATH)}
+        {NavigationMenu("/index.html", HOME_PAGE_NAME, HOME_MENU_LOGO_PATH, currentSimulationPage)}
         {NavigationMenu(
           convertToLinkUrl(QUICKSIM_URL),
           QUICKSIM_PAGE_NAME,
-          QUICKSIM_MENU_LOGO_PATH
+          QUICKSIM_MENU_LOGO_PATH,
+          currentSimulationPage
         )}
         {NavigationMenu(
           convertToLinkUrl(GEAR_COMPARE_URL),
           GEAR_COMPARE_PAGE_NAME,
-          GEAR_COMPARE_MENU_LOGO_PATH
+          GEAR_COMPARE_MENU_LOGO_PATH,
+          currentSimulationPage
         )}
         {NavigationMenu(
           convertToLinkUrl(BEST_PARTNER_URL),
           BEST_PARTNER_PAGE_NAME,
-          BEST_PARTNER_MENU_LOGO_PATH
+          BEST_PARTNER_MENU_LOGO_PATH,
+          currentSimulationPage
+
         )}
         {NavigationMenu(
           convertToLinkUrl(STAT_WEIGHTS_URL),
           STAT_WEIGHTS_PAGE_NAME,
-          STAT_WEIGHTS_MENU_LOGO_PATH
+          STAT_WEIGHTS_MENU_LOGO_PATH,
+          currentSimulationPage
         )}
       </LeftMenuNavigationBar>
     </>

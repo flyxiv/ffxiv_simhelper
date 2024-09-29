@@ -2,7 +2,7 @@ import { styled, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   calculateIlvlAdjustment,
-  mapJobAbbrevToJobDefaultStat,
+  mapJobAbbrevToJobBisEquipments,
   playerStatToPlayerPower,
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
@@ -30,6 +30,9 @@ import {
 } from "../../types/BestPartnerResponse";
 import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
+import { MIDLANDER_HYUR_NAME_EN } from "../../const/languageTexts";
+import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
+import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
 
@@ -165,10 +168,27 @@ function createBestPartnerRequest(
   ];
 
   let playerCount = 0;
-  let defaultStat = mapJobAbbrevToJobDefaultStat(partnerJobAbbrev);
+  let bisEquipments = mapJobAbbrevToJobBisEquipments(jobAbbrev);
 
-  if (defaultStat !== undefined) {
-    let partnerPower = playerStatToPlayerPower(defaultStat, jobAbbrev);
+
+
+  if (bisEquipments !== undefined) {
+    let playerTotalState = {
+      mainPlayerJobAbbrev: jobAbbrev,
+      race: MIDLANDER_HYUR_NAME_EN,
+      foodId: bisEquipments.foodId,
+      mainPlayerPartner1Id: null,
+      mainPlayerPartner2Id: null,
+      itemSet: bisEquipments.itemSet,
+      gearSetMaterias: bisEquipments.gearSetMaterias,
+      combatTimeMillisecond: 0,
+      partyMemberJobAbbrevs: [],
+      partyMemberIds: [],
+      partyMemberIlvl: 0,
+      usePot: 1,
+      power: defaultPlayerPower(),
+    }
+    let partnerPower = calculatePlayerPowerFromInputs(playerTotalState);
     let autoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
     if (autoAttackDelays === undefined) {
       autoAttackDelays = 0;

@@ -18,6 +18,7 @@ import { SimulationDataByRole } from "../types/ffxivdatabase/PartyCompositionMak
 import { ContributionByRoleTable } from "../components/graph/ContributionByRoleTable";
 import {
   AST_EN_NAME,
+  BEST_PARTNER_PAGE_NAME,
   BRD_EN_NAME,
   BURST_TEXT,
   DNC_EN_NAME,
@@ -91,7 +92,7 @@ export function BestPartnerResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu()}
+        {BasicLeftMenu(BEST_PARTNER_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultTopBoardBox marginBottom="40px">
@@ -143,7 +144,7 @@ function convertToContributionTable(
       case GNB_EN_NAME:
         table.tanks.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps,
+          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
@@ -153,7 +154,7 @@ function convertToContributionTable(
       case SGE_EN_NAME:
         table.healers.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps,
+          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
@@ -165,7 +166,7 @@ function convertToContributionTable(
       case VPR_EN_NAME:
         table.melee.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps,
+          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
@@ -174,14 +175,14 @@ function convertToContributionTable(
       case DNC_EN_NAME:
         table.ranged.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps,
+          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
       default:
         table.casters.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps,
+          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
     }
