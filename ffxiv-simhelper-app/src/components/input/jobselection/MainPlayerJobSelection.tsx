@@ -41,7 +41,7 @@ import {
   WAR_EN_NAME,
   WHM_EN_NAME,
 } from "../../../const/languageTexts";
-import { calculateModifiedGCD, DEFAULT_GCD } from "../../../types/ffxivdatabase/StatCalculator";
+import { calculateHasteBuff, DEFAULT_GCD } from "../../../types/ffxivdatabase/StatCalculator";
 import { mapJobAbbrevToJobBisEquipments } from "../../../const/StatValue";
 
 let ALIGN = "left";
@@ -185,7 +185,7 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
 
     newTotalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev = newJobAbbrev;
     newTotalEquipmentState.equipmentDatas[id].power.speedMultiplier = 1;
-    newTotalEquipmentState.equipmentDatas[id].power.gcd = Math.floor(calculateModifiedGCD(DEFAULT_GCD, newJobAbbrev))
+    newTotalEquipmentState.equipmentDatas[id].power.gcd = Math.floor(calculateHasteBuff(DEFAULT_GCD, newJobAbbrev))
 
     setTotalState(newTotalEquipmentState);
   };
@@ -231,7 +231,7 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
 const GCD_OPTION_COUNT = 30;
 
 function getGcdOptions(jobAbbrev: string) {
-  let maxGcd = Math.floor(calculateModifiedGCD(DEFAULT_GCD, jobAbbrev))
+  let maxGcd = Math.floor(calculateHasteBuff(DEFAULT_GCD, jobAbbrev))
   let gcdOptions = [];
 
   for (let i = 0; i < GCD_OPTION_COUNT; i++) {
@@ -274,7 +274,7 @@ export function MainPlayerGcdSelection(
         onChange={(e) => {
           let newGcd = parseInt(e.target.value);
           let newTotalState = { ...totalEquipmentState };
-          let maxGcd = Math.floor(calculateModifiedGCD(DEFAULT_GCD, jobAbbrev))
+          let maxGcd = Math.floor(calculateHasteBuff(DEFAULT_GCD, jobAbbrev))
           let newSpeedMultiplier = Math.floor(maxGcd / newGcd * 1000) / 1000;
 
           newTotalState.equipmentDatas[id].power.gcd = newGcd;
