@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
 import {
-  BEST_PARTNER_INPUT_SAVE_NAME,
   BODY_WIDTH,
+  SINGLE_INPUT_SAVE_NAME,
 } from "../App";
 import { BestPartnerInputMenu } from "../components/input/basicform/EquipmentInputForm";
 import { EquipmentInput } from "../types/EquipmentInput";
@@ -73,7 +73,7 @@ export function isNotValid(input: EquipmentInput) {
 }
 
 export function BestPartner() {
-  let mostRecentInputState = localStorage.getItem(BEST_PARTNER_INPUT_SAVE_NAME);
+  let mostRecentInputState = localStorage.getItem(SINGLE_INPUT_SAVE_NAME);
   let mostRecentInput = null;
 
   if (mostRecentInputState === null) {

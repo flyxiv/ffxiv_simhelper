@@ -24,9 +24,7 @@ import {
 import { useEffect } from "react";
 
 export const SINGLE_INPUT_SAVE_NAME = "mostRecentSingleInput";
-export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
 export const GEAR_COMPARE_REQUEST_SAVE_NAME = "mostRecentGearCompareRequest";
-export const STAT_WEIGHTS_REQUEST_SAVE_NAME = "mostRecentStatWeightsRequest";
 
 export const QUICK_SIM_RESPONSE_SAVE_NAME = "mostRecentQuickSimResponse";
 export const GEAR_COMPARE_RESPONSE_SAVE_NAME = "mostRecentGearCompareResponse";

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, styled } from "@mui/material";
 import {
   BODY_WIDTH,
-  STAT_WEIGHTS_REQUEST_SAVE_NAME,
+  SINGLE_INPUT_SAVE_NAME,
   STAT_WEIGHTS_URL,
 } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
@@ -26,7 +26,7 @@ import {
   PLAYER_POWER_TEXT,
   QUICK_SIM_INPUT_INFO_TEXT,
   QUICK_SIM_PARTY_INPUT_INFO_TEXT,
-  STAT_WEIGHTS_PAGE_NAME,
+  QUICKSIM_PAGE_NAME,
 } from "../const/languageTexts";
 
 let INPUT_CONTAINER_WIDTH = "70%";
@@ -68,7 +68,7 @@ export function isNotValid(input: EquipmentInput) {
 
 export function StatWeights() {
   let mostRecentInputState = localStorage.getItem(
-    STAT_WEIGHTS_REQUEST_SAVE_NAME
+    SINGLE_INPUT_SAVE_NAME
   );
   let mostRecentInput = null;
 
@@ -83,7 +83,6 @@ export function StatWeights() {
   }
 
   const [totalState, setTotalState] = useState(mostRecentInput);
-  console.log(totalState)
 
   return (
     <>
@@ -95,7 +94,7 @@ export function StatWeights() {
         {LeftMenuWithLoadout(
           STATWEIGHTS_LOADOUT_COUNT,
           STAT_WEIGHTS_URL,
-          STAT_WEIGHTS_PAGE_NAME,
+          QUICKSIM_PAGE_NAME,
           totalState,
           setTotalState
         )}
