@@ -39,6 +39,7 @@ import {
   WAR_EN_NAME,
   WHM_EN_NAME,
 } from "../const/languageTexts";
+import { BEST_PARTNER_ITERATION_COUNT } from "../components/basic/BestPartnerRequestButton";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -100,7 +101,9 @@ export function BestPartnerResult() {
             {PlayerInfo(
               responseJson.mainPlayerPower,
               mainPlayerJob,
-              responseJson.combatTimeMillisecond
+              responseJson.combatTimeMillisecond,
+              BEST_PARTNER_ITERATION_COUNT,
+              1,
             )}
           </ResultTopBoardBox>
           <ResultBoardBox>

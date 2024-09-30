@@ -25,6 +25,7 @@ import {
   SCH_EN_NAME,
   TANK_TEXT,
 } from "../../../const/languageTexts";
+import { calculatePlayerPowerFromInputs } from "../../../types/ffxivdatabase/ItemSet";
 
 let ALIGN = "center";
 
@@ -125,15 +126,18 @@ export function PartyMemberJobSelection(
     newTotalState.equipmentDatas.forEach((data) => {
       data.partyMemberJobAbbrevs = newJobNames;
       data.partyMemberIds = newAvailablePartyIds;
+      let updatePower = calculatePlayerPowerFromInputs(newTotalState.equipmentDatas[0]);
+      data.power = updatePower;
     });
 
-    if (newTotalState.equipmentDatas[0].mainPlayerPartner1Id === id) {
-      newTotalState.equipmentDatas[0].mainPlayerPartner1Id = null;
+    if (newTotalState.equipmentDatas[id].mainPlayerPartner1Id === id) {
+      newTotalState.equipmentDatas[id].mainPlayerPartner1Id = null;
     }
 
-    if (newTotalState.equipmentDatas[0].mainPlayerPartner2Id === id) {
-      newTotalState.equipmentDatas[0].mainPlayerPartner2Id = null;
+    if (newTotalState.equipmentDatas[id].mainPlayerPartner2Id === id) {
+      newTotalState.equipmentDatas[id].mainPlayerPartner2Id = null;
     }
+
 
     setTotalState({ ...newTotalState });
   };
@@ -149,8 +153,8 @@ export function PartyMemberJobSelection(
   let playerLabel = jobAbbrevs.includes(SCH_EN_NAME)
     ? HEALER_TEXT
     : jobAbbrevs.includes(PLD_EN_NAME)
-    ? TANK_TEXT
-    : DPS_TEXT;
+      ? TANK_TEXT
+      : DPS_TEXT;
 
   return (
     <CustomFormControl fullWidth>

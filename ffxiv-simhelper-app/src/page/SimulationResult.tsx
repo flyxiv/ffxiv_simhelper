@@ -25,6 +25,7 @@ import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { PlayerInfo } from "../components/container/PlayerInfo";
 import { BEST_TEAMMATE_BUTTON_TEXT, DAMAGE_PROFILE_BUTTON_TEXT, MY_CONTRIBUTION_BUTTON_TEXT, QUICKSIM_PAGE_NAME, ROTATION_SAMPLE_BUTTON_TEXT, SIMULATION_RESULT_TEXT } from "../const/languageTexts";
+import { QUICK_SIM_ITERATION_COUNT } from "../components/basic/QuickSimRequestButton";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -94,7 +95,7 @@ export function SimulationResult() {
           <ResultBoardTopBox>
             {SimulationTitle(SIMULATION_RESULT_TEXT)}
             {DpsSummary(mainPlayerSimulationData, "MAX RDPS")}
-            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs)}
+            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, QUICK_SIM_ITERATION_COUNT, 1)}
           </ResultBoardTopBox>
           <Box display="flex" justifyContent={"center"}>
             {ResultPageButtonGroup(

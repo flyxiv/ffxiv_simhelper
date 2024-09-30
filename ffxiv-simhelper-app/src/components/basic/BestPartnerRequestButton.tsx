@@ -33,6 +33,7 @@ import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
+export const BEST_PARTNER_ITERATION_COUNT = 2000;
 
 interface PartnerKey {
   jobAbbrev: string;

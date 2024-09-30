@@ -53,6 +53,8 @@ const SKS_INCREASE_AMOUNT = 2;
 const SPS_INCREASE_AMOUNT = 2;
 const TEN_INCREASE_AMOUNT = 20;
 
+export const STAT_WEIGHTS_REQUEST_COUNT = 2000;
+
 export function StatWeightsRequestButton(totalState: EquipmentInput) {
   let [isRunning, setIsRunning] = useState(false);
 

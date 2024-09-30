@@ -22,6 +22,7 @@ import { AppConfigurations } from "../../Themes";
 
 const TOTAL_REQUEST_COUNT = 500;
 const TOTAL_ITERATION_COUNT = 8;
+export const GEAR_COMPARE_ITERATION_COUNT = TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT;
 const HIGH_PERCENTILE = 0.95;
 
 const REQUEST_URL = "http://localhost:13406/api/v1/gearcompare";

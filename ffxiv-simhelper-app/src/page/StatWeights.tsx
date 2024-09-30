@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Box, styled } from "@mui/material";
 import {
   BODY_WIDTH,
+  QUICKSIM_URL,
   SINGLE_INPUT_SAVE_NAME,
   STAT_WEIGHTS_URL,
 } from "../App";
@@ -28,9 +29,9 @@ import {
   QUICK_SIM_PARTY_INPUT_INFO_TEXT,
   QUICKSIM_PAGE_NAME,
 } from "../const/languageTexts";
+import { isNotValid, QUICKSIM_LOADOUT_COUNT } from "./QuickSim";
 
 let INPUT_CONTAINER_WIDTH = "70%";
-const STATWEIGHTS_LOADOUT_COUNT = 6;
 
 let StatWeightsInputContainer = styled(Box)`
   ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}
@@ -43,28 +44,6 @@ let CustomizeBoard = styled(Box)`
 let EquipmentBoard = styled(Box)`
   ${EquipmentBoardStyle}
 `;
-
-export function isNotValid(input: EquipmentInput) {
-  if (input.equipmentDatas === null || input.equipmentDatas === undefined) {
-    return true;
-  }
-
-  for (let i = 0; i < input.equipmentDatas.length; i++) {
-    if (input.equipmentDatas[i].partyMemberIlvl === undefined) {
-      return true;
-    }
-
-    if (input.equipmentDatas[i].usePot === undefined) {
-      return true;
-    }
-
-    if (input.equipmentDatas[i].partyMemberJobAbbrevs.length === 0) {
-      return true;
-    }
-  }
-
-  return false;
-}
 
 export function StatWeights() {
   let mostRecentInputState = localStorage.getItem(
@@ -92,8 +71,8 @@ export function StatWeights() {
         width="100vw"
       >
         {LeftMenuWithLoadout(
-          STATWEIGHTS_LOADOUT_COUNT,
-          STAT_WEIGHTS_URL,
+          QUICKSIM_LOADOUT_COUNT,
+          QUICKSIM_URL,
           QUICKSIM_PAGE_NAME,
           totalState,
           setTotalState

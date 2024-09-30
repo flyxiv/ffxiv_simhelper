@@ -188,6 +188,23 @@ export const LOAD_COMPLETE_TEXT =
     ? "Load Complete"
     : "불러오기 완료";
 
+export const OVERWRITE_CONFIRM_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE
+    ? "Overwrite gearset?"
+    : "장비셋을 덮어쓰시겠습니까?";
+
+export const LOAD_CONFIRM_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE
+    ? "Load gearset?"
+    : "장비셋을 불러오시겠습니까?";
+
+export const CONFIRM_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE ? "Yes" : "확인";
+
+export const CANCEL_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE ? "No" : "취소";
+
+
 // Player Text
 export const JOB_EN_TEXT = "Job";
 export const JOB_KR_TEXT = "직업";
@@ -818,8 +835,9 @@ export function convertToEnglishSubStatName(subStatName: string) {
 }
 
 // Power Names
-export const VALUES_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Values" : "수치";
+export const ITERATION_NAME = AppConfigurations.languageMode === ENGLISH_MODE ? "Iteration" : "시뮬 횟수";
+export const VARIANCE_NAME = AppConfigurations.languageMode === ENGLISH_MODE ? "Error %" : "오차 범위";
+export const COMPOSITION_NAME = AppConfigurations.languageMode === ENGLISH_MODE ? "PT%" : "파티 조합%";
 export const WD_POWER_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE ? "Weapon" : "무기 공격력";
 export const MAIN_STAT_POWER_NAME =

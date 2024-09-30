@@ -22,6 +22,7 @@ import { ItemSet } from "./ItemSet";
 import { GearSetMaterias } from "./Materia";
 import {
   AST_EN_NAME,
+  BLM_EN_NAME,
   BRD_EN_NAME,
   CRIT_STAT_NAME,
   CRT_POWER_NAME,
@@ -32,6 +33,7 @@ import {
   DH_RATE_POWER_NAME,
   DH_STAT_NAME,
   DNC_EN_NAME,
+  DRG_EN_NAME,
   DRK_EN_NAME,
   GCD_NAME,
   GNB_EN_NAME,
@@ -41,12 +43,15 @@ import {
   MIND_STAT_NAME,
   MNK_EN_NAME,
   NIN_EN_NAME,
+  PCT_EN_NAME,
   PLD_EN_NAME,
+  RDM_EN_NAME,
   RPR_EN_NAME,
   SAM_EN_NAME,
   SCH_EN_NAME,
   SGE_EN_NAME,
   SKS_STAT_NAME,
+  SMN_EN_NAME,
   SPEED_POWER_NAME,
   SPS_STAT_NAME,
   STR_STAT_NAME,
@@ -58,6 +63,7 @@ import {
   WD_STAT_NAME,
   WHM_EN_NAME,
 } from "../../const/languageTexts";
+import { SingleEquipmentInputSaveState } from "../EquipmentInput";
 
 export const POWER_NAMES = [
   WD_POWER_NAME,
@@ -225,6 +231,95 @@ export function isHealer(jobAbbrev: string) {
       return false;
   }
 }
+
+function isMelee(jobAbbrev: string) {
+  switch (jobAbbrev) {
+    case DRG_EN_NAME:
+    case MNK_EN_NAME:
+    case NIN_EN_NAME:
+    case SAM_EN_NAME:
+    case RPR_EN_NAME:
+    case VPR_EN_NAME:
+      return true;
+    default:
+      return false;
+  }
+}
+
+function isPhysRanged(jobAbbrev: string) {
+  switch (jobAbbrev) {
+    case BRD_EN_NAME:
+    case MCH_EN_NAME:
+    case DNC_EN_NAME:
+      return true;
+    default:
+      return false;
+  }
+}
+
+function isDpsCaster(jobAbbrev: string) {
+  switch (jobAbbrev) {
+    case SMN_EN_NAME:
+    case BLM_EN_NAME:
+    case RDM_EN_NAME:
+    case PCT_EN_NAME:
+      return true;
+    default:
+      return false;
+  }
+}
+
+export function setPartyCompositionBuffPercent(
+  input: SingleEquipmentInputSaveState
+) {
+  let partyMembers = [...input.partyMemberJobAbbrevs];
+  partyMembers.push(input.mainPlayerJobAbbrev);
+
+  let hasMelee = false;
+  let hasPhysRanged = false;
+  let hasCaster = false;
+  let hasTank = false;
+  let hasHealer = false;
+
+  for (let jobAbbrev of partyMembers) {
+    if (isMelee(jobAbbrev)) {
+      hasMelee = true;
+    } else if (isPhysRanged(jobAbbrev)) {
+      hasPhysRanged = true;
+    } else if (isDpsCaster(jobAbbrev)) {
+      hasCaster = true;
+    } else if (isTank(jobAbbrev)) {
+      hasTank = true;
+    } else if (isHealer(jobAbbrev)) {
+      hasHealer = true;
+    }
+  }
+
+  let partyBuffPercent = 0;
+
+  if (hasTank) {
+    partyBuffPercent += 1;
+  }
+  if (hasHealer) {
+    partyBuffPercent += 1;
+  }
+  if (hasMelee) {
+    partyBuffPercent += 1;
+  }
+  if (hasPhysRanged) {
+    partyBuffPercent += 1;
+  }
+  if (hasCaster) {
+    partyBuffPercent += 1;
+  }
+
+  if (partyBuffPercent >= 3) {
+    input.compositionBuffPercent = partyBuffPercent;
+  } else {
+    input.compositionBuffPercent = 0;
+  }
+}
+
 
 export function getSpeedStatByJobAbbrev(
   totalStats: PlayerPower,

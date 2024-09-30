@@ -74,6 +74,7 @@ export function defaultSingleEquipmentInput(): EquipmentInput {
     foodId: -1,
     usePot: USE_POT_VAL,
     power: defaultPlayerPower(),
+    compositionBuffPercent: 0,
   };
 
   if (bisGear !== undefined) {
