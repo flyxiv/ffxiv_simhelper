@@ -15,6 +15,7 @@ import {
   LOAD_COMPLETE_TEXT,
   LOAD_CONFIRM_TEXT,
   LOADOUT_LOAD_TEXT,
+  LOADOUT_NAME_TEXT,
   LOADOUT_WRITE_TEXT,
   OVERWRITE_CONFIRM_TEXT,
   PLD_EN_NAME,
@@ -63,6 +64,9 @@ export function DefaultBestPartnerLoadoutMetadata(): LoadoutMetaData {
   };
 }
 
+const BLUR_COLOR = "gray";
+const FOCUS_COLOR = "black";
+
 export function LoadoutBox(
   loadoutId: number,
   simulationName: string,
@@ -70,7 +74,8 @@ export function LoadoutBox(
   setTotalState: Function,
   numberOfEquipmentSets: number
 ) {
-  let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState("");
+  let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState(LOADOUT_NAME_TEXT);
+  let [textColor, setColor] = useState(BLUR_COLOR);
   let loadoutSaveKey = `${simulationName}-${loadoutId}`;
   let loadoutMetadataSaveKey = `${simulationName}-loadoutMetadata-${loadoutId}`;
 
@@ -84,6 +89,17 @@ export function LoadoutBox(
     savedLoadoutMetadata = JSON.parse(savedLoadoutMetadataString);
   }
   let [loadoutMetadata, setLoadoutMetadata] = useState(savedLoadoutMetadata);
+
+  const handleBlur = () => {
+    setTextFieldInputLoadoutName(LOADOUT_NAME_TEXT);
+    setColor(BLUR_COLOR);
+  };
+
+  const handleFocus = () => {
+    setTextFieldInputLoadoutName("");
+    setColor(FOCUS_COLOR);
+  }
+
 
   return (
     <Box
@@ -121,9 +137,11 @@ export function LoadoutBox(
       </Box>
       <Box>
         <LoadoutInput
-          InputLabelProps={{
+          InputProps={{
             sx: {
-              fontSize: "1.6vh",
+              "& .MuiInputBase-input": {
+                color: textColor, // 입력 필드 텍스트 색상 지정
+              },
             },
           }}
           value={textFieldInputLoadoutName}
@@ -131,6 +149,8 @@ export function LoadoutBox(
             setTextFieldInputLoadoutName(e.target.value);
           }}
           fullWidth
+          onBlur={handleBlur}
+          onFocus={handleFocus}
           sx={{ backgroundColor: "white", width: "100%" }}
         />
 

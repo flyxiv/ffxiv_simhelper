@@ -5,7 +5,7 @@ import {
   StatSummaryBoxStyle,
 } from "./Styles";
 import { getStatNames } from "../../types/ffxivdatabase/Stats";
-import { AppConfigurations } from "../../Themes";
+import { AppConfigurations, ENGLISH_MODE } from "../../Themes";
 import {
   getStatByStatName,
   getStatLostByStatName,
@@ -18,6 +18,7 @@ import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { StatWeightsData } from "../../page/StatWeightsResult";
 import {
   COMPOSITION_NAME,
+  GCD_NAME,
   ITERATION_NAME,
   NAME_TEXT,
   NEXT_TEXT,
@@ -31,7 +32,7 @@ import {
 const STAT_SUMMARY_BOX_WIDTH = "3vw";
 const STAT_SUMMARY_TIME_BOX_WIDTH = "6vw";
 const POWER_SUMMARY_BOX_WIDTH = "6vw";
-const SUMMARY_FONT_SIZE = "1vw";
+const SUMMARY_FONT_SIZE = AppConfigurations.languageMode === ENGLISH_MODE ? "1vw" : "0.9vw";
 
 let StatSummaryBox = styled(Box)`
   ${StatSummaryBoxStyle}
@@ -59,15 +60,19 @@ export function StatSummaryTypography(text: string) {
 
 export function StatSummaryTypographyCompare(
   stat: string,
-  compareStat: string
+  compareStat: string,
+  statName: string
 ) {
   let statValue = parseFloat(stat);
   let compareStatValue = parseFloat(compareStat);
 
+  let isBetter = statName === GCD_NAME ? statValue < compareStatValue : statValue > compareStatValue;
+  let isWorse = statName === GCD_NAME ? statValue > compareStatValue : statValue < compareStatValue;
+
   let color =
-    statValue > compareStatValue
+    isBetter
       ? AppConfigurations.secondary
-      : statValue < compareStatValue
+      : isWorse
         ? AppConfigurations.alert
         : "white";
 
@@ -186,7 +191,8 @@ export function StatSummaryGearCompare(
             <SingleStatBox>
               {StatSummaryTypographyCompare(
                 getStatByStatName(power, statName, jobAbbrev),
-                getStatByStatName(comparePower, statName, jobAbbrev)
+                getStatByStatName(comparePower, statName, jobAbbrev),
+                statName
               )}
             </SingleStatBox>
           );

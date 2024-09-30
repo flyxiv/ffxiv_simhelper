@@ -188,6 +188,8 @@ export const LOAD_COMPLETE_TEXT =
     ? "Load Complete"
     : "불러오기 완료";
 
+export const LOADOUT_NAME_TEXT = AppConfigurations.languageMode === ENGLISH_MODE ? "Loadout Name" : "장비셋 이름";
+
 export const OVERWRITE_CONFIRM_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "Overwrite gearset?"
@@ -671,8 +673,8 @@ export const CAST_TEXT =
 
 export const BEST_TEAMMATE_BUTTON_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Teammate Contributions"
-    : "파티원 기여도";
+    ? "Buffs Received"
+    : "받은 기여도(RDPS)";
 export const MEMBER_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE ? "Member" : "파티원";
 export const TOTAL_TEXT =
@@ -680,8 +682,8 @@ export const TOTAL_TEXT =
 
 export const MY_CONTRIBUTION_BUTTON_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? "My Contributions"
-    : "나의 기여도";
+    ? "Buffs Taken"
+    : "준 기여도(RDPS)";
 
 export const ROTATION_SAMPLE_WARNING_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
@@ -837,7 +839,7 @@ export function convertToEnglishSubStatName(subStatName: string) {
 // Power Names
 export const ITERATION_NAME = AppConfigurations.languageMode === ENGLISH_MODE ? "Iteration" : "시뮬 횟수";
 export const VARIANCE_NAME = AppConfigurations.languageMode === ENGLISH_MODE ? "Error %" : "오차 범위";
-export const COMPOSITION_NAME = AppConfigurations.languageMode === ENGLISH_MODE ? "PT%" : "파티 조합%";
+export const COMPOSITION_NAME = AppConfigurations.languageMode === ENGLISH_MODE ? "PT%" : "조합%";
 export const WD_POWER_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE ? "Weapon" : "무기 공격력";
 export const MAIN_STAT_POWER_NAME =
