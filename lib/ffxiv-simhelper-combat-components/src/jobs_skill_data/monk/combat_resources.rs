@@ -37,7 +37,7 @@ const MONK_MAX_STACKS: [ResourceType; MONK_STACKS_COUNT] = [
     1,
     1,
     1,
-    1,
+    2,
     1,
 ];
 
