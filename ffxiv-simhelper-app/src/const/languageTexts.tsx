@@ -690,6 +690,11 @@ export const ROTATION_SAMPLE_WARNING_TEXT =
     ? "!!!This is a sample of the engine's simulation log, not a guide to playing the job. analyze with care."
     : "!!!이건 직업에 대한 가이드가 아닌, 시뮬레이션 엔진의 샘플 결과일 뿐입니다. 이를 감안하고 분석할 때 주의해주세요.";
 
+export const SAMURAI_ROTATION_WARNING_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE
+    ? "!!!Samurai's 'tengentsu' is simulated as a 35s skill(looking at logsmatch its 12 casts in a 6:30 fight)."
+    : "!!!사무라이의 '천격'은 35초 스킬로 시뮬레이션 되었습니다(로그를 봤을 때 6:30 전투에서 12번 정도 사용됨).";
+
 export const ROTATION_SAMPLE_BUTTON_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "Rotation Sample"
