@@ -938,7 +938,7 @@ impl SamuraiDatabase {
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
-            cooldown_millisecond: 25000,
+            cooldown_millisecond: 35000,
             resource_required: vec![],
             resource_created: Default::default(),
             is_guaranteed_crit: true,
