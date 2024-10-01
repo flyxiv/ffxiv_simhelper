@@ -30,15 +30,14 @@ import {
   DEFAULT_SPEED,
   DEFAULT_TENACITY,
 } from "../../const/StatValue";
-import { PlayerPower } from "./PlayerPower";
 
 const DEFAULT_DIVIDEND = 2780.0;
 export const DEFAULT_GCD = 250;
 
-export const NIN_GCD_SPEED_BUFF = 0.85;
-export const MNK_GCD_SPEED_BUFF = 0.8;
-export const VPR_GCD_SPEED_BUFF = 0.85;
-export const SAM_GCD_SPEED_BUFF = 0.87;
+export const NIN_GCD_SPEED_BUFF = 85;
+export const MNK_GCD_SPEED_BUFF = 80;
+export const VPR_GCD_SPEED_BUFF = 85;
+export const SAM_GCD_SPEED_BUFF = 87;
 
 export const AUTO_DH_SLOPE = 140;
 
@@ -74,18 +73,18 @@ const BASE_WEAPON_DAMAGE_PER_JOB = new Map([
   [PCT_EN_NAME, 50],
 ]);
 
-export function calculateModifiedGCD(gcd: number, jobAbbrev: string) {
+export function calculateHasteBuff(jobAbbrev: string) {
   switch (jobAbbrev) {
     case NIN_EN_NAME:
-      return gcd * NIN_GCD_SPEED_BUFF;
+      return NIN_GCD_SPEED_BUFF;
     case MNK_EN_NAME:
-      return gcd * MNK_GCD_SPEED_BUFF;
+      return MNK_GCD_SPEED_BUFF;
     case VPR_EN_NAME:
-      return gcd * VPR_GCD_SPEED_BUFF;
+      return VPR_GCD_SPEED_BUFF;
     case SAM_EN_NAME:
-      return gcd * SAM_GCD_SPEED_BUFF;
+      return SAM_GCD_SPEED_BUFF;
     default:
-      return gcd;
+      return 100;
   }
 }
 
@@ -99,12 +98,14 @@ export function calculateMultiplierPercentIncrease(
 }
 
 
-export function calculateGCDMultiplierPercentIncrease(
-  stat: number,
-  baseValue: number,
-  slope: number
+// calculate GCD in percent. ex) GCD 1.94 -> 194
+export function calculateGCD(
+  speedMultiplier: number,
+  hasteBuffPercent: number
 ) {
-  return Math.floor((slope * (baseValue - stat)) / DEFAULT_DIVIDEND) / 10;
+  let gcdMultiplier = 2 - speedMultiplier;
+
+  return Math.floor(Math.floor(DEFAULT_GCD * gcdMultiplier * 10) * hasteBuffPercent / 1000)
 }
 
 export function calculateWeaponMultiplierPercent(
@@ -167,83 +168,6 @@ export function calculateSpeedPercentIncrease(speedStat: number) {
     speedStat,
     DEFAULT_SPEED,
     SPEED_SLOPE
-  );
-}
-
-// MNK Speed doesn't match the formula. Just hard coding it.
-export function MONK_SKS_TIER(gcd: number) {
-  switch (gcd) {
-    case 200:
-      return 420;
-    case 199:
-      return 442;
-    case 198:
-      return 527;
-    case 197:
-      return 656;
-    case 196:
-      return 741;
-    case 195:
-      return 870;
-    case 194:
-      return 955;
-    case 193:
-      return 1083;
-    case 192:
-      return 1169;
-    case 191:
-      return 1297;
-    case 190:
-      return 1383;
-    case 189:
-      return 1511;
-    case 188:
-      return 1597;
-    case 187:
-      return 1725;
-    case 186:
-      return 1810;
-    case 185:
-      return 1939;
-    case 184:
-      return 2024;
-    case 183:
-      return 2153;
-    case 182:
-      return 2238;
-    case 181:
-      return 2366;
-    case 180:
-      return 2452;
-    case 179:
-      return 2580;
-    case 178:
-      return 2666;
-    case 177:
-      return 2794;
-    default:
-      return 2880;
-
-  }
-}
-
-
-export function calculateGCDPercentIncrease(speedStat: number) {
-  return calculateGCDMultiplierPercentIncrease(
-    speedStat,
-    DEFAULT_SPEED,
-    SPEED_SLOPE
-  );
-}
-
-export function calculateGCDByMultiplier(speedMultiplier: number) {
-  return Math.floor(DEFAULT_GCD / speedMultiplier) / 100;
-}
-
-export function calculateGCD(power: PlayerPower, jobAbbrev: string) {
-  return (
-    Math.floor(calculateModifiedGCD(DEFAULT_GCD, jobAbbrev) * power.gcdMultiplier) /
-    100
   );
 }
 
@@ -319,29 +243,20 @@ export function getMinNeededStatForCurrentGCD(
   currentGCD: number,
   jobAbbrev: string
 ) {
-  if (jobAbbrev === MNK_EN_NAME) {
-    return MONK_SKS_TIER(currentGCD * 100);
-  }
+  let hasteBuff = calculateHasteBuff(jobAbbrev);
 
-  let base_gcd = calculateModifiedGCD(DEFAULT_GCD, jobAbbrev);
-  let defaultGcdSeconds = base_gcd / 100;
-  if (currentGCD >= defaultGcdSeconds) {
-    return DEFAULT_SPEED;
-  }
+  // multiplier * 1000
+  let speedIncrease = 0;
 
-  let speedMultiplier = 0;
-
-  while (speedMultiplier < 500) {
-    let nextSpeedLadderStat = getMinNeededStatForCurrentSpeed(speedMultiplier / 10);
-    let nextGCDMultiplier = 1 + calculateGCDPercentIncrease(nextSpeedLadderStat) / 100;
-
-    let nextGCD = Math.floor(base_gcd * nextGCDMultiplier) / 100;
+  while (speedIncrease < 500) {
+    let nextSpeedLadderStat = getMinNeededStatForCurrentSpeed(speedIncrease / 10);
+    let nextGCD = calculateGCD(1 + speedIncrease / 1000, hasteBuff) / 100;
 
     if (nextGCD <= currentGCD) {
       return nextSpeedLadderStat;
     }
 
-    speedMultiplier += 1;
+    speedIncrease += 1;
   }
 
   return DEFAULT_SPEED;

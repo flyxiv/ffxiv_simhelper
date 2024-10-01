@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   calculateIlvlAdjustment,
   mapJobAbbrevToJobBisEquipments,
-  playerStatToPlayerPower,
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
 import {

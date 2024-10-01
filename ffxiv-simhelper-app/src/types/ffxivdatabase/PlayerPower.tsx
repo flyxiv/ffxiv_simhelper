@@ -7,6 +7,7 @@ import {
 } from "../../const/StatValue";
 import {
   calculateGCD,
+  calculateHasteBuff,
   DEFAULT_GCD,
   getMinNeededStatForCurrentCriticalStrike,
   getMinNeededStatForCurrentDetermination,
@@ -87,7 +88,6 @@ export interface PlayerPower {
   directHitRate: number;
   determinationMultiplier: number;
   speedMultiplier: number;
-  gcdMultiplier: number;
   tenacityMultiplier: number;
   autoAttackDelays: number;
 
@@ -124,7 +124,6 @@ export function defaultPlayerPower(): PlayerPower {
     directHitRate: 0,
     determinationMultiplier: 0,
     speedMultiplier: 0,
-    gcdMultiplier: 0,
     tenacityMultiplier: 0,
     autoDirectHitIncrease: 0,
     autoAttackDelays: 0,
@@ -159,9 +158,9 @@ export function getStatByStatName(
       return `${playerPower.tenacity}`;
     case GCD_NAME: {
       playerPower.gcd = calculateGCD(
-        playerPower,
-        jobAbbrev
-      );
+        playerPower.speedMultiplier,
+        calculateHasteBuff(jobAbbrev)
+      ) / 100;
       return `${playerPower.gcd.toFixed(2)}`;
     }
     default:
