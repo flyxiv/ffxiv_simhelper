@@ -237,7 +237,11 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 703:
       return actionIconDirectory + "/SGE/psyche.png";
     case 704:
+      return actionIconDirectory + "/SGE/eukrasia.png";
+    case 705:
       return actionIconDirectory + "/SGE/eukrasian_dosis_III.png";
+    case 706:
+      return actionIconDirectory + "/SGE/toxikon.png";
 
     // DRG
     case 800:
@@ -442,6 +446,8 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
       return actionIconDirectory + "/SAM/kaeshi_setsugekka.png";
     case 1125:
       return actionIconDirectory + "/SAM/higanbana.png";
+    case 1126:
+      return actionIconDirectory + "/SAM/tengentsu.png";
 
     // RPR
     case 1200:
@@ -595,7 +601,7 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1322:
       return actionIconDirectory + "/BRD/radiant_encore.png";
     case 1323:
-      return actionIconDirectory + "/BRD/refulgent_arrow.png";
+      return actionIconDirectory + "/BRD/refulgent_arrow_barrage.png";
     case 1324:
       return actionIconDirectory + "/BRD/caustic_bite.png";
     case 1325:
@@ -643,7 +649,7 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1419:
       return actionIconDirectory + "/MCH/excavator.png";
     case 1420:
-      return actionIconDirectory + "/MCH/hypercharge.png";
+      return actionIconDirectory + "/MCH/reassemble.png";
 
     // DNC
     case 1500:
@@ -791,7 +797,7 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1718:
       return actionIconDirectory + "/BLM/fire_III.png";
     case 1719:
-      return actionIconDirectory + "/BLM/blizzard_III.png";
+      return actionIconDirectory + "/BLM/fire_IV.png";
     case 1720:
       return actionIconDirectory + "/BLM/flare_star.png";
     case 1721:
