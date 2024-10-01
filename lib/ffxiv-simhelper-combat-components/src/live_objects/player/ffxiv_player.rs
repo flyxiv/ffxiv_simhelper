@@ -514,6 +514,10 @@ impl FfxivPlayer {
             /// fell cleave + inner release
             111 => 104,
 
+            /// AST
+            /// fall malefic lightspeed -> fall malefic
+            511 => 500,
+
             /// DRG
             /// heavens thrust + surge
             812 => 805,

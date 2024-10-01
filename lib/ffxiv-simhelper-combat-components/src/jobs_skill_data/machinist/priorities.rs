@@ -219,21 +219,24 @@ pub(crate) fn make_machinist_ogcd_priority_table(
             skill_id: db.reassemble.get_id(),
             prerequisite: Some(And(
                 Box::new(Or(
-                    Box::new(RelatedSkillCooldownLessOrEqualThan(db.drill.get_id(), 1000)),
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(db.drill.get_id(), 1500)),
                     Box::new(Or(
                         Box::new(RelatedSkillCooldownLessOrEqualThan(
                             db.air_anchor.get_id(),
-                            1000,
+                            1500,
                         )),
                         Box::new(RelatedSkillCooldownLessOrEqualThan(
                             db.chainsaw.get_id(),
-                            1000,
+                            1500,
                         )),
                     )),
                 )),
                 Box::new(Or(
                     Box::new(MillisecondsBeforeBurst(0)),
-                    Box::new(HasSkillStacks(db.reassemble.get_id(), 2)),
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.reassemble.get_id(),
+                        20000,
+                    )),
                 )),
             )),
         },
