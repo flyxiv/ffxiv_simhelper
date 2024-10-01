@@ -649,7 +649,10 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
     case 1419:
       return actionIconDirectory + "/MCH/excavator.png";
     case 1420:
+      return actionIconDirectory + "/MCH/hypercharge.png";
+    case 1421:
       return actionIconDirectory + "/MCH/reassemble.png";
+
 
     // DNC
     case 1500:
