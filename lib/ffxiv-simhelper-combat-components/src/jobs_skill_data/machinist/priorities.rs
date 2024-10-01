@@ -58,39 +58,54 @@ impl MachinistPriorityTable {
 
 pub(crate) fn make_machinist_opener(db: &MachinistDatabase, use_pots: bool) -> Vec<Opener> {
     let mut openers = if use_pots {
-        vec![Opener::OgcdOpener((Some(db.potion.get_id()), None))]
+        vec![
+            Opener::GcdOpener(db.reassemble_opener.get_id()),
+            Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+        ]
     } else {
-        vec![]
+        vec![
+            Opener::GcdOpener(db.reassemble_opener.get_id()),
+            Opener::OgcdOpener((None, None)),
+        ]
     };
 
     openers.extend(vec![
         Opener::GcdOpener(db.air_anchor.get_id()),
         Opener::OgcdOpener((Some(db.double_check.get_id()), Some(db.checkmate.get_id()))),
         Opener::GcdOpener(db.drill.get_id()),
-        Opener::OgcdOpener((Some(db.reassemble.get_id()), Some(db.checkmate.get_id()))),
-        Opener::GcdOpener(db.chainsaw_reassemble.get_id()),
-        Opener::OgcdOpener((Some(db.reassemble.get_id()), Some(db.double_check.get_id()))),
-        Opener::GcdOpener(db.excavator_reassemble.get_id()),
+        Opener::OgcdOpener((Some(db.barrel_stabilizer.get_id()), None)),
+        Opener::GcdOpener(db.chainsaw.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.excavator.get_id()),
         Opener::OgcdOpener((
             Some(db.automaton_queen.get_id()),
-            Some(db.barrel_stabilizer.get_id()),
+            Some(db.reassemble.get_id()),
         )),
-        Opener::GcdOpener(db.drill.get_id()),
-        Opener::OgcdOpener((
-            Some(db.hypercharge_hypercharged.get_id()),
-            Some(db.wildfire.get_id()),
-        )),
-        Opener::GcdOpener(db.blazing_shot.get_id()),
-        Opener::OgcdOpener((Some(db.double_check.get_id()), None)),
-        Opener::GcdOpener(db.blazing_shot.get_id()),
-        Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
-        Opener::GcdOpener(db.blazing_shot.get_id()),
-        Opener::OgcdOpener((Some(db.double_check.get_id()), None)),
-        Opener::GcdOpener(db.blazing_shot.get_id()),
-        Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
-        Opener::GcdOpener(db.blazing_shot.get_id()),
-        Opener::OgcdOpener((Some(db.double_check.get_id()), None)),
+        Opener::GcdOpener(db.drill_reassemble.get_id()),
+        Opener::OgcdOpener((Some(db.checkmate.get_id()), Some(db.wildfire.get_id()))),
         Opener::GcdOpener(db.full_metal_field.get_id()),
+        Opener::OgcdOpener((
+            Some(db.double_check.get_id()),
+            Some(db.hypercharge_hypercharged.get_id()),
+        )),
+        Opener::GcdOpener(db.blazing_shot.get_id()),
+        Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
+        Opener::GcdOpener(db.blazing_shot.get_id()),
+        Opener::OgcdOpener((Some(db.double_check.get_id()), None)),
+        Opener::GcdOpener(db.blazing_shot.get_id()),
+        Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
+        Opener::GcdOpener(db.blazing_shot.get_id()),
+        Opener::OgcdOpener((Some(db.double_check.get_id()), None)),
+        Opener::GcdOpener(db.blazing_shot.get_id()),
+        Opener::OgcdOpener((Some(db.checkmate.get_id()), None)),
+        Opener::GcdOpener(db.drill.get_id()),
+        Opener::OgcdOpener((Some(db.double_check.get_id()), Some(db.checkmate.get_id()))),
+        Opener::GcdOpener(db.heated_split_shot.get_id()),
+        Opener::OgcdOpener((Some(db.double_check.get_id()), None)),
+        Opener::GcdOpener(db.heated_slug_shot.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.heated_clean_shot.get_id()),
+        Opener::OgcdOpener((None, None)),
     ]);
 
     openers
@@ -173,7 +188,10 @@ pub(crate) fn make_machinist_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.hypercharge_hypercharged.get_id(),
-            prerequisite: None,
+            prerequisite: Some(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                db.wildfire.get_id(),
+                105000,
+            )))),
         },
         SkillPriorityInfo {
             skill_id: db.hypercharge.get_id(),

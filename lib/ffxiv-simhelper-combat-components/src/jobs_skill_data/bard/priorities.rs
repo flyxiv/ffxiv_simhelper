@@ -65,33 +65,36 @@ pub(crate) fn make_bard_opener(db: &BardDatabase, use_pots: bool) -> Vec<Opener>
     let mut bard_opener: Vec<Opener> = vec![Opener::GcdOpener(db.storm_bite.get_id())];
 
     if use_pots {
-        bard_opener.push(Opener::OgcdOpener((
-            Some(db.wanderers_minuet.get_id()),
-            Some(db.potion.get_id()),
-        )));
+        bard_opener.extend(vec![
+            Opener::OgcdOpener((
+                Some(db.heartbreak_shot.get_id()),
+                Some(db.wanderers_minuet.get_id()),
+            )),
+            Opener::GcdOpener(db.caustic_bite.get_id()),
+            Opener::OgcdOpener((Some(db.potion.get_id()), Some(db.radiant_finale.get_id()))),
+        ]);
     } else {
-        bard_opener.push(Opener::OgcdOpener((
-            Some(db.wanderers_minuet.get_id()),
-            None,
-        )));
+        bard_opener.extend(vec![
+            Opener::OgcdOpener((
+                Some(db.heartbreak_shot.get_id()),
+                Some(db.wanderers_minuet.get_id()),
+            )),
+            Opener::GcdOpener(db.caustic_bite.get_id()),
+            Opener::OgcdOpener((Some(db.radiant_finale.get_id()), None)),
+        ]);
     }
 
     bard_opener.extend(vec![
-        Opener::GcdOpener(db.caustic_bite.get_id()),
-        Opener::OgcdOpener((
-            Some(db.raging_strike.get_id()),
-            Some(db.empyreal_arrow.get_id()),
-        )),
-        Opener::GcdOpener(db.burst_shot.get_id()),
-        Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.burst_shot.get_id()),
         Opener::OgcdOpener((
             Some(db.battle_voice.get_id()),
-            Some(db.radiant_finale.get_id()),
+            Some(db.raging_strike.get_id()),
         )),
+        Opener::GcdOpener(db.burst_shot.get_id()),
+        Opener::OgcdOpener((Some(db.empyreal_arrow.get_id()), None)),
         Opener::GcdOpener(db.radiant_encore1.get_id()),
-        Opener::OgcdOpener((Some(db.barrage.get_id()), Some(db.heartbreak_shot.get_id()))),
-        Opener::GcdOpener(db.iron_jaws.get_id()),
+        Opener::OgcdOpener((Some(db.barrage.get_id()), None)),
+        Opener::GcdOpener(db.side_winder.get_id()),
     ]);
 
     bard_opener
@@ -99,6 +102,14 @@ pub(crate) fn make_bard_opener(db: &BardDatabase, use_pots: bool) -> Vec<Opener>
 
 pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriorityInfo> {
     let bard_gcd_priority_table: Vec<SkillPriorityInfo> = vec![
+        SkillPriorityInfo {
+            skill_id: db.iron_jaws.get_id(),
+            prerequisite: Some(And(
+                Box::new(BufforDebuffLessThan(1300, 27000)),
+                // radiant finale
+                Box::new(BufforDebuffLessThan(1309, 6000)),
+            )),
+        },
         SkillPriorityInfo {
             skill_id: db.iron_jaws.get_id(),
             prerequisite: Some(SkillPrerequisite::Or(
@@ -123,9 +134,16 @@ pub(crate) fn make_bard_gcd_priority_table(db: &BardDatabase) -> Vec<SkillPriori
         },
         SkillPriorityInfo {
             skill_id: db.iron_jaws.get_id(),
-            prerequisite: Some(SkillPrerequisite::Or(
-                Box::new(BufforDebuffLessThan(1300, 6000)),
-                Box::new(BufforDebuffLessThan(1301, 6000)),
+            prerequisite: Some(BufforDebuffLessThan(1300, 6000)),
+        },
+        SkillPriorityInfo {
+            skill_id: db.iron_jaws.get_id(),
+            prerequisite: Some(And(
+                Box::new(SkillPrerequisite::Or(
+                    Box::new(BufforDebuffLessThan(1300, 6000)),
+                    Box::new(BufforDebuffLessThan(1309, 2500)),
+                )),
+                Box::new(BufforDebuffLessThan(1300, 10000)),
             )),
         },
         SkillPriorityInfo {
@@ -185,7 +203,7 @@ pub(crate) fn make_bard_ogcd_priority_table(
         SkillPriorityInfo {
             skill_id: db.armys_paeon.get_id(),
             prerequisite: Some(And(
-                Box::new(BufforDebuffLessThan(db.mages_ballad_status.get_id(), 3000)),
+                Box::new(BufforDebuffLessThan(db.mages_ballad_status.get_id(), 6000)),
                 Box::new(Not(Box::new(HasBufforDebuff(
                     db.wanderers_minuet_status.get_id(),
                 )))),

@@ -59,21 +59,19 @@ pub(crate) fn make_scholar_opener(db: &ScholarDatabase, use_pots: bool) -> Vec<O
     let mut openers = if use_pots {
         vec![
             Opener::GcdOpener(db.broil_iv.get_id()),
-            Opener::OgcdOpener((Some(db.dissipation.get_id()), None)),
-            Opener::GcdOpener(db.biolysis.get_id()),
             Opener::OgcdOpener((Some(db.potion.get_id()), None)),
+            Opener::GcdOpener(db.biolysis.get_id()),
+            Opener::OgcdOpener((Some(db.dissipation.get_id()), None)),
         ]
     } else {
         vec![
             Opener::GcdOpener(db.broil_iv.get_id()),
-            Opener::OgcdOpener((Some(db.dissipation.get_id()), None)),
-            Opener::GcdOpener(db.biolysis.get_id()),
             Opener::OgcdOpener((None, None)),
+            Opener::GcdOpener(db.biolysis.get_id()),
+            Opener::OgcdOpener((Some(db.dissipation.get_id()), None)),
         ]
     };
     openers.extend(vec![
-        Opener::GcdOpener(db.broil_iv.get_id()),
-        Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((Some(db.chain_stratagem.get_id()), None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
@@ -85,13 +83,13 @@ pub(crate) fn make_scholar_opener(db: &ScholarDatabase, use_pots: bool) -> Vec<O
         Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((Some(db.aetherflow.get_id()), None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
-        Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
-        Opener::GcdOpener(db.broil_iv.get_id()),
-        Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
-        Opener::GcdOpener(db.broil_iv.get_id()),
-        Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
-        Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((Some(db.baneful_impaction.get_id()), None)),
+        Opener::GcdOpener(db.broil_iv.get_id()),
+        Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
+        Opener::GcdOpener(db.broil_iv.get_id()),
+        Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
+        Opener::GcdOpener(db.broil_iv.get_id()),
+        Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
     ]);
 
     openers

@@ -33,6 +33,7 @@ pub(crate) struct MachinistDatabase {
     pub(crate) full_metal_field: AttackSkill,
     pub(crate) excavator_reassemble: AttackSkill,
     pub(crate) hypercharge_hypercharged: AttackSkill,
+    pub(crate) reassemble_opener: AttackSkill,
 
     pub(crate) hypercharge_buff: BuffStatus,
 
@@ -288,8 +289,8 @@ impl MachinistDatabase {
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 0,
             charging_time_millisecond: 0,
-            is_speed_buffed: true,
-            cooldown_reduced_by_speed: true,
+            is_speed_buffed: false,
+            cooldown_reduced_by_speed: false,
             cooldown_millisecond: 55000,
             resource_required: vec![],
             resource_created: Default::default(),
@@ -702,6 +703,40 @@ impl MachinistDatabase {
             is_guaranteed_direct_hit: false,
         };
 
+        let reassemble_opener: AttackSkill = AttackSkill {
+            id: 1421,
+            name: String::from("Reassemble"),
+            player_id,
+            potency: 0,
+            use_type: UseType::NoTarget,
+            trait_percent: 120,
+            additional_skill_events: vec![ApplyBuff(
+                player_id,
+                player_id,
+                reassemble_buff.clone(),
+                5000,
+                5000,
+                0,
+            )],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 2500,
+            charging_time_millisecond: 1000,
+            is_speed_buffed: false,
+            cooldown_reduced_by_speed: false,
+            cooldown_millisecond: 55000,
+            resource_required: vec![],
+            resource_created: Default::default(),
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            max_stacks: 1,
+            stack_skill_id: Some(reassemble.get_id()),
+            is_guaranteed_crit: false,
+            is_guaranteed_direct_hit: false,
+        };
+
         let potion_skill = PotionSkill::new(player_id);
 
         Self {
@@ -726,6 +761,7 @@ impl MachinistDatabase {
             full_metal_field,
             excavator_reassemble: excavator_reasssemble,
             hypercharge_hypercharged,
+            reassemble_opener,
 
             hypercharge_buff,
 
@@ -759,6 +795,7 @@ pub(crate) fn make_machinist_skill_list(player_id: PlayerIdType) -> SkillTable<A
         db.full_metal_field,
         db.excavator_reassemble,
         db.hypercharge_hypercharged,
+        db.reassemble_opener,
         db.potion,
     ];
 

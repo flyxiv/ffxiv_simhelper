@@ -28,7 +28,7 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
         [ARRAY_REPEAT_VALUE; BEST_PARTNER_SIMULATION_COUNT];
 
     for simulation_idx in 0..BEST_PARTNER_SIMULATION_COUNT {
-        let simulation_board = create_simulation_board(request.clone(), false)?;
+        let simulation_board = create_simulation_board(request.clone())?;
         simulation_board.run_simulation();
 
         let simulation_result = simulation_board.create_simulation_result();

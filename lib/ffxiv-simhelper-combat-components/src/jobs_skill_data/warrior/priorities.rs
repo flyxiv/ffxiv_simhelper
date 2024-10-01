@@ -64,7 +64,9 @@ pub(crate) fn make_warrior_opener(db: &WarriorDatabase, use_pots: bool) -> Vec<O
             GcdOpener(db.heavy_swing.get_id()),
             OgcdOpener((Some(db.infuriate.get_id()), None)),
             GcdOpener(db.maim.get_id()),
-            OgcdOpener((Some(db.potion.get_id()), None)),
+            OgcdOpener((None, None)),
+            GcdOpener(db.storms_eye.get_id()),
+            OgcdOpener((Some(db.inner_release.get_id()), Some(db.potion.get_id()))),
         ]
     } else {
         vec![
@@ -72,25 +74,35 @@ pub(crate) fn make_warrior_opener(db: &WarriorDatabase, use_pots: bool) -> Vec<O
             OgcdOpener((Some(db.infuriate.get_id()), None)),
             GcdOpener(db.maim.get_id()),
             OgcdOpener((None, None)),
+            GcdOpener(db.storms_eye.get_id()),
+            OgcdOpener((Some(db.inner_release.get_id()), None)),
         ]
     };
 
     openers.extend(vec![
-        GcdOpener(db.storms_eye.get_id()),
-        OgcdOpener((Some(db.inner_release.get_id()), None)),
         GcdOpener(db.inner_chaos.get_id()),
         OgcdOpener((Some(db.upheaval.get_id()), Some(db.onslaught.get_id()))),
         GcdOpener(db.primal_rend.get_id()),
-        OgcdOpener((Some(db.infuriate.get_id()), None)),
-        GcdOpener(db.inner_chaos.get_id()),
         OgcdOpener((Some(db.onslaught.get_id()), None)),
-        GcdOpener(db.fell_cleave_inner.get_id()),
+        GcdOpener(db.primal_ruination.get_id()),
         OgcdOpener((Some(db.onslaught.get_id()), None)),
         GcdOpener(db.fell_cleave_inner.get_id()),
         OgcdOpener((None, None)),
         GcdOpener(db.fell_cleave_inner.get_id()),
-        OgcdOpener((Some(db.primal_wrath.get_id()), None)),
-        GcdOpener(db.primal_ruination.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.fell_cleave_inner.get_id()),
+        OgcdOpener((Some(db.primal_wrath.get_id()), Some(db.infuriate.get_id()))),
+        GcdOpener(db.inner_chaos.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.heavy_swing.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.maim.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.storms_path.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.fell_cleave.get_id()),
+        OgcdOpener((Some(db.infuriate.get_id()), None)),
+        GcdOpener(db.inner_chaos.get_id()),
     ]);
 
     openers
