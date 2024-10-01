@@ -108,7 +108,7 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
     case 1802:
       return actionIconDirectory + "/RDM/acceleration.png";
     case 1803:
-      return actionIconDirectory + "/RDM/Traits/dualcast.png";
+      return actionIconDirectory + "/RDM/dualcast.png";
 
     // PCT
     case 2000:
