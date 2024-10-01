@@ -77,9 +77,9 @@ pub(crate) fn make_redmage_opener(db: &RedmageDatabase, use_pots: bool) -> Vec<O
     };
 
     openers.extend(vec![
-        Opener::GcdOpener(db.grand_impact.get_id()),
-        Opener::OgcdOpener((Some(db.fleche.get_id()), Some(db.acceleration.get_id()))),
         Opener::GcdOpener(db.verthunder_iii_swift.get_id()),
+        Opener::OgcdOpener((Some(db.fleche.get_id()), Some(db.acceleration.get_id()))),
+        Opener::GcdOpener(db.verthunder_iii_accel.get_id()),
         Opener::OgcdOpener((Some(db.embolden.get_id()), Some(db.manafication.get_id()))),
         Opener::GcdOpener(db.manafication_riposte.get_id()),
         Opener::OgcdOpener((Some(db.contre_sixte.get_id()), None)),
@@ -96,6 +96,7 @@ pub(crate) fn make_redmage_opener(db: &RedmageDatabase, use_pots: bool) -> Vec<O
         )),
         Opener::GcdOpener(db.manafication_resolution.get_id()),
         Opener::OgcdOpener((Some(db.prefulgence.get_id()), None)),
+        Opener::GcdOpener(db.grand_impact.get_id()),
     ]);
 
     openers

@@ -4,7 +4,6 @@ use crate::request::simulation_api_request::SimulationApiRequest;
 use crate::response::convert_simulation_result::create_response_from_simulation_result;
 use crate::response::simulation_api_response::SimulationApiResponse;
 use axum::Json;
-use ffxiv_simhelper_combat_components::types::DpsType;
 use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 
 const NUMBER_OF_ITERATIONS_PER_REQUEST_QUICKSIM: usize = 2;
@@ -29,7 +28,7 @@ pub fn quicksim(
     let main_player_power = request.party[main_player_id as usize].power.clone();
     let main_player_job_abbrev = request.party[main_player_id as usize].job_abbrev.clone();
 
-    let simulation_board = create_simulation_board(request.clone(), true)?;
+    let simulation_board = create_simulation_board(request.clone())?;
     simulation_board.run_simulation();
     let simulation_result = simulation_board.create_simulation_result();
     let mut response = create_response_from_simulation_result(
@@ -39,7 +38,7 @@ pub fn quicksim(
     );
 
     for _ in 1..number_of_iterations {
-        let simulation_board = create_simulation_board(request.clone(), true)?;
+        let simulation_board = create_simulation_board(request.clone())?;
         simulation_board.run_simulation();
 
         let simulation_result = simulation_board.create_simulation_result();

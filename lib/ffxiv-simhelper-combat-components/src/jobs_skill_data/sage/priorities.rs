@@ -58,17 +58,19 @@ impl SagePriorityTable {
 pub(crate) fn make_sage_opener(db: &SageDatabase, use_pots: bool) -> Vec<Opener> {
     let mut openers = if use_pots {
         vec![
-            Opener::GcdOpener(db.gcd.get_id()),
+            Opener::GcdOpener(db.eukrasia.get_id()),
             Opener::OgcdOpener((Some(db.potion.get_id()), None)),
         ]
     } else {
         vec![
-            Opener::GcdOpener(db.gcd.get_id()),
+            Opener::GcdOpener(db.eukrasia.get_id()),
             Opener::OgcdOpener((None, None)),
         ]
     };
     openers.extend(vec![
-        Opener::GcdOpener(db.dot.get_id()),
+        Opener::GcdOpener(db.toxikon.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.eukrasia_dot_opener.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.gcd.get_id()),
         Opener::OgcdOpener((None, None)),

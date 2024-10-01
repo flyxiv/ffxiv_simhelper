@@ -68,10 +68,6 @@ pub(crate) fn make_summoner_opener(db: &SummonerDatabase, use_pots: bool) -> Vec
         vec![
             GcdOpener(db.ruin_iii.get_id()),
             OgcdOpener((None, None)),
-            GcdOpener(db.ruin_iii.get_id()),
-            OgcdOpener((None, None)),
-            GcdOpener(db.ruin_iii.get_id()),
-            OgcdOpener((Some(db.searing_light.get_id()), None)),
             GcdOpener(db.summon_solar_bahamut.get_id()),
             OgcdOpener((Some(db.potion.get_id()), None)),
         ]
@@ -79,28 +75,27 @@ pub(crate) fn make_summoner_opener(db: &SummonerDatabase, use_pots: bool) -> Vec
         vec![
             GcdOpener(db.ruin_iii.get_id()),
             OgcdOpener((None, None)),
-            GcdOpener(db.ruin_iii.get_id()),
-            OgcdOpener((None, None)),
-            GcdOpener(db.ruin_iii.get_id()),
-            OgcdOpener((Some(db.searing_light.get_id()), None)),
             GcdOpener(db.summon_solar_bahamut.get_id()),
-            OgcdOpener((None, None)),
+            OgcdOpener((Some(db.potion.get_id()), None)),
         ]
     };
 
     openers.extend(vec![
         GcdOpener(db.umbral_impulse.get_id()),
-        OgcdOpener((
-            Some(db.energy_drain.get_id()),
-            Some(db.searing_flash.get_id()),
-        )),
+        OgcdOpener((Some(db.searing_light.get_id()), None)),
+        GcdOpener(db.umbral_impulse.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.umbral_impulse.get_id()),
+        OgcdOpener((Some(db.energy_drain.get_id()), None)),
         GcdOpener(db.umbral_impulse.get_id()),
         OgcdOpener((
-            Some(db.necrotize.get_id()),
             Some(db.enkindle_solar_bahamut.get_id()),
+            Some(db.necrotize.get_id()),
         )),
         GcdOpener(db.umbral_impulse.get_id()),
-        OgcdOpener((Some(db.necrotize.get_id()), Some(db.sunflare.get_id()))),
+        OgcdOpener((Some(db.sunflare.get_id()), Some(db.necrotize.get_id()))),
+        GcdOpener(db.umbral_impulse.get_id()),
+        OgcdOpener((Some(db.searing_flash.get_id()), None)),
     ]);
 
     openers

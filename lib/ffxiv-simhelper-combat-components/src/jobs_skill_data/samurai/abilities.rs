@@ -39,6 +39,7 @@ pub(crate) struct SamuraiDatabase {
     pub(crate) zanshin: AttackSkill,
     pub(crate) tendo_setsugekka: AttackSkill,
     pub(crate) kaeshi_setsugekka: AttackSkill,
+    pub(crate) tengentsu: AttackSkill,
 
     pub(crate) higanbana_dot: DebuffStatus,
     pub(crate) meikyo_shisui_buff: BuffStatus,
@@ -922,6 +923,32 @@ impl SamuraiDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
+        let tengentsu: AttackSkill = AttackSkill {
+            id: 1126,
+            name: String::from("Tengentsu"),
+            player_id,
+            potency: 0,
+            trait_percent: 100,
+            additional_skill_events: vec![],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 0,
+            charging_time_millisecond: 0,
+            is_speed_buffed: true,
+            cooldown_reduced_by_speed: true,
+            cooldown_millisecond: 25000,
+            resource_required: vec![],
+            resource_created: Default::default(),
+            is_guaranteed_crit: true,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            max_stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: false,
+            use_type: UseType::NoTarget,
+        };
 
         let potion_skill = PotionSkill::new(player_id);
 
@@ -951,6 +978,7 @@ impl SamuraiDatabase {
             zanshin,
             tendo_setsugekka,
             kaeshi_setsugekka,
+            tengentsu,
 
             higanbana_dot,
             meikyo_shisui_buff,
@@ -989,6 +1017,7 @@ pub(crate) fn make_samurai_skill_list(player_id: PlayerIdType) -> SkillTable<Att
         db.zanshin,
         db.tendo_setsugekka,
         db.kaeshi_setsugekka,
+        db.tengentsu,
         db.potion,
     ];
 

@@ -26,7 +26,7 @@ pub fn stat_weights(request: StatWeightsApiRequest) -> Result<StatWeightsApiResp
     let mut dps_results: [i32; STAT_WEIGHTS_SIMULATION_COUNT] = [0; STAT_WEIGHTS_SIMULATION_COUNT];
 
     for simulation_idx in 0..STAT_WEIGHTS_SIMULATION_COUNT {
-        let simulation_board = create_simulation_board(SimulationApiRequest::from(&request), true)?;
+        let simulation_board = create_simulation_board(SimulationApiRequest::from(&request))?;
         simulation_board.run_simulation();
 
         let simulation_result = simulation_board.create_simulation_result();

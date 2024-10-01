@@ -417,6 +417,10 @@ pub(crate) fn make_samurai_ogcd_priority_table(
                 Box::new(HasResource(0, 50)),
             )),
         },
+        SkillPriorityInfo {
+            skill_id: db.tengentsu.get_id(),
+            prerequisite: Some(Not(Box::new(HasResource(0, 95)))),
+        },
     ]);
 
     skill_ogcd_priorities

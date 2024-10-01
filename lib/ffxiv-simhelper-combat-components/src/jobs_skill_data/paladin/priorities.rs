@@ -63,6 +63,8 @@ pub(crate) fn make_paladin_opener(db: &PaladinDatabase, use_pots: bool) -> Vec<O
             GcdOpener(db.weak_holy_spirit.get_id()),
             OgcdOpener((None, None)),
             GcdOpener(db.fast_blade.get_id()),
+            OgcdOpener((None, None)),
+            GcdOpener(db.riot_blade.get_id()),
             OgcdOpener((Some(db.potion.get_id()), None)),
         ]
     } else {
@@ -71,31 +73,32 @@ pub(crate) fn make_paladin_opener(db: &PaladinDatabase, use_pots: bool) -> Vec<O
             OgcdOpener((None, None)),
             GcdOpener(db.fast_blade.get_id()),
             OgcdOpener((None, None)),
+            GcdOpener(db.riot_blade.get_id()),
+            OgcdOpener((None, None)),
         ]
     };
 
     openers.extend(vec![
-        GcdOpener(db.riot_blade.get_id()),
-        OgcdOpener((None, None)),
         GcdOpener(db.royal_authority.get_id()),
         OgcdOpener((
             Some(db.fight_or_flight.get_id()),
             Some(db.imperator.get_id()),
         )),
-        GcdOpener(db.goring_blade.get_id()),
+        GcdOpener(db.confiteor.get_id()),
         OgcdOpener((
             Some(db.circle_of_scorn.get_id()),
             Some(db.explacion.get_id()),
         )),
-        GcdOpener(db.confiteor.get_id()),
-        OgcdOpener((Some(db.intervene.get_id()), None)),
         GcdOpener(db.blade_of_faith.get_id()),
         OgcdOpener((Some(db.intervene.get_id()), None)),
         GcdOpener(db.blade_of_truth.get_id()),
-        OgcdOpener((None, None)),
+        OgcdOpener((Some(db.intervene.get_id()), None)),
         GcdOpener(db.blade_of_valor.get_id()),
         OgcdOpener((Some(db.blade_of_honor.get_id()), None)),
-        GcdOpener(db.holy_spirit.get_id()),
+        GcdOpener(db.goring_blade.get_id()),
+        OgcdOpener((None, None)),
+        GcdOpener(db.atonement.get_id()),
+        OgcdOpener((None, None)),
     ]);
 
     openers

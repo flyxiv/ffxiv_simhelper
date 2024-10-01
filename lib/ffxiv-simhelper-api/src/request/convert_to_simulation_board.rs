@@ -2,10 +2,7 @@ use crate::errors::{FfxivSimbotServiceError, Result};
 use crate::request::simulation_api_request::PlayerInfoRequest;
 use ffxiv_simhelper_combat_components::event::FfxivEventQueue;
 use ffxiv_simhelper_combat_components::live_objects::player::ffxiv_player::FfxivPlayer;
-use ffxiv_simhelper_combat_components::live_objects::player::player_power::add_main_stat;
-use ffxiv_simhelper_combat_components::types::{
-    BuffIncreasePercentType, IncreaseType, PlayerIdType,
-};
+use ffxiv_simhelper_combat_components::types::PlayerIdType;
 use lazy_static::lazy_static;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -41,18 +38,11 @@ lazy_static! {
 /// Stat power and jobs
 pub(crate) fn create_player(
     player_info: PlayerInfoRequest,
-    composition_buff_percent: BuffIncreasePercentType,
     player_jobs: &[(PlayerIdType, String)],
     event_queue: Rc<RefCell<FfxivEventQueue>>,
     use_pots: bool,
 ) -> Result<FfxivPlayer> {
     let character_power = player_info.power;
-    let character_power = add_main_stat(
-        &character_power,
-        &player_info.job_abbrev,
-        character_power.main_stat as IncreaseType,
-        composition_buff_percent,
-    );
     let player_count = player_jobs.len();
 
     match player_info.job_abbrev.as_str() {

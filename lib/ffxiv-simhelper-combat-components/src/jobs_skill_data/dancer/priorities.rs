@@ -71,9 +71,13 @@ pub(crate) fn make_dancer_opener(db: &DancerDatabase, use_pots: bool) -> Vec<Ope
     opener.extend(vec![
         Opener::GcdOpener(db.technical_step.get_id()),
         Opener::OgcdOpener((Some(db.devilment.get_id()), None)),
-        Opener::GcdOpener(db.last_dance.get_id()),
+        Opener::GcdOpener(db.tillana.get_id()),
         Opener::OgcdOpener((Some(db.flourish.get_id()), None)),
-        Opener::GcdOpener(db.starfall_dance.get_id()),
+        Opener::GcdOpener(db.dance_of_the_dawn.get_id()),
+        Opener::OgcdOpener((Some(db.fan_dance4.get_id()), None)),
+        Opener::GcdOpener(db.last_dance.get_id()),
+        Opener::OgcdOpener((Some(db.fan_dance3.get_id()), None)),
+        Opener::GcdOpener(db.finishing_move.get_id()),
     ]);
 
     opener

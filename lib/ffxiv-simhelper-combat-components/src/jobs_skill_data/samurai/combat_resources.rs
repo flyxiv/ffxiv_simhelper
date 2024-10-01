@@ -94,7 +94,7 @@ impl SamuraiCombatResources {
         Self {
             skills: make_samurai_skill_list(player_id),
             current_combo: None,
-            resources: [120, 0, 0, 0, 0, 0],
+            resources: [0, 0, 0, 0, 0, 0],
         }
     }
 }
