@@ -173,6 +173,7 @@ fn get_auto_attack_interval_tuning_value_of_job(job_abbrev: &String) -> Multipli
         "WAR" => 0.75,
         "GNB" => 0.9,
         "DRG" => 0.9,
+        "MNK" => 0.95,
         _ => 1.0,
     }
 }
