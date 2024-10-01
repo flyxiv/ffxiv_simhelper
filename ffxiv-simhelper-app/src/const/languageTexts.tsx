@@ -693,7 +693,7 @@ export const ROTATION_SAMPLE_WARNING_TEXT =
 export const SAMURAI_ROTATION_WARNING_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "!!!Samurai's 'tengentsu' is simulated as a 35s skill(looking at logsmatch its 12 casts in a 6:30 fight)."
-    : "!!!사무라이의 '천격'은 35초 스킬로 시뮬레이션 되었습니다(로그를 봤을 때 6:30 전투에서 12번 정도 사용됨).";
+    : "!!!사무라이의 '심안'은 35초 스킬로 시뮬레이션 되었습니다(로그를 봤을 때 6:30 전투에서 12번 정도 사용됨).";
 
 export const ROTATION_SAMPLE_BUTTON_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
