@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, styled } from "@mui/material";
 import {
   BODY_WIDTH,
-  QUICKSIM_RESULT_URL,
+  QUICKSIM_URL,
   SINGLE_INPUT_SAVE_NAME,
 } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
@@ -58,6 +58,15 @@ export function isNotValid(input: EquipmentInput) {
       return true;
     }
 
+    if (input.equipmentDatas[i].mainPlayerPartner1Id === undefined) {
+      return true;
+    }
+
+    if (input.equipmentDatas[i].mainPlayerPartner2Id === undefined) {
+      return true;
+    }
+
+
     if (input.equipmentDatas[i].usePot === undefined) {
       return true;
     }
@@ -99,7 +108,7 @@ export function QuickSim() {
       >
         {LeftMenuWithLoadout(
           QUICKSIM_LOADOUT_COUNT,
-          QUICKSIM_RESULT_URL,
+          QUICKSIM_URL,
           QUICKSIM_PAGE_NAME,
           totalState,
           setTotalState
