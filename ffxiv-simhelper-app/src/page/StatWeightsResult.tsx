@@ -11,6 +11,7 @@ import { StatWeightsResponseTable } from "../types/StatWeightsResponse";
 import { StatWeightSummary } from "../components/container/StatSummary";
 import { SIMULATION_RESULT_TEXT, STAT_WEIGHTS_PAGE_NAME, STAT_WEIGHTS_TEXT } from "../const/languageTexts";
 import { EMPTY_PARTY_MEMBER } from "../types/PartyStates";
+import { STAT_WEIGHTS_REQUEST_COUNT } from "../components/basic/StatWeightsRequestButton";
 
 export interface StatWeightsData {
   statName: string;
@@ -71,7 +72,7 @@ export function StatWeightsResult() {
           {AppHeader()}
           <ResultBoardTopBox marginBottom="40px">
             {SimulationTitle(SIMULATION_RESULT_TEXT)}
-            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs)}
+            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, STAT_WEIGHTS_REQUEST_COUNT, 1)}
           </ResultBoardTopBox>
           <ResultBoardBox >
             {SimulationTitle(STAT_WEIGHTS_TEXT)}

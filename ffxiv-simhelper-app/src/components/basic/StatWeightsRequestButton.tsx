@@ -6,7 +6,7 @@ import {
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
 import {
-  STAT_WEIGHTS_REQUEST_SAVE_NAME,
+  SINGLE_INPUT_SAVE_NAME,
   STAT_WEIGHTS_RESPONSE_SAVE_NAME,
   STAT_WEIGHTS_RESULT_URL,
 } from "../../App";
@@ -53,6 +53,8 @@ const SKS_INCREASE_AMOUNT = 2;
 const SPS_INCREASE_AMOUNT = 2;
 const TEN_INCREASE_AMOUNT = 20;
 
+export const STAT_WEIGHTS_REQUEST_COUNT = 2000;
+
 export function StatWeightsRequestButton(totalState: EquipmentInput) {
   let [isRunning, setIsRunning] = useState(false);
 
@@ -78,7 +80,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
     setIsRunning(true);
     setButtonText(loadingButtonText(requestCount));
     let inputJson = JSON.stringify(totalState);
-    localStorage.setItem(STAT_WEIGHTS_REQUEST_SAVE_NAME, inputJson);
+    localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
     let statWeightsResponseTable: StatWeightsResponseTable = {
       combatTimeMillisecond: totalState.equipmentDatas[0].combatTimeMillisecond,
@@ -274,6 +276,7 @@ function createAugmentedRequest(
       partyMemberIlvl: 0,
       usePot: 1,
       power: defaultPlayerPower(),
+      compositionBuffPercent: 0,
     }
 
     let bisPower = calculatePlayerPowerFromInputs(playerTotalState);

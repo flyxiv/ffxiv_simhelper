@@ -11,6 +11,7 @@ import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { GEAR_COMPARE_PAGE_NAME, GEARSET1_TEXT, GEARSET2_TEXT } from "../const/languageTexts";
+import { GEAR_COMPARE_ITERATION_COUNT } from "../components/basic/GearCompareRequestButton";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -74,7 +75,9 @@ export function GearCompareResult() {
                 simulationResult1.mainPlayerPower,
                 simulationResult2.mainPlayerPower,
                 combatTimeMilliseconds,
-                partyMemberJobAbbrevs
+                partyMemberJobAbbrevs,
+                GEAR_COMPARE_ITERATION_COUNT,
+                0.1
               )}
             </ResultBoardTopBox>
             <ResultBoardTopBox>
@@ -85,7 +88,9 @@ export function GearCompareResult() {
                 simulationResult2.mainPlayerPower,
                 simulationResult1.mainPlayerPower,
                 combatTimeMilliseconds,
-                partyMemberJobAbbrevs
+                partyMemberJobAbbrevs,
+                GEAR_COMPARE_ITERATION_COUNT,
+                0.1
               )}
             </ResultBoardTopBox>
           </Box>

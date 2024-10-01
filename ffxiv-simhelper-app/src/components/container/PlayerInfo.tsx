@@ -13,7 +13,7 @@ const PlayerInfoJobTitle = styled(Box)`
   ${PlayerInfoJobTitleStyle}
 `;
 
-export function PlayerInfo(power: PlayerPower, job: string, combatTimeMilliseconds: number, partyMemberJobAbbrevs: string[] | null = null) {
+export function PlayerInfo(power: PlayerPower, job: string, combatTimeMilliseconds: number, partyMemberJobAbbrevs: string[] | null = null, iterationCount: number, variancePercent: number) {
 
   return (
     <PlayerInfoBox>
@@ -27,7 +27,7 @@ export function PlayerInfo(power: PlayerPower, job: string, combatTimeMillisecon
         ? PartyMemberJobsInfo(partyMemberJobAbbrevs)
         : null}
 
-      {SimulationInputSummary(power, job, combatTimeMilliseconds / 1000)}
+      {SimulationInputSummary(power, job, combatTimeMilliseconds / 1000, iterationCount, variancePercent)}
     </PlayerInfoBox>
   );
 }
@@ -51,7 +51,9 @@ export function StatComparePlayerInfo(
   targetStat: PlayerPower,
   compareStat: PlayerPower,
   combatTimeMilliseconds: number,
-  partyMemberJobAbbrevs: string[]
+  partyMemberJobAbbrevs: string[],
+  iterationCount: number,
+  variancePercent: number
 ) {
   return (
     <PlayerInfoBox>
@@ -63,7 +65,7 @@ export function StatComparePlayerInfo(
       </PlayerInfoJobTitle>
 
       {PartyMemberJobsInfo(partyMemberJobAbbrevs)}
-      {StatSummaryGearCompare(jobAbbrev, targetStat, compareStat, combatTimeMilliseconds)}
+      {StatSummaryGearCompare(jobAbbrev, targetStat, compareStat, combatTimeMilliseconds, iterationCount, variancePercent)}
     </PlayerInfoBox>
   );
 }

@@ -6,7 +6,6 @@ import {
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
 import {
-  BEST_PARTNER_INPUT_SAVE_NAME,
   BEST_PARTNER_RESPONSE_SAVE_NAME,
   BEST_PARTNER_RESULT_URL,
 } from "../../App";
@@ -34,6 +33,7 @@ import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
+export const BEST_PARTNER_ITERATION_COUNT = 2000;
 
 interface PartnerKey {
   jobAbbrev: string;
@@ -64,8 +64,6 @@ export function BestPartnerRequestButton(totalState: EquipmentInput) {
   const handleClick = async () => {
     setIsRunning(true);
     setButtonText(loadingButtonText(requestCount));
-    let inputJson = JSON.stringify(totalState);
-    localStorage.setItem(BEST_PARTNER_INPUT_SAVE_NAME, inputJson);
 
     let bestPartnerResponseTable: BestPartnerResponseTable = {
       combatTimeMillisecond: totalState.equipmentDatas[0].combatTimeMillisecond,
@@ -186,6 +184,7 @@ function createBestPartnerRequest(
       partyMemberIlvl: 0,
       usePot: 1,
       power: defaultPlayerPower(),
+      compositionBuffPercent: 0,
     }
     let partnerPower = calculatePlayerPowerFromInputs(playerTotalState);
     let autoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);

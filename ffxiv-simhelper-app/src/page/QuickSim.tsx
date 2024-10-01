@@ -30,7 +30,7 @@ import {
 } from "../const/languageTexts";
 
 export const INPUT_CONTAINER_WIDTH = "70%";
-const QUICKSIM_LOADOUT_COUNT = 6;
+export const QUICKSIM_LOADOUT_COUNT = 6;
 
 let QuickSimInputContainer = styled(Box)`
   ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}
@@ -65,6 +65,10 @@ export function isNotValid(input: EquipmentInput) {
     if (input.equipmentDatas[i].partyMemberJobAbbrevs.length === 0) {
       return true;
     }
+
+    if (input.equipmentDatas[i].compositionBuffPercent === undefined) {
+      return true;
+    }
   }
 
   return false;
@@ -85,7 +89,6 @@ export function QuickSim() {
   }
 
   const [totalState, setTotalState] = useState(mostRecentInput);
-  console.log(totalState);
 
   return (
     <>

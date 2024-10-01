@@ -59,7 +59,6 @@ export const DpsBoxStyle = `
 `;
 
 export const PlayerInfoBoxStyle = `
-  width: 40vw;
   margin: 1vh;
   background: ${AppConfigurations.backgroundThree};
   display: flex;
@@ -67,6 +66,8 @@ export const PlayerInfoBoxStyle = `
   align-items: center;
   padding-top: 10px;
   padding-bottom: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
 `;
 
 export const PlayerInfoJobTitleStyle = `
@@ -194,6 +195,9 @@ export const StatSummaryBoxStyle = `
 `;
 
 export const SingleStatBoxStyle = (width: string) => `
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
   border: 1px solid #201F28;
   width: ${width};

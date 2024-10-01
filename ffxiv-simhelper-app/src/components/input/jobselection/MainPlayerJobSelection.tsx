@@ -109,10 +109,12 @@ export function MainPlayerJobSelection(
       return;
     }
 
-    newTotalState.equipmentDatas[id].mainPlayerJobAbbrev = newJobAbbrev;
-    newTotalState.equipmentDatas[id].itemSet = bisForNewJob.itemSet;
-    newTotalState.equipmentDatas[id].gearSetMaterias = bisForNewJob.gearSetMaterias;
-    newTotalState.equipmentDatas[id].foodId = bisForNewJob.foodId;
+    newTotalState.equipmentDatas.forEach((data) => {
+      data.mainPlayerJobAbbrev = newJobAbbrev;
+      data.itemSet = bisForNewJob.itemSet;
+      data.gearSetMaterias = bisForNewJob.gearSetMaterias;
+      data.foodId = bisForNewJob.foodId;
+    })
 
     resetInvalidPartnersForNewJob(newTotalState.equipmentDatas[id]);
 

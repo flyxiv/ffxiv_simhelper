@@ -10,7 +10,7 @@ import { getBaseMainStat } from "../../const/StartStats";
 
 import { FOOD_DATABASE } from "./Food";
 import { addMateriaStatToTotalStat } from "./Materia";
-import { defaultPlayerPower, isTank, PlayerPower } from "./PlayerPower";
+import { defaultPlayerPower, isTank, PlayerPower, setPartyCompositionBuffPercent } from "./PlayerPower";
 import {
   calculateAutoDirectHitIncrease,
   calculateCriticalStrikePercentIncrease,
@@ -206,7 +206,8 @@ export function calculatePlayerPowerFromInputs(
     power.tenacity += Math.min(food.tenacity, Math.floor(power.tenacity / 10));
   }
 
-
+  setPartyCompositionBuffPercent(totalState);
+  power.mainStat = Math.floor(power.mainStat * (1 + totalState.compositionBuffPercent / 100));
 
   calculatePowerByStat(power, totalState.mainPlayerJobAbbrev);
 

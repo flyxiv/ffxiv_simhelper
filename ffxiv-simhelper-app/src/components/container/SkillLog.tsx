@@ -14,6 +14,8 @@ import {
   COMBAT_TIME_TEXT,
   IMPORTANT_STATUS_TEXT,
   ROTATION_SAMPLE_WARNING_TEXT,
+  SAM_EN_NAME,
+  SAMURAI_ROTATION_WARNING_TEXT,
 } from "../../const/languageTexts";
 import { AppConfigurations } from "../../Themes";
 
@@ -68,6 +70,15 @@ export const SkillLogResult = (response: QuickSimResponse) => {
       >
         {ROTATION_SAMPLE_WARNING_TEXT}
       </Typography>
+      {
+        response.mainPlayerJobAbbrev === SAM_EN_NAME ?
+          <Typography
+            sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}
+          >
+            {SAMURAI_ROTATION_WARNING_TEXT}
+          </Typography>
+          : <Box></Box>
+      }
       <SkillLogTableList>
         <ListItem>
           <SkillEntityBox>

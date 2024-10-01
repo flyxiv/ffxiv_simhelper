@@ -23,6 +23,7 @@ export interface SingleEquipmentInputSaveState {
   partyMemberIlvl: number;
   usePot: number;
   power: PlayerPower;
+  compositionBuffPercent: number;
 }
 
 export interface SingleEquipmentSetLoadoutData {

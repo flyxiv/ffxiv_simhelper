@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
 import {
-  BEST_PARTNER_INPUT_SAVE_NAME,
   BODY_WIDTH,
+  SINGLE_INPUT_SAVE_NAME,
 } from "../App";
 import { BestPartnerInputMenu } from "../components/input/basicform/EquipmentInputForm";
 import { EquipmentInput } from "../types/EquipmentInput";
@@ -35,6 +35,7 @@ import {
   WAR_EN_NAME,
   WHM_EN_NAME,
 } from "../const/languageTexts";
+import { isNotValid } from "./QuickSim";
 
 export enum JobRole {
   TANK,
@@ -54,26 +55,8 @@ let EquipmentBoard = styled(Box)`
   ${EquipmentBoardStyle}
 `;
 
-export function isNotValid(input: EquipmentInput) {
-  if (input.equipmentDatas === null || input.equipmentDatas === undefined) {
-    return true;
-  }
-
-  for (let i = 0; i < input.equipmentDatas.length; i++) {
-    if (input.equipmentDatas[i].partyMemberIlvl === undefined) {
-      return true;
-    }
-
-    if (input.equipmentDatas[i].usePot === undefined) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 export function BestPartner() {
-  let mostRecentInputState = localStorage.getItem(BEST_PARTNER_INPUT_SAVE_NAME);
+  let mostRecentInputState = localStorage.getItem(SINGLE_INPUT_SAVE_NAME);
   let mostRecentInput = null;
 
   if (mostRecentInputState === null) {

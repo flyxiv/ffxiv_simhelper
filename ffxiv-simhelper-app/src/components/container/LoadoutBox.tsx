@@ -1,7 +1,7 @@
-import { Box, Button, styled, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, styled, TextField, Typography } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import {
   defaultBestPartnerEquipmentInput,
@@ -9,10 +9,14 @@ import {
 } from "../../const/DefaultSingleEquipmentInput";
 import { BEST_PARTNER_URL } from "../../App";
 import {
+  CANCEL_TEXT,
+  CONFIRM_TEXT,
   DEFAULT_LOADOUT_TEXT,
-  LOAD_COMPLETE_TEXT,
+  LOAD_CONFIRM_TEXT,
   LOADOUT_LOAD_TEXT,
+  LOADOUT_NAME_TEXT,
   LOADOUT_WRITE_TEXT,
+  OVERWRITE_CONFIRM_TEXT,
   PLD_EN_NAME,
   SCH_EN_NAME,
 } from "../../const/languageTexts";
@@ -59,6 +63,9 @@ export function DefaultBestPartnerLoadoutMetadata(): LoadoutMetaData {
   };
 }
 
+const BLUR_COLOR = "gray";
+const FOCUS_COLOR = "black";
+
 export function LoadoutBox(
   loadoutId: number,
   simulationName: string,
@@ -66,9 +73,11 @@ export function LoadoutBox(
   setTotalState: Function,
   numberOfEquipmentSets: number
 ) {
-  let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState("");
+  let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState(LOADOUT_NAME_TEXT);
+  let [textColor, setColor] = useState(BLUR_COLOR);
   let loadoutSaveKey = `${simulationName}-${loadoutId}`;
   let loadoutMetadataSaveKey = `${simulationName}-loadoutMetadata-${loadoutId}`;
+  let [blur, setBlur] = useState(true);
 
   let savedLoadoutMetadataString = localStorage.getItem(loadoutMetadataSaveKey);
   let savedLoadoutMetadata =
@@ -80,6 +89,17 @@ export function LoadoutBox(
     savedLoadoutMetadata = JSON.parse(savedLoadoutMetadataString);
   }
   let [loadoutMetadata, setLoadoutMetadata] = useState(savedLoadoutMetadata);
+
+  const handleBlur = () => {
+    setColor(BLUR_COLOR);
+  };
+
+  const handleFocus = () => {
+    setTextFieldInputLoadoutName("");
+    setColor(FOCUS_COLOR);
+    setBlur(false);
+  }
+
 
   return (
     <Box
@@ -117,16 +137,22 @@ export function LoadoutBox(
       </Box>
       <Box>
         <LoadoutInput
-          InputLabelProps={{
+          InputProps={{
             sx: {
-              fontSize: "1.6vh",
+              "& .MuiInputBase-input": {
+                color: textColor, // 입력 필드 텍스트 색상 지정
+              },
             },
           }}
-          value={textFieldInputLoadoutName}
+          value={blur ? LOADOUT_NAME_TEXT : textFieldInputLoadoutName}
           onChange={(e) => {
-            setTextFieldInputLoadoutName(e.target.value);
+            if (!blur) {
+              setTextFieldInputLoadoutName(e.target.value);
+            }
           }}
           fullWidth
+          onBlur={handleBlur}
+          onFocus={handleFocus}
           sx={{ backgroundColor: "white", width: "100%" }}
         />
 
@@ -137,14 +163,14 @@ export function LoadoutBox(
             textFieldInputLoadoutName,
             totalState,
             setLoadoutMetadata,
-            setTextFieldInputLoadoutName
+            setBlur,
           )}
           {LoadoutLoadButton(
             loadoutSaveKey,
             simulationName,
             setTotalState,
-            setTextFieldInputLoadoutName,
-            numberOfEquipmentSets
+            numberOfEquipmentSets,
+            setBlur
           )}
         </Box>
       </Box>
@@ -158,36 +184,80 @@ function LoadoutOverwriteButton(
   textFieldInputLoadoutName: string,
   totalState: EquipmentInput,
   setLoadoutMetadata: Function,
-  setTextFieldInputLoadoutName: Function
+  setBlur: Function
 ) {
-  return (
-    <Button
-      sx={{
-        backgroundColor: AppConfigurations.primary,
-        color: "black",
-        borderRadius: 2,
-      }}
-      onClick={(_) => {
-        let newMetaData = {
-          loadoutName: textFieldInputLoadoutName,
-          jobAbbrev: totalState.equipmentDatas[0].mainPlayerJobAbbrev,
-        };
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [buttonClickConfirmed, setButtonClickConfirmed] = useState(false);
 
-        localStorage.setItem(loadoutSaveKey, JSON.stringify(totalState));
-        localStorage.setItem(
-          loadoutMetadataSaveKey,
-          JSON.stringify(newMetaData)
-        );
-        setLoadoutMetadata(newMetaData);
-        setTextFieldInputLoadoutName("");
-      }}
-    >
-      <Typography
-        sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}
+  const handleDialogClose = () => {
+    setDialogOpen(false); // 다이얼로그 닫기
+  };
+
+  const handleConfirm = () => {
+    setDialogOpen(false);
+    setButtonClickConfirmed(true); // 다이얼로그 확인 클릭 시 버튼 클릭 확정
+    let newMetaData = {
+      loadoutName: textFieldInputLoadoutName,
+      jobAbbrev: totalState.equipmentDatas[0].mainPlayerJobAbbrev,
+    };
+
+    localStorage.setItem(loadoutSaveKey, JSON.stringify(totalState));
+    localStorage.setItem(
+      loadoutMetadataSaveKey,
+      JSON.stringify(newMetaData)
+    );
+
+    setLoadoutMetadata(newMetaData);
+    setBlur(true);
+  };
+
+
+  useEffect(() => {
+    if (buttonClickConfirmed) {
+      // 여기서 실제 버튼의 onClick 이벤트 처리
+      setButtonClickConfirmed(false); // 상태 초기화
+    }
+  }, [buttonClickConfirmed]);
+
+  return (
+    <>
+      <Button
+        sx={{
+          backgroundColor: AppConfigurations.primary,
+          color: "black",
+          borderRadius: 2,
+        }}
+        onClick={() => {
+          setDialogOpen(true);
+        }}
       >
-        {LOADOUT_WRITE_TEXT}
-      </Typography>
-    </Button>
+        <Typography
+          sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}
+        >
+          {LOADOUT_WRITE_TEXT}
+        </Typography>
+      </Button>
+      <Dialog
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        aria-labelledby="confirm-dialog-title"
+        aria-describedby="confirm-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="confirm-dialog-description">
+            {OVERWRITE_CONFIRM_TEXT}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirm} color="primary" autoFocus>
+            {CONFIRM_TEXT}
+          </Button>
+          <Button onClick={handleDialogClose} color="primary">
+            {CANCEL_TEXT}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 
@@ -195,41 +265,82 @@ function LoadoutLoadButton(
   loadoutSaveKey: string,
   simulationName: string,
   setTotalState: Function,
-  setTextFieldInputLoadoutName: Function,
-  numberOfEquipmentSets: number
+  numberOfEquipmentSets: number,
+  setBlur: Function
 ) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [buttonClickConfirmed, setButtonClickConfirmed] = useState(false);
+
+  const handleDialogClose = () => {
+    setDialogOpen(false); // 다이얼로그 닫기
+  };
+
+  const handleConfirm = () => {
+    setDialogOpen(false);
+    setButtonClickConfirmed(true); // 다이얼로그 확인 클릭 시 버튼 클릭 확정
+    let savedLoadoutDataString = localStorage.getItem(loadoutSaveKey);
+    let savedLoadoutData =
+      simulationName !== BEST_PARTNER_URL
+        ? defaultSingleEquipmentInput()
+        : defaultBestPartnerEquipmentInput();
+
+    let defaultSet = savedLoadoutData.equipmentDatas[0];
+    for (let i = 1; i < numberOfEquipmentSets; i++) {
+      savedLoadoutData.equipmentDatas.push({ ...defaultSet });
+    }
+
+    if (savedLoadoutDataString !== null) {
+      savedLoadoutData = JSON.parse(savedLoadoutDataString);
+    }
+
+    setTotalState(savedLoadoutData);
+    setBlur(true);
+  };
+
+
+  useEffect(() => {
+    if (buttonClickConfirmed) {
+      setButtonClickConfirmed(false); // 상태 초기화
+    }
+  }, [buttonClickConfirmed]);
   return (
-    <Button
-      sx={{
-        backgroundColor: AppConfigurations.primary,
-        color: "black",
-        borderRadius: 2,
-      }}
-      onClick={(_) => {
-        let savedLoadoutDataString = localStorage.getItem(loadoutSaveKey);
-        let savedLoadoutData =
-          simulationName !== BEST_PARTNER_URL
-            ? defaultSingleEquipmentInput()
-            : defaultBestPartnerEquipmentInput();
-
-        let defaultSet = savedLoadoutData.equipmentDatas[0];
-        for (let i = 1; i < numberOfEquipmentSets; i++) {
-          savedLoadoutData.equipmentDatas.push({ ...defaultSet });
-        }
-
-        if (savedLoadoutDataString !== null) {
-          savedLoadoutData = JSON.parse(savedLoadoutDataString);
-        }
-
-        setTotalState(savedLoadoutData);
-        setTextFieldInputLoadoutName(LOAD_COMPLETE_TEXT);
-      }}
-    >
-      <Typography
-        sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}
+    <>
+      <Button
+        sx={{
+          backgroundColor: AppConfigurations.primary,
+          color: "black",
+          borderRadius: 2,
+        }}
+        onClick={() => {
+          setDialogOpen(true);
+        }}
       >
-        {LOADOUT_LOAD_TEXT}
-      </Typography>
-    </Button>
+        <Typography
+          sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}
+        >
+          {LOADOUT_LOAD_TEXT}
+        </Typography>
+      </Button>
+      <Dialog
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        aria-labelledby="confirm-dialog-title"
+        aria-describedby="confirm-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="confirm-dialog-description">
+            {LOAD_CONFIRM_TEXT}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirm} color="primary" autoFocus>
+            {CONFIRM_TEXT}
+          </Button>
+          <Button onClick={handleDialogClose} color="primary">
+            {CANCEL_TEXT}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

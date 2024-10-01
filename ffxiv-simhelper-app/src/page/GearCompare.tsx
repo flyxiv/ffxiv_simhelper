@@ -49,7 +49,7 @@ let EquipmentBoard = styled(Box)`
   ${EquipmentBoardStyle}
 `;
 
-export function isNotValid(input: EquipmentInput) {
+export function isNotValidGearCompare(input: EquipmentInput) {
   if (
     input.equipmentDatas === null ||
     input.equipmentDatas === undefined ||
@@ -64,6 +64,9 @@ export function isNotValid(input: EquipmentInput) {
     }
 
     if (input.equipmentDatas[i].usePot === undefined) {
+      return true;
+    }
+    if (input.equipmentDatas[i].compositionBuffPercent === undefined) {
       return true;
     }
   }
@@ -83,7 +86,7 @@ export function GearCompare() {
     mostRecentInput = JSON.parse(mostRecentInputState) as EquipmentInput;
   }
 
-  if (isNotValid(mostRecentInput)) {
+  if (isNotValidGearCompare(mostRecentInput)) {
     mostRecentInput = defaultDoubleEquipmentInput();
   }
 

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Box, styled } from "@mui/material";
 import {
   BODY_WIDTH,
-  STAT_WEIGHTS_REQUEST_SAVE_NAME,
-  STAT_WEIGHTS_URL,
+  QUICKSIM_URL,
+  SINGLE_INPUT_SAVE_NAME,
 } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatPowerSummary } from "../components/container/StatSummary";
@@ -26,11 +26,11 @@ import {
   PLAYER_POWER_TEXT,
   QUICK_SIM_INPUT_INFO_TEXT,
   QUICK_SIM_PARTY_INPUT_INFO_TEXT,
-  STAT_WEIGHTS_PAGE_NAME,
+  QUICKSIM_PAGE_NAME,
 } from "../const/languageTexts";
+import { isNotValid, QUICKSIM_LOADOUT_COUNT } from "./QuickSim";
 
 let INPUT_CONTAINER_WIDTH = "70%";
-const STATWEIGHTS_LOADOUT_COUNT = 6;
 
 let StatWeightsInputContainer = styled(Box)`
   ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}
@@ -44,31 +44,9 @@ let EquipmentBoard = styled(Box)`
   ${EquipmentBoardStyle}
 `;
 
-export function isNotValid(input: EquipmentInput) {
-  if (input.equipmentDatas === null || input.equipmentDatas === undefined) {
-    return true;
-  }
-
-  for (let i = 0; i < input.equipmentDatas.length; i++) {
-    if (input.equipmentDatas[i].partyMemberIlvl === undefined) {
-      return true;
-    }
-
-    if (input.equipmentDatas[i].usePot === undefined) {
-      return true;
-    }
-
-    if (input.equipmentDatas[i].partyMemberJobAbbrevs.length === 0) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 export function StatWeights() {
   let mostRecentInputState = localStorage.getItem(
-    STAT_WEIGHTS_REQUEST_SAVE_NAME
+    SINGLE_INPUT_SAVE_NAME
   );
   let mostRecentInput = null;
 
@@ -83,7 +61,6 @@ export function StatWeights() {
   }
 
   const [totalState, setTotalState] = useState(mostRecentInput);
-  console.log(totalState)
 
   return (
     <>
@@ -93,9 +70,9 @@ export function StatWeights() {
         width="100vw"
       >
         {LeftMenuWithLoadout(
-          STATWEIGHTS_LOADOUT_COUNT,
-          STAT_WEIGHTS_URL,
-          STAT_WEIGHTS_PAGE_NAME,
+          QUICKSIM_LOADOUT_COUNT,
+          QUICKSIM_URL,
+          QUICKSIM_PAGE_NAME,
           totalState,
           setTotalState
         )}
