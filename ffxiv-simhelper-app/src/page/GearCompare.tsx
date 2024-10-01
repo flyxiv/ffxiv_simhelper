@@ -66,6 +66,9 @@ export function isNotValidGearCompare(input: EquipmentInput) {
     if (input.equipmentDatas[i].usePot === undefined) {
       return true;
     }
+    if (input.equipmentDatas[i].compositionBuffPercent === undefined) {
+      return true;
+    }
   }
 
   return false;

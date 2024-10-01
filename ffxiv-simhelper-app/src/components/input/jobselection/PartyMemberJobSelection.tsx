@@ -126,17 +126,18 @@ export function PartyMemberJobSelection(
     newTotalState.equipmentDatas.forEach((data) => {
       data.partyMemberJobAbbrevs = newJobNames;
       data.partyMemberIds = newAvailablePartyIds;
-      let updatePower = calculatePlayerPowerFromInputs(newTotalState.equipmentDatas[0]);
+      let updatePower = calculatePlayerPowerFromInputs(data);
       data.power = updatePower;
+
+      if (data.mainPlayerPartner1Id === id) {
+        newTotalState.equipmentDatas[id].mainPlayerPartner1Id = null;
+      }
+
+      if (data.mainPlayerPartner2Id === id) {
+        newTotalState.equipmentDatas[id].mainPlayerPartner2Id = null;
+      }
     });
 
-    if (newTotalState.equipmentDatas[id].mainPlayerPartner1Id === id) {
-      newTotalState.equipmentDatas[id].mainPlayerPartner1Id = null;
-    }
-
-    if (newTotalState.equipmentDatas[id].mainPlayerPartner2Id === id) {
-      newTotalState.equipmentDatas[id].mainPlayerPartner2Id = null;
-    }
 
 
     setTotalState({ ...newTotalState });

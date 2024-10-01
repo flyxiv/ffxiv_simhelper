@@ -102,8 +102,9 @@ export function BestPartnerResult() {
               responseJson.mainPlayerPower,
               mainPlayerJob,
               responseJson.combatTimeMillisecond,
+              null,
               BEST_PARTNER_ITERATION_COUNT,
-              1,
+              1
             )}
           </ResultTopBoardBox>
           <ResultBoardBox>

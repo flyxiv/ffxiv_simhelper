@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, styled, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, styled, TextField, Typography } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { useEffect, useState } from "react";
@@ -78,6 +78,7 @@ export function LoadoutBox(
   let [textColor, setColor] = useState(BLUR_COLOR);
   let loadoutSaveKey = `${simulationName}-${loadoutId}`;
   let loadoutMetadataSaveKey = `${simulationName}-loadoutMetadata-${loadoutId}`;
+  let [blur, setBlur] = useState(true);
 
   let savedLoadoutMetadataString = localStorage.getItem(loadoutMetadataSaveKey);
   let savedLoadoutMetadata =
@@ -91,13 +92,13 @@ export function LoadoutBox(
   let [loadoutMetadata, setLoadoutMetadata] = useState(savedLoadoutMetadata);
 
   const handleBlur = () => {
-    setTextFieldInputLoadoutName(LOADOUT_NAME_TEXT);
     setColor(BLUR_COLOR);
   };
 
   const handleFocus = () => {
     setTextFieldInputLoadoutName("");
     setColor(FOCUS_COLOR);
+    setBlur(false);
   }
 
 
@@ -144,9 +145,11 @@ export function LoadoutBox(
               },
             },
           }}
-          value={textFieldInputLoadoutName}
+          value={blur ? LOADOUT_NAME_TEXT : textFieldInputLoadoutName}
           onChange={(e) => {
-            setTextFieldInputLoadoutName(e.target.value);
+            if (!blur) {
+              setTextFieldInputLoadoutName(e.target.value);
+            }
           }}
           fullWidth
           onBlur={handleBlur}
@@ -161,14 +164,14 @@ export function LoadoutBox(
             textFieldInputLoadoutName,
             totalState,
             setLoadoutMetadata,
-            setTextFieldInputLoadoutName
+            setBlur,
           )}
           {LoadoutLoadButton(
             loadoutSaveKey,
             simulationName,
             setTotalState,
-            setTextFieldInputLoadoutName,
-            numberOfEquipmentSets
+            numberOfEquipmentSets,
+            setBlur
           )}
         </Box>
       </Box>
@@ -182,7 +185,7 @@ function LoadoutOverwriteButton(
   textFieldInputLoadoutName: string,
   totalState: EquipmentInput,
   setLoadoutMetadata: Function,
-  setTextFieldInputLoadoutName: Function
+  setBlur: Function
 ) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [buttonClickConfirmed, setButtonClickConfirmed] = useState(false);
@@ -204,15 +207,15 @@ function LoadoutOverwriteButton(
       loadoutMetadataSaveKey,
       JSON.stringify(newMetaData)
     );
+
     setLoadoutMetadata(newMetaData);
-    setTextFieldInputLoadoutName("");
+    setBlur(true);
   };
 
 
   useEffect(() => {
     if (buttonClickConfirmed) {
       // 여기서 실제 버튼의 onClick 이벤트 처리
-      console.log("Button action confirmed and executed!");
       setButtonClickConfirmed(false); // 상태 초기화
     }
   }, [buttonClickConfirmed]);
@@ -263,8 +266,8 @@ function LoadoutLoadButton(
   loadoutSaveKey: string,
   simulationName: string,
   setTotalState: Function,
-  setTextFieldInputLoadoutName: Function,
-  numberOfEquipmentSets: number
+  numberOfEquipmentSets: number,
+  setBlur: Function
 ) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [buttonClickConfirmed, setButtonClickConfirmed] = useState(false);
@@ -292,14 +295,12 @@ function LoadoutLoadButton(
     }
 
     setTotalState(savedLoadoutData);
-    setTextFieldInputLoadoutName(LOAD_COMPLETE_TEXT);
+    setBlur(true);
   };
 
 
   useEffect(() => {
     if (buttonClickConfirmed) {
-      // 여기서 실제 버튼의 onClick 이벤트 처리
-      console.log("Button action confirmed and executed!");
       setButtonClickConfirmed(false); // 상태 초기화
     }
   }, [buttonClickConfirmed]);

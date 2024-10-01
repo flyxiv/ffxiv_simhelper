@@ -4,7 +4,6 @@ import {
   BODY_WIDTH,
   QUICKSIM_URL,
   SINGLE_INPUT_SAVE_NAME,
-  STAT_WEIGHTS_URL,
 } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatPowerSummary } from "../components/container/StatSummary";

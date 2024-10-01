@@ -184,6 +184,7 @@ function createBestPartnerRequest(
       partyMemberIlvl: 0,
       usePot: 1,
       power: defaultPlayerPower(),
+      compositionBuffPercent: 0,
     }
     let partnerPower = calculatePlayerPowerFromInputs(playerTotalState);
     let autoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);

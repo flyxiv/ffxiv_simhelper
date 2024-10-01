@@ -276,6 +276,7 @@ function createAugmentedRequest(
       partyMemberIlvl: 0,
       usePot: 1,
       power: defaultPlayerPower(),
+      compositionBuffPercent: 0,
     }
 
     let bisPower = calculatePlayerPowerFromInputs(playerTotalState);
