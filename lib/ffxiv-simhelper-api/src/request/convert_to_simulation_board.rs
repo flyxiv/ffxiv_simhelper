@@ -92,11 +92,13 @@ pub(crate) fn create_player(
             player_info.player_id,
             character_power,
             get_partner_id(
+                player_info.player_id,
                 player_info.partner1_id,
                 player_jobs,
                 PartnerCategory::MeleePartner,
             ),
             get_partner_id(
+                player_info.player_id,
                 player_info.partner2_id,
                 player_jobs,
                 PartnerCategory::RangedPartner,
@@ -164,6 +166,7 @@ pub(crate) fn create_player(
         "DNC" => Ok(FfxivPlayer::new_dancer(
             player_info.player_id,
             get_partner_id(
+                player_info.player_id,
                 player_info.partner1_id,
                 player_jobs,
                 PartnerCategory::AllPartner,
@@ -213,6 +216,7 @@ pub(crate) fn create_player(
 }
 
 fn get_partner_id(
+    player_id: PlayerIdType,
     partner_id: Option<PlayerIdType>,
     party_jobs: &[(PlayerIdType, String)],
     partner_category: PartnerCategory,
@@ -228,7 +232,7 @@ fn get_partner_id(
 
             for job in partner_priority_table {
                 for (id, job_name) in party_jobs {
-                    if job_name == *job && *id != 0 {
+                    if job_name == *job && *id != player_id {
                         return *id;
                     }
                 }
