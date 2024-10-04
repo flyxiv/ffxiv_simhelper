@@ -99,6 +99,7 @@ export function PartyMemberJobSelection(
   setTotalState: Function
 ) {
   let playerId = `${PARTY_MEMBER_LABEL_TEXT} ${id}`;
+
   const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
     const newJobNames =
       totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs.map(
@@ -130,15 +131,13 @@ export function PartyMemberJobSelection(
       data.power = updatePower;
 
       if (data.mainPlayerPartner1Id === id) {
-        newTotalState.equipmentDatas[id].mainPlayerPartner1Id = null;
+        data.mainPlayerPartner1Id = null;
       }
 
       if (data.mainPlayerPartner2Id === id) {
-        newTotalState.equipmentDatas[id].mainPlayerPartner2Id = null;
+        data.mainPlayerPartner2Id = null;
       }
     });
-
-
 
     setTotalState({ ...newTotalState });
   };

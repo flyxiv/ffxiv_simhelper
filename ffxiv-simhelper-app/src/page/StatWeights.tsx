@@ -26,7 +26,7 @@ import {
   PLAYER_POWER_TEXT,
   QUICK_SIM_INPUT_INFO_TEXT,
   QUICK_SIM_PARTY_INPUT_INFO_TEXT,
-  QUICKSIM_PAGE_NAME,
+  STAT_WEIGHTS_PAGE_NAME,
 } from "../const/languageTexts";
 import { isNotValid, QUICKSIM_LOADOUT_COUNT } from "./QuickSim";
 
@@ -72,7 +72,7 @@ export function StatWeights() {
         {LeftMenuWithLoadout(
           QUICKSIM_LOADOUT_COUNT,
           QUICKSIM_URL,
-          QUICKSIM_PAGE_NAME,
+          STAT_WEIGHTS_PAGE_NAME,
           totalState,
           setTotalState
         )}
