@@ -176,6 +176,7 @@ export function getMinNeededStatForStatLadder(
   slope: number,
   baseValue: number
 ) {
+  currentIncreasePercent = Math.round(currentIncreasePercent * 10) / 10;
   if (currentIncreasePercent === 0) {
     return baseValue;
   }
@@ -216,6 +217,7 @@ export function getMinNeededStatForCurrentDirectHit(
 export function getMinNeededStatForCurrentDetermination(
   currentIncreasePercent: number
 ) {
+  console.log(currentIncreasePercent)
   return getMinNeededStatForStatLadder(
     currentIncreasePercent,
     DET_SLOPE,

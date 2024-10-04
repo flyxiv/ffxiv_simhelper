@@ -6,7 +6,7 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
   switch (statusId) {
     // PLD
     case 1900:
-      return actionIconDirectory + "/PLD/requiescat.png";
+      return actionIconDirectory + "/PLD/imperator.png";
     case 1901:
       return actionIconDirectory + "/PLD/fight_or_flight.png";
 

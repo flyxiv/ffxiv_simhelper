@@ -45,7 +45,10 @@ export function EquipmentItem(
           variant="body2"
           justifyContent={"center"}
           sx={{
-            fontSize: "0.8vw",
+            fontSize: {
+              xs: "1.6vw",
+              lg: "0.9vw"
+            }
           }}
           color="white"
           align="left"
@@ -55,7 +58,10 @@ export function EquipmentItem(
         <Typography
           variant="body2"
           sx={{
-            fontSize: "0.6vw",
+            fontSize: {
+              xs: "1.4vw",
+              lg: "0.7vw"
+            },
           }}
           color="white"
           align="left"
