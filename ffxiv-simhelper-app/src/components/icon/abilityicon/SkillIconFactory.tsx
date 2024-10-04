@@ -5,7 +5,7 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
   switch (skillId) {
     // PLD
     case 1900:
-      return actionIconDirectory + "/PLD/requiescat.png";
+      return actionIconDirectory + "/PLD/imperator.png";
     case 1901:
       return actionIconDirectory + "/PLD/goring_blade.png";
     case 1902:
