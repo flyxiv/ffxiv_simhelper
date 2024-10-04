@@ -228,7 +228,7 @@ pub(crate) fn make_reaper_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.arcane_circle.get_id(),
-            prerequisite: Some(MillisecondsBeforeBurst(500)),
+            prerequisite: Some(HasResourceExactly(3, 4)),
         },
         SkillPriorityInfo {
             skill_id: db.enshroud.get_id(),
@@ -247,7 +247,7 @@ pub(crate) fn make_reaper_ogcd_priority_table(
                         )),
                         Box::new(HasResource(0, 70)),
                     )),
-                    Box::new(MillisecondsBeforeBurst(7000)),
+                    Box::new(MillisecondsBeforeBurst(9000)),
                 )),
                 Box::new(And(
                     Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),

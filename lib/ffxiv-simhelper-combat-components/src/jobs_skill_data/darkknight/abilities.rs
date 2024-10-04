@@ -30,8 +30,11 @@ pub(crate) struct DarkknightDatabase {
     pub(crate) salt_and_darkness: AttackSkill,
     pub(crate) comeuppance: AttackSkill,
     pub(crate) torcleaver: AttackSkill,
+    pub(crate) the_blackest_night: AttackSkill,
+    pub(crate) edge_of_shadow_proc: AttackSkill,
 
     pub(crate) darkside: BuffStatus,
+    pub(crate) the_blackest_night_proc: BuffStatus,
 
     pub(crate) potion: AttackSkill,
 }
@@ -105,6 +108,19 @@ impl DarkknightDatabase {
         let torcleaver_ready: BuffStatus = BuffStatus {
             id: 205,
             name: String::from("Torcleaver Ready"),
+            stacks: 1,
+            max_stacks: 1,
+            owner_id: player_id,
+            duration_left_millisecond: 0,
+            status_info: vec![],
+            duration_millisecond: 30000,
+            is_raidwide: false,
+            trigger_proc_event_on_gcd: vec![],
+        };
+
+        let the_blackest_night_proc: BuffStatus = BuffStatus {
+            id: 206,
+            name: String::from("Blackest Night Proc"),
             stacks: 1,
             max_stacks: 1,
             owner_id: player_id,
@@ -579,7 +595,72 @@ impl DarkknightDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-
+        let the_blackest_night: AttackSkill = AttackSkill {
+            id: 216,
+            name: String::from("The Blackest Night"),
+            player_id,
+            potency: 0,
+            trait_percent: 100,
+            additional_skill_events: vec![ApplyBuff(
+                player_id,
+                player_id,
+                the_blackest_night_proc.clone(),
+                30000,
+                30000,
+                0,
+            )],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 3000,
+            charging_time_millisecond: 0,
+            is_speed_buffed: false,
+            cooldown_reduced_by_speed: false,
+            cooldown_millisecond: 0,
+            resource_required: vec![Resource(0, 3000)],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            max_stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: false,
+            use_type: UseType::UseOnTarget,
+        };
+        let edge_of_shadow_proc: AttackSkill = AttackSkill {
+            id: 217,
+            name: String::from("Edge of Shadow"),
+            player_id,
+            potency: 460,
+            trait_percent: 100,
+            additional_skill_events: vec![ApplyBuff(
+                player_id,
+                player_id,
+                darkside.clone(),
+                30000,
+                60000,
+                0,
+            )],
+            proc_events: vec![],
+            combo: None,
+            delay_millisecond: None,
+            casting_time_millisecond: 0,
+            gcd_cooldown_millisecond: 0,
+            charging_time_millisecond: 0,
+            is_speed_buffed: false,
+            cooldown_reduced_by_speed: false,
+            cooldown_millisecond: 0,
+            resource_required: vec![UseBuff(the_blackest_night_proc.get_id())],
+            resource_created: Default::default(),
+            is_guaranteed_crit: false,
+            current_cooldown_millisecond: 0,
+            stacks: 1,
+            max_stacks: 1,
+            stack_skill_id: None,
+            is_guaranteed_direct_hit: false,
+            use_type: UseType::UseOnTarget,
+        };
         let potion_skill = PotionSkill::new(player_id);
 
         DarkknightDatabase {
@@ -599,8 +680,11 @@ impl DarkknightDatabase {
             torcleaver,
             scarlet_delirium,
             disesteem,
+            the_blackest_night,
+            edge_of_shadow_proc,
 
             darkside,
+            the_blackest_night_proc,
 
             potion: potion_skill.potion,
         }
@@ -627,6 +711,8 @@ pub(crate) fn make_darkknight_skill_list(player_id: PlayerIdType) -> SkillTable<
         db.torcleaver,
         db.scarlet_delirium,
         db.disesteem,
+        db.the_blackest_night,
+        db.edge_of_shadow_proc,
         db.potion,
     ];
 

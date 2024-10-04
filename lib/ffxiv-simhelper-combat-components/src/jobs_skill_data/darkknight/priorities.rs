@@ -60,11 +60,15 @@ impl DarkknightPriorityTable {
 pub(crate) fn make_darkknight_opener(db: &DarkknightDatabase, use_pots: bool) -> Vec<Opener> {
     let mut openers = if use_pots {
         vec![
+            GcdOpener(db.the_blackest_night.get_id()),
+            OgcdOpener((None, None)),
             GcdOpener(db.hard_slash.get_id()),
-            OgcdOpener((Some(db.edge_of_shadow.get_id()), Some(db.potion.get_id()))),
+            OgcdOpener((Some(db.potion.get_id()), Some(db.edge_of_shadow.get_id()))),
         ]
     } else {
         vec![
+            GcdOpener(db.the_blackest_night.get_id()),
+            OgcdOpener((None, None)),
             GcdOpener(db.hard_slash.get_id()),
             OgcdOpener((Some(db.edge_of_shadow.get_id()), None)),
         ]
@@ -78,7 +82,7 @@ pub(crate) fn make_darkknight_opener(db: &DarkknightDatabase, use_pots: bool) ->
         GcdOpener(db.disesteem.get_id()),
         OgcdOpener((
             Some(db.salted_earth.get_id()),
-            Some(db.edge_of_shadow.get_id()),
+            Some(db.edge_of_shadow_proc.get_id()),
         )),
         GcdOpener(db.scarlet_delirium.get_id()),
         OgcdOpener((
@@ -88,7 +92,7 @@ pub(crate) fn make_darkknight_opener(db: &DarkknightDatabase, use_pots: bool) ->
         GcdOpener(db.comeuppance.get_id()),
         OgcdOpener((
             Some(db.carve_and_spit.get_id()),
-            Some(db.salt_and_darkness.get_id()),
+            Some(db.edge_of_shadow.get_id()),
         )),
         GcdOpener(db.torcleaver.get_id()),
         OgcdOpener((
@@ -96,6 +100,7 @@ pub(crate) fn make_darkknight_opener(db: &DarkknightDatabase, use_pots: bool) ->
             Some(db.edge_of_shadow.get_id()),
         )),
         GcdOpener(db.bloodspiller.get_id()),
+        OgcdOpener((Some(db.salt_and_darkness.get_id()), None)),
     ]);
 
     openers

@@ -205,25 +205,28 @@ pub(crate) fn make_dragoon_ogcd_priority_table(
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.life_surge.get_id(),
+            prerequisite: Some(And(
+                Box::new(Or(Box::new(Combo(Some(3))), Box::new(Combo(Some(7))))),
+                Box::new(Or(
+                    Box::new(HasBufforDebuff(db.lance_charge_buff.id)),
+                    Box::new(Or(
+                        Box::new(RelatedSkillCooldownLessOrEqualThan(
+                            db.life_surge.get_id(),
+                            0,
+                        )),
+                        Box::new(MillisecondsBeforeBurst(0)),
+                    )),
+                )),
+            )),
+        },
+        SkillPriorityInfo {
             skill_id: db.nastrond.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.mirage_dive.get_id(),
             prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.life_surge.get_id(),
-            prerequisite: Some(And(
-                Box::new(Or(Box::new(Combo(Some(3))), Box::new(Combo(Some(7))))),
-                Box::new(Or(
-                    Box::new(HasBufforDebuff(db.lance_charge_buff.id)),
-                    Box::new(RelatedSkillCooldownLessOrEqualThan(
-                        db.life_surge.get_id(),
-                        10000,
-                    )),
-                )),
-            )),
         },
         SkillPriorityInfo {
             skill_id: db.wyrmwind_thrust.get_id(),

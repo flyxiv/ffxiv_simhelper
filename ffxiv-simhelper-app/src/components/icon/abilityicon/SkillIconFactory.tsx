@@ -108,6 +108,10 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
       return actionIconDirectory + "/DRK/comeuppance.png";
     case 215:
       return actionIconDirectory + "/DRK/torcleaver.png";
+    case 216:
+      return actionIconDirectory + "/DRK/the_blackest_night.png";
+    case 217:
+      return actionIconDirectory + "/DRK/edge_of_shadow.png";
 
     // GNB
     case 300:
@@ -652,7 +656,6 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
       return actionIconDirectory + "/MCH/hypercharge.png";
     case 1421:
       return actionIconDirectory + "/MCH/reassemble.png";
-
 
     // DNC
     case 1500:

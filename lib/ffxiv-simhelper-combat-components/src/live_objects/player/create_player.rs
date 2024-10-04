@@ -37,7 +37,7 @@ use std::rc::Rc;
 
 pub(crate) static PALADIN_START_TIME_MILLISECOND: TimeType = -2500;
 pub(crate) static WARRIOR_START_TIME_MILLISECOND: TimeType = 0;
-pub(crate) static DARKKNIGHT_START_TIME_MILLISECOND: TimeType = 0;
+pub(crate) static DARKKNIGHT_START_TIME_MILLISECOND: TimeType = -3000;
 pub(crate) static GUNBREAKER_START_TIME_MILLISECOND: TimeType = 0;
 pub(crate) static WHITEMAGE_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static SCHOLAR_START_TIME_MILLISECOND: TimeType = -1500;

@@ -12,7 +12,7 @@ use crate::status::status_info::StatusInfo;
 use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
-const PROC_PERCENT: PercentType = 60;
+const PROC_PERCENT: PercentType = 50;
 
 pub(crate) struct RedmageDatabase {
     pub(crate) jolt_iii: AttackSkill,
@@ -962,7 +962,7 @@ impl RedmageDatabase {
             player_id,
             potency: 300,
             use_type: UseType::UseOnTarget,
-            trait_percent: 138,
+            trait_percent: 135,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(2),
@@ -988,7 +988,7 @@ impl RedmageDatabase {
             player_id,
             potency: 360,
             use_type: UseType::UseOnTarget,
-            trait_percent: 138,
+            trait_percent: 135,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(3),
@@ -1014,7 +1014,7 @@ impl RedmageDatabase {
             player_id,
             potency: 540,
             use_type: UseType::UseOnTarget,
-            trait_percent: 138,
+            trait_percent: 135,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
                 player_id,
@@ -1047,7 +1047,7 @@ impl RedmageDatabase {
             player_id,
             potency: 620,
             use_type: UseType::UseOnTarget,
-            trait_percent: 138,
+            trait_percent: 135,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(4),
@@ -1076,7 +1076,7 @@ impl RedmageDatabase {
             player_id,
             potency: 620,
             use_type: UseType::UseOnTarget,
-            trait_percent: 130,
+            trait_percent: 135,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(4),
@@ -1105,7 +1105,7 @@ impl RedmageDatabase {
             player_id,
             potency: 700,
             use_type: UseType::UseOnTarget,
-            trait_percent: 138,
+            trait_percent: 135,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(5),
@@ -1131,7 +1131,7 @@ impl RedmageDatabase {
             player_id,
             potency: 800,
             use_type: UseType::UseOnTarget,
-            trait_percent: 138,
+            trait_percent: 135,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: Some(0),
