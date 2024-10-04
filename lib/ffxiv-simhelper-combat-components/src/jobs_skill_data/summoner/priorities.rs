@@ -9,7 +9,8 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::summoner::abilities::SummonerDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
+    Combo, HasBufforDebuff, HasResource, HasResourceExactly, MillisecondsBeforeBurst, Not,
+    RelatedSkillCooldownLessOrEqualThan,
 };
 
 #[derive(Clone)]
@@ -128,7 +129,23 @@ pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<Ski
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.ruin_iv.get_id(),
+            skill_id: db.summon_titan_ii.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.topaz_rite.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.summon_garuda_ii.get_id(),
+            prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.slipstream.get_id(),
+            prerequisite: Some(Combo(Some(3))),
+        },
+        SkillPriorityInfo {
+            skill_id: db.emerald_rite.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -148,23 +165,7 @@ pub(crate) fn make_summoner_gcd_priority_table(db: &SummonerDatabase) -> Vec<Ski
             prerequisite: None,
         },
         SkillPriorityInfo {
-            skill_id: db.summon_titan_ii.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.topaz_rite.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.summon_garuda_ii.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.slipstream.get_id(),
-            prerequisite: Some(Combo(Some(3))),
-        },
-        SkillPriorityInfo {
-            skill_id: db.emerald_rite.get_id(),
+            skill_id: db.ruin_iv.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
@@ -188,6 +189,10 @@ pub(crate) fn make_summoner_ogcd_priority_table(
     };
 
     ogcd_priorities.extend(vec![
+        SkillPriorityInfo {
+            skill_id: db.swiftcast.get_id(),
+            prerequisite: Some(HasBufforDebuff(db.garuda_state.get_id())),
+        },
         SkillPriorityInfo {
             skill_id: db.searing_light.get_id(),
             prerequisite: None,

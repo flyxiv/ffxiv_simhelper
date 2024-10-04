@@ -98,7 +98,7 @@ impl SummonerCombatResources {
         Self {
             skills: make_summoner_skill_list(player_id, ffxiv_event_queue),
             current_combo: None,
-            resources: [0, 0, 0, 0, 0, 0],
+            resources: [0, 0, 0, 0, 0, 1],
         }
     }
 }

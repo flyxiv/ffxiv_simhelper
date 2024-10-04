@@ -5,7 +5,7 @@ use crate::event::FfxivEventQueue;
 use crate::event_ticker::auto_attack_ticker::AutoAttackTicker;
 use crate::event_ticker::ffxiv_event_ticker::FfxivEventTicker;
 use crate::id_entity::IdEntity;
-use crate::jobs_skill_data::PotionSkill;
+use crate::jobs_skill_data::{CasterGlobalSkill, PotionSkill};
 use crate::rotation::SkillTable;
 use crate::skill::attack_skill::AttackSkill;
 use crate::skill::damage_category::DamageCategory;
@@ -52,8 +52,10 @@ pub(crate) struct SummonerDatabase {
     pub(crate) sunflare: AttackSkill,
     pub(crate) enkindle_solar_bahamut: AttackSkill,
     pub(crate) luxwave: AttackSkill,
+    pub(crate) swiftcast: AttackSkill,
 
     pub(crate) searing_light_buff: BuffStatus,
+    pub(crate) garuda_state: BuffStatus,
 
     pub(crate) potion: AttackSkill,
 }
@@ -63,6 +65,10 @@ impl SummonerDatabase {
         player_id: PlayerIdType,
         ffxiv_event_queue: Rc<RefCell<FfxivEventQueue>>,
     ) -> Self {
+        let caster_skills = CasterGlobalSkill::new(player_id);
+        let swiftcast_buff = caster_skills.swiftcast_buff.clone();
+        let swiftcast = caster_skills.swiftcast.clone();
+
         let further_ruin: BuffStatus = BuffStatus {
             id: 1600,
             name: String::from("Further Ruin"),
@@ -867,13 +873,16 @@ impl SummonerDatabase {
             proc_events: vec![],
             combo: Some(4),
             delay_millisecond: None,
-            casting_time_millisecond: 3000,
+            casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 3500,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![CheckStatus(garuda_state.get_id())],
+            resource_required: vec![
+                CheckStatus(garuda_state.get_id()),
+                UseBuff(swiftcast_buff.get_id()),
+            ],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -1143,8 +1152,10 @@ impl SummonerDatabase {
             sunflare,
             enkindle_solar_bahamut,
             luxwave,
+            swiftcast,
 
             searing_light_buff,
+            garuda_state,
 
             potion: potion_skill.potion,
         }
@@ -1189,6 +1200,7 @@ pub(crate) fn make_summoner_skill_list(
         db.sunflare,
         db.enkindle_solar_bahamut,
         db.luxwave,
+        db.swiftcast,
         db.potion,
     ];
 

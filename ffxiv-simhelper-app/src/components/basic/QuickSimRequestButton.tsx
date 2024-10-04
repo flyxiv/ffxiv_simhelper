@@ -28,7 +28,8 @@ import { MIDLANDER_HYUR_NAME_EN } from "../../const/languageTexts";
 
 const TOTAL_REQUEST_COUNT = 1000;
 const TOTAL_ITERATION_COUNT = 2;
-export const QUICK_SIM_ITERATION_COUNT = TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT;
+export const QUICK_SIM_ITERATION_COUNT =
+  TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT;
 const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
 
 export function QuickSimRequestButton(totalState: EquipmentInput) {
@@ -178,13 +179,13 @@ export function createQuickSimRequest(
       itemSet: bisEquipments.itemSet,
       gearSetMaterias: bisEquipments.gearSetMaterias,
       combatTimeMillisecond: 0,
-      partyMemberJobAbbrevs: [],
-      partyMemberIds: [],
-      partyMemberIlvl: 0,
-      usePot: 1,
+      partyMemberJobAbbrevs: totalState.partyMemberJobAbbrevs,
+      partyMemberIds: totalState.partyMemberIds,
+      partyMemberIlvl: totalState.partyMemberIlvl,
+      usePot: totalState.usePot,
       power: defaultPlayerPower(),
       compositionBuffPercent: 0,
-    }
+    };
 
     let bisPower = calculatePlayerPowerFromInputs(playerTotalState);
 

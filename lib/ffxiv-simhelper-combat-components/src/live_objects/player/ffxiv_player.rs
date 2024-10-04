@@ -511,8 +511,12 @@ impl FfxivPlayer {
     fn convert_related_skill_ids(skill_id: SkillIdType) -> SkillIdType {
         match skill_id {
             /// WAR
-            /// fell cleave + inner release
+            /// fell cleave + inner release -> fell cleave
             111 => 104,
+
+            /// DRK
+            /// edge of shadow proc -> edge of shadow
+            217 => 203,
 
             /// AST
             /// fall malefic lightspeed -> fall malefic

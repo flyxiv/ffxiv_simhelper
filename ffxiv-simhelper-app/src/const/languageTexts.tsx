@@ -188,7 +188,10 @@ export const LOAD_COMPLETE_TEXT =
     ? "Load Complete"
     : "불러오기 완료";
 
-export const LOADOUT_NAME_TEXT = AppConfigurations.languageMode === ENGLISH_MODE ? "Loadout Name" : "장비셋 이름";
+export const LOADOUT_NAME_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE
+    ? "Loadout Name"
+    : "장비셋 이름";
 
 export const OVERWRITE_CONFIRM_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
@@ -205,7 +208,6 @@ export const CONFIRM_TEXT =
 
 export const CANCEL_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE ? "No" : "취소";
-
 
 // Player Text
 export const JOB_EN_TEXT = "Job";
@@ -692,7 +694,7 @@ export const ROTATION_SAMPLE_WARNING_TEXT =
 
 export const SAMURAI_ROTATION_WARNING_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? "!!!Samurai's 'tengentsu' is simulated as a 35s skill(looking at logsmatch its 12 casts in a 6:30 fight)."
+    ? "!!!Samurai's 'tengentsu' is simulated as a 35s skill(trying to fit approximately 12 casts in a 6:30 fight)."
     : "!!!사무라이의 '심안'은 35초 스킬로 시뮬레이션 되었습니다(로그를 봤을 때 6:30 전투에서 12번 정도 사용됨).";
 
 export const ROTATION_SAMPLE_BUTTON_TEXT =
@@ -842,9 +844,12 @@ export function convertToEnglishSubStatName(subStatName: string) {
 }
 
 // Power Names
-export const ITERATION_NAME = AppConfigurations.languageMode === ENGLISH_MODE ? "Iteration" : "시뮬 횟수";
-export const VARIANCE_NAME = AppConfigurations.languageMode === ENGLISH_MODE ? "Error %" : "오차 범위";
-export const COMPOSITION_NAME = AppConfigurations.languageMode === ENGLISH_MODE ? "PT%" : "조합%";
+export const ITERATION_NAME =
+  AppConfigurations.languageMode === ENGLISH_MODE ? "Iteration" : "시뮬 횟수";
+export const VARIANCE_NAME =
+  AppConfigurations.languageMode === ENGLISH_MODE ? "Error %" : "오차 범위";
+export const COMPOSITION_NAME =
+  AppConfigurations.languageMode === ENGLISH_MODE ? "PT%" : "조합%";
 export const WD_POWER_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE ? "Weapon" : "무기 공격력";
 export const MAIN_STAT_POWER_NAME =

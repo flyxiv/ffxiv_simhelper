@@ -120,7 +120,7 @@ impl DarkknightCombatResources {
             skills: make_darkknight_skill_list(player_id),
             player_id,
             current_combo: None,
-            resources: [MANA_MAX, 0],
+            resources: [MANA_MAX + 2000, 0],
             living_shadow_delay: None,
         }
     }

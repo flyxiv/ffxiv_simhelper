@@ -10,6 +10,10 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
     case 1901:
       return actionIconDirectory + "/PLD/fight_or_flight.png";
 
+    // DRK
+    case 201:
+      return actionIconDirectory + "/DRK/delirium.png";
+
     // WAR
     case 100:
       return actionIconDirectory + "/WAR/storm's_eye.png";
