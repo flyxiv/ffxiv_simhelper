@@ -35,7 +35,6 @@ import {
   WAR_EN_NAME,
   WHM_EN_NAME,
 } from "../const/languageTexts";
-import { isNotValid } from "./QuickSim";
 
 export enum JobRole {
   TANK,

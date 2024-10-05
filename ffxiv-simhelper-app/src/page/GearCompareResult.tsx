@@ -1,4 +1,4 @@
-import { Box, styled } from "@mui/material";
+import { Box, styled, Typography } from "@mui/material";
 import "./SimulationResult.css";
 import { GearCompareDpsSummary } from "../components/container/DpsSummaryBox";
 import { ResultBoardTopBoxStyle } from "../components/container/Styles";
@@ -10,7 +10,7 @@ import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
-import { GEAR_COMPARE_PAGE_NAME, GEARSET1_TEXT, GEARSET2_TEXT } from "../const/languageTexts";
+import { EDPS_EXPLANATION_TEXT, GEAR_COMPARE_PAGE_NAME, GEARSET1_TEXT, GEARSET2_TEXT } from "../const/languageTexts";
 import { GEAR_COMPARE_ITERATION_COUNT } from "../components/basic/GearCompareRequestButton";
 
 const ResultBoardTopBox = styled(Box)`
@@ -70,6 +70,9 @@ export function GearCompareResult() {
             <ResultBoardTopBox marginBottom="50px">
               {SimulationTitle(GEARSET1_TEXT)}
               {GearCompareDpsSummary(simulationData1, simulationData2)}
+              <Typography sx={{ color: 'white' }}>
+                {EDPS_EXPLANATION_TEXT}
+              </Typography>
               {StatComparePlayerInfo(
                 mainCharacterJob,
                 simulationResult1.mainPlayerPower,
@@ -83,6 +86,9 @@ export function GearCompareResult() {
             <ResultBoardTopBox>
               {SimulationTitle(GEARSET2_TEXT)}
               {GearCompareDpsSummary(simulationData2, simulationData1)}
+              <Typography sx={{ color: 'white' }}>
+                {EDPS_EXPLANATION_TEXT}
+              </Typography>
               {StatComparePlayerInfo(
                 mainCharacterJob,
                 simulationResult2.mainPlayerPower,

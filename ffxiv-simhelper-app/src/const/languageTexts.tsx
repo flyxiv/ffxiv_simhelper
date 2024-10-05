@@ -659,6 +659,11 @@ export const PARTY_MEMBERS_TEXT =
 export const TIME_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE ? "Time(s)" : "전투시간(초)";
 
+export const EDPS_EXPLANATION_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE
+    ? "!!! EDPS: RDPS + My total contribution to party members' buffs"
+    : "!!! EDPS: RDPS + 파티원들 시너지에 대한 내 전체 기여도";
+
 // Quick Sim Results
 export const DAMAGE_PROFILE_BUTTON_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
