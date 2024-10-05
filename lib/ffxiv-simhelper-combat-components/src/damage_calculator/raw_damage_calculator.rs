@@ -202,6 +202,25 @@ fn get_damage_variance_multiplier() -> MultiplierType {
     damage_random
 }
 
+#[inline]
+fn get_crit_direct_hit_rng() -> MultiplierType {
+    thread_rng().gen_range(0..1000) as MultiplierType / 1000.0
+}
+
+#[inline]
+fn decide_crit_direct_hit(
+    critical_hit_rate: MultiplierType,
+    direct_hit_rate: MultiplierType,
+) -> (bool, bool) {
+    let crit_rng = get_crit_direct_hit_rng();
+    let direct_hit_rng = get_crit_direct_hit_rng();
+
+    (
+        crit_rng < critical_hit_rate,
+        direct_hit_rng < direct_hit_rate,
+    )
+}
+
 fn calculate_crit_direct_hit_damage_direct_damage(
     player_id: PlayerIdType,
     base_damage: MultiplierType,
@@ -229,21 +248,49 @@ fn calculate_crit_direct_hit_damage_direct_damage(
     let direct_hit_rate =
         get_final_direct_hit_rate(snapshotted_status, is_guaranteed_direct_hit, player_power);
 
-    let crit_rng = thread_rng().gen_range(0..1000) as MultiplierType / 1000.0;
-    let direct_hit_rng = thread_rng().gen_range(0..1000) as MultiplierType / 1000.0;
-    let is_crit = crit_rng < critical_hit_rate;
-    let is_direct_hit = direct_hit_rng < direct_hit_rate;
+    let (is_crit, is_direct_hit) = decide_crit_direct_hit(critical_hit_rate, direct_hit_rate);
+
+    calculate_crit_direct_hit_result(
+        player_id,
+        damage_before_crit_direct_hit,
+        damage_variance,
+        is_crit,
+        is_direct_hit,
+        is_guaranteed_critical_hit,
+        is_guaranteed_direct_hit,
+        damage_category,
+        snapshotted_status,
+        player_power,
+        critical_hit_rate,
+        direct_hit_rate,
+    )
+}
+
+fn calculate_crit_direct_hit_result(
+    player_id: PlayerIdType,
+    damage_before_crit_direct_hit: MultiplierType,
+    damage_variance: MultiplierType,
+    is_crit: bool,
+    is_direct_hit: bool,
+    is_guaranteed_critical_hit: bool,
+    is_guaranteed_direct_hit: bool,
+    damage_category: DamageCategory,
+    snapshotted_status: &SnapshotTable,
+    player_power: &PlayerPower,
+    critical_hit_rate: MultiplierType,
+    direct_hit_rate: MultiplierType,
+) -> (MultiplierType, HashMap<StatusKey, MultiplierType>, bool) {
     let mut contribution_board: HashMap<StatusKey, MultiplierType> = HashMap::new();
 
     let crit_multiplier = if is_crit {
         player_power.critical_strike_damage
     } else {
-        1.0
+        MULTIPLIER_BASE
     };
     let dh_multiplier = if is_direct_hit {
         DIRECT_HIT_DAMAGE_MULTIPLIER
     } else {
-        1.0
+        MULTIPLIER_BASE
     };
     let crit_dh_multiplier = crit_multiplier * dh_multiplier;
 
@@ -302,7 +349,7 @@ fn calculate_crit_direct_hit_damage_direct_damage(
         }
     }
 
-    if dh_multiplier > 1.0 && !is_guaranteed_direct_hit {
+    if dh_multiplier > MULTIPLIER_BASE && !is_guaranteed_direct_hit {
         let dh_contribution = dh_portion * crit_dh_contribution;
 
         for (&key, snapshot_info) in snapshotted_status.iter() {
@@ -370,5 +417,311 @@ impl RawDamageCalculator for FfxivRawDamageCalculator {}
 impl Default for FfxivRawDamageCalculator {
     fn default() -> Self {
         FfxivRawDamageCalculator {}
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        damage_calculator::raw_damage_calculator::{calculate_base_damage, decide_crit_direct_hit},
+        skill::damage_category::DamageCategory,
+    };
+    use std::collections::HashMap;
+
+    use super::get_damage_variance_multiplier;
+
+    #[test]
+    fn damage_variance_multiplier_test() {
+        // Check that the damage variance of +- 5% is distributed evenly
+        let number_of_samples = 100000;
+        let uniform_number_per_key = number_of_samples / 100;
+        let number_per_key_lower_bound = uniform_number_per_key - 200;
+        let number_per_key_upper_bound = uniform_number_per_key + 200;
+
+        let mut variance_map = HashMap::new();
+
+        for _ in 0..number_of_samples {
+            let entry = variance_map
+                .entry((get_damage_variance_multiplier() * 1000.0) as i32)
+                .or_insert(0);
+
+            *entry = *entry + 1;
+        }
+
+        for (_, &value) in variance_map.iter() {
+            assert!(
+                value > number_per_key_lower_bound && value < number_per_key_upper_bound,
+                "get_damage_variance_multiplier() doesn't give a uniform distribution: {:?}",
+                variance_map
+            );
+        }
+    }
+
+    #[test]
+    fn crit_direct_hit_rng_test() {
+        let number_of_samples = 100000;
+
+        let crit_percent = 0.255;
+        let direct_hit_percent = 0.455;
+
+        let valid_crit_count = (number_of_samples as f64 * crit_percent) as i32;
+        let crit_count_lower_bound = valid_crit_count - 500;
+        let crit_count_upper_bound = valid_crit_count + 500;
+
+        let valid_direct_hit_count = (number_of_samples as f64 * direct_hit_percent) as i32;
+        let direct_hit_count_lower_bound = valid_direct_hit_count - 500;
+        let direct_hit_count_upper_bound = valid_direct_hit_count + 500;
+
+        let valid_crit_direct_hit_count =
+            (number_of_samples as f64 * crit_percent * direct_hit_percent) as i32;
+        let crit_direct_hit_count_lower_bound = valid_crit_direct_hit_count - 500;
+        let crit_direct_hit_count_upper_bound = valid_crit_direct_hit_count + 500;
+
+        let mut critical_hit_count = 0;
+        let mut direct_hit_count = 0;
+        let mut critical_direct_hit_count = 0;
+
+        for _ in 0..number_of_samples {
+            let (is_crit, is_direct_hit) = decide_crit_direct_hit(crit_percent, direct_hit_percent);
+
+            if is_crit {
+                critical_hit_count += 1;
+            }
+
+            if is_direct_hit {
+                direct_hit_count += 1;
+            }
+
+            if is_crit && is_direct_hit {
+                critical_direct_hit_count += 1;
+            }
+        }
+
+        assert!(
+            critical_hit_count > crit_count_lower_bound
+                && critical_hit_count < crit_count_upper_bound,
+            "Critical hit rate is not within the expected range: {}",
+            critical_hit_count
+        );
+
+        assert!(
+            direct_hit_count > direct_hit_count_lower_bound
+                && direct_hit_count < direct_hit_count_upper_bound,
+            "Direct hit rate is not within the expected range: {}",
+            direct_hit_count
+        );
+
+        assert!(
+            critical_direct_hit_count > crit_direct_hit_count_lower_bound
+                && critical_direct_hit_count < crit_direct_hit_count_upper_bound,
+            "Critical hit and direct hit rate is not within the expected range: {}",
+            critical_direct_hit_count
+        );
+    }
+
+    #[test]
+    fn direct_damage_base_damage_test() {
+        let potency = 310.0;
+        let trait_percent = 130;
+        let player_power = crate::live_objects::player::player_power::PlayerPower {
+            auto_attack_delays: 3.0,
+            critical_strike_rate: 0.15,
+            critical_strike_damage: 1.5,
+            direct_hit_rate: 0.23,
+            auto_direct_hit_increase: 0.4,
+            determination_multiplier: 1.124,
+            tenacity_multiplier: 1.0,
+            speed_multiplier: 1.26,
+            weapon_damage_multiplier: 1.96,
+            main_stat_multiplier: 24.65,
+            weapon_damage: 132,
+            main_stat: 3300,
+            critical_strike: 2560,
+            direct_hit: 2500,
+            determination: 2500,
+            skill_speed: 2500,
+            tenacity: 400,
+            spell_speed: 2500,
+        };
+
+        let base_damage_answer = 21500.0;
+        let base_damage_answer_lower_bound = base_damage_answer * 0.95;
+        let base_damage_answer_upper_bound = base_damage_answer * 1.05;
+
+        let base_damage_direct_no_guarantee = calculate_base_damage(
+            potency,
+            trait_percent,
+            DamageCategory::Direct,
+            &player_power,
+            false,
+        );
+
+        assert!(
+            base_damage_direct_no_guarantee > base_damage_answer_lower_bound
+                && base_damage_direct_no_guarantee < base_damage_answer_upper_bound,
+            "base damage no guarantee: {}, lower bound: {}, upper bound: {}",
+            base_damage_direct_no_guarantee,
+            base_damage_answer_lower_bound,
+            base_damage_answer_upper_bound
+        );
+
+        let base_damage_direct_guarantee = calculate_base_damage(
+            potency,
+            trait_percent,
+            DamageCategory::Direct,
+            &player_power,
+            true,
+        );
+
+        assert!(
+            base_damage_direct_guarantee > base_damage_answer_lower_bound * 1.4
+                && base_damage_direct_guarantee < base_damage_answer_upper_bound * 1.4,
+            "{}",
+            base_damage_direct_guarantee
+        );
+    }
+
+    #[test]
+    fn magical_dot_base_damage_test() {
+        let trait_percent = 130;
+        let player_power = crate::live_objects::player::player_power::PlayerPower {
+            auto_attack_delays: 3.0,
+            critical_strike_rate: 0.15,
+            critical_strike_damage: 1.5,
+            direct_hit_rate: 0.23,
+            auto_direct_hit_increase: 0.4,
+            determination_multiplier: 1.124,
+            tenacity_multiplier: 1.0,
+            speed_multiplier: 1.26,
+            weapon_damage_multiplier: 1.96,
+            main_stat_multiplier: 24.65,
+            weapon_damage: 132,
+            main_stat: 3300,
+            critical_strike: 2560,
+            direct_hit: 2500,
+            determination: 2500,
+            skill_speed: 2500,
+            tenacity: 400,
+            spell_speed: 2500,
+        };
+
+        let potency_magical_dot = 75.0;
+        let base_damage_magical_dot = 5170.0 * player_power.speed_multiplier;
+        let base_damage_magical_dot_lower_bound = base_damage_magical_dot * 0.95;
+        let base_damage_magical_dot_upper_bound = base_damage_magical_dot * 1.05;
+
+        let base_damage_magical_dot = calculate_base_damage(
+            potency_magical_dot,
+            trait_percent,
+            DamageCategory::MagicalDot,
+            &player_power,
+            false,
+        );
+
+        assert!(
+            base_damage_magical_dot > base_damage_magical_dot * 0.95
+                && base_damage_magical_dot < base_damage_magical_dot * 1.05,
+            "base_damage_magical_dot: {}, lower bound: {}, upper bound: {}",
+            base_damage_magical_dot,
+            base_damage_magical_dot_lower_bound,
+            base_damage_magical_dot_upper_bound
+        );
+    }
+
+    #[test]
+    fn physical_dot_damage_test() {
+        let player_power_physical = crate::live_objects::player::player_power::PlayerPower {
+            auto_attack_delays: 2.64,
+            critical_strike_rate: 0.176,
+            critical_strike_damage: 1.526,
+            direct_hit_rate: 0.234,
+            auto_direct_hit_increase: 0.4,
+            determination_multiplier: 1.085,
+            tenacity_multiplier: 1.0,
+            speed_multiplier: 1.025,
+            weapon_damage_multiplier: 1.86,
+            main_stat_multiplier: 21.44,
+            weapon_damage: 132,
+            main_stat: 3300,
+            critical_strike: 2560,
+            direct_hit: 2500,
+            determination: 2500,
+            skill_speed: 2500,
+            tenacity: 400,
+            spell_speed: 2500,
+        };
+
+        let potency_physical_dot = 50.0;
+        let melee_trait = 100;
+
+        let base_damage_physical_dot = calculate_base_damage(
+            potency_physical_dot,
+            melee_trait,
+            DamageCategory::PhysicalDot,
+            &player_power_physical,
+            false,
+        );
+
+        let base_damage_answer_physical_dot = 2170.0;
+        let base_damage_answer_physical_dot_lower_bound = base_damage_answer_physical_dot * 0.95;
+        let base_damage_answer_physical_dot_upper_bound = base_damage_answer_physical_dot * 1.05;
+
+        assert!(
+            base_damage_physical_dot > base_damage_answer_physical_dot_lower_bound
+                && base_damage_physical_dot < base_damage_answer_physical_dot_upper_bound,
+            "base_damage_physical_dot: {}, lower bound: {}, upper bound: {}",
+            base_damage_physical_dot,
+            base_damage_answer_physical_dot_lower_bound,
+            base_damage_answer_physical_dot_upper_bound
+        );
+    }
+
+    #[test]
+    fn auto_attack_base_damage_test() {
+        let player_power_physical = crate::live_objects::player::player_power::PlayerPower {
+            auto_attack_delays: 2.64,
+            critical_strike_rate: 0.176,
+            critical_strike_damage: 1.526,
+            direct_hit_rate: 0.234,
+            auto_direct_hit_increase: 0.4,
+            determination_multiplier: 1.085,
+            tenacity_multiplier: 1.0,
+            speed_multiplier: 1.025,
+            weapon_damage_multiplier: 1.86,
+            main_stat_multiplier: 21.44,
+            weapon_damage: 132,
+            main_stat: 3300,
+            critical_strike: 2560,
+            direct_hit: 2500,
+            determination: 2500,
+            skill_speed: 2500,
+            tenacity: 400,
+            spell_speed: 2500,
+        };
+
+        // samurai auto attack
+        let potency_auto_attack = 90.0;
+        let melee_trait = 100;
+
+        let base_damage_auto_attack = calculate_base_damage(
+            potency_auto_attack,
+            melee_trait,
+            DamageCategory::AutoAttack,
+            &player_power_physical,
+            false,
+        );
+
+        let base_damage_answer_auto_attack = 3450.0;
+        let base_damage_answer_auto_attack_lower_bound = base_damage_answer_auto_attack * 0.95;
+        let base_damage_answer_auto_attack_upper_bound = base_damage_answer_auto_attack * 1.05;
+
+        assert!(
+            base_damage_auto_attack > base_damage_answer_auto_attack_lower_bound
+                && base_damage_auto_attack < base_damage_answer_auto_attack_upper_bound,
+            "base_damage_auto_attack: {}, lower bound: {}, upper bound: {}",
+            base_damage_auto_attack,
+            base_damage_answer_auto_attack_lower_bound,
+            base_damage_answer_auto_attack_upper_bound
+        );
     }
 }

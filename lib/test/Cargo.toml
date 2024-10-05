@@ -1,0 +1,24 @@
+[package]
+name = "ffxiv-simhelper-test"
+version = "0.1.0"
+edition = "2021"
+description = "test for ffxivsimhelper"
+authors = ["Junyeop Na <ns0902@naver.com>"]
+repository = "https://github.com/ffxiv-simhelper"
+
+
+[dependencies]
+project-root = "0.2.2"
+lazy_static = "1.4.0"
+sorted-vec = "0.8"
+log = "0.4.20"
+rand = "0.8.5"
+serde = { version = "1.0.196", features = ["derive"] }
+
+[dependencies.ffxiv-simhelper-combat-components]
+version = "0.1.0"
+path = "../ffxiv-simhelper-combat-components"
+
+[dependencies.ffxiv-simhelper-dps-simulator]
+version = "0.1.0"
+path = "../ffxiv-simhelper-dps-simulator"

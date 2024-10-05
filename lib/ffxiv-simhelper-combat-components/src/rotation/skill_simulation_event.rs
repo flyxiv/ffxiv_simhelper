@@ -22,6 +22,8 @@ pub(crate) enum SkillSimulationEvent {
     UpdateCombo(u8),
 }
 
+/// Get skill events that affect the player statuses which will affect the
+/// rotation decision of the jobs(ex) apply or delete buff, reduce skill cooldown, increase resource, ...)  
 pub(crate) fn extract_skill_simulation_event(
     skill: &AttackSkill,
     time_offset: TimeType,
@@ -194,6 +196,8 @@ pub(crate) fn extract_skill_simulation_event(
     events
 }
 
+/// Extract the skill internal events that could affect the decision for the next skill,
+/// such as resource increase or decrease.
 pub(crate) fn simulate_resources(
     combat_resources: &FfxivCombatResources,
     skill_simulation_events: &[SkillSimulationEvent],

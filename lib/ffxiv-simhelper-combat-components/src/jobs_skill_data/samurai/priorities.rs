@@ -8,7 +8,7 @@ use crate::jobs_skill_data::samurai::abilities::SamuraiDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
-    Or,
+    Or, SkillCooldownWillComeBackMillisecondsBeforeBurst,
 };
 
 #[derive(Clone)]
@@ -395,7 +395,13 @@ pub(crate) fn make_samurai_ogcd_priority_table(
                 )),
                 Box::new(Or(
                     Box::new(BufforDebuffLessThan(db.higanbana_dot.get_id(), 9000)),
-                    Box::new(MillisecondsBeforeBurst(5000)),
+                    Box::new(Or(
+                        Box::new(SkillCooldownWillComeBackMillisecondsBeforeBurst(
+                            db.meikyo_shisui.get_id(),
+                            5000,
+                        )),
+                        Box::new(MillisecondsBeforeBurst(5000)),
+                    )),
                 )),
             )),
         },

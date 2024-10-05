@@ -6,6 +6,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::types::{PlayerIdType, TimeType};
 use std::collections::HashMap;
 
+/// It's a struct of Pointers, so it isn't costly to copy them.
 #[derive(Clone, Copy)]
 pub(crate) struct InformationNeededForRotationDecision<'a> {
     pub(crate) buffs: &'a HashMap<StatusKey, BuffStatus>,

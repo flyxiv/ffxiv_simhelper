@@ -112,10 +112,11 @@ impl AutoAttackTicker {
             "MNK" => 90,
             "RPR" => 85,
             "DRG" => 80,
+            "SAM" => 85,
             _ => 100,
         };
 
-        let mut auto_attack = AttackSkill::new(
+        let mut auto_attack = AttackSkill::new_auto_attack(
             AUTO_ATTACK_ID,
             String::from("Auto Attack"),
             player_id,
