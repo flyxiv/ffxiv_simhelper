@@ -1,19 +1,63 @@
 # API Specification
 
-## 1. Request
+## 0. Request Overview
 
 | API route           | Request Type           | Description                                                                             |
 |---------------------|------------------------|-----------------------------------------------------------------------------------------|
-| /api/v1/quicksim    | POST(application/json) | Only customize player + party composition, and rest of the party member is default BIS. |
-| /api/v1/advancedsim | POST(application/json) | Customize all party job + stats                                                         |
+| /api/v1/quicksim    | POST(application/json) | Very quickly simulate player's detailed damage profile. (1000 iterations)               |
+| /api/v1/gearcompare | POST(application/json) | Detailed simulation of expected DPS for two different gearsets. (4000 iterations each)  |
+| /api/v1/bestpartner | POST(application/json) | Finds out which jobs contributes the most to the main player's raidbuffs (500 iteration each) |
+| /api/v1/statweights | POST(application/json) | Finds out the expected DPS increase per stat point for each character stats (500 iteration each) | 
 
-### Request Body Example
 
-* Requested in POST json body.
+## 1. QuickSim
+* Fastest simulation + In-detail analysis of player DPS
+* DPS Summary/Party Member Contribution/My Contribution to Party Members/Sample of Damage Rotation
+* **The root of all simulation. Other simulations are done using the QuickSim in a specific way.**
+
+#### Request Parameters: SimulationApiRequest
+| Parameter | Type | Description |
+--|--|--
+| mainPlayerId | int | id of the main character in the "party" parameter array |
+| combatTimeMillisecond | int | duration of simulation in millisecond |
+| party | PartyInfoRequest | Status of the party members |
+| partyIlvlAdjustment | float | tuning parameter depending on the input party iLvl. The value is a float < 1.0| 
+| usePot | boolean | decides whether the simulation is done using pots or not |
+
+
+#### PartyRequest
+| Parameter | Type | Description |
+--|--|--
+| playerId | int | id of the data |
+| partnerId1 | int or null | id of the first partner player in the party. This value is null for every job except DNC and AST. For AST, it is the ID of the melee card target, and for DNC it is the ID of the dance partner. If the value is null for DNC or AST, the partner is assigned automatically based on internal algorithm. |
+| partnerId2 | int or null | id of the second partner player in the party. This value is null for every job except AST. For AST, it is the ID of the ranged card target. If the value is null for AST, the partner is assigned automatically based on internal algorithm. |
+| jobAbbrev | string | 3-letter abbreviation of the player's combat job |
+| power | PlayerPower | Specific stats and stat ladder values of player |
+
+
+#### PlayerPower
+| Parameter | Type | Description |
+--|--|--
+| weaponDamage | int | Weapon Damage Stat of the weapon |
+| mainStat | int | Main stat(STR, DEX, INT, MND) related to the player's job |
+| criticalStrike | int | Critical Strike substat of player |
+| directHit | int | Direct Hit substat of player | 
+| determination | int | Determination substat of player |
+| skillSpeed | int | Skill Speed substat of player |
+| spellSpeed | int | Spell Speed substat of player |
+| tenacity | int | Tenacity substat of player |
+| piety | int | Piety substat of player |
+| weaponDamageMultiplier | float | the actual weapon damage increase value. Value must be greater than 1. ex) 1% damage increase = 1.01
+| mainStatMultiplier | float | the main stat damage increase value. Value must be greater than 1. ex) 1% damage increase = 1.01
+| criticalStrikeRate | float | critical 
+
+
+### Request Example
 
 ```json
 {
-  "mainPlayerId": 5,
+  "mainPlayerId": 0,
+  "combatTimeMillisecond": 300000,
   "party": [
     {
       "playerId": 0,
