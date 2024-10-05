@@ -5,7 +5,7 @@ use crate::jobs_skill_data::pictomancer::combat_resources::{
     HAS_CREATURE_ID, SHOT_STACK_ID, STARRY_SKY_STACK_ID,
 };
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasResourceExactly, MillisecondsBeforeBurst, Not, Or,
+    And, Combo, HasResourceExactly, MillisecondsBeforeBurst, Not, Or, HasResource
 };
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
@@ -114,12 +114,26 @@ pub(crate) fn make_pictomancer_gcd_priority_table(
 ) -> Vec<SkillPriorityInfo> {
     vec![
         SkillPriorityInfo {
-            skill_id: db.star_prism.get_id(),
-            prerequisite: None,
+            skill_id: db.hammer_brush.get_id(),
+            prerequisite: Some(And(
+                Box::new(HasResourceExactly(HAMMER_STACK_ID, 2)),
+                Box::new(MillisecondsBeforeBurst(0)),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.hammer_stamp.get_id(),
+            prerequisite: Some(And(
+                Box::new(HasResourceExactly(HAMMER_STACK_ID, 3)),
+                Box::new(MillisecondsBeforeBurst(0)),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.comet_in_black_hyperphantasia.get_id(),
             prerequisite: None,
+        },
+        SkillPriorityInfo {
+            skill_id: db.star_prism.get_id(),
+            prerequisite: Some(HasResourceExactly(HAMMER_STACK_ID, 1)),
         },
         SkillPriorityInfo {
             skill_id: db.thunder_in_magenta_hyperphantasia.get_id(),
@@ -252,14 +266,20 @@ pub(crate) fn make_pictomancer_ogcd_priority_table(
             skill_id: db.retribution_of_the_madeem.get_id(),
             prerequisite: Some(Or(
                 Box::new(Not(Box::new(MillisecondsBeforeBurst(80000)))),
-                Box::new(MillisecondsBeforeBurst(0)),
+                Box::new(And(
+                    Box::new(HasResource(HAMMER_STACK_ID, 1)),
+                    Box::new(MillisecondsBeforeBurst(0)),
+                )),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.mog_of_the_ages.get_id(),
             prerequisite: Some(Or(
                 Box::new(Not(Box::new(MillisecondsBeforeBurst(80000)))),
-                Box::new(MillisecondsBeforeBurst(0)),
+                Box::new(And(
+                    Box::new(HasResource(HAMMER_STACK_ID, 1)),
+                    Box::new(MillisecondsBeforeBurst(0)),
+                )),
             )),
         },
         SkillPriorityInfo {

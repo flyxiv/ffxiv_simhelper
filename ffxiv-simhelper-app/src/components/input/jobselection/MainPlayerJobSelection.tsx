@@ -255,7 +255,7 @@ export function MainPlayerGcdSelection(
         sx={{ fontSize: AppConfigurations.body1FontSize }}
       >
         <Box display="flex" sx={{ height: "4vh" }} alignItems={"center"} justifyContent={"flex-end"}>
-          <Typography sx={{ fontSize: "0.8vw" }}>
+          <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
             {SPEED_LABEL_TEXT}
           </Typography>
         </Box>
@@ -264,7 +264,7 @@ export function MainPlayerGcdSelection(
       <Select
         labelId={key}
         id={key}
-        value={(totalEquipmentState.equipmentDatas[id].power.gcd).toFixed(0)}
+        value={(totalEquipmentState.equipmentDatas[id].power.gcd).toFixed(2)}
         label={key}
         onChange={(e) => {
           let newGcd = parseInt(e.target.value);
@@ -289,7 +289,7 @@ export function MainPlayerGcdSelection(
             return (
               <MenuItem value={gcd.toFixed(0)}>
                 <Box display="flex" sx={{ height: "4vh" }} alignItems={"center"} justifyContent={"flex-end"}>
-                  <Typography sx={{ fontSize: "0.8vw", color: "white" }}>
+                  <Typography sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}>
                     {`${(gcd / 100).toFixed(2)}`}
                   </Typography>
                 </Box>

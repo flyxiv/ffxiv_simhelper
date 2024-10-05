@@ -8,12 +8,12 @@ use std::collections::HashMap;
 
 const MINUTE_IN_MILLISECOND: TimeType = 60000;
 
-/// standard step, wanderer, mages ballad and armys paeon
+// standard step, wanderer, mages ballad and armys paeon
 const PASSIVE_RAIDBUFFS: [SkillIdType; 4] = [1500, 1302, 1304, 1306];
 const PASSIVE_END_MILLISECOND: TimeType = 30000;
 const PASSIVE_START_MILLISECOND: TimeType = 4000;
 
-/// Sum up all damage profile for each skill.
+// Sum up all damage profile for each skill.
 #[derive(Clone)]
 pub(crate) struct SkillDamageAggregate {
     pub(crate) total_raw_damage: MultiplierType,
@@ -21,8 +21,8 @@ pub(crate) struct SkillDamageAggregate {
     pub(crate) cast_count: CountType,
 }
 
-/// Sum up all damage profile for each raidbuff.
-/// Damage buffs to self are calculated as raw damage, the rest are calculated as rdps.
+// Sum up all damage profile for each raidbuff.
+// Damage buffs to self are calculated as raw damage, the rest are calculated as rdps.
 #[derive(Clone)]
 pub(crate) struct RaidbuffDamageAggregate {
     pub(crate) total_raw_damage: MultiplierType,
@@ -56,11 +56,11 @@ impl Default for SkillDamageAggregate {
     }
 }
 
-/// Aggregate the total number of raw damage
-/// and the total number of buff contribution for each raidbuff.
-/// for each skill unit.
-/// first hashmap: detailed dps profile of each skill(how much each skill contributed + raw damage)
-/// second hashmap: burst profile: how much each player contributed to each player at each burst periods.
+// Aggregate the total number of raw damage
+// and the total number of buff contribution for each raidbuff.
+// for each skill unit.
+// first hashmap: detailed dps profile of each skill(how much each skill contributed + raw damage)
+// second hashmap: burst profile: how much each player contributed to each player at each burst periods.
 pub(crate) fn aggregate_skill_damage(
     damage_logs_of_party: &[Vec<DamageLog>],
 ) -> (
@@ -91,7 +91,7 @@ pub(crate) fn aggregate_skill_damage(
                     rdps_contribution.player_id,
                 );
 
-                /// only consider passive raidbuffs at even minutes:4 seconds to 30 seconds
+                // only consider passive raidbuffs at even minutes:4 seconds to 30 seconds
                 let time_key = if PASSIVE_RAIDBUFFS.contains(&rdps_contribution.raid_buff_status_id)
                 {
                     let time_offset = damage_time_milliseconds % MINUTE_IN_MILLISECOND;
@@ -131,7 +131,7 @@ pub(crate) fn aggregate_skill_damage(
     (skill_damage_tables, skill_burst_damage_tables)
 }
 
-/// Aggregate the total number of buff contribution for each player in player units.
+// Aggregate the total number of buff contribution for each player in player units.
 pub(crate) fn aggregate_contribution(
     skill_damage_table: &HashMap<SkillIdType, SkillDamageAggregate>,
 ) -> HashMap<StatusKey, MultiplierType> {
@@ -146,8 +146,8 @@ pub(crate) fn aggregate_contribution(
     contribution_table
 }
 
-/// Calculate the final damage profile statistic for each player:
-/// raw damage, given contribution and received contribution.
+// Calculate the final damage profile statistic for each player:
+// raw damage, given contribution and received contribution.
 pub(crate) fn aggregate_player_damage_statistics(
     party_damage_contribution_table: &[HashMap<StatusKey, MultiplierType>],
     skill_damage_tables: &[HashMap<SkillIdType, SkillDamageAggregate>],
@@ -180,10 +180,10 @@ pub(crate) fn aggregate_player_damage_statistics(
     party_damage_aggregate
 }
 
-/// Aggregates total raw/raid damage a player has given to each raidbuff
-/// Vec[player_id] contains raidbuff damage aggregate for each player.
-/// HashMap<SkillIdType, RaidbuffDamageAggregate> contains the total raw/raid damage a player has given to each raidbuff.
-/// HashMap<(SkillIdType, TimeType), RaidbuffDamageAggregate> contains the total raw/raid damage a player has given at each burst time.
+// Aggregates total raw/raid damage a player has given to each raidbuff
+// Vec[player_id] contains raidbuff damage aggregate for each player.
+// HashMap<SkillIdType, RaidbuffDamageAggregate> contains the total raw/raid damage a player has given to each raidbuff.
+// HashMap<(SkillIdType, TimeType), RaidbuffDamageAggregate> contains the total raw/raid damage a player has given at each burst time.
 pub(crate) fn aggregate_status_damages(
     skill_damage_tables: &[HashMap<SkillIdType, SkillDamageAggregate>],
 ) -> Vec<HashMap<SkillIdType, RaidbuffDamageAggregate>> {

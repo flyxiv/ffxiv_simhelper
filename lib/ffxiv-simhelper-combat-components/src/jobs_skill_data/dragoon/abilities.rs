@@ -43,7 +43,6 @@ pub(crate) struct DragoonDatabase {
     pub(crate) draconian_fire: BuffStatus,
     pub(crate) lance_charge_buff: BuffStatus,
     pub(crate) battle_litany_buff: BuffStatus,
-    pub(crate) life_of_the_dragon: BuffStatus,
 
     pub(crate) potion: AttackSkill,
 }
@@ -881,7 +880,6 @@ impl DragoonDatabase {
             draconian_fire,
             lance_charge_buff: lance_charge_status,
             battle_litany_buff: battle_litany_status,
-            life_of_the_dragon,
 
             potion: potion_skill.potion,
         }

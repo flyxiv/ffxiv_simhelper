@@ -34,7 +34,6 @@ pub(crate) struct DarkknightDatabase {
     pub(crate) edge_of_shadow_proc: AttackSkill,
 
     pub(crate) darkside: BuffStatus,
-    pub(crate) the_blackest_night_proc: BuffStatus,
 
     pub(crate) potion: AttackSkill,
 }
@@ -684,7 +683,6 @@ impl DarkknightDatabase {
             edge_of_shadow_proc,
 
             darkside,
-            the_blackest_night_proc,
 
             potion: potion_skill.potion,
         }

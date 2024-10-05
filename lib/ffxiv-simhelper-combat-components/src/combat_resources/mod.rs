@@ -8,14 +8,14 @@ use crate::skill::attack_skill::AttackSkill;
 use crate::skill::{Skill, SkillEvents};
 use crate::status::buff_status::BuffStatus;
 use crate::status::debuff_status::DebuffStatus;
-use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType, StackType};
+use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-/// Saves all the combat related resources for the player's job
-/// resources include stack, combo, cooldown of each skill
+// Saves all the combat related resources for the player's job
+// resources include stack, combo, cooldown of each skill
 pub(crate) trait CombatResource: Clone + Sized {
     fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill>;
     fn get_skills(&self) -> &SkillTable<AttackSkill>;
@@ -27,14 +27,6 @@ pub(crate) trait CombatResource: Clone + Sized {
     fn reduce_cooldown(&mut self, skill_id: SkillIdType, reduce_amount: TimeType) {
         let skill = self.get_skills_mut().get_mut(&skill_id).unwrap();
         skill.update_cooldown(reduce_amount);
-    }
-
-    fn get_stack(&self, skill_id: SkillIdType) -> StackType {
-        let skill = self.get_skill(skill_id);
-        let skill_table = self.get_skills();
-
-        let stack_skill = skill_table.get(&skill.stack_skill_id()).unwrap();
-        stack_skill.stacks
     }
 
     fn use_resource(&mut self, resource_id: ResourceIdType, resource: ResourceType) {
@@ -49,7 +41,7 @@ pub(crate) trait CombatResource: Clone + Sized {
         skill.start_cooldown(player);
     }
 
-    /// Add conditional trigger event on skill
+    // Add conditional trigger event on skill
     fn trigger_on_event(
         &mut self,
         skill_id: SkillIdType,

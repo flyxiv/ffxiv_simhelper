@@ -32,24 +32,24 @@ use std::rc::Rc;
 pub const FFXIV_EVENT_QUEUE_INITIAL_CAPACITY: usize = 20;
 pub static TARGET_ID: PlayerIdType = 100;
 
-/// The Abstraction for an actual FFXIV Player in the combat.
+// The Abstraction for an actual FFXIV Player in the combat.
 pub struct FfxivPlayer {
-    /// Stat/Job Data about the player
+    // Stat/Job Data about the player
     pub id: PlayerIdType,
     pub job_abbrev: String,
     pub power: PlayerPower,
 
     pub priority_table: FfxivPriorityTable,
 
-    /// Realtime Combat Data about the player
+    // Realtime Combat Data about the player
     pub buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
     pub(crate) combat_resources: RefCell<FfxivCombatResources>,
     pub(crate) internal_event_queue: RefCell<Vec<FfxivPlayerInternalEvent>>,
     pub event_queue: Rc<RefCell<FfxivEventQueue>>,
     pub turn_calculator: RefCell<PlayerTurnCalculator>,
 
-    /// profile tables. Saved and returned later on the response the show combat simulation results.
-    /// Saves how much % of the total damage each damage skill contributed to the total damage.
+    // profile tables. Saved and returned later on the response the show combat simulation results.
+    // Saves how much % of the total damage each damage skill contributed to the total damage.
     pub damage_logs: Vec<DamageLog>,
     pub skill_logs: Vec<SkillLog>,
     pub start_turn: FfxivEvent,
@@ -419,8 +419,8 @@ impl FfxivPlayer {
         )
     }
 
-    /// GCD buffs are calculated as "reduction multiplier" rather than divider
-    /// ex) 10% speed buff, GCD isn't 2.50 / 1.10 = 2.27, but 2.50 * 0.90 = 2.25
+    // GCD buffs are calculated as "reduction multiplier" rather than divider
+    // ex) 10% speed buff, GCD isn't 2.50 / 1.10 = 2.27, but 2.50 * 0.90 = 2.25
     fn get_gcd_buff_reducer(&self, is_auto_attack: bool) -> MultiplierType {
         let mut gcd_buffs_multiplier = 1.0;
         for buff in self.buff_list.borrow().values() {
@@ -504,137 +504,137 @@ impl FfxivPlayer {
         ));
     }
 
-    /// buffed skills like ley line fire IV, life surge buffed heaven's thrust
-    /// are treated as separate skills by the engine, but is the same skill to the
-    /// app user.
-    /// Merge these buffed skills to the un-buffed original skills
+    // buffed skills like ley line fire IV, life surge buffed heaven's thrust
+    // are treated as separate skills by the engine, but is the same skill to the
+    // app user.
+    // Merge these buffed skills to the un-buffed original skills
     fn convert_related_skill_ids(skill_id: SkillIdType) -> SkillIdType {
         match skill_id {
-            /// WAR
-            /// fell cleave + inner release -> fell cleave
+            // WAR
+            // fell cleave + inner release -> fell cleave
             111 => 104,
 
-            /// DRK
-            /// edge of shadow proc -> edge of shadow
+            // DRK
+            // edge of shadow proc -> edge of shadow
             217 => 203,
 
-            /// AST
-            /// fall malefic lightspeed -> fall malefic
+            // AST
+            // fall malefic lightspeed -> fall malefic
             511 => 500,
 
-            /// DRG
-            /// heavens thrust + surge
+            // DRG
+            // heavens thrust + surge
             812 => 805,
-            /// drakesbane + surge
+            // drakesbane + surge
             813 => 809,
 
-            /// MNK
-            /// perfect leaping opo -> leaping opo
+            // MNK
+            // perfect leaping opo -> leaping opo
             914 => 900,
-            /// perfect rising raptor -> rising raptor
+            // perfect rising raptor -> rising raptor
             915 => 901,
-            /// perfect pouncing coeurl -> pouncing coeurl
+            // perfect pouncing coeurl -> pouncing coeurl
             916 => 902,
-            /// perfect twin snakes -> twin snakes
+            // perfect twin snakes -> twin snakes
             917 => 903,
-            /// perfect demolish -> demolish
+            // perfect demolish -> demolish
             918 => 904,
-            /// perfect dragon kick -> dragon kick
+            // perfect dragon kick -> dragon kick
             919 => 905,
 
-            /// NIN
-            /// bhavacakra meisui -> bhavacakra
+            // NIN
+            // bhavacakra meisui -> bhavacakra
             1021 => 1012,
-            /// zesho meppo meisui -> zesho meppo
+            // zesho meppo meisui -> zesho meppo
             1025 => 1000,
 
-            /// SAM
-            /// gekko meikyo
+            // SAM
+            // gekko meikyo
             1110 => 1102,
-            /// kasha meikyo
+            // kasha meikyo
             1111 => 1104,
-            /// yuki meikyo
+            // yuki meikyo
             1112 => 1105,
-            /// higanbana two(kasha sen)
+            // higanbana two(kasha sen)
             1119 => 1118,
-            /// higanbana three(yuki sen)
+            // higanbana three(yuki sen)
             1120 => 1118,
 
-            /// RPR
-            /// refresh slice -> slice
+            // RPR
+            // refresh slice -> slice
             1223 => 1200,
-            /// refresh waxing slice -> waxing slice
+            // refresh waxing slice -> waxing slice
             1224 => 1201,
-            /// refresh infernal slice -> infernal slice
+            // refresh infernal slice -> infernal slice
             1225 => 1202,
 
-            /// MCH
-            /// drill reassemble -> drill
+            // MCH
+            // drill reassemble -> drill
             1414 => 1403,
-            /// air anchor reassemble -> air anchor
+            // air anchor reassemble -> air anchor
             1415 => 1404,
-            /// chain saw reassemble -> chain saw
+            // chain saw reassemble -> chain saw
             1416 => 1405,
-            /// excavator reassemble -> excavator
+            // excavator reassemble -> excavator
             1419 => 1417,
 
-            /// BLM
-            /// Fire 4 Triplecast -> Fire 4
+            // BLM
+            // Fire 4 Triplecast -> Fire 4
             1704 => 1703,
-            /// Fire 4 Swiftcast -> Fire 4
+            // Fire 4 Swiftcast -> Fire 4
             1719 => 1703,
 
-            /// Fire 3 astral fire 1 -> Fire 3 umbral ice 3
+            // Fire 3 astral fire 1 -> Fire 3 umbral ice 3
             1706 => 1705,
-            /// Fire 3 Opener -> Fire 3 umbral ice 3
+            // Fire 3 Opener -> Fire 3 umbral ice 3
             1718 => 1705,
-            /// Fire 3 -> Fire 3 umbral ice 3
+            // Fire 3 -> Fire 3 umbral ice 3
 
-            /// Despair Triplecast -> Despair
+            // Despair Triplecast -> Despair
             1708 => 1707,
 
-            /// Blizzard 3 transpose triplecast -> Blizzard 3
+            // Blizzard 3 transpose triplecast -> Blizzard 3
             1721 => 1712,
-            /// Blizzard 3 transpose swiftcast -> Blizzard 3
+            // Blizzard 3 transpose swiftcast -> Blizzard 3
             1723 => 1712,
 
-            /// flarestar triplecast -> flarestar
+            // flarestar triplecast -> flarestar
             1722 => 1720,
 
-            /// RDM
-            /// veraero swiftcast -> veraero
+            // RDM
+            // veraero swiftcast -> veraero
             1802 => 1801,
-            /// veraero dualcast -> veraero
+            // veraero dualcast -> veraero
             1803 => 1801,
-            /// veraero acceleration -> veraero
+            // veraero acceleration -> veraero
             1804 => 1801,
-            /// verthunder dualcast -> verthunder swiftcast
+            // verthunder dualcast -> verthunder swiftcast
             1806 => 1805,
-            /// verthunder acceleration -> verthunder swiftcast
+            // verthunder acceleration -> verthunder swiftcast
             1807 => 1805,
-            /// riposte manafication -> enchanted riposte
+            // riposte manafication -> enchanted riposte
             1827 => 1815,
-            /// zwerchhau manafication -> enchanted zwerchhau
+            // zwerchhau manafication -> enchanted zwerchhau
             1828 => 1816,
-            /// redoublement manafication -> enchanted redoublement
+            // redoublement manafication -> enchanted redoublement
             1829 => 1817,
-            /// verholy manafication -> verholy
+            // verholy manafication -> verholy
             1830 => 1818,
-            /// verflare manafication -> verflare
+            // verflare manafication -> verflare
             1831 => 1819,
-            /// scorch manafication -> scorch
+            // scorch manafication -> scorch
             1832 => 1822,
-            /// resolution manafication -> resolution
+            // resolution manafication -> resolution
             1833 => 1823,
 
-            /// PCT
-            /// Comet in Black Hyperphantasia -> Comet in Black
+            // PCT
+            // Comet in Black Hyperphantasia -> Comet in Black
             2032 => 2022,
-            /// Blizzard in Cyan Hyperphantasia -> Blizzard in Cyan
+            // Blizzard in Cyan Hyperphantasia -> Blizzard in Cyan
             2033 => 2013,
-            /// Stone in Yellow Hyperphantasia -> Stone in Yellow
+            // Stone in Yellow Hyperphantasia -> Stone in Yellow
             2034 => 2014,
-            /// Thunder in Magenta Hyperphantasia -> Thunder in Magenta
+            // Thunder in Magenta Hyperphantasia -> Thunder in Magenta
             2035 => 2015,
 
             _ => skill_id,
