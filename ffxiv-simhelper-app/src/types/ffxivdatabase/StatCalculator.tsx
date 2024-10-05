@@ -217,7 +217,6 @@ export function getMinNeededStatForCurrentDirectHit(
 export function getMinNeededStatForCurrentDetermination(
   currentIncreasePercent: number
 ) {
-  console.log(currentIncreasePercent)
   return getMinNeededStatForStatLadder(
     currentIncreasePercent,
     DET_SLOPE,
