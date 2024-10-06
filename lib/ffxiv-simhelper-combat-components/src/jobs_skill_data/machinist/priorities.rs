@@ -1,7 +1,7 @@
 use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::machinist::abilities::MachinistDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, Combo, HasBufforDebuff, HasResource, HasSkillStacks, MillisecondsBeforeBurst, Not, Or,
+    And, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not, Or,
     RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable};

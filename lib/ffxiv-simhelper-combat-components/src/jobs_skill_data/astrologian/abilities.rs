@@ -45,7 +45,7 @@ impl AstrologianDatabase {
             max_stacks: 1,
             owner_id: player_id,
             duration_left_millisecond: 0,
-            status_info: vec![StatusInfo::DamagePercent(7)],
+            status_info: vec![StatusInfo::DamagePercent(6)],
             duration_millisecond: 21000,
             is_raidwide: true,
             trigger_proc_event_on_gcd: vec![],

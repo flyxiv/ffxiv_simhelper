@@ -9,8 +9,7 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::summoner::abilities::SummonerDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    Combo, HasBufforDebuff, HasResource, HasResourceExactly, MillisecondsBeforeBurst, Not,
-    RelatedSkillCooldownLessOrEqualThan,
+    Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
 };
 
 #[derive(Clone)]

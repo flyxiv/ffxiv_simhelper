@@ -1,13 +1,10 @@
 use crate::errors::Result;
 use crate::request::convert_to_simulation_board::create_player;
-use crate::request::simulation_api_request::{PlayerInfoRequest, SimulationApiRequest};
-use ffxiv_simhelper_combat_components::live_objects::player::role::job_abbrev_to_role;
+use crate::request::simulation_api_request::SimulationApiRequest;
 use ffxiv_simhelper_combat_components::live_objects::target::ffxiv_target::FfxivTarget;
-use ffxiv_simhelper_combat_components::types::{BuffIncreasePercentType, IncreaseType};
 use ffxiv_simhelper_dps_simulator::combat_simulator::ffxiv_simulation_board::FfxivSimulationBoard;
 use itertools::Itertools;
 use std::cell::RefCell;
-use std::collections::HashSet;
 use std::rc::Rc;
 
 pub mod bestpartner;

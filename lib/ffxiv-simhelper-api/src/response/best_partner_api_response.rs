@@ -1,4 +1,3 @@
-use ffxiv_simhelper_combat_components::types::DpsType;
 use serde::Serialize;
 
 #[derive(Debug, Serialize, Clone)]

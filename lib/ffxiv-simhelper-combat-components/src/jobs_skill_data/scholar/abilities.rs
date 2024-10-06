@@ -55,7 +55,7 @@ impl ScholarDatabase {
             damage_skill_id: None,
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::CritHitRatePercent(10)],
-            duration_millisecond: 20000,
+            duration_millisecond: 21000,
             is_raidwide: true,
             stacks: 1,
             max_stacks: 1,
@@ -236,7 +236,7 @@ impl ScholarDatabase {
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                FfxivEvent::ApplyDebuff(player_id, chain_stratagem_buff.clone(), 20000, 20000, 0),
+                FfxivEvent::ApplyDebuff(player_id, chain_stratagem_buff.clone(), 21000, 21000, 0),
                 FfxivEvent::ApplyBuff(
                     player_id,
                     player_id,

@@ -94,7 +94,7 @@ export function SimulationResult() {
           {AppHeader()}
           <ResultBoardTopBox>
             {SimulationTitle(SIMULATION_RESULT_TEXT)}
-            {DpsSummary(mainPlayerSimulationData, "MAX RDPS")}
+            {DpsSummary(mainPlayerSimulationData, "99.9% RDPS")}
             {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, QUICK_SIM_ITERATION_COUNT, 1)}
           </ResultBoardTopBox>
           <Box display="flex" justifyContent={"center"}>

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
 import {
+  BEST_PARTNER_INPUT_SAVE_NAME,
   BODY_WIDTH,
-  SINGLE_INPUT_SAVE_NAME,
 } from "../App";
 import { BestPartnerInputMenu } from "../components/input/basicform/EquipmentInputForm";
 import { EquipmentInput } from "../types/EquipmentInput";
@@ -55,8 +55,34 @@ let EquipmentBoard = styled(Box)`
   ${EquipmentBoardStyle}
 `;
 
+export function isNotValidBestPartnerInput(input: EquipmentInput) {
+  if (input.equipmentDatas === null || input.equipmentDatas === undefined) {
+    return true;
+  }
+
+  if (input.equipmentDatas.length !== 1) {
+    return true;
+  }
+
+  for (let i = 0; i < input.equipmentDatas.length; i++) {
+    if (input.equipmentDatas[i].partyMemberIlvl === undefined) {
+      return true;
+    }
+
+    if (input.equipmentDatas[i].mainPlayerPartner1Id === undefined) {
+      return true;
+    }
+
+    if (input.equipmentDatas[i].mainPlayerPartner2Id === undefined) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 export function BestPartner() {
-  let mostRecentInputState = localStorage.getItem(SINGLE_INPUT_SAVE_NAME);
+  let mostRecentInputState = localStorage.getItem(BEST_PARTNER_INPUT_SAVE_NAME);
   let mostRecentInput = null;
 
   if (mostRecentInputState === null) {
@@ -65,7 +91,7 @@ export function BestPartner() {
     mostRecentInput = JSON.parse(mostRecentInputState) as EquipmentInput;
   }
 
-  if (isNotValid(mostRecentInput)) {
+  if (isNotValidBestPartnerInput(mostRecentInput)) {
     mostRecentInput = defaultBestPartnerEquipmentInput();
   }
 

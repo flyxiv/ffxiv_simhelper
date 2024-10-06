@@ -333,14 +333,6 @@ impl AttackSkill {
         self.is_speed_buffed
     }
 
-    pub(crate) fn stack_skill_id(&self) -> SkillIdType {
-        if let Some(skill_id) = self.stack_skill_id {
-            skill_id
-        } else {
-            self.id
-        }
-    }
-
     #[inline]
     fn calculate_stack(&self) -> StackType {
         let used_stack =
@@ -376,7 +368,6 @@ impl AttackSkill {
             return self.stacks;
         }
 
-        let current_stack = self.stacks;
         let mut future_cooldown = max(0, self.current_cooldown_millisecond - time_offset);
 
         for simulation_event in simulation_events {

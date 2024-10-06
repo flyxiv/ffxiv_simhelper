@@ -23,11 +23,15 @@ impl log::Log for SimpleLogger {
     fn flush(&self) {}
 }
 
+#[allow(unused)]
 static LOGGER: SimpleLogger = SimpleLogger;
+
+#[allow(unused)]
 pub fn init(log_level: LevelFilter) -> Result<(), SetLoggerError> {
     log::set_logger(&LOGGER).map(|()| log::set_max_level(log_level))
 }
 
+#[allow(unused)]
 fn main() {
     let party_members = vec!["PLD", "NIN", "WAR", "WHM", "SGE", "DRG", "BRD", "PCT"];
     let party = party_members

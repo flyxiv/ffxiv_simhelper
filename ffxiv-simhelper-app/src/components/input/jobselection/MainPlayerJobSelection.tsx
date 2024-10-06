@@ -255,7 +255,7 @@ export function MainPlayerGcdSelection(
         sx={{ fontSize: AppConfigurations.body1FontSize }}
       >
         <Box display="flex" sx={{ height: "4vh" }} alignItems={"center"} justifyContent={"flex-end"}>
-          <Typography sx={{ fontSize: "0.8vw" }}>
+          <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
             {SPEED_LABEL_TEXT}
           </Typography>
         </Box>
@@ -264,12 +264,12 @@ export function MainPlayerGcdSelection(
       <Select
         labelId={key}
         id={key}
-        value={(totalEquipmentState.equipmentDatas[id].power.gcd).toFixed(0)}
+        value={(totalEquipmentState.equipmentDatas[id].power.gcd).toFixed(2)}
         label={key}
         onChange={(e) => {
-          let newGcd = parseInt(e.target.value);
+          let newGcd = parseFloat(e.target.value);
           let newTotalState = { ...totalEquipmentState };
-          let maxGcd = Math.floor(DEFAULT_GCD * calculateHasteBuff(jobAbbrev) / 100)
+          let maxGcd = Math.floor(DEFAULT_GCD * calculateHasteBuff(jobAbbrev)) / 100;
           let newSpeedMultiplier = Math.floor(maxGcd / newGcd * 1000) / 1000;
 
           newTotalState.equipmentDatas[id].power.gcd = newGcd;
@@ -287,9 +287,9 @@ export function MainPlayerGcdSelection(
         {
           gcdOptions.map((gcd) => {
             return (
-              <MenuItem value={gcd.toFixed(0)}>
+              <MenuItem value={(gcd / 100).toFixed(2)}>
                 <Box display="flex" sx={{ height: "4vh" }} alignItems={"center"} justifyContent={"flex-end"}>
-                  <Typography sx={{ fontSize: "0.8vw", color: "white" }}>
+                  <Typography sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}>
                     {`${(gcd / 100).toFixed(2)}`}
                   </Typography>
                 </Box>
