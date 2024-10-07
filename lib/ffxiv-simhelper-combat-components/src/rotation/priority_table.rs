@@ -303,7 +303,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 skill.current_cooldown_millisecond
             };
 
-            let skill_start_time = start_time + skill_cooldown;
+            let skill_start_time = start_time + max(skill_cooldown - time_offset, 0);
             let time_offset = time_offset + skill_cooldown;
 
             if skill_start_time <= latest_time_to_use {
