@@ -115,7 +115,7 @@ impl MonkDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![(
                 FfxivEvent::IncreasePlayerResource(player_id, 0, 1, 0),
-                8,
+                5,
             )],
         };
         let winds_rumination: BuffStatus = BuffStatus {
