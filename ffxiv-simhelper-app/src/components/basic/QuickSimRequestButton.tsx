@@ -109,6 +109,9 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
       1.0
     );
 
+    finalResponses.sort((a, b) => b.simulationData[0].simulationSummary.rdps[0] - a.simulationData[0].simulationSummary.rdps[0]);
+    console.log(finalResponses);
+
     response = finalResponses[0];
     response.simulationData[mainPlayerId].simulationSummary = damageSummary;
 

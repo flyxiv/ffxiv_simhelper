@@ -312,8 +312,8 @@ pub(crate) trait PriorityTable: Sized + Clone {
             let second_skill_offset_cooldown =
                 second_skill_candidate.get_offset_cooldown_millisecond();
 
-            let skill_start_time = start_time + second_skill_offset_cooldown;
-            let second_skill_time_offset = first_skill_time_offset + second_skill_offset_cooldown;
+            let skill_start_time = start_time + max(skill_cooldown - time_offset, 0);
+            let time_offset = time_offset + skill_cooldown;
 
             if skill_start_time <= latest_time_to_use {
                 if self.can_use_skill(
