@@ -111,7 +111,7 @@ impl AutoAttackTicker {
             "VPR" => 90,
             "MNK" => 90,
             "RPR" => 85,
-            "DRG" => 80,
+            "DRG" => 90,
             "SAM" => 85,
             _ => 100,
         };
