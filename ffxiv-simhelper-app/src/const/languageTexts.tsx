@@ -702,6 +702,11 @@ export const SAMURAI_ROTATION_WARNING_TEXT =
     ? "!!!Samurai's 'tengentsu' is simulated as a 35s skill(trying to fit approximately 12 casts in a 6:30 fight)."
     : "!!!사무라이의 '심안'은 35초 스킬로 시뮬레이션 되었습니다(로그를 봤을 때 6:30 전투에서 12번 정도 사용됨).";
 
+export const MNK_ROTATION_WARNING_TEXT =
+  AppConfigurations.languageMode === ENGLISH_MODE
+    ? "!!!Monk's GCD in real ingame is affected by frame rate and ping, causing slight clips in GCD when double-weaving. The simulation can't take this into account, so Monk's potencies have been tuned a little down to compensate for this."
+    : "!!!몽크의 실제 인게임 글쿨은 프레임레이트/핑에 영향을 많이 받고, 글쿨 사이에 논글쿨 두개를 쓰면 조금씩 클리핑이 발생하기도 합니다. 시뮬레이션은 그런 부분을 반영할 수 없어서 대신 몽크의 기본 위력을 조금 낮췄습니다.";
+
 export const ROTATION_SAMPLE_BUTTON_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "Rotation Sample"

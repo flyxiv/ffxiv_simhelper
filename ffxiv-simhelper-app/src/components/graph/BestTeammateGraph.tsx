@@ -1,9 +1,11 @@
 import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 import { GraphTitleRow, JobBarChartTeammate } from "./JobBarChart";
-import { Box, styled } from "@mui/material";
+import { Box, styled, Typography } from "@mui/material";
 import { GraphBoxStyle } from "./Style";
 import { PartyContributionData, TeammateChartData } from "./GraphData";
 import { TABLE_WIDTH } from "../../page/SimulationResult";
+import { MNK_EN_NAME, MNK_ROTATION_WARNING_TEXT } from "../../const/languageTexts";
+import { WarningText } from "../basic/WarningText";
 
 const GraphBox = styled(Box)`
   ${GraphBoxStyle}
@@ -78,7 +80,8 @@ export const makeBestTeammateData = (
 };
 
 export const BestTeammateGraph = (
-  teammatesContributionToMyBuffs: null | PartyContributionData
+  teammatesContributionToMyBuffs: null | PartyContributionData,
+  jobAbbrev: string
 ) => {
   if (teammatesContributionToMyBuffs === null) {
     return;
@@ -102,11 +105,14 @@ export const BestTeammateGraph = (
   return (
     <Box width={TABLE_WIDTH}>
       {GraphTitleRow()}
+      {
+        jobAbbrev === MNK_EN_NAME ? WarningText(MNK_ROTATION_WARNING_TEXT) : <Box />
+      }
       <GraphBox>
         {teammateContributionData.map((data) => {
           return JobBarChartTeammate(data, maxContribution);
         })}
       </GraphBox>
-    </Box>
+    </Box >
   );
 };

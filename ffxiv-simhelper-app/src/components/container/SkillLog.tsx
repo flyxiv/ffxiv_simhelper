@@ -13,11 +13,14 @@ import {
   ABILITY_TEXT,
   COMBAT_TIME_TEXT,
   IMPORTANT_STATUS_TEXT,
+  MNK_EN_NAME,
+  MNK_ROTATION_WARNING_TEXT,
   ROTATION_SAMPLE_WARNING_TEXT,
   SAM_EN_NAME,
   SAMURAI_ROTATION_WARNING_TEXT,
 } from "../../const/languageTexts";
 import { AppConfigurations } from "../../Themes";
+import { WarningText } from "../basic/WarningText";
 
 const SkillLogCombatTimeBox = styled(Box)`
   ${SkillLogCombatTimeBoxStyle}
@@ -72,12 +75,8 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
       </Typography>
       {
         response.mainPlayerJobAbbrev === SAM_EN_NAME ?
-          <Typography
-            sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}
-          >
-            {SAMURAI_ROTATION_WARNING_TEXT}
-          </Typography>
-          : <Box></Box>
+          WarningText(SAMURAI_ROTATION_WARNING_TEXT)
+          : response.mainPlayerJobAbbrev === MNK_EN_NAME ? WarningText(MNK_ROTATION_WARNING_TEXT) : <Box></Box>
       }
       <SkillLogTableList>
         <ListItem>
