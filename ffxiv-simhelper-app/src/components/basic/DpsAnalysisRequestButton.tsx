@@ -4,7 +4,7 @@ import {
   calculateIlvlAdjustment,
   mapJobAbbrevToJobBisEquipments,
 } from "../../const/StatValue";
-import { PartyInfo } from "../../types/PartyStates";
+import { EMPTY_PARTY_MEMBER, PartyInfo } from "../../types/PartyStates";
 import {
   DPS_ANALYSIS_RESULT_URL,
   SINGLE_INPUT_SAVE_NAME,
@@ -163,6 +163,17 @@ export function createDpsAnalysisRequest(
       power: power,
     },
   ];
+
+  for (let i = 0; i < totalState.partyMemberJobAbbrevs.length; i++) {
+    if (totalState.partyMemberJobAbbrevs[i] === EMPTY_PARTY_MEMBER) {
+      if (partyInfo[0].partner1Id !== null && partyInfo[0].partner1Id >= i) {
+        partyInfo[0].partner1Id -= 1;
+      }
+      if (partyInfo[0].partner2Id !== null && partyInfo[0].partner2Id >= i) {
+        partyInfo[0].partner2Id -= 1;
+      }
+    }
+  }
 
   let playerCount = 0;
   for (let i = 0; i < totalState.partyMemberJobAbbrevs.length; i++) {

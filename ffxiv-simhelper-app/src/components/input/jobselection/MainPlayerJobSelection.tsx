@@ -114,9 +114,9 @@ export function MainPlayerJobSelection(
       data.itemSet = bisForNewJob.itemSet;
       data.gearSetMaterias = bisForNewJob.gearSetMaterias;
       data.foodId = bisForNewJob.foodId;
+      resetInvalidPartnersForNewJob(data);
     })
 
-    resetInvalidPartnersForNewJob(newTotalState.equipmentDatas[id]);
 
     updateAllPlayerPower(newTotalState, setTotalState);
   };
