@@ -1,4 +1,4 @@
-import { QuickSimResponse } from "../../types/QuickSimResponse";
+import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 import { GraphTitleRow, JobBarChartTeammate } from "./JobBarChart";
 import { Box, styled } from "@mui/material";
 import { GraphBoxStyle } from "./Style";
@@ -10,7 +10,7 @@ const GraphBox = styled(Box)`
 `;
 
 export const makeBestTeammateData = (
-  response: QuickSimResponse,
+  response: DpsAnalysisResponse,
   teammatesContributions: null | PartyContributionData,
   setTeammatesContributionToMyBuffs: Function
 ) => {

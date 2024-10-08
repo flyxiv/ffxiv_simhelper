@@ -572,10 +572,10 @@ export function convertToRaceText(raceName: string) {
 // Page Names
 export const HOME_PAGE_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE ? "Home" : "시작";
-export const QUICKSIM_PAGE_NAME =
+export const DPS_ANALYSIS_PAGE_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Quick Sim"
-    : "빠른 시뮬레이션";
+    ? "DPS Analysis"
+    : "DPS 분석";
 export const GEAR_COMPARE_PAGE_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "Gear Compare"
@@ -584,16 +584,16 @@ export const BEST_PARTNER_PAGE_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "Best Partner"
     : "시너지 파트너";
-export const STAT_WEIGHTS_PAGE_NAME =
+export const BEST_STAT_PAGE_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Stat Weights"
+    ? "Best Stat"
     : "스탯 가중치";
 
 export const PLAYER_POWER_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "Specific Player Power"
     : "스탯별 결과 수치";
-export const QUICK_SIM_PARTY_INPUT_INFO_TEXT =
+export const DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "2. Additional Settings"
     : "2. 파티 관련 설정을 입력해주세요";
@@ -609,15 +609,15 @@ export const NO_POT_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE ? "X(No)" : "X(미사용)";
 
 // Home
-export const QUICK_SIM_DESCRIPTION_TEXT =
+export const DPS_ANALYSIS_DESCRIPTION_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Quickly get analyze DPS of your input gearset."
+    ? "Quickly analyze DPS for your input gearset."
     : "당신의 장비셋을 입력하고 빠르게 분석해보세요.";
 export const GEAR_COMPARE_DESCRIPTION_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "Compare two gearsets to see which is better for your damage."
     : "두 장비셋을 비교하여 더 높은 데미지를 내는 장비셋을 확인해보세요.";
-export const STAT_WEIGHTS_DESCRIPTION_TEXT =
+export const BEST_STATS_DESCRIPTION_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "Calculate which main/sub stats are more valuable to you."
     : "가장 딜상승 기대값이 높은 스탯을 분석합니다.";
@@ -627,7 +627,7 @@ export const BEST_PARTNER_DESCRIPTION_TEXT =
     : "내 시너지를 가장 잘 사용해줄 조합을 찾아줍니다(시너지 직업만).";
 
 // Quick Sim
-export const QUICK_SIM_INPUT_INFO_TEXT =
+export const DPS_ANALYSIS_INPUT_INFO_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "1. Input Your Info"
     : "1. 분석할 장비셋을 입력해주세요";
@@ -664,7 +664,7 @@ export const EDPS_EXPLANATION_TEXT =
     ? "!!! EDPS: RDPS + My total contribution to party members' buffs"
     : "!!! EDPS: RDPS + 파티원들 시너지에 대한 내 전체 기여도";
 
-// Quick Sim Results
+// Dps Analysis Results
 export const DAMAGE_PROFILE_BUTTON_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "Damage Profile"
@@ -746,13 +746,13 @@ export const BURST_TEXT = (burst_minute: number) =>
     ? `${burst_minute} Minute Burst`
     : `${burst_minute}분 버스트`;
 
-// Stat Weights Results
-export const STAT_WEIGHTS_TEXT =
+// Best Stats Results
+export const BEST_STATS_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "RDPS Increase Per Stat Point"
     : "스탯 1당 RDPS 증가 기대값";
 
-export const STAT_WEIGHTS_NAME_TEXT =
+export const BEST_STATS_NAME_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE
     ? "RDPS Increase / 1 Stat Point"
     : "RDPS 증가 / 1 스탯 포인트";

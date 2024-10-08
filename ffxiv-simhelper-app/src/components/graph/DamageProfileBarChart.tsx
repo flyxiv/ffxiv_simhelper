@@ -42,7 +42,7 @@ const SkillBarBox = styled(Box)`
   ${SkillBarBoxStyle}
 `;
 
-// One row of Damage Profile column in QuickSim Result
+// One row of Damage Profile column in DpsAnalysis Result
 // 1. Skill Icon
 // 2. Skill Name
 // 3. Skill Damage Bar + Percentage of Total Damage

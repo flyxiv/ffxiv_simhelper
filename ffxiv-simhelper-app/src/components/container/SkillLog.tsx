@@ -1,4 +1,4 @@
-import { QuickSimResponse } from "../../types/QuickSimResponse";
+import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 import {
   SkillLogTableStyle,
   SkillLogCombatTimeBoxStyle,
@@ -39,7 +39,7 @@ const SkillEntityBox = styled(Box)`
   ${SkillEntityBoxStyle}
 `;
 
-export const SkillLogResult = (response: QuickSimResponse) => {
+export const SkillLogResult = (response: DpsAnalysisResponse) => {
   const mainPlayerId = response.mainPlayerId;
   const simulationDatas = response.simulationData;
 

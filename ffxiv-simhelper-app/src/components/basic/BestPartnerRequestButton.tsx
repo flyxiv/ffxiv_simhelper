@@ -21,7 +21,7 @@ import {
   ALL_PLAYER_JOBS,
   AUTO_ATTACK_DELAYS,
 } from "../../types/ffxivdatabase/Job";
-import { sendRequestAsync } from "./QuickSimRequestButton";
+import { sendRequestAsync } from "./DpsAnalysisRequestButton";
 import { jobAbbrevToRole, JobRole } from "../../page/BestPartner";
 import {
   BestPartnerResponse,

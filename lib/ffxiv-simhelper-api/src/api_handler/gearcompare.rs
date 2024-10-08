@@ -1,4 +1,4 @@
-use crate::api_handler::quicksim::quicksim;
+use crate::api_handler::dpsanalysis::dps_analysis;
 use crate::errors::Result;
 use crate::request::gear_compare_api_request::GearCompareApiRequest;
 use crate::response::stat_compare_api_response::GearCompareApiResponse;
@@ -9,11 +9,11 @@ const NUMBER_OF_ITERATIONS_PER_REQUEST_GEAR_COMPARE: usize = 8;
 pub(crate) async fn gear_compare_api_handler(
     Json(request): Json<GearCompareApiRequest>,
 ) -> Result<Json<GearCompareApiResponse>> {
-    let simulation_response1 = quicksim(
+    let simulation_response1 = dps_analysis(
         request.gear1_request,
         NUMBER_OF_ITERATIONS_PER_REQUEST_GEAR_COMPARE,
     )?;
-    let simulation_response2 = quicksim(
+    let simulation_response2 = dps_analysis(
         request.gear2_request,
         NUMBER_OF_ITERATIONS_PER_REQUEST_GEAR_COMPARE,
     )?;

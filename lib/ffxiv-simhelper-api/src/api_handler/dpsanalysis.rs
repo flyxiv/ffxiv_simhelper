@@ -6,21 +6,21 @@ use crate::response::simulation_api_response::SimulationApiResponse;
 use axum::Json;
 use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 
-const NUMBER_OF_ITERATIONS_PER_REQUEST_QUICKSIM: usize = 2;
+const NUMBER_OF_ITERATIONS_PER_REQUEST_DPS_ANALYSIS: usize = 2;
 
-/// QuickSim API Request Handler
+/// DpsAnalysis API Request Handler
 /// The most basic simulation of FFXIV SimHelper
 /// 1) In-depth analysis of character's DPS
-pub(crate) async fn quicksim_api_handler(
+pub(crate) async fn dps_analysis_api_handler(
     Json(request): Json<SimulationApiRequest>,
 ) -> Result<Json<SimulationApiResponse>> {
-    Ok(Json(quicksim(
+    Ok(Json(dps_analysis(
         request,
-        NUMBER_OF_ITERATIONS_PER_REQUEST_QUICKSIM,
+        NUMBER_OF_ITERATIONS_PER_REQUEST_DPS_ANALYSIS,
     )?))
 }
 
-pub fn quicksim(
+pub fn dps_analysis(
     request: SimulationApiRequest,
     number_of_iterations: usize,
 ) -> Result<SimulationApiResponse> {

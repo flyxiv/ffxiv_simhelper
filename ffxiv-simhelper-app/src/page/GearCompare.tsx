@@ -26,7 +26,7 @@ import {
   COPY_BUTTON_TEXT,
   GEAR_COMPARE_INPUT_INFO_TEXT,
   GEAR_COMPARE_PAGE_NAME,
-  QUICK_SIM_PARTY_INPUT_INFO_TEXT,
+  DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT,
 } from "../const/languageTexts";
 
 export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "98%";
@@ -156,7 +156,7 @@ export function GearCompare() {
             </GearCompareEquipmentInputContainer>
 
             <GearComparePartyInputContainer paddingTop={10} paddingBottom={40}>
-              {SelectionTitle(QUICK_SIM_PARTY_INPUT_INFO_TEXT)}
+              {SelectionTitle(DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
                 {HorizontalPartyInput(totalState, setTotalState)}
               </CustomizeBoard>

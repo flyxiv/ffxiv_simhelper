@@ -1,7 +1,7 @@
 use crate::api_handler::create_simulation_board;
 use crate::errors::Result;
+use crate::request::best_stats_api_request::BestStatsApiRequest;
 use crate::request::simulation_api_request::SimulationApiRequest;
-use crate::request::stat_weights_api_request::StatWeightsApiRequest;
 use crate::response::convert_simulation_result::create_response_from_simulation_result;
 use crate::response::stat_weights_api_response::StatWeightsApiResponse;
 use axum::Json;
@@ -9,23 +9,23 @@ use ffxiv_simhelper_combat_components::types::DpsType;
 use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
 
-const STAT_WEIGHTS_SIMULATION_COUNT: usize = 2000;
+const BEST_STATS_SIMULATION_COUNT: usize = 2000;
 const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.50;
 
-pub(crate) async fn stat_weights_api_handler(
-    Json(request): Json<StatWeightsApiRequest>,
+pub(crate) async fn best_stats_api_handler(
+    Json(request): Json<BestStatsApiRequest>,
 ) -> Result<Json<StatWeightsApiResponse>> {
     Ok(Json(stat_weights(request)?))
 }
 
-pub fn stat_weights(request: StatWeightsApiRequest) -> Result<StatWeightsApiResponse> {
+pub fn stat_weights(request: BestStatsApiRequest) -> Result<StatWeightsApiResponse> {
     let main_player_id = request.main_player_id;
     let main_player_power = request.party[main_player_id as usize].power.clone();
     let main_player_job_abbrev = request.party[main_player_id as usize].job_abbrev.clone();
 
-    let mut dps_results: [i32; STAT_WEIGHTS_SIMULATION_COUNT] = [0; STAT_WEIGHTS_SIMULATION_COUNT];
+    let mut dps_results: [i32; BEST_STATS_SIMULATION_COUNT] = [0; BEST_STATS_SIMULATION_COUNT];
 
-    for simulation_idx in 0..STAT_WEIGHTS_SIMULATION_COUNT {
+    for simulation_idx in 0..BEST_STATS_SIMULATION_COUNT {
         let simulation_board = create_simulation_board(SimulationApiRequest::from(&request))?;
         simulation_board.run_simulation();
 
@@ -48,7 +48,7 @@ pub fn stat_weights(request: StatWeightsApiRequest) -> Result<StatWeightsApiResp
         dps: dps_results
             .into_iter()
             .sorted()
-            .nth((WANTED_CONTRIBUTION_PERCENTILE * STAT_WEIGHTS_SIMULATION_COUNT as f64) as usize)
+            .nth((WANTED_CONTRIBUTION_PERCENTILE * BEST_STATS_SIMULATION_COUNT as f64) as usize)
             .unwrap() as DpsType,
     })
 }

@@ -24,7 +24,7 @@ import {
   NEXT_TEXT,
   PREV_TEXT,
   STAT_TEXT,
-  STAT_WEIGHTS_NAME_TEXT,
+  BEST_STATS_NAME_TEXT,
   TIME_TEXT,
   VARIANCE_NAME,
 } from "../../const/languageTexts";
@@ -294,7 +294,7 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
         <StatSummaryBox
           sx={{ backgroundColor: AppConfigurations.backgroundThree }}
         >
-          <SingleStatBox sx={{ width: "15vw" }}>{StatSummaryTypography(STAT_WEIGHTS_NAME_TEXT)}</SingleStatBox>
+          <SingleStatBox sx={{ width: "15vw" }}>{StatSummaryTypography(BEST_STATS_NAME_TEXT)}</SingleStatBox>
         </StatSummaryBox>
       </Box>
 

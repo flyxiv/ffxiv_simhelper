@@ -6,12 +6,12 @@ import {
 } from "../../const/StatValue";
 import { PartyInfo } from "../../types/PartyStates";
 import {
-  QUICKSIM_RESULT_URL,
+  DPS_ANALYSIS_RESULT_URL,
   SINGLE_INPUT_SAVE_NAME,
-  QUICK_SIM_RESPONSE_SAVE_NAME,
+  DPS_ANALYSIS_RESPONSE_SAVE_NAME,
 } from "../../App";
 import { useState } from "react";
-import { QuickSimResponse } from "../../types/QuickSimResponse";
+import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 import { requestButtonStyle } from "./Style";
 import {
   EquipmentInput,
@@ -32,7 +32,7 @@ export const QUICK_SIM_ITERATION_COUNT =
   TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT;
 const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
 
-export function QuickSimRequestButton(totalState: EquipmentInput) {
+export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
   let [isRunning, setIsRunning] = useState(false);
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
@@ -57,7 +57,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
     let inputJson = JSON.stringify(totalState);
     localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
-    let request = createQuickSimRequest(totalState.equipmentDatas[0]);
+    let request = createDpsAnalysisRequest(totalState.equipmentDatas[0]);
 
     if (request instanceof Error) {
       console.error("Error: ", request.message);
@@ -88,7 +88,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
     }
 
     await Promise.all(responsePromises);
-    const formattedResponses: Array<Promise<QuickSimResponse>> = responses.map(
+    const formattedResponses: Array<Promise<DpsAnalysisResponse>> = responses.map(
       async (response) => {
         const data = await response.json();
         return data;
@@ -116,9 +116,9 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
     response.simulationData[mainPlayerId].simulationSummary = damageSummary;
 
     const responseString = JSON.stringify(response);
-    localStorage.setItem(QUICK_SIM_RESPONSE_SAVE_NAME, responseString);
+    localStorage.setItem(DPS_ANALYSIS_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(`/${QUICKSIM_RESULT_URL}`);
+    navigate(`/${DPS_ANALYSIS_RESULT_URL}`);
   };
   return (
     <Box display="flex" alignItems={"center"}>
@@ -140,7 +140,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
   );
 }
 
-export function createQuickSimRequest(
+export function createDpsAnalysisRequest(
   totalState: SingleEquipmentInputSaveState
 ) {
   let jobAbbrev = totalState.mainPlayerJobAbbrev;

@@ -7,11 +7,11 @@ import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
-import { StatWeightsResponseTable } from "../types/StatWeightsResponse";
+import { BestStatsResponseTable } from "../types/BestStats";
 import { StatWeightSummary } from "../components/container/StatSummary";
-import { SIMULATION_RESULT_TEXT, STAT_WEIGHTS_PAGE_NAME, STAT_WEIGHTS_TEXT } from "../const/languageTexts";
+import { SIMULATION_RESULT_TEXT, BEST_STAT_PAGE_NAME, BEST_STATS_TEXT } from "../const/languageTexts";
 import { EMPTY_PARTY_MEMBER } from "../types/PartyStates";
-import { STAT_WEIGHTS_REQUEST_COUNT } from "../components/basic/StatWeightsRequestButton";
+import { STAT_WEIGHTS_REQUEST_COUNT } from "../components/basic/BestStatsRequestButton";
 
 export interface StatWeightsData {
   statName: string;
@@ -39,7 +39,7 @@ export function StatWeightsResult() {
     );
   }
 
-  let responseJson = JSON.parse(response) as StatWeightsResponseTable;
+  let responseJson = JSON.parse(response) as BestStatsResponseTable;
   let mainPlayerJob = responseJson.mainPlayerJobAbbrev;
   let partyMemberJobAbbrevs = responseJson.partyMemberJobAbbrevs.filter((job) => job !== EMPTY_PARTY_MEMBER);
   let statWeightsTable = responseJson.statAugmentedSimulationData;
@@ -67,7 +67,7 @@ export function StatWeightsResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(STAT_WEIGHTS_PAGE_NAME)}
+        {BasicLeftMenu(BEST_STAT_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultBoardTopBox marginBottom="40px">
@@ -75,7 +75,7 @@ export function StatWeightsResult() {
             {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, STAT_WEIGHTS_REQUEST_COUNT, 1)}
           </ResultBoardTopBox>
           <ResultBoardBox >
-            {SimulationTitle(STAT_WEIGHTS_TEXT)}
+            {SimulationTitle(BEST_STATS_TEXT)}
             {StatWeightSummary(statWeightsCalculated)}
           </ResultBoardBox>
           {Footer()}

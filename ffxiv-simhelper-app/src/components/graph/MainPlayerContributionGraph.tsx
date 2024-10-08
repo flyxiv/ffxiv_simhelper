@@ -8,7 +8,7 @@ import { Box, styled } from "@mui/material";
 import { GraphBoxStyle } from "./Style";
 import { GraphTitleRow, JobBarChartTeammate } from "./JobBarChart";
 import { TABLE_WIDTH } from "../../page/SimulationResult";
-import { QuickSimResponse } from "../../types/QuickSimResponse";
+import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 
 const GraphBox = styled(Box)`
   ${GraphBoxStyle}
@@ -16,7 +16,7 @@ const GraphBox = styled(Box)`
 
 // main player id has to be 0
 export const makeMainPlayerContributionData = (
-  response: QuickSimResponse,
+  response: DpsAnalysisResponse,
   mainPlayerContributionToOthers: null | PartyContributionData,
   setMainPlayerContributionToOthers: Function
 ) => {

@@ -1,7 +1,7 @@
 import { Box, styled, Typography } from "@mui/material";
 import "./SimulationResult.css";
 import { useState } from "react";
-import { QuickSimResponse } from "../types/QuickSimResponse";
+import { DpsAnalysisResponse } from "../types/DpsAnalysisResponse";
 import {
   BestTeammateGraph,
   makeBestTeammateData,
@@ -13,7 +13,7 @@ import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { DamageProfileGraph } from "../components/graph/DamageProfileGraph";
 import { SkillLogResult } from "../components/container/SkillLog";
 import { ResultPageButtonGroup } from "../components/container/ResultPageButtonGroup";
-import { QUICK_SIM_RESPONSE_SAVE_NAME } from "../App";
+import { DPS_ANALYSIS_RESPONSE_SAVE_NAME } from "../App";
 import { PartyContributionData } from "../components/graph/GraphData";
 import {
   MainPlayerContributionGraph,
@@ -24,8 +24,8 @@ import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { PlayerInfo } from "../components/container/PlayerInfo";
-import { BEST_TEAMMATE_BUTTON_TEXT, DAMAGE_PROFILE_BUTTON_TEXT, EDPS_EXPLANATION_TEXT, MY_CONTRIBUTION_BUTTON_TEXT, QUICKSIM_PAGE_NAME, ROTATION_SAMPLE_BUTTON_TEXT, SIMULATION_RESULT_TEXT } from "../const/languageTexts";
-import { QUICK_SIM_ITERATION_COUNT } from "../components/basic/QuickSimRequestButton";
+import { BEST_TEAMMATE_BUTTON_TEXT, DAMAGE_PROFILE_BUTTON_TEXT, EDPS_EXPLANATION_TEXT, MY_CONTRIBUTION_BUTTON_TEXT, DPS_ANALYSIS_PAGE_NAME, ROTATION_SAMPLE_BUTTON_TEXT, SIMULATION_RESULT_TEXT } from "../const/languageTexts";
+import { QUICK_SIM_ITERATION_COUNT } from "../components/basic/DpsAnalysisRequestButton";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -40,7 +40,7 @@ export const TABLE_WIDTH = "80%";
 export function SimulationResult() {
   let [currentlyToggledView, setCurrentlyToggledView] =
     useState(DAMAGE_PROFILE_BUTTON_TEXT);
-  let response = localStorage.getItem(QUICK_SIM_RESPONSE_SAVE_NAME);
+  let response = localStorage.getItem(DPS_ANALYSIS_RESPONSE_SAVE_NAME);
 
   if (response == null) {
     return (
@@ -50,7 +50,7 @@ export function SimulationResult() {
     );
   }
 
-  let responseJson = JSON.parse(response) as QuickSimResponse;
+  let responseJson = JSON.parse(response) as DpsAnalysisResponse;
   let mainPlayerId = responseJson.mainPlayerId;
   let mainPlayerSimulationData = responseJson.simulationData[mainPlayerId];
   let mainPlayerJob = mainPlayerSimulationData.jobAbbrev.valueOf();
@@ -89,7 +89,7 @@ export function SimulationResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(QUICKSIM_PAGE_NAME)}
+        {BasicLeftMenu(DPS_ANALYSIS_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultBoardTopBox>
@@ -123,7 +123,7 @@ export function SimulationResult() {
 
 function renderTableBasedOnSelectedButton(
   currentlyToggledView: string,
-  responseJson: QuickSimResponse,
+  responseJson: DpsAnalysisResponse,
   teammatesContributionToMyBuffs: null | PartyContributionData,
   mainPlayerContributionToOthers: null | PartyContributionData
 ) {

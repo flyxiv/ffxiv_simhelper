@@ -6,10 +6,10 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import { SimulationResult } from "./page/SimulationResult";
-import { QuickSim } from "./page/QuickSim";
+import { DpsAnalysis } from "./page/DpsAnalysis";
 import { GearCompare } from "./page/GearCompare";
 import { Home } from "./page/home";
-import { StatWeights } from "./page/StatWeights";
+import { BestStats } from "./page/BestStats";
 import { BestPartner } from "./page/BestPartner";
 import { GearCompareResult } from "./page/GearCompareResult";
 import { BestPartnerResult } from "./page/BestPartnerResult";
@@ -28,13 +28,13 @@ export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
 
 export const GEAR_COMPARE_REQUEST_SAVE_NAME = "mostRecentGearCompareRequest";
 
-export const QUICK_SIM_RESPONSE_SAVE_NAME = "mostRecentQuickSimResponse";
+export const DPS_ANALYSIS_RESPONSE_SAVE_NAME = "mostRecentDpsAnalysisResponse";
 export const GEAR_COMPARE_RESPONSE_SAVE_NAME = "mostRecentGearCompareResponse";
 export const BEST_PARTNER_RESPONSE_SAVE_NAME = "mostRecentBestPartnerResponse";
-export const STAT_WEIGHTS_RESPONSE_SAVE_NAME = "mostRecentStatWeightsResponse";
+export const STAT_WEIGHTS_RESPONSE_SAVE_NAME = "mostRecentBestStatsResponse";
 
-export const QUICKSIM_URL = "quicksim";
-export const QUICKSIM_RESULT_URL = "quicksimsimulationresult";
+export const DPS_ANALYSIS_URL = "dpsanalysis";
+export const DPS_ANALYSIS_RESULT_URL = "dpsanalysissimulationresult";
 
 export const GEAR_COMPARE_URL = "gearcompare";
 export const GEAR_COMPARE_RESULT_URL = "gearcomparesimulationresult";
@@ -42,8 +42,8 @@ export const GEAR_COMPARE_RESULT_URL = "gearcomparesimulationresult";
 export const BEST_PARTNER_URL = "bestpartner";
 export const BEST_PARTNER_RESULT_URL = "bestpartnersimulationresult";
 
-export const STAT_WEIGHTS_URL = "statweights";
-export const STAT_WEIGHTS_RESULT_URL = "statweightssimulationresult";
+export const BEST_STATS_URL = "beststats";
+export const BEST_STATS_RESULT_URL = "beststatssimulationresult";
 
 export const BODY_WIDTH = {
   xs: `${100 - MENU_WIDTH_VW_XS}vw`,
@@ -60,10 +60,10 @@ function App() {
       <main className="Body">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path={`/${QUICKSIM_URL}`} element={<QuickSim />} />
+          <Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
 
           <Route
-            path={`/${QUICKSIM_RESULT_URL}`}
+            path={`/${DPS_ANALYSIS_RESULT_URL}`}
             element={<SimulationResult />}
           />
 
@@ -79,9 +79,9 @@ function App() {
             element={<BestPartnerResult />}
           />
 
-          <Route path={`/${STAT_WEIGHTS_URL}`} element={<StatWeights />} />
+          <Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
           <Route
-            path={`/${STAT_WEIGHTS_RESULT_URL}`}
+            path={`/${BEST_STATS_RESULT_URL}`}
             element={<StatWeightsResult />}
           />
         </Routes>

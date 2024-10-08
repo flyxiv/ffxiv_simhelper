@@ -4,7 +4,7 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct StatWeightsApiRequest {
+pub struct BestStatsApiRequest {
     pub main_player_id: PlayerIdType,
     pub combat_time_millisecond: TimeType,
     pub party: Vec<PlayerInfoRequest>,
@@ -14,8 +14,8 @@ pub struct StatWeightsApiRequest {
     pub use_pot: bool,
 }
 
-impl From<&StatWeightsApiRequest> for SimulationApiRequest {
-    fn from(request: &StatWeightsApiRequest) -> Self {
+impl From<&BestStatsApiRequest> for SimulationApiRequest {
+    fn from(request: &BestStatsApiRequest) -> Self {
         SimulationApiRequest {
             main_player_id: request.main_player_id,
             combat_time_millisecond: request.combat_time_millisecond,

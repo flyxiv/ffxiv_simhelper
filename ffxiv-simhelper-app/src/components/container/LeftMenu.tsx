@@ -10,8 +10,8 @@ import { LoadoutBox } from "./LoadoutBox";
 import {
   BEST_PARTNER_URL,
   GEAR_COMPARE_URL,
-  QUICKSIM_URL,
-  STAT_WEIGHTS_URL,
+  DPS_ANALYSIS_URL,
+  BEST_STATS_URL,
 } from "../../App";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import {
@@ -19,9 +19,9 @@ import {
   GEAR_COMPARE_PAGE_NAME,
   HOME_PAGE_NAME,
   NAVIGATE_TEXT,
-  QUICKSIM_PAGE_NAME,
+  DPS_ANALYSIS_PAGE_NAME,
   SAVED_GEARSETS_TEXT,
-  STAT_WEIGHTS_PAGE_NAME,
+  BEST_STAT_PAGE_NAME,
 } from "../../const/languageTexts";
 import { convertToLinkUrl } from "../../page/home";
 
@@ -128,10 +128,10 @@ function NavigationMenu(link: string, text: string, iconPath: string, currentSim
 }
 
 const HOME_MENU_LOGO_PATH = "/images/icon_home_w.svg";
-const QUICKSIM_MENU_LOGO_PATH = "/images/icon_quick_sim_w.svg";
+const DPS_ANALYSIS_MENU_LOGO_PATH = "/images/icon_dps_analysis_w.svg";
 const GEAR_COMPARE_MENU_LOGO_PATH = "/images/icon_gear_compare_w.svg";
 const BEST_PARTNER_MENU_LOGO_PATH = "/images/icon_best_partner_w.svg";
-const STAT_WEIGHTS_MENU_LOGO_PATH = "/images/icon_stat_weights_w.svg";
+const STAT_WEIGHTS_MENU_LOGO_PATH = "/images/icon_best_stats_w.svg";
 const LOGO_PATH = "/images/left_menu_logo.svg";
 
 function DefaultLeftMenuComponents(currentSimulationPage: string) {
@@ -162,9 +162,9 @@ function DefaultLeftMenuComponents(currentSimulationPage: string) {
 
         {NavigationMenu("/index.html", HOME_PAGE_NAME, HOME_MENU_LOGO_PATH, currentSimulationPage)}
         {NavigationMenu(
-          convertToLinkUrl(QUICKSIM_URL),
-          QUICKSIM_PAGE_NAME,
-          QUICKSIM_MENU_LOGO_PATH,
+          convertToLinkUrl(DPS_ANALYSIS_URL),
+          DPS_ANALYSIS_PAGE_NAME,
+          DPS_ANALYSIS_MENU_LOGO_PATH,
           currentSimulationPage
         )}
         {NavigationMenu(
@@ -181,8 +181,8 @@ function DefaultLeftMenuComponents(currentSimulationPage: string) {
 
         )}
         {NavigationMenu(
-          convertToLinkUrl(STAT_WEIGHTS_URL),
-          STAT_WEIGHTS_PAGE_NAME,
+          convertToLinkUrl(BEST_STATS_URL),
+          BEST_STAT_PAGE_NAME,
           STAT_WEIGHTS_MENU_LOGO_PATH,
           currentSimulationPage
         )}

@@ -1,11 +1,11 @@
-import { QuickSimResponse } from "../../types/QuickSimResponse";
+import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 import { DamageChartTitle, SkillDamageProfile } from "./DamageProfileBarChart";
 import { SkillIdToIconPathFactory } from "../icon/abilityicon/SkillIconFactory";
 import { iconPathToName } from "../Util";
 import { DamageChartData } from "./GraphData";
 import { Box } from "@mui/material";
 
-export const DamageProfileGraph = (response: QuickSimResponse) => {
+export const DamageProfileGraph = (response: DpsAnalysisResponse) => {
   const mainPlayerId = response.mainPlayerId;
   const simulationDatas = response.simulationData;
 

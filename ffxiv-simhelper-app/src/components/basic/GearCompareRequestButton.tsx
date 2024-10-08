@@ -12,9 +12,9 @@ import {
   SingleEquipmentInputSaveState,
 } from "../../types/EquipmentInput";
 import {
-  createQuickSimRequest,
+  createDpsAnalysisRequest,
   sendRequestAsync,
-} from "./QuickSimRequestButton";
+} from "./DpsAnalysisRequestButton";
 import { GearCompareResponse } from "../..//types/GearCompareResponse";
 import { SimulationSummary } from "../../types/CombatSimulationResult";
 import { StopButton } from "./StopButton";
@@ -153,8 +153,8 @@ function createGearCompareRequest(
   equipment2: SingleEquipmentInputSaveState
 ) {
   return {
-    gear1Request: createQuickSimRequest(equipment1),
-    gear2Request: createQuickSimRequest(equipment2),
+    gear1Request: createDpsAnalysisRequest(equipment1),
+    gear2Request: createDpsAnalysisRequest(equipment2),
   };
 }
 

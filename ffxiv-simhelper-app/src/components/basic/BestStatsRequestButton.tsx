@@ -8,7 +8,7 @@ import { PartyInfo } from "../../types/PartyStates";
 import {
   SINGLE_INPUT_SAVE_NAME,
   STAT_WEIGHTS_RESPONSE_SAVE_NAME,
-  STAT_WEIGHTS_RESULT_URL,
+  BEST_STATS_RESULT_URL,
 } from "../../App";
 import { useState } from "react";
 import { requestButtonStyle } from "./Style";
@@ -20,11 +20,11 @@ import {
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 import { getStatWeightNames } from "../../types/ffxivdatabase/Stats";
 import {
-  StatWeightsResponse,
-  StatWeightsResponseTable,
-} from "../../types/StatWeightsResponse";
+  BestStatsResponse,
+  BestStatsResponseTable,
+} from "../../types/BestStats";
 import { calculatePlayerPowerFromInputs, calculatePowerByStat } from "../../types/ffxivdatabase/ItemSet";
-import { sendRequestAsync } from "./QuickSimRequestButton";
+import { sendRequestAsync } from "./DpsAnalysisRequestButton";
 import {
   CRIT_STAT_NAME,
   DET_STAT_NAME,
@@ -43,7 +43,7 @@ import { defaultPlayerPower, getStatNeededByStatNameLadderAmount } from "../../t
 import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
 
-const REQUEST_URL = "http://localhost:13406/api/v1/statweights";
+const REQUEST_URL = "http://localhost:13406/api/v1/beststats";
 const WEAPON_DAMAGE_INCREASE = 10;
 const MAIN_STAT_INCREASE = 100;
 const CRIT_INCREASE_AMOUNT = 20;
@@ -55,7 +55,7 @@ const TEN_INCREASE_AMOUNT = 20;
 
 export const STAT_WEIGHTS_REQUEST_COUNT = 2000;
 
-export function StatWeightsRequestButton(totalState: EquipmentInput) {
+export function BestStatsRequestButton(totalState: EquipmentInput) {
   let [isRunning, setIsRunning] = useState(false);
 
   let RequestButton = styled(Button)`
@@ -82,7 +82,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
     let inputJson = JSON.stringify(totalState);
     localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
-    let statWeightsResponseTable: StatWeightsResponseTable = {
+    let statWeightsResponseTable: BestStatsResponseTable = {
       combatTimeMillisecond: totalState.equipmentDatas[0].combatTimeMillisecond,
       mainPlayerPower: totalState.equipmentDatas[0].power,
       mainPlayerJobAbbrev: totalState.equipmentDatas[0].mainPlayerJobAbbrev,
@@ -119,7 +119,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
     }
 
     await Promise.all(responsePromises);
-    const formattedResponses: Array<Promise<StatWeightsResponse>> =
+    const formattedResponses: Array<Promise<BestStatsResponse>> =
       responses.map(async (response) => {
         const data = await response.json();
         return data;
@@ -132,7 +132,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
 
     localStorage.setItem(STAT_WEIGHTS_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(`/${STAT_WEIGHTS_RESULT_URL}`);
+    navigate(`/${BEST_STATS_RESULT_URL}`);
   };
   return (
     <Box display="flex" alignItems="center">
