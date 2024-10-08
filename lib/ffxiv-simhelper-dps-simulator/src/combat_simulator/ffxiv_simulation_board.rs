@@ -116,6 +116,7 @@ impl FfxivSimulationBoard {
                 guaranteed_dh,
                 snapshotted_infos,
                 damage_category,
+                is_gcd,
                 time,
             ) => {
                 let player = self.get_player_data(*player_id).clone();
@@ -129,6 +130,7 @@ impl FfxivSimulationBoard {
                     *guaranteed_dh,
                     snapshotted_infos,
                     *damage_category,
+                    *is_gcd,
                     *time,
                 );
             }
@@ -336,6 +338,7 @@ impl FfxivSimulationBoard {
         guaranteed_dh: bool,
         snapshotted_infos: &SnapshotTable,
         damage_category: DamageCategory,
+        is_gcd: bool,
         current_combat_time_millisecond: TimeType,
     ) {
         let player_id = player.borrow().get_id();
@@ -369,7 +372,7 @@ impl FfxivSimulationBoard {
             &power,
         );
 
-        if is_crit {
+        if is_crit && is_gcd {
             player.borrow_mut().update_on_crit();
         }
 

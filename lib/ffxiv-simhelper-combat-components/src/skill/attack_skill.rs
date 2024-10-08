@@ -239,6 +239,7 @@ impl AttackSkill {
             self.is_guaranteed_direct_hit,
             snapshot_status_infos(&buffs.borrow(), &debuffs.borrow(), self.player_id),
             DamageCategory::Direct,
+            self.is_gcd(),
             current_combat_milliseconds + inflict_damage_time,
         ))
     }

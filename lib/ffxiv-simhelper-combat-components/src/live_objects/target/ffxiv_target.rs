@@ -60,6 +60,7 @@ impl Target for FfxivTarget {
                                 false,
                                 snapshotted_infos,
                                 debuff.damage_category.unwrap(),
+                                false,
                                 combat_time_millisecond,
                             )));
                     }

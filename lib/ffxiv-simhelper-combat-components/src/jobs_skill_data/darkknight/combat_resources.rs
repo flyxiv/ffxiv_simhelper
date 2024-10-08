@@ -94,6 +94,7 @@ impl CombatResource for DarkknightCombatResources {
                 false,
                 snapshot_status_infos(&buff_list.borrow(), &debuff_list.borrow(), self.player_id),
                 DamageCategory::Direct,
+                false,
                 current_time_millisecond,
             ));
 

@@ -102,6 +102,7 @@ impl CombatResource for MachinistCombatResources {
                         player.get_id(),
                     ),
                     DamageCategory::Direct,
+                    false,
                     current_time_millisecond,
                 ));
                 self.wildfire_damage_incoming = None;
@@ -131,6 +132,7 @@ impl CombatResource for MachinistCombatResources {
                         player.get_id(),
                     ),
                     DamageCategory::Direct,
+                    false,
                     current_time_millisecond,
                 ));
 

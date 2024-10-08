@@ -23,7 +23,7 @@ pub enum FfxivEvent {
     /// player_id, target_id, skill_id
     UseSkill(PlayerIdType, Option<PlayerIdType>, SkillIdType, TimeType),
 
-    /// owner_player_id, skill ID, potency, trait, guaranteed crit, guaranteed direct hit, snapshotted buffs and debuffs, damage category
+    /// owner_player_id, skill ID, potency, trait, guaranteed crit, guaranteed direct hit, snapshotted buffs and debuffs, damage category, is_gcd
     Damage(
         PlayerIdType,
         SkillIdType,
@@ -33,6 +33,7 @@ pub enum FfxivEvent {
         bool,
         SnapshotTable,
         DamageCategory,
+        bool,
         TimeType,
     ),
 
@@ -100,7 +101,7 @@ impl FfxivEvent {
         match self {
             FfxivEvent::PlayerTurn(_, _, _, time)
             | FfxivEvent::UseSkill(_, _, _, time)
-            | FfxivEvent::Damage(_, _, _, _, _, _, _, _, time)
+            | FfxivEvent::Damage(_, _, _, _, _, _, _, _, _, time)
             | FfxivEvent::Tick(_, time)
             | FfxivEvent::AddTicker(_, time)
             | FfxivEvent::RemoveTicker(_, time)
@@ -159,6 +160,7 @@ impl FfxivEvent {
                 is_direct_hit,
                 snapshots,
                 damage_category,
+                is_gcd,
                 time,
             ) => FfxivEvent::Damage(
                 player_id,
@@ -169,6 +171,7 @@ impl FfxivEvent {
                 is_direct_hit,
                 snapshots,
                 damage_category,
+                is_gcd,
                 elapsed_time + time,
             ),
             FfxivEvent::Tick(ticker_id, time) => FfxivEvent::Tick(ticker_id, elapsed_time + time),
@@ -323,7 +326,7 @@ impl FfxivEvent {
     fn importance_of_event(&self) -> i32 {
         match self {
             FfxivEvent::UseSkill(_, _, _, _) => 1,
-            FfxivEvent::Damage(_, _, _, _, _, _, _, _, _) => 2,
+            FfxivEvent::Damage(_, _, _, _, _, _, _, _, _, _) => 2,
             FfxivEvent::Tick(_, _) => 3,
             FfxivEvent::AddTicker(_, _) => 4,
             FfxivEvent::RemoveTicker(_, _) => 5,
@@ -379,7 +382,7 @@ impl ToString for FfxivEvent {
                 format!("Event: Player Turn {}, time: {}", id, time)
             }
             FfxivEvent::UseSkill(_, _, _, _) => String::from("Event: Use Skill"),
-            FfxivEvent::Damage(_, _, _, _, _, _, _, _, _) => String::from("Event: Damage"),
+            FfxivEvent::Damage(_, _, _, _, _, _, _, _, _, _) => String::from("Event: Damage"),
             FfxivEvent::Tick(_, _) => String::from("Event: Tick"),
             FfxivEvent::AddTicker(_, _) => String::from("Event: Add Ticker"),
             FfxivEvent::RemoveTicker(_, _) => String::from("Event: Remove Ticker"),

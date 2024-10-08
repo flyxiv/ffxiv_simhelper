@@ -57,6 +57,7 @@ impl EventTicker for AutoAttackTicker {
                             self.player_id,
                         ),
                         self.damage_category,
+                        false,
                         max(current_time_millisecond, 0),
                     )));
             }
