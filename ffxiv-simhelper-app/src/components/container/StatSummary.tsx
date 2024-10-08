@@ -119,7 +119,7 @@ export function SimulationInputSummary(
         }}
       >
         <SingleStatCombatTimeBox>
-          {StatSummaryTypography(`${combatTimeMilliseconds}`)}
+          {StatSummaryTypography(`${combatTimeMilliseconds.toFixed(0)}`)}
         </SingleStatCombatTimeBox>
         <SingleStatCombatTimeBox>
           {StatSummaryTypography(iterationCount.toString())}

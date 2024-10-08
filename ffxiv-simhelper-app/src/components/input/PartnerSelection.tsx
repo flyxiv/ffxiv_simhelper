@@ -22,29 +22,27 @@ export function Partner1Selection(
   const handlePartnerChange = (event: SelectChangeEvent<string>) => {
     let newState = { ...totalEquipmentState };
 
-    newState.equipmentDatas.forEach((data) => {
-      if (event.target.value === EMPTY_PARTY_MEMBER) {
-        data.mainPlayerPartner1Id = null;
-      } else {
-        data.mainPlayerPartner1Id = parseInt(event.target.value);
-      }
-    });
+    if (event.target.value === EMPTY_PARTY_MEMBER) {
+      newState.equipmentDatas[id].mainPlayerPartner1Id = null;
+    } else {
+      newState.equipmentDatas[id].mainPlayerPartner1Id = parseInt(event.target.value);
+    }
 
     setTotalEquipmentState({ ...newState });
   };
 
-  let availablePartyIds = totalEquipmentState.equipmentDatas[0].partyMemberIds;
+  let availablePartyIds = totalEquipmentState.equipmentDatas[id].partyMemberIds;
   let availablePartners: number[] = [];
 
   for (let i = 0; i < availablePartyIds.length; i++) {
     let partyId = availablePartyIds[i];
-    if (partyId === totalEquipmentState.equipmentDatas[0].mainPlayerPartner2Id) {
+    if (partyId === totalEquipmentState.equipmentDatas[id].mainPlayerPartner2Id) {
       continue;
     }
     availablePartners.push(availablePartyIds[i]);
   }
 
-  let currentPartnerId = totalEquipmentState.equipmentDatas[0].mainPlayerPartner1Id;
+  let currentPartnerId = totalEquipmentState.equipmentDatas[id].mainPlayerPartner1Id;
 
   return (
     <InputBox>
@@ -67,7 +65,7 @@ export function Partner1Selection(
           }}
         >
           {availablePartyIds.map((partyMemberId) => {
-            return PartnerMenuItem(id, partyMemberId, totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[partyMemberId - 1]);
+            return PartnerMenuItem(id, partyMemberId, totalEquipmentState.equipmentDatas[id].partyMemberJobAbbrevs[partyMemberId - 1]);
           })}
           {<MenuItem key={`${id}_partner1_empty_menuitem`} value="empty" color="white"><Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{EMPTY_TEXT}</Typography></MenuItem>};
         </Select>
@@ -86,29 +84,27 @@ export function Partner2Selection(
   const handlePartnerChange = (event: SelectChangeEvent<string>) => {
     let newState = { ...totalEquipmentState };
 
-    newState.equipmentDatas.forEach((data) => {
-      if (event.target.value === "empty") {
-        data.mainPlayerPartner2Id = null;
-      } else {
-        data.mainPlayerPartner2Id = parseInt(event.target.value);
-      }
-    });
+    if (event.target.value === EMPTY_PARTY_MEMBER) {
+      newState.equipmentDatas[id].mainPlayerPartner2Id = null;
+    } else {
+      newState.equipmentDatas[id].mainPlayerPartner2Id = parseInt(event.target.value);
+    }
 
     setTotalEquipmentState({ ...newState });
   };
 
-  let availablePartyIds = totalEquipmentState.equipmentDatas[0].partyMemberIds;
+  let availablePartyIds = totalEquipmentState.equipmentDatas[id].partyMemberIds;
   let availablePartners: number[] = [];
 
   for (let i = 0; i < availablePartyIds.length; i++) {
     let partyId = availablePartyIds[i];
-    if (partyId === totalEquipmentState.equipmentDatas[0].mainPlayerPartner1Id) {
+    if (partyId === totalEquipmentState.equipmentDatas[id].mainPlayerPartner1Id) {
       continue;
     }
     availablePartners.push(availablePartyIds[i]);
   }
 
-  let currentPartnerId = totalEquipmentState.equipmentDatas[0].mainPlayerPartner2Id;
+  let currentPartnerId = totalEquipmentState.equipmentDatas[id].mainPlayerPartner2Id;
 
   return (
     <InputBox>
@@ -130,7 +126,7 @@ export function Partner2Selection(
           }}
         >
           {availablePartyIds.map((partyMemberId) => {
-            return PartnerMenuItem(id, partyMemberId, totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[partyMemberId - 1]);
+            return PartnerMenuItem(id, partyMemberId, totalEquipmentState.equipmentDatas[id].partyMemberJobAbbrevs[partyMemberId - 1]);
           })}
           {<MenuItem key={`${id}_partner2_empty_menuitem`} value="empty" color="white"><Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{EMPTY_TEXT}</Typography></MenuItem>};
         </Select>

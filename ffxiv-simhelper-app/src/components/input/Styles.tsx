@@ -44,7 +44,7 @@ export const FormControlStyle = `
 export const HorizontalInputGridContainerStyle = `
   background-color: ${AppConfigurations.backgroundTwo};
   width: 100%;
-  height: 20vh;
+  height: 22vh;
 `;
 
 export const HorizontalInputGridItemStyle = `
@@ -52,7 +52,7 @@ export const HorizontalInputGridItemStyle = `
   width: 23%;
   display: flex;
   margin: 1%;
-  height: 8vh;
+  height: 5vh;
 `;
 
 export const MateriaInputBoxStyle = `

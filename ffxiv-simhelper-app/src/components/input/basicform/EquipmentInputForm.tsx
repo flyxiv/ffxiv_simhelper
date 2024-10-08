@@ -606,9 +606,7 @@ function PotSelection(
       usePot = parseInt(usePot);
     }
 
-    newState.equipmentDatas.forEach((data) => {
-      data.usePot = usePot;
-    });
+    newState.equipmentDatas[id].usePot = usePot;
 
     setTotalEquipmentState(newState);
   };
