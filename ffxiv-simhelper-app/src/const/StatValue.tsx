@@ -5,9 +5,9 @@ import {
   AST_EN_NAME,
   BLM_EN_NAME,
   BRD_EN_NAME,
-  CRIT_STAT_NAME,
-  DET_STAT_NAME,
-  DH_STAT_NAME,
+  CRIT_STAT_EN_NAME,
+  DET_STAT_EN_NAME,
+  DH_STAT_EN_NAME,
   DNC_EN_NAME,
   DRG_EN_NAME,
   DRK_EN_NAME,
@@ -22,9 +22,9 @@ import {
   SAM_EN_NAME,
   SCH_EN_NAME,
   SGE_EN_NAME,
-  SKS_STAT_NAME,
+  SKS_STAT_EN_NAME,
   SMN_EN_NAME,
-  SPS_STAT_NAME,
+  SPS_STAT_EN_NAME,
   VPR_EN_NAME,
   WAR_EN_NAME,
   WHM_EN_NAME,
@@ -121,49 +121,49 @@ export const PLD_BIS_SETTINGS = {
   itemSet: [43101, 43123, 43047, 43125, 43126, 43050, 43081, 43163, 43091, 43096, 43173, 43122],
   gearSetMaterias: [
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
 
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -176,48 +176,48 @@ export const WAR_BIS_SETTINGS = {
   itemSet: [43103, 43123, 43047, 43125, 43126, 43050, 43081, 43163, 43091, 43096, 43173, -1],
   gearSetMaterias: [
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -231,48 +231,48 @@ export const DRK_BIS_SETTINGS = {
   itemSet: [43111, 43123, 43047, 43125, 43126, 43050, 43081, 43163, 43091, 43096, 43173, -1],
   gearSetMaterias: [
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -285,48 +285,48 @@ export const GNB_BIS_SETTINGS = {
   itemSet: [43116, 43123, 43047, 43125, 43126, 43050, 43081, 43163, 43091, 43096, 43173, -1],
   gearSetMaterias: [
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -340,51 +340,51 @@ export const WHM_BIS_SETTINGS = {
   itemSet: [43106, 43071, 43149, 42919, 43074, 43152, 43161, 43089, 43171, 43099, 43176, -1],
   gearSetMaterias: [
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 }
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 }
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
-      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_EN_NAME, maxValue: 18, effectiveValue: 18 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     []
   ]
@@ -395,51 +395,51 @@ export const SCH_BIS_SETTINGS = {
   itemSet: [43109, 43071, 43149, 42919, 43074, 43152, 43161, 43089, 43171, 43099, 43176, -1],
   gearSetMaterias: [
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 }
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 }
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
-      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_EN_NAME, maxValue: 18, effectiveValue: 18 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     []
   ]
@@ -451,51 +451,51 @@ export const AST_BIS_SETTINGS = {
   itemSet: [43113, 43071, 43149, 42919, 43074, 43152, 43161, 43089, 43171, 43099, 43176, -1],
   gearSetMaterias: [
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 }
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 }
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
-      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_EN_NAME, maxValue: 18, effectiveValue: 18 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     []
   ]
@@ -507,51 +507,51 @@ export const SGE_BIS_SETTINGS = {
   itemSet: [43119, 43071, 43149, 42919, 43074, 43152, 43161, 43089, 43171, 43099, 43176, -1],
   gearSetMaterias: [
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 }
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 }
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
-      { statName: DH_STAT_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 18, effectiveValue: 18 },
+      { statName: DH_STAT_EN_NAME, maxValue: 18, effectiveValue: 18 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     []
   ]
@@ -562,48 +562,48 @@ export const DRG_BIS_SETTINGS = {
   itemSet: [43104, 43051, 43129, 43053, 43054, 43132, 43159, 43087, 43169, 43097, 43174, -1],
   gearSetMaterias: [
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -617,48 +617,48 @@ export const MNK_BIS_SETTINGS = {
   itemSet: [43102, 43056, 43057, 43058, 43136, 43137, 43082, 43087, 43169, 43174, 43097, -1],
   gearSetMaterias: [
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -672,49 +672,49 @@ export const NIN_BIS_SETTINGS = {
   itemSet: [43110, 43143, 43144, 43068, 43069, 43147, 43083, 43165, 43093, 43098, 43175, -1],
   gearSetMaterias: [
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
 
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -728,49 +728,49 @@ export const SAM_BIS_SETTINGS = {
   itemSet: [43114, 43056, 43057, 43058, 43136, 43137, 43159, 43087, 43169, 43174, 43097, -1],
   gearSetMaterias: [
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
 
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -784,48 +784,48 @@ export const RPR_BIS_SETTINGS = {
   itemSet: [43118, 43051, 43129, 43053, 43054, 43132, 43159, 43087, 43169, 43097, 43174, -1],
   gearSetMaterias: [
     [
-      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -840,48 +840,48 @@ export const VPR_BIS_SETTINGS = {
   itemSet: [43120, 43143, 43144, 43068, 43069, 43147, 43083, 43165, 43093, 43098, 43175, -1],
   gearSetMaterias: [
     [
-      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: SKS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SKS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -894,49 +894,49 @@ export const BRD_BIS_SETTINGS = {
   itemSet: [43105, 43138, 43062, 43063, 43141, 43142, 43083, 43165, 43093, 43098, 43175, -1],
   gearSetMaterias: [
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
 
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -949,49 +949,49 @@ export const DNC_BIS_SETTINGS = {
   itemSet: [43117, 43138, 43062, 43063, 43141, 43142, 43083, 43165, 43093, 43098, 43175, -1],
   gearSetMaterias: [
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
 
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -1005,49 +1005,49 @@ export const MCH_BIS_SETTINGS = {
   itemSet: [43112, 43138, 43062, 43063, 43141, 43142, 43083, 43165, 43093, 43098, 43175, -1],
   gearSetMaterias: [
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
 
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -1060,49 +1060,49 @@ export const BLM_BIS_SETTINGS = {
   itemSet: [43107, 43076, 43154, 43155, 43079, 43080, 43162, 43090, 43172, 43100, 43177, -1],
   gearSetMaterias: [
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: SPS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SPS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: SPS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SPS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
 
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -1115,48 +1115,48 @@ export const SMN_BIS_SETTINGS = {
   itemSet: [43108, 43076, 43154, 43078, 43079, 43157, 43162, 43090, 43172, 43100, 43177, -1],
   gearSetMaterias: [
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: SPS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: SPS_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SPS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: SPS_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -1170,48 +1170,48 @@ export const RDM_BIS_SETTINGS = {
   itemSet: [43115, 43076, 43154, 43078, 43079, 43157, 43162, 43090, 43172, 43100, 43177, -1],
   gearSetMaterias: [
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 
@@ -1225,48 +1225,48 @@ export const PCT_BIS_SETTINGS = {
   itemSet: [43121, 43076, 43154, 43078, 43079, 43157, 43162, 43090, 43172, 43100, 43177, -1],
   gearSetMaterias: [
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: DH_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DH_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
-      { statName: CRIT_STAT_NAME, maxValue: 54, effectiveValue: 54 },
-      { statName: DET_STAT_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: CRIT_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
+      { statName: DET_STAT_EN_NAME, maxValue: 54, effectiveValue: 54 },
     ],
     [
 

@@ -24,7 +24,7 @@ import { aggregateDamageStatisticsFromSampleRuns } from "./GearCompareRequestBut
 import { AppConfigurations } from "../../Themes";
 import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
-import { MIDLANDER_HYUR_NAME_EN } from "../../const/languageTexts";
+import { MIDLANDER_HYUR_EN_NAME } from "../../const/languageTexts";
 
 const TOTAL_REQUEST_COUNT = 1000;
 const TOTAL_ITERATION_COUNT = 2;
@@ -186,7 +186,7 @@ export function createDpsAnalysisRequest(
 
     let playerTotalState = {
       mainPlayerJobAbbrev: jobAbbrev,
-      race: MIDLANDER_HYUR_NAME_EN,
+      race: MIDLANDER_HYUR_EN_NAME,
       foodId: bisEquipments.foodId,
       mainPlayerPartner1Id: null,
       mainPlayerPartner2Id: null,
@@ -239,7 +239,7 @@ export function sendRequestAsync(
       const timeoutId = setTimeout(() => {
         controller.abort();
         reject(new Error("Request timeout"));
-      }, 300000);
+      }, 30000);
 
       const response = await fetch(requestUrl, {
         method: "POST",

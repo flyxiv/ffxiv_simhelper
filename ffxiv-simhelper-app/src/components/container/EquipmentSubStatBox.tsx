@@ -11,7 +11,7 @@ import {
   EquipmentSubStatBoxStyle,
 } from "./Styles";
 import { AppConfigurations } from "../../Themes";
-import { CRIT_STAT_NAME, DET_STAT_NAME, DH_STAT_NAME, SKS_STAT_NAME, SPS_STAT_NAME, TEN_STAT_NAME } from "../../const/languageTexts";
+import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME } from "../../const/languageTexts";
 
 const EquipmentSubStatBox = styled(Box)`
   ${EquipmentSubStatBoxStyle}
@@ -34,22 +34,22 @@ export function EquipmentSubStatTable(
   let finalStats = addMateriaMaxValueToEquipment(equipment, materias);
   let nonZeroSubStats = [];
   if (finalStats.criticalStrike > 0) {
-    nonZeroSubStats.push(CRIT_STAT_NAME);
+    nonZeroSubStats.push(CRIT_STAT_EN_NAME);
   }
   if (finalStats.directHit > 0) {
-    nonZeroSubStats.push(DH_STAT_NAME);
+    nonZeroSubStats.push(DH_STAT_EN_NAME);
   }
   if (finalStats.determination > 0) {
-    nonZeroSubStats.push(DET_STAT_NAME);
+    nonZeroSubStats.push(DET_STAT_EN_NAME);
   }
   if (finalStats.skillSpeed > 0) {
-    nonZeroSubStats.push(SKS_STAT_NAME);
+    nonZeroSubStats.push(SKS_STAT_EN_NAME);
   }
   if (finalStats.spellSpeed > 0) {
-    nonZeroSubStats.push(SPS_STAT_NAME);
+    nonZeroSubStats.push(SPS_STAT_EN_NAME);
   }
   if (finalStats.tenacity > 0) {
-    nonZeroSubStats.push(TEN_STAT_NAME);
+    nonZeroSubStats.push(TEN_STAT_EN_NAME);
   }
 
   let numberOfSubStats = nonZeroSubStats.length;

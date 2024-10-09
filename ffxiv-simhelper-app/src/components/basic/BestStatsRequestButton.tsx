@@ -26,16 +26,25 @@ import {
 import { calculatePlayerPowerFromInputs, calculatePowerByStat } from "../../types/ffxivdatabase/ItemSet";
 import { sendRequestAsync } from "./DpsAnalysisRequestButton";
 import {
+  CRIT_STAT_EN_NAME,
   CRIT_STAT_NAME,
+  DET_STAT_EN_NAME,
   DET_STAT_NAME,
   DEX_STAT_NAME,
+  DEX_STAT_EN_NAME,
+  DH_STAT_EN_NAME,
   DH_STAT_NAME,
   INT_STAT_NAME,
-  MIDLANDER_HYUR_NAME_EN,
+  INT_STAT_EN_NAME,
+  MIDLANDER_HYUR_EN_NAME,
   MIND_STAT_NAME,
+  MIND_STAT_EN_NAME,
+  SKS_STAT_EN_NAME,
   SKS_STAT_NAME,
+  SPS_STAT_EN_NAME,
   SPS_STAT_NAME,
-  STR_STAT_NAME,
+  STR_STAT_EN_NAME,
+  TEN_STAT_EN_NAME,
   TEN_STAT_NAME,
   WD_STAT_NAME,
 } from "../../const/languageTexts";
@@ -177,15 +186,16 @@ function createAugmentedRequest(
       power.weaponDamage += WEAPON_DAMAGE_INCREASE;
     }
     if (
-      augmentStatName === STR_STAT_NAME ||
-      augmentStatName === DEX_STAT_NAME ||
-      augmentStatName === INT_STAT_NAME ||
-      augmentStatName === MIND_STAT_NAME
+      augmentStatName === STR_STAT_EN_NAME ||
+      augmentStatName === DEX_STAT_EN_NAME ||
+      augmentStatName === INT_STAT_EN_NAME ||
+      augmentStatName === MIND_STAT_EN_NAME
     ) {
       augmentAmount = MAIN_STAT_INCREASE;
       power.mainStat += MAIN_STAT_INCREASE;
     }
-    if (augmentStatName === CRIT_STAT_NAME) {
+
+    if (augmentStatName === CRIT_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -194,7 +204,7 @@ function createAugmentedRequest(
       );
       power.criticalStrike += augmentAmount;
     }
-    if (augmentStatName === DH_STAT_NAME) {
+    if (augmentStatName === DH_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -203,7 +213,7 @@ function createAugmentedRequest(
       );
       power.directHit += augmentAmount;
     }
-    if (augmentStatName === DET_STAT_NAME) {
+    if (augmentStatName === DET_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -212,7 +222,7 @@ function createAugmentedRequest(
       );
       power.determination += augmentAmount;
     }
-    if (augmentStatName === SKS_STAT_NAME) {
+    if (augmentStatName === SKS_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -221,7 +231,7 @@ function createAugmentedRequest(
       );
       power.skillSpeed += augmentAmount;
     }
-    if (augmentStatName === SPS_STAT_NAME) {
+    if (augmentStatName === SPS_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -230,7 +240,7 @@ function createAugmentedRequest(
       );
       power.spellSpeed += augmentAmount;
     }
-    if (augmentStatName === TEN_STAT_NAME) {
+    if (augmentStatName === TEN_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -275,7 +285,7 @@ function createAugmentedRequest(
 
     let playerTotalState = {
       mainPlayerJobAbbrev: jobAbbrev,
-      race: MIDLANDER_HYUR_NAME_EN,
+      race: MIDLANDER_HYUR_EN_NAME,
       foodId: bisEquipments.foodId,
       mainPlayerPartner1Id: null,
       mainPlayerPartner2Id: null,

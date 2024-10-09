@@ -392,172 +392,172 @@ export function convertToSlotText(slotName: string) {
 }
 
 // Race Names
-export const MIDLANDER_HYUR_NAME_EN = "Midlander Hyur";
-export const MIDLANDER_HYUR_NAME_KR = "중부 휴런";
+export const MIDLANDER_HYUR_EN_NAME = "Midlander Hyur";
+export const MIDLANDER_HYUR_KR_NAME = "중부 휴런";
 
-export const HIGHLANDER_HYUR_NAME_EN = "Highlander Hyur";
-export const HIGHLANDER_HYUR_NAME_KR = "고지 휴런";
+export const HIGHLANDER_HYUR_EN_NAME = "Highlander Hyur";
+export const HIGHLANDER_HYUR_KR_NAME = "고지 휴런";
 
-export const WILDWOOD_ELEZEN_NAME_EN = "Wildwood Elezen";
-export const WILDWOOD_ELEZEN_NAME_KR = "숲 엘레젠";
+export const WILDWOOD_ELEZEN_EN_NAME = "Wildwood Elezen";
+export const WILDWOOD_ELEZEN_KR_NAME = "숲 엘레젠";
 
-export const DUSKWIGHT_ELEZEN_NAME_EN = "Duskwight Elezen";
-export const DUSKWIGHT_ELEZEN_NAME_KR = "밤 엘레젠";
+export const DUSKWIGHT_ELEZEN_EN_NAME = "Duskwight Elezen";
+export const DUSKWIGHT_ELEZEN_KR_NAME = "밤 엘레젠";
 
-export const PLAINSFOLK_LALAFELL_NAME_EN = "Plainsfolk Lalafell";
-export const PLAINSFOLK_LALAFELL_NAME_KR = "평원 라라펠";
+export const PLAINSFOLK_LALAFELL_EN_NAME = "Plainsfolk Lalafell";
+export const PLAINSFOLK_LALAFELL_KR_NAME = "평원 라라펠";
 
-export const DUNESFOLK_LALAFELL_NAME_EN = "Dunesfolk Lalafell";
-export const DUNESFOLK_LALAFELL_NAME_KR = "사막 라라펠";
+export const DUNESFOLK_LALAFELL_EN_NAME = "Dunesfolk Lalafell";
+export const DUNESFOLK_LALAFELL_KR_NAME = "사막 라라펠";
 
-export const SEEKER_OF_THE_SUN_MIQOTE_NAME_EN = "Seeker of the Sun Miqo'te";
-export const SEEKER_OF_THE_SUN_MIQOTE_NAME_KR = "태양의 추종자 미코테";
+export const SEEKER_OF_THE_SUN_MIQOTE_EN_NAME = "Seeker of the Sun Miqo'te";
+export const SEEKER_OF_THE_SUN_MIQOTE_KR_NAME = "태양의 추종자 미코테";
 
-export const KEEPER_OF_THE_MOON_MIQOTE_NAME_EN = "Keeper of the Moon Miqo'te";
-export const KEEPER_OF_THE_MOON_MIQOTE_NAME_KR = "달의 수호자 미코테";
+export const KEEPER_OF_THE_MOON_MIQOTE_EN_NAME = "Keeper of the Moon Miqo'te";
+export const KEEPER_OF_THE_MOON_MIQOTE_KR_NAME = "달의 수호자 미코테";
 
-export const SEA_WOLVES_ROEGADYN_NAME_EN = "Sea Wolves Roegadyn";
-export const SEA_WOLVES_ROEGADYN_NAME_KR = "바다늑대 루가딘";
+export const SEA_WOLVES_ROEGADYN_EN_NAME = "Sea Wolves Roegadyn";
+export const SEA_WOLVES_ROEGADYN_KR_NAME = "바다늑대 루가딘";
 
-export const HELLSGUARD_ROEGADYN_NAME_EN = "Hellsguard Roegadyn";
-export const HELLSGUARD_ROEGADYN_NAME_KR = "불꽃지킴이 루가딘";
+export const HELLSGUARD_ROEGADYN_EN_NAME = "Hellsguard Roegadyn";
+export const HELLSGUARD_ROEGADYN_KR_NAME = "불꽃지킴이 루가딘";
 
-export const RAEN_AU_RA_NAME_EN = "Raen Au Ra";
-export const RAEN_AU_RA_NAME_KR = "렌 아우라";
+export const RAEN_AU_RA_EN_NAME = "Raen Au Ra";
+export const RAEN_AU_RA_KR_NAME = "렌 아우라";
 
-export const XAELA_AU_RA_NAME_EN = "Xaela Au Ra";
-export const XAELA_AU_RA_NAME_KR = "젤라 아우라";
+export const XAELA_AU_RA_EN_NAME = "Xaela Au Ra";
+export const XAELA_AU_RA_KR_NAME = "젤라 아우라";
 
-export const HELIONS_HROTHGAR_NAME_EN = "Helions Hrothgar";
-export const HELIONS_HROTHGAR_NAME_KR = "맴도는 별 로스갈";
+export const HELIONS_HROTHGAR_EN_NAME = "Helions Hrothgar";
+export const HELIONS_HROTHGAR_KR_NAME = "맴도는 별 로스갈";
 
-export const THE_LOST_HROTHGAR_NAME_EN = "The Lost Hrothgar";
-export const THE_LOST_HROTHGAR_NAME_KR = "떠도는 별 로스갈";
+export const THE_LOST_HROTHGAR_EN_NAME = "The Lost Hrothgar";
+export const THE_LOST_HROTHGAR_KR_NAME = "떠도는 별 로스갈";
 
-export const RAVA_VIERA_NAME_EN = "Rava Viera";
-export const RAVA_VIERA_NAME_KR = "라바 비에라";
+export const RAVA_VIERA_EN_NAME = "Rava Viera";
+export const RAVA_VIERA_KR_NAME = "라바 비에라";
 
-export const VEENA_VIERA_NAME_EN = "Veena Viera";
-export const VEENA_VIERA_NAME_KR = "비나 비에라";
+export const VEENA_VIERA_EN_NAME = "Veena Viera";
+export const VEENA_VIERA_KR_NAME = "비나 비에라";
 
 export const MIDLANDER_HYUR_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? MIDLANDER_HYUR_NAME_EN
-    : MIDLANDER_HYUR_NAME_KR;
+    ? MIDLANDER_HYUR_EN_NAME
+    : MIDLANDER_HYUR_KR_NAME;
 export const HIGHLANDER_HYUR_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? HIGHLANDER_HYUR_NAME_EN
-    : HIGHLANDER_HYUR_NAME_KR;
+    ? HIGHLANDER_HYUR_EN_NAME
+    : HIGHLANDER_HYUR_KR_NAME;
 export const WILDWOOD_ELEZEN_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? WILDWOOD_ELEZEN_NAME_EN
-    : WILDWOOD_ELEZEN_NAME_KR;
+    ? WILDWOOD_ELEZEN_EN_NAME
+    : WILDWOOD_ELEZEN_KR_NAME;
 export const DUSKWIGHT_ELEZEN_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? DUSKWIGHT_ELEZEN_NAME_EN
-    : DUSKWIGHT_ELEZEN_NAME_KR;
+    ? DUSKWIGHT_ELEZEN_EN_NAME
+    : DUSKWIGHT_ELEZEN_KR_NAME;
 export const PLAINSFOLK_LALAFELL_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? PLAINSFOLK_LALAFELL_NAME_EN
-    : PLAINSFOLK_LALAFELL_NAME_KR;
+    ? PLAINSFOLK_LALAFELL_EN_NAME
+    : PLAINSFOLK_LALAFELL_KR_NAME;
 export const DUNESFOLK_LALAFELL_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? DUNESFOLK_LALAFELL_NAME_EN
-    : DUNESFOLK_LALAFELL_NAME_KR;
+    ? DUNESFOLK_LALAFELL_EN_NAME
+    : DUNESFOLK_LALAFELL_KR_NAME;
 export const SEEKER_OF_THE_SUN_MIQOTE_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? SEEKER_OF_THE_SUN_MIQOTE_NAME_EN
-    : SEEKER_OF_THE_SUN_MIQOTE_NAME_KR;
+    ? SEEKER_OF_THE_SUN_MIQOTE_EN_NAME
+    : SEEKER_OF_THE_SUN_MIQOTE_KR_NAME;
 export const KEEPER_OF_THE_MOON_MIQOTE_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? KEEPER_OF_THE_MOON_MIQOTE_NAME_EN
-    : KEEPER_OF_THE_MOON_MIQOTE_NAME_KR;
+    ? KEEPER_OF_THE_MOON_MIQOTE_EN_NAME
+    : KEEPER_OF_THE_MOON_MIQOTE_KR_NAME;
 export const SEA_WOLVES_ROEGADYN_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? SEA_WOLVES_ROEGADYN_NAME_EN
-    : SEA_WOLVES_ROEGADYN_NAME_KR;
+    ? SEA_WOLVES_ROEGADYN_EN_NAME
+    : SEA_WOLVES_ROEGADYN_KR_NAME;
 export const HELLSGUARD_ROEGADYN_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? HELLSGUARD_ROEGADYN_NAME_EN
-    : HELLSGUARD_ROEGADYN_NAME_KR;
+    ? HELLSGUARD_ROEGADYN_EN_NAME
+    : HELLSGUARD_ROEGADYN_KR_NAME;
 export const RAEN_AU_RA_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? RAEN_AU_RA_NAME_EN
-    : RAEN_AU_RA_NAME_KR;
+    ? RAEN_AU_RA_EN_NAME
+    : RAEN_AU_RA_KR_NAME;
 export const XAELA_AU_RA_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? XAELA_AU_RA_NAME_EN
-    : XAELA_AU_RA_NAME_KR;
+    ? XAELA_AU_RA_EN_NAME
+    : XAELA_AU_RA_KR_NAME;
 export const HELIONS_HROTHGAR_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? HELIONS_HROTHGAR_NAME_EN
-    : HELIONS_HROTHGAR_NAME_KR;
+    ? HELIONS_HROTHGAR_EN_NAME
+    : HELIONS_HROTHGAR_KR_NAME;
 export const THE_LOST_HROTHGAR_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? THE_LOST_HROTHGAR_NAME_EN
-    : THE_LOST_HROTHGAR_NAME_KR;
+    ? THE_LOST_HROTHGAR_EN_NAME
+    : THE_LOST_HROTHGAR_KR_NAME;
 export const RAVA_VIERA_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? RAVA_VIERA_NAME_EN
-    : RAVA_VIERA_NAME_KR;
+    ? RAVA_VIERA_EN_NAME
+    : RAVA_VIERA_KR_NAME;
 export const VEENA_VIERA_NAME =
   AppConfigurations.languageMode === ENGLISH_MODE
-    ? VEENA_VIERA_NAME_EN
-    : VEENA_VIERA_NAME_KR;
+    ? VEENA_VIERA_EN_NAME
+    : VEENA_VIERA_KR_NAME;
 
 export const RACES = [
-  MIDLANDER_HYUR_NAME_EN,
-  HIGHLANDER_HYUR_NAME_EN,
-  WILDWOOD_ELEZEN_NAME_EN,
-  DUSKWIGHT_ELEZEN_NAME_EN,
-  PLAINSFOLK_LALAFELL_NAME_EN,
-  DUNESFOLK_LALAFELL_NAME_EN,
-  SEEKER_OF_THE_SUN_MIQOTE_NAME_EN,
-  KEEPER_OF_THE_MOON_MIQOTE_NAME_EN,
-  SEA_WOLVES_ROEGADYN_NAME_EN,
-  HELLSGUARD_ROEGADYN_NAME_EN,
-  RAEN_AU_RA_NAME_EN,
-  XAELA_AU_RA_NAME_EN,
-  HELIONS_HROTHGAR_NAME_EN,
-  THE_LOST_HROTHGAR_NAME_EN,
-  RAVA_VIERA_NAME_EN,
-  VEENA_VIERA_NAME_EN,
+  MIDLANDER_HYUR_EN_NAME,
+  HIGHLANDER_HYUR_EN_NAME,
+  WILDWOOD_ELEZEN_EN_NAME,
+  DUSKWIGHT_ELEZEN_EN_NAME,
+  PLAINSFOLK_LALAFELL_EN_NAME,
+  DUNESFOLK_LALAFELL_EN_NAME,
+  SEEKER_OF_THE_SUN_MIQOTE_EN_NAME,
+  KEEPER_OF_THE_MOON_MIQOTE_EN_NAME,
+  SEA_WOLVES_ROEGADYN_EN_NAME,
+  HELLSGUARD_ROEGADYN_EN_NAME,
+  RAEN_AU_RA_EN_NAME,
+  XAELA_AU_RA_EN_NAME,
+  HELIONS_HROTHGAR_EN_NAME,
+  THE_LOST_HROTHGAR_EN_NAME,
+  RAVA_VIERA_EN_NAME,
+  VEENA_VIERA_EN_NAME,
 ];
 
 function convertToKoreanRaceName(raceName: string) {
   switch (raceName) {
-    case MIDLANDER_HYUR_NAME_EN:
-      return MIDLANDER_HYUR_NAME_KR;
-    case HIGHLANDER_HYUR_NAME_EN:
-      return HIGHLANDER_HYUR_NAME_KR;
-    case WILDWOOD_ELEZEN_NAME_EN:
-      return WILDWOOD_ELEZEN_NAME_KR;
-    case DUSKWIGHT_ELEZEN_NAME_EN:
-      return DUSKWIGHT_ELEZEN_NAME_KR;
-    case PLAINSFOLK_LALAFELL_NAME_EN:
-      return PLAINSFOLK_LALAFELL_NAME_KR;
-    case DUNESFOLK_LALAFELL_NAME_EN:
-      return DUNESFOLK_LALAFELL_NAME_KR;
-    case SEEKER_OF_THE_SUN_MIQOTE_NAME_EN:
-      return SEEKER_OF_THE_SUN_MIQOTE_NAME_KR;
-    case KEEPER_OF_THE_MOON_MIQOTE_NAME_EN:
-      return KEEPER_OF_THE_MOON_MIQOTE_NAME_KR;
-    case SEA_WOLVES_ROEGADYN_NAME_EN:
-      return SEA_WOLVES_ROEGADYN_NAME_KR;
-    case HELLSGUARD_ROEGADYN_NAME_EN:
-      return HELLSGUARD_ROEGADYN_NAME_KR;
-    case RAEN_AU_RA_NAME_EN:
-      return RAEN_AU_RA_NAME_KR;
-    case XAELA_AU_RA_NAME_EN:
-      return XAELA_AU_RA_NAME_KR;
-    case HELIONS_HROTHGAR_NAME_EN:
-      return HELIONS_HROTHGAR_NAME_KR;
-    case THE_LOST_HROTHGAR_NAME_EN:
-      return THE_LOST_HROTHGAR_NAME_KR;
-    case RAVA_VIERA_NAME_EN:
-      return RAVA_VIERA_NAME_KR;
-    case VEENA_VIERA_NAME_EN:
-      return VEENA_VIERA_NAME_KR;
+    case MIDLANDER_HYUR_EN_NAME:
+      return MIDLANDER_HYUR_KR_NAME;
+    case HIGHLANDER_HYUR_EN_NAME:
+      return HIGHLANDER_HYUR_KR_NAME;
+    case WILDWOOD_ELEZEN_EN_NAME:
+      return WILDWOOD_ELEZEN_KR_NAME;
+    case DUSKWIGHT_ELEZEN_EN_NAME:
+      return DUSKWIGHT_ELEZEN_KR_NAME;
+    case PLAINSFOLK_LALAFELL_EN_NAME:
+      return PLAINSFOLK_LALAFELL_KR_NAME;
+    case DUNESFOLK_LALAFELL_EN_NAME:
+      return DUNESFOLK_LALAFELL_KR_NAME;
+    case SEEKER_OF_THE_SUN_MIQOTE_EN_NAME:
+      return SEEKER_OF_THE_SUN_MIQOTE_KR_NAME;
+    case KEEPER_OF_THE_MOON_MIQOTE_EN_NAME:
+      return KEEPER_OF_THE_MOON_MIQOTE_KR_NAME;
+    case SEA_WOLVES_ROEGADYN_EN_NAME:
+      return SEA_WOLVES_ROEGADYN_KR_NAME;
+    case HELLSGUARD_ROEGADYN_EN_NAME:
+      return HELLSGUARD_ROEGADYN_KR_NAME;
+    case RAEN_AU_RA_EN_NAME:
+      return RAEN_AU_RA_KR_NAME;
+    case XAELA_AU_RA_EN_NAME:
+      return XAELA_AU_RA_KR_NAME;
+    case HELIONS_HROTHGAR_EN_NAME:
+      return HELIONS_HROTHGAR_KR_NAME;
+    case THE_LOST_HROTHGAR_EN_NAME:
+      return THE_LOST_HROTHGAR_KR_NAME;
+    case RAVA_VIERA_EN_NAME:
+      return RAVA_VIERA_KR_NAME;
+    case VEENA_VIERA_EN_NAME:
+      return VEENA_VIERA_KR_NAME;
     default:
       return raceName;
   }
@@ -775,17 +775,30 @@ export const PREV_TEXT =
 export const NEXT_TEXT =
   AppConfigurations.languageMode === ENGLISH_MODE ? "Next" : "다음";
 
+export const WD_STAT_EN_NAME = "WD";
+export const WD_STAT_KR_NAME = "무공";
+
 export const WD_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "WD" : "무공";
+  AppConfigurations.languageMode === ENGLISH_MODE ? WD_STAT_EN_NAME : WD_STAT_KR_NAME;
+
+export const STR_STAT_EN_NAME = "STR";
+export const DEX_STAT_EN_NAME = "DEX";
+export const INT_STAT_EN_NAME = "INT";
+export const MIND_STAT_EN_NAME = "MND";
+
+export const STR_STAT_NAME_KR = "힘";
+export const DEX_STAT_NAME_KR = "민첩";
+export const INT_STAT_NAME_KR = "지능";
+export const MIND_STAT_NAME_KR = "정신";
 
 export const STR_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "STR" : "힘";
+  AppConfigurations.languageMode === ENGLISH_MODE ? STR_STAT_EN_NAME : STR_STAT_NAME_KR;
 export const DEX_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "DEX" : "민첩";
+  AppConfigurations.languageMode === ENGLISH_MODE ? DEX_STAT_EN_NAME : DEX_STAT_NAME_KR;
 export const INT_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "INT" : "지능";
+  AppConfigurations.languageMode === ENGLISH_MODE ? INT_STAT_EN_NAME : INT_STAT_NAME_KR;
 export const MIND_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "MND" : "정신";
+  AppConfigurations.languageMode === ENGLISH_MODE ? MIND_STAT_EN_NAME : MIND_STAT_NAME_KR;
 
 export const CRIT_STAT_EN_NAME = "CRT";
 export const DH_STAT_EN_NAME = "DH";
@@ -852,6 +865,40 @@ export function convertToEnglishSubStatName(subStatName: string) {
       return subStatName;
   }
 }
+
+export function convertToKoreanSubStatName(enSubStatName: string) {
+  switch (enSubStatName) {
+    case WD_STAT_EN_NAME:
+      return WD_STAT_KR_NAME;
+    case STR_STAT_EN_NAME:
+      return STR_STAT_NAME_KR;
+    case DEX_STAT_EN_NAME:
+      return DEX_STAT_NAME_KR;
+    case INT_STAT_EN_NAME:
+      return INT_STAT_NAME_KR;
+    case MIND_STAT_EN_NAME:
+      return MIND_STAT_NAME_KR;
+    case CRIT_STAT_EN_NAME:
+      return CRIT_STAT_KR_NAME;
+    case DH_STAT_EN_NAME:
+      return DH_STAT_KR_NAME;
+    case DET_STAT_EN_NAME:
+      return DET_STAT_KR_NAME;
+    case SKS_STAT_EN_NAME:
+      return SKS_STAT_KR_NAME;
+    case SPS_STAT_EN_NAME:
+      return SPS_STAT_KR_NAME;
+    case TEN_STAT_EN_NAME:
+      return TEN_STAT_KR_NAME;
+    case PIE_STAT_EN_NAME:
+      return PIE_STAT_KR_NAME;
+    default:
+      return enSubStatName;
+  }
+}
+
+
+
 
 // Power Names
 export const ITERATION_NAME =

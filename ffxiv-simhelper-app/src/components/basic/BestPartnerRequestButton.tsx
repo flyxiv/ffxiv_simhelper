@@ -29,7 +29,7 @@ import {
 } from "../../types/BestPartnerResponse";
 import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
-import { MIDLANDER_HYUR_NAME_EN } from "../../const/languageTexts";
+import { MIDLANDER_HYUR_EN_NAME } from "../../const/languageTexts";
 import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
 
@@ -175,7 +175,7 @@ function createBestPartnerRequest(
   if (bisEquipments !== undefined) {
     let playerTotalState = {
       mainPlayerJobAbbrev: jobAbbrev,
-      race: MIDLANDER_HYUR_NAME_EN,
+      race: MIDLANDER_HYUR_EN_NAME,
       foodId: bisEquipments.foodId,
       mainPlayerPartner1Id: null,
       mainPlayerPartner2Id: null,
