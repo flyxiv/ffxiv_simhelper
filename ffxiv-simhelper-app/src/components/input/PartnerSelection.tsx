@@ -6,7 +6,7 @@ import { EquipmentInput } from "../../types/EquipmentInput";
 import { AppConfigurations } from "../../Themes";
 import { PartnerMenuItem } from "../items/PartnerMenuItem";
 import { EMPTY_PARTY_MEMBER } from "../../types/PartyStates";
-import { LANGUAGE_TEXTS } from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 const InputBox = styled(Box)`
   ${InputGridItemStyle}
@@ -18,6 +18,7 @@ export function Partner1Selection(
   setTotalEquipmentState: Function,
   labelText: string
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   const handlePartnerChange = (event: SelectChangeEvent<string>) => {
     let newState = { ...totalEquipmentState };
@@ -80,6 +81,7 @@ export function Partner2Selection(
   setTotalEquipmentState: Function,
   labelText: string
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   const handlePartnerChange = (event: SelectChangeEvent<string>) => {
     let newState = { ...totalEquipmentState };

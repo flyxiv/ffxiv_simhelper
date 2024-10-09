@@ -1,73 +1,245 @@
 import { useEffect, useState } from "react";
 import { LanguageMode, useLanguage } from "../LanguageContext";
 
-const AppLanguageTexts = () => {
+export const WD_STAT_EN_NAME = "WD";
+export const STR_STAT_EN_NAME = "STR";
+export const DEX_STAT_EN_NAME = "DEX";
+export const INT_STAT_EN_NAME = "INT";
+export const MIND_STAT_EN_NAME = "MND";
+export const CRIT_STAT_EN_NAME = "CRT";
+export const DH_STAT_EN_NAME = "DH";
+export const DET_STAT_EN_NAME = "DET";
+export const SKS_STAT_EN_NAME = "SKS";
+export const SPS_STAT_EN_NAME = "SPS";
+export const TEN_STAT_EN_NAME = "TEN";
+export const PIE_STAT_EN_NAME = "PIE";
+
+export const PLD_EN_NAME = "PLD";
+export const WAR_EN_NAME = "WAR";
+export const DRK_EN_NAME = "DRK";
+export const GNB_EN_NAME = "GNB";
+
+export const WHM_EN_NAME = "WHM";
+export const AST_EN_NAME = "AST";
+
+export const SCH_EN_NAME = "SCH";
+export const SGE_EN_NAME = "SGE";
+export const DRG_EN_NAME = "DRG";
+export const MNK_EN_NAME = "MNK";
+export const NIN_EN_NAME = "NIN";
+export const SAM_EN_NAME = "SAM";
+export const RPR_EN_NAME = "RPR";
+export const VPR_EN_NAME = "VPR";
+
+export const BRD_EN_NAME = "BRD";
+export const MCH_EN_NAME = "MCH";
+export const DNC_EN_NAME = "DNC";
+export const BLM_EN_NAME = "BLM";
+export const SMN_EN_NAME = "SMN";
+export const RDM_EN_NAME = "RDM";
+export const PCT_EN_NAME = "PCT";
+
+
+
+export const MIDLANDER_HYUR_EN_NAME = "Midlander Hyur";
+
+export const HIGHLANDER_HYUR_EN_NAME = "Highlander Hyur";
+
+export const WILDWOOD_ELEZEN_EN_NAME = "Wildwood Elezen";
+
+export const DUSKWIGHT_ELEZEN_EN_NAME = "Duskwight Elezen";
+
+export const PLAINSFOLK_LALAFELL_EN_NAME = "Plainsfolk Lalafell";
+
+export const DUNESFOLK_LALAFELL_EN_NAME = "Dunesfolk Lalafell";
+
+export const SEEKER_OF_THE_SUN_MIQOTE_EN_NAME = "Seeker of the Sun Miqo'te";
+
+export const KEEPER_OF_THE_MOON_MIQOTE_EN_NAME = "Keeper of the Moon Miqo'te";
+
+export const SEA_WOLVES_ROEGADYN_EN_NAME = "Sea Wolves Roegadyn";
+
+export const HELLSGUARD_ROEGADYN_EN_NAME = "Hellsguard Roegadyn";
+
+export const RAEN_AU_RA_EN_NAME = "Raen Au Ra";
+
+export const XAELA_AU_RA_EN_NAME = "Xaela Au Ra";
+
+export const HELIONS_HROTHGAR_EN_NAME = "Helions Hrothgar";
+
+export const THE_LOST_HROTHGAR_EN_NAME = "The Lost Hrothgar";
+
+export const RAVA_VIERA_EN_NAME = "Rava Viera";
+
+export const VEENA_VIERA_EN_NAME = "Veena Viera";
+
+// Player Text
+export const WEAPON_SLOT_EN_TEXT = "weapon";
+
+export const OFFHAND_SLOT_EN_TEXT = "offHand";
+
+export const HEAD_SLOT_EN_TEXT = "head";
+
+export const BODY_SLOT_EN_TEXT = "body";
+
+export const HANDS_SLOT_EN_TEXT = "hands";
+
+export const LEGS_SLOT_EN_TEXT = "legs";
+
+export const FEET_SLOT_EN_TEXT = "feet";
+
+export const EARS_SLOT_EN_TEXT = "ears";
+
+export const NECK_SLOT_EN_TEXT = "neck";
+
+export const WRIST_SLOT_EN_TEXT = "wrists";
+
+export const FINGER1_SLOT_EN_TEXT = "finger1";
+
+export const FINGER2_SLOT_EN_TEXT = "finger2";
+
+export const FOOD_SLOT_EN_TEXT = "food";
+
+export const FINGER_SLOT_EN_TEXT = "finger";
+
+export const RACES = [
+  MIDLANDER_HYUR_EN_NAME,
+  HIGHLANDER_HYUR_EN_NAME,
+  WILDWOOD_ELEZEN_EN_NAME,
+  DUSKWIGHT_ELEZEN_EN_NAME,
+  PLAINSFOLK_LALAFELL_EN_NAME,
+  DUNESFOLK_LALAFELL_EN_NAME,
+  SEEKER_OF_THE_SUN_MIQOTE_EN_NAME,
+  KEEPER_OF_THE_MOON_MIQOTE_EN_NAME,
+  SEA_WOLVES_ROEGADYN_EN_NAME,
+  HELLSGUARD_ROEGADYN_EN_NAME,
+  RAEN_AU_RA_EN_NAME,
+  XAELA_AU_RA_EN_NAME,
+  HELIONS_HROTHGAR_EN_NAME,
+  THE_LOST_HROTHGAR_EN_NAME,
+  RAVA_VIERA_EN_NAME,
+  VEENA_VIERA_EN_NAME,
+];
+
+export const PLD_KR_NAME = "나이트";
+export const WAR_KR_NAME = "전사";
+export const DRK_KR_NAME = "암흑기사";
+export const GNB_KR_NAME = "건브레이커";
+export const WHM_KR_NAME = "백마도사";
+export const AST_KR_NAME = "점성술사";
+export const SCH_KR_NAME = "학자";
+export const SGE_KR_NAME = "현자";
+export const DRG_KR_NAME = "용기사";
+export const MNK_KR_NAME = "몽크";
+export const NIN_KR_NAME = "닌자";
+export const SAM_KR_NAME = "사무라이";
+export const RPR_KR_NAME = "리퍼";
+export const VPR_KR_NAME = "바이퍼";
+export const BRD_KR_NAME = "음유시인";
+export const MCH_KR_NAME = "기공사";
+
+export const DNC_KR_NAME = "무도가";
+export const BLM_KR_NAME = "흑마도사";
+export const SMN_KR_NAME = "소환사";
+export const RDM_KR_NAME = "적마도사";
+export const PCT_KR_NAME = "픽토맨서";
+
+// Player Text
+export const JOB_EN_TEXT = "Job";
+const JOB_KR_TEXT = "직업";
+
+const RACE_EN_TEXT = "Race";
+const RACE_KR_TEXT = "종족";
+
+export const WEAPON_SLOT_KR_TEXT = "무기";
+export const OFFHAND_SLOT_KR_TEXT = "보조무기";
+export const HEAD_SLOT_KR_TEXT = "머리";
+
+const BODY_SLOT_KR_TEXT = "몸통";
+const HANDS_SLOT_KR_TEXT = "손";
+
+const LEGS_SLOT_KR_TEXT = "다리";
+
+const FEET_SLOT_KR_TEXT = "발";
+
+const EARS_SLOT_KR_TEXT = "귀걸이";
+
+const NECK_SLOT_KR_TEXT = "목걸이";
+
+const WRIST_SLOT_KR_TEXT = "팔찌";
+
+const FINGER1_SLOT_KR_TEXT = "반지1";
+
+const FINGER2_SLOT_KR_TEXT = "반지2";
+
+const FOOD_SLOT_KR_TEXT = "음식";
+
+const AST_MELEE_PARTNER_EN_TEXT = "Melee Card Target";
+const AST_MELEE_PARTNER_KR_TEXT = "근거리 카드 대상";
+
+const AST_RANGED_PARTNER_EN_TEXT = "Ranged Card Target";
+const AST_RANGED_PARTNER_KR_TEXT = "원거리 카드 대상";
+
+const DNC_PARTNER_EN_TEXT = "Dance Partner";
+const DNC_PARTNER_KR_TEXT = "무도가 파트너";
+
+const FINGER_SLOT_KR_TEXT = "반지";
+
+
+// Race Names
+const MIDLANDER_HYUR_KR_NAME = "중부 휴런";
+
+const HIGHLANDER_HYUR_KR_NAME = "고지 휴런";
+
+const WILDWOOD_ELEZEN_KR_NAME = "숲 엘레젠";
+
+const DUSKWIGHT_ELEZEN_KR_NAME = "밤 엘레젠";
+
+const PLAINSFOLK_LALAFELL_KR_NAME = "평원 라라펠";
+
+const DUNESFOLK_LALAFELL_KR_NAME = "사막 라라펠";
+
+const SEEKER_OF_THE_SUN_MIQOTE_KR_NAME = "태양의 추종자 미코테";
+
+const KEEPER_OF_THE_MOON_MIQOTE_KR_NAME = "달의 수호자 미코테";
+
+const SEA_WOLVES_ROEGADYN_KR_NAME = "바다늑대 루가딘";
+
+const HELLSGUARD_ROEGADYN_KR_NAME = "불꽃지킴이 루가딘";
+
+const RAEN_AU_RA_KR_NAME = "렌 아우라";
+
+const XAELA_AU_RA_KR_NAME = "젤라 아우라";
+
+const HELIONS_HROTHGAR_KR_NAME = "맴도는 별 로스갈";
+
+const THE_LOST_HROTHGAR_KR_NAME = "떠도는 별 로스갈";
+
+const RAVA_VIERA_KR_NAME = "라바 비에라";
+
+const VEENA_VIERA_KR_NAME = "비나 비에라";
+
+const WD_STAT_KR_NAME = "무공";
+const STR_STAT_KR_NAME = "힘";
+const DEX_STAT_KR_NAME = "민첩";
+const INT_STAT_KR_NAME = "지능";
+const MIND_STAT_KR_NAME = "정신";
+
+
+const CRIT_STAT_KR_NAME = "극대";
+const DH_STAT_KR_NAME = "직격";
+const DET_STAT_KR_NAME = "의지";
+const SKS_STAT_KR_NAME = "기시";
+const SPS_STAT_KR_NAME = "마시";
+const TEN_STAT_KR_NAME = "불굴";
+const PIE_STAT_KR_NAME = "신앙";
+
+
+
+export const AppLanguageTexts = () => {
   let { language } = useLanguage();
 
   // Job Names
-  const PLD_EN_NAME = "PLD";
-  const PLD_KR_NAME = "나이트";
-
-  const WAR_EN_NAME = "WAR";
-  const WAR_KR_NAME = "전사";
-
-  const DRK_EN_NAME = "DRK";
-  const DRK_KR_NAME = "암흑기사";
-
-  const GNB_EN_NAME = "GNB";
-  const GNB_KR_NAME = "건브레이커";
-
-  const WHM_EN_NAME = "WHM";
-  const WHM_KR_NAME = "백마도사";
-
-  const AST_EN_NAME = "AST";
-  const AST_KR_NAME = "점성술사";
-
-  const SCH_EN_NAME = "SCH";
-  const SCH_KR_NAME = "학자";
-
-  const SGE_EN_NAME = "SGE";
-  const SGE_KR_NAME = "현자";
-
-  const DRG_EN_NAME = "DRG";
-  const DRG_KR_NAME = "용기사";
-
-  const MNK_EN_NAME = "MNK";
-  const MNK_KR_NAME = "몽크";
-
-  const NIN_EN_NAME = "NIN";
-  const NIN_KR_NAME = "닌자";
-
-  const SAM_EN_NAME = "SAM";
-  const SAM_KR_NAME = "사무라이";
-
-  const RPR_EN_NAME = "RPR";
-  const RPR_KR_NAME = "리퍼";
-
-  const VPR_EN_NAME = "VPR";
-  const VPR_KR_NAME = "바이퍼";
-
-  const BRD_EN_NAME = "BRD";
-  const BRD_KR_NAME = "음유시인";
-
-  const MCH_EN_NAME = "MCH";
-  const MCH_KR_NAME = "기공사";
-
-  const DNC_EN_NAME = "DNC";
-  const DNC_KR_NAME = "무도가";
-
-  const BLM_EN_NAME = "BLM";
-  const BLM_KR_NAME = "흑마도사";
-
-  const SMN_EN_NAME = "SMN";
-  const SMN_KR_NAME = "소환사";
-
-  const RDM_EN_NAME = "RDM";
-  const RDM_KR_NAME = "적마도사";
-
-  const PCT_EN_NAME = "PCT";
-  const PCT_KR_NAME = "픽토맨서";
-
   const PLD_JOB_NAME =
     language === LanguageMode.ENGLISH_MODE ? PLD_EN_NAME : PLD_KR_NAME;
   const WAR_JOB_NAME =
@@ -159,63 +331,7 @@ const AppLanguageTexts = () => {
   const CANCEL_TEXT =
     language === LanguageMode.ENGLISH_MODE ? "No" : "취소";
 
-  // Player Text
-  const JOB_EN_TEXT = "Job";
-  const JOB_KR_TEXT = "직업";
 
-  const RACE_EN_TEXT = "Race";
-  const RACE_KR_TEXT = "종족";
-
-  const WEAPON_SLOT_EN_TEXT = "weapon";
-  const WEAPON_SLOT_KR_TEXT = "무기";
-
-  const OFFHAND_SLOT_EN_TEXT = "offHand";
-  const OFFHAND_SLOT_KR_TEXT = "보조무기";
-
-  const HEAD_SLOT_EN_TEXT = "head";
-  const HEAD_SLOT_KR_TEXT = "머리";
-
-  const BODY_SLOT_EN_TEXT = "body";
-  const BODY_SLOT_KR_TEXT = "몸통";
-
-  const HANDS_SLOT_EN_TEXT = "hands";
-  const HANDS_SLOT_KR_TEXT = "손";
-
-  const LEGS_SLOT_EN_TEXT = "legs";
-  const LEGS_SLOT_KR_TEXT = "다리";
-
-  const FEET_SLOT_EN_TEXT = "feet";
-  const FEET_SLOT_KR_TEXT = "발";
-
-  const EARS_SLOT_EN_TEXT = "ears";
-  const EARS_SLOT_KR_TEXT = "귀걸이";
-
-  const NECK_SLOT_EN_TEXT = "neck";
-  const NECK_SLOT_KR_TEXT = "목걸이";
-
-  const WRIST_SLOT_EN_TEXT = "wrists";
-  const WRIST_SLOT_KR_TEXT = "팔찌";
-
-  const FINGER1_SLOT_EN_TEXT = "finger1";
-  const FINGER1_SLOT_KR_TEXT = "반지1";
-
-  const FINGER2_SLOT_EN_TEXT = "finger2";
-  const FINGER2_SLOT_KR_TEXT = "반지2";
-
-  const FOOD_SLOT_EN_TEXT = "food";
-  const FOOD_SLOT_KR_TEXT = "음식";
-
-  const AST_MELEE_PARTNER_EN_TEXT = "Melee Card Target";
-  const AST_MELEE_PARTNER_KR_TEXT = "근거리 카드 대상";
-
-  const AST_RANGED_PARTNER_EN_TEXT = "Ranged Card Target";
-  const AST_RANGED_PARTNER_KR_TEXT = "원거리 카드 대상";
-
-  const DNC_PARTNER_EN_TEXT = "Dance Partner";
-  const DNC_PARTNER_KR_TEXT = "무도가 파트너";
-
-  const FINGER_SLOT_EN_TEXT = "finger";
-  const FINGER_SLOT_KR_TEXT = "반지";
 
   const JOB_TEXT =
     language === LanguageMode.ENGLISH_MODE ? JOB_EN_TEXT : JOB_KR_TEXT;
@@ -289,56 +405,6 @@ const AppLanguageTexts = () => {
     language === LanguageMode.ENGLISH_MODE
       ? FINGER_SLOT_EN_TEXT
       : FINGER_SLOT_KR_TEXT;
-
-  // Race Names
-  const MIDLANDER_HYUR_EN_NAME = "Midlander Hyur";
-  const MIDLANDER_HYUR_KR_NAME = "중부 휴런";
-
-  const HIGHLANDER_HYUR_EN_NAME = "Highlander Hyur";
-  const HIGHLANDER_HYUR_KR_NAME = "고지 휴런";
-
-  const WILDWOOD_ELEZEN_EN_NAME = "Wildwood Elezen";
-  const WILDWOOD_ELEZEN_KR_NAME = "숲 엘레젠";
-
-  const DUSKWIGHT_ELEZEN_EN_NAME = "Duskwight Elezen";
-  const DUSKWIGHT_ELEZEN_KR_NAME = "밤 엘레젠";
-
-  const PLAINSFOLK_LALAFELL_EN_NAME = "Plainsfolk Lalafell";
-  const PLAINSFOLK_LALAFELL_KR_NAME = "평원 라라펠";
-
-  const DUNESFOLK_LALAFELL_EN_NAME = "Dunesfolk Lalafell";
-  const DUNESFOLK_LALAFELL_KR_NAME = "사막 라라펠";
-
-  const SEEKER_OF_THE_SUN_MIQOTE_EN_NAME = "Seeker of the Sun Miqo'te";
-  const SEEKER_OF_THE_SUN_MIQOTE_KR_NAME = "태양의 추종자 미코테";
-
-  const KEEPER_OF_THE_MOON_MIQOTE_EN_NAME = "Keeper of the Moon Miqo'te";
-  const KEEPER_OF_THE_MOON_MIQOTE_KR_NAME = "달의 수호자 미코테";
-
-  const SEA_WOLVES_ROEGADYN_EN_NAME = "Sea Wolves Roegadyn";
-  const SEA_WOLVES_ROEGADYN_KR_NAME = "바다늑대 루가딘";
-
-  const HELLSGUARD_ROEGADYN_EN_NAME = "Hellsguard Roegadyn";
-  const HELLSGUARD_ROEGADYN_KR_NAME = "불꽃지킴이 루가딘";
-
-  const RAEN_AU_RA_EN_NAME = "Raen Au Ra";
-  const RAEN_AU_RA_KR_NAME = "렌 아우라";
-
-  const XAELA_AU_RA_EN_NAME = "Xaela Au Ra";
-  const XAELA_AU_RA_KR_NAME = "젤라 아우라";
-
-  const HELIONS_HROTHGAR_EN_NAME = "Helions Hrothgar";
-  const HELIONS_HROTHGAR_KR_NAME = "맴도는 별 로스갈";
-
-  const THE_LOST_HROTHGAR_EN_NAME = "The Lost Hrothgar";
-  const THE_LOST_HROTHGAR_KR_NAME = "떠도는 별 로스갈";
-
-  const RAVA_VIERA_EN_NAME = "Rava Viera";
-  const RAVA_VIERA_KR_NAME = "라바 비에라";
-
-  const VEENA_VIERA_EN_NAME = "Veena Viera";
-  const VEENA_VIERA_KR_NAME = "비나 비에라";
-
   const MIDLANDER_HYUR_NAME =
     language === LanguageMode.ENGLISH_MODE
       ? MIDLANDER_HYUR_EN_NAME
@@ -403,25 +469,6 @@ const AppLanguageTexts = () => {
     language === LanguageMode.ENGLISH_MODE
       ? VEENA_VIERA_EN_NAME
       : VEENA_VIERA_KR_NAME;
-
-  const RACES = [
-    MIDLANDER_HYUR_EN_NAME,
-    HIGHLANDER_HYUR_EN_NAME,
-    WILDWOOD_ELEZEN_EN_NAME,
-    DUSKWIGHT_ELEZEN_EN_NAME,
-    PLAINSFOLK_LALAFELL_EN_NAME,
-    DUNESFOLK_LALAFELL_EN_NAME,
-    SEEKER_OF_THE_SUN_MIQOTE_EN_NAME,
-    KEEPER_OF_THE_MOON_MIQOTE_EN_NAME,
-    SEA_WOLVES_ROEGADYN_EN_NAME,
-    HELLSGUARD_ROEGADYN_EN_NAME,
-    RAEN_AU_RA_EN_NAME,
-    XAELA_AU_RA_EN_NAME,
-    HELIONS_HROTHGAR_EN_NAME,
-    THE_LOST_HROTHGAR_EN_NAME,
-    RAVA_VIERA_EN_NAME,
-    VEENA_VIERA_EN_NAME,
-  ];
 
 
   // Page Names
@@ -630,47 +677,19 @@ const AppLanguageTexts = () => {
   const NEXT_TEXT =
     language === LanguageMode.ENGLISH_MODE ? "Next" : "다음";
 
-  const WD_STAT_EN_NAME = "WD";
-  const WD_STAT_KR_NAME = "무공";
 
   const WD_STAT_NAME =
     language === LanguageMode.ENGLISH_MODE ? WD_STAT_EN_NAME : WD_STAT_KR_NAME;
 
-  const STR_STAT_EN_NAME = "STR";
-  const DEX_STAT_EN_NAME = "DEX";
-  const INT_STAT_EN_NAME = "INT";
-  const MIND_STAT_EN_NAME = "MND";
-
-  const STR_STAT_NAME_KR = "힘";
-  const DEX_STAT_NAME_KR = "민첩";
-  const INT_STAT_NAME_KR = "지능";
-  const MIND_STAT_NAME_KR = "정신";
 
   const STR_STAT_NAME =
-    language === LanguageMode.ENGLISH_MODE ? STR_STAT_EN_NAME : STR_STAT_NAME_KR;
+    language === LanguageMode.ENGLISH_MODE ? STR_STAT_EN_NAME : STR_STAT_KR_NAME;
   const DEX_STAT_NAME =
-    language === LanguageMode.ENGLISH_MODE ? DEX_STAT_EN_NAME : DEX_STAT_NAME_KR;
+    language === LanguageMode.ENGLISH_MODE ? DEX_STAT_EN_NAME : DEX_STAT_KR_NAME;
   const INT_STAT_NAME =
-    language === LanguageMode.ENGLISH_MODE ? INT_STAT_EN_NAME : INT_STAT_NAME_KR;
+    language === LanguageMode.ENGLISH_MODE ? INT_STAT_EN_NAME : INT_STAT_KR_NAME;
   const MIND_STAT_NAME =
-    language === LanguageMode.ENGLISH_MODE ? MIND_STAT_EN_NAME : MIND_STAT_NAME_KR;
-
-  const CRIT_STAT_EN_NAME = "CRT";
-  const DH_STAT_EN_NAME = "DH";
-  const DET_STAT_EN_NAME = "DET";
-  const SKS_STAT_EN_NAME = "SKS";
-  const SPS_STAT_EN_NAME = "SPS";
-  const TEN_STAT_EN_NAME = "TEN";
-  const PIE_STAT_EN_NAME = "PIE";
-
-  const CRIT_STAT_KR_NAME = "극대";
-  const DH_STAT_KR_NAME = "직격";
-  const DET_STAT_KR_NAME = "의지";
-  const SKS_STAT_KR_NAME = "기시";
-  const SPS_STAT_KR_NAME = "마시";
-  const TEN_STAT_KR_NAME = "불굴";
-  const PIE_STAT_KR_NAME = "신앙";
-
+    language === LanguageMode.ENGLISH_MODE ? MIND_STAT_EN_NAME : MIND_STAT_KR_NAME;
   const CRIT_STAT_NAME =
     language === LanguageMode.ENGLISH_MODE
       ? CRIT_STAT_EN_NAME
@@ -736,68 +755,6 @@ const AppLanguageTexts = () => {
 
 
   let allTexts = {
-    PLD_EN_NAME,
-    PLD_KR_NAME,
-
-    WAR_EN_NAME,
-    WAR_KR_NAME,
-
-    DRK_EN_NAME,
-    DRK_KR_NAME,
-
-    GNB_EN_NAME,
-    GNB_KR_NAME,
-    WHM_EN_NAME,
-    WHM_KR_NAME,
-
-    AST_EN_NAME,
-    AST_KR_NAME,
-
-    SCH_EN_NAME,
-    SCH_KR_NAME,
-
-    SGE_EN_NAME,
-    SGE_KR_NAME,
-
-    DRG_EN_NAME,
-    DRG_KR_NAME,
-
-    MNK_EN_NAME,
-    MNK_KR_NAME,
-
-    NIN_EN_NAME,
-    NIN_KR_NAME,
-
-    SAM_EN_NAME,
-    SAM_KR_NAME,
-
-    RPR_EN_NAME,
-    RPR_KR_NAME,
-
-    VPR_EN_NAME,
-    VPR_KR_NAME,
-
-    BRD_EN_NAME,
-    BRD_KR_NAME,
-
-    MCH_EN_NAME,
-    MCH_KR_NAME,
-
-    DNC_EN_NAME,
-    DNC_KR_NAME,
-
-    BLM_EN_NAME,
-    BLM_KR_NAME,
-
-    SMN_EN_NAME,
-    SMN_KR_NAME,
-
-    RDM_EN_NAME,
-    RDM_KR_NAME,
-
-    PCT_EN_NAME,
-    PCT_KR_NAME,
-
     PLD_JOB_NAME,
     WAR_JOB_NAME,
     DRK_JOB_NAME,
@@ -843,63 +800,6 @@ const AppLanguageTexts = () => {
     CANCEL_TEXT,
 
     // Player Text
-    JOB_EN_TEXT,
-    JOB_KR_TEXT,
-
-    RACE_EN_TEXT,
-    RACE_KR_TEXT,
-
-    WEAPON_SLOT_EN_TEXT,
-    WEAPON_SLOT_KR_TEXT,
-
-    OFFHAND_SLOT_EN_TEXT,
-    OFFHAND_SLOT_KR_TEXT,
-
-    HEAD_SLOT_EN_TEXT,
-    HEAD_SLOT_KR_TEXT,
-
-    BODY_SLOT_EN_TEXT,
-    BODY_SLOT_KR_TEXT,
-
-    HANDS_SLOT_EN_TEXT,
-    HANDS_SLOT_KR_TEXT,
-
-    LEGS_SLOT_EN_TEXT,
-    LEGS_SLOT_KR_TEXT,
-
-    FEET_SLOT_EN_TEXT,
-    FEET_SLOT_KR_TEXT,
-
-    EARS_SLOT_EN_TEXT,
-    EARS_SLOT_KR_TEXT,
-
-    NECK_SLOT_EN_TEXT,
-    NECK_SLOT_KR_TEXT,
-
-    WRIST_SLOT_EN_TEXT,
-    WRIST_SLOT_KR_TEXT,
-
-    FINGER1_SLOT_EN_TEXT,
-    FINGER1_SLOT_KR_TEXT,
-
-    FINGER2_SLOT_EN_TEXT,
-    FINGER2_SLOT_KR_TEXT,
-
-    FOOD_SLOT_EN_TEXT,
-    FOOD_SLOT_KR_TEXT,
-
-    AST_MELEE_PARTNER_EN_TEXT,
-    AST_MELEE_PARTNER_KR_TEXT,
-
-    AST_RANGED_PARTNER_EN_TEXT,
-    AST_RANGED_PARTNER_KR_TEXT,
-
-    DNC_PARTNER_EN_TEXT,
-    DNC_PARTNER_KR_TEXT,
-
-    FINGER_SLOT_EN_TEXT,
-    FINGER_SLOT_KR_TEXT,
-
     JOB_TEXT,
     RACE_TEXT,
     WEAPON_SLOT_TEXT,
@@ -919,54 +819,6 @@ const AppLanguageTexts = () => {
     AST_RANGED_PARTNER_TEXT,
     DNC_PARTNER_TEXT,
     FINGER_SLOT_TEXT,
-    MIDLANDER_HYUR_EN_NAME,
-    MIDLANDER_HYUR_KR_NAME,
-
-    HIGHLANDER_HYUR_EN_NAME,
-    HIGHLANDER_HYUR_KR_NAME,
-
-    WILDWOOD_ELEZEN_EN_NAME,
-    WILDWOOD_ELEZEN_KR_NAME,
-
-    DUSKWIGHT_ELEZEN_EN_NAME,
-    DUSKWIGHT_ELEZEN_KR_NAME,
-
-    PLAINSFOLK_LALAFELL_EN_NAME,
-    PLAINSFOLK_LALAFELL_KR_NAME,
-
-    DUNESFOLK_LALAFELL_EN_NAME,
-    DUNESFOLK_LALAFELL_KR_NAME,
-
-    SEEKER_OF_THE_SUN_MIQOTE_EN_NAME,
-    SEEKER_OF_THE_SUN_MIQOTE_KR_NAME,
-
-    KEEPER_OF_THE_MOON_MIQOTE_EN_NAME,
-    KEEPER_OF_THE_MOON_MIQOTE_KR_NAME,
-
-    SEA_WOLVES_ROEGADYN_EN_NAME,
-    SEA_WOLVES_ROEGADYN_KR_NAME,
-
-    HELLSGUARD_ROEGADYN_EN_NAME,
-    HELLSGUARD_ROEGADYN_KR_NAME,
-
-    RAEN_AU_RA_EN_NAME,
-    RAEN_AU_RA_KR_NAME,
-
-    XAELA_AU_RA_EN_NAME,
-    XAELA_AU_RA_KR_NAME,
-
-    HELIONS_HROTHGAR_EN_NAME,
-    HELIONS_HROTHGAR_KR_NAME,
-
-    THE_LOST_HROTHGAR_EN_NAME,
-    THE_LOST_HROTHGAR_KR_NAME,
-
-    RAVA_VIERA_EN_NAME,
-    RAVA_VIERA_KR_NAME,
-
-    VEENA_VIERA_EN_NAME,
-    VEENA_VIERA_KR_NAME,
-
     MIDLANDER_HYUR_NAME,
     HIGHLANDER_HYUR_NAME,
     WILDWOOD_ELEZEN_NAME,
@@ -983,9 +835,6 @@ const AppLanguageTexts = () => {
     THE_LOST_HROTHGAR_NAME,
     RAVA_VIERA_NAME,
     VEENA_VIERA_NAME,
-
-    RACES,
-
 
     // Page Names
     HOME_PAGE_NAME,
@@ -1076,39 +925,10 @@ const AppLanguageTexts = () => {
 
     WD_STAT_NAME,
 
-    WD_STAT_EN_NAME,
-    WD_STAT_KR_NAME,
-
-    STR_STAT_EN_NAME,
-    DEX_STAT_EN_NAME,
-    INT_STAT_EN_NAME,
-    MIND_STAT_EN_NAME,
-
-    STR_STAT_NAME_KR,
-    DEX_STAT_NAME_KR,
-    INT_STAT_NAME_KR,
-    MIND_STAT_NAME_KR,
-
     STR_STAT_NAME,
     DEX_STAT_NAME,
     INT_STAT_NAME,
     MIND_STAT_NAME,
-
-    CRIT_STAT_EN_NAME,
-    DH_STAT_EN_NAME,
-    DET_STAT_EN_NAME,
-    SKS_STAT_EN_NAME,
-    SPS_STAT_EN_NAME,
-    TEN_STAT_EN_NAME,
-    PIE_STAT_EN_NAME,
-
-    CRIT_STAT_KR_NAME,
-    DH_STAT_KR_NAME,
-    DET_STAT_KR_NAME,
-    SKS_STAT_KR_NAME,
-    SPS_STAT_KR_NAME,
-    TEN_STAT_KR_NAME,
-    PIE_STAT_KR_NAME,
 
     CRIT_STAT_NAME,
     DH_STAT_NAME,
@@ -1148,219 +968,144 @@ const AppLanguageTexts = () => {
   return texts;
 }
 
-export function convertToKoreanRaceName(raceName: string) {
+export function convertToRaceTextName(raceName: string) {
   const LANGUAGE_TEXTS = AppLanguageTexts();
 
   switch (raceName) {
-    case LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME:
-      return LANGUAGE_TEXTS.MIDLANDER_HYUR_KR_NAME;
-    case LANGUAGE_TEXTS.HIGHLANDER_HYUR_EN_NAME:
-      return LANGUAGE_TEXTS.HIGHLANDER_HYUR_KR_NAME;
-    case LANGUAGE_TEXTS.WILDWOOD_ELEZEN_EN_NAME:
-      return LANGUAGE_TEXTS.WILDWOOD_ELEZEN_KR_NAME;
-    case LANGUAGE_TEXTS.DUSKWIGHT_ELEZEN_EN_NAME:
-      return LANGUAGE_TEXTS.DUSKWIGHT_ELEZEN_KR_NAME;
-    case LANGUAGE_TEXTS.PLAINSFOLK_LALAFELL_EN_NAME:
-      return LANGUAGE_TEXTS.PLAINSFOLK_LALAFELL_KR_NAME;
-    case LANGUAGE_TEXTS.DUNESFOLK_LALAFELL_EN_NAME:
-      return LANGUAGE_TEXTS.DUNESFOLK_LALAFELL_KR_NAME;
-    case LANGUAGE_TEXTS.SEEKER_OF_THE_SUN_MIQOTE_EN_NAME:
-      return LANGUAGE_TEXTS.SEEKER_OF_THE_SUN_MIQOTE_KR_NAME;
-    case LANGUAGE_TEXTS.KEEPER_OF_THE_MOON_MIQOTE_EN_NAME:
-      return LANGUAGE_TEXTS.KEEPER_OF_THE_MOON_MIQOTE_KR_NAME;
-    case LANGUAGE_TEXTS.SEA_WOLVES_ROEGADYN_EN_NAME:
-      return LANGUAGE_TEXTS.SEA_WOLVES_ROEGADYN_KR_NAME;
-    case LANGUAGE_TEXTS.HELLSGUARD_ROEGADYN_EN_NAME:
-      return LANGUAGE_TEXTS.HELLSGUARD_ROEGADYN_KR_NAME;
-    case LANGUAGE_TEXTS.RAEN_AU_RA_EN_NAME:
-      return LANGUAGE_TEXTS.RAEN_AU_RA_KR_NAME;
-    case LANGUAGE_TEXTS.XAELA_AU_RA_EN_NAME:
-      return LANGUAGE_TEXTS.XAELA_AU_RA_KR_NAME;
-    case LANGUAGE_TEXTS.HELIONS_HROTHGAR_EN_NAME:
-      return LANGUAGE_TEXTS.HELIONS_HROTHGAR_KR_NAME;
-    case LANGUAGE_TEXTS.THE_LOST_HROTHGAR_EN_NAME:
-      return LANGUAGE_TEXTS.THE_LOST_HROTHGAR_KR_NAME;
-    case LANGUAGE_TEXTS.RAVA_VIERA_EN_NAME:
-      return LANGUAGE_TEXTS.RAVA_VIERA_KR_NAME;
-    case LANGUAGE_TEXTS.VEENA_VIERA_EN_NAME:
-      return LANGUAGE_TEXTS.VEENA_VIERA_KR_NAME;
+    case MIDLANDER_HYUR_EN_NAME:
+      return LANGUAGE_TEXTS.MIDLANDER_HYUR_NAME;
+    case HIGHLANDER_HYUR_EN_NAME:
+      return LANGUAGE_TEXTS.HIGHLANDER_HYUR_NAME;
+    case WILDWOOD_ELEZEN_EN_NAME:
+      return LANGUAGE_TEXTS.WILDWOOD_ELEZEN_NAME;
+    case DUSKWIGHT_ELEZEN_EN_NAME:
+      return LANGUAGE_TEXTS.DUSKWIGHT_ELEZEN_NAME;
+    case PLAINSFOLK_LALAFELL_EN_NAME:
+      return LANGUAGE_TEXTS.PLAINSFOLK_LALAFELL_NAME;
+    case DUNESFOLK_LALAFELL_EN_NAME:
+      return LANGUAGE_TEXTS.DUNESFOLK_LALAFELL_NAME;
+    case SEEKER_OF_THE_SUN_MIQOTE_EN_NAME:
+      return LANGUAGE_TEXTS.SEEKER_OF_THE_SUN_MIQOTE_NAME;
+    case KEEPER_OF_THE_MOON_MIQOTE_EN_NAME:
+      return LANGUAGE_TEXTS.KEEPER_OF_THE_MOON_MIQOTE_NAME;
+    case SEA_WOLVES_ROEGADYN_EN_NAME:
+      return LANGUAGE_TEXTS.SEA_WOLVES_ROEGADYN_NAME;
+    case HELLSGUARD_ROEGADYN_EN_NAME:
+      return LANGUAGE_TEXTS.HELLSGUARD_ROEGADYN_NAME;
+    case RAEN_AU_RA_EN_NAME:
+      return LANGUAGE_TEXTS.RAEN_AU_RA_NAME;
+    case XAELA_AU_RA_EN_NAME:
+      return LANGUAGE_TEXTS.XAELA_AU_RA_NAME;
+    case HELIONS_HROTHGAR_EN_NAME:
+      return LANGUAGE_TEXTS.HELIONS_HROTHGAR_NAME;
+    case THE_LOST_HROTHGAR_EN_NAME:
+      return LANGUAGE_TEXTS.THE_LOST_HROTHGAR_NAME;
+    case RAVA_VIERA_EN_NAME:
+      return LANGUAGE_TEXTS.RAVA_VIERA_NAME;
+    case VEENA_VIERA_EN_NAME:
+      return LANGUAGE_TEXTS.VEENA_VIERA_NAME;
     default:
       return raceName;
   }
 }
 
-export function convertToRaceText(raceName: string) {
-  let { language } = useLanguage();
-  return language === LanguageMode.ENGLISH_MODE
-    ? raceName
-    : convertToKoreanRaceName(raceName);
-}
-
-export function convertToKoreanSlotName(slotName: string) {
-  const LANGUAGE_TEXTS = AppLanguageTexts();
+export function convertToSlotText(slotName: string) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   switch (slotName) {
-    case LANGUAGE_TEXTS.JOB_EN_TEXT:
-      return LANGUAGE_TEXTS.JOB_KR_TEXT;
-    case LANGUAGE_TEXTS.RACE_EN_TEXT:
-      return LANGUAGE_TEXTS.RACE_KR_TEXT;
-    case LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.WEAPON_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.OFFHAND_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.OFFHAND_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.HEAD_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.HEAD_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.BODY_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.BODY_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.HANDS_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.HANDS_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.LEGS_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.LEGS_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.FEET_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.FEET_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.EARS_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.EARS_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.NECK_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.NECK_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.WRIST_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.WRIST_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.FINGER1_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.FINGER2_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.FOOD_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.FOOD_SLOT_KR_TEXT;
-    case LANGUAGE_TEXTS.AST_MELEE_PARTNER_EN_TEXT:
-      return LANGUAGE_TEXTS.AST_MELEE_PARTNER_KR_TEXT;
-    case LANGUAGE_TEXTS.AST_RANGED_PARTNER_EN_TEXT:
-      return LANGUAGE_TEXTS.AST_RANGED_PARTNER_KR_TEXT;
-    case LANGUAGE_TEXTS.DNC_PARTNER_EN_TEXT:
-      return LANGUAGE_TEXTS.DNC_PARTNER_KR_TEXT;
-    case LANGUAGE_TEXTS.FINGER_SLOT_EN_TEXT:
-      return LANGUAGE_TEXTS.FINGER_SLOT_KR_TEXT;
+    case JOB_EN_TEXT:
+      return LANGUAGE_TEXTS.JOB_TEXT;
+    case RACE_EN_TEXT:
+      return LANGUAGE_TEXTS.RACE_TEXT;
+    case WEAPON_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.WEAPON_SLOT_TEXT;
+    case OFFHAND_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.OFFHAND_SLOT_TEXT;
+    case HEAD_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.HEAD_SLOT_TEXT;
+    case BODY_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.BODY_SLOT_TEXT;
+    case HANDS_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.HANDS_SLOT_TEXT;
+    case LEGS_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.LEGS_SLOT_TEXT;
+    case FEET_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.FEET_SLOT_TEXT;
+    case EARS_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.EARS_SLOT_TEXT;
+    case NECK_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.NECK_SLOT_TEXT;
+    case WRIST_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.WRIST_SLOT_TEXT;
+    case FINGER1_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.FINGER1_SLOT_TEXT;
+    case FINGER2_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.FINGER2_SLOT_TEXT;
+    case FOOD_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.FOOD_SLOT_TEXT;
+    case AST_MELEE_PARTNER_EN_TEXT:
+      return LANGUAGE_TEXTS.AST_MELEE_PARTNER_TEXT;
+    case AST_RANGED_PARTNER_EN_TEXT:
+      return LANGUAGE_TEXTS.AST_RANGED_PARTNER_TEXT;
+    case DNC_PARTNER_EN_TEXT:
+      return LANGUAGE_TEXTS.DNC_PARTNER_TEXT;
+    case FINGER_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.FINGER_SLOT_TEXT;
     default:
       return slotName;
   }
 }
-export function convertToSlotText(slotName: string) {
-  let { language } = useLanguage();
-  return language === LanguageMode.ENGLISH_MODE
-    ? slotName
-    : convertToKoreanSlotName(slotName);
-}
 
 
-export const convertToKoreanJobAbbrev = (jobAbbrev: string) => {
-  const LANGUAGE_TEXTS = AppLanguageTexts();
+export const convertToJobText = (jobAbbrev: string) => {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   switch (jobAbbrev) {
-    case LANGUAGE_TEXTS.PLD_EN_NAME:
-      return LANGUAGE_TEXTS.PLD_KR_NAME;
-    case LANGUAGE_TEXTS.WAR_EN_NAME:
-      return LANGUAGE_TEXTS.WAR_KR_NAME;
-    case LANGUAGE_TEXTS.DRK_EN_NAME:
-      return LANGUAGE_TEXTS.DRK_KR_NAME;
-    case LANGUAGE_TEXTS.GNB_EN_NAME:
-      return LANGUAGE_TEXTS.GNB_KR_NAME;
-    case LANGUAGE_TEXTS.WHM_EN_NAME:
-      return LANGUAGE_TEXTS.WHM_KR_NAME;
-    case LANGUAGE_TEXTS.AST_EN_NAME:
-      return LANGUAGE_TEXTS.AST_KR_NAME;
-    case LANGUAGE_TEXTS.SCH_EN_NAME:
-      return LANGUAGE_TEXTS.SCH_KR_NAME;
-    case LANGUAGE_TEXTS.SGE_EN_NAME:
-      return LANGUAGE_TEXTS.SGE_KR_NAME;
-    case LANGUAGE_TEXTS.DRG_EN_NAME:
-      return LANGUAGE_TEXTS.DRG_KR_NAME;
-    case LANGUAGE_TEXTS.MNK_EN_NAME:
-      return LANGUAGE_TEXTS.MNK_KR_NAME;
-    case LANGUAGE_TEXTS.NIN_EN_NAME:
-      return LANGUAGE_TEXTS.NIN_KR_NAME;
-    case LANGUAGE_TEXTS.SAM_EN_NAME:
-      return LANGUAGE_TEXTS.SAM_KR_NAME;
-    case LANGUAGE_TEXTS.RPR_EN_NAME:
-      return LANGUAGE_TEXTS.RPR_KR_NAME;
-    case LANGUAGE_TEXTS.VPR_EN_NAME:
-      return LANGUAGE_TEXTS.VPR_KR_NAME;
-    case LANGUAGE_TEXTS.BRD_EN_NAME:
-      return LANGUAGE_TEXTS.BRD_KR_NAME;
-    case LANGUAGE_TEXTS.MCH_EN_NAME:
-      return LANGUAGE_TEXTS.MCH_KR_NAME;
-    case LANGUAGE_TEXTS.DNC_EN_NAME:
-      return LANGUAGE_TEXTS.DNC_KR_NAME;
-    case LANGUAGE_TEXTS.BLM_EN_NAME:
-      return LANGUAGE_TEXTS.BLM_KR_NAME;
-    case LANGUAGE_TEXTS.SMN_EN_NAME:
-      return LANGUAGE_TEXTS.SMN_KR_NAME;
-    case LANGUAGE_TEXTS.RDM_EN_NAME:
-      return LANGUAGE_TEXTS.RDM_KR_NAME;
-    case LANGUAGE_TEXTS.PCT_EN_NAME:
-      return LANGUAGE_TEXTS.PCT_KR_NAME;
+    case PLD_EN_NAME:
+      return LANGUAGE_TEXTS.PLD_JOB_NAME;
+    case WAR_EN_NAME:
+      return LANGUAGE_TEXTS.WAR_JOB_NAME;
+    case DRK_EN_NAME:
+      return LANGUAGE_TEXTS.DRK_JOB_NAME;
+    case GNB_EN_NAME:
+      return LANGUAGE_TEXTS.GNB_JOB_NAME;
+    case WHM_EN_NAME:
+      return LANGUAGE_TEXTS.WHM_JOB_NAME;
+    case AST_EN_NAME:
+      return LANGUAGE_TEXTS.AST_JOB_NAME;
+    case SCH_EN_NAME:
+      return LANGUAGE_TEXTS.SCH_JOB_NAME;
+    case SGE_EN_NAME:
+      return LANGUAGE_TEXTS.SGE_JOB_NAME;
+    case DRG_EN_NAME:
+      return LANGUAGE_TEXTS.DRG_JOB_NAME;
+    case MNK_EN_NAME:
+      return LANGUAGE_TEXTS.MNK_JOB_NAME;
+    case NIN_EN_NAME:
+      return LANGUAGE_TEXTS.NIN_JOB_NAME;
+    case SAM_EN_NAME:
+      return LANGUAGE_TEXTS.SAM_JOB_NAME;
+    case RPR_EN_NAME:
+      return LANGUAGE_TEXTS.RPR_JOB_NAME;
+    case VPR_EN_NAME:
+      return LANGUAGE_TEXTS.VPR_JOB_NAME;
+    case BRD_EN_NAME:
+      return LANGUAGE_TEXTS.BRD_JOB_NAME;
+    case MCH_EN_NAME:
+      return LANGUAGE_TEXTS.MCH_JOB_NAME;
+    case DNC_EN_NAME:
+      return LANGUAGE_TEXTS.DNC_JOB_NAME;
+    case BLM_EN_NAME:
+      return LANGUAGE_TEXTS.BLM_JOB_NAME;
+    case SMN_EN_NAME:
+      return LANGUAGE_TEXTS.SMN_JOB_NAME;
+    case RDM_EN_NAME:
+      return LANGUAGE_TEXTS.RDM_JOB_NAME;
+    case PCT_EN_NAME:
+      return LANGUAGE_TEXTS.PCT_JOB_NAME;
     default:
       return jobAbbrev;
   }
 };
 
-export function convertToJobText(jobAbbrev: string) {
-  let { language } = useLanguage();
-  return language === LanguageMode.ENGLISH_MODE
-    ? jobAbbrev
-    : convertToKoreanJobAbbrev(jobAbbrev);
-}
 
-
-export function convertToEnglishSubStatName(subStatName: string) {
-  const LANGUAGE_TEXTS = AppLanguageTexts();
-
-  switch (subStatName) {
-    case LANGUAGE_TEXTS.CRIT_STAT_KR_NAME:
-      return LANGUAGE_TEXTS.CRIT_STAT_EN_NAME;
-    case LANGUAGE_TEXTS.DH_STAT_KR_NAME:
-      return LANGUAGE_TEXTS.DH_STAT_EN_NAME;
-    case LANGUAGE_TEXTS.DET_STAT_KR_NAME:
-      return LANGUAGE_TEXTS.DET_STAT_EN_NAME;
-    case LANGUAGE_TEXTS.SKS_STAT_KR_NAME:
-      return LANGUAGE_TEXTS.SKS_STAT_EN_NAME;
-    case LANGUAGE_TEXTS.SPS_STAT_KR_NAME:
-      return LANGUAGE_TEXTS.SPS_STAT_EN_NAME;
-    case LANGUAGE_TEXTS.TEN_STAT_KR_NAME:
-      return LANGUAGE_TEXTS.TEN_STAT_EN_NAME;
-    case LANGUAGE_TEXTS.PIE_STAT_KR_NAME:
-      return LANGUAGE_TEXTS.PIE_STAT_EN_NAME;
-    default:
-      return subStatName;
-  }
-}
-
-export function convertToKoreanSubStatName(enSubStatName: string) {
-  const LANGUAGE_TEXTS = AppLanguageTexts();
-
-  switch (enSubStatName) {
-    case LANGUAGE_TEXTS.WD_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.WD_STAT_KR_NAME;
-    case LANGUAGE_TEXTS.STR_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.STR_STAT_NAME_KR;
-    case LANGUAGE_TEXTS.DEX_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.DEX_STAT_NAME_KR;
-    case LANGUAGE_TEXTS.INT_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.INT_STAT_NAME_KR;
-    case LANGUAGE_TEXTS.MIND_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.MIND_STAT_NAME_KR;
-    case LANGUAGE_TEXTS.CRIT_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.CRIT_STAT_KR_NAME;
-    case LANGUAGE_TEXTS.DH_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.DH_STAT_KR_NAME;
-    case LANGUAGE_TEXTS.DET_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.DET_STAT_KR_NAME;
-    case LANGUAGE_TEXTS.SKS_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.SKS_STAT_KR_NAME;
-    case LANGUAGE_TEXTS.SPS_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.SPS_STAT_KR_NAME;
-    case LANGUAGE_TEXTS.TEN_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.TEN_STAT_KR_NAME;
-    case LANGUAGE_TEXTS.PIE_STAT_EN_NAME:
-      return LANGUAGE_TEXTS.PIE_STAT_KR_NAME;
-    default:
-      return enSubStatName;
-  }
-}

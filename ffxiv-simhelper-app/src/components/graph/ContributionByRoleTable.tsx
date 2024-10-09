@@ -6,7 +6,7 @@ import {
 import { BestPartnerBuffBarStyle, BuffBarBoxStyle } from "./Style";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { AppConfigurations } from "../../Themes";
-import { LANGUAGE_TEXTS } from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 const MAX_RANKINGS = 4;
 const RANKING_ITEM_HEIGHT = "4vh";
@@ -14,6 +14,7 @@ const RANKING_ITEM_HEIGHT = "4vh";
 export function ContributionByRoleTable(
   simulationDataByRole: SimulationDataByRole
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   let tankPartnerData = simulationDataByRole.tanks;
   let healerPartnerData = simulationDataByRole.healers;
   let dpsPartnerData = simulationDataByRole.melee;

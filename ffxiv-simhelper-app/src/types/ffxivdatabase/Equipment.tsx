@@ -1,37 +1,39 @@
 import {
   AppLanguageTexts,
+  BODY_SLOT_EN_TEXT,
+  EARS_SLOT_EN_TEXT,
+  FEET_SLOT_EN_TEXT,
+  FINGER1_SLOT_EN_TEXT,
+  FINGER2_SLOT_EN_TEXT,
+  FINGER_SLOT_EN_TEXT,
+  HANDS_SLOT_EN_TEXT,
+  HEAD_SLOT_EN_TEXT,
+  LEGS_SLOT_EN_TEXT,
+  NECK_SLOT_EN_TEXT,
+  OFFHAND_SLOT_EN_TEXT,
+  PLD_EN_NAME,
+  WEAPON_SLOT_EN_TEXT,
+  WRIST_SLOT_EN_TEXT,
 } from "../../const/languageTexts";
 import totalEquipmentsJson from "../../assets/data/equipment_data.json";
 import { LanguageMode } from "../../LanguageContext";
 
-export const loadSlots = () => {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
-  const WEAPONSLOTS = [LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT, LANGUAGE_TEXTS.OFFHAND_SLOT_EN_TEXT];
-  const LEFTSLOTS = [
-    LANGUAGE_TEXTS.HEAD_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.BODY_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.HANDS_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.LEGS_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.FEET_SLOT_EN_TEXT,
-  ];
-  const RIGHTSLOTS = [
-    LANGUAGE_TEXTS.WRIST_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.EARS_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.NECK_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT,
-  ];
-  const TOTAL_SLOTS = WEAPONSLOTS.concat(LEFTSLOTS).concat(RIGHTSLOTS);
-
-
-  return {
-    WEAPONSLOTS,
-    LEFTSLOTS,
-    RIGHTSLOTS,
-    TOTAL_SLOTS,
-  }
-}
+export const WEAPONSLOTS = [WEAPON_SLOT_EN_TEXT, OFFHAND_SLOT_EN_TEXT];
+export const LEFTSLOTS = [
+  HEAD_SLOT_EN_TEXT,
+  BODY_SLOT_EN_TEXT,
+  HANDS_SLOT_EN_TEXT,
+  LEGS_SLOT_EN_TEXT,
+  FEET_SLOT_EN_TEXT,
+];
+export const RIGHTSLOTS = [
+  WRIST_SLOT_EN_TEXT,
+  EARS_SLOT_EN_TEXT,
+  NECK_SLOT_EN_TEXT,
+  FINGER1_SLOT_EN_TEXT,
+  FINGER2_SLOT_EN_TEXT,
+];
+export const TOTAL_SLOTS = WEAPONSLOTS.concat(LEFTSLOTS).concat(RIGHTSLOTS);
 
 let totalEquipments: Array<Equipment> = [];
 
@@ -60,20 +62,14 @@ totalEquipmentsJson.forEach((element) => {
   });
 });
 
-export const loadMinMaxEquipmentItemLevels = () => {
-  const LANGUAGE_TEXTS = AppLanguageTexts();
-  const CURRENT_MIN_ITEM_LEVEL =
-    LANGUAGE_TEXTS.language === LanguageMode.ENGLISH_MODE ? 710 : 690;
-  const CURRENT_MAX_ITEM_LEVEL =
-    LANGUAGE_TEXTS.language === LanguageMode.ENGLISH_MODE ? 735 : 735;
+const CURRENT_MIN_ITEM_LEVEL = 710;
+const CURRENT_MAX_ITEM_LEVEL = 735;
 
-  return { CURRENT_MAX_ITEM_LEVEL, CURRENT_MIN_ITEM_LEVEL };
-}
+export const {
+  idDatabase: EQUIPMENT_DATABASE_BY_ID,
+  keyDatabase: EQUIPMENT_DATABASE_BY_KEYS,
+} = readEquipmentData(CURRENT_MIN_ITEM_LEVEL, CURRENT_MAX_ITEM_LEVEL);
 
-export const loadEquipmentData = () => {
-  let { CURRENT_MIN_ITEM_LEVEL, CURRENT_MAX_ITEM_LEVEL } = loadMinMaxEquipmentItemLevels();
-  return readEquipmentData(CURRENT_MIN_ITEM_LEVEL, CURRENT_MAX_ITEM_LEVEL);
-}
 
 export interface Equipment {
   id: number;
@@ -111,10 +107,9 @@ export function toEquipmentKeyString(
   jobAbbrev: string,
   slotName: string
 ): string {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   let keySlotName = slotName;
-  if (slotName === LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT || slotName === LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT) {
-    keySlotName = LANGUAGE_TEXTS.FINGER_SLOT_EN_TEXT;
+  if (slotName === FINGER1_SLOT_EN_TEXT || slotName === FINGER2_SLOT_EN_TEXT) {
+    keySlotName = FINGER_SLOT_EN_TEXT;
   }
   return `${keySlotName}-${jobAbbrev}`;
 }
@@ -236,37 +231,35 @@ export function equipmentStatDescriptionString(equipment: Equipment) {
 }
 
 export function getEquipmentSlotsOfJob(jobAbbrev: string) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
-  if (jobAbbrev === LANGUAGE_TEXTS.PLD_EN_NAME) {
+  if (jobAbbrev === PLD_EN_NAME) {
     return [
-      LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.OFFHAND_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.HEAD_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.BODY_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.HANDS_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.LEGS_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.FEET_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.EARS_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.NECK_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.WRIST_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT,
-      LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT,
+      WEAPON_SLOT_EN_TEXT,
+      OFFHAND_SLOT_EN_TEXT,
+      HEAD_SLOT_EN_TEXT,
+      BODY_SLOT_EN_TEXT,
+      HANDS_SLOT_EN_TEXT,
+      LEGS_SLOT_EN_TEXT,
+      FEET_SLOT_EN_TEXT,
+      EARS_SLOT_EN_TEXT,
+      NECK_SLOT_EN_TEXT,
+      WRIST_SLOT_EN_TEXT,
+      FINGER1_SLOT_EN_TEXT,
+      FINGER2_SLOT_EN_TEXT,
     ];
   }
 
   return [
-    LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.HEAD_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.BODY_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.HANDS_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.LEGS_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.FEET_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.EARS_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.NECK_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.WRIST_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT,
-    LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT,
+    WEAPON_SLOT_EN_TEXT,
+    HEAD_SLOT_EN_TEXT,
+    BODY_SLOT_EN_TEXT,
+    HANDS_SLOT_EN_TEXT,
+    LEGS_SLOT_EN_TEXT,
+    FEET_SLOT_EN_TEXT,
+    EARS_SLOT_EN_TEXT,
+    NECK_SLOT_EN_TEXT,
+    WRIST_SLOT_EN_TEXT,
+    FINGER1_SLOT_EN_TEXT,
+    FINGER2_SLOT_EN_TEXT,
   ];
 }
 

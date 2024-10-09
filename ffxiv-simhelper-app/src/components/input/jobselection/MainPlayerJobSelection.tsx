@@ -10,9 +10,9 @@ import {
   SingleEquipmentInputSaveState,
 } from "../../../types/EquipmentInput";
 import { getRoleByIdAndMainCharacterJob } from "./PartyMemberJobSelection";
-import { LANGUAGE_TEXTS } from "../../../const/languageTexts";
 import { calculateHasteBuff, DEFAULT_GCD } from "../../../types/ffxivdatabase/StatCalculator";
 import { mapJobAbbrevToJobBisEquipments } from "../../../const/StatValue";
+import { AppLanguageTexts, AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../../const/languageTexts";
 
 let ALIGN = "left";
 
@@ -116,31 +116,31 @@ export function MainPlayerJobSelection(
           },
         }}
       >
-        {JobMenuItem(LANGUAGE_TEXTS.PLD_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.WAR_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.DRK_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.GNB_EN_NAME, ALIGN)}
+        {JobMenuItem(PLD_EN_NAME, ALIGN)}
+        {JobMenuItem(WAR_EN_NAME, ALIGN)}
+        {JobMenuItem(DRK_EN_NAME, ALIGN)}
+        {JobMenuItem(GNB_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem(LANGUAGE_TEXTS.WHM_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.AST_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.SCH_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.SGE_EN_NAME, ALIGN)}
+        {JobMenuItem(WHM_EN_NAME, ALIGN)}
+        {JobMenuItem(AST_EN_NAME, ALIGN)}
+        {JobMenuItem(SCH_EN_NAME, ALIGN)}
+        {JobMenuItem(SGE_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem(LANGUAGE_TEXTS.DRG_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.MNK_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.NIN_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.SAM_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.RPR_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.VPR_EN_NAME, ALIGN)}
+        {JobMenuItem(DRG_EN_NAME, ALIGN)}
+        {JobMenuItem(MNK_EN_NAME, ALIGN)}
+        {JobMenuItem(NIN_EN_NAME, ALIGN)}
+        {JobMenuItem(SAM_EN_NAME, ALIGN)}
+        {JobMenuItem(RPR_EN_NAME, ALIGN)}
+        {JobMenuItem(VPR_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem(LANGUAGE_TEXTS.BRD_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.MCH_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.DNC_EN_NAME, ALIGN)}
+        {JobMenuItem(BRD_EN_NAME, ALIGN)}
+        {JobMenuItem(MCH_EN_NAME, ALIGN)}
+        {JobMenuItem(DNC_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem(LANGUAGE_TEXTS.SMN_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.BLM_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.RDM_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.PCT_EN_NAME, ALIGN)}
+        {JobMenuItem(SMN_EN_NAME, ALIGN)}
+        {JobMenuItem(BLM_EN_NAME, ALIGN)}
+        {JobMenuItem(RDM_EN_NAME, ALIGN)}
+        {JobMenuItem(PCT_EN_NAME, ALIGN)}
       </Select>
     </CustomFormControl>
   );
@@ -180,20 +180,20 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
           },
         }}
       >
-        {JobMenuItem(LANGUAGE_TEXTS.AST_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.SCH_EN_NAME, ALIGN)}
+        {JobMenuItem(AST_EN_NAME, ALIGN)}
+        {JobMenuItem(SCH_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem(LANGUAGE_TEXTS.DRG_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.MNK_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.NIN_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.RPR_EN_NAME, ALIGN)}
+        {JobMenuItem(DRG_EN_NAME, ALIGN)}
+        {JobMenuItem(MNK_EN_NAME, ALIGN)}
+        {JobMenuItem(NIN_EN_NAME, ALIGN)}
+        {JobMenuItem(RPR_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem(LANGUAGE_TEXTS.BRD_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.DNC_EN_NAME, ALIGN)}
+        {JobMenuItem(BRD_EN_NAME, ALIGN)}
+        {JobMenuItem(DNC_EN_NAME, ALIGN)}
         <Divider />
-        {JobMenuItem(LANGUAGE_TEXTS.SMN_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.RDM_EN_NAME, ALIGN)}
-        {JobMenuItem(LANGUAGE_TEXTS.PCT_EN_NAME, ALIGN)}
+        {JobMenuItem(SMN_EN_NAME, ALIGN)}
+        {JobMenuItem(RDM_EN_NAME, ALIGN)}
+        {JobMenuItem(PCT_EN_NAME, ALIGN)}
       </Select>
     </CustomFormControl>
   );
@@ -224,6 +224,8 @@ export function MainPlayerGcdSelection(
   let jobAbbrev = totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
   let gcdOptions = getGcdOptions(jobAbbrev);
 
+  const LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <CustomFormControl fullWidth>
       <InputLabel
@@ -233,7 +235,7 @@ export function MainPlayerGcdSelection(
       >
         <Box display="flex" sx={{ height: "4vh" }} alignItems={"center"} justifyContent={"flex-end"}>
           <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
-            {SPEED_LABEL_TEXT}
+            {LANGUAGE_TEXTS.SPEED_LABEL_TEXT}
           </Typography>
         </Box>
       </InputLabel>

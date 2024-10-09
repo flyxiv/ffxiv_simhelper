@@ -10,7 +10,7 @@ import {
 } from "../SimulationResultTextBox";
 import { EquipmentInput } from "../../../types/EquipmentInput";
 import { PartyMemberIlvlSelection } from "../PartyMemberIlvlSelection";
-import { LANGUAGE_TEXTS } from "../../../const/languageTexts";
+import { AppLanguageTexts } from "../../../const/languageTexts";
 
 const HorizontalInputGridContainer = styled(Grid)`
   ${HorizontalInputGridContainerStyle}
@@ -34,6 +34,7 @@ export function HorizontalPartyInput(
   setTotalEquipmentState: Function,
 ) {
   let xs = 14;
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   return (
     <HorizontalInputGridContainer container>
       <HorizontalInputBox>

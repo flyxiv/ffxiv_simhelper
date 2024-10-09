@@ -50,7 +50,7 @@ import {
 } from "../../../types/EquipmentInput";
 import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
-import { convertToSlotText, LANGUAGE_TEXTS } from "../../../const/languageTexts";
+import { AppLanguageTexts, AST_EN_NAME, convertToSlotText, DNC_EN_NAME, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -75,7 +75,7 @@ const EquipmentMenu = styled(MenuItem)`
   ${MenuItemStyle}
 `;
 
-let PLAYER_EQUIPMENTS = new Map(EQUIPMENT_DATABASE_BY_ID);
+let PLAYER_EQUIPMENTS = new Map();
 
 function EquipmentMenuOfOneSlot(
   id: number,
@@ -84,6 +84,7 @@ function EquipmentMenuOfOneSlot(
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   let totalState = totalEquipmentState.equipmentDatas[id];
   let key = `${slotName}-${id}-equipment`;
   let slotEquipmentId = totalState.itemSet[slotNameToSlotIndex(slotName)];
@@ -91,10 +92,10 @@ function EquipmentMenuOfOneSlot(
     slotEquipmentId === undefined ? EMPTY_EQUIPMENT_ID : slotEquipmentId;
 
   if (
-    slotName === LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT &&
-    totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT)] !== -1
+    slotName === FINGER1_SLOT_EN_TEXT &&
+    totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)] !== -1
   ) {
-    let ring2 = totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT)];
+    let ring2 = totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)];
     let ring2Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring2);
     if (
       ring2Equipment !== undefined &&
@@ -103,15 +104,15 @@ function EquipmentMenuOfOneSlot(
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
         (equipment) =>
           equipment.id !==
-          totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT)]
+          totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)]
       );
     }
   }
   if (
-    slotName === LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT &&
-    totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT)] !== -1
+    slotName === FINGER2_SLOT_EN_TEXT &&
+    totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)] !== -1
   ) {
-    let ring1 = totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT)];
+    let ring1 = totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)];
     let ring1Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring1);
     if (
       ring1Equipment !== undefined &&
@@ -120,7 +121,7 @@ function EquipmentMenuOfOneSlot(
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
         (equipment) =>
           equipment.id !==
-          totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT)]
+          totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)]
       );
     }
   }
@@ -202,7 +203,7 @@ function EquipmentMenuOfOneSlot(
             );
           })}
           <Divider />
-          {slotName !== LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT ? (
+          {slotName !== WEAPON_SLOT_EN_TEXT ? (
             <EquipmentMenu value={-1} key={`${id}_${slotLabel}_empty`}>
               <Box
                 display="flex"
@@ -281,6 +282,7 @@ export function EquipmentSelectionMenu(
   let mainCharacterJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
   let inputCount = isDouble ? 2 : 1;
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <EquipmentGridContainer container>
@@ -401,6 +403,7 @@ export function BestPartnerInputMenu(
 ) {
   let xs = 12;
   let inputCount = 1;
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <EquipmentGridContainer container>
@@ -455,7 +458,9 @@ function PartnerSelectionMenu(
   let mainPlayerJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
 
-  if (mainPlayerJobAbbrev === LANGUAGE_TEXTS.AST_EN_NAME) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+  if (mainPlayerJobAbbrev === AST_EN_NAME) {
     return (
       <>
         <EquipmentGridItemBox
@@ -487,7 +492,7 @@ function PartnerSelectionMenu(
         </EquipmentGridItemBox>
       </>
     );
-  } else if (mainPlayerJobAbbrev === LANGUAGE_TEXTS.DNC_EN_NAME) {
+  } else if (mainPlayerJobAbbrev === DNC_EN_NAME) {
     return (
       <EquipmentGridItemBox
         key={`partner1_${id}_grid`}
@@ -514,6 +519,7 @@ function FoodSelection(
   setTotalEquipmentState: Function
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   let foodLabel = LANGUAGE_TEXTS.FOOD_SLOT_TEXT;
   if (totalState.foodId !== -1) {
@@ -580,6 +586,7 @@ function PotSelection(
   setTotalEquipmentState: Function
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   let label = LANGUAGE_TEXTS.POT_LABEL_TEXT;
 

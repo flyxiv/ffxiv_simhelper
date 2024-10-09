@@ -5,7 +5,7 @@ import { GraphBoxStyle } from "./Style";
 import { PartyContributionData, TeammateChartData } from "./GraphData";
 import { TABLE_WIDTH } from "../../page/SimulationResult";
 import { WarningText } from "../basic/WarningText";
-import { LANGUAGE_TEXTS } from "../../const/languageTexts";
+import { AppLanguageTexts, MNK_EN_NAME } from "../../const/languageTexts";
 
 const GraphBox = styled(Box)`
   ${GraphBoxStyle}
@@ -102,11 +102,13 @@ export const BestTeammateGraph = (
     );
   }
 
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <Box width={TABLE_WIDTH}>
       {GraphTitleRow()}
       {
-        jobAbbrev === LANGUAGE_TEXTS.MNK_EN_NAME ? WarningText(LANGUAGE_TEXTS.MNK_ROTATION_WARNING_TEXT) : <Box />
+        jobAbbrev === MNK_EN_NAME ? WarningText(LANGUAGE_TEXTS.MNK_ROTATION_WARNING_TEXT) : <Box />
       }
       <GraphBox>
         {teammateContributionData.map((data) => {

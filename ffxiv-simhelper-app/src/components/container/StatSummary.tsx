@@ -11,12 +11,11 @@ import {
   getStatLostByStatName,
   getStatNeededByStatName,
   getStatPower,
+  loadPowerNames,
   PlayerPower,
-  POWER_NAMES,
 } from "../../types/ffxivdatabase/PlayerPower";
 import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { StatWeightsData } from "../../page/StatWeightsResult";
-import { LanguageMode } from "../../LanguageContext";
 import { AppLanguageTexts } from "../../const/languageTexts";
 
 const STAT_SUMMARY_BOX_WIDTH = "3vw";
@@ -326,13 +325,14 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
 
 export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
   let power = totalState.power;
+  let { POWER_NAMES } = loadPowerNames();
 
   return (
     <Box display="inline-block">
       <StatSummaryBox
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
-        {POWER_NAMES.map((powerName) => {
+        {POWER_NAMEs.map((powerName) => {
           return (
             <SinglePowerBox>{StatSummaryTypography(powerName)}</SinglePowerBox>
           );

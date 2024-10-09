@@ -12,7 +12,7 @@ import { StatusIdToIconPathFactory } from "../icon/abilityicon/StatusIconFactory
 import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
 import { TeammateChartData } from "./GraphData";
 import { AppConfigurations } from "../../Themes";
-import { LANGUAGE_TEXTS } from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 export const JOB_BAR_ITEM_HEIGHT = "65px";
 const IMAGE_SIZE = 30;
@@ -89,6 +89,8 @@ export function JobBarChartTeammate(
 }
 
 export function GraphTitleRow() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <PartyMemberBuffBox>
       <PartyMemberIconBox>

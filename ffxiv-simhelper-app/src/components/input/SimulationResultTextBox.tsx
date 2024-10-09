@@ -7,7 +7,7 @@ import {
   SingleEquipmentInputSaveState,
 } from "../../types/EquipmentInput";
 import { CustomTimeFormControl } from "./basicform/BasicInputForm";
-import { LANGUAGE_TEXTS } from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 export interface InputFormProps {
   label: string;
@@ -81,6 +81,7 @@ export function SimulationUpperInputTimeTextBox(
   totalEquipmentState: EquipmentInput,
   setTotalState: Function
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   return (
     <CustomTimeFormControl fullWidth>
       <InputLabel

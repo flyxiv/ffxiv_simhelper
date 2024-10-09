@@ -1,38 +1,29 @@
 import totalFoodJson from "../../assets/data/food_data.json";
 import { AppLanguageTexts } from "../../const/languageTexts";
-import { LanguageMode } from "../../LanguageContext";
 
-export const GetFoodDatabase = () => {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
+export const FOOD_MIN_ILVL = 680;
+export const FOOD_MAX_ILVL = 710;
 
-  const FOOD_MIN_ILVL =
-    LANGUAGE_TEXTS.language === LanguageMode.ENGLISH_MODE ? 710 : 680;
-  const FOOD_MAX_ILVL =
-    LANGUAGE_TEXTS.language === LanguageMode.ENGLISH_MODE ? 710 : 710;
-
-  const totalFood: Array<Food> = [];
-  totalFoodJson.forEach((element) => {
-    totalFood.push({
-      id: element.id,
-      name: element.name,
-      itemLevel: element.itemLevel,
-      criticalStrike: element.criticalStrike,
-      directHit: element.directHit,
-      determination: element.determination,
-      skillSpeed: element.skillSpeed,
-      spellSpeed: element.spellSpeed,
-      tenacity: element.tenacity,
-      piety: element.piety,
-    });
+export const totalFood: Array<Food> = [];
+totalFoodJson.forEach((element) => {
+  totalFood.push({
+    id: element.id,
+    name: element.name,
+    itemLevel: element.itemLevel,
+    criticalStrike: element.criticalStrike,
+    directHit: element.directHit,
+    determination: element.determination,
+    skillSpeed: element.skillSpeed,
+    spellSpeed: element.spellSpeed,
+    tenacity: element.tenacity,
+    piety: element.piety,
   });
+});
 
-  const FOOD_DATABASE = readFoodData(FOOD_MIN_ILVL, FOOD_MAX_ILVL, totalFood);
-  const ALL_FOODS = Array.from(FOOD_DATABASE.values()).sort(
-    (a, b) => b.itemLevel - a.itemLevel
-  );
-
-  return { foodDatabase: FOOD_DATABASE, allFoods: ALL_FOODS }
-}
+export const FOOD_DATABASE = readFoodData(FOOD_MIN_ILVL, FOOD_MAX_ILVL);
+export const ALL_FOODS = Array.from(FOOD_DATABASE.values()).sort(
+  (a, b) => b.itemLevel - a.itemLevel
+);
 
 
 export interface Food {
@@ -49,7 +40,7 @@ export interface Food {
   piety: number;
 }
 
-export function readFoodData(minIlvl: number, maxIlvl: number, totalFood: Array<Food>) {
+export function readFoodData(minIlvl: number, maxIlvl: number) {
   let foodDataFiltered = totalFood.filter(
     (food: Food) => food.itemLevel >= minIlvl && food.itemLevel <= maxIlvl
   );

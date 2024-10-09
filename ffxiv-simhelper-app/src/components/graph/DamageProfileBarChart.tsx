@@ -1,4 +1,4 @@
-import { LANGUAGE_TEXTS } from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 import { AppConfigurations } from "../../Themes";
 import { DamageChartData } from "./GraphData";
 import {
@@ -107,35 +107,40 @@ const SkillPercentBox = styled(Box)`
   ${SkillPercentageBoxStyle}
 `;
 
-export const DamageChartTitle = (
-  <SkillBox>
-    <Box display="flex" width="200px">
-      <SkillIconBox />
-      <SkillNameBox>
-        <Typography variant="body2" fontSize={AppConfigurations.body2FontSize}>
-          {LANGUAGE_TEXTS.SKILL_TITLE_TEXT}
+export const DamageChartTitle = () => {
+
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+  return (
+    <SkillBox>
+      <Box display="flex" width="200px">
+        <SkillIconBox />
+        <SkillNameBox>
+          <Typography variant="body2" fontSize={AppConfigurations.body2FontSize}>
+            {LANGUAGE_TEXTS.SKILL_TITLE_TEXT}
+          </Typography>
+        </SkillNameBox>
+      </Box>
+
+      <SkillBarBox />
+
+      <SkillPercentBox>
+        <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
+          {LANGUAGE_TEXTS.DAMAGE_PERCENTAGE_TEXT}
         </Typography>
-      </SkillNameBox>
-    </Box>
+      </SkillPercentBox>
 
-    <SkillBarBox />
+      <TotalDamageBox>
+        <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
+          {LANGUAGE_TEXTS.TOTAL_DAMAGE_TEXT}
+        </Typography>
+      </TotalDamageBox>
 
-    <SkillPercentBox>
-      <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-        {LANGUAGE_TEXTS.DAMAGE_PERCENTAGE_TEXT}
-      </Typography>
-    </SkillPercentBox>
-
-    <TotalDamageBox>
-      <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-        {LANGUAGE_TEXTS.TOTAL_DAMAGE_TEXT}
-      </Typography>
-    </TotalDamageBox>
-
-    <SkillCountBox>
-      <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-        {LANGUAGE_TEXTS.CAST_TEXT}
-      </Typography>
-    </SkillCountBox>
-  </SkillBox>
-);
+      <SkillCountBox>
+        <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
+          {LANGUAGE_TEXTS.CAST_TEXT}
+        </Typography>
+      </SkillCountBox>
+    </SkillBox>
+  );
+}

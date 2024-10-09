@@ -55,7 +55,7 @@ export const DamageProfileGraph = (response: DpsAnalysisResponse) => {
 
   return (
     <Box>
-      {DamageChartTitle}
+      {DamageChartTitle()}
       {damageProfileData.map((data) => {
         return SkillDamageProfile(
           data,

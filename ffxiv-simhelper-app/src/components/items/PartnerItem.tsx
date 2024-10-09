@@ -1,9 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { ITEM_TOP_MENU_MIN_HEIGHT } from "./Styles";
-import { LANGUAGE_TEXTS } from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 export function PartnerItem(partyMemberJobId: number, jobAbbrev: string) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <Box display="flex" justifyContent="left" alignItems={"center"} height={ITEM_TOP_MENU_MIN_HEIGHT}>
       <Box marginRight={1}>

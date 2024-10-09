@@ -1,40 +1,36 @@
-import { AppLanguageTexts } from "../../const/languageTexts";
+import { AppLanguageTexts, AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../const/languageTexts";
 
-export const loadJobRelatedInfos = () => {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-  const BUFF_JOBS_LIST = [
-    LANGUAGE_TEXTS.AST_EN_NAME,
-    LANGUAGE_TEXTS.SCH_EN_NAME,
-    LANGUAGE_TEXTS.DRG_EN_NAME,
-    LANGUAGE_TEXTS.MNK_EN_NAME,
-    LANGUAGE_TEXTS.NIN_EN_NAME,
-    LANGUAGE_TEXTS.RPR_EN_NAME,
-    LANGUAGE_TEXTS.BRD_EN_NAME,
-    LANGUAGE_TEXTS.DNC_EN_NAME,
-    LANGUAGE_TEXTS.SMN_EN_NAME,
-    LANGUAGE_TEXTS.RDM_EN_NAME,
-    LANGUAGE_TEXTS.PCT_EN_NAME,
-  ];
-  const HEALER_JOBS = [LANGUAGE_TEXTS.WHM_EN_NAME, LANGUAGE_TEXTS.AST_EN_NAME, LANGUAGE_TEXTS.SCH_EN_NAME, LANGUAGE_TEXTS.SGE_EN_NAME];
-  const TANK_JOBS = [LANGUAGE_TEXTS.PLD_EN_NAME, LANGUAGE_TEXTS.WAR_EN_NAME, LANGUAGE_TEXTS.DRK_EN_NAME, LANGUAGE_TEXTS.GNB_EN_NAME];
-  const DPS_JOBS = [
-    LANGUAGE_TEXTS.MNK_EN_NAME,
-    LANGUAGE_TEXTS.DRG_EN_NAME,
-    LANGUAGE_TEXTS.NIN_EN_NAME,
-    LANGUAGE_TEXTS.SAM_EN_NAME,
-    LANGUAGE_TEXTS.RPR_EN_NAME,
-    LANGUAGE_TEXTS.VPR_EN_NAME,
-    LANGUAGE_TEXTS.BRD_EN_NAME,
-    LANGUAGE_TEXTS.MCH_EN_NAME,
-    LANGUAGE_TEXTS.DNC_EN_NAME,
-    LANGUAGE_TEXTS.BLM_EN_NAME,
-    LANGUAGE_TEXTS.SMN_EN_NAME,
-    LANGUAGE_TEXTS.RDM_EN_NAME,
-    LANGUAGE_TEXTS.PCT_EN_NAME,
-  ];
+export const BUFF_JOBS_LIST = [
+  AST_EN_NAME,
+  SCH_EN_NAME,
+  DRG_EN_NAME,
+  MNK_EN_NAME,
+  NIN_EN_NAME,
+  RPR_EN_NAME,
+  BRD_EN_NAME,
+  DNC_EN_NAME,
+  SMN_EN_NAME,
+  RDM_EN_NAME,
+  PCT_EN_NAME,
+];
+export const HEALER_JOBS = [WHM_EN_NAME, AST_EN_NAME, SCH_EN_NAME, SGE_EN_NAME];
+export const TANK_JOBS = [PLD_EN_NAME, WAR_EN_NAME, DRK_EN_NAME, GNB_EN_NAME];
+export const DPS_JOBS = [
+  MNK_EN_NAME,
+  DRG_EN_NAME,
+  NIN_EN_NAME,
+  SAM_EN_NAME,
+  RPR_EN_NAME,
+  VPR_EN_NAME,
+  BRD_EN_NAME,
+  MCH_EN_NAME,
+  DNC_EN_NAME,
+  BLM_EN_NAME,
+  SMN_EN_NAME,
+  RDM_EN_NAME,
+  PCT_EN_NAME,
+];
 
-  return { BUFF_JOBS_LIST, HEALER_JOBS, TANK_JOBS, DPS_JOBS };
-}
 
 
 export interface SimulationDataByRole {
@@ -70,53 +66,52 @@ export class PartyCompositionMaker {
   }
 
   setMainCharacter(mainPlayerJobAbbrev: string) {
-    let LANGUAGE_TEXTS = AppLanguageTexts();
     switch (mainPlayerJobAbbrev) {
-      case LANGUAGE_TEXTS.PLD_EN_NAME:
-      case LANGUAGE_TEXTS.WAR_EN_NAME:
-      case LANGUAGE_TEXTS.DRK_EN_NAME:
-      case LANGUAGE_TEXTS.GNB_EN_NAME:
+      case PLD_EN_NAME:
+      case WAR_EN_NAME:
+      case DRK_EN_NAME:
+      case GNB_EN_NAME:
         this.tank1 = {
           jobAbbrev: mainPlayerJobAbbrev,
           buffContribution: null,
         };
         break;
 
-      case LANGUAGE_TEXTS.WHM_EN_NAME:
-      case LANGUAGE_TEXTS.AST_EN_NAME:
-      case LANGUAGE_TEXTS.SCH_EN_NAME:
-      case LANGUAGE_TEXTS.SGE_EN_NAME:
+      case WHM_EN_NAME:
+      case AST_EN_NAME:
+      case SCH_EN_NAME:
+      case SGE_EN_NAME:
         this.mainHealer = {
           jobAbbrev: mainPlayerJobAbbrev,
           buffContribution: null,
         };
         break;
 
-      case LANGUAGE_TEXTS.MNK_EN_NAME:
-      case LANGUAGE_TEXTS.DRG_EN_NAME:
-      case LANGUAGE_TEXTS.NIN_EN_NAME:
-      case LANGUAGE_TEXTS.SAM_EN_NAME:
-      case LANGUAGE_TEXTS.RPR_EN_NAME:
-      case LANGUAGE_TEXTS.VPR_EN_NAME:
+      case MNK_EN_NAME:
+      case DRG_EN_NAME:
+      case NIN_EN_NAME:
+      case SAM_EN_NAME:
+      case RPR_EN_NAME:
+      case VPR_EN_NAME:
         this.melee = {
           jobAbbrev: mainPlayerJobAbbrev,
           buffContribution: null,
         };
         break;
 
-      case LANGUAGE_TEXTS.BRD_EN_NAME:
-      case LANGUAGE_TEXTS.MCH_EN_NAME:
-      case LANGUAGE_TEXTS.DNC_EN_NAME:
+      case BRD_EN_NAME:
+      case MCH_EN_NAME:
+      case DNC_EN_NAME:
         this.ranged = {
           jobAbbrev: mainPlayerJobAbbrev,
           buffContribution: null,
         };
         break;
 
-      case LANGUAGE_TEXTS.BLM_EN_NAME:
-      case LANGUAGE_TEXTS.SMN_EN_NAME:
-      case LANGUAGE_TEXTS.RDM_EN_NAME:
-      case LANGUAGE_TEXTS.PCT_EN_NAME:
+      case BLM_EN_NAME:
+      case SMN_EN_NAME:
+      case RDM_EN_NAME:
+      case PCT_EN_NAME:
         this.caster = {
           jobAbbrev: mainPlayerJobAbbrev,
           buffContribution: null,
@@ -254,13 +249,12 @@ export class PartyCompositionMaker {
 }
 
 function getHealerOrder(healerJobAbbrev: string) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   switch (healerJobAbbrev) {
-    case LANGUAGE_TEXTS.WHM_EN_NAME:
+    case WHM_EN_NAME:
       return 0;
-    case LANGUAGE_TEXTS.AST_EN_NAME:
+    case AST_EN_NAME:
       return 1;
-    case LANGUAGE_TEXTS.SCH_EN_NAME:
+    case SCH_EN_NAME:
       return 2;
     default:
       return 3;

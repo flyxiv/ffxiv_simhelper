@@ -23,7 +23,7 @@ import {
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
-import { LANGUAGE_TEXTS } from "../../../const/languageTexts";
+import { AppLanguageTexts } from "../../../const/languageTexts";
 
 const MateriaMenu = styled(MenuItem)`
   ${MenuItemStyle}
@@ -71,6 +71,7 @@ function SingleMateriaMenu(
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   if (materias === undefined) {
     return <></>;
   }

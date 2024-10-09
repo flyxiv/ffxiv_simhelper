@@ -4,7 +4,7 @@ import { RaceMenuItem } from "../items/RaceMenuItem";
 import { AppConfigurations } from "../../Themes";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { updateOnePlayerPower } from "../../types/ffxivdatabase/ItemSet";
-import { LANGUAGE_TEXTS } from "../../const/languageTexts";
+import { RACES } from "../../const/languageTexts";
 
 export function MainPlayerRaceSelection(
   id: number,
@@ -52,7 +52,7 @@ export function MainPlayerRaceSelection(
           },
         }}
       >
-        {LANGUAGE_TEXTS.RACES.map((race) => {
+        {RACES.map((race) => {
           return RaceMenuItem(race, totalState.mainPlayerJobAbbrev);
         })}
       </Select>
