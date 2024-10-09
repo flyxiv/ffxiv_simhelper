@@ -332,7 +332,7 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
       <StatSummaryBox
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
-        {POWER_NAMEs.map((powerName) => {
+        {POWER_NAMES.map((powerName) => {
           return (
             <SinglePowerBox>{StatSummaryTypography(powerName)}</SinglePowerBox>
           );

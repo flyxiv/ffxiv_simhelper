@@ -16,6 +16,7 @@ import {
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { convertToLinkUrl } from "../../page/home";
 import { AppLanguageTexts } from "../../const/languageTexts";
+import { LanguageInputForm } from "../input/basicform/LanguageInputForm";
 
 export const MENU_WIDTH_VW_XS = 35;
 export const MENU_WIDTH_VW_SM = 30;
@@ -142,6 +143,9 @@ function DefaultLeftMenuComponents(currentSimulationPage: string) {
           </Typography>
         </Box>
       </LeftMenuLogo>
+
+      {LanguageInputForm()}
+
       <LeftMenuNavigationBar paddingY={4} paddingLeft={2}>
         <Typography variant="h3" align="left" sx={{ fontWeight: "bold" }}>
           {LANGUAGE_TEXTS.NAVIGATE_TEXT}
