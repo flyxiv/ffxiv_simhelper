@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { AppConfigurations, ENGLISH_MODE } from "./Themes";
+import { LanguageProvider } from "./LanguageContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -68,7 +69,9 @@ export const theme = createTheme({
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <App />
+      <LanguageProvider>
+        <App />
+      </LanguageProvider>
     </ThemeProvider>
   </React.StrictMode>
 );
