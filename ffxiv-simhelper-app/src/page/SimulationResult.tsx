@@ -131,7 +131,7 @@ function renderTableBasedOnSelectedButton(
     return (
       <ResultBoardBox>
         {SimulationTitle(BEST_TEAMMATE_BUTTON_TEXT)}
-        {BestTeammateGraph(teammatesContributionToMyBuffs)}
+        {BestTeammateGraph(teammatesContributionToMyBuffs, responseJson.mainPlayerJobAbbrev)}
       </ResultBoardBox>
     );
   } else if (currentlyToggledView === DAMAGE_PROFILE_BUTTON_TEXT) {

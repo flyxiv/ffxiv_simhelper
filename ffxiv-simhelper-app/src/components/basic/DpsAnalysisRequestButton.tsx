@@ -166,10 +166,10 @@ export function createDpsAnalysisRequest(
 
   for (let i = 0; i < totalState.partyMemberJobAbbrevs.length; i++) {
     if (totalState.partyMemberJobAbbrevs[i] === EMPTY_PARTY_MEMBER) {
-      if (partyInfo[0].partner1Id !== null && partyInfo[0].partner1Id >= i) {
+      if (partyInfo[0].partner1Id !== null && partyInfo[0].partner1Id > i) {
         partyInfo[0].partner1Id -= 1;
       }
-      if (partyInfo[0].partner2Id !== null && partyInfo[0].partner2Id >= i) {
+      if (partyInfo[0].partner2Id !== null && partyInfo[0].partner2Id > i) {
         partyInfo[0].partner2Id -= 1;
       }
     }

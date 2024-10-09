@@ -1,6 +1,6 @@
 import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 import { GraphTitleRow, JobBarChartTeammate } from "./JobBarChart";
-import { Box, styled, Typography } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { GraphBoxStyle } from "./Style";
 import { PartyContributionData, TeammateChartData } from "./GraphData";
 import { TABLE_WIDTH } from "../../page/SimulationResult";

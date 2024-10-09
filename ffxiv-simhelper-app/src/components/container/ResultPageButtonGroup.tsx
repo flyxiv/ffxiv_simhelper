@@ -49,8 +49,6 @@ export function ResultPageButtonGroup(
     </ToggleButtonCustom>
   );
 
-  console.log(teammatesContributionToMyBuffs);
-
   return (
     <Box marginTop={4} marginBottom={2}>
       <ToggleButtonGroup
