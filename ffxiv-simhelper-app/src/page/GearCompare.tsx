@@ -22,12 +22,7 @@ import { defaultDoubleEquipmentInput } from "../const/DefaultDoubleEquipmentInpu
 import { EquipmentInput } from "../types/EquipmentInput";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import {
-  COPY_BUTTON_TEXT,
-  GEAR_COMPARE_INPUT_INFO_TEXT,
-  GEAR_COMPARE_PAGE_NAME,
-  DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT,
-} from "../const/languageTexts";
+import { AppLanguageTexts } from "../const/languageTexts";
 
 export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "98%";
 const GEAR_COMPARE_LOADOUNT_COUNT = 6;
@@ -75,6 +70,8 @@ export function isNotValidGearCompare(input: EquipmentInput) {
 }
 
 export function GearCompare() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   let mostRecentInputState = localStorage.getItem(
     GEAR_COMPARE_REQUEST_SAVE_NAME
   );
@@ -102,7 +99,7 @@ export function GearCompare() {
         {LeftMenuWithLoadout(
           GEAR_COMPARE_LOADOUNT_COUNT,
           GEAR_COMPARE_URL,
-          GEAR_COMPARE_PAGE_NAME,
+          LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
           totalState,
           setTotalState
         )}
@@ -110,7 +107,7 @@ export function GearCompare() {
           {AppHeader()}
           <Box display="flex" flexDirection="column" justifyContent={"center"}>
             <GearCompareEquipmentInputContainer>
-              {SelectionTitle(GEAR_COMPARE_INPUT_INFO_TEXT)}
+              {SelectionTitle(LANGUAGE_TEXTS.GEAR_COMPARE_INPUT_INFO_TEXT)}
               <Box
                 display="flex"
                 justifyContent="space-evenly"
@@ -156,7 +153,7 @@ export function GearCompare() {
             </GearCompareEquipmentInputContainer>
 
             <GearComparePartyInputContainer paddingTop={10} paddingBottom={40}>
-              {SelectionTitle(DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
+              {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
                 {HorizontalPartyInput(totalState, setTotalState)}
               </CustomizeBoard>
@@ -175,6 +172,8 @@ function LoadLeftEquipmentToRightButton(
   totalState: EquipmentInput,
   setTotalState: Function
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <Button
       variant="contained"
@@ -188,7 +187,7 @@ function LoadLeftEquipmentToRightButton(
       }}
       sx={{ fontSize: AppConfigurations.body2FontSize }}
     >
-      {COPY_BUTTON_TEXT}
+      {LANGUAGE_TEXTS.COPY_BUTTON_TEXT}
     </Button>
   );
 }
@@ -197,6 +196,8 @@ function LoadRightEquipmentToLeftButton(
   totalState: EquipmentInput,
   setTotalState: Function
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <Button
       variant="contained"
@@ -210,7 +211,7 @@ function LoadRightEquipmentToLeftButton(
       }}
       sx={{ fontSize: AppConfigurations.body2FontSize }}
     >
-      {COPY_BUTTON_TEXT}
+      {LANGUAGE_TEXTS.COPY_BUTTON_TEXT}
     </Button>
   );
 }

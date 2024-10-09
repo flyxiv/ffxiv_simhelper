@@ -6,7 +6,7 @@ import { EquipmentInput } from "../../types/EquipmentInput";
 import { AppConfigurations } from "../../Themes";
 import { PartnerMenuItem } from "../items/PartnerMenuItem";
 import { EMPTY_PARTY_MEMBER } from "../../types/PartyStates";
-import { EMPTY_TEXT } from "../../const/languageTexts";
+import { LANGUAGE_TEXTS } from "../../const/languageTexts";
 
 const InputBox = styled(Box)`
   ${InputGridItemStyle}
@@ -67,7 +67,7 @@ export function Partner1Selection(
           {availablePartyIds.map((partyMemberId) => {
             return PartnerMenuItem(id, partyMemberId, totalEquipmentState.equipmentDatas[id].partyMemberJobAbbrevs[partyMemberId - 1]);
           })}
-          {<MenuItem key={`${id}_partner1_empty_menuitem`} value="empty" color="white"><Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{EMPTY_TEXT}</Typography></MenuItem>};
+          {<MenuItem key={`${id}_partner1_empty_menuitem`} value="empty" color="white"><Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{LANGUAGE_TEXTS.EMPTY_TEXT}</Typography></MenuItem>};
         </Select>
       </CustomFormControl>
     </InputBox>
@@ -128,7 +128,7 @@ export function Partner2Selection(
           {availablePartyIds.map((partyMemberId) => {
             return PartnerMenuItem(id, partyMemberId, totalEquipmentState.equipmentDatas[id].partyMemberJobAbbrevs[partyMemberId - 1]);
           })}
-          {<MenuItem key={`${id}_partner2_empty_menuitem`} value="empty" color="white"><Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{EMPTY_TEXT}</Typography></MenuItem>};
+          {<MenuItem key={`${id}_partner2_empty_menuitem`} value="empty" color="white"><Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{LANGUAGE_TEXTS.EMPTY_TEXT}</Typography></MenuItem>};
         </Select>
       </CustomFormControl>
     </InputBox>

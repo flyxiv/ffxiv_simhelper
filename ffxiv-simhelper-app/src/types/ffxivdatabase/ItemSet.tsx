@@ -1,14 +1,13 @@
 import {
   EMPTY_EQUIPMENT_ID,
-  EQUIPMENT_DATABASE_BY_ID,
-  EQUIPMENT_DATABASE_BY_KEYS,
+  loadEquipmentData,
+  loadSlots,
   toEquipmentKeyString,
-  TOTAL_SLOTS,
 } from "./Equipment";
 import { convertEquipmentToItemStat } from "./ItemStats";
 import { getBaseMainStat } from "../../const/StartStats";
 
-import { FOOD_DATABASE } from "./Food";
+import { GetFoodDatabase } from "./Food";
 import { addMateriaStatToTotalStat } from "./Materia";
 import { defaultPlayerPower, isTank, PlayerPower, setPartyCompositionBuffPercent } from "./PlayerPower";
 import {
@@ -26,28 +25,7 @@ import {
   EquipmentInput,
   SingleEquipmentInputSaveState,
 } from "../EquipmentInput";
-import {
-  AST_EN_NAME,
-  BLM_EN_NAME,
-  BODY_SLOT_EN_TEXT,
-  EARS_SLOT_EN_TEXT,
-  FEET_SLOT_EN_TEXT,
-  FINGER1_SLOT_EN_TEXT,
-  FINGER2_SLOT_EN_TEXT,
-  HANDS_SLOT_EN_TEXT,
-  HEAD_SLOT_EN_TEXT,
-  LEGS_SLOT_EN_TEXT,
-  NECK_SLOT_EN_TEXT,
-  OFFHAND_SLOT_EN_TEXT,
-  PCT_EN_NAME,
-  RDM_EN_NAME,
-  SCH_EN_NAME,
-  SGE_EN_NAME,
-  SMN_EN_NAME,
-  WEAPON_SLOT_EN_TEXT,
-  WHM_EN_NAME,
-  WRIST_SLOT_EN_TEXT,
-} from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 export const WEAPON_SLOT_ID = 0;
 export const HEAD_SLOT_ID = 1;
@@ -65,30 +43,32 @@ export const OFFHAND_SLOT_ID = 11;
 export type ItemSet = number[];
 
 export function slotNameToSlotIndex(slotName: string): number {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   switch (slotName) {
-    case WEAPON_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT:
       return WEAPON_SLOT_ID;
-    case HEAD_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.HEAD_SLOT_EN_TEXT:
       return HEAD_SLOT_ID;
-    case BODY_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.BODY_SLOT_EN_TEXT:
       return BODY_SLOT_ID;
-    case HANDS_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.HANDS_SLOT_EN_TEXT:
       return HANDS_SLOT_ID;
-    case LEGS_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.LEGS_SLOT_EN_TEXT:
       return LEGS_SLOT_ID;
-    case FEET_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.FEET_SLOT_EN_TEXT:
       return FEET_SLOT_ID;
-    case EARS_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.EARS_SLOT_EN_TEXT:
       return EAR_SLOT_ID;
-    case NECK_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.NECK_SLOT_EN_TEXT:
       return NECK_SLOT_ID;
-    case WRIST_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.WRIST_SLOT_EN_TEXT:
       return WRIST_SLOT_ID;
-    case FINGER1_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT:
       return FINGER1_SLOT_ID;
-    case FINGER2_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT:
       return FINGER2_SLOT_ID;
-    case OFFHAND_SLOT_EN_TEXT:
+    case LANGUAGE_TEXTS.OFFHAND_SLOT_EN_TEXT:
       return OFFHAND_SLOT_ID;
     default:
       return EMPTY_EQUIPMENT_ID;
@@ -96,31 +76,33 @@ export function slotNameToSlotIndex(slotName: string): number {
 }
 
 export function slotIndexToSlotName(slotIndex: number): string {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   switch (slotIndex) {
     case WEAPON_SLOT_ID:
-      return WEAPON_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT;
     case HEAD_SLOT_ID:
-      return HEAD_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.HEAD_SLOT_EN_TEXT;
     case BODY_SLOT_ID:
-      return BODY_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.BODY_SLOT_EN_TEXT;
     case HANDS_SLOT_ID:
-      return HANDS_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.HANDS_SLOT_EN_TEXT;
     case LEGS_SLOT_ID:
-      return LEGS_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.LEGS_SLOT_EN_TEXT;
     case FEET_SLOT_ID:
-      return FEET_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.FEET_SLOT_EN_TEXT;
     case EAR_SLOT_ID:
-      return EARS_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.EARS_SLOT_EN_TEXT;
     case NECK_SLOT_ID:
-      return NECK_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.NECK_SLOT_EN_TEXT;
     case WRIST_SLOT_ID:
-      return WRIST_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.WRIST_SLOT_EN_TEXT;
     case FINGER1_SLOT_ID:
-      return FINGER1_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT;
     case FINGER2_SLOT_ID:
-      return FINGER2_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT;
     case OFFHAND_SLOT_ID:
-      return OFFHAND_SLOT_EN_TEXT;
+      return LANGUAGE_TEXTS.OFFHAND_SLOT_EN_TEXT;
     default:
       return "";
   }
@@ -130,12 +112,17 @@ export function defaultItemSet(jobAbbrev: string): [ItemSet, number] {
   let itemSet: number[] = [];
   let materiaCount = 0;
 
+  let { TOTAL_SLOTS } = loadSlots();
+
   TOTAL_SLOTS.forEach((_) => {
     itemSet.push(EMPTY_EQUIPMENT_ID);
   });
 
-  let weaponsOfJob = EQUIPMENT_DATABASE_BY_KEYS.get(
-    toEquipmentKeyString(jobAbbrev, WEAPON_SLOT_EN_TEXT)
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+  let { keyDatabase } = loadEquipmentData();
+
+  let weaponsOfJob = keyDatabase.get(
+    toEquipmentKeyString(jobAbbrev, LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT)
   );
   if (weaponsOfJob !== undefined) {
     itemSet[WEAPON_SLOT_ID] = weaponsOfJob[0].id;
@@ -157,8 +144,10 @@ export function calculatePlayerPowerFromInputs(
     totalState.race
   );
 
+  let { idDatabase } = loadEquipmentData();
+
   totalState.itemSet.forEach((equipmentId) => {
-    let equipment = EQUIPMENT_DATABASE_BY_ID.get(equipmentId);
+    let equipment = idDatabase.get(equipmentId);
     if (equipment === undefined) {
       return;
     }
@@ -181,7 +170,9 @@ export function calculatePlayerPowerFromInputs(
     });
   });
 
-  let food = FOOD_DATABASE.get(totalState.foodId);
+  let { foodDatabase } = GetFoodDatabase();
+
+  let food = foodDatabase.get(totalState.foodId);
   if (food !== undefined) {
     power.criticalStrike += Math.min(
       food.criticalStrike,
@@ -242,15 +233,17 @@ export function calculatePowerByStat(power: PlayerPower, jobAbbrev: string) {
 }
 
 export function isCaster(jobAbbrev: string) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   switch (jobAbbrev) {
-    case WHM_EN_NAME:
-    case SCH_EN_NAME:
-    case AST_EN_NAME:
-    case SGE_EN_NAME:
-    case BLM_EN_NAME:
-    case SMN_EN_NAME:
-    case RDM_EN_NAME:
-    case PCT_EN_NAME:
+    case LANGUAGE_TEXTS.WHM_EN_NAME:
+    case LANGUAGE_TEXTS.SCH_EN_NAME:
+    case LANGUAGE_TEXTS.AST_EN_NAME:
+    case LANGUAGE_TEXTS.SGE_EN_NAME:
+    case LANGUAGE_TEXTS.BLM_EN_NAME:
+    case LANGUAGE_TEXTS.SMN_EN_NAME:
+    case LANGUAGE_TEXTS.RDM_EN_NAME:
+    case LANGUAGE_TEXTS.PCT_EN_NAME:
       return true;
     default:
       return false;

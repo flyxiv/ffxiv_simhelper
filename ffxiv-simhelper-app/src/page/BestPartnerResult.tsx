@@ -16,30 +16,8 @@ import {
 import { Footer } from "../components/basic/Footer";
 import { SimulationDataByRole } from "../types/ffxivdatabase/PartyCompositionMaker";
 import { ContributionByRoleTable } from "../components/graph/ContributionByRoleTable";
-import {
-  AST_EN_NAME,
-  BEST_PARTNER_PAGE_NAME,
-  BRD_EN_NAME,
-  BURST_TEXT,
-  DNC_EN_NAME,
-  DRG_EN_NAME,
-  DRK_EN_NAME,
-  GNB_EN_NAME,
-  MCH_EN_NAME,
-  MNK_EN_NAME,
-  NIN_EN_NAME,
-  OVERALL_TEXT,
-  PLD_EN_NAME,
-  RPR_EN_NAME,
-  SAM_EN_NAME,
-  SCH_EN_NAME,
-  SGE_EN_NAME,
-  SIMULATION_RESULT_TEXT,
-  VPR_EN_NAME,
-  WAR_EN_NAME,
-  WHM_EN_NAME,
-} from "../const/languageTexts";
 import { BEST_PARTNER_ITERATION_COUNT } from "../components/basic/BestPartnerRequestButton";
+import { AppLanguageTexts } from "../const/languageTexts";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -82,6 +60,7 @@ export function BestPartnerResult() {
       convertToContributionTable(singleBurstResponses)
     );
   }
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <Box
@@ -93,11 +72,11 @@ export function BestPartnerResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(BEST_PARTNER_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultTopBoardBox marginBottom="40px">
-            {SimulationTitle(SIMULATION_RESULT_TEXT)}
+            {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
             {PlayerInfo(
               responseJson.mainPlayerPower,
               mainPlayerJob,
@@ -108,7 +87,7 @@ export function BestPartnerResult() {
             )}
           </ResultTopBoardBox>
           <ResultBoardBox>
-            {SimulationTitle(OVERALL_TEXT)}
+            {SimulationTitle(LANGUAGE_TEXTS.OVERALL_TEXT)}
             {ContributionByRoleTable(simulationDataByRoles[0])}
 
             {simulationDataByRoles.slice(1).map((table, index) => {
@@ -116,7 +95,7 @@ export function BestPartnerResult() {
 
               return (
                 <>
-                  {SimulationTitle(BURST_TEXT(burstMinute))}
+                  {SimulationTitle(`${burstMinute}${LANGUAGE_TEXTS.BURST_TEXT}`)}
                   {ContributionByRoleTable(table)};
                 </>
               );
@@ -139,44 +118,45 @@ function convertToContributionTable(
     ranged: [],
     casters: [],
   };
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   for (let data of partnerSimulationData) {
     switch (data.partnerJobAbbrev) {
-      case PLD_EN_NAME:
-      case WAR_EN_NAME:
-      case DRK_EN_NAME:
-      case GNB_EN_NAME:
+      case LANGUAGE_TEXTS.PLD_EN_NAME:
+      case LANGUAGE_TEXTS.WAR_EN_NAME:
+      case LANGUAGE_TEXTS.DRK_EN_NAME:
+      case LANGUAGE_TEXTS.GNB_EN_NAME:
         table.tanks.push({
           jobAbbrev: data.partnerJobAbbrev,
           buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
-      case WHM_EN_NAME:
-      case AST_EN_NAME:
-      case SCH_EN_NAME:
-      case SGE_EN_NAME:
+      case LANGUAGE_TEXTS.WHM_EN_NAME:
+      case LANGUAGE_TEXTS.AST_EN_NAME:
+      case LANGUAGE_TEXTS.SCH_EN_NAME:
+      case LANGUAGE_TEXTS.SGE_EN_NAME:
         table.healers.push({
           jobAbbrev: data.partnerJobAbbrev,
           buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
-      case DRG_EN_NAME:
-      case MNK_EN_NAME:
-      case NIN_EN_NAME:
-      case SAM_EN_NAME:
-      case RPR_EN_NAME:
-      case VPR_EN_NAME:
+      case LANGUAGE_TEXTS.DRG_EN_NAME:
+      case LANGUAGE_TEXTS.MNK_EN_NAME:
+      case LANGUAGE_TEXTS.NIN_EN_NAME:
+      case LANGUAGE_TEXTS.SAM_EN_NAME:
+      case LANGUAGE_TEXTS.RPR_EN_NAME:
+      case LANGUAGE_TEXTS.VPR_EN_NAME:
         table.melee.push({
           jobAbbrev: data.partnerJobAbbrev,
           buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
         });
         break;
 
-      case BRD_EN_NAME:
-      case MCH_EN_NAME:
-      case DNC_EN_NAME:
+      case LANGUAGE_TEXTS.BRD_EN_NAME:
+      case LANGUAGE_TEXTS.MCH_EN_NAME:
+      case LANGUAGE_TEXTS.DNC_EN_NAME:
         table.ranged.push({
           jobAbbrev: data.partnerJobAbbrev,
           buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,

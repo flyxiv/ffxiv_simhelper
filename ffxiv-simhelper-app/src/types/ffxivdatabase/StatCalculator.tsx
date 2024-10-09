@@ -1,26 +1,4 @@
-import {
-  AST_EN_NAME,
-  BLM_EN_NAME,
-  BRD_EN_NAME,
-  DNC_EN_NAME,
-  DRG_EN_NAME,
-  DRK_EN_NAME,
-  GNB_EN_NAME,
-  MCH_EN_NAME,
-  MNK_EN_NAME,
-  NIN_EN_NAME,
-  PCT_EN_NAME,
-  PLD_EN_NAME,
-  RDM_EN_NAME,
-  RPR_EN_NAME,
-  SAM_EN_NAME,
-  SCH_EN_NAME,
-  SGE_EN_NAME,
-  SMN_EN_NAME,
-  VPR_EN_NAME,
-  WAR_EN_NAME,
-  WHM_EN_NAME,
-} from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 import {
   DEFAULT_CRITICAL_STRIKE,
   DEFAULT_DETERMINATION,
@@ -49,39 +27,46 @@ const DET_SLOPE = 140;
 const SPEED_SLOPE = 130;
 const TENACITY_SLOPE = 112;
 
-const BASE_WEAPON_DAMAGE_PER_JOB = new Map([
-  [PLD_EN_NAME, 44],
-  [WAR_EN_NAME, 46],
-  [DRK_EN_NAME, 46],
-  [GNB_EN_NAME, 44],
-  [WHM_EN_NAME, 50],
-  [SCH_EN_NAME, 50],
-  [AST_EN_NAME, 50],
-  [SGE_EN_NAME, 50],
-  [DRG_EN_NAME, 50],
-  [MNK_EN_NAME, 48],
-  [NIN_EN_NAME, 48],
-  [SAM_EN_NAME, 49],
-  [RPR_EN_NAME, 50],
-  [VPR_EN_NAME, 48],
-  [BRD_EN_NAME, 50],
-  [MCH_EN_NAME, 50],
-  [DNC_EN_NAME, 50],
-  [BLM_EN_NAME, 50],
-  [SMN_EN_NAME, 50],
-  [RDM_EN_NAME, 50],
-  [PCT_EN_NAME, 50],
-]);
+export const LoadJobRelatedStats = () => {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+  const BASE_WEAPON_DAMAGE_PER_JOB = new Map([
+    [LANGUAGE_TEXTS.PLD_EN_NAME, 44],
+    [LANGUAGE_TEXTS.WAR_EN_NAME, 46],
+    [LANGUAGE_TEXTS.DRK_EN_NAME, 46],
+    [LANGUAGE_TEXTS.GNB_EN_NAME, 44],
+    [LANGUAGE_TEXTS.WHM_EN_NAME, 50],
+    [LANGUAGE_TEXTS.SCH_EN_NAME, 50],
+    [LANGUAGE_TEXTS.AST_EN_NAME, 50],
+    [LANGUAGE_TEXTS.SGE_EN_NAME, 50],
+    [LANGUAGE_TEXTS.DRG_EN_NAME, 50],
+    [LANGUAGE_TEXTS.MNK_EN_NAME, 48],
+    [LANGUAGE_TEXTS.NIN_EN_NAME, 48],
+    [LANGUAGE_TEXTS.SAM_EN_NAME, 49],
+    [LANGUAGE_TEXTS.RPR_EN_NAME, 50],
+    [LANGUAGE_TEXTS.VPR_EN_NAME, 48],
+    [LANGUAGE_TEXTS.BRD_EN_NAME, 50],
+    [LANGUAGE_TEXTS.MCH_EN_NAME, 50],
+    [LANGUAGE_TEXTS.DNC_EN_NAME, 50],
+    [LANGUAGE_TEXTS.BLM_EN_NAME, 50],
+    [LANGUAGE_TEXTS.SMN_EN_NAME, 50],
+    [LANGUAGE_TEXTS.RDM_EN_NAME, 50],
+    [LANGUAGE_TEXTS.PCT_EN_NAME, 50],
+  ]);
+
+  return { BASE_WEAPON_DAMAGE_PER_JOB };
+}
+
 
 export function calculateHasteBuff(jobAbbrev: string) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   switch (jobAbbrev) {
-    case NIN_EN_NAME:
+    case LANGUAGE_TEXTS.NIN_EN_NAME:
       return NIN_GCD_SPEED_BUFF;
-    case MNK_EN_NAME:
+    case LANGUAGE_TEXTS.MNK_EN_NAME:
       return MNK_GCD_SPEED_BUFF;
-    case VPR_EN_NAME:
+    case LANGUAGE_TEXTS.VPR_EN_NAME:
       return VPR_GCD_SPEED_BUFF;
-    case SAM_EN_NAME:
+    case LANGUAGE_TEXTS.SAM_EN_NAME:
       return SAM_GCD_SPEED_BUFF;
     default:
       return 100;

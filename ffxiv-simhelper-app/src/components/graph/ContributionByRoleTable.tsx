@@ -6,7 +6,7 @@ import {
 import { BestPartnerBuffBarStyle, BuffBarBoxStyle } from "./Style";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { AppConfigurations } from "../../Themes";
-import { DPS_TEXT, HEALER_TEXT, TANK_TEXT } from "../../const/languageTexts";
+import { LANGUAGE_TEXTS } from "../../const/languageTexts";
 
 const MAX_RANKINGS = 4;
 const RANKING_ITEM_HEIGHT = "4vh";
@@ -69,7 +69,7 @@ export function ContributionByRoleTable(
       <Grid container item xs={6} direction="column" spacing={3}>
         <Grid item>
           {ContributionTableSingleRole(
-            TANK_TEXT,
+            LANGUAGE_TEXTS.TANK_TEXT,
             tankPartnerData,
             maxContribution,
             maxTankContribution
@@ -77,7 +77,7 @@ export function ContributionByRoleTable(
         </Grid>
         <Grid item>
           {ContributionTableSingleRole(
-            HEALER_TEXT,
+            LANGUAGE_TEXTS.HEALER_TEXT,
             healerPartnerData,
             maxContribution,
             maxHealerContribution
@@ -87,7 +87,7 @@ export function ContributionByRoleTable(
 
       <Grid item xs={6}>
         {ContributionTableSingleRole(
-          DPS_TEXT,
+          LANGUAGE_TEXTS.DPS_TEXT,
           dpsPartnerData,
           maxContribution,
           maxDpsContribution

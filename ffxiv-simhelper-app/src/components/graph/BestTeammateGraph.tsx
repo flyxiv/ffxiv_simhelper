@@ -4,8 +4,8 @@ import { Box, styled } from "@mui/material";
 import { GraphBoxStyle } from "./Style";
 import { PartyContributionData, TeammateChartData } from "./GraphData";
 import { TABLE_WIDTH } from "../../page/SimulationResult";
-import { MNK_EN_NAME, MNK_ROTATION_WARNING_TEXT } from "../../const/languageTexts";
 import { WarningText } from "../basic/WarningText";
+import { LANGUAGE_TEXTS } from "../../const/languageTexts";
 
 const GraphBox = styled(Box)`
   ${GraphBoxStyle}
@@ -106,7 +106,7 @@ export const BestTeammateGraph = (
     <Box width={TABLE_WIDTH}>
       {GraphTitleRow()}
       {
-        jobAbbrev === MNK_EN_NAME ? WarningText(MNK_ROTATION_WARNING_TEXT) : <Box />
+        jobAbbrev === LANGUAGE_TEXTS.MNK_EN_NAME ? WarningText(LANGUAGE_TEXTS.MNK_ROTATION_WARNING_TEXT) : <Box />
       }
       <GraphBox>
         {teammateContributionData.map((data) => {

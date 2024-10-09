@@ -22,12 +22,7 @@ import {
   InputContainerStyle,
 } from "./Styles";
 import { DpsAnalysisRequestButton } from "../components/basic/DpsAnalysisRequestButton";
-import {
-  PLAYER_POWER_TEXT,
-  DPS_ANALYSIS_INPUT_INFO_TEXT,
-  DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT,
-  DPS_ANALYSIS_PAGE_NAME,
-} from "../const/languageTexts";
+import { AppLanguageTexts } from "../const/languageTexts";
 
 export const INPUT_CONTAINER_WIDTH = "70%";
 export const DPS_ANALYSIS_LOADOUT_COUNT = 6;
@@ -84,6 +79,8 @@ export function isNotValid(input: EquipmentInput) {
 }
 
 export function DpsAnalysis() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   let mostRecentInputState = localStorage.getItem(SINGLE_INPUT_SAVE_NAME);
   let mostRecentInput = null;
 
@@ -109,7 +106,7 @@ export function DpsAnalysis() {
         {LeftMenuWithLoadout(
           DPS_ANALYSIS_LOADOUT_COUNT,
           DPS_ANALYSIS_URL,
-          DPS_ANALYSIS_PAGE_NAME,
+          LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
           totalState,
           setTotalState
         )}
@@ -117,21 +114,21 @@ export function DpsAnalysis() {
           {AppHeader()}
           <Box alignContent={"center"}>
             <DpsAnalysisInputContainer justifyContent={"center"}>
-              {SelectionTitle(DPS_ANALYSIS_INPUT_INFO_TEXT)}
+              {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
               <EquipmentBoard>
                 {EquipmentSelectionMenu(0, totalState, setTotalState)}
               </EquipmentBoard>
             </DpsAnalysisInputContainer>
 
             <DpsAnalysisInputContainer paddingTop={20}>
-              {SelectionTitle(DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
+              {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
                 {HorizontalPartyInput(totalState, setTotalState)}
               </CustomizeBoard>
             </DpsAnalysisInputContainer>
 
             <DpsAnalysisInputContainer marginTop={10}>
-              {SelectionTitle(`3. ${PLAYER_POWER_TEXT}`)}
+              {SelectionTitle(`3. ${LANGUAGE_TEXTS.PLAYER_POWER_TEXT}`)}
               <Box
                 display="flex"
                 justifyContent="center"

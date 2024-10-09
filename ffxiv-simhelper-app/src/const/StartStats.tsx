@@ -1,4 +1,4 @@
-import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DEX_STAT_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, DUNESFOLK_LALAFELL_EN_NAME, DUSKWIGHT_ELEZEN_EN_NAME, GNB_EN_NAME, HELIONS_HROTHGAR_EN_NAME, HELLSGUARD_ROEGADYN_EN_NAME, HIGHLANDER_HYUR_EN_NAME, INT_STAT_NAME, KEEPER_OF_THE_MOON_MIQOTE_EN_NAME, MCH_EN_NAME, MIDLANDER_HYUR_EN_NAME, MIND_STAT_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLAINSFOLK_LALAFELL_EN_NAME, PLD_EN_NAME, RAEN_AU_RA_EN_NAME, RAVA_VIERA_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SEA_WOLVES_ROEGADYN_EN_NAME, SEEKER_OF_THE_SUN_MIQOTE_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, STR_STAT_NAME, THE_LOST_HROTHGAR_EN_NAME, VEENA_VIERA_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME, WILDWOOD_ELEZEN_EN_NAME, XAELA_AU_RA_EN_NAME } from "./languageTexts";
+import { LANGUAGE_TEXTS } from "./languageTexts";
 
 interface RaceInfo {
   STR: number;
@@ -8,27 +8,27 @@ interface RaceInfo {
 }
 
 const MAIN_STAT_BASE_PER_JOB = new Map([
-  [PLD_EN_NAME, 100],
-  [WAR_EN_NAME, 105],
-  [DRK_EN_NAME, 105],
-  [GNB_EN_NAME, 100],
-  [WHM_EN_NAME, 115],
-  [SCH_EN_NAME, 115],
-  [AST_EN_NAME, 115],
-  [SGE_EN_NAME, 115],
-  [MNK_EN_NAME, 110],
-  [DRG_EN_NAME, 115],
-  [NIN_EN_NAME, 110],
-  [SAM_EN_NAME, 112],
-  [RPR_EN_NAME, 115],
-  [VPR_EN_NAME, 100],
-  [BRD_EN_NAME, 115],
-  [MCH_EN_NAME, 115],
-  [DNC_EN_NAME, 115],
-  [BLM_EN_NAME, 115],
-  [SMN_EN_NAME, 115],
-  [RDM_EN_NAME, 115],
-  [PCT_EN_NAME, 115],
+  [LANGUAGE_TEXTS.PLD_EN_NAME, 100],
+  [LANGUAGE_TEXTS.WAR_EN_NAME, 105],
+  [LANGUAGE_TEXTS.DRK_EN_NAME, 105],
+  [LANGUAGE_TEXTS.GNB_EN_NAME, 100],
+  [LANGUAGE_TEXTS.WHM_EN_NAME, 115],
+  [LANGUAGE_TEXTS.SCH_EN_NAME, 115],
+  [LANGUAGE_TEXTS.AST_EN_NAME, 115],
+  [LANGUAGE_TEXTS.SGE_EN_NAME, 115],
+  [LANGUAGE_TEXTS.MNK_EN_NAME, 110],
+  [LANGUAGE_TEXTS.DRG_EN_NAME, 115],
+  [LANGUAGE_TEXTS.NIN_EN_NAME, 110],
+  [LANGUAGE_TEXTS.SAM_EN_NAME, 112],
+  [LANGUAGE_TEXTS.RPR_EN_NAME, 115],
+  [LANGUAGE_TEXTS.VPR_EN_NAME, 100],
+  [LANGUAGE_TEXTS.BRD_EN_NAME, 115],
+  [LANGUAGE_TEXTS.MCH_EN_NAME, 115],
+  [LANGUAGE_TEXTS.DNC_EN_NAME, 115],
+  [LANGUAGE_TEXTS.BLM_EN_NAME, 115],
+  [LANGUAGE_TEXTS.SMN_EN_NAME, 115],
+  [LANGUAGE_TEXTS.RDM_EN_NAME, 115],
+  [LANGUAGE_TEXTS.PCT_EN_NAME, 115],
 ]);
 
 interface RaceInfo {
@@ -40,12 +40,12 @@ interface RaceInfo {
 
 
 export const RACE_MAIN_STAT = new Map([
-  [MIDLANDER_HYUR_EN_NAME, { STR: 22, DEX: 19, INT: 23, MND: 19 }],
-  [HIGHLANDER_HYUR_EN_NAME, { STR: 23, DEX: 20, INT: 18, MND: 20 }],
-  [WILDWOOD_ELEZEN_EN_NAME, { STR: 20, DEX: 23, INT: 22, MND: 19 }],
-  [DUSKWIGHT_ELEZEN_EN_NAME, { STR: 20, DEX: 22, INT: 23, MND: 21 }],
+  [LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME, { STR: 22, DEX: 19, INT: 23, MND: 19 }],
+  [LANGUAGE_TEXTS.HIGHLANDER_HYUR_EN_NAME, { STR: 23, DEX: 20, INT: 18, MND: 20 }],
+  [LANGUAGE_TEXTS.WILDWOOD_ELEZEN_EN_NAME, { STR: 20, DEX: 23, INT: 22, MND: 19 }],
+  [LANGUAGE_TEXTS.DUSKWIGHT_ELEZEN_EN_NAME, { STR: 20, DEX: 22, INT: 23, MND: 21 }],
   [
-    PLAINSFOLK_LALAFELL_EN_NAME,
+    LANGUAGE_TEXTS.PLAINSFOLK_LALAFELL_EN_NAME,
     {
       STR: 19,
       DEX: 23,
@@ -53,9 +53,9 @@ export const RACE_MAIN_STAT = new Map([
       MND: 20,
     },
   ],
-  [DUNESFOLK_LALAFELL_EN_NAME, { STR: 19, DEX: 21, INT: 22, MND: 23 }],
+  [LANGUAGE_TEXTS.DUNESFOLK_LALAFELL_EN_NAME, { STR: 19, DEX: 21, INT: 22, MND: 23 }],
   [
-    SEEKER_OF_THE_SUN_MIQOTE_EN_NAME,
+    LANGUAGE_TEXTS.SEEKER_OF_THE_SUN_MIQOTE_EN_NAME,
     {
       STR: 22,
       DEX: 23,
@@ -64,7 +64,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    KEEPER_OF_THE_MOON_MIQOTE_EN_NAME,
+    LANGUAGE_TEXTS.KEEPER_OF_THE_MOON_MIQOTE_EN_NAME,
     {
       STR: 19,
       DEX: 22,
@@ -73,7 +73,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    SEA_WOLVES_ROEGADYN_EN_NAME,
+    LANGUAGE_TEXTS.SEA_WOLVES_ROEGADYN_EN_NAME,
     {
       STR: 22,
       DEX: 19,
@@ -82,7 +82,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    HELLSGUARD_ROEGADYN_EN_NAME,
+    LANGUAGE_TEXTS.HELLSGUARD_ROEGADYN_EN_NAME,
     {
       STR: 20,
       DEX: 18,
@@ -91,7 +91,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    RAEN_AU_RA_EN_NAME,
+    LANGUAGE_TEXTS.RAEN_AU_RA_EN_NAME,
     {
       STR: 19,
       DEX: 22,
@@ -100,7 +100,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    XAELA_AU_RA_EN_NAME,
+    LANGUAGE_TEXTS.XAELA_AU_RA_EN_NAME,
     {
       STR: 23,
       DEX: 20,
@@ -109,7 +109,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    HELIONS_HROTHGAR_EN_NAME,
+    LANGUAGE_TEXTS.HELIONS_HROTHGAR_EN_NAME,
     {
       STR: 23,
       DEX: 17,
@@ -118,7 +118,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    THE_LOST_HROTHGAR_EN_NAME,
+    LANGUAGE_TEXTS.THE_LOST_HROTHGAR_EN_NAME,
     {
       STR: 23,
       DEX: 17,
@@ -127,7 +127,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    RAVA_VIERA_EN_NAME,
+    LANGUAGE_TEXTS.RAVA_VIERA_EN_NAME,
     {
       STR: 20,
       DEX: 23,
@@ -136,7 +136,7 @@ export const RACE_MAIN_STAT = new Map([
     },
   ],
   [
-    VEENA_VIERA_EN_NAME,
+    LANGUAGE_TEXTS.VEENA_VIERA_EN_NAME,
     {
       STR: 19,
       DEX: 20,
@@ -175,11 +175,11 @@ export function getMainStatOfRace(race: string, mainStatName: string): number {
 
 function getRaceMainStatByName(mainStatName: string, stats: RaceInfo): number {
   switch (mainStatName) {
-    case STR_STAT_NAME:
+    case LANGUAGE_TEXTS.STR_STAT_NAME:
       return stats.STR;
-    case DEX_STAT_NAME:
+    case LANGUAGE_TEXTS.DEX_STAT_NAME:
       return stats.DEX;
-    case INT_STAT_NAME:
+    case LANGUAGE_TEXTS.INT_STAT_NAME:
       return stats.INT;
     default:
       return stats.MND;
@@ -188,27 +188,27 @@ function getRaceMainStatByName(mainStatName: string, stats: RaceInfo): number {
 
 export function getMainStatNameByJob(job: string): string {
   switch (job) {
-    case PLD_EN_NAME:
-    case WAR_EN_NAME:
-    case DRK_EN_NAME:
-    case GNB_EN_NAME:
-    case MNK_EN_NAME:
-    case DRG_EN_NAME:
-    case SAM_EN_NAME:
-    case RPR_EN_NAME:
-      return STR_STAT_NAME;
-    case NIN_EN_NAME:
-    case VPR_EN_NAME:
-    case BRD_EN_NAME:
-    case MCH_EN_NAME:
-    case DNC_EN_NAME:
-      return DEX_STAT_NAME;
-    case WHM_EN_NAME:
-    case SCH_EN_NAME:
-    case AST_EN_NAME:
-    case SGE_EN_NAME:
-      return MIND_STAT_NAME;
+    case LANGUAGE_TEXTS.PLD_EN_NAME:
+    case LANGUAGE_TEXTS.WAR_EN_NAME:
+    case LANGUAGE_TEXTS.DRK_EN_NAME:
+    case LANGUAGE_TEXTS.GNB_EN_NAME:
+    case LANGUAGE_TEXTS.MNK_EN_NAME:
+    case LANGUAGE_TEXTS.DRG_EN_NAME:
+    case LANGUAGE_TEXTS.SAM_EN_NAME:
+    case LANGUAGE_TEXTS.RPR_EN_NAME:
+      return LANGUAGE_TEXTS.STR_STAT_NAME;
+    case LANGUAGE_TEXTS.NIN_EN_NAME:
+    case LANGUAGE_TEXTS.VPR_EN_NAME:
+    case LANGUAGE_TEXTS.BRD_EN_NAME:
+    case LANGUAGE_TEXTS.MCH_EN_NAME:
+    case LANGUAGE_TEXTS.DNC_EN_NAME:
+      return LANGUAGE_TEXTS.DEX_STAT_NAME;
+    case LANGUAGE_TEXTS.WHM_EN_NAME:
+    case LANGUAGE_TEXTS.SCH_EN_NAME:
+    case LANGUAGE_TEXTS.AST_EN_NAME:
+    case LANGUAGE_TEXTS.SGE_EN_NAME:
+      return LANGUAGE_TEXTS.MIND_STAT_NAME;
     default:
-      return INT_STAT_NAME;
+      return LANGUAGE_TEXTS.INT_STAT_NAME;
   }
 }

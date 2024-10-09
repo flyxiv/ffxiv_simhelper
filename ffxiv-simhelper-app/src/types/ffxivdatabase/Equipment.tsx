@@ -1,55 +1,37 @@
 import {
-  BODY_SLOT_EN_TEXT,
-  CRIT_STAT_NAME,
-  DET_STAT_NAME,
-  DEX_STAT_NAME,
-  DH_STAT_NAME,
-  EARS_SLOT_EN_TEXT,
-  FEET_SLOT_EN_TEXT,
-  FINGER1_SLOT_EN_TEXT,
-  FINGER2_SLOT_EN_TEXT,
-  FINGER_SLOT_EN_TEXT,
-  HANDS_SLOT_EN_TEXT,
-  HEAD_SLOT_EN_TEXT,
-  INT_STAT_NAME,
-  LEGS_SLOT_EN_TEXT,
-  MIND_STAT_NAME,
-  NECK_SLOT_EN_TEXT,
-  OFFHAND_SLOT_EN_TEXT,
-  PIE_STAT_NAME,
-  PLD_EN_NAME,
-  SKS_STAT_NAME,
-  SPS_STAT_NAME,
-  STR_STAT_NAME,
-  TEN_STAT_NAME,
-  WD_STAT_NAME,
-  WEAPON_SLOT_EN_TEXT,
-  WRIST_SLOT_EN_TEXT,
+  AppLanguageTexts,
 } from "../../const/languageTexts";
 import totalEquipmentsJson from "../../assets/data/equipment_data.json";
-import { AppConfigurations, ENGLISH_MODE } from "../../Themes";
+import { LanguageMode } from "../../LanguageContext";
 
-export const WEAPONSLOTS = [WEAPON_SLOT_EN_TEXT, OFFHAND_SLOT_EN_TEXT];
-export const LEFTSLOTS = [
-  HEAD_SLOT_EN_TEXT,
-  BODY_SLOT_EN_TEXT,
-  HANDS_SLOT_EN_TEXT,
-  LEGS_SLOT_EN_TEXT,
-  FEET_SLOT_EN_TEXT,
-];
-export const RIGHTSLOTS = [
-  WRIST_SLOT_EN_TEXT,
-  EARS_SLOT_EN_TEXT,
-  NECK_SLOT_EN_TEXT,
-  FINGER1_SLOT_EN_TEXT,
-  FINGER2_SLOT_EN_TEXT,
-];
-export const TOTAL_SLOTS = WEAPONSLOTS.concat(LEFTSLOTS).concat(RIGHTSLOTS);
+export const loadSlots = () => {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
-export const CURRENT_MIN_ITEM_LEVEL =
-  AppConfigurations.languageMode === ENGLISH_MODE ? 710 : 690;
-export const CURRENT_MAX_ITEM_LEVEL =
-  AppConfigurations.languageMode === ENGLISH_MODE ? 735 : 735;
+  const WEAPONSLOTS = [LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT, LANGUAGE_TEXTS.OFFHAND_SLOT_EN_TEXT];
+  const LEFTSLOTS = [
+    LANGUAGE_TEXTS.HEAD_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.BODY_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.HANDS_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.LEGS_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.FEET_SLOT_EN_TEXT,
+  ];
+  const RIGHTSLOTS = [
+    LANGUAGE_TEXTS.WRIST_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.EARS_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.NECK_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT,
+  ];
+  const TOTAL_SLOTS = WEAPONSLOTS.concat(LEFTSLOTS).concat(RIGHTSLOTS);
+
+
+  return {
+    WEAPONSLOTS,
+    LEFTSLOTS,
+    RIGHTSLOTS,
+    TOTAL_SLOTS,
+  }
+}
 
 let totalEquipments: Array<Equipment> = [];
 
@@ -78,10 +60,20 @@ totalEquipmentsJson.forEach((element) => {
   });
 });
 
-export const {
-  idDatabase: EQUIPMENT_DATABASE_BY_ID,
-  keyDatabase: EQUIPMENT_DATABASE_BY_KEYS,
-} = readEquipmentData(CURRENT_MIN_ITEM_LEVEL, CURRENT_MAX_ITEM_LEVEL);
+export const loadMinMaxEquipmentItemLevels = () => {
+  const LANGUAGE_TEXTS = AppLanguageTexts();
+  const CURRENT_MIN_ITEM_LEVEL =
+    LANGUAGE_TEXTS.language === LanguageMode.ENGLISH_MODE ? 710 : 690;
+  const CURRENT_MAX_ITEM_LEVEL =
+    LANGUAGE_TEXTS.language === LanguageMode.ENGLISH_MODE ? 735 : 735;
+
+  return { CURRENT_MAX_ITEM_LEVEL, CURRENT_MIN_ITEM_LEVEL };
+}
+
+export const loadEquipmentData = () => {
+  let { CURRENT_MIN_ITEM_LEVEL, CURRENT_MAX_ITEM_LEVEL } = loadMinMaxEquipmentItemLevels();
+  return readEquipmentData(CURRENT_MIN_ITEM_LEVEL, CURRENT_MAX_ITEM_LEVEL);
+}
 
 export interface Equipment {
   id: number;
@@ -119,9 +111,10 @@ export function toEquipmentKeyString(
   jobAbbrev: string,
   slotName: string
 ): string {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   let keySlotName = slotName;
-  if (slotName === FINGER1_SLOT_EN_TEXT || slotName === FINGER2_SLOT_EN_TEXT) {
-    keySlotName = FINGER_SLOT_EN_TEXT;
+  if (slotName === LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT || slotName === LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT) {
+    keySlotName = LANGUAGE_TEXTS.FINGER_SLOT_EN_TEXT;
   }
   return `${keySlotName}-${jobAbbrev}`;
 }
@@ -182,54 +175,56 @@ export function readEquipmentData(minItemLevel: number, maxItemLevel: number) {
 
 export function equipmentStatDescriptionString(equipment: Equipment) {
   const stats = [];
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   if (equipment.weaponDamage > 0) {
-    stats.push({ statName: WD_STAT_NAME, value: equipment.weaponDamage });
+    stats.push({ statName: LANGUAGE_TEXTS.WD_STAT_NAME, value: equipment.weaponDamage });
   }
   if (equipment.STR > 0) {
     stats.push({
-      statName: STR_STAT_NAME,
+      statName: LANGUAGE_TEXTS.STR_STAT_NAME,
       value: equipment.STR,
     });
   }
   if (equipment.DEX > 0) {
     stats.push({
-      statName: DEX_STAT_NAME,
+      statName: LANGUAGE_TEXTS.DEX_STAT_NAME,
       value: equipment.DEX,
     });
   }
   if (equipment.INT > 0) {
     stats.push({
-      statName: INT_STAT_NAME,
+      statName: LANGUAGE_TEXTS.INT_STAT_NAME,
       value: equipment.INT,
     });
   }
   if (equipment.MND > 0) {
     stats.push({
-      statName: MIND_STAT_NAME,
+      statName: LANGUAGE_TEXTS.MIND_STAT_NAME,
       value: equipment.MND,
     });
   }
 
   if (equipment.criticalStrike > 0) {
-    stats.push({ statName: CRIT_STAT_NAME, value: equipment.criticalStrike });
+    stats.push({ statName: LANGUAGE_TEXTS.CRIT_STAT_NAME, value: equipment.criticalStrike });
   }
   if (equipment.directHit > 0) {
-    stats.push({ statName: DH_STAT_NAME, value: equipment.directHit });
+    stats.push({ statName: LANGUAGE_TEXTS.DH_STAT_NAME, value: equipment.directHit });
   }
   if (equipment.determination > 0) {
-    stats.push({ statName: DET_STAT_NAME, value: equipment.determination });
+    stats.push({ statName: LANGUAGE_TEXTS.DET_STAT_NAME, value: equipment.determination });
   }
   if (equipment.skillSpeed > 0) {
-    stats.push({ statName: SKS_STAT_NAME, value: equipment.skillSpeed });
+    stats.push({ statName: LANGUAGE_TEXTS.SKS_STAT_NAME, value: equipment.skillSpeed });
   }
   if (equipment.spellSpeed > 0) {
-    stats.push({ statName: SPS_STAT_NAME, value: equipment.spellSpeed });
+    stats.push({ statName: LANGUAGE_TEXTS.SPS_STAT_NAME, value: equipment.spellSpeed });
   }
   if (equipment.tenacity > 0) {
-    stats.push({ statName: TEN_STAT_NAME, value: equipment.tenacity });
+    stats.push({ statName: LANGUAGE_TEXTS.TEN_STAT_NAME, value: equipment.tenacity });
   }
   if (equipment.piety > 0) {
-    stats.push({ statName: PIE_STAT_NAME, value: equipment.piety });
+    stats.push({ statName: LANGUAGE_TEXTS.PIE_STAT_NAME, value: equipment.piety });
   }
 
   let descriptionString = "";
@@ -241,94 +236,97 @@ export function equipmentStatDescriptionString(equipment: Equipment) {
 }
 
 export function getEquipmentSlotsOfJob(jobAbbrev: string) {
-  if (jobAbbrev === PLD_EN_NAME) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+  if (jobAbbrev === LANGUAGE_TEXTS.PLD_EN_NAME) {
     return [
-      WEAPON_SLOT_EN_TEXT,
-      OFFHAND_SLOT_EN_TEXT,
-      HEAD_SLOT_EN_TEXT,
-      BODY_SLOT_EN_TEXT,
-      HANDS_SLOT_EN_TEXT,
-      LEGS_SLOT_EN_TEXT,
-      FEET_SLOT_EN_TEXT,
-      EARS_SLOT_EN_TEXT,
-      NECK_SLOT_EN_TEXT,
-      WRIST_SLOT_EN_TEXT,
-      FINGER1_SLOT_EN_TEXT,
-      FINGER2_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.OFFHAND_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.HEAD_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.BODY_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.HANDS_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.LEGS_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.FEET_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.EARS_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.NECK_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.WRIST_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT,
+      LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT,
     ];
   }
 
   return [
-    WEAPON_SLOT_EN_TEXT,
-    HEAD_SLOT_EN_TEXT,
-    BODY_SLOT_EN_TEXT,
-    HANDS_SLOT_EN_TEXT,
-    LEGS_SLOT_EN_TEXT,
-    FEET_SLOT_EN_TEXT,
-    EARS_SLOT_EN_TEXT,
-    NECK_SLOT_EN_TEXT,
-    WRIST_SLOT_EN_TEXT,
-    FINGER1_SLOT_EN_TEXT,
-    FINGER2_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.HEAD_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.BODY_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.HANDS_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.LEGS_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.FEET_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.EARS_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.NECK_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.WRIST_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT,
+    LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT,
   ];
 }
 
 export function getFirstSecondSubStat(equipment: Equipment) {
-  let firstSubStat = CRIT_STAT_NAME;
-  let secondSubStat = DH_STAT_NAME;
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+  let firstSubStat = LANGUAGE_TEXTS.CRIT_STAT_NAME;
+  let secondSubStat = LANGUAGE_TEXTS.DH_STAT_NAME;
   if (equipment.criticalStrike > 0) {
     if (equipment.criticalStrike === equipment.maxSubstat) {
-      firstSubStat = CRIT_STAT_NAME;
+      firstSubStat = LANGUAGE_TEXTS.CRIT_STAT_NAME;
     } else {
-      secondSubStat = CRIT_STAT_NAME;
+      secondSubStat = LANGUAGE_TEXTS.CRIT_STAT_NAME;
     }
   }
 
   if (equipment.directHit > 0) {
     if (equipment.directHit === equipment.maxSubstat) {
-      firstSubStat = DH_STAT_NAME;
+      firstSubStat = LANGUAGE_TEXTS.DH_STAT_NAME;
     } else {
-      secondSubStat = DH_STAT_NAME;
+      secondSubStat = LANGUAGE_TEXTS.DH_STAT_NAME;
     }
   }
 
   if (equipment.determination > 0) {
     if (equipment.determination === equipment.maxSubstat) {
-      firstSubStat = DET_STAT_NAME;
+      firstSubStat = LANGUAGE_TEXTS.DET_STAT_NAME;
     } else {
-      secondSubStat = DET_STAT_NAME;
+      secondSubStat = LANGUAGE_TEXTS.DET_STAT_NAME;
     }
   }
 
   if (equipment.skillSpeed > 0) {
     if (equipment.skillSpeed === equipment.maxSubstat) {
-      firstSubStat = SKS_STAT_NAME;
+      firstSubStat = LANGUAGE_TEXTS.SKS_STAT_NAME;
     } else {
-      secondSubStat = SKS_STAT_NAME;
+      secondSubStat = LANGUAGE_TEXTS.SKS_STAT_NAME;
     }
   }
 
   if (equipment.spellSpeed > 0) {
     if (equipment.spellSpeed === equipment.maxSubstat) {
-      firstSubStat = SPS_STAT_NAME;
+      firstSubStat = LANGUAGE_TEXTS.SPS_STAT_NAME;
     } else {
-      secondSubStat = SPS_STAT_NAME;
+      secondSubStat = LANGUAGE_TEXTS.SPS_STAT_NAME;
     }
   }
 
   if (equipment.tenacity > 0) {
     if (equipment.tenacity === equipment.maxSubstat) {
-      firstSubStat = TEN_STAT_NAME;
+      firstSubStat = LANGUAGE_TEXTS.TEN_STAT_NAME;
     } else {
-      secondSubStat = TEN_STAT_NAME;
+      secondSubStat = LANGUAGE_TEXTS.TEN_STAT_NAME;
     }
   }
 
   if (equipment.piety > 0) {
     if (equipment.piety === equipment.maxSubstat) {
-      firstSubStat = PIE_STAT_NAME;
+      firstSubStat = LANGUAGE_TEXTS.PIE_STAT_NAME;
     } else {
-      secondSubStat = PIE_STAT_NAME;
+      secondSubStat = LANGUAGE_TEXTS.PIE_STAT_NAME;
     }
   }
 

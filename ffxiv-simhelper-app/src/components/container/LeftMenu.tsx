@@ -14,16 +14,8 @@ import {
   BEST_STATS_URL,
 } from "../../App";
 import { EquipmentInput } from "../../types/EquipmentInput";
-import {
-  BEST_PARTNER_PAGE_NAME,
-  GEAR_COMPARE_PAGE_NAME,
-  HOME_PAGE_NAME,
-  NAVIGATE_TEXT,
-  DPS_ANALYSIS_PAGE_NAME,
-  SAVED_GEARSETS_TEXT,
-  BEST_STAT_PAGE_NAME,
-} from "../../const/languageTexts";
 import { convertToLinkUrl } from "../../page/home";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 export const MENU_WIDTH_VW_XS = 35;
 export const MENU_WIDTH_VW_SM = 30;
@@ -62,6 +54,7 @@ export function LeftMenuWithLoadout(
   totalState: EquipmentInput,
   setTotalState: Function
 ) {
+
   return (
     <Drawer
       sx={{
@@ -135,6 +128,8 @@ const STAT_WEIGHTS_MENU_LOGO_PATH = "/images/icon_best_stats_w.svg";
 const LOGO_PATH = "/images/left_menu_logo.svg";
 
 function DefaultLeftMenuComponents(currentSimulationPage: string) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <>
       <LeftMenuLogo>
@@ -149,7 +144,7 @@ function DefaultLeftMenuComponents(currentSimulationPage: string) {
       </LeftMenuLogo>
       <LeftMenuNavigationBar paddingY={4} paddingLeft={2}>
         <Typography variant="h3" align="left" sx={{ fontWeight: "bold" }}>
-          {NAVIGATE_TEXT}
+          {LANGUAGE_TEXTS.NAVIGATE_TEXT}
         </Typography>
 
         <Divider
@@ -160,29 +155,29 @@ function DefaultLeftMenuComponents(currentSimulationPage: string) {
           }}
         />
 
-        {NavigationMenu("/index.html", HOME_PAGE_NAME, HOME_MENU_LOGO_PATH, currentSimulationPage)}
+        {NavigationMenu("/index.html", LANGUAGE_TEXTS.HOME_PAGE_NAME, HOME_MENU_LOGO_PATH, currentSimulationPage)}
         {NavigationMenu(
           convertToLinkUrl(DPS_ANALYSIS_URL),
-          DPS_ANALYSIS_PAGE_NAME,
+          LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
           DPS_ANALYSIS_MENU_LOGO_PATH,
           currentSimulationPage
         )}
         {NavigationMenu(
           convertToLinkUrl(GEAR_COMPARE_URL),
-          GEAR_COMPARE_PAGE_NAME,
+          LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
           GEAR_COMPARE_MENU_LOGO_PATH,
           currentSimulationPage
         )}
         {NavigationMenu(
           convertToLinkUrl(BEST_PARTNER_URL),
-          BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
           BEST_PARTNER_MENU_LOGO_PATH,
           currentSimulationPage
 
         )}
         {NavigationMenu(
           convertToLinkUrl(BEST_STATS_URL),
-          BEST_STAT_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
           STAT_WEIGHTS_MENU_LOGO_PATH,
           currentSimulationPage
         )}
@@ -197,6 +192,8 @@ function EquipmentLoadouts(
   totalState: EquipmentInput,
   setTotalState: Function
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <>
       <Box paddingX={2}>
@@ -205,7 +202,7 @@ function EquipmentLoadouts(
           align="left"
           sx={{ fontWeight: "bold", paddingLeft: 2 }}
         >
-          {SAVED_GEARSETS_TEXT}
+          {LANGUAGE_TEXTS.SAVED_GEARSETS_TEXT}
         </Typography>
         <Divider
           sx={{

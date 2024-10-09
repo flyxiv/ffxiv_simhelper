@@ -10,7 +10,7 @@ type LanguageContextType = {
     setLanguage: (language: LanguageMode) => void;
 };
 
-function toLanguageMode(value: string): LanguageMode {
+export function toLanguageMode(value: string): LanguageMode {
     switch (value) {
         case LanguageMode.ENGLISH_MODE:
             return LanguageMode.ENGLISH_MODE;
@@ -29,7 +29,6 @@ interface LanguageProviderProps {
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-
     const [language, setLanguage] = useState<LanguageMode>(() => {
         return toLanguageMode(localStorage.getItem(LANGUAGE_MODE_SAVE_NAME) || LanguageMode.ENGLISH_MODE);
     });
@@ -42,6 +41,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
 };
 
 export const useLanguage = (): LanguageContextType => {
+    console.log(LanguageContext);
     const context = useContext(LanguageContext);
     if (!context) {
         throw new Error('useLanguage must be used within a LanguageProvider');

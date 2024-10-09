@@ -1,935 +1,1366 @@
-import { AppConfigurations, ENGLISH_MODE } from "../Themes";
+import { useEffect, useState } from "react";
+import { LanguageMode, useLanguage } from "../LanguageContext";
 
-// Job Names
-export const PLD_EN_NAME = "PLD";
-export const PLD_KR_NAME = "나이트";
+const AppLanguageTexts = () => {
+  let { language } = useLanguage();
 
-export const WAR_EN_NAME = "WAR";
-export const WAR_KR_NAME = "전사";
+  // Job Names
+  const PLD_EN_NAME = "PLD";
+  const PLD_KR_NAME = "나이트";
 
-export const DRK_EN_NAME = "DRK";
-export const DRK_KR_NAME = "암흑기사";
+  const WAR_EN_NAME = "WAR";
+  const WAR_KR_NAME = "전사";
 
-export const GNB_EN_NAME = "GNB";
-export const GNB_KR_NAME = "건브레이커";
+  const DRK_EN_NAME = "DRK";
+  const DRK_KR_NAME = "암흑기사";
 
-export const WHM_EN_NAME = "WHM";
-export const WHM_KR_NAME = "백마도사";
+  const GNB_EN_NAME = "GNB";
+  const GNB_KR_NAME = "건브레이커";
 
-export const AST_EN_NAME = "AST";
-export const AST_KR_NAME = "점성술사";
+  const WHM_EN_NAME = "WHM";
+  const WHM_KR_NAME = "백마도사";
 
-export const SCH_EN_NAME = "SCH";
-export const SCH_KR_NAME = "학자";
+  const AST_EN_NAME = "AST";
+  const AST_KR_NAME = "점성술사";
 
-export const SGE_EN_NAME = "SGE";
-export const SGE_KR_NAME = "현자";
+  const SCH_EN_NAME = "SCH";
+  const SCH_KR_NAME = "학자";
 
-export const DRG_EN_NAME = "DRG";
-export const DRG_KR_NAME = "용기사";
+  const SGE_EN_NAME = "SGE";
+  const SGE_KR_NAME = "현자";
 
-export const MNK_EN_NAME = "MNK";
-export const MNK_KR_NAME = "몽크";
+  const DRG_EN_NAME = "DRG";
+  const DRG_KR_NAME = "용기사";
 
-export const NIN_EN_NAME = "NIN";
-export const NIN_KR_NAME = "닌자";
+  const MNK_EN_NAME = "MNK";
+  const MNK_KR_NAME = "몽크";
 
-export const SAM_EN_NAME = "SAM";
-export const SAM_KR_NAME = "사무라이";
+  const NIN_EN_NAME = "NIN";
+  const NIN_KR_NAME = "닌자";
 
-export const RPR_EN_NAME = "RPR";
-export const RPR_KR_NAME = "리퍼";
+  const SAM_EN_NAME = "SAM";
+  const SAM_KR_NAME = "사무라이";
 
-export const VPR_EN_NAME = "VPR";
-export const VPR_KR_NAME = "바이퍼";
+  const RPR_EN_NAME = "RPR";
+  const RPR_KR_NAME = "리퍼";
 
-export const BRD_EN_NAME = "BRD";
-export const BRD_KR_NAME = "음유시인";
+  const VPR_EN_NAME = "VPR";
+  const VPR_KR_NAME = "바이퍼";
 
-export const MCH_EN_NAME = "MCH";
-export const MCH_KR_NAME = "기공사";
+  const BRD_EN_NAME = "BRD";
+  const BRD_KR_NAME = "음유시인";
 
-export const DNC_EN_NAME = "DNC";
-export const DNC_KR_NAME = "무도가";
+  const MCH_EN_NAME = "MCH";
+  const MCH_KR_NAME = "기공사";
 
-export const BLM_EN_NAME = "BLM";
-export const BLM_KR_NAME = "흑마도사";
+  const DNC_EN_NAME = "DNC";
+  const DNC_KR_NAME = "무도가";
 
-export const SMN_EN_NAME = "SMN";
-export const SMN_KR_NAME = "소환사";
+  const BLM_EN_NAME = "BLM";
+  const BLM_KR_NAME = "흑마도사";
 
-export const RDM_EN_NAME = "RDM";
-export const RDM_KR_NAME = "적마도사";
+  const SMN_EN_NAME = "SMN";
+  const SMN_KR_NAME = "소환사";
 
-export const PCT_EN_NAME = "PCT";
-export const PCT_KR_NAME = "픽토맨서";
+  const RDM_EN_NAME = "RDM";
+  const RDM_KR_NAME = "적마도사";
 
-export const PLD_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? PLD_EN_NAME : PLD_KR_NAME;
-export const WAR_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? WAR_EN_NAME : WAR_KR_NAME;
-export const DRK_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? DRK_EN_NAME : DRK_KR_NAME;
-export const GNB_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? GNB_EN_NAME : GNB_KR_NAME;
+  const PCT_EN_NAME = "PCT";
+  const PCT_KR_NAME = "픽토맨서";
 
-export const WHM_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? WHM_EN_NAME : WHM_KR_NAME;
-export const SCH_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? SCH_EN_NAME : SCH_KR_NAME;
-export const AST_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? AST_EN_NAME : AST_KR_NAME;
-export const SGE_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? SGE_EN_NAME : SGE_KR_NAME;
+  const PLD_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? PLD_EN_NAME : PLD_KR_NAME;
+  const WAR_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? WAR_EN_NAME : WAR_KR_NAME;
+  const DRK_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? DRK_EN_NAME : DRK_KR_NAME;
+  const GNB_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? GNB_EN_NAME : GNB_KR_NAME;
 
-export const DRG_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? DRG_EN_NAME : DRG_KR_NAME;
-export const MNK_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? MNK_EN_NAME : MNK_KR_NAME;
-export const NIN_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? NIN_EN_NAME : NIN_KR_NAME;
-export const SAM_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? SAM_EN_NAME : SAM_KR_NAME;
-export const RPR_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? RPR_EN_NAME : RPR_KR_NAME;
-export const VPR_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? VPR_EN_NAME : VPR_KR_NAME;
+  const WHM_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? WHM_EN_NAME : WHM_KR_NAME;
+  const SCH_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? SCH_EN_NAME : SCH_KR_NAME;
+  const AST_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? AST_EN_NAME : AST_KR_NAME;
+  const SGE_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? SGE_EN_NAME : SGE_KR_NAME;
 
-export const BRD_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? BRD_EN_NAME : BRD_KR_NAME;
-export const MCH_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? MCH_EN_NAME : MCH_KR_NAME;
-export const DNC_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? DNC_EN_NAME : DNC_KR_NAME;
+  const DRG_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? DRG_EN_NAME : DRG_KR_NAME;
+  const MNK_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? MNK_EN_NAME : MNK_KR_NAME;
+  const NIN_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? NIN_EN_NAME : NIN_KR_NAME;
+  const SAM_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? SAM_EN_NAME : SAM_KR_NAME;
+  const RPR_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? RPR_EN_NAME : RPR_KR_NAME;
+  const VPR_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? VPR_EN_NAME : VPR_KR_NAME;
 
-export const BLM_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? BLM_EN_NAME : BLM_KR_NAME;
-export const SMN_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? SMN_EN_NAME : SMN_KR_NAME;
-export const RDM_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? RDM_EN_NAME : RDM_KR_NAME;
-export const PCT_JOB_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? PCT_EN_NAME : PCT_KR_NAME;
+  const BRD_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? BRD_EN_NAME : BRD_KR_NAME;
+  const MCH_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? MCH_EN_NAME : MCH_KR_NAME;
+  const DNC_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? DNC_EN_NAME : DNC_KR_NAME;
 
-const convertToKoreanJobAbbrev = (jobAbbrev: string) => {
-  switch (jobAbbrev) {
-    case PLD_EN_NAME:
-      return PLD_KR_NAME;
-    case WAR_EN_NAME:
-      return WAR_KR_NAME;
-    case DRK_EN_NAME:
-      return DRK_KR_NAME;
-    case GNB_EN_NAME:
-      return GNB_KR_NAME;
-    case WHM_EN_NAME:
-      return WHM_KR_NAME;
-    case AST_EN_NAME:
-      return AST_KR_NAME;
-    case SCH_EN_NAME:
-      return SCH_KR_NAME;
-    case SGE_EN_NAME:
-      return SGE_KR_NAME;
-    case DRG_EN_NAME:
-      return DRG_KR_NAME;
-    case MNK_EN_NAME:
-      return MNK_KR_NAME;
-    case NIN_EN_NAME:
-      return NIN_KR_NAME;
-    case SAM_EN_NAME:
-      return SAM_KR_NAME;
-    case RPR_EN_NAME:
-      return RPR_KR_NAME;
-    case VPR_EN_NAME:
-      return VPR_KR_NAME;
-    case BRD_EN_NAME:
-      return BRD_KR_NAME;
-    case MCH_EN_NAME:
-      return MCH_KR_NAME;
-    case DNC_EN_NAME:
-      return DNC_KR_NAME;
-    case BLM_EN_NAME:
-      return BLM_KR_NAME;
-    case SMN_EN_NAME:
-      return SMN_KR_NAME;
-    case RDM_EN_NAME:
-      return RDM_KR_NAME;
-    case PCT_EN_NAME:
-      return PCT_KR_NAME;
-    default:
-      return jobAbbrev;
+  const BLM_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? BLM_EN_NAME : BLM_KR_NAME;
+  const SMN_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? SMN_EN_NAME : SMN_KR_NAME;
+  const RDM_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? RDM_EN_NAME : RDM_KR_NAME;
+  const PCT_JOB_NAME =
+    language === LanguageMode.ENGLISH_MODE ? PCT_EN_NAME : PCT_KR_NAME;
+
+
+  // Menu Text
+  const NAVIGATE_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Navigate" : "빠른 이동";
+  const SAVED_GEARSETS_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Saved Gearsets"
+      : "저장된 장비셋";
+  const LOADOUT_NAME_LABEL_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Name" : "이름";
+  const LOADOUT_WRITE_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Write" : "저장";
+  const LOADOUT_LOAD_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Load" : "로드";
+  const DEFAULT_LOADOUT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Default Loadout"
+      : "기본 장비셋";
+  const LOAD_COMPLETE_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Load Complete"
+      : "불러오기 완료";
+
+  const LOADOUT_NAME_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Loadout Name"
+      : "장비셋 이름";
+
+  const OVERWRITE_CONFIRM_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Overwrite gearset?"
+      : "장비셋을 덮어쓰시겠습니까?";
+
+  const LOAD_CONFIRM_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Load gearset?"
+      : "장비셋을 불러오시겠습니까?";
+
+  const CONFIRM_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Yes" : "확인";
+
+  const CANCEL_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "No" : "취소";
+
+  // Player Text
+  const JOB_EN_TEXT = "Job";
+  const JOB_KR_TEXT = "직업";
+
+  const RACE_EN_TEXT = "Race";
+  const RACE_KR_TEXT = "종족";
+
+  const WEAPON_SLOT_EN_TEXT = "weapon";
+  const WEAPON_SLOT_KR_TEXT = "무기";
+
+  const OFFHAND_SLOT_EN_TEXT = "offHand";
+  const OFFHAND_SLOT_KR_TEXT = "보조무기";
+
+  const HEAD_SLOT_EN_TEXT = "head";
+  const HEAD_SLOT_KR_TEXT = "머리";
+
+  const BODY_SLOT_EN_TEXT = "body";
+  const BODY_SLOT_KR_TEXT = "몸통";
+
+  const HANDS_SLOT_EN_TEXT = "hands";
+  const HANDS_SLOT_KR_TEXT = "손";
+
+  const LEGS_SLOT_EN_TEXT = "legs";
+  const LEGS_SLOT_KR_TEXT = "다리";
+
+  const FEET_SLOT_EN_TEXT = "feet";
+  const FEET_SLOT_KR_TEXT = "발";
+
+  const EARS_SLOT_EN_TEXT = "ears";
+  const EARS_SLOT_KR_TEXT = "귀걸이";
+
+  const NECK_SLOT_EN_TEXT = "neck";
+  const NECK_SLOT_KR_TEXT = "목걸이";
+
+  const WRIST_SLOT_EN_TEXT = "wrists";
+  const WRIST_SLOT_KR_TEXT = "팔찌";
+
+  const FINGER1_SLOT_EN_TEXT = "finger1";
+  const FINGER1_SLOT_KR_TEXT = "반지1";
+
+  const FINGER2_SLOT_EN_TEXT = "finger2";
+  const FINGER2_SLOT_KR_TEXT = "반지2";
+
+  const FOOD_SLOT_EN_TEXT = "food";
+  const FOOD_SLOT_KR_TEXT = "음식";
+
+  const AST_MELEE_PARTNER_EN_TEXT = "Melee Card Target";
+  const AST_MELEE_PARTNER_KR_TEXT = "근거리 카드 대상";
+
+  const AST_RANGED_PARTNER_EN_TEXT = "Ranged Card Target";
+  const AST_RANGED_PARTNER_KR_TEXT = "원거리 카드 대상";
+
+  const DNC_PARTNER_EN_TEXT = "Dance Partner";
+  const DNC_PARTNER_KR_TEXT = "무도가 파트너";
+
+  const FINGER_SLOT_EN_TEXT = "finger";
+  const FINGER_SLOT_KR_TEXT = "반지";
+
+  const JOB_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? JOB_EN_TEXT : JOB_KR_TEXT;
+  const RACE_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? RACE_EN_TEXT : RACE_KR_TEXT;
+  const WEAPON_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? WEAPON_SLOT_EN_TEXT
+      : WEAPON_SLOT_KR_TEXT;
+  const OFFHAND_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? OFFHAND_SLOT_EN_TEXT
+      : OFFHAND_SLOT_KR_TEXT;
+  const HEAD_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? HEAD_SLOT_EN_TEXT
+      : HEAD_SLOT_KR_TEXT;
+  const BODY_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? BODY_SLOT_EN_TEXT
+      : BODY_SLOT_KR_TEXT;
+  const HANDS_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? HANDS_SLOT_EN_TEXT
+      : HANDS_SLOT_KR_TEXT;
+  const LEGS_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? LEGS_SLOT_EN_TEXT
+      : LEGS_SLOT_KR_TEXT;
+  const FEET_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? FEET_SLOT_EN_TEXT
+      : FEET_SLOT_KR_TEXT;
+  const EARS_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? EARS_SLOT_EN_TEXT
+      : EARS_SLOT_KR_TEXT;
+  const NECK_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? NECK_SLOT_EN_TEXT
+      : NECK_SLOT_KR_TEXT;
+  const WRIST_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? WRIST_SLOT_EN_TEXT
+      : WRIST_SLOT_KR_TEXT;
+  const FINGER1_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? FINGER1_SLOT_EN_TEXT
+      : FINGER1_SLOT_KR_TEXT;
+  const FINGER2_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? FINGER2_SLOT_EN_TEXT
+      : FINGER2_SLOT_KR_TEXT;
+  const FOOD_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? FOOD_SLOT_EN_TEXT
+      : FOOD_SLOT_KR_TEXT;
+  const AST_MELEE_PARTNER_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? AST_MELEE_PARTNER_EN_TEXT
+      : AST_MELEE_PARTNER_KR_TEXT;
+  const AST_RANGED_PARTNER_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? AST_RANGED_PARTNER_EN_TEXT
+      : AST_RANGED_PARTNER_KR_TEXT;
+  const DNC_PARTNER_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? DNC_PARTNER_EN_TEXT
+      : DNC_PARTNER_KR_TEXT;
+  const FINGER_SLOT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? FINGER_SLOT_EN_TEXT
+      : FINGER_SLOT_KR_TEXT;
+
+  // Race Names
+  const MIDLANDER_HYUR_EN_NAME = "Midlander Hyur";
+  const MIDLANDER_HYUR_KR_NAME = "중부 휴런";
+
+  const HIGHLANDER_HYUR_EN_NAME = "Highlander Hyur";
+  const HIGHLANDER_HYUR_KR_NAME = "고지 휴런";
+
+  const WILDWOOD_ELEZEN_EN_NAME = "Wildwood Elezen";
+  const WILDWOOD_ELEZEN_KR_NAME = "숲 엘레젠";
+
+  const DUSKWIGHT_ELEZEN_EN_NAME = "Duskwight Elezen";
+  const DUSKWIGHT_ELEZEN_KR_NAME = "밤 엘레젠";
+
+  const PLAINSFOLK_LALAFELL_EN_NAME = "Plainsfolk Lalafell";
+  const PLAINSFOLK_LALAFELL_KR_NAME = "평원 라라펠";
+
+  const DUNESFOLK_LALAFELL_EN_NAME = "Dunesfolk Lalafell";
+  const DUNESFOLK_LALAFELL_KR_NAME = "사막 라라펠";
+
+  const SEEKER_OF_THE_SUN_MIQOTE_EN_NAME = "Seeker of the Sun Miqo'te";
+  const SEEKER_OF_THE_SUN_MIQOTE_KR_NAME = "태양의 추종자 미코테";
+
+  const KEEPER_OF_THE_MOON_MIQOTE_EN_NAME = "Keeper of the Moon Miqo'te";
+  const KEEPER_OF_THE_MOON_MIQOTE_KR_NAME = "달의 수호자 미코테";
+
+  const SEA_WOLVES_ROEGADYN_EN_NAME = "Sea Wolves Roegadyn";
+  const SEA_WOLVES_ROEGADYN_KR_NAME = "바다늑대 루가딘";
+
+  const HELLSGUARD_ROEGADYN_EN_NAME = "Hellsguard Roegadyn";
+  const HELLSGUARD_ROEGADYN_KR_NAME = "불꽃지킴이 루가딘";
+
+  const RAEN_AU_RA_EN_NAME = "Raen Au Ra";
+  const RAEN_AU_RA_KR_NAME = "렌 아우라";
+
+  const XAELA_AU_RA_EN_NAME = "Xaela Au Ra";
+  const XAELA_AU_RA_KR_NAME = "젤라 아우라";
+
+  const HELIONS_HROTHGAR_EN_NAME = "Helions Hrothgar";
+  const HELIONS_HROTHGAR_KR_NAME = "맴도는 별 로스갈";
+
+  const THE_LOST_HROTHGAR_EN_NAME = "The Lost Hrothgar";
+  const THE_LOST_HROTHGAR_KR_NAME = "떠도는 별 로스갈";
+
+  const RAVA_VIERA_EN_NAME = "Rava Viera";
+  const RAVA_VIERA_KR_NAME = "라바 비에라";
+
+  const VEENA_VIERA_EN_NAME = "Veena Viera";
+  const VEENA_VIERA_KR_NAME = "비나 비에라";
+
+  const MIDLANDER_HYUR_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? MIDLANDER_HYUR_EN_NAME
+      : MIDLANDER_HYUR_KR_NAME;
+  const HIGHLANDER_HYUR_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? HIGHLANDER_HYUR_EN_NAME
+      : HIGHLANDER_HYUR_KR_NAME;
+  const WILDWOOD_ELEZEN_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? WILDWOOD_ELEZEN_EN_NAME
+      : WILDWOOD_ELEZEN_KR_NAME;
+  const DUSKWIGHT_ELEZEN_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? DUSKWIGHT_ELEZEN_EN_NAME
+      : DUSKWIGHT_ELEZEN_KR_NAME;
+  const PLAINSFOLK_LALAFELL_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? PLAINSFOLK_LALAFELL_EN_NAME
+      : PLAINSFOLK_LALAFELL_KR_NAME;
+  const DUNESFOLK_LALAFELL_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? DUNESFOLK_LALAFELL_EN_NAME
+      : DUNESFOLK_LALAFELL_KR_NAME;
+  const SEEKER_OF_THE_SUN_MIQOTE_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? SEEKER_OF_THE_SUN_MIQOTE_EN_NAME
+      : SEEKER_OF_THE_SUN_MIQOTE_KR_NAME;
+  const KEEPER_OF_THE_MOON_MIQOTE_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? KEEPER_OF_THE_MOON_MIQOTE_EN_NAME
+      : KEEPER_OF_THE_MOON_MIQOTE_KR_NAME;
+  const SEA_WOLVES_ROEGADYN_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? SEA_WOLVES_ROEGADYN_EN_NAME
+      : SEA_WOLVES_ROEGADYN_KR_NAME;
+  const HELLSGUARD_ROEGADYN_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? HELLSGUARD_ROEGADYN_EN_NAME
+      : HELLSGUARD_ROEGADYN_KR_NAME;
+  const RAEN_AU_RA_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? RAEN_AU_RA_EN_NAME
+      : RAEN_AU_RA_KR_NAME;
+  const XAELA_AU_RA_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? XAELA_AU_RA_EN_NAME
+      : XAELA_AU_RA_KR_NAME;
+  const HELIONS_HROTHGAR_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? HELIONS_HROTHGAR_EN_NAME
+      : HELIONS_HROTHGAR_KR_NAME;
+  const THE_LOST_HROTHGAR_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? THE_LOST_HROTHGAR_EN_NAME
+      : THE_LOST_HROTHGAR_KR_NAME;
+  const RAVA_VIERA_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? RAVA_VIERA_EN_NAME
+      : RAVA_VIERA_KR_NAME;
+  const VEENA_VIERA_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? VEENA_VIERA_EN_NAME
+      : VEENA_VIERA_KR_NAME;
+
+  const RACES = [
+    MIDLANDER_HYUR_EN_NAME,
+    HIGHLANDER_HYUR_EN_NAME,
+    WILDWOOD_ELEZEN_EN_NAME,
+    DUSKWIGHT_ELEZEN_EN_NAME,
+    PLAINSFOLK_LALAFELL_EN_NAME,
+    DUNESFOLK_LALAFELL_EN_NAME,
+    SEEKER_OF_THE_SUN_MIQOTE_EN_NAME,
+    KEEPER_OF_THE_MOON_MIQOTE_EN_NAME,
+    SEA_WOLVES_ROEGADYN_EN_NAME,
+    HELLSGUARD_ROEGADYN_EN_NAME,
+    RAEN_AU_RA_EN_NAME,
+    XAELA_AU_RA_EN_NAME,
+    HELIONS_HROTHGAR_EN_NAME,
+    THE_LOST_HROTHGAR_EN_NAME,
+    RAVA_VIERA_EN_NAME,
+    VEENA_VIERA_EN_NAME,
+  ];
+
+
+  // Page Names
+  const HOME_PAGE_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "Home" : "시작";
+  const DPS_ANALYSIS_PAGE_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? "DPS Analysis"
+      : "DPS 분석";
+  const GEAR_COMPARE_PAGE_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Gear Compare"
+      : "장비셋 비교";
+  const BEST_PARTNER_PAGE_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Best Partner"
+      : "시너지 파트너";
+  const BEST_STAT_PAGE_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Best Stat"
+      : "스탯 가중치";
+
+  const PLAYER_POWER_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Specific Player Power"
+      : "스탯별 결과 수치";
+  const DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "2. Additional Settings"
+      : "2. 파티 관련 설정을 입력해주세요";
+  const PARTY_MEMBER_ILVL_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Party Members iLvl"
+      : "파티원 템렙";
+  const POT_LABEL_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Pot" : "탕약";
+  const USE_POT_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "O(Use)" : "O(사용)";
+  const NO_POT_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "X(No)" : "X(미사용)";
+
+  // Home
+  const DPS_ANALYSIS_DESCRIPTION_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Quickly analyze DPS for your input gearset."
+      : "당신의 장비셋을 입력하고 빠르게 분석해보세요.";
+  const GEAR_COMPARE_DESCRIPTION_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Compare two gearsets to see which is better for your damage."
+      : "두 장비셋을 비교하여 더 높은 데미지를 내는 장비셋을 확인해보세요.";
+  const BEST_STATS_DESCRIPTION_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Calculate which main/sub stats are more valuable to you."
+      : "가장 딜상승 기대값이 높은 스탯을 분석합니다.";
+  const BEST_PARTNER_DESCRIPTION_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Find out the teammates that will contribute the most RDPS for you(buff jobs only)."
+      : "내 시너지를 가장 잘 사용해줄 조합을 찾아줍니다(시너지 직업만).";
+
+  // Quick Sim
+  const DPS_ANALYSIS_INPUT_INFO_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "1. Input Your Info"
+      : "1. 분석할 장비셋을 입력해주세요";
+
+  // Gear Compare
+  const GEAR_COMPARE_INPUT_INFO_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "1. Input Gearsets You Want To Compare"
+      : "1. 비교할 두 장비셋을 입력해주세요";
+  const COPY_BUTTON_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Copy" : "복사";
+
+  // Best Partner
+  const BEST_PARTNER_INPUT_INFO_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "1. Input Your Info"
+      : "1. 필요한 정보를 입력해주세요";
+
+  const SPEED_LABEL_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "GCD" : "글쿨";
+
+  // Results Text
+  const SIMULATION_RESULT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Simulation Result"
+      : "시뮬레이션 결과";
+  const PARTY_MEMBERS_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Party Members" : "파티원";
+  const TIME_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Time(s)" : "전투시간(초)";
+
+  const EDPS_EXPLANATION_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "!!! EDPS: RDPS + My total contribution to party members' buffs"
+      : "!!! EDPS: RDPS + 파티원들 시너지에 대한 내 전체 기여도";
+
+  // Dps Analysis Results
+  const DAMAGE_PROFILE_BUTTON_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Damage Profile"
+      : "데미지 분포";
+  const SKILL_TITLE_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Skill" : "스킬";
+  const DAMAGE_PERCENTAGE_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Dmg%" : "데미지%";
+  const TOTAL_DAMAGE_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Total Dmg" : "총 데미지";
+  const CAST_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Cast" : "스윙 수";
+
+  const BEST_TEAMMATE_BUTTON_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Buffs Received"
+      : "받은 기여도(RDPS)";
+  const MEMBER_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Member" : "파티원";
+  const TOTAL_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Total" : "합계";
+
+  const MY_CONTRIBUTION_BUTTON_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Buffs Taken"
+      : "준 기여도(RDPS)";
+
+  const ROTATION_SAMPLE_WARNING_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "!!!This is a sample of the engine's simulation log, not a guide to playing the job. analyze with care."
+      : "!!!이건 직업에 대한 가이드가 아닌, 시뮬레이션 엔진의 샘플 결과일 뿐입니다. 이를 감안하고 분석할 때 주의해주세요.";
+
+  const SAMURAI_ROTATION_WARNING_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "!!!Samurai's 'tengentsu' is simulated as a 35s skill(trying to fit approximately 12 casts in a 6:30 fight)."
+      : "!!!사무라이의 '심안'은 35초 스킬로 시뮬레이션 되었습니다(로그를 봤을 때 6:30 전투에서 12번 정도 사용됨).";
+
+  const MNK_ROTATION_WARNING_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "!!!Monk's GCD in real ingame is affected by frame rate and ping, causing slight clips in GCD when double-weaving. The simulation can't take this into account, so Monk's potencies have been tuned a little down to compensate for this."
+      : "!!!몽크의 실제 인게임 글쿨은 프레임레이트/핑에 영향을 많이 받고, 글쿨 사이에 논글쿨 두개를 쓰면 조금씩 클리핑이 발생하기도 합니다. 시뮬레이션은 그런 부분을 반영할 수 없어서 대신 몽크의 기본 위력을 조금 낮췄습니다.";
+
+  const ROTATION_SAMPLE_BUTTON_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Rotation Sample"
+      : "딜사이클 샘플";
+  const COMBAT_TIME_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Combat Time" : "전투 시간";
+  const ABILITY_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Ability" : "스킬";
+  const IMPORTANT_STATUS_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Important Status"
+      : "중요 버프들";
+
+  // Gear Compare Results
+  const GEARSET1_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Gearset1" : "장비셋1";
+  const GEARSET2_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Gearset2" : "장비셋2";
+
+  // Best Partner Results
+  const BEST_PARTNER_BY_ROLE_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Best Partner By Role"
+      : "역할군별 최고 파트너";
+  const TANK_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Tank" : "탱커";
+  const HEALER_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Healer" : "힐러";
+  const DPS_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "DPS" : "딜러";
+
+  const OVERALL_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Total Contribution"
+      : "총합 기여도";
+  const BURST_SECTION_TITLE_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Contributions at Each Burst"
+      : "버스트마다의 기여도";
+  const BURST_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? `Minute Burst`
+      : `분 버스트`;
+
+  // Best Stats Results
+  const BEST_STATS_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "RDPS Increase Per Stat Point"
+      : "스탯 1당 RDPS 증가 기대값";
+
+  const BEST_STATS_NAME_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "RDPS Increase / 1 Stat Point"
+      : "RDPS 증가 / 1 스탯 포인트";
+
+  const EMPTY_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Empty" : "없음";
+
+  // Stat Names
+  const NAME_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Name" : "이름";
+  const STAT_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Stat" : "스탯";
+  const PREV_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Prev" : "이전";
+  const NEXT_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Next" : "다음";
+
+  const WD_STAT_EN_NAME = "WD";
+  const WD_STAT_KR_NAME = "무공";
+
+  const WD_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE ? WD_STAT_EN_NAME : WD_STAT_KR_NAME;
+
+  const STR_STAT_EN_NAME = "STR";
+  const DEX_STAT_EN_NAME = "DEX";
+  const INT_STAT_EN_NAME = "INT";
+  const MIND_STAT_EN_NAME = "MND";
+
+  const STR_STAT_NAME_KR = "힘";
+  const DEX_STAT_NAME_KR = "민첩";
+  const INT_STAT_NAME_KR = "지능";
+  const MIND_STAT_NAME_KR = "정신";
+
+  const STR_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE ? STR_STAT_EN_NAME : STR_STAT_NAME_KR;
+  const DEX_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE ? DEX_STAT_EN_NAME : DEX_STAT_NAME_KR;
+  const INT_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE ? INT_STAT_EN_NAME : INT_STAT_NAME_KR;
+  const MIND_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE ? MIND_STAT_EN_NAME : MIND_STAT_NAME_KR;
+
+  const CRIT_STAT_EN_NAME = "CRT";
+  const DH_STAT_EN_NAME = "DH";
+  const DET_STAT_EN_NAME = "DET";
+  const SKS_STAT_EN_NAME = "SKS";
+  const SPS_STAT_EN_NAME = "SPS";
+  const TEN_STAT_EN_NAME = "TEN";
+  const PIE_STAT_EN_NAME = "PIE";
+
+  const CRIT_STAT_KR_NAME = "극대";
+  const DH_STAT_KR_NAME = "직격";
+  const DET_STAT_KR_NAME = "의지";
+  const SKS_STAT_KR_NAME = "기시";
+  const SPS_STAT_KR_NAME = "마시";
+  const TEN_STAT_KR_NAME = "불굴";
+  const PIE_STAT_KR_NAME = "신앙";
+
+  const CRIT_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? CRIT_STAT_EN_NAME
+      : CRIT_STAT_KR_NAME;
+  const DH_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? DH_STAT_EN_NAME
+      : DH_STAT_KR_NAME;
+  const DET_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? DET_STAT_EN_NAME
+      : DET_STAT_KR_NAME;
+  const SKS_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? SKS_STAT_EN_NAME
+      : SKS_STAT_KR_NAME;
+  const SPS_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? SPS_STAT_EN_NAME
+      : SPS_STAT_KR_NAME;
+  const TEN_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? TEN_STAT_EN_NAME
+      : TEN_STAT_KR_NAME;
+  const PIE_STAT_NAME =
+    language === LanguageMode.ENGLISH_MODE
+      ? PIE_STAT_EN_NAME
+      : PIE_STAT_KR_NAME;
+
+  // Power Names
+  const ITERATION_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "Iteration" : "시뮬 횟수";
+  const VARIANCE_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "Error %" : "오차 범위";
+  const COMPOSITION_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "PT%" : "조합%";
+  const WD_POWER_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "Weapon" : "무기 공격력";
+  const MAIN_STAT_POWER_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "Main Stat" : "주 스탯";
+  const CRT_RATE_POWER_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "Crit Rate" : "극대 확률";
+  const CRT_POWER_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "Crit" : "극대 피해";
+  const DH_RATE_POWER_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "DH Rate" : "직격 확률";
+  const DET_POWER_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "Det Rate" : "의지 효과";
+  const SPEED_POWER_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "Speed" : "도트/평타 위력";
+  const TENACITY_POWER_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "Tenacity" : "불굴 효과";
+  const GCD_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "GCD" : "글쿨";
+
+  // Party Input Text
+  const TIME_INPUT_LABEL_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "Combat Time(Seconds)"
+      : "전투 시간(초)";
+  const PARTY_MEMBER_LABEL_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Party Member" : "파티원";
+
+
+  let allTexts = {
+    PLD_EN_NAME,
+    PLD_KR_NAME,
+
+    WAR_EN_NAME,
+    WAR_KR_NAME,
+
+    DRK_EN_NAME,
+    DRK_KR_NAME,
+
+    GNB_EN_NAME,
+    GNB_KR_NAME,
+    WHM_EN_NAME,
+    WHM_KR_NAME,
+
+    AST_EN_NAME,
+    AST_KR_NAME,
+
+    SCH_EN_NAME,
+    SCH_KR_NAME,
+
+    SGE_EN_NAME,
+    SGE_KR_NAME,
+
+    DRG_EN_NAME,
+    DRG_KR_NAME,
+
+    MNK_EN_NAME,
+    MNK_KR_NAME,
+
+    NIN_EN_NAME,
+    NIN_KR_NAME,
+
+    SAM_EN_NAME,
+    SAM_KR_NAME,
+
+    RPR_EN_NAME,
+    RPR_KR_NAME,
+
+    VPR_EN_NAME,
+    VPR_KR_NAME,
+
+    BRD_EN_NAME,
+    BRD_KR_NAME,
+
+    MCH_EN_NAME,
+    MCH_KR_NAME,
+
+    DNC_EN_NAME,
+    DNC_KR_NAME,
+
+    BLM_EN_NAME,
+    BLM_KR_NAME,
+
+    SMN_EN_NAME,
+    SMN_KR_NAME,
+
+    RDM_EN_NAME,
+    RDM_KR_NAME,
+
+    PCT_EN_NAME,
+    PCT_KR_NAME,
+
+    PLD_JOB_NAME,
+    WAR_JOB_NAME,
+    DRK_JOB_NAME,
+    GNB_JOB_NAME,
+    WHM_JOB_NAME,
+    SCH_JOB_NAME,
+    AST_JOB_NAME,
+
+    SGE_JOB_NAME,
+
+    DRG_JOB_NAME,
+    MNK_JOB_NAME,
+    NIN_JOB_NAME,
+    SAM_JOB_NAME,
+    RPR_JOB_NAME,
+    VPR_JOB_NAME,
+
+    BRD_JOB_NAME,
+    MCH_JOB_NAME,
+    DNC_JOB_NAME,
+
+    BLM_JOB_NAME,
+    SMN_JOB_NAME,
+    RDM_JOB_NAME,
+    PCT_JOB_NAME,
+
+
+    // Menu Text
+    NAVIGATE_TEXT,
+    SAVED_GEARSETS_TEXT,
+    LOADOUT_NAME_LABEL_TEXT,
+    LOADOUT_WRITE_TEXT,
+    LOADOUT_LOAD_TEXT,
+    DEFAULT_LOADOUT_TEXT,
+    LOAD_COMPLETE_TEXT,
+    LOADOUT_NAME_TEXT,
+
+    OVERWRITE_CONFIRM_TEXT,
+
+    LOAD_CONFIRM_TEXT,
+    CONFIRM_TEXT,
+
+    CANCEL_TEXT,
+
+    // Player Text
+    JOB_EN_TEXT,
+    JOB_KR_TEXT,
+
+    RACE_EN_TEXT,
+    RACE_KR_TEXT,
+
+    WEAPON_SLOT_EN_TEXT,
+    WEAPON_SLOT_KR_TEXT,
+
+    OFFHAND_SLOT_EN_TEXT,
+    OFFHAND_SLOT_KR_TEXT,
+
+    HEAD_SLOT_EN_TEXT,
+    HEAD_SLOT_KR_TEXT,
+
+    BODY_SLOT_EN_TEXT,
+    BODY_SLOT_KR_TEXT,
+
+    HANDS_SLOT_EN_TEXT,
+    HANDS_SLOT_KR_TEXT,
+
+    LEGS_SLOT_EN_TEXT,
+    LEGS_SLOT_KR_TEXT,
+
+    FEET_SLOT_EN_TEXT,
+    FEET_SLOT_KR_TEXT,
+
+    EARS_SLOT_EN_TEXT,
+    EARS_SLOT_KR_TEXT,
+
+    NECK_SLOT_EN_TEXT,
+    NECK_SLOT_KR_TEXT,
+
+    WRIST_SLOT_EN_TEXT,
+    WRIST_SLOT_KR_TEXT,
+
+    FINGER1_SLOT_EN_TEXT,
+    FINGER1_SLOT_KR_TEXT,
+
+    FINGER2_SLOT_EN_TEXT,
+    FINGER2_SLOT_KR_TEXT,
+
+    FOOD_SLOT_EN_TEXT,
+    FOOD_SLOT_KR_TEXT,
+
+    AST_MELEE_PARTNER_EN_TEXT,
+    AST_MELEE_PARTNER_KR_TEXT,
+
+    AST_RANGED_PARTNER_EN_TEXT,
+    AST_RANGED_PARTNER_KR_TEXT,
+
+    DNC_PARTNER_EN_TEXT,
+    DNC_PARTNER_KR_TEXT,
+
+    FINGER_SLOT_EN_TEXT,
+    FINGER_SLOT_KR_TEXT,
+
+    JOB_TEXT,
+    RACE_TEXT,
+    WEAPON_SLOT_TEXT,
+    OFFHAND_SLOT_TEXT,
+    HEAD_SLOT_TEXT,
+    BODY_SLOT_TEXT,
+    HANDS_SLOT_TEXT,
+    LEGS_SLOT_TEXT,
+    FEET_SLOT_TEXT,
+    EARS_SLOT_TEXT,
+    NECK_SLOT_TEXT,
+    WRIST_SLOT_TEXT,
+    FINGER1_SLOT_TEXT,
+    FINGER2_SLOT_TEXT,
+    FOOD_SLOT_TEXT,
+    AST_MELEE_PARTNER_TEXT,
+    AST_RANGED_PARTNER_TEXT,
+    DNC_PARTNER_TEXT,
+    FINGER_SLOT_TEXT,
+    MIDLANDER_HYUR_EN_NAME,
+    MIDLANDER_HYUR_KR_NAME,
+
+    HIGHLANDER_HYUR_EN_NAME,
+    HIGHLANDER_HYUR_KR_NAME,
+
+    WILDWOOD_ELEZEN_EN_NAME,
+    WILDWOOD_ELEZEN_KR_NAME,
+
+    DUSKWIGHT_ELEZEN_EN_NAME,
+    DUSKWIGHT_ELEZEN_KR_NAME,
+
+    PLAINSFOLK_LALAFELL_EN_NAME,
+    PLAINSFOLK_LALAFELL_KR_NAME,
+
+    DUNESFOLK_LALAFELL_EN_NAME,
+    DUNESFOLK_LALAFELL_KR_NAME,
+
+    SEEKER_OF_THE_SUN_MIQOTE_EN_NAME,
+    SEEKER_OF_THE_SUN_MIQOTE_KR_NAME,
+
+    KEEPER_OF_THE_MOON_MIQOTE_EN_NAME,
+    KEEPER_OF_THE_MOON_MIQOTE_KR_NAME,
+
+    SEA_WOLVES_ROEGADYN_EN_NAME,
+    SEA_WOLVES_ROEGADYN_KR_NAME,
+
+    HELLSGUARD_ROEGADYN_EN_NAME,
+    HELLSGUARD_ROEGADYN_KR_NAME,
+
+    RAEN_AU_RA_EN_NAME,
+    RAEN_AU_RA_KR_NAME,
+
+    XAELA_AU_RA_EN_NAME,
+    XAELA_AU_RA_KR_NAME,
+
+    HELIONS_HROTHGAR_EN_NAME,
+    HELIONS_HROTHGAR_KR_NAME,
+
+    THE_LOST_HROTHGAR_EN_NAME,
+    THE_LOST_HROTHGAR_KR_NAME,
+
+    RAVA_VIERA_EN_NAME,
+    RAVA_VIERA_KR_NAME,
+
+    VEENA_VIERA_EN_NAME,
+    VEENA_VIERA_KR_NAME,
+
+    MIDLANDER_HYUR_NAME,
+    HIGHLANDER_HYUR_NAME,
+    WILDWOOD_ELEZEN_NAME,
+    DUSKWIGHT_ELEZEN_NAME,
+    PLAINSFOLK_LALAFELL_NAME,
+    DUNESFOLK_LALAFELL_NAME,
+    SEEKER_OF_THE_SUN_MIQOTE_NAME,
+    KEEPER_OF_THE_MOON_MIQOTE_NAME,
+    SEA_WOLVES_ROEGADYN_NAME,
+    HELLSGUARD_ROEGADYN_NAME,
+    RAEN_AU_RA_NAME,
+    XAELA_AU_RA_NAME,
+    HELIONS_HROTHGAR_NAME,
+    THE_LOST_HROTHGAR_NAME,
+    RAVA_VIERA_NAME,
+    VEENA_VIERA_NAME,
+
+    RACES,
+
+
+    // Page Names
+    HOME_PAGE_NAME,
+    DPS_ANALYSIS_PAGE_NAME,
+    GEAR_COMPARE_PAGE_NAME,
+    BEST_PARTNER_PAGE_NAME,
+    BEST_STAT_PAGE_NAME,
+    PLAYER_POWER_TEXT,
+    DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT,
+    PARTY_MEMBER_ILVL_TEXT,
+    POT_LABEL_TEXT,
+    USE_POT_TEXT,
+    NO_POT_TEXT,
+
+    // Home
+    DPS_ANALYSIS_DESCRIPTION_TEXT,
+    GEAR_COMPARE_DESCRIPTION_TEXT,
+    BEST_STATS_DESCRIPTION_TEXT,
+    BEST_PARTNER_DESCRIPTION_TEXT,
+
+    // Quick Sim
+    DPS_ANALYSIS_INPUT_INFO_TEXT,
+
+    // Gear Compare
+    GEAR_COMPARE_INPUT_INFO_TEXT,
+    COPY_BUTTON_TEXT,
+
+    // Best Partner
+    BEST_PARTNER_INPUT_INFO_TEXT,
+
+    SPEED_LABEL_TEXT,
+
+    // Results Text
+    SIMULATION_RESULT_TEXT,
+    PARTY_MEMBERS_TEXT,
+    TIME_TEXT,
+
+    EDPS_EXPLANATION_TEXT,
+
+    // Dps Analysis Results
+    DAMAGE_PROFILE_BUTTON_TEXT,
+    SKILL_TITLE_TEXT,
+    DAMAGE_PERCENTAGE_TEXT,
+    TOTAL_DAMAGE_TEXT,
+    CAST_TEXT,
+
+    BEST_TEAMMATE_BUTTON_TEXT,
+    MEMBER_TEXT,
+    TOTAL_TEXT,
+
+    MY_CONTRIBUTION_BUTTON_TEXT,
+
+    ROTATION_SAMPLE_WARNING_TEXT,
+
+    SAMURAI_ROTATION_WARNING_TEXT,
+
+    MNK_ROTATION_WARNING_TEXT,
+
+    ROTATION_SAMPLE_BUTTON_TEXT,
+    COMBAT_TIME_TEXT,
+    ABILITY_TEXT,
+    IMPORTANT_STATUS_TEXT,
+
+    GEARSET1_TEXT,
+    GEARSET2_TEXT,
+
+    // Best Partner Results
+    BEST_PARTNER_BY_ROLE_TEXT,
+    TANK_TEXT,
+    HEALER_TEXT,
+    DPS_TEXT,
+
+    OVERALL_TEXT,
+    BURST_SECTION_TITLE_TEXT,
+    BURST_TEXT,
+
+    // Best Stats Results
+    BEST_STATS_TEXT,
+
+    BEST_STATS_NAME_TEXT,
+
+    EMPTY_TEXT,
+
+    NAME_TEXT,
+    STAT_TEXT,
+    PREV_TEXT,
+    NEXT_TEXT,
+
+    WD_STAT_NAME,
+
+    WD_STAT_EN_NAME,
+    WD_STAT_KR_NAME,
+
+    STR_STAT_EN_NAME,
+    DEX_STAT_EN_NAME,
+    INT_STAT_EN_NAME,
+    MIND_STAT_EN_NAME,
+
+    STR_STAT_NAME_KR,
+    DEX_STAT_NAME_KR,
+    INT_STAT_NAME_KR,
+    MIND_STAT_NAME_KR,
+
+    STR_STAT_NAME,
+    DEX_STAT_NAME,
+    INT_STAT_NAME,
+    MIND_STAT_NAME,
+
+    CRIT_STAT_EN_NAME,
+    DH_STAT_EN_NAME,
+    DET_STAT_EN_NAME,
+    SKS_STAT_EN_NAME,
+    SPS_STAT_EN_NAME,
+    TEN_STAT_EN_NAME,
+    PIE_STAT_EN_NAME,
+
+    CRIT_STAT_KR_NAME,
+    DH_STAT_KR_NAME,
+    DET_STAT_KR_NAME,
+    SKS_STAT_KR_NAME,
+    SPS_STAT_KR_NAME,
+    TEN_STAT_KR_NAME,
+    PIE_STAT_KR_NAME,
+
+    CRIT_STAT_NAME,
+    DH_STAT_NAME,
+    DET_STAT_NAME,
+    SKS_STAT_NAME,
+    SPS_STAT_NAME,
+    TEN_STAT_NAME,
+    PIE_STAT_NAME,
+
+    // Power Names
+    ITERATION_NAME,
+    VARIANCE_NAME,
+    COMPOSITION_NAME,
+    WD_POWER_NAME,
+    MAIN_STAT_POWER_NAME,
+    CRT_RATE_POWER_NAME,
+    CRT_POWER_NAME,
+    DH_RATE_POWER_NAME,
+    DET_POWER_NAME,
+    SPEED_POWER_NAME,
+    TENACITY_POWER_NAME,
+    GCD_NAME,
+
+    // Party Input Text
+    TIME_INPUT_LABEL_TEXT,
+    PARTY_MEMBER_LABEL_TEXT,
+
+    language
   }
-};
 
-export function convertToJobText(jobAbbrev: string) {
-  return AppConfigurations.languageMode === ENGLISH_MODE
-    ? jobAbbrev
-    : convertToKoreanJobAbbrev(jobAbbrev);
+  const [texts, setTexts] = useState(allTexts);
+
+  useEffect(() => {
+    setTexts(allTexts);
+  }, [language]);
+
+  return texts;
 }
 
-// Menu Text
-export const NAVIGATE_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Navigate" : "빠른 이동";
-export const SAVED_GEARSETS_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Saved Gearsets"
-    : "저장된 장비셋";
-export const LOADOUT_NAME_LABEL_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Name" : "이름";
-export const LOADOUT_WRITE_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Write" : "저장";
-export const LOADOUT_LOAD_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Load" : "로드";
-export const DEFAULT_LOADOUT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Default Loadout"
-    : "기본 장비셋";
-export const LOAD_COMPLETE_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Load Complete"
-    : "불러오기 완료";
+export function convertToKoreanRaceName(raceName: string) {
+  const LANGUAGE_TEXTS = AppLanguageTexts();
 
-export const LOADOUT_NAME_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Loadout Name"
-    : "장비셋 이름";
-
-export const OVERWRITE_CONFIRM_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Overwrite gearset?"
-    : "장비셋을 덮어쓰시겠습니까?";
-
-export const LOAD_CONFIRM_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Load gearset?"
-    : "장비셋을 불러오시겠습니까?";
-
-export const CONFIRM_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Yes" : "확인";
-
-export const CANCEL_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "No" : "취소";
-
-// Player Text
-export const JOB_EN_TEXT = "Job";
-export const JOB_KR_TEXT = "직업";
-
-export const RACE_EN_TEXT = "Race";
-export const RACE_KR_TEXT = "종족";
-
-export const WEAPON_SLOT_EN_TEXT = "weapon";
-export const WEAPON_SLOT_KR_TEXT = "무기";
-
-export const OFFHAND_SLOT_EN_TEXT = "offHand";
-export const OFFHAND_SLOT_KR_TEXT = "보조무기";
-
-export const HEAD_SLOT_EN_TEXT = "head";
-export const HEAD_SLOT_KR_TEXT = "머리";
-
-export const BODY_SLOT_EN_TEXT = "body";
-export const BODY_SLOT_KR_TEXT = "몸통";
-
-export const HANDS_SLOT_EN_TEXT = "hands";
-export const HANDS_SLOT_KR_TEXT = "손";
-
-export const LEGS_SLOT_EN_TEXT = "legs";
-export const LEGS_SLOT_KR_TEXT = "다리";
-
-export const FEET_SLOT_EN_TEXT = "feet";
-export const FEET_SLOT_KR_TEXT = "발";
-
-export const EARS_SLOT_EN_TEXT = "ears";
-export const EARS_SLOT_KR_TEXT = "귀걸이";
-
-export const NECK_SLOT_EN_TEXT = "neck";
-export const NECK_SLOT_KR_TEXT = "목걸이";
-
-export const WRIST_SLOT_EN_TEXT = "wrists";
-export const WRIST_SLOT_KR_TEXT = "팔찌";
-
-export const FINGER1_SLOT_EN_TEXT = "finger1";
-export const FINGER1_SLOT_KR_TEXT = "반지1";
-
-export const FINGER2_SLOT_EN_TEXT = "finger2";
-export const FINGER2_SLOT_KR_TEXT = "반지2";
-
-export const FOOD_SLOT_EN_TEXT = "food";
-export const FOOD_SLOT_KR_TEXT = "음식";
-
-export const AST_MELEE_PARTNER_EN_TEXT = "Melee Card Target";
-export const AST_MELEE_PARTNER_KR_TEXT = "근거리 카드 대상";
-
-export const AST_RANGED_PARTNER_EN_TEXT = "Ranged Card Target";
-export const AST_RANGED_PARTNER_KR_TEXT = "원거리 카드 대상";
-
-export const DNC_PARTNER_EN_TEXT = "Dance Partner";
-export const DNC_PARTNER_KR_TEXT = "무도가 파트너";
-
-export const FINGER_SLOT_EN_TEXT = "finger";
-export const FINGER_SLOT_KR_TEXT = "반지";
-
-export const JOB_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? JOB_EN_TEXT : JOB_KR_TEXT;
-export const RACE_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? RACE_EN_TEXT : RACE_KR_TEXT;
-export const WEAPON_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? WEAPON_SLOT_EN_TEXT
-    : WEAPON_SLOT_KR_TEXT;
-export const OFFHAND_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? OFFHAND_SLOT_EN_TEXT
-    : OFFHAND_SLOT_KR_TEXT;
-export const HEAD_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? HEAD_SLOT_EN_TEXT
-    : HEAD_SLOT_KR_TEXT;
-export const BODY_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? BODY_SLOT_EN_TEXT
-    : BODY_SLOT_KR_TEXT;
-export const HANDS_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? HANDS_SLOT_EN_TEXT
-    : HANDS_SLOT_KR_TEXT;
-export const LEGS_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? LEGS_SLOT_EN_TEXT
-    : LEGS_SLOT_KR_TEXT;
-export const FEET_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? FEET_SLOT_EN_TEXT
-    : FEET_SLOT_KR_TEXT;
-export const EARS_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? EARS_SLOT_EN_TEXT
-    : EARS_SLOT_KR_TEXT;
-export const NECK_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? NECK_SLOT_EN_TEXT
-    : NECK_SLOT_KR_TEXT;
-export const WRIST_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? WRIST_SLOT_EN_TEXT
-    : WRIST_SLOT_KR_TEXT;
-export const FINGER1_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? FINGER1_SLOT_EN_TEXT
-    : FINGER1_SLOT_KR_TEXT;
-export const FINGER2_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? FINGER2_SLOT_EN_TEXT
-    : FINGER2_SLOT_KR_TEXT;
-export const FOOD_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? FOOD_SLOT_EN_TEXT
-    : FOOD_SLOT_KR_TEXT;
-export const AST_MELEE_PARTNER_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? AST_MELEE_PARTNER_EN_TEXT
-    : AST_MELEE_PARTNER_KR_TEXT;
-export const AST_RANGED_PARTNER_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? AST_RANGED_PARTNER_EN_TEXT
-    : AST_RANGED_PARTNER_KR_TEXT;
-export const DNC_PARTNER_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? DNC_PARTNER_EN_TEXT
-    : DNC_PARTNER_KR_TEXT;
-export const FINGER_SLOT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? FINGER_SLOT_EN_TEXT
-    : FINGER_SLOT_KR_TEXT;
-
-function convertToKoreanSlotName(slotName: string) {
-  switch (slotName) {
-    case JOB_EN_TEXT:
-      return JOB_KR_TEXT;
-    case RACE_EN_TEXT:
-      return RACE_KR_TEXT;
-    case WEAPON_SLOT_EN_TEXT:
-      return WEAPON_SLOT_KR_TEXT;
-    case OFFHAND_SLOT_EN_TEXT:
-      return OFFHAND_SLOT_KR_TEXT;
-    case HEAD_SLOT_EN_TEXT:
-      return HEAD_SLOT_KR_TEXT;
-    case BODY_SLOT_EN_TEXT:
-      return BODY_SLOT_KR_TEXT;
-    case HANDS_SLOT_EN_TEXT:
-      return HANDS_SLOT_KR_TEXT;
-    case LEGS_SLOT_EN_TEXT:
-      return LEGS_SLOT_KR_TEXT;
-    case FEET_SLOT_EN_TEXT:
-      return FEET_SLOT_KR_TEXT;
-    case EARS_SLOT_EN_TEXT:
-      return EARS_SLOT_KR_TEXT;
-    case NECK_SLOT_EN_TEXT:
-      return NECK_SLOT_KR_TEXT;
-    case WRIST_SLOT_EN_TEXT:
-      return WRIST_SLOT_KR_TEXT;
-    case FINGER1_SLOT_EN_TEXT:
-      return FINGER1_SLOT_KR_TEXT;
-    case FINGER2_SLOT_EN_TEXT:
-      return FINGER2_SLOT_KR_TEXT;
-    case FOOD_SLOT_EN_TEXT:
-      return FOOD_SLOT_KR_TEXT;
-    case AST_MELEE_PARTNER_EN_TEXT:
-      return AST_MELEE_PARTNER_KR_TEXT;
-    case AST_RANGED_PARTNER_EN_TEXT:
-      return AST_RANGED_PARTNER_KR_TEXT;
-    case DNC_PARTNER_EN_TEXT:
-      return DNC_PARTNER_KR_TEXT;
-    case FINGER_SLOT_EN_TEXT:
-      return FINGER_SLOT_KR_TEXT;
-    default:
-      return slotName;
-  }
-}
-
-export function convertToSlotText(slotName: string) {
-  return AppConfigurations.languageMode === ENGLISH_MODE
-    ? slotName
-    : convertToKoreanSlotName(slotName);
-}
-
-// Race Names
-export const MIDLANDER_HYUR_EN_NAME = "Midlander Hyur";
-export const MIDLANDER_HYUR_KR_NAME = "중부 휴런";
-
-export const HIGHLANDER_HYUR_EN_NAME = "Highlander Hyur";
-export const HIGHLANDER_HYUR_KR_NAME = "고지 휴런";
-
-export const WILDWOOD_ELEZEN_EN_NAME = "Wildwood Elezen";
-export const WILDWOOD_ELEZEN_KR_NAME = "숲 엘레젠";
-
-export const DUSKWIGHT_ELEZEN_EN_NAME = "Duskwight Elezen";
-export const DUSKWIGHT_ELEZEN_KR_NAME = "밤 엘레젠";
-
-export const PLAINSFOLK_LALAFELL_EN_NAME = "Plainsfolk Lalafell";
-export const PLAINSFOLK_LALAFELL_KR_NAME = "평원 라라펠";
-
-export const DUNESFOLK_LALAFELL_EN_NAME = "Dunesfolk Lalafell";
-export const DUNESFOLK_LALAFELL_KR_NAME = "사막 라라펠";
-
-export const SEEKER_OF_THE_SUN_MIQOTE_EN_NAME = "Seeker of the Sun Miqo'te";
-export const SEEKER_OF_THE_SUN_MIQOTE_KR_NAME = "태양의 추종자 미코테";
-
-export const KEEPER_OF_THE_MOON_MIQOTE_EN_NAME = "Keeper of the Moon Miqo'te";
-export const KEEPER_OF_THE_MOON_MIQOTE_KR_NAME = "달의 수호자 미코테";
-
-export const SEA_WOLVES_ROEGADYN_EN_NAME = "Sea Wolves Roegadyn";
-export const SEA_WOLVES_ROEGADYN_KR_NAME = "바다늑대 루가딘";
-
-export const HELLSGUARD_ROEGADYN_EN_NAME = "Hellsguard Roegadyn";
-export const HELLSGUARD_ROEGADYN_KR_NAME = "불꽃지킴이 루가딘";
-
-export const RAEN_AU_RA_EN_NAME = "Raen Au Ra";
-export const RAEN_AU_RA_KR_NAME = "렌 아우라";
-
-export const XAELA_AU_RA_EN_NAME = "Xaela Au Ra";
-export const XAELA_AU_RA_KR_NAME = "젤라 아우라";
-
-export const HELIONS_HROTHGAR_EN_NAME = "Helions Hrothgar";
-export const HELIONS_HROTHGAR_KR_NAME = "맴도는 별 로스갈";
-
-export const THE_LOST_HROTHGAR_EN_NAME = "The Lost Hrothgar";
-export const THE_LOST_HROTHGAR_KR_NAME = "떠도는 별 로스갈";
-
-export const RAVA_VIERA_EN_NAME = "Rava Viera";
-export const RAVA_VIERA_KR_NAME = "라바 비에라";
-
-export const VEENA_VIERA_EN_NAME = "Veena Viera";
-export const VEENA_VIERA_KR_NAME = "비나 비에라";
-
-export const MIDLANDER_HYUR_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? MIDLANDER_HYUR_EN_NAME
-    : MIDLANDER_HYUR_KR_NAME;
-export const HIGHLANDER_HYUR_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? HIGHLANDER_HYUR_EN_NAME
-    : HIGHLANDER_HYUR_KR_NAME;
-export const WILDWOOD_ELEZEN_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? WILDWOOD_ELEZEN_EN_NAME
-    : WILDWOOD_ELEZEN_KR_NAME;
-export const DUSKWIGHT_ELEZEN_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? DUSKWIGHT_ELEZEN_EN_NAME
-    : DUSKWIGHT_ELEZEN_KR_NAME;
-export const PLAINSFOLK_LALAFELL_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? PLAINSFOLK_LALAFELL_EN_NAME
-    : PLAINSFOLK_LALAFELL_KR_NAME;
-export const DUNESFOLK_LALAFELL_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? DUNESFOLK_LALAFELL_EN_NAME
-    : DUNESFOLK_LALAFELL_KR_NAME;
-export const SEEKER_OF_THE_SUN_MIQOTE_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? SEEKER_OF_THE_SUN_MIQOTE_EN_NAME
-    : SEEKER_OF_THE_SUN_MIQOTE_KR_NAME;
-export const KEEPER_OF_THE_MOON_MIQOTE_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? KEEPER_OF_THE_MOON_MIQOTE_EN_NAME
-    : KEEPER_OF_THE_MOON_MIQOTE_KR_NAME;
-export const SEA_WOLVES_ROEGADYN_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? SEA_WOLVES_ROEGADYN_EN_NAME
-    : SEA_WOLVES_ROEGADYN_KR_NAME;
-export const HELLSGUARD_ROEGADYN_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? HELLSGUARD_ROEGADYN_EN_NAME
-    : HELLSGUARD_ROEGADYN_KR_NAME;
-export const RAEN_AU_RA_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? RAEN_AU_RA_EN_NAME
-    : RAEN_AU_RA_KR_NAME;
-export const XAELA_AU_RA_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? XAELA_AU_RA_EN_NAME
-    : XAELA_AU_RA_KR_NAME;
-export const HELIONS_HROTHGAR_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? HELIONS_HROTHGAR_EN_NAME
-    : HELIONS_HROTHGAR_KR_NAME;
-export const THE_LOST_HROTHGAR_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? THE_LOST_HROTHGAR_EN_NAME
-    : THE_LOST_HROTHGAR_KR_NAME;
-export const RAVA_VIERA_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? RAVA_VIERA_EN_NAME
-    : RAVA_VIERA_KR_NAME;
-export const VEENA_VIERA_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? VEENA_VIERA_EN_NAME
-    : VEENA_VIERA_KR_NAME;
-
-export const RACES = [
-  MIDLANDER_HYUR_EN_NAME,
-  HIGHLANDER_HYUR_EN_NAME,
-  WILDWOOD_ELEZEN_EN_NAME,
-  DUSKWIGHT_ELEZEN_EN_NAME,
-  PLAINSFOLK_LALAFELL_EN_NAME,
-  DUNESFOLK_LALAFELL_EN_NAME,
-  SEEKER_OF_THE_SUN_MIQOTE_EN_NAME,
-  KEEPER_OF_THE_MOON_MIQOTE_EN_NAME,
-  SEA_WOLVES_ROEGADYN_EN_NAME,
-  HELLSGUARD_ROEGADYN_EN_NAME,
-  RAEN_AU_RA_EN_NAME,
-  XAELA_AU_RA_EN_NAME,
-  HELIONS_HROTHGAR_EN_NAME,
-  THE_LOST_HROTHGAR_EN_NAME,
-  RAVA_VIERA_EN_NAME,
-  VEENA_VIERA_EN_NAME,
-];
-
-function convertToKoreanRaceName(raceName: string) {
   switch (raceName) {
-    case MIDLANDER_HYUR_EN_NAME:
-      return MIDLANDER_HYUR_KR_NAME;
-    case HIGHLANDER_HYUR_EN_NAME:
-      return HIGHLANDER_HYUR_KR_NAME;
-    case WILDWOOD_ELEZEN_EN_NAME:
-      return WILDWOOD_ELEZEN_KR_NAME;
-    case DUSKWIGHT_ELEZEN_EN_NAME:
-      return DUSKWIGHT_ELEZEN_KR_NAME;
-    case PLAINSFOLK_LALAFELL_EN_NAME:
-      return PLAINSFOLK_LALAFELL_KR_NAME;
-    case DUNESFOLK_LALAFELL_EN_NAME:
-      return DUNESFOLK_LALAFELL_KR_NAME;
-    case SEEKER_OF_THE_SUN_MIQOTE_EN_NAME:
-      return SEEKER_OF_THE_SUN_MIQOTE_KR_NAME;
-    case KEEPER_OF_THE_MOON_MIQOTE_EN_NAME:
-      return KEEPER_OF_THE_MOON_MIQOTE_KR_NAME;
-    case SEA_WOLVES_ROEGADYN_EN_NAME:
-      return SEA_WOLVES_ROEGADYN_KR_NAME;
-    case HELLSGUARD_ROEGADYN_EN_NAME:
-      return HELLSGUARD_ROEGADYN_KR_NAME;
-    case RAEN_AU_RA_EN_NAME:
-      return RAEN_AU_RA_KR_NAME;
-    case XAELA_AU_RA_EN_NAME:
-      return XAELA_AU_RA_KR_NAME;
-    case HELIONS_HROTHGAR_EN_NAME:
-      return HELIONS_HROTHGAR_KR_NAME;
-    case THE_LOST_HROTHGAR_EN_NAME:
-      return THE_LOST_HROTHGAR_KR_NAME;
-    case RAVA_VIERA_EN_NAME:
-      return RAVA_VIERA_KR_NAME;
-    case VEENA_VIERA_EN_NAME:
-      return VEENA_VIERA_KR_NAME;
+    case LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME:
+      return LANGUAGE_TEXTS.MIDLANDER_HYUR_KR_NAME;
+    case LANGUAGE_TEXTS.HIGHLANDER_HYUR_EN_NAME:
+      return LANGUAGE_TEXTS.HIGHLANDER_HYUR_KR_NAME;
+    case LANGUAGE_TEXTS.WILDWOOD_ELEZEN_EN_NAME:
+      return LANGUAGE_TEXTS.WILDWOOD_ELEZEN_KR_NAME;
+    case LANGUAGE_TEXTS.DUSKWIGHT_ELEZEN_EN_NAME:
+      return LANGUAGE_TEXTS.DUSKWIGHT_ELEZEN_KR_NAME;
+    case LANGUAGE_TEXTS.PLAINSFOLK_LALAFELL_EN_NAME:
+      return LANGUAGE_TEXTS.PLAINSFOLK_LALAFELL_KR_NAME;
+    case LANGUAGE_TEXTS.DUNESFOLK_LALAFELL_EN_NAME:
+      return LANGUAGE_TEXTS.DUNESFOLK_LALAFELL_KR_NAME;
+    case LANGUAGE_TEXTS.SEEKER_OF_THE_SUN_MIQOTE_EN_NAME:
+      return LANGUAGE_TEXTS.SEEKER_OF_THE_SUN_MIQOTE_KR_NAME;
+    case LANGUAGE_TEXTS.KEEPER_OF_THE_MOON_MIQOTE_EN_NAME:
+      return LANGUAGE_TEXTS.KEEPER_OF_THE_MOON_MIQOTE_KR_NAME;
+    case LANGUAGE_TEXTS.SEA_WOLVES_ROEGADYN_EN_NAME:
+      return LANGUAGE_TEXTS.SEA_WOLVES_ROEGADYN_KR_NAME;
+    case LANGUAGE_TEXTS.HELLSGUARD_ROEGADYN_EN_NAME:
+      return LANGUAGE_TEXTS.HELLSGUARD_ROEGADYN_KR_NAME;
+    case LANGUAGE_TEXTS.RAEN_AU_RA_EN_NAME:
+      return LANGUAGE_TEXTS.RAEN_AU_RA_KR_NAME;
+    case LANGUAGE_TEXTS.XAELA_AU_RA_EN_NAME:
+      return LANGUAGE_TEXTS.XAELA_AU_RA_KR_NAME;
+    case LANGUAGE_TEXTS.HELIONS_HROTHGAR_EN_NAME:
+      return LANGUAGE_TEXTS.HELIONS_HROTHGAR_KR_NAME;
+    case LANGUAGE_TEXTS.THE_LOST_HROTHGAR_EN_NAME:
+      return LANGUAGE_TEXTS.THE_LOST_HROTHGAR_KR_NAME;
+    case LANGUAGE_TEXTS.RAVA_VIERA_EN_NAME:
+      return LANGUAGE_TEXTS.RAVA_VIERA_KR_NAME;
+    case LANGUAGE_TEXTS.VEENA_VIERA_EN_NAME:
+      return LANGUAGE_TEXTS.VEENA_VIERA_KR_NAME;
     default:
       return raceName;
   }
 }
 
 export function convertToRaceText(raceName: string) {
-  return AppConfigurations.languageMode === ENGLISH_MODE
+  let { language } = useLanguage();
+  return language === LanguageMode.ENGLISH_MODE
     ? raceName
     : convertToKoreanRaceName(raceName);
 }
 
-// Page Names
-export const HOME_PAGE_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Home" : "시작";
-export const DPS_ANALYSIS_PAGE_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "DPS Analysis"
-    : "DPS 분석";
-export const GEAR_COMPARE_PAGE_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Gear Compare"
-    : "장비셋 비교";
-export const BEST_PARTNER_PAGE_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Best Partner"
-    : "시너지 파트너";
-export const BEST_STAT_PAGE_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Best Stat"
-    : "스탯 가중치";
+export function convertToKoreanSlotName(slotName: string) {
+  const LANGUAGE_TEXTS = AppLanguageTexts();
 
-export const PLAYER_POWER_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Specific Player Power"
-    : "스탯별 결과 수치";
-export const DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "2. Additional Settings"
-    : "2. 파티 관련 설정을 입력해주세요";
-export const PARTY_MEMBER_ILVL_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Party Members iLvl"
-    : "파티원 템렙";
-export const POT_LABEL_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Pot" : "탕약";
-export const USE_POT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "O(Use)" : "O(사용)";
-export const NO_POT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "X(No)" : "X(미사용)";
+  switch (slotName) {
+    case LANGUAGE_TEXTS.JOB_EN_TEXT:
+      return LANGUAGE_TEXTS.JOB_KR_TEXT;
+    case LANGUAGE_TEXTS.RACE_EN_TEXT:
+      return LANGUAGE_TEXTS.RACE_KR_TEXT;
+    case LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.WEAPON_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.OFFHAND_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.OFFHAND_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.HEAD_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.HEAD_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.BODY_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.BODY_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.HANDS_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.HANDS_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.LEGS_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.LEGS_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.FEET_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.FEET_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.EARS_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.EARS_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.NECK_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.NECK_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.WRIST_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.WRIST_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.FINGER1_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.FINGER2_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.FOOD_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.FOOD_SLOT_KR_TEXT;
+    case LANGUAGE_TEXTS.AST_MELEE_PARTNER_EN_TEXT:
+      return LANGUAGE_TEXTS.AST_MELEE_PARTNER_KR_TEXT;
+    case LANGUAGE_TEXTS.AST_RANGED_PARTNER_EN_TEXT:
+      return LANGUAGE_TEXTS.AST_RANGED_PARTNER_KR_TEXT;
+    case LANGUAGE_TEXTS.DNC_PARTNER_EN_TEXT:
+      return LANGUAGE_TEXTS.DNC_PARTNER_KR_TEXT;
+    case LANGUAGE_TEXTS.FINGER_SLOT_EN_TEXT:
+      return LANGUAGE_TEXTS.FINGER_SLOT_KR_TEXT;
+    default:
+      return slotName;
+  }
+}
+export function convertToSlotText(slotName: string) {
+  let { language } = useLanguage();
+  return language === LanguageMode.ENGLISH_MODE
+    ? slotName
+    : convertToKoreanSlotName(slotName);
+}
 
-// Home
-export const DPS_ANALYSIS_DESCRIPTION_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Quickly analyze DPS for your input gearset."
-    : "당신의 장비셋을 입력하고 빠르게 분석해보세요.";
-export const GEAR_COMPARE_DESCRIPTION_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Compare two gearsets to see which is better for your damage."
-    : "두 장비셋을 비교하여 더 높은 데미지를 내는 장비셋을 확인해보세요.";
-export const BEST_STATS_DESCRIPTION_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Calculate which main/sub stats are more valuable to you."
-    : "가장 딜상승 기대값이 높은 스탯을 분석합니다.";
-export const BEST_PARTNER_DESCRIPTION_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Find out the teammates that will contribute the most RDPS for you(buff jobs only)."
-    : "내 시너지를 가장 잘 사용해줄 조합을 찾아줍니다(시너지 직업만).";
 
-// Quick Sim
-export const DPS_ANALYSIS_INPUT_INFO_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "1. Input Your Info"
-    : "1. 분석할 장비셋을 입력해주세요";
+export const convertToKoreanJobAbbrev = (jobAbbrev: string) => {
+  const LANGUAGE_TEXTS = AppLanguageTexts();
 
-// Gear Compare
-export const GEAR_COMPARE_INPUT_INFO_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "1. Input Gearsets You Want To Compare"
-    : "1. 비교할 두 장비셋을 입력해주세요";
-export const COPY_BUTTON_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Copy" : "복사";
+  switch (jobAbbrev) {
+    case LANGUAGE_TEXTS.PLD_EN_NAME:
+      return LANGUAGE_TEXTS.PLD_KR_NAME;
+    case LANGUAGE_TEXTS.WAR_EN_NAME:
+      return LANGUAGE_TEXTS.WAR_KR_NAME;
+    case LANGUAGE_TEXTS.DRK_EN_NAME:
+      return LANGUAGE_TEXTS.DRK_KR_NAME;
+    case LANGUAGE_TEXTS.GNB_EN_NAME:
+      return LANGUAGE_TEXTS.GNB_KR_NAME;
+    case LANGUAGE_TEXTS.WHM_EN_NAME:
+      return LANGUAGE_TEXTS.WHM_KR_NAME;
+    case LANGUAGE_TEXTS.AST_EN_NAME:
+      return LANGUAGE_TEXTS.AST_KR_NAME;
+    case LANGUAGE_TEXTS.SCH_EN_NAME:
+      return LANGUAGE_TEXTS.SCH_KR_NAME;
+    case LANGUAGE_TEXTS.SGE_EN_NAME:
+      return LANGUAGE_TEXTS.SGE_KR_NAME;
+    case LANGUAGE_TEXTS.DRG_EN_NAME:
+      return LANGUAGE_TEXTS.DRG_KR_NAME;
+    case LANGUAGE_TEXTS.MNK_EN_NAME:
+      return LANGUAGE_TEXTS.MNK_KR_NAME;
+    case LANGUAGE_TEXTS.NIN_EN_NAME:
+      return LANGUAGE_TEXTS.NIN_KR_NAME;
+    case LANGUAGE_TEXTS.SAM_EN_NAME:
+      return LANGUAGE_TEXTS.SAM_KR_NAME;
+    case LANGUAGE_TEXTS.RPR_EN_NAME:
+      return LANGUAGE_TEXTS.RPR_KR_NAME;
+    case LANGUAGE_TEXTS.VPR_EN_NAME:
+      return LANGUAGE_TEXTS.VPR_KR_NAME;
+    case LANGUAGE_TEXTS.BRD_EN_NAME:
+      return LANGUAGE_TEXTS.BRD_KR_NAME;
+    case LANGUAGE_TEXTS.MCH_EN_NAME:
+      return LANGUAGE_TEXTS.MCH_KR_NAME;
+    case LANGUAGE_TEXTS.DNC_EN_NAME:
+      return LANGUAGE_TEXTS.DNC_KR_NAME;
+    case LANGUAGE_TEXTS.BLM_EN_NAME:
+      return LANGUAGE_TEXTS.BLM_KR_NAME;
+    case LANGUAGE_TEXTS.SMN_EN_NAME:
+      return LANGUAGE_TEXTS.SMN_KR_NAME;
+    case LANGUAGE_TEXTS.RDM_EN_NAME:
+      return LANGUAGE_TEXTS.RDM_KR_NAME;
+    case LANGUAGE_TEXTS.PCT_EN_NAME:
+      return LANGUAGE_TEXTS.PCT_KR_NAME;
+    default:
+      return jobAbbrev;
+  }
+};
 
-// Best Partner
-export const BEST_PARTNER_INPUT_INFO_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "1. Input Your Info"
-    : "1. 필요한 정보를 입력해주세요";
+export function convertToJobText(jobAbbrev: string) {
+  let { language } = useLanguage();
+  return language === LanguageMode.ENGLISH_MODE
+    ? jobAbbrev
+    : convertToKoreanJobAbbrev(jobAbbrev);
+}
 
-export const SPEED_LABEL_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "GCD" : "글쿨";
-
-// Results Text
-export const SIMULATION_RESULT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Simulation Result"
-    : "시뮬레이션 결과";
-export const PARTY_MEMBERS_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Party Members" : "파티원";
-export const TIME_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Time(s)" : "전투시간(초)";
-
-export const EDPS_EXPLANATION_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "!!! EDPS: RDPS + My total contribution to party members' buffs"
-    : "!!! EDPS: RDPS + 파티원들 시너지에 대한 내 전체 기여도";
-
-// Dps Analysis Results
-export const DAMAGE_PROFILE_BUTTON_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Damage Profile"
-    : "데미지 분포";
-export const SKILL_TITLE_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Skill" : "스킬";
-export const DAMAGE_PERCENTAGE_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Dmg%" : "데미지%";
-export const TOTAL_DAMAGE_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Total Dmg" : "총 데미지";
-export const CAST_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Cast" : "스윙 수";
-
-export const BEST_TEAMMATE_BUTTON_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Buffs Received"
-    : "받은 기여도(RDPS)";
-export const MEMBER_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Member" : "파티원";
-export const TOTAL_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Total" : "합계";
-
-export const MY_CONTRIBUTION_BUTTON_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Buffs Taken"
-    : "준 기여도(RDPS)";
-
-export const ROTATION_SAMPLE_WARNING_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "!!!This is a sample of the engine's simulation log, not a guide to playing the job. analyze with care."
-    : "!!!이건 직업에 대한 가이드가 아닌, 시뮬레이션 엔진의 샘플 결과일 뿐입니다. 이를 감안하고 분석할 때 주의해주세요.";
-
-export const SAMURAI_ROTATION_WARNING_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "!!!Samurai's 'tengentsu' is simulated as a 35s skill(trying to fit approximately 12 casts in a 6:30 fight)."
-    : "!!!사무라이의 '심안'은 35초 스킬로 시뮬레이션 되었습니다(로그를 봤을 때 6:30 전투에서 12번 정도 사용됨).";
-
-export const MNK_ROTATION_WARNING_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "!!!Monk's GCD in real ingame is affected by frame rate and ping, causing slight clips in GCD when double-weaving. The simulation can't take this into account, so Monk's potencies have been tuned a little down to compensate for this."
-    : "!!!몽크의 실제 인게임 글쿨은 프레임레이트/핑에 영향을 많이 받고, 글쿨 사이에 논글쿨 두개를 쓰면 조금씩 클리핑이 발생하기도 합니다. 시뮬레이션은 그런 부분을 반영할 수 없어서 대신 몽크의 기본 위력을 조금 낮췄습니다.";
-
-export const ROTATION_SAMPLE_BUTTON_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Rotation Sample"
-    : "딜사이클 샘플";
-export const COMBAT_TIME_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Combat Time" : "전투 시간";
-export const ABILITY_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Ability" : "스킬";
-export const IMPORTANT_STATUS_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Important Status"
-    : "중요 버프들";
-
-// Gear Compare Results
-export const GEARSET1_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Gearset1" : "장비셋1";
-export const GEARSET2_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Gearset2" : "장비셋2";
-
-// Best Partner Results
-export const BEST_PARTNER_BY_ROLE_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Best Partner By Role"
-    : "역할군별 최고 파트너";
-export const TANK_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Tank" : "탱커";
-export const HEALER_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Healer" : "힐러";
-export const DPS_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "DPS" : "딜러";
-
-export const OVERALL_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Total Contribution"
-    : "총합 기여도";
-export const BURST_SECTION_TITLE_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Contributions at Each Burst"
-    : "버스트마다의 기여도";
-export const BURST_TEXT = (burst_minute: number) =>
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? `${burst_minute} Minute Burst`
-    : `${burst_minute}분 버스트`;
-
-// Best Stats Results
-export const BEST_STATS_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "RDPS Increase Per Stat Point"
-    : "스탯 1당 RDPS 증가 기대값";
-
-export const BEST_STATS_NAME_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "RDPS Increase / 1 Stat Point"
-    : "RDPS 증가 / 1 스탯 포인트";
-
-export const EMPTY_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Empty" : "없음";
-
-// Stat Names
-export const NAME_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Name" : "이름";
-export const STAT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Stat" : "스탯";
-export const PREV_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Prev" : "이전";
-export const NEXT_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Next" : "다음";
-
-export const WD_STAT_EN_NAME = "WD";
-export const WD_STAT_KR_NAME = "무공";
-
-export const WD_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? WD_STAT_EN_NAME : WD_STAT_KR_NAME;
-
-export const STR_STAT_EN_NAME = "STR";
-export const DEX_STAT_EN_NAME = "DEX";
-export const INT_STAT_EN_NAME = "INT";
-export const MIND_STAT_EN_NAME = "MND";
-
-export const STR_STAT_NAME_KR = "힘";
-export const DEX_STAT_NAME_KR = "민첩";
-export const INT_STAT_NAME_KR = "지능";
-export const MIND_STAT_NAME_KR = "정신";
-
-export const STR_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? STR_STAT_EN_NAME : STR_STAT_NAME_KR;
-export const DEX_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? DEX_STAT_EN_NAME : DEX_STAT_NAME_KR;
-export const INT_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? INT_STAT_EN_NAME : INT_STAT_NAME_KR;
-export const MIND_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? MIND_STAT_EN_NAME : MIND_STAT_NAME_KR;
-
-export const CRIT_STAT_EN_NAME = "CRT";
-export const DH_STAT_EN_NAME = "DH";
-export const DET_STAT_EN_NAME = "DET";
-export const SKS_STAT_EN_NAME = "SKS";
-export const SPS_STAT_EN_NAME = "SPS";
-export const TEN_STAT_EN_NAME = "TEN";
-export const PIE_STAT_EN_NAME = "PIE";
-
-export const CRIT_STAT_KR_NAME = "극대";
-export const DH_STAT_KR_NAME = "직격";
-export const DET_STAT_KR_NAME = "의지";
-export const SKS_STAT_KR_NAME = "기시";
-export const SPS_STAT_KR_NAME = "마시";
-export const TEN_STAT_KR_NAME = "불굴";
-export const PIE_STAT_KR_NAME = "신앙";
-
-export const CRIT_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? CRIT_STAT_EN_NAME
-    : CRIT_STAT_KR_NAME;
-export const DH_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? DH_STAT_EN_NAME
-    : DH_STAT_KR_NAME;
-export const DET_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? DET_STAT_EN_NAME
-    : DET_STAT_KR_NAME;
-export const SKS_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? SKS_STAT_EN_NAME
-    : SKS_STAT_KR_NAME;
-export const SPS_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? SPS_STAT_EN_NAME
-    : SPS_STAT_KR_NAME;
-export const TEN_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? TEN_STAT_EN_NAME
-    : TEN_STAT_KR_NAME;
-export const PIE_STAT_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? PIE_STAT_EN_NAME
-    : PIE_STAT_KR_NAME;
 
 export function convertToEnglishSubStatName(subStatName: string) {
+  const LANGUAGE_TEXTS = AppLanguageTexts();
+
   switch (subStatName) {
-    case CRIT_STAT_KR_NAME:
-      return CRIT_STAT_EN_NAME;
-    case DH_STAT_KR_NAME:
-      return DH_STAT_EN_NAME;
-    case DET_STAT_KR_NAME:
-      return DET_STAT_EN_NAME;
-    case SKS_STAT_KR_NAME:
-      return SKS_STAT_EN_NAME;
-    case SPS_STAT_KR_NAME:
-      return SPS_STAT_EN_NAME;
-    case TEN_STAT_KR_NAME:
-      return TEN_STAT_EN_NAME;
-    case PIE_STAT_KR_NAME:
-      return PIE_STAT_EN_NAME;
+    case LANGUAGE_TEXTS.CRIT_STAT_KR_NAME:
+      return LANGUAGE_TEXTS.CRIT_STAT_EN_NAME;
+    case LANGUAGE_TEXTS.DH_STAT_KR_NAME:
+      return LANGUAGE_TEXTS.DH_STAT_EN_NAME;
+    case LANGUAGE_TEXTS.DET_STAT_KR_NAME:
+      return LANGUAGE_TEXTS.DET_STAT_EN_NAME;
+    case LANGUAGE_TEXTS.SKS_STAT_KR_NAME:
+      return LANGUAGE_TEXTS.SKS_STAT_EN_NAME;
+    case LANGUAGE_TEXTS.SPS_STAT_KR_NAME:
+      return LANGUAGE_TEXTS.SPS_STAT_EN_NAME;
+    case LANGUAGE_TEXTS.TEN_STAT_KR_NAME:
+      return LANGUAGE_TEXTS.TEN_STAT_EN_NAME;
+    case LANGUAGE_TEXTS.PIE_STAT_KR_NAME:
+      return LANGUAGE_TEXTS.PIE_STAT_EN_NAME;
     default:
       return subStatName;
   }
 }
 
 export function convertToKoreanSubStatName(enSubStatName: string) {
+  const LANGUAGE_TEXTS = AppLanguageTexts();
+
   switch (enSubStatName) {
-    case WD_STAT_EN_NAME:
-      return WD_STAT_KR_NAME;
-    case STR_STAT_EN_NAME:
-      return STR_STAT_NAME_KR;
-    case DEX_STAT_EN_NAME:
-      return DEX_STAT_NAME_KR;
-    case INT_STAT_EN_NAME:
-      return INT_STAT_NAME_KR;
-    case MIND_STAT_EN_NAME:
-      return MIND_STAT_NAME_KR;
-    case CRIT_STAT_EN_NAME:
-      return CRIT_STAT_KR_NAME;
-    case DH_STAT_EN_NAME:
-      return DH_STAT_KR_NAME;
-    case DET_STAT_EN_NAME:
-      return DET_STAT_KR_NAME;
-    case SKS_STAT_EN_NAME:
-      return SKS_STAT_KR_NAME;
-    case SPS_STAT_EN_NAME:
-      return SPS_STAT_KR_NAME;
-    case TEN_STAT_EN_NAME:
-      return TEN_STAT_KR_NAME;
-    case PIE_STAT_EN_NAME:
-      return PIE_STAT_KR_NAME;
+    case LANGUAGE_TEXTS.WD_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.WD_STAT_KR_NAME;
+    case LANGUAGE_TEXTS.STR_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.STR_STAT_NAME_KR;
+    case LANGUAGE_TEXTS.DEX_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.DEX_STAT_NAME_KR;
+    case LANGUAGE_TEXTS.INT_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.INT_STAT_NAME_KR;
+    case LANGUAGE_TEXTS.MIND_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.MIND_STAT_NAME_KR;
+    case LANGUAGE_TEXTS.CRIT_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.CRIT_STAT_KR_NAME;
+    case LANGUAGE_TEXTS.DH_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.DH_STAT_KR_NAME;
+    case LANGUAGE_TEXTS.DET_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.DET_STAT_KR_NAME;
+    case LANGUAGE_TEXTS.SKS_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.SKS_STAT_KR_NAME;
+    case LANGUAGE_TEXTS.SPS_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.SPS_STAT_KR_NAME;
+    case LANGUAGE_TEXTS.TEN_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.TEN_STAT_KR_NAME;
+    case LANGUAGE_TEXTS.PIE_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.PIE_STAT_KR_NAME;
     default:
       return enSubStatName;
   }
 }
-
-
-
-
-// Power Names
-export const ITERATION_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Iteration" : "시뮬 횟수";
-export const VARIANCE_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Error %" : "오차 범위";
-export const COMPOSITION_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "PT%" : "조합%";
-export const WD_POWER_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Weapon" : "무기 공격력";
-export const MAIN_STAT_POWER_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Main Stat" : "주 스탯";
-export const CRT_RATE_POWER_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Crit Rate" : "극대 확률";
-export const CRT_POWER_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Crit" : "극대 피해";
-export const DH_RATE_POWER_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "DH Rate" : "직격 확률";
-export const DET_POWER_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Det Rate" : "의지 효과";
-export const SPEED_POWER_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Speed" : "도트/평타 위력";
-export const TENACITY_POWER_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Tenacity" : "불굴 효과";
-export const GCD_NAME =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "GCD" : "글쿨";
-
-// Party Input Text
-export const TIME_INPUT_LABEL_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE
-    ? "Combat Time(Seconds)"
-    : "전투 시간(초)";
-export const PARTY_MEMBER_LABEL_TEXT =
-  AppConfigurations.languageMode === ENGLISH_MODE ? "Party Member" : "파티원";

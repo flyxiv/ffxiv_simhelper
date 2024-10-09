@@ -1,5 +1,5 @@
+import { LANGUAGE_TEXTS } from "../../const/languageTexts";
 import { AppConfigurations } from "../../Themes";
-import { CAST_TEXT, DAMAGE_PERCENTAGE_TEXT, SKILL_TITLE_TEXT, TOTAL_DAMAGE_TEXT } from "../../const/languageTexts";
 import { DamageChartData } from "./GraphData";
 import {
   SkillBarBoxStyle,
@@ -113,7 +113,7 @@ export const DamageChartTitle = (
       <SkillIconBox />
       <SkillNameBox>
         <Typography variant="body2" fontSize={AppConfigurations.body2FontSize}>
-          {SKILL_TITLE_TEXT}
+          {LANGUAGE_TEXTS.SKILL_TITLE_TEXT}
         </Typography>
       </SkillNameBox>
     </Box>
@@ -122,19 +122,19 @@ export const DamageChartTitle = (
 
     <SkillPercentBox>
       <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-        {DAMAGE_PERCENTAGE_TEXT}
+        {LANGUAGE_TEXTS.DAMAGE_PERCENTAGE_TEXT}
       </Typography>
     </SkillPercentBox>
 
     <TotalDamageBox>
       <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-        {TOTAL_DAMAGE_TEXT}
+        {LANGUAGE_TEXTS.TOTAL_DAMAGE_TEXT}
       </Typography>
     </TotalDamageBox>
 
     <SkillCountBox>
       <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-        {CAST_TEXT}
+        {LANGUAGE_TEXTS.CAST_TEXT}
       </Typography>
     </SkillCountBox>
   </SkillBox>

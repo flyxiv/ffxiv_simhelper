@@ -9,18 +9,9 @@ import {
 } from "./Styles";
 import { SkillLogTable } from "./SkillLogTable";
 import { styled, List, Box, Typography, ListItem } from "@mui/material";
-import {
-  ABILITY_TEXT,
-  COMBAT_TIME_TEXT,
-  IMPORTANT_STATUS_TEXT,
-  MNK_EN_NAME,
-  MNK_ROTATION_WARNING_TEXT,
-  ROTATION_SAMPLE_WARNING_TEXT,
-  SAM_EN_NAME,
-  SAMURAI_ROTATION_WARNING_TEXT,
-} from "../../const/languageTexts";
 import { AppConfigurations } from "../../Themes";
 import { WarningText } from "../basic/WarningText";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 const SkillLogCombatTimeBox = styled(Box)`
   ${SkillLogCombatTimeBoxStyle}
@@ -65,18 +56,20 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
       </div>
     );
   }
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
 
   return (
     <>
       <Typography
         sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}
       >
-        {ROTATION_SAMPLE_WARNING_TEXT}
+        {LANGUAGE_TEXTS.ROTATION_SAMPLE_WARNING_TEXT}
       </Typography>
       {
-        response.mainPlayerJobAbbrev === SAM_EN_NAME ?
-          WarningText(SAMURAI_ROTATION_WARNING_TEXT)
-          : response.mainPlayerJobAbbrev === MNK_EN_NAME ? WarningText(MNK_ROTATION_WARNING_TEXT) : <Box></Box>
+        response.mainPlayerJobAbbrev === LANGUAGE_TEXTS.SAM_EN_NAME ?
+          WarningText(LANGUAGE_TEXTS.SAMURAI_ROTATION_WARNING_TEXT)
+          : response.mainPlayerJobAbbrev === LANGUAGE_TEXTS.MNK_EN_NAME ? WarningText(LANGUAGE_TEXTS.MNK_ROTATION_WARNING_TEXT) : <Box></Box>
       }
       <SkillLogTableList>
         <ListItem>
@@ -86,7 +79,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {COMBAT_TIME_TEXT}
+                {LANGUAGE_TEXTS.COMBAT_TIME_TEXT}
               </Typography>
             </SkillLogCombatTimeBox>
 
@@ -95,7 +88,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {ABILITY_TEXT}
+                {LANGUAGE_TEXTS.ABILITY_TEXT}
               </Typography>
             </SkillIconBox>
 
@@ -104,7 +97,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {IMPORTANT_STATUS_TEXT}
+                {LANGUAGE_TEXTS.IMPORTANT_STATUS_TEXT}
               </Typography>
             </StatusBox>
           </SkillEntityBox>

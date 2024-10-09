@@ -24,8 +24,8 @@ import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { PlayerInfo } from "../components/container/PlayerInfo";
-import { BEST_TEAMMATE_BUTTON_TEXT, DAMAGE_PROFILE_BUTTON_TEXT, EDPS_EXPLANATION_TEXT, MY_CONTRIBUTION_BUTTON_TEXT, DPS_ANALYSIS_PAGE_NAME, ROTATION_SAMPLE_BUTTON_TEXT, SIMULATION_RESULT_TEXT } from "../const/languageTexts";
 import { QUICK_SIM_ITERATION_COUNT } from "../components/basic/DpsAnalysisRequestButton";
+import { AppLanguageTexts } from "../const/languageTexts";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -38,8 +38,10 @@ const ResultBoardBox = styled(Box)`
 export const TABLE_WIDTH = "80%";
 
 export function SimulationResult() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   let [currentlyToggledView, setCurrentlyToggledView] =
-    useState(DAMAGE_PROFILE_BUTTON_TEXT);
+    useState(LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT);
   let response = localStorage.getItem(DPS_ANALYSIS_RESPONSE_SAVE_NAME);
 
   if (response == null) {
@@ -89,14 +91,14 @@ export function SimulationResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(DPS_ANALYSIS_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultBoardTopBox>
-            {SimulationTitle(SIMULATION_RESULT_TEXT)}
+            {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
             {DpsSummary(mainPlayerSimulationData, "99.9% RDPS")}
             <Typography sx={{ color: 'white' }}>
-              {EDPS_EXPLANATION_TEXT}
+              {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
             </Typography>
             {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, QUICK_SIM_ITERATION_COUNT, 1)}
           </ResultBoardTopBox>
@@ -127,31 +129,33 @@ function renderTableBasedOnSelectedButton(
   teammatesContributionToMyBuffs: null | PartyContributionData,
   mainPlayerContributionToOthers: null | PartyContributionData
 ) {
-  if (currentlyToggledView === BEST_TEAMMATE_BUTTON_TEXT) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+  if (currentlyToggledView === LANGUAGE_TEXTS.BEST_TEAMMATE_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
-        {SimulationTitle(BEST_TEAMMATE_BUTTON_TEXT)}
+        {SimulationTitle(LANGUAGE_TEXTS.BEST_TEAMMATE_BUTTON_TEXT)}
         {BestTeammateGraph(teammatesContributionToMyBuffs, responseJson.mainPlayerJobAbbrev)}
       </ResultBoardBox>
     );
-  } else if (currentlyToggledView === DAMAGE_PROFILE_BUTTON_TEXT) {
+  } else if (currentlyToggledView === LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
-        {SimulationTitle(DAMAGE_PROFILE_BUTTON_TEXT)}
+        {SimulationTitle(LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT)}
         {DamageProfileGraph(responseJson)}
       </ResultBoardBox>
     );
-  } else if (currentlyToggledView == MY_CONTRIBUTION_BUTTON_TEXT) {
+  } else if (currentlyToggledView == LANGUAGE_TEXTS.MY_CONTRIBUTION_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
-        {SimulationTitle(MY_CONTRIBUTION_BUTTON_TEXT)}
+        {SimulationTitle(LANGUAGE_TEXTS.MY_CONTRIBUTION_BUTTON_TEXT)}
         {MainPlayerContributionGraph(mainPlayerContributionToOthers)}
       </ResultBoardBox>
     );
-  } else if (currentlyToggledView === ROTATION_SAMPLE_BUTTON_TEXT) {
+  } else if (currentlyToggledView === LANGUAGE_TEXTS.ROTATION_SAMPLE_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
-        {SimulationTitle(ROTATION_SAMPLE_BUTTON_TEXT)}
+        {SimulationTitle(LANGUAGE_TEXTS.ROTATION_SAMPLE_BUTTON_TEXT)}
         {SkillLogResult(responseJson)}
       </ResultBoardBox>
     );

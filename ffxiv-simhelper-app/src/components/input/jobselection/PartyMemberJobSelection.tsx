@@ -17,14 +17,7 @@ import {
   HEALER_JOBS,
   TANK_JOBS,
 } from "../../../types/ffxivdatabase/PartyCompositionMaker";
-import {
-  DPS_TEXT,
-  HEALER_TEXT,
-  PARTY_MEMBER_LABEL_TEXT,
-  PLD_EN_NAME,
-  SCH_EN_NAME,
-  TANK_TEXT,
-} from "../../../const/languageTexts";
+import { LANGUAGE_TEXTS } from "../../../const/languageTexts";
 import { calculatePlayerPowerFromInputs } from "../../../types/ffxivdatabase/ItemSet";
 
 let ALIGN = "center";
@@ -98,7 +91,7 @@ export function PartyMemberJobSelection(
   totalEquipmentState: EquipmentInput,
   setTotalState: Function
 ) {
-  let playerId = `${PARTY_MEMBER_LABEL_TEXT} ${id}`;
+  let playerId = `${LANGUAGE_TEXTS.PARTY_MEMBER_LABEL_TEXT} ${id}`;
 
   const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
     const newJobNames =
@@ -150,11 +143,11 @@ export function PartyMemberJobSelection(
     totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs
   );
 
-  let playerLabel = jobAbbrevs.includes(SCH_EN_NAME)
-    ? HEALER_TEXT
-    : jobAbbrevs.includes(PLD_EN_NAME)
-      ? TANK_TEXT
-      : DPS_TEXT;
+  let playerLabel = jobAbbrevs.includes(LANGUAGE_TEXTS.SCH_EN_NAME)
+    ? LANGUAGE_TEXTS.HEALER_TEXT
+    : jobAbbrevs.includes(LANGUAGE_TEXTS.PLD_EN_NAME)
+      ? LANGUAGE_TEXTS.TANK_TEXT
+      : LANGUAGE_TEXTS.DPS_TEXT;
 
   return (
     <CustomFormControl fullWidth>

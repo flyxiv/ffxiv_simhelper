@@ -11,17 +11,7 @@ import {
   DPS_ANALYSIS_URL,
   BEST_STATS_URL,
 } from "../App";
-import {
-  BEST_PARTNER_DESCRIPTION_TEXT,
-  BEST_PARTNER_PAGE_NAME,
-  GEAR_COMPARE_DESCRIPTION_TEXT,
-  GEAR_COMPARE_PAGE_NAME,
-  HOME_PAGE_NAME,
-  DPS_ANALYSIS_DESCRIPTION_TEXT,
-  DPS_ANALYSIS_PAGE_NAME,
-  BEST_STATS_DESCRIPTION_TEXT,
-  BEST_STAT_PAGE_NAME,
-} from "../const/languageTexts";
+import { AppLanguageTexts } from "../const/languageTexts";
 
 const dpsAnalysisButtonImagePath = "/images/icon_dps_analysis_C.svg";
 const gearCompareSimButtonImagePath = "/images/icon_gear_compare_C.svg";
@@ -29,6 +19,8 @@ const statWeightsButtonImagePath = "/images/icon_best_stats_C.svg";
 const bestPartnerButtonImagePath = "/images/icon_best_partner_C.svg";
 
 export function Home() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <Box
       sx={{
@@ -38,7 +30,7 @@ export function Home() {
       }}
     >
       <Box display="flex" width="100vw">
-        {BasicLeftMenu(HOME_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME)}
         <Box width="100%">
           {AppHeader()}
           <Box className="HomeBody" height="70vh">
@@ -51,18 +43,18 @@ export function Home() {
               {LogoBox(
                 DPS_ANALYSIS_URL,
                 dpsAnalysisButtonImagePath,
-                DPS_ANALYSIS_PAGE_NAME,
-                DPS_ANALYSIS_PAGE_NAME,
-                DPS_ANALYSIS_DESCRIPTION_TEXT,
+                LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
+                LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
+                LANGUAGE_TEXTS.DPS_ANALYSIS_DESCRIPTION_TEXT,
                 AppConfigurations.primary
               )}
 
               {LogoBox(
                 BEST_PARTNER_URL,
                 bestPartnerButtonImagePath,
-                BEST_PARTNER_PAGE_NAME,
-                BEST_PARTNER_PAGE_NAME,
-                BEST_PARTNER_DESCRIPTION_TEXT,
+                LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+                LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+                LANGUAGE_TEXTS.BEST_PARTNER_DESCRIPTION_TEXT,
                 AppConfigurations.secondary
               )}
             </Box>
@@ -75,18 +67,18 @@ export function Home() {
               {LogoBox(
                 GEAR_COMPARE_URL,
                 gearCompareSimButtonImagePath,
-                GEAR_COMPARE_PAGE_NAME,
-                GEAR_COMPARE_PAGE_NAME,
-                GEAR_COMPARE_DESCRIPTION_TEXT,
+                LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
+                LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
+                LANGUAGE_TEXTS.GEAR_COMPARE_DESCRIPTION_TEXT,
                 AppConfigurations.secondary
               )}
 
               {LogoBox(
                 BEST_STATS_URL,
                 statWeightsButtonImagePath,
-                BEST_STAT_PAGE_NAME,
-                BEST_STAT_PAGE_NAME,
-                BEST_STATS_DESCRIPTION_TEXT,
+                LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
+                LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
+                LANGUAGE_TEXTS.BEST_STATS_DESCRIPTION_TEXT,
                 AppConfigurations.primary
               )}
             </Box>

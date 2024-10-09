@@ -50,23 +50,7 @@ import {
 } from "../../../types/EquipmentInput";
 import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
-import {
-  AST_EN_NAME,
-  AST_MELEE_PARTNER_TEXT,
-  AST_RANGED_PARTNER_TEXT,
-  convertToSlotText,
-  DNC_EN_NAME,
-  DNC_PARTNER_TEXT,
-  EMPTY_TEXT,
-  FINGER1_SLOT_EN_TEXT,
-  FINGER2_SLOT_EN_TEXT,
-  FOOD_SLOT_TEXT,
-  NO_POT_TEXT,
-  POT_LABEL_TEXT,
-  TIME_INPUT_LABEL_TEXT,
-  USE_POT_TEXT,
-  WEAPON_SLOT_EN_TEXT,
-} from "../../../const/languageTexts";
+import { convertToSlotText, LANGUAGE_TEXTS } from "../../../const/languageTexts";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -107,10 +91,10 @@ function EquipmentMenuOfOneSlot(
     slotEquipmentId === undefined ? EMPTY_EQUIPMENT_ID : slotEquipmentId;
 
   if (
-    slotName === FINGER1_SLOT_EN_TEXT &&
-    totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)] !== -1
+    slotName === LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT &&
+    totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT)] !== -1
   ) {
-    let ring2 = totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)];
+    let ring2 = totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT)];
     let ring2Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring2);
     if (
       ring2Equipment !== undefined &&
@@ -119,15 +103,15 @@ function EquipmentMenuOfOneSlot(
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
         (equipment) =>
           equipment.id !==
-          totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)]
+          totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT)]
       );
     }
   }
   if (
-    slotName === FINGER2_SLOT_EN_TEXT &&
-    totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)] !== -1
+    slotName === LANGUAGE_TEXTS.FINGER2_SLOT_EN_TEXT &&
+    totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT)] !== -1
   ) {
-    let ring1 = totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)];
+    let ring1 = totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT)];
     let ring1Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring1);
     if (
       ring1Equipment !== undefined &&
@@ -136,7 +120,7 @@ function EquipmentMenuOfOneSlot(
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
         (equipment) =>
           equipment.id !==
-          totalState.itemSet[slotNameToSlotIndex(FINGER1_SLOT_EN_TEXT)]
+          totalState.itemSet[slotNameToSlotIndex(LANGUAGE_TEXTS.FINGER1_SLOT_EN_TEXT)]
       );
     }
   }
@@ -218,7 +202,7 @@ function EquipmentMenuOfOneSlot(
             );
           })}
           <Divider />
-          {slotName !== WEAPON_SLOT_EN_TEXT ? (
+          {slotName !== LANGUAGE_TEXTS.WEAPON_SLOT_EN_TEXT ? (
             <EquipmentMenu value={-1} key={`${id}_${slotLabel}_empty`}>
               <Box
                 display="flex"
@@ -231,7 +215,7 @@ function EquipmentMenuOfOneSlot(
                   color="white"
                   sx={{ fontSize: AppConfigurations.body1FontSize }}
                 >
-                  {EMPTY_TEXT}
+                  {LANGUAGE_TEXTS.EMPTY_TEXT}
                 </Typography>
               </Box>
             </EquipmentMenu>
@@ -396,7 +380,7 @@ export function EquipmentSelectionMenu(
         >
           <InputEquipmentBox item xs={xs}>
             {SimulationUpperInputTimeTextBox(
-              TIME_INPUT_LABEL_TEXT,
+              LANGUAGE_TEXTS.TIME_INPUT_LABEL_TEXT,
               totalEquipmentState,
               setTotalEquipmentState
             )}
@@ -452,7 +436,7 @@ export function BestPartnerInputMenu(
       >
         <InputEquipmentBox item xs={xs}>
           {SimulationUpperInputTimeTextBox(
-            TIME_INPUT_LABEL_TEXT,
+            LANGUAGE_TEXTS.TIME_INPUT_LABEL_TEXT,
             totalEquipmentState,
             setTotalEquipmentState
           )}
@@ -471,7 +455,7 @@ function PartnerSelectionMenu(
   let mainPlayerJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
 
-  if (mainPlayerJobAbbrev === AST_EN_NAME) {
+  if (mainPlayerJobAbbrev === LANGUAGE_TEXTS.AST_EN_NAME) {
     return (
       <>
         <EquipmentGridItemBox
@@ -483,7 +467,7 @@ function PartnerSelectionMenu(
               id,
               totalEquipmentState,
               setTotalEquipmentState,
-              AST_MELEE_PARTNER_TEXT
+              LANGUAGE_TEXTS.AST_MELEE_PARTNER_TEXT
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
@@ -497,13 +481,13 @@ function PartnerSelectionMenu(
               id,
               totalEquipmentState,
               setTotalEquipmentState,
-              AST_RANGED_PARTNER_TEXT
+              LANGUAGE_TEXTS.AST_RANGED_PARTNER_TEXT
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
       </>
     );
-  } else if (mainPlayerJobAbbrev === DNC_EN_NAME) {
+  } else if (mainPlayerJobAbbrev === LANGUAGE_TEXTS.DNC_EN_NAME) {
     return (
       <EquipmentGridItemBox
         key={`partner1_${id}_grid`}
@@ -514,7 +498,7 @@ function PartnerSelectionMenu(
             id,
             totalEquipmentState,
             setTotalEquipmentState,
-            DNC_PARTNER_TEXT
+            LANGUAGE_TEXTS.DNC_PARTNER_TEXT
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
@@ -531,7 +515,7 @@ function FoodSelection(
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
 
-  let foodLabel = FOOD_SLOT_TEXT;
+  let foodLabel = LANGUAGE_TEXTS.FOOD_SLOT_TEXT;
   if (totalState.foodId !== -1) {
     foodLabel = "";
   }
@@ -580,7 +564,7 @@ function FoodSelection(
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                {EMPTY_TEXT}
+                {LANGUAGE_TEXTS.EMPTY_TEXT}
               </Typography>
             </Box>
           </MenuItem>
@@ -597,7 +581,7 @@ function PotSelection(
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
 
-  let label = POT_LABEL_TEXT;
+  let label = LANGUAGE_TEXTS.POT_LABEL_TEXT;
 
   const updateUsePot = (e: SelectChangeEvent<number>) => {
     let newState = { ...totalEquipmentState };
@@ -640,7 +624,7 @@ function PotSelection(
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                {USE_POT_TEXT}
+                {LANGUAGE_TEXTS.USE_POT_TEXT}
               </Typography>
             </Box>
           </MenuItem>
@@ -652,7 +636,7 @@ function PotSelection(
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                {NO_POT_TEXT}
+                {LANGUAGE_TEXTS.NO_POT_TEXT}
               </Typography>
             </Box>
           </MenuItem>

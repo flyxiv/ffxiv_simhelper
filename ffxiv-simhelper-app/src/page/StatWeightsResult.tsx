@@ -9,9 +9,9 @@ import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { BestStatsResponseTable } from "../types/BestStats";
 import { StatWeightSummary } from "../components/container/StatSummary";
-import { SIMULATION_RESULT_TEXT, BEST_STAT_PAGE_NAME, BEST_STATS_TEXT } from "../const/languageTexts";
 import { EMPTY_PARTY_MEMBER } from "../types/PartyStates";
 import { STAT_WEIGHTS_REQUEST_COUNT } from "../components/basic/BestStatsRequestButton";
+import { AppLanguageTexts } from "../const/languageTexts";
 
 export interface StatWeightsData {
   statName: string;
@@ -29,6 +29,7 @@ const ResultBoardTopBox = styled(Box)`
 export const TABLE_WIDTH = "80%";
 
 export function StatWeightsResult() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   let response = localStorage.getItem(STAT_WEIGHTS_RESPONSE_SAVE_NAME);
 
   if (response == null) {
@@ -67,15 +68,15 @@ export function StatWeightsResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(BEST_STAT_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultBoardTopBox marginBottom="40px">
-            {SimulationTitle(SIMULATION_RESULT_TEXT)}
+            {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
             {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, STAT_WEIGHTS_REQUEST_COUNT, 1)}
           </ResultBoardTopBox>
           <ResultBoardBox >
-            {SimulationTitle(BEST_STATS_TEXT)}
+            {SimulationTitle(LANGUAGE_TEXTS.BEST_STATS_TEXT)}
             {StatWeightSummary(statWeightsCalculated)}
           </ResultBoardBox>
           {Footer()}

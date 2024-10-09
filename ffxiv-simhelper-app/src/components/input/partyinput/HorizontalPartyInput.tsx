@@ -9,8 +9,8 @@ import {
   inputStyleSimulationResultTextBox,
 } from "../SimulationResultTextBox";
 import { EquipmentInput } from "../../../types/EquipmentInput";
-import { PARTY_MEMBER_ILVL_TEXT } from "../../../const/languageTexts";
 import { PartyMemberIlvlSelection } from "../PartyMemberIlvlSelection";
+import { LANGUAGE_TEXTS } from "../../../const/languageTexts";
 
 const HorizontalInputGridContainer = styled(Grid)`
   ${HorizontalInputGridContainerStyle}
@@ -41,7 +41,7 @@ export function HorizontalPartyInput(
           <InputBox marginBottom={0.5} key={"time"}>
             <InputJobBox item xs={xs} key={`timeinput`} height={"5vh"}>
               {PartyMemberIlvlSelection(
-                PARTY_MEMBER_ILVL_TEXT,
+                LANGUAGE_TEXTS.PARTY_MEMBER_ILVL_TEXT,
                 totalEquipmentState,
                 setTotalEquipmentState,
               )

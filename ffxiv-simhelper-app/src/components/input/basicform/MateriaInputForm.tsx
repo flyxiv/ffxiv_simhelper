@@ -23,7 +23,7 @@ import {
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
-import { EMPTY_TEXT } from "../../../const/languageTexts";
+import { LANGUAGE_TEXTS } from "../../../const/languageTexts";
 
 const MateriaMenu = styled(MenuItem)`
   ${MenuItemStyle}
@@ -131,7 +131,7 @@ function SingleMateriaMenu(
             alignItems={"center"}
             height="100%"
           >
-            <Typography align="center">{EMPTY_TEXT}</Typography>
+            <Typography align="center">{LANGUAGE_TEXTS.EMPTY_TEXT}</Typography>
           </Box>
         </MateriaMenu>
       </Select>

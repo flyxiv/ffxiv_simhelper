@@ -10,18 +10,7 @@ import {
   SingleEquipmentInputSaveState,
   USE_POT_VAL,
 } from "../types/EquipmentInput";
-import {
-  BLM_EN_NAME,
-  BRD_EN_NAME,
-  DRG_EN_NAME,
-  MIDLANDER_HYUR_EN_NAME,
-  NIN_EN_NAME,
-  PLD_EN_NAME,
-  SCH_EN_NAME,
-  SGE_EN_NAME,
-  WAR_EN_NAME,
-  WHM_EN_NAME,
-} from "./languageTexts";
+import { LANGUAGE_TEXTS } from "./languageTexts";
 import { PARTY_MAX_ILVL } from "../components/input/PartyMemberIlvlSelection";
 import { mapJobAbbrevToJobBisEquipments } from "./StatValue";
 
@@ -42,27 +31,27 @@ export const DEFAULT_GEARSET_MATERIAS: GearSetMaterias = [
 
 export function defaultSingleEquipmentInput(): EquipmentInput {
   let partyMemberJobs = [
-    WAR_EN_NAME,
-    WHM_EN_NAME,
-    SGE_EN_NAME,
-    DRG_EN_NAME,
-    NIN_EN_NAME,
-    BRD_EN_NAME,
-    BLM_EN_NAME,
+    LANGUAGE_TEXTS.WAR_EN_NAME,
+    LANGUAGE_TEXTS.WHM_EN_NAME,
+    LANGUAGE_TEXTS.SGE_EN_NAME,
+    LANGUAGE_TEXTS.DRG_EN_NAME,
+    LANGUAGE_TEXTS.NIN_EN_NAME,
+    LANGUAGE_TEXTS.BRD_EN_NAME,
+    LANGUAGE_TEXTS.BLM_EN_NAME,
   ];
   let defaultMaterias = DEFAULT_GEARSET_MATERIAS;
-  let [itemSet, weaponSlotmateriaCount] = defaultItemSet(PLD_EN_NAME);
+  let [itemSet, weaponSlotmateriaCount] = defaultItemSet(LANGUAGE_TEXTS.PLD_EN_NAME);
   defaultMaterias[WEAPON_SLOT_ID] = Array(weaponSlotmateriaCount).fill(
     EMPTY_MATERIA
   );
 
-  let mainPlayerJobAbbrev = PLD_EN_NAME;
+  let mainPlayerJobAbbrev = LANGUAGE_TEXTS.PLD_EN_NAME;
 
   let bisGear = mapJobAbbrevToJobBisEquipments(mainPlayerJobAbbrev);
 
   let singleEquipmentInput: SingleEquipmentInputSaveState = {
-    mainPlayerJobAbbrev: PLD_EN_NAME,
-    race: MIDLANDER_HYUR_EN_NAME,
+    mainPlayerJobAbbrev: LANGUAGE_TEXTS.PLD_EN_NAME,
+    race: LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME,
     mainPlayerPartner1Id: null,
     mainPlayerPartner2Id: null,
     itemSet: itemSet,
@@ -93,14 +82,14 @@ export function defaultSingleEquipmentInput(): EquipmentInput {
 
 export function defaultBestPartnerEquipmentInput(): EquipmentInput {
   let defaultMaterias = DEFAULT_GEARSET_MATERIAS;
-  let [itemSet, weaponSlotmateriaCount] = defaultItemSet(SCH_EN_NAME);
+  let [itemSet, weaponSlotmateriaCount] = defaultItemSet(LANGUAGE_TEXTS.SCH_EN_NAME);
   defaultMaterias[WEAPON_SLOT_ID] = Array(weaponSlotmateriaCount).fill(
     EMPTY_MATERIA
   );
 
   let singleEquipmentInput: SingleEquipmentInputSaveState = {
-    mainPlayerJobAbbrev: SCH_EN_NAME,
-    race: MIDLANDER_HYUR_EN_NAME,
+    mainPlayerJobAbbrev: LANGUAGE_TEXTS.SCH_EN_NAME,
+    race: LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME,
     mainPlayerPartner1Id: null,
     mainPlayerPartner2Id: null,
     itemSet: itemSet,

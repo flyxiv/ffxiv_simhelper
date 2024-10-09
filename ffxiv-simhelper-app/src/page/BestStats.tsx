@@ -22,13 +22,8 @@ import {
   InputContainerStyle,
 } from "./Styles";
 import { BestStatsRequestButton } from "../components/basic/BestStatsRequestButton";
-import {
-  PLAYER_POWER_TEXT,
-  DPS_ANALYSIS_INPUT_INFO_TEXT,
-  DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT,
-  BEST_STAT_PAGE_NAME,
-} from "../const/languageTexts";
 import { isNotValid, DPS_ANALYSIS_LOADOUT_COUNT } from "./DpsAnalysis";
+import { AppLanguageTexts } from "../const/languageTexts";
 
 let INPUT_CONTAINER_WIDTH = "70%";
 
@@ -45,6 +40,8 @@ let EquipmentBoard = styled(Box)`
 `;
 
 export function BestStats() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   let mostRecentInputState = localStorage.getItem(
     SINGLE_INPUT_SAVE_NAME
   );
@@ -72,7 +69,7 @@ export function BestStats() {
         {LeftMenuWithLoadout(
           DPS_ANALYSIS_LOADOUT_COUNT,
           DPS_ANALYSIS_URL,
-          BEST_STAT_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
           totalState,
           setTotalState
         )}
@@ -80,21 +77,21 @@ export function BestStats() {
           {AppHeader()}
           <Box alignContent={"center"}>
             <StatWeightsInputContainer justifyContent={"center"}>
-              {SelectionTitle(DPS_ANALYSIS_INPUT_INFO_TEXT)}
+              {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
               <EquipmentBoard>
                 {EquipmentSelectionMenu(0, totalState, setTotalState)}
               </EquipmentBoard>
             </StatWeightsInputContainer>
 
             <StatWeightsInputContainer paddingTop={20}>
-              {SelectionTitle(DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
+              {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
                 {HorizontalPartyInput(totalState, setTotalState)}
               </CustomizeBoard>
             </StatWeightsInputContainer>
 
             <StatWeightsInputContainer marginTop={10}>
-              {SelectionTitle(`3. ${PLAYER_POWER_TEXT}`)}
+              {SelectionTitle(`3. ${LANGUAGE_TEXTS.PLAYER_POWER_TEXT}`)}
               <Box
                 display="flex"
                 justifyContent="center"

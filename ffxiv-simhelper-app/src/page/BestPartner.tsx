@@ -14,27 +14,7 @@ import { AppHeader } from "../components/image/AppHeader";
 import { SelectionTitle } from "../components/basic/SelectionTitle";
 import { EquipmentBoardStyle, InputContainerStyle } from "./Styles";
 import { BestPartnerRequestButton } from "../components/basic/BestPartnerRequestButton";
-import {
-  AST_EN_NAME,
-  BEST_PARTNER_INPUT_INFO_TEXT,
-  BEST_PARTNER_PAGE_NAME,
-  BRD_EN_NAME,
-  DNC_EN_NAME,
-  DRG_EN_NAME,
-  DRK_EN_NAME,
-  GNB_EN_NAME,
-  MCH_EN_NAME,
-  MNK_EN_NAME,
-  NIN_EN_NAME,
-  PLD_EN_NAME,
-  RPR_EN_NAME,
-  SAM_EN_NAME,
-  SCH_EN_NAME,
-  SGE_EN_NAME,
-  VPR_EN_NAME,
-  WAR_EN_NAME,
-  WHM_EN_NAME,
-} from "../const/languageTexts";
+import { AppLanguageTexts } from "../const/languageTexts";
 
 export enum JobRole {
   TANK,
@@ -81,6 +61,7 @@ export function isNotValidBestPartnerInput(input: EquipmentInput) {
 }
 
 export function BestPartner() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   let mostRecentInputState = localStorage.getItem(BEST_PARTNER_INPUT_SAVE_NAME);
   let mostRecentInput = null;
 
@@ -104,13 +85,13 @@ export function BestPartner() {
         width="100vw"
       >
         {BasicLeftMenu(
-          BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box alignContent={"center"} minHeight={"60vh"}>
             <StatWeightsInputContainer justifyContent={"center"}>
-              {SelectionTitle(BEST_PARTNER_INPUT_INFO_TEXT)}
+              {SelectionTitle(LANGUAGE_TEXTS.BEST_PARTNER_INPUT_INFO_TEXT)}
               <EquipmentBoard>
                 {BestPartnerInputMenu(
                   0,
@@ -132,27 +113,28 @@ export function BestPartner() {
 }
 
 export function jobAbbrevToRole(jobAbbrev: string) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   switch (jobAbbrev) {
-    case PLD_EN_NAME:
-    case WAR_EN_NAME:
-    case DRK_EN_NAME:
-    case GNB_EN_NAME:
+    case LANGUAGE_TEXTS.PLD_EN_NAME:
+    case LANGUAGE_TEXTS.WAR_EN_NAME:
+    case LANGUAGE_TEXTS.DRK_EN_NAME:
+    case LANGUAGE_TEXTS.GNB_EN_NAME:
       return JobRole.TANK;
-    case WHM_EN_NAME:
-    case SCH_EN_NAME:
-    case AST_EN_NAME:
-    case SGE_EN_NAME:
+    case LANGUAGE_TEXTS.WHM_EN_NAME:
+    case LANGUAGE_TEXTS.SCH_EN_NAME:
+    case LANGUAGE_TEXTS.AST_EN_NAME:
+    case LANGUAGE_TEXTS.SGE_EN_NAME:
       return JobRole.HEALER;
-    case MNK_EN_NAME:
-    case DRG_EN_NAME:
-    case NIN_EN_NAME:
-    case SAM_EN_NAME:
-    case RPR_EN_NAME:
-    case VPR_EN_NAME:
+    case LANGUAGE_TEXTS.MNK_EN_NAME:
+    case LANGUAGE_TEXTS.DRG_EN_NAME:
+    case LANGUAGE_TEXTS.NIN_EN_NAME:
+    case LANGUAGE_TEXTS.SAM_EN_NAME:
+    case LANGUAGE_TEXTS.RPR_EN_NAME:
+    case LANGUAGE_TEXTS.VPR_EN_NAME:
       return JobRole.MELEE;
-    case BRD_EN_NAME:
-    case MCH_EN_NAME:
-    case DNC_EN_NAME:
+    case LANGUAGE_TEXTS.BRD_EN_NAME:
+    case LANGUAGE_TEXTS.MCH_EN_NAME:
+    case LANGUAGE_TEXTS.DNC_EN_NAME:
       return JobRole.RANGED;
     default:
       return JobRole.CASTER;

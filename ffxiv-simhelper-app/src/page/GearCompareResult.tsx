@@ -10,14 +10,16 @@ import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
-import { EDPS_EXPLANATION_TEXT, GEAR_COMPARE_PAGE_NAME, GEARSET1_TEXT, GEARSET2_TEXT } from "../const/languageTexts";
 import { GEAR_COMPARE_ITERATION_COUNT } from "../components/basic/GearCompareRequestButton";
+import { AppLanguageTexts } from "../const/languageTexts";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
 `;
 
 export function GearCompareResult() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   let response = localStorage.getItem(GEAR_COMPARE_RESPONSE_SAVE_NAME);
 
   if (response == null) {
@@ -61,17 +63,17 @@ export function GearCompareResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(GEAR_COMPARE_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <Box className="SimulationResult" sx={{
             backgroundColor: AppConfigurations.backgroundOne
           }}>
             <ResultBoardTopBox marginBottom="50px">
-              {SimulationTitle(GEARSET1_TEXT)}
+              {SimulationTitle(LANGUAGE_TEXTS.GEARSET1_TEXT)}
               {GearCompareDpsSummary(simulationData1, simulationData2)}
               <Typography sx={{ color: 'white' }}>
-                {EDPS_EXPLANATION_TEXT}
+                {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
               </Typography>
               {StatComparePlayerInfo(
                 mainCharacterJob,
@@ -84,10 +86,10 @@ export function GearCompareResult() {
               )}
             </ResultBoardTopBox>
             <ResultBoardTopBox>
-              {SimulationTitle(GEARSET2_TEXT)}
+              {SimulationTitle(LANGUAGE_TEXTS.GEARSET2_TEXT)}
               {GearCompareDpsSummary(simulationData2, simulationData1)}
               <Typography sx={{ color: 'white' }}>
-                {EDPS_EXPLANATION_TEXT}
+                {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
               </Typography>
               {StatComparePlayerInfo(
                 mainCharacterJob,

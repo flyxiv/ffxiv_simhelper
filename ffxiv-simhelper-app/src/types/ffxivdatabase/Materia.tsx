@@ -1,11 +1,4 @@
-import {
-  CRIT_STAT_EN_NAME,
-  DET_STAT_EN_NAME,
-  DH_STAT_EN_NAME,
-  SKS_STAT_EN_NAME,
-  SPS_STAT_EN_NAME,
-  TEN_STAT_EN_NAME,
-} from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 import { Equipment, getFirstSecondSubStat } from "./Equipment";
 import {
   convertEquipmentToFinalStat,
@@ -22,23 +15,30 @@ export const EMPTY_MATERIA = {
   effectiveValue: 0,
 };
 
-export const NON_PENTAMELDABLE_MATERIAS = [
-  `${CRIT_STAT_EN_NAME}+54`,
-  `${DH_STAT_EN_NAME}+54`,
-  `${DET_STAT_EN_NAME}+54`,
-  `${SKS_STAT_EN_NAME}+54`,
-  `${SPS_STAT_EN_NAME}+54`,
-  `${TEN_STAT_EN_NAME}+54`,
-];
+export const loadMaterias = () => {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
-export const PENTAMELDABLE_MATERIAS = [
-  `${CRIT_STAT_EN_NAME}+18`,
-  `${DH_STAT_EN_NAME}+18`,
-  `${DET_STAT_EN_NAME}+18`,
-  `${SKS_STAT_EN_NAME}+18`,
-  `${SPS_STAT_EN_NAME}+18`,
-  `${TEN_STAT_EN_NAME}+18`,
-];
+  const NON_PENTAMELDABLE_MATERIAS = [
+    `${LANGUAGE_TEXTS.CRIT_STAT_EN_NAME}+54`,
+    `${LANGUAGE_TEXTS.DH_STAT_EN_NAME}+54`,
+    `${LANGUAGE_TEXTS.DET_STAT_EN_NAME}+54`,
+    `${LANGUAGE_TEXTS.SKS_STAT_EN_NAME}+54`,
+    `${LANGUAGE_TEXTS.SPS_STAT_EN_NAME}+54`,
+    `${LANGUAGE_TEXTS.TEN_STAT_EN_NAME}+54`,
+  ];
+
+  const PENTAMELDABLE_MATERIAS = [
+    `${LANGUAGE_TEXTS.CRIT_STAT_EN_NAME}+18`,
+    `${LANGUAGE_TEXTS.DH_STAT_EN_NAME}+18`,
+    `${LANGUAGE_TEXTS.DET_STAT_EN_NAME}+18`,
+    `${LANGUAGE_TEXTS.SKS_STAT_EN_NAME}+18`,
+    `${LANGUAGE_TEXTS.SPS_STAT_EN_NAME}+18`,
+    `${LANGUAGE_TEXTS.TEN_STAT_EN_NAME}+18`,
+  ];
+
+  return { NON_PENTAMELDABLE_MATERIAS, PENTAMELDABLE_MATERIAS };
+}
+
 
 export interface Materia {
   statName: string;
@@ -50,8 +50,10 @@ export function updateMateriaValueStatToFinalStat(
   finalStats: FinalEquipmentStat,
   materia: Materia
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   switch (materia.statName) {
-    case CRIT_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.CRIT_STAT_EN_NAME:
       if (
         finalStats.criticalStrike + materia.maxValue >
         finalStats.maxSubstat
@@ -64,7 +66,7 @@ export function updateMateriaValueStatToFinalStat(
         materia.effectiveValue = materia.maxValue;
       }
       break;
-    case DH_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.DH_STAT_EN_NAME:
       if (finalStats.directHit + materia.maxValue > finalStats.maxSubstat) {
         materia.effectiveValue = finalStats.maxSubstat - finalStats.directHit;
         finalStats.directHit = finalStats.maxSubstat;
@@ -73,7 +75,7 @@ export function updateMateriaValueStatToFinalStat(
         materia.effectiveValue = materia.maxValue;
       }
       break;
-    case DET_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.DET_STAT_EN_NAME:
       if (finalStats.determination + materia.maxValue > finalStats.maxSubstat) {
         materia.effectiveValue =
           finalStats.maxSubstat - finalStats.determination;
@@ -83,7 +85,7 @@ export function updateMateriaValueStatToFinalStat(
         materia.effectiveValue = materia.maxValue;
       }
       break;
-    case SKS_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.SKS_STAT_EN_NAME:
       if (finalStats.skillSpeed + materia.maxValue > finalStats.maxSubstat) {
         materia.effectiveValue = finalStats.maxSubstat - finalStats.skillSpeed;
         finalStats.skillSpeed = finalStats.maxSubstat;
@@ -92,7 +94,7 @@ export function updateMateriaValueStatToFinalStat(
         materia.effectiveValue = materia.maxValue;
       }
       break;
-    case SPS_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.SPS_STAT_EN_NAME:
       if (finalStats.spellSpeed + materia.maxValue > finalStats.maxSubstat) {
         materia.effectiveValue = finalStats.maxSubstat - finalStats.spellSpeed;
         finalStats.spellSpeed = finalStats.maxSubstat;
@@ -150,6 +152,8 @@ export function getPossibleMateriasForEquipmentSlot(
   materiaSlot: number,
   jobAbbrev: string
 ) {
+  let { NON_PENTAMELDABLE_MATERIAS, PENTAMELDABLE_MATERIAS } = loadMaterias();
+
   let possibleMaterias: Array<string> = [];
   if (materiaSlot < equipment.materiaSlotCount) {
     possibleMaterias = [...NON_PENTAMELDABLE_MATERIAS];
@@ -165,6 +169,7 @@ export function getPossibleMateriasForEquipmentSlot(
 
   let secondSubStatIdx = -1;
   let casterJob = isCaster(jobAbbrev);
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   for (let i = 0; i < possibleMaterias.length; i++) {
     let [statName, _] = possibleMaterias[i].split("+");
@@ -174,11 +179,11 @@ export function getPossibleMateriasForEquipmentSlot(
       i = i - 1;
     }
 
-    if (!casterJob && statName === SPS_STAT_EN_NAME) {
+    if (!casterJob && statName === LANGUAGE_TEXTS.SPS_STAT_EN_NAME) {
       possibleMaterias.splice(i, 1);
       i = i - 1;
     }
-    if (casterJob && statName === SKS_STAT_EN_NAME) {
+    if (casterJob && statName === LANGUAGE_TEXTS.SKS_STAT_EN_NAME) {
       possibleMaterias.splice(i, 1);
       i = i - 1;
     }
@@ -215,20 +220,22 @@ export function addMateriaStatToTotalStat(
   totalStats: PlayerPower,
   materia: Materia
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   switch (materia.statName) {
-    case CRIT_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.CRIT_STAT_EN_NAME:
       totalStats.criticalStrike += materia.effectiveValue;
       break;
-    case DH_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.DH_STAT_EN_NAME:
       totalStats.directHit += materia.effectiveValue;
       break;
-    case DET_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.DET_STAT_EN_NAME:
       totalStats.determination += materia.effectiveValue;
       break;
-    case SKS_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.SKS_STAT_EN_NAME:
       totalStats.skillSpeed += materia.effectiveValue;
       break;
-    case SPS_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.SPS_STAT_EN_NAME:
       totalStats.spellSpeed += materia.effectiveValue;
       break;
     default:
