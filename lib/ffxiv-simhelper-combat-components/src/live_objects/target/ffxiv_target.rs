@@ -78,3 +78,74 @@ impl StatusHolder<DebuffStatus> for FfxivTarget {
 }
 
 impl StatusTimer<DebuffStatus> for FfxivTarget {}
+
+impl Default for FfxivTarget {
+    fn default() -> Self {
+        FfxivTarget {
+            debuff_list: Rc::new(RefCell::new(HashMap::new())),
+            event_queue: Rc::new(RefCell::new(FfxivEventQueue::new())),
+            combat_time_millisecond: 0,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::FfxivTarget;
+    use crate::{
+        live_objects::player::StatusKey,
+        status::{debuff_status::DebuffStatus, status_timer::StatusTimer},
+    };
+
+    #[test]
+    fn target_debuff_update_status_time_test() {
+        let mut target = FfxivTarget::default();
+        let mut debuff = DebuffStatus::default();
+
+        debuff.duration_left_millisecond = 5000;
+        debuff.duration_millisecond = 5000;
+
+        let key = StatusKey {
+            player_id: debuff.owner_id,
+            status_id: debuff.id,
+        };
+
+        target.debuff_list.borrow_mut().insert(key, debuff);
+
+        target.update_status_time(1000);
+
+        let debuff_time = target
+            .debuff_list
+            .borrow()
+            .get(&key)
+            .unwrap()
+            .duration_left_millisecond;
+
+        assert_eq!(
+            debuff_time, 4000,
+            "Debuff time has to be 4000, but it is {}",
+            debuff_time
+        );
+
+        target.update_status_time(3999);
+
+        let debuff_check2 = target
+            .debuff_list
+            .borrow()
+            .get(&key)
+            .unwrap()
+            .duration_left_millisecond;
+
+        assert_eq!(
+            debuff_check2, 1,
+            "Debuff has to have 1 second remaining, but it is {}",
+            debuff_check2
+        );
+
+        target.update_status_time(1);
+
+        let debuff_is_none = target.debuff_list.borrow().get(&key).is_none();
+
+        assert!(debuff_is_none, "Debuff has to be removed but it is not",)
+    }
+}

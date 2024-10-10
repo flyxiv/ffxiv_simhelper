@@ -92,3 +92,24 @@ impl OwnerTracker for DebuffStatus {
         self.owner_id
     }
 }
+
+impl Default for DebuffStatus {
+    fn default() -> Self {
+        DebuffStatus {
+            id: 0,
+            owner_id: 0,
+            damage_skill_id: None,
+            potency: None,
+            trait_percent: None,
+            damage_category: None,
+            duration_left_millisecond: 0,
+            status_info: vec![],
+            duration_millisecond: 0,
+            is_raidwide: false,
+            stacks: 0,
+            max_stacks: 0,
+            name: "".to_string(),
+            snapshotted_infos: SnapshotTable::new(),
+        }
+    }
+}

@@ -568,6 +568,10 @@ impl FfxivPlayer {
             // refresh infernal slice -> infernal slice
             1225 => 1202,
 
+            // VPR
+            // Reawaken proc -> Reawaken
+            2121 => 2114,
+
             // MCH
             // drill reassemble -> drill
             1414 => 1403,
