@@ -8,18 +8,7 @@ import {
   defaultSingleEquipmentInput,
 } from "../../const/DefaultSingleEquipmentInput";
 import { BEST_PARTNER_URL } from "../../App";
-import {
-  CANCEL_TEXT,
-  CONFIRM_TEXT,
-  DEFAULT_LOADOUT_TEXT,
-  LOAD_CONFIRM_TEXT,
-  LOADOUT_LOAD_TEXT,
-  LOADOUT_NAME_TEXT,
-  LOADOUT_WRITE_TEXT,
-  OVERWRITE_CONFIRM_TEXT,
-  PLD_EN_NAME,
-  SCH_EN_NAME,
-} from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 export const inputStyle = {
   width: "60%",
@@ -50,16 +39,20 @@ interface LoadoutMetaData {
 }
 
 export function DefaultLoadoutMetadata(): LoadoutMetaData {
+  const LANGUAGE_TEXTS = AppLanguageTexts();
+
   return {
-    loadoutName: DEFAULT_LOADOUT_TEXT,
-    jobAbbrev: PLD_EN_NAME,
+    loadoutName: LANGUAGE_TEXTS.DEFAULT_LOADOUT_TEXT,
+    jobAbbrev: LANGUAGE_TEXTS.PLD_EN_NAME,
   };
 }
 
 export function DefaultBestPartnerLoadoutMetadata(): LoadoutMetaData {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return {
-    loadoutName: DEFAULT_LOADOUT_TEXT,
-    jobAbbrev: SCH_EN_NAME,
+    loadoutName: LANGUAGE_TEXTS.DEFAULT_LOADOUT_TEXT,
+    jobAbbrev: LANGUAGE_TEXTS.SCH_EN_NAME,
   };
 }
 
@@ -73,7 +66,9 @@ export function LoadoutBox(
   setTotalState: Function,
   numberOfEquipmentSets: number
 ) {
-  let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState(LOADOUT_NAME_TEXT);
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+  let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState(LANGUAGE_TEXTS.LOADOUT_NAME_TEXT);
   let [textColor, setColor] = useState(BLUR_COLOR);
   let loadoutSaveKey = `${simulationName}-${loadoutId}`;
   let loadoutMetadataSaveKey = `${simulationName}-loadoutMetadata-${loadoutId}`;
@@ -144,7 +139,7 @@ export function LoadoutBox(
               },
             },
           }}
-          value={blur ? LOADOUT_NAME_TEXT : textFieldInputLoadoutName}
+          value={blur ? LANGUAGE_TEXTS.LOADOUT_NAME_TEXT : textFieldInputLoadoutName}
           onChange={(e) => {
             if (!blur) {
               setTextFieldInputLoadoutName(e.target.value);
@@ -219,6 +214,8 @@ function LoadoutOverwriteButton(
     }
   }, [buttonClickConfirmed]);
 
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <>
       <Button
@@ -234,7 +231,7 @@ function LoadoutOverwriteButton(
         <Typography
           sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}
         >
-          {LOADOUT_WRITE_TEXT}
+          {LANGUAGE_TEXTS.LOADOUT_WRITE_TEXT}
         </Typography>
       </Button>
       <Dialog
@@ -245,15 +242,15 @@ function LoadoutOverwriteButton(
       >
         <DialogContent>
           <DialogContentText id="confirm-dialog-description">
-            {OVERWRITE_CONFIRM_TEXT}
+            {LANGUAGE_TEXTS.OVERWRITE_CONFIRM_TEXT}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleConfirm} color="primary" autoFocus>
-            {CONFIRM_TEXT}
+            {LANGUAGE_TEXTS.CONFIRM_TEXT}
           </Button>
           <Button onClick={handleDialogClose} color="primary">
-            {CANCEL_TEXT}
+            {LANGUAGE_TEXTS.CANCEL_TEXT}
           </Button>
         </DialogActions>
       </Dialog>
@@ -303,6 +300,8 @@ function LoadoutLoadButton(
       setButtonClickConfirmed(false); // 상태 초기화
     }
   }, [buttonClickConfirmed]);
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   return (
     <>
       <Button
@@ -318,7 +317,7 @@ function LoadoutLoadButton(
         <Typography
           sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}
         >
-          {LOADOUT_LOAD_TEXT}
+          {LANGUAGE_TEXTS.LOADOUT_LOAD_TEXT}
         </Typography>
       </Button>
       <Dialog
@@ -329,15 +328,15 @@ function LoadoutLoadButton(
       >
         <DialogContent>
           <DialogContentText id="confirm-dialog-description">
-            {LOAD_CONFIRM_TEXT}
+            {LANGUAGE_TEXTS.LOAD_CONFIRM_TEXT}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleConfirm} color="primary" autoFocus>
-            {CONFIRM_TEXT}
+            {LANGUAGE_TEXTS.CONFIRM_TEXT}
           </Button>
           <Button onClick={handleDialogClose} color="primary">
-            {CANCEL_TEXT}
+            {LANGUAGE_TEXTS.CANCEL_TEXT}
           </Button>
         </DialogActions>
       </Dialog>

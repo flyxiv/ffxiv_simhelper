@@ -65,7 +65,7 @@ pub(crate) fn make_viper_opener(db: &ViperDatabase, use_pots: bool) -> Vec<Opene
             OgcdOpener((None, None)),
             GcdOpener(db.swiftskins_sting.get_id()),
             OgcdOpener((Some(db.serpents_ire.get_id()), None)),
-            GcdOpener(db.dreadwinder.get_id()),
+            GcdOpener(db.vicewinder.get_id()),
             OgcdOpener((Some(db.potion.get_id()), None)),
         ]
     } else {
@@ -74,7 +74,7 @@ pub(crate) fn make_viper_opener(db: &ViperDatabase, use_pots: bool) -> Vec<Opene
             OgcdOpener((None, None)),
             GcdOpener(db.swiftskins_sting.get_id()),
             OgcdOpener((Some(db.serpents_ire.get_id()), None)),
-            GcdOpener(db.dreadwinder.get_id()),
+            GcdOpener(db.vicewinder.get_id()),
             OgcdOpener((None, None)),
         ]
     };
@@ -169,7 +169,7 @@ pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPrio
             prerequisite: Some(Not(Box::new(MillisecondsBeforeBurst(3000)))),
         },
         SkillPriorityInfo {
-            skill_id: db.dreadwinder.get_id(),
+            skill_id: db.vicewinder.get_id(),
             prerequisite: Some(Not(Box::new(MillisecondsBeforeBurst(10000)))),
         },
         SkillPriorityInfo {

@@ -94,6 +94,7 @@ impl CombatResource for AstrologianCombatResources {
                         self.player_id,
                     ),
                     DamageCategory::Direct,
+                    false,
                     combat_time_millisecond,
                 ))
             }

@@ -50,23 +50,7 @@ import {
 } from "../../../types/EquipmentInput";
 import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
-import {
-  AST_EN_NAME,
-  AST_MELEE_PARTNER_TEXT,
-  AST_RANGED_PARTNER_TEXT,
-  convertToSlotText,
-  DNC_EN_NAME,
-  DNC_PARTNER_TEXT,
-  EMPTY_TEXT,
-  FINGER1_SLOT_EN_TEXT,
-  FINGER2_SLOT_EN_TEXT,
-  FOOD_SLOT_TEXT,
-  NO_POT_TEXT,
-  POT_LABEL_TEXT,
-  TIME_INPUT_LABEL_TEXT,
-  USE_POT_TEXT,
-  WEAPON_SLOT_EN_TEXT,
-} from "../../../const/languageTexts";
+import { AppLanguageTexts, AST_EN_NAME, convertToSlotText, DNC_EN_NAME, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -91,7 +75,7 @@ const EquipmentMenu = styled(MenuItem)`
   ${MenuItemStyle}
 `;
 
-let PLAYER_EQUIPMENTS = new Map(EQUIPMENT_DATABASE_BY_ID);
+let PLAYER_EQUIPMENTS = new Map();
 
 function EquipmentMenuOfOneSlot(
   id: number,
@@ -100,6 +84,7 @@ function EquipmentMenuOfOneSlot(
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   let totalState = totalEquipmentState.equipmentDatas[id];
   let key = `${slotName}-${id}-equipment`;
   let slotEquipmentId = totalState.itemSet[slotNameToSlotIndex(slotName)];
@@ -231,7 +216,7 @@ function EquipmentMenuOfOneSlot(
                   color="white"
                   sx={{ fontSize: AppConfigurations.body1FontSize }}
                 >
-                  {EMPTY_TEXT}
+                  {LANGUAGE_TEXTS.EMPTY_TEXT}
                 </Typography>
               </Box>
             </EquipmentMenu>
@@ -297,6 +282,7 @@ export function EquipmentSelectionMenu(
   let mainCharacterJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
   let inputCount = isDouble ? 2 : 1;
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <EquipmentGridContainer container>
@@ -396,7 +382,7 @@ export function EquipmentSelectionMenu(
         >
           <InputEquipmentBox item xs={xs}>
             {SimulationUpperInputTimeTextBox(
-              TIME_INPUT_LABEL_TEXT,
+              LANGUAGE_TEXTS.TIME_INPUT_LABEL_TEXT,
               totalEquipmentState,
               setTotalEquipmentState
             )}
@@ -417,6 +403,7 @@ export function BestPartnerInputMenu(
 ) {
   let xs = 12;
   let inputCount = 1;
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <EquipmentGridContainer container>
@@ -452,7 +439,7 @@ export function BestPartnerInputMenu(
       >
         <InputEquipmentBox item xs={xs}>
           {SimulationUpperInputTimeTextBox(
-            TIME_INPUT_LABEL_TEXT,
+            LANGUAGE_TEXTS.TIME_INPUT_LABEL_TEXT,
             totalEquipmentState,
             setTotalEquipmentState
           )}
@@ -471,6 +458,8 @@ function PartnerSelectionMenu(
   let mainPlayerJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
 
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   if (mainPlayerJobAbbrev === AST_EN_NAME) {
     return (
       <>
@@ -483,7 +472,7 @@ function PartnerSelectionMenu(
               id,
               totalEquipmentState,
               setTotalEquipmentState,
-              AST_MELEE_PARTNER_TEXT
+              LANGUAGE_TEXTS.AST_MELEE_PARTNER_TEXT
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
@@ -497,7 +486,7 @@ function PartnerSelectionMenu(
               id,
               totalEquipmentState,
               setTotalEquipmentState,
-              AST_RANGED_PARTNER_TEXT
+              LANGUAGE_TEXTS.AST_RANGED_PARTNER_TEXT
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
@@ -514,7 +503,7 @@ function PartnerSelectionMenu(
             id,
             totalEquipmentState,
             setTotalEquipmentState,
-            DNC_PARTNER_TEXT
+            LANGUAGE_TEXTS.DNC_PARTNER_TEXT
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
@@ -530,8 +519,9 @@ function FoodSelection(
   setTotalEquipmentState: Function
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
-  let foodLabel = FOOD_SLOT_TEXT;
+  let foodLabel = LANGUAGE_TEXTS.FOOD_SLOT_TEXT;
   if (totalState.foodId !== -1) {
     foodLabel = "";
   }
@@ -580,7 +570,7 @@ function FoodSelection(
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                {EMPTY_TEXT}
+                {LANGUAGE_TEXTS.EMPTY_TEXT}
               </Typography>
             </Box>
           </MenuItem>
@@ -596,8 +586,9 @@ function PotSelection(
   setTotalEquipmentState: Function
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
-  let label = POT_LABEL_TEXT;
+  let label = LANGUAGE_TEXTS.POT_LABEL_TEXT;
 
   const updateUsePot = (e: SelectChangeEvent<number>) => {
     let newState = { ...totalEquipmentState };
@@ -606,9 +597,7 @@ function PotSelection(
       usePot = parseInt(usePot);
     }
 
-    newState.equipmentDatas.forEach((data) => {
-      data.usePot = usePot;
-    });
+    newState.equipmentDatas[id].usePot = usePot;
 
     setTotalEquipmentState(newState);
   };
@@ -642,7 +631,7 @@ function PotSelection(
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                {USE_POT_TEXT}
+                {LANGUAGE_TEXTS.USE_POT_TEXT}
               </Typography>
             </Box>
           </MenuItem>
@@ -654,7 +643,7 @@ function PotSelection(
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                {NO_POT_TEXT}
+                {LANGUAGE_TEXTS.NO_POT_TEXT}
               </Typography>
             </Box>
           </MenuItem>

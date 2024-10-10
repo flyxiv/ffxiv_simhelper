@@ -20,62 +20,36 @@ import {
 import { CRIT_BASE_DAMAGE } from "./Stats";
 import { ItemSet } from "./ItemSet";
 import { GearSetMaterias } from "./Materia";
-import {
-  AST_EN_NAME,
-  BLM_EN_NAME,
-  BRD_EN_NAME,
-  CRIT_STAT_NAME,
-  CRT_POWER_NAME,
-  CRT_RATE_POWER_NAME,
-  DET_POWER_NAME,
-  DET_STAT_NAME,
-  DEX_STAT_NAME,
-  DH_RATE_POWER_NAME,
-  DH_STAT_NAME,
-  DNC_EN_NAME,
-  DRG_EN_NAME,
-  DRK_EN_NAME,
-  GCD_NAME,
-  GNB_EN_NAME,
-  INT_STAT_NAME,
-  MAIN_STAT_POWER_NAME,
-  MCH_EN_NAME,
-  MIND_STAT_NAME,
-  MNK_EN_NAME,
-  NIN_EN_NAME,
-  PCT_EN_NAME,
-  PLD_EN_NAME,
-  RDM_EN_NAME,
-  RPR_EN_NAME,
-  SAM_EN_NAME,
-  SCH_EN_NAME,
-  SGE_EN_NAME,
-  SKS_STAT_NAME,
-  SMN_EN_NAME,
-  SPEED_POWER_NAME,
-  SPS_STAT_NAME,
-  STR_STAT_NAME,
-  TEN_STAT_NAME,
-  TENACITY_POWER_NAME,
-  VPR_EN_NAME,
-  WAR_EN_NAME,
-  WD_POWER_NAME,
-  WD_STAT_NAME,
-  WHM_EN_NAME,
-} from "../../const/languageTexts";
 import { SingleEquipmentInputSaveState } from "../EquipmentInput";
+import { AppLanguageTexts, AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DEX_STAT_EN_NAME, DH_STAT_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, INT_STAT_EN_NAME, MCH_EN_NAME, MIND_STAT_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SKS_STAT_EN_NAME, SMN_EN_NAME, SPS_STAT_EN_NAME, STR_STAT_EN_NAME, TEN_STAT_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WD_STAT_EN_NAME, WHM_EN_NAME } from "../../const/languageTexts";
+import { useEffect, useState } from "react";
+import { useLanguage } from "../../LanguageContext";
 
-export const POWER_NAMES = [
-  WD_POWER_NAME,
-  MAIN_STAT_POWER_NAME,
-  CRT_RATE_POWER_NAME,
-  CRT_POWER_NAME,
-  DH_RATE_POWER_NAME,
-  DET_POWER_NAME,
-  SPEED_POWER_NAME,
-  TENACITY_POWER_NAME,
-  GCD_NAME,
-];
+export const loadPowerNames = () => {
+  let { language } = useLanguage();
+
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+  const POWER_NAMES = [
+    LANGUAGE_TEXTS.WD_POWER_NAME,
+    LANGUAGE_TEXTS.MAIN_STAT_POWER_NAME,
+    LANGUAGE_TEXTS.CRT_RATE_POWER_NAME,
+    LANGUAGE_TEXTS.CRT_POWER_NAME,
+    LANGUAGE_TEXTS.DH_RATE_POWER_NAME,
+    LANGUAGE_TEXTS.DET_POWER_NAME,
+    LANGUAGE_TEXTS.SPEED_POWER_NAME,
+    LANGUAGE_TEXTS.TENACITY_POWER_NAME,
+    LANGUAGE_TEXTS.GCD_NAME,
+  ]
+
+  let [powerNames, setPowerNames] = useState(POWER_NAMES);
+
+  useEffect(() => {
+    setPowerNames(powerNames);
+  }, [language]);
+
+  return { POWER_NAMES };
+}
+
 
 export interface PlayerPower {
   weaponDamage: number;
@@ -142,27 +116,28 @@ export function getStatByStatName(
   statName: string,
   jobAbbrev: string
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   switch (statName) {
-    case WD_STAT_NAME:
+    case WD_STAT_EN_NAME:
       return `${playerPower.weaponDamage}`;
-    case STR_STAT_NAME:
-    case DEX_STAT_NAME:
-    case INT_STAT_NAME:
-    case MIND_STAT_NAME:
+    case STR_STAT_EN_NAME:
+    case DEX_STAT_EN_NAME:
+    case INT_STAT_EN_NAME:
+    case MIND_STAT_EN_NAME:
       return `${playerPower.mainStat}`;
-    case CRIT_STAT_NAME:
+    case CRIT_STAT_EN_NAME:
       return `${playerPower.criticalStrike}`;
-    case DH_STAT_NAME:
+    case DH_STAT_EN_NAME:
       return `${playerPower.directHit}`;
-    case DET_STAT_NAME:
+    case DET_STAT_EN_NAME:
       return `${playerPower.determination}`;
-    case SKS_STAT_NAME:
+    case SKS_STAT_EN_NAME:
       return `${playerPower.skillSpeed}`;
-    case SPS_STAT_NAME:
+    case SPS_STAT_EN_NAME:
       return `${playerPower.spellSpeed}`;
-    case TEN_STAT_NAME:
+    case TEN_STAT_EN_NAME:
       return `${playerPower.tenacity}`;
-    case GCD_NAME: {
+    case LANGUAGE_TEXTS.GCD_NAME: {
       playerPower.gcd = calculateGCD(
         playerPower.speedMultiplier,
         calculateHasteBuff(jobAbbrev)
@@ -175,32 +150,33 @@ export function getStatByStatName(
 }
 
 export function getStatPower(power: PlayerPower, powerName: string) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   switch (powerName) {
-    case WD_POWER_NAME: {
+    case LANGUAGE_TEXTS.WD_POWER_NAME: {
       return `${(power.weaponDamageMultiplier * 100).toFixed(0)}%`;
     }
-    case MAIN_STAT_POWER_NAME: {
+    case LANGUAGE_TEXTS.MAIN_STAT_POWER_NAME: {
       return `${(power.mainStatMultiplier * 100).toFixed(0)}%`;
     }
-    case CRT_RATE_POWER_NAME: {
+    case LANGUAGE_TEXTS.CRT_RATE_POWER_NAME: {
       return `+${(power.criticalStrikeRate * 100).toFixed(1)}%`;
     }
-    case CRT_POWER_NAME: {
+    case LANGUAGE_TEXTS.CRT_POWER_NAME: {
       return `+${(power.criticalStrikeDamage * 100).toFixed(1)}%`;
     }
-    case DH_RATE_POWER_NAME: {
+    case LANGUAGE_TEXTS.DH_RATE_POWER_NAME: {
       return `${(power.directHitRate * 100).toFixed(1)}%`;
     }
-    case DET_POWER_NAME: {
+    case LANGUAGE_TEXTS.DET_POWER_NAME: {
       return `${(100 * power.determinationMultiplier).toFixed(1)}%`;
     }
-    case SPEED_POWER_NAME: {
+    case LANGUAGE_TEXTS.SPEED_POWER_NAME: {
       return `${(100 * power.speedMultiplier).toFixed(1)}%`;
     }
-    case TENACITY_POWER_NAME: {
+    case LANGUAGE_TEXTS.TENACITY_POWER_NAME: {
       return `${(power.tenacityMultiplier * 100).toFixed(1)}%`;
     }
-    case GCD_NAME: {
+    case LANGUAGE_TEXTS.GCD_NAME: {
       return `${power.gcd.toFixed(2)}`;
     }
     default:
@@ -350,55 +326,57 @@ export function getStatLostByStatName(
   statName: string,
   jobAbbrev: string
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   switch (statName) {
-    case WD_STAT_NAME:
+    case WD_STAT_EN_NAME:
       return 0;
-    case STR_STAT_NAME:
-    case DEX_STAT_NAME:
-    case INT_STAT_NAME:
-    case MIND_STAT_NAME:
+    case STR_STAT_EN_NAME:
+    case DEX_STAT_EN_NAME:
+    case INT_STAT_EN_NAME:
+    case MIND_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentMainStat(
           totalStats.mainStatMultiplier * 100,
           isTank(jobAbbrev)
         ) - totalStats.mainStat
       );
-    case CRIT_STAT_NAME:
+    case CRIT_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentCriticalStrike(
           100 * (totalStats.criticalStrikeDamage - CRIT_BASE_DAMAGE)
         ) - totalStats.criticalStrike
       );
-    case DH_STAT_NAME:
+    case DH_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentDirectHit(100 * totalStats.directHitRate) -
         totalStats.directHit
       );
-    case DET_STAT_NAME:
+    case DET_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentDetermination(
           totalStats.determinationMultiplier * 100 - 100
         ) - totalStats.determination
       );
-    case SKS_STAT_NAME:
+    case SKS_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentSpeed(
           totalStats.speedMultiplier * 100 - 100
         ) - totalStats.skillSpeed
       );
-    case SPS_STAT_NAME:
+    case SPS_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentSpeed(
           totalStats.speedMultiplier * 100 - 100
         ) - totalStats.spellSpeed
       );
-    case TEN_STAT_NAME:
+    case TEN_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentTenacity(
           totalStats.tenacityMultiplier * 100 - 100
         ) - totalStats.tenacity
       );
-    case GCD_NAME:
+    case LANGUAGE_TEXTS.GCD_NAME:
       return (
         Math.max(getMinNeededStatForCurrentGCD(totalStats.gcd, jobAbbrev), DEFAULT_SPEED) -
         getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
@@ -413,56 +391,57 @@ export function getStatNeededByStatName(
   statName: string,
   jobAbbrev: string
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   switch (statName) {
-    case WD_STAT_NAME:
+    case WD_STAT_EN_NAME:
       return 0;
-    case STR_STAT_NAME:
-    case DEX_STAT_NAME:
-    case INT_STAT_NAME:
-    case MIND_STAT_NAME:
+    case STR_STAT_EN_NAME:
+    case DEX_STAT_EN_NAME:
+    case INT_STAT_EN_NAME:
+    case MIND_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentMainStat(
           totalStats.mainStatMultiplier * 100 + 1,
           isTank(jobAbbrev)
         ) - totalStats.mainStat
       );
-    case CRIT_STAT_NAME:
+    case CRIT_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentCriticalStrike(
           100 * (totalStats.criticalStrikeDamage - CRIT_BASE_DAMAGE) + 0.1
         ) - totalStats.criticalStrike
       );
-    case DH_STAT_NAME:
+    case DH_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentDirectHit(
           100 * totalStats.directHitRate + 0.1
         ) - totalStats.directHit
       );
-    case DET_STAT_NAME:
+    case DET_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentDetermination(
           totalStats.determinationMultiplier * 100 - 100 + 0.1
         ) - totalStats.determination
       );
-    case SKS_STAT_NAME:
+    case SKS_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentSpeed(
           totalStats.speedMultiplier * 100 - 100 + 0.1
         ) - totalStats.skillSpeed
       );
-    case SPS_STAT_NAME:
+    case SPS_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentSpeed(
           totalStats.speedMultiplier * 100 - 100 + 0.1
         ) - totalStats.spellSpeed
       );
-    case TEN_STAT_NAME:
+    case TEN_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentTenacity(
           totalStats.tenacityMultiplier * 100 - 100 + 0.1
         ) - totalStats.tenacity
       );
-    case GCD_NAME:
+    case LANGUAGE_TEXTS.GCD_NAME:
       return (
         getMinNeededStatForCurrentGCD(totalStats.gcd - 0.01, jobAbbrev) -
         getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
@@ -478,47 +457,48 @@ export function getStatNeededByStatNameLadderAmount(
   jobAbbrev: string,
   amount: number
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   switch (statName) {
-    case WD_STAT_NAME:
+    case WD_STAT_EN_NAME:
       return 0;
-    case STR_STAT_NAME:
-    case DEX_STAT_NAME:
-    case INT_STAT_NAME:
-    case MIND_STAT_NAME:
+    case STR_STAT_EN_NAME:
+    case DEX_STAT_EN_NAME:
+    case INT_STAT_EN_NAME:
+    case MIND_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentMainStat(
           totalStats.mainStatMultiplier * 100 + 1 * amount,
           isTank(jobAbbrev)
         ) - totalStats.mainStat
       );
-    case CRIT_STAT_NAME:
+    case CRIT_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentCriticalStrike(
           100 * (totalStats.criticalStrikeDamage - CRIT_BASE_DAMAGE) +
           0.1 * amount
         ) - totalStats.criticalStrike
       );
-    case DH_STAT_NAME:
+    case DH_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentDirectHit(
           100 * totalStats.directHitRate + 0.1 * amount
         ) - totalStats.directHit
       );
-    case DET_STAT_NAME:
+    case DET_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentDetermination(
           totalStats.determinationMultiplier * 100 - 100 + 0.1 * amount
         ) - totalStats.determination
       );
-    case TEN_STAT_NAME:
+    case TEN_STAT_EN_NAME:
       return (
         getMinNeededStatForCurrentTenacity(
           totalStats.tenacityMultiplier * 100 - 100 + 0.1 * amount
         ) - totalStats.tenacity
       );
-    case SKS_STAT_NAME:
-    case SPS_STAT_NAME:
-    case GCD_NAME:
+    case SKS_STAT_EN_NAME:
+    case SPS_STAT_EN_NAME:
+    case LANGUAGE_TEXTS.GCD_NAME:
       return (
         getMinNeededStatForCurrentGCD(
           totalStats.gcd - 0.01 * amount,

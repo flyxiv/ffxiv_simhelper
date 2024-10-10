@@ -1,5 +1,5 @@
+import { AppLanguageTexts } from "../../const/languageTexts";
 import { AppConfigurations } from "../../Themes";
-import { CAST_TEXT, DAMAGE_PERCENTAGE_TEXT, SKILL_TITLE_TEXT, TOTAL_DAMAGE_TEXT } from "../../const/languageTexts";
 import { DamageChartData } from "./GraphData";
 import {
   SkillBarBoxStyle,
@@ -42,7 +42,7 @@ const SkillBarBox = styled(Box)`
   ${SkillBarBoxStyle}
 `;
 
-// One row of Damage Profile column in QuickSim Result
+// One row of Damage Profile column in DpsAnalysis Result
 // 1. Skill Icon
 // 2. Skill Name
 // 3. Skill Damage Bar + Percentage of Total Damage
@@ -107,35 +107,40 @@ const SkillPercentBox = styled(Box)`
   ${SkillPercentageBoxStyle}
 `;
 
-export const DamageChartTitle = (
-  <SkillBox>
-    <Box display="flex" width="200px">
-      <SkillIconBox />
-      <SkillNameBox>
-        <Typography variant="body2" fontSize={AppConfigurations.body2FontSize}>
-          {SKILL_TITLE_TEXT}
+export const DamageChartTitle = () => {
+
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+  return (
+    <SkillBox>
+      <Box display="flex" width="200px">
+        <SkillIconBox />
+        <SkillNameBox>
+          <Typography variant="body2" fontSize={AppConfigurations.body2FontSize}>
+            {LANGUAGE_TEXTS.SKILL_TITLE_TEXT}
+          </Typography>
+        </SkillNameBox>
+      </Box>
+
+      <SkillBarBox />
+
+      <SkillPercentBox>
+        <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
+          {LANGUAGE_TEXTS.DAMAGE_PERCENTAGE_TEXT}
         </Typography>
-      </SkillNameBox>
-    </Box>
+      </SkillPercentBox>
 
-    <SkillBarBox />
+      <TotalDamageBox>
+        <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
+          {LANGUAGE_TEXTS.TOTAL_DAMAGE_TEXT}
+        </Typography>
+      </TotalDamageBox>
 
-    <SkillPercentBox>
-      <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-        {DAMAGE_PERCENTAGE_TEXT}
-      </Typography>
-    </SkillPercentBox>
-
-    <TotalDamageBox>
-      <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-        {TOTAL_DAMAGE_TEXT}
-      </Typography>
-    </TotalDamageBox>
-
-    <SkillCountBox>
-      <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-        {CAST_TEXT}
-      </Typography>
-    </SkillCountBox>
-  </SkillBox>
-);
+      <SkillCountBox>
+        <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
+          {LANGUAGE_TEXTS.CAST_TEXT}
+        </Typography>
+      </SkillCountBox>
+    </SkillBox>
+  );
+}

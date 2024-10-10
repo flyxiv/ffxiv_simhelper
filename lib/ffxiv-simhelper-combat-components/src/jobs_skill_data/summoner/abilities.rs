@@ -1043,7 +1043,7 @@ impl SummonerDatabase {
             name: String::from("Umbral Impulse"),
             player_id,
             potency: 620,
-            trait_percent: 130,
+            trait_percent: 115,
             additional_skill_events: vec![],
             proc_events: vec![],
             combo: None,

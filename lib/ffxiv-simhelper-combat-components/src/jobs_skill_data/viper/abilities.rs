@@ -13,7 +13,7 @@ use std::collections::HashMap;
 pub(crate) struct ViperDatabase {
     pub(crate) steel_fangs: AttackSkill,
     pub(crate) dread_fangs: AttackSkill,
-    pub(crate) dreadwinder: AttackSkill,
+    pub(crate) vicewinder: AttackSkill,
     pub(crate) hunters_sting: AttackSkill,
     pub(crate) swiftskins_sting: AttackSkill,
     pub(crate) flankstings_strike: AttackSkill,
@@ -221,9 +221,9 @@ impl ViperDatabase {
             is_guaranteed_direct_hit: false,
             use_type: UseType::UseOnTarget,
         };
-        let dreadwinder: AttackSkill = AttackSkill {
+        let vicewinder: AttackSkill = AttackSkill {
             id: 2102,
-            name: String::from("Dreadwinder"),
+            name: String::from("Vicewinder"),
             player_id,
             potency: 500,
             trait_percent: 100,
@@ -232,7 +232,7 @@ impl ViperDatabase {
             combo: None,
             delay_millisecond: None,
             casting_time_millisecond: 0,
-            gcd_cooldown_millisecond: 2500,
+            gcd_cooldown_millisecond: 3000,
             charging_time_millisecond: 0,
             is_speed_buffed: true,
             cooldown_reduced_by_speed: false,
@@ -317,7 +317,7 @@ impl ViperDatabase {
             id: 2105,
             name: String::from("Flanksting Strike"),
             player_id,
-            potency: 500,
+            potency: 400,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -350,7 +350,7 @@ impl ViperDatabase {
             id: 2106,
             name: String::from("Flanksbane Fang"),
             player_id,
-            potency: 500,
+            potency: 400,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -383,7 +383,7 @@ impl ViperDatabase {
             id: 2107,
             name: String::from("Hindsting Strike"),
             player_id,
-            potency: 500,
+            potency: 400,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -416,7 +416,7 @@ impl ViperDatabase {
             id: 2108,
             name: String::from("Hindsbane Fang"),
             player_id,
-            potency: 500,
+            potency: 400,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -866,7 +866,7 @@ impl ViperDatabase {
         ViperDatabase {
             steel_fangs,
             dread_fangs,
-            dreadwinder,
+            vicewinder,
             hunters_sting,
             swiftskins_sting,
             flankstings_strike: flanksting_strike,
@@ -906,7 +906,7 @@ pub(crate) fn make_viper_skill_list(player_id: PlayerIdType) -> SkillTable<Attac
     let viper_skill_list: Vec<AttackSkill> = vec![
         db.steel_fangs,
         db.dread_fangs,
-        db.dreadwinder,
+        db.vicewinder,
         db.hunters_sting,
         db.swiftskins_sting,
         db.flankstings_strike,

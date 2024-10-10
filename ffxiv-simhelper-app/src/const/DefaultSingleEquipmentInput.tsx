@@ -10,20 +10,9 @@ import {
   SingleEquipmentInputSaveState,
   USE_POT_VAL,
 } from "../types/EquipmentInput";
-import {
-  BLM_EN_NAME,
-  BRD_EN_NAME,
-  DRG_EN_NAME,
-  MIDLANDER_HYUR_NAME_EN,
-  NIN_EN_NAME,
-  PLD_EN_NAME,
-  SCH_EN_NAME,
-  SGE_EN_NAME,
-  WAR_EN_NAME,
-  WHM_EN_NAME,
-} from "./languageTexts";
 import { PARTY_MAX_ILVL } from "../components/input/PartyMemberIlvlSelection";
 import { mapJobAbbrevToJobBisEquipments } from "./StatValue";
+import { BLM_EN_NAME, BRD_EN_NAME, DRG_EN_NAME, MIDLANDER_HYUR_EN_NAME, NIN_EN_NAME, PLD_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "./languageTexts";
 
 export const DEFAULT_GEARSET_MATERIAS: GearSetMaterias = [
   [],
@@ -61,8 +50,8 @@ export function defaultSingleEquipmentInput(): EquipmentInput {
   let bisGear = mapJobAbbrevToJobBisEquipments(mainPlayerJobAbbrev);
 
   let singleEquipmentInput: SingleEquipmentInputSaveState = {
-    mainPlayerJobAbbrev: PLD_EN_NAME,
-    race: MIDLANDER_HYUR_NAME_EN,
+    mainPlayerJobAbbrev: mainPlayerJobAbbrev,
+    race: MIDLANDER_HYUR_EN_NAME,
     mainPlayerPartner1Id: null,
     mainPlayerPartner2Id: null,
     itemSet: itemSet,
@@ -100,7 +89,7 @@ export function defaultBestPartnerEquipmentInput(): EquipmentInput {
 
   let singleEquipmentInput: SingleEquipmentInputSaveState = {
     mainPlayerJobAbbrev: SCH_EN_NAME,
-    race: MIDLANDER_HYUR_NAME_EN,
+    race: MIDLANDER_HYUR_EN_NAME,
     mainPlayerPartner1Id: null,
     mainPlayerPartner2Id: null,
     itemSet: itemSet,

@@ -115,7 +115,7 @@ impl MonkDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![(
                 FfxivEvent::IncreasePlayerResource(player_id, 0, 1, 0),
-                8,
+                20,
             )],
         };
         let winds_rumination: BuffStatus = BuffStatus {
@@ -554,7 +554,7 @@ impl MonkDatabase {
             id: 914,
             name: "Leaping Opo".to_string(),
             player_id,
-            potency: 460,
+            potency: 420,
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],

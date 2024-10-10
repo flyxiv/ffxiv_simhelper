@@ -57,6 +57,7 @@ impl EventTicker for AutoAttackTicker {
                             self.player_id,
                         ),
                         self.damage_category,
+                        false,
                         max(current_time_millisecond, 0),
                     )));
             }
@@ -108,14 +109,15 @@ impl AutoAttackTicker {
             "NIN" => 110,
             "DRK" | "WAR" | "GNB" => 90,
             "BRD" | "MCH" => 80,
-            "VPR" => 90,
+            "VPR" => 95,
             "MNK" => 90,
             "RPR" => 85,
-            "DRG" => 80,
+            "DRG" => 90,
+            "SAM" => 85,
             _ => 100,
         };
 
-        let mut auto_attack = AttackSkill::new(
+        let mut auto_attack = AttackSkill::new_auto_attack(
             AUTO_ATTACK_ID,
             String::from("Auto Attack"),
             player_id,
@@ -176,7 +178,7 @@ fn get_auto_attack_interval_tuning_value_of_job(job_abbrev: &String) -> Multipli
         "GNB" => 0.9,
         "DRG" => 0.9,
         "MNK" => 0.95,
-        "VPR" => 0.9,
+        "VPR" => 0.91,
         _ => 1.0,
     }
 }

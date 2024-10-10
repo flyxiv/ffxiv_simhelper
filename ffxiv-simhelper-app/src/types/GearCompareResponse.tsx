@@ -1,6 +1,6 @@
-import { QuickSimResponse } from "./QuickSimResponse";
+import { DpsAnalysisResponse } from "./DpsAnalysisResponse";
 
 export interface GearCompareResponse {
-  simulationGear1: QuickSimResponse;
-  simulationGear2: QuickSimResponse;
+  simulationGear1: DpsAnalysisResponse;
+  simulationGear2: DpsAnalysisResponse;
 }

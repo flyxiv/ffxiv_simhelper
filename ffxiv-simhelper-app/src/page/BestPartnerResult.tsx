@@ -16,30 +16,8 @@ import {
 import { Footer } from "../components/basic/Footer";
 import { SimulationDataByRole } from "../types/ffxivdatabase/PartyCompositionMaker";
 import { ContributionByRoleTable } from "../components/graph/ContributionByRoleTable";
-import {
-  AST_EN_NAME,
-  BEST_PARTNER_PAGE_NAME,
-  BRD_EN_NAME,
-  BURST_TEXT,
-  DNC_EN_NAME,
-  DRG_EN_NAME,
-  DRK_EN_NAME,
-  GNB_EN_NAME,
-  MCH_EN_NAME,
-  MNK_EN_NAME,
-  NIN_EN_NAME,
-  OVERALL_TEXT,
-  PLD_EN_NAME,
-  RPR_EN_NAME,
-  SAM_EN_NAME,
-  SCH_EN_NAME,
-  SGE_EN_NAME,
-  SIMULATION_RESULT_TEXT,
-  VPR_EN_NAME,
-  WAR_EN_NAME,
-  WHM_EN_NAME,
-} from "../const/languageTexts";
 import { BEST_PARTNER_ITERATION_COUNT } from "../components/basic/BestPartnerRequestButton";
+import { AppLanguageTexts, AST_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PLD_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../const/languageTexts";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -82,6 +60,7 @@ export function BestPartnerResult() {
       convertToContributionTable(singleBurstResponses)
     );
   }
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <Box
@@ -93,11 +72,11 @@ export function BestPartnerResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(BEST_PARTNER_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultTopBoardBox marginBottom="40px">
-            {SimulationTitle(SIMULATION_RESULT_TEXT)}
+            {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
             {PlayerInfo(
               responseJson.mainPlayerPower,
               mainPlayerJob,
@@ -108,7 +87,7 @@ export function BestPartnerResult() {
             )}
           </ResultTopBoardBox>
           <ResultBoardBox>
-            {SimulationTitle(OVERALL_TEXT)}
+            {SimulationTitle(LANGUAGE_TEXTS.OVERALL_TEXT)}
             {ContributionByRoleTable(simulationDataByRoles[0])}
 
             {simulationDataByRoles.slice(1).map((table, index) => {
@@ -116,7 +95,7 @@ export function BestPartnerResult() {
 
               return (
                 <>
-                  {SimulationTitle(BURST_TEXT(burstMinute))}
+                  {SimulationTitle(`${burstMinute}${LANGUAGE_TEXTS.BURST_TEXT}`)}
                   {ContributionByRoleTable(table)};
                 </>
               );
@@ -139,6 +118,7 @@ function convertToContributionTable(
     ranged: [],
     casters: [],
   };
+  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   for (let data of partnerSimulationData) {
     switch (data.partnerJobAbbrev) {

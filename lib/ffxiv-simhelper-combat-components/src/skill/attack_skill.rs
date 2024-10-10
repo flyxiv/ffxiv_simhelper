@@ -239,6 +239,7 @@ impl AttackSkill {
             self.is_guaranteed_direct_hit,
             snapshot_status_infos(&buffs.borrow(), &debuffs.borrow(), self.player_id),
             DamageCategory::Direct,
+            self.is_gcd(),
             current_combat_milliseconds + inflict_damage_time,
         ))
     }
@@ -308,7 +309,7 @@ impl AttackSkill {
     }
 
     /// All FFXIV Offensive Skills can be double-weaved except for Stardiver, so
-    /// just give a default of 700ms, which is right for almost all skills.
+    /// just give a default value, which is right for almost all skills.
     pub(crate) fn get_delay_millisecond(&self) -> TimeType {
         if let Some(delay) = self.delay_millisecond {
             delay
@@ -387,7 +388,18 @@ impl AttackSkill {
         max(0, self.max_stacks - future_used_stack)
     }
 
-    pub fn new(
+    /// Calculate when the skill can be used from present time in millisecond
+    /// if the skill is available right now, the offset is 0.
+    /// if the skill is available after 1000ms, the offset is 1000.
+    pub(crate) fn get_offset_cooldown_millisecond(&self) -> TimeType {
+        if self.stacks >= 1 {
+            0
+        } else {
+            self.current_cooldown_millisecond
+        }
+    }
+
+    pub fn new_auto_attack(
         id: SkillIdType,
         name: String,
         player_id: PlayerIdType,

@@ -7,11 +7,11 @@ import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
-import { StatWeightsResponseTable } from "../types/StatWeightsResponse";
+import { BestStatsResponseTable } from "../types/BestStats";
 import { StatWeightSummary } from "../components/container/StatSummary";
-import { SIMULATION_RESULT_TEXT, STAT_WEIGHTS_PAGE_NAME, STAT_WEIGHTS_TEXT } from "../const/languageTexts";
 import { EMPTY_PARTY_MEMBER } from "../types/PartyStates";
-import { STAT_WEIGHTS_REQUEST_COUNT } from "../components/basic/StatWeightsRequestButton";
+import { STAT_WEIGHTS_REQUEST_COUNT } from "../components/basic/BestStatsRequestButton";
+import { AppLanguageTexts } from "../const/languageTexts";
 
 export interface StatWeightsData {
   statName: string;
@@ -29,6 +29,7 @@ const ResultBoardTopBox = styled(Box)`
 export const TABLE_WIDTH = "80%";
 
 export function StatWeightsResult() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   let response = localStorage.getItem(STAT_WEIGHTS_RESPONSE_SAVE_NAME);
 
   if (response == null) {
@@ -39,7 +40,7 @@ export function StatWeightsResult() {
     );
   }
 
-  let responseJson = JSON.parse(response) as StatWeightsResponseTable;
+  let responseJson = JSON.parse(response) as BestStatsResponseTable;
   let mainPlayerJob = responseJson.mainPlayerJobAbbrev;
   let partyMemberJobAbbrevs = responseJson.partyMemberJobAbbrevs.filter((job) => job !== EMPTY_PARTY_MEMBER);
   let statWeightsTable = responseJson.statAugmentedSimulationData;
@@ -67,15 +68,15 @@ export function StatWeightsResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(STAT_WEIGHTS_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME)}
         <Box>
           {AppHeader()}
           <ResultBoardTopBox marginBottom="40px">
-            {SimulationTitle(SIMULATION_RESULT_TEXT)}
+            {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
             {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, STAT_WEIGHTS_REQUEST_COUNT, 1)}
           </ResultBoardTopBox>
           <ResultBoardBox >
-            {SimulationTitle(STAT_WEIGHTS_TEXT)}
+            {SimulationTitle(LANGUAGE_TEXTS.BEST_STATS_TEXT)}
             {StatWeightSummary(statWeightsCalculated)}
           </ResultBoardBox>
           {Footer()}

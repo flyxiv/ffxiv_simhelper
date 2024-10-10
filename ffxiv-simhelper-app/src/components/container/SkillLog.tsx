@@ -1,4 +1,4 @@
-import { QuickSimResponse } from "../../types/QuickSimResponse";
+import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 import {
   SkillLogTableStyle,
   SkillLogCombatTimeBoxStyle,
@@ -9,15 +9,9 @@ import {
 } from "./Styles";
 import { SkillLogTable } from "./SkillLogTable";
 import { styled, List, Box, Typography, ListItem } from "@mui/material";
-import {
-  ABILITY_TEXT,
-  COMBAT_TIME_TEXT,
-  IMPORTANT_STATUS_TEXT,
-  ROTATION_SAMPLE_WARNING_TEXT,
-  SAM_EN_NAME,
-  SAMURAI_ROTATION_WARNING_TEXT,
-} from "../../const/languageTexts";
 import { AppConfigurations } from "../../Themes";
+import { WarningText } from "../basic/WarningText";
+import { AppLanguageTexts, MNK_EN_NAME, SAM_EN_NAME } from "../../const/languageTexts";
 
 const SkillLogCombatTimeBox = styled(Box)`
   ${SkillLogCombatTimeBoxStyle}
@@ -39,7 +33,7 @@ const SkillEntityBox = styled(Box)`
   ${SkillEntityBoxStyle}
 `;
 
-export const SkillLogResult = (response: QuickSimResponse) => {
+export const SkillLogResult = (response: DpsAnalysisResponse) => {
   const mainPlayerId = response.mainPlayerId;
   const simulationDatas = response.simulationData;
 
@@ -63,21 +57,20 @@ export const SkillLogResult = (response: QuickSimResponse) => {
     );
   }
 
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+
   return (
     <>
       <Typography
         sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}
       >
-        {ROTATION_SAMPLE_WARNING_TEXT}
+        {LANGUAGE_TEXTS.ROTATION_SAMPLE_WARNING_TEXT}
       </Typography>
       {
         response.mainPlayerJobAbbrev === SAM_EN_NAME ?
-          <Typography
-            sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}
-          >
-            {SAMURAI_ROTATION_WARNING_TEXT}
-          </Typography>
-          : <Box></Box>
+          WarningText(LANGUAGE_TEXTS.SAMURAI_ROTATION_WARNING_TEXT)
+          : response.mainPlayerJobAbbrev === MNK_EN_NAME ? WarningText(LANGUAGE_TEXTS.MNK_ROTATION_WARNING_TEXT) : <Box></Box>
       }
       <SkillLogTableList>
         <ListItem>
@@ -87,7 +80,7 @@ export const SkillLogResult = (response: QuickSimResponse) => {
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {COMBAT_TIME_TEXT}
+                {LANGUAGE_TEXTS.COMBAT_TIME_TEXT}
               </Typography>
             </SkillLogCombatTimeBox>
 
@@ -96,7 +89,7 @@ export const SkillLogResult = (response: QuickSimResponse) => {
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {ABILITY_TEXT}
+                {LANGUAGE_TEXTS.ABILITY_TEXT}
               </Typography>
             </SkillIconBox>
 
@@ -105,7 +98,7 @@ export const SkillLogResult = (response: QuickSimResponse) => {
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {IMPORTANT_STATUS_TEXT}
+                {LANGUAGE_TEXTS.IMPORTANT_STATUS_TEXT}
               </Typography>
             </StatusBox>
           </SkillEntityBox>

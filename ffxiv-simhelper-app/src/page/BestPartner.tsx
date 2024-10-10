@@ -14,28 +14,7 @@ import { AppHeader } from "../components/image/AppHeader";
 import { SelectionTitle } from "../components/basic/SelectionTitle";
 import { EquipmentBoardStyle, InputContainerStyle } from "./Styles";
 import { BestPartnerRequestButton } from "../components/basic/BestPartnerRequestButton";
-import {
-  AST_EN_NAME,
-  BEST_PARTNER_INPUT_INFO_TEXT,
-  BEST_PARTNER_PAGE_NAME,
-  BRD_EN_NAME,
-  DNC_EN_NAME,
-  DRG_EN_NAME,
-  DRK_EN_NAME,
-  GNB_EN_NAME,
-  MCH_EN_NAME,
-  MNK_EN_NAME,
-  NIN_EN_NAME,
-  PLD_EN_NAME,
-  RPR_EN_NAME,
-  SAM_EN_NAME,
-  SCH_EN_NAME,
-  SGE_EN_NAME,
-  VPR_EN_NAME,
-  WAR_EN_NAME,
-  WHM_EN_NAME,
-} from "../const/languageTexts";
-import { isNotValid } from "./QuickSim";
+import { AppLanguageTexts, AST_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PLD_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../const/languageTexts";
 
 export enum JobRole {
   TANK,
@@ -82,6 +61,7 @@ export function isNotValidBestPartnerInput(input: EquipmentInput) {
 }
 
 export function BestPartner() {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
   let mostRecentInputState = localStorage.getItem(BEST_PARTNER_INPUT_SAVE_NAME);
   let mostRecentInput = null;
 
@@ -105,13 +85,13 @@ export function BestPartner() {
         width="100vw"
       >
         {BasicLeftMenu(
-          BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box alignContent={"center"} minHeight={"60vh"}>
             <StatWeightsInputContainer justifyContent={"center"}>
-              {SelectionTitle(BEST_PARTNER_INPUT_INFO_TEXT)}
+              {SelectionTitle(LANGUAGE_TEXTS.BEST_PARTNER_INPUT_INFO_TEXT)}
               <EquipmentBoard>
                 {BestPartnerInputMenu(
                   0,

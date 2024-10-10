@@ -41,6 +41,11 @@ pub(crate) enum SkillPrerequisite {
     MillisecondsBeforeBurst(TimeType),
     RelatedSkillCooldownLessOrEqualThan(SkillIdType, TimeType),
 
+    /// If the skill is a multi-stack skill and we want to use it when we know the skill will be available before the burst
+    /// Even if we use it now.
+    /// skill id, milliseconds before burst
+    SkillCooldownWillComeBackMillisecondsBeforeBurst(SkillIdType, TimeType),
+
     /// Greater resource id, Lesser resource id, Greater by how much amount
     /// example: (1, 2, 50), then ok if resource1 >= resource2 + 50
     ResourceGreaterOrEqualThanAnotherResourceBy(ResourceIdType, ResourceIdType, ResourceType),
@@ -182,6 +187,13 @@ pub(crate) trait PriorityTable: Sized + Clone {
         }
     }
 
+    /// Use Branch Prediction - Likely algorithm to find the best oGCD skill combination.
+    /// 1. Probe based on the best(=lower index) priority oGCD skill
+    ///
+    /// 2. When we find a skill that could be used(=meets requirements AND meets skill priority prerequisites AND does not clip next GCD), we find if another oGCD skill can be fit in after the first skill's delay
+    ///
+    /// 3. The first skill can have events that could affect the decision of the next skill such as erase buffs/debuffs, add new buffs/debuffs, or modify player's resource, so we collect these kinds of skill events and use that to
+    ///    simulate the status after using the first skill to decide the second skill.
     fn find_best_ogcd_skill_combination(
         &self,
         information_needed: InformationNeededForRotationDecision,
@@ -192,87 +204,87 @@ pub(crate) trait PriorityTable: Sized + Clone {
         let mut best_one_ogcd = None;
 
         for (priority_number, skill_priority) in ogcd_priority_table.iter().enumerate() {
-            let skill = information_needed
+            let first_skill_candidate = information_needed
                 .combat_resources
                 .get_skill(skill_priority.skill_id);
-            let skill_delay_millisecond = skill.get_delay_millisecond();
-            let latest_time_to_use = next_gcd_millisecond - skill_delay_millisecond;
 
-            let skill_cooldown = if skill.stacks >= 1 {
-                0
-            } else {
-                skill.current_cooldown_millisecond
-            };
+            let first_skill_offset_cooldown =
+                first_skill_candidate.get_offset_cooldown_millisecond();
 
-            let first_skill_start_time = turn_info.lower_bound_millisecond + skill_cooldown;
-
-            if first_skill_start_time <= latest_time_to_use {
-                let mut first_skill_offset_time = skill_cooldown;
-
-                if self.can_use_skill(
+            let (first_skill_start_time, first_skill_delay_millisecond, first_skill_can_be_used) =
+                self.examine_if_first_skill_can_be_used(
+                    first_skill_candidate,
                     information_needed,
                     skill_priority,
-                    &[],
+                    turn_info,
+                    first_skill_offset_cooldown,
+                );
+
+            if first_skill_can_be_used {
+                let mut first_skill_offset_time = first_skill_offset_cooldown;
+
+                if best_one_ogcd.is_none() {
+                    best_one_ogcd = Some(vec![OgcdPlan {
+                        skill: SkillUsageInfo::new_delay(
+                            skill_priority.skill_id,
+                            Some(first_skill_start_time),
+                        ),
+                        priority_number: priority_number as SkillIdType,
+                    }]);
+                }
+
+                let simulated_events = extract_skill_simulation_event(
+                    first_skill_candidate,
+                    first_skill_offset_time,
+                    information_needed.player_id,
+                );
+
+                let second_skill_start_time =
+                    first_skill_start_time + first_skill_delay_millisecond;
+
+                if second_skill_start_time > next_gcd_millisecond - NON_GCD_DELAY_MILLISECOND {
+                    continue;
+                }
+
+                first_skill_offset_time += first_skill_delay_millisecond;
+
+                return if let Some(second_skill_plan) = self.find_second_highest_ogcd_skill(
+                    information_needed,
+                    &ogcd_priority_table,
+                    &simulated_events,
+                    turn_info,
+                    second_skill_start_time,
+                    first_skill_candidate.get_id(),
                     first_skill_offset_time,
                 ) {
-                    if best_one_ogcd.is_none() {
-                        best_one_ogcd = Some(vec![OgcdPlan {
-                            skill: SkillUsageInfo::new_delay(
-                                skill_priority.skill_id,
-                                Some(first_skill_start_time),
-                            ),
-                            priority_number: priority_number as SkillIdType,
-                        }]);
-                    }
-                    let simulated_events = extract_skill_simulation_event(
-                        skill,
-                        first_skill_offset_time,
-                        information_needed.player_id,
-                    );
-
-                    let second_skill_start_time = first_skill_start_time + skill_delay_millisecond;
-
-                    if second_skill_start_time > next_gcd_millisecond - NON_GCD_DELAY_MILLISECOND {
-                        continue;
-                    }
-
-                    first_skill_offset_time += skill_delay_millisecond;
-                    return if let Some(second_skill_plan) = self.find_second_highest_ogcd_skill(
-                        information_needed,
-                        &ogcd_priority_table,
-                        &simulated_events,
-                        turn_info,
-                        second_skill_start_time,
-                        skill.get_id(),
-                        first_skill_offset_time,
-                    ) {
-                        let first_skill_plan = OgcdPlan {
-                            skill: SkillUsageInfo::new_delay(
-                                skill_priority.skill_id,
-                                Some(first_skill_start_time),
-                            ),
-                            priority_number: priority_number as SkillIdType,
-                        };
-
-                        let double_weave_plan = Some(vec![first_skill_plan, second_skill_plan]);
-
-                        if has_important_skill(&best_one_ogcd)
-                            && !has_important_skill(&double_weave_plan)
-                        {
-                            best_one_ogcd
-                        } else {
-                            double_weave_plan
-                        }
-                    } else {
-                        best_one_ogcd
+                    let first_skill_plan = OgcdPlan {
+                        skill: SkillUsageInfo::new_delay(
+                            skill_priority.skill_id,
+                            Some(first_skill_start_time),
+                        ),
+                        priority_number: priority_number as SkillIdType,
                     };
-                }
+
+                    let double_weave_plan = Some(vec![first_skill_plan, second_skill_plan]);
+
+                    if has_important_skill(&best_one_ogcd)
+                        && !has_important_skill(&double_weave_plan)
+                    {
+                        best_one_ogcd
+                    } else {
+                        double_weave_plan
+                    }
+                } else {
+                    best_one_ogcd
+                };
             }
         }
 
         best_one_ogcd
     }
 
+    /// Based on the simulation_events that recorded all the skill-decision related events of the first selected skill,
+    /// simulate the player's status after using the first skill and use that simulated status to decide the second skill.
     fn find_second_highest_ogcd_skill(
         &self,
         information_needed: InformationNeededForRotationDecision,
@@ -281,37 +293,35 @@ pub(crate) trait PriorityTable: Sized + Clone {
         turn_info: &TurnInfo,
         start_time: TimeType,
         first_used_skill_id: SkillIdType,
-        time_offset: TimeType,
+        first_skill_time_offset: TimeType,
     ) -> Option<OgcdPlan> {
         let next_gcd_millisecond = turn_info.next_gcd_millisecond;
 
         for (priority_number, skill_priority) in ogcd_priority_table.iter().enumerate() {
-            let skill = information_needed
+            let second_skill_candidate = information_needed
                 .combat_resources
                 .get_skill(skill_priority.skill_id);
 
-            if skill.id == first_used_skill_id {
+            if second_skill_candidate.id == first_used_skill_id {
                 continue;
             }
 
-            let skill_delay_millisecond = skill.get_delay_millisecond();
+            let skill_delay_millisecond = second_skill_candidate.get_delay_millisecond();
             let latest_time_to_use = next_gcd_millisecond - skill_delay_millisecond;
 
-            let skill_cooldown = if skill.stacks >= 1 {
-                0
-            } else {
-                skill.current_cooldown_millisecond
-            };
+            let second_skill_offset_cooldown =
+                second_skill_candidate.get_offset_cooldown_millisecond();
 
-            let skill_start_time = start_time + max(skill_cooldown - time_offset, 0);
-            let time_offset = time_offset + skill_cooldown;
+            let skill_start_time =
+                start_time + max(second_skill_offset_cooldown - first_skill_time_offset, 0);
+            let second_skill_time_offset = first_skill_time_offset + second_skill_offset_cooldown;
 
             if skill_start_time <= latest_time_to_use {
                 if self.can_use_skill(
                     information_needed,
                     skill_priority,
                     simulation_events,
-                    time_offset,
+                    second_skill_time_offset,
                 ) {
                     return Some(OgcdPlan {
                         skill: SkillUsageInfo::new_delay(
@@ -325,6 +335,31 @@ pub(crate) trait PriorityTable: Sized + Clone {
         }
 
         None
+    }
+
+    fn examine_if_first_skill_can_be_used(
+        &self,
+        first_skill_candidate: &AttackSkill,
+        information_needed: InformationNeededForRotationDecision,
+        skill_priority: &SkillPriorityInfo,
+        turn_info: &TurnInfo,
+        skill_cooldown: TimeType,
+    ) -> (TimeType, TimeType, bool) {
+        let skill_delay_millisecond = first_skill_candidate.get_delay_millisecond();
+
+        // The latest time to use the skill without clipping the next GCD
+        let latest_time_to_use = turn_info.next_gcd_millisecond - skill_delay_millisecond;
+
+        let first_skill_start_time = turn_info.lower_bound_millisecond + skill_cooldown;
+
+        let can_use_skill = first_skill_start_time <= latest_time_to_use
+            && self.can_use_skill(information_needed, skill_priority, &[], skill_cooldown);
+
+        (
+            first_skill_start_time,
+            skill_delay_millisecond,
+            can_use_skill,
+        )
     }
 
     fn find_highest_gcd_skill(
@@ -593,6 +628,35 @@ pub(crate) trait PriorityTable: Sized + Clone {
 
                 max(related_skill_cooldown - time_offset, 0) <= *time_millisecond
             }
+
+            SkillPrerequisite::SkillCooldownWillComeBackMillisecondsBeforeBurst(
+                related_skill_id,
+                milliseconds_before_burst,
+            ) => {
+                let skill = information_needed
+                    .combat_resources
+                    .get_skill(*related_skill_id);
+                let mut next_stack_charging_time_millisecond =
+                    skill.current_cooldown_millisecond % skill.cooldown_millisecond;
+                let current_milliseconds_before_burst =
+                    information_needed.milliseconds_before_burst;
+
+                for simulation_event in simulation_events {
+                    match simulation_event {
+                        SkillSimulationEvent::ReduceCooldown(skill_id, amount) => {
+                            if *skill_id == *related_skill_id {
+                                next_stack_charging_time_millisecond =
+                                    max(next_stack_charging_time_millisecond - *amount, 0);
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+
+                max(next_stack_charging_time_millisecond - time_offset, 0)
+                    <= current_milliseconds_before_burst - *milliseconds_before_burst
+            }
+
             SkillPrerequisite::ResourceGreaterOrEqualThanAnotherResourceBy(
                 greater_resource_id,
                 lesser_resource_id,
@@ -734,6 +798,7 @@ pub(crate) trait PriorityTable: Sized + Clone {
 fn has_important_skill(ogcd_plans: &Option<Vec<OgcdPlan>>) -> bool {
     if let Some(ogcd_plans) = ogcd_plans {
         for plan in ogcd_plans {
+            // BLM's transpose. This is very important since missing this oGCD can really mess up the rotation
             if plan.skill.skill_id == 1716 {
                 return true;
             }

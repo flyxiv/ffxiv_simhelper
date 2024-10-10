@@ -4,11 +4,11 @@ import {
   calculateIlvlAdjustment,
   mapJobAbbrevToJobBisEquipments,
 } from "../../const/StatValue";
-import { PartyInfo } from "../../types/PartyStates";
+import { EMPTY_PARTY_MEMBER, PartyInfo } from "../../types/PartyStates";
 import {
   SINGLE_INPUT_SAVE_NAME,
   STAT_WEIGHTS_RESPONSE_SAVE_NAME,
-  STAT_WEIGHTS_RESULT_URL,
+  BEST_STATS_RESULT_URL,
 } from "../../App";
 import { useState } from "react";
 import { requestButtonStyle } from "./Style";
@@ -20,30 +20,17 @@ import {
 import { AUTO_ATTACK_DELAYS } from "../../types/ffxivdatabase/Job";
 import { getStatWeightNames } from "../../types/ffxivdatabase/Stats";
 import {
-  StatWeightsResponse,
-  StatWeightsResponseTable,
-} from "../../types/StatWeightsResponse";
+  BestStatsResponse,
+  BestStatsResponseTable,
+} from "../../types/BestStats";
 import { calculatePlayerPowerFromInputs, calculatePowerByStat } from "../../types/ffxivdatabase/ItemSet";
-import { sendRequestAsync } from "./QuickSimRequestButton";
-import {
-  CRIT_STAT_NAME,
-  DET_STAT_NAME,
-  DEX_STAT_NAME,
-  DH_STAT_NAME,
-  INT_STAT_NAME,
-  MIDLANDER_HYUR_NAME_EN,
-  MIND_STAT_NAME,
-  SKS_STAT_NAME,
-  SPS_STAT_NAME,
-  STR_STAT_NAME,
-  TEN_STAT_NAME,
-  WD_STAT_NAME,
-} from "../../const/languageTexts";
+import { sendRequestAsync } from "./DpsAnalysisRequestButton";
 import { defaultPlayerPower, getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
 import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
-const REQUEST_URL = "http://localhost:13406/api/v1/statweights";
+const REQUEST_URL = "http://localhost:13406/api/v1/beststats";
 const WEAPON_DAMAGE_INCREASE = 10;
 const MAIN_STAT_INCREASE = 100;
 const CRIT_INCREASE_AMOUNT = 20;
@@ -55,7 +42,7 @@ const TEN_INCREASE_AMOUNT = 20;
 
 export const STAT_WEIGHTS_REQUEST_COUNT = 2000;
 
-export function StatWeightsRequestButton(totalState: EquipmentInput) {
+export function BestStatsRequestButton(totalState: EquipmentInput) {
   let [isRunning, setIsRunning] = useState(false);
 
   let RequestButton = styled(Button)`
@@ -82,7 +69,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
     let inputJson = JSON.stringify(totalState);
     localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
-    let statWeightsResponseTable: StatWeightsResponseTable = {
+    let statWeightsResponseTable: BestStatsResponseTable = {
       combatTimeMillisecond: totalState.equipmentDatas[0].combatTimeMillisecond,
       mainPlayerPower: totalState.equipmentDatas[0].power,
       mainPlayerJobAbbrev: totalState.equipmentDatas[0].mainPlayerJobAbbrev,
@@ -119,7 +106,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
     }
 
     await Promise.all(responsePromises);
-    const formattedResponses: Array<Promise<StatWeightsResponse>> =
+    const formattedResponses: Array<Promise<BestStatsResponse>> =
       responses.map(async (response) => {
         const data = await response.json();
         return data;
@@ -132,7 +119,7 @@ export function StatWeightsRequestButton(totalState: EquipmentInput) {
 
     localStorage.setItem(STAT_WEIGHTS_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(`/${STAT_WEIGHTS_RESULT_URL}`);
+    navigate(`/${BEST_STATS_RESULT_URL}`);
   };
   return (
     <Box display="flex" alignItems="center">
@@ -170,22 +157,25 @@ function createAugmentedRequest(
   power.autoAttackDelays = autoAttackDelays;
 
   let augmentAmount = 0;
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
 
   if (augmentStatName !== "") {
-    if (augmentStatName === WD_STAT_NAME) {
+    if (augmentStatName === LANGUAGE_TEXTS.WD_STAT_NAME) {
       augmentAmount = WEAPON_DAMAGE_INCREASE;
       power.weaponDamage += WEAPON_DAMAGE_INCREASE;
     }
     if (
-      augmentStatName === STR_STAT_NAME ||
-      augmentStatName === DEX_STAT_NAME ||
-      augmentStatName === INT_STAT_NAME ||
-      augmentStatName === MIND_STAT_NAME
+      augmentStatName === LANGUAGE_TEXTS.STR_STAT_EN_NAME ||
+      augmentStatName === LANGUAGE_TEXTS.DEX_STAT_EN_NAME ||
+      augmentStatName === LANGUAGE_TEXTS.INT_STAT_EN_NAME ||
+      augmentStatName === LANGUAGE_TEXTS.MIND_STAT_EN_NAME
     ) {
       augmentAmount = MAIN_STAT_INCREASE;
       power.mainStat += MAIN_STAT_INCREASE;
     }
-    if (augmentStatName === CRIT_STAT_NAME) {
+
+    if (augmentStatName === LANGUAGE_TEXTS.CRIT_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -194,7 +184,7 @@ function createAugmentedRequest(
       );
       power.criticalStrike += augmentAmount;
     }
-    if (augmentStatName === DH_STAT_NAME) {
+    if (augmentStatName === LANGUAGE_TEXTS.DH_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -203,7 +193,7 @@ function createAugmentedRequest(
       );
       power.directHit += augmentAmount;
     }
-    if (augmentStatName === DET_STAT_NAME) {
+    if (augmentStatName === LANGUAGE_TEXTS.DET_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -212,7 +202,7 @@ function createAugmentedRequest(
       );
       power.determination += augmentAmount;
     }
-    if (augmentStatName === SKS_STAT_NAME) {
+    if (augmentStatName === LANGUAGE_TEXTS.SKS_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -221,7 +211,7 @@ function createAugmentedRequest(
       );
       power.skillSpeed += augmentAmount;
     }
-    if (augmentStatName === SPS_STAT_NAME) {
+    if (augmentStatName === LANGUAGE_TEXTS.SPS_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -230,7 +220,7 @@ function createAugmentedRequest(
       );
       power.spellSpeed += augmentAmount;
     }
-    if (augmentStatName === TEN_STAT_NAME) {
+    if (augmentStatName === LANGUAGE_TEXTS.TEN_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -253,6 +243,17 @@ function createAugmentedRequest(
     },
   ];
 
+  for (let i = 0; i < totalState.partyMemberJobAbbrevs.length; i++) {
+    if (totalState.partyMemberJobAbbrevs[i] === EMPTY_PARTY_MEMBER) {
+      if (partyInfo[0].partner1Id !== null && partyInfo[0].partner1Id > i) {
+        partyInfo[0].partner1Id -= 1;
+      }
+      if (partyInfo[0].partner2Id !== null && partyInfo[0].partner2Id > i) {
+        partyInfo[0].partner2Id -= 1;
+      }
+    }
+  }
+
   let playerCount = 0;
   for (let i = 0; i < totalState.partyMemberJobAbbrevs.length; i++) {
     let jobAbbrev = totalState.partyMemberJobAbbrevs[i];
@@ -264,7 +265,7 @@ function createAugmentedRequest(
 
     let playerTotalState = {
       mainPlayerJobAbbrev: jobAbbrev,
-      race: MIDLANDER_HYUR_NAME_EN,
+      race: LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME,
       foodId: bisEquipments.foodId,
       mainPlayerPartner1Id: null,
       mainPlayerPartner2Id: null,

@@ -8,8 +8,8 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 pub mod bestpartner;
+pub mod dpsanalysis;
 pub mod gearcompare;
-pub mod quicksim;
 pub mod statweights;
 
 fn create_simulation_board(request: SimulationApiRequest) -> Result<FfxivSimulationBoard> {

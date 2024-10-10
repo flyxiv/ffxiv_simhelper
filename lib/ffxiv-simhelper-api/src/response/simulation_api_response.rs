@@ -6,7 +6,7 @@ use serde::Serialize;
 pub(crate) const SKILL_ENTITY_STRING: &'static str = "Skill";
 pub(crate) const STATUS_ENTITY_STRING: &'static str = "Status";
 
-/// API Response Format for quicksim/advancedsim API
+/// API Response Format for dpsanalysis/advancedsim API
 /// Given as a GraphQL response
 #[derive(Debug, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]

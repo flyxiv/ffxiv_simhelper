@@ -1,26 +1,4 @@
-import {
-  AST_EN_NAME,
-  BLM_EN_NAME,
-  BRD_EN_NAME,
-  DNC_EN_NAME,
-  DRG_EN_NAME,
-  DRK_EN_NAME,
-  GNB_EN_NAME,
-  MCH_EN_NAME,
-  MNK_EN_NAME,
-  NIN_EN_NAME,
-  PCT_EN_NAME,
-  PLD_EN_NAME,
-  RDM_EN_NAME,
-  RPR_EN_NAME,
-  SAM_EN_NAME,
-  SCH_EN_NAME,
-  SGE_EN_NAME,
-  SMN_EN_NAME,
-  VPR_EN_NAME,
-  WAR_EN_NAME,
-  WHM_EN_NAME,
-} from "../../const/languageTexts";
+import { AppLanguageTexts, AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../const/languageTexts";
 
 export const BUFF_JOBS_LIST = [
   AST_EN_NAME,
@@ -52,6 +30,8 @@ export const DPS_JOBS = [
   RDM_EN_NAME,
   PCT_EN_NAME,
 ];
+
+
 
 export interface SimulationDataByRole {
   tanks: Array<BestPartnerSimulationData>;

@@ -21,7 +21,7 @@ import {
   ALL_PLAYER_JOBS,
   AUTO_ATTACK_DELAYS,
 } from "../../types/ffxivdatabase/Job";
-import { sendRequestAsync } from "./QuickSimRequestButton";
+import { sendRequestAsync } from "./DpsAnalysisRequestButton";
 import { jobAbbrevToRole, JobRole } from "../../page/BestPartner";
 import {
   BestPartnerResponse,
@@ -29,9 +29,9 @@ import {
 } from "../../types/BestPartnerResponse";
 import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
-import { MIDLANDER_HYUR_NAME_EN } from "../../const/languageTexts";
 import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
 export const BEST_PARTNER_ITERATION_COUNT = 2000;
@@ -171,11 +171,13 @@ function createBestPartnerRequest(
   let bisEquipments = mapJobAbbrevToJobBisEquipments(jobAbbrev);
 
 
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
 
   if (bisEquipments !== undefined) {
     let playerTotalState = {
       mainPlayerJobAbbrev: jobAbbrev,
-      race: MIDLANDER_HYUR_NAME_EN,
+      race: LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME,
       foodId: bisEquipments.foodId,
       mainPlayerPartner1Id: null,
       mainPlayerPartner2Id: null,

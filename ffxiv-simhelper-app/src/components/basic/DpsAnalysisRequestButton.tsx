@@ -4,14 +4,14 @@ import {
   calculateIlvlAdjustment,
   mapJobAbbrevToJobBisEquipments,
 } from "../../const/StatValue";
-import { PartyInfo } from "../../types/PartyStates";
+import { EMPTY_PARTY_MEMBER, PartyInfo } from "../../types/PartyStates";
 import {
-  QUICKSIM_RESULT_URL,
+  DPS_ANALYSIS_RESULT_URL,
   SINGLE_INPUT_SAVE_NAME,
-  QUICK_SIM_RESPONSE_SAVE_NAME,
+  DPS_ANALYSIS_RESPONSE_SAVE_NAME,
 } from "../../App";
 import { useState } from "react";
-import { QuickSimResponse } from "../../types/QuickSimResponse";
+import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 import { requestButtonStyle } from "./Style";
 import {
   EquipmentInput,
@@ -24,7 +24,7 @@ import { aggregateDamageStatisticsFromSampleRuns } from "./GearCompareRequestBut
 import { AppConfigurations } from "../../Themes";
 import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
-import { MIDLANDER_HYUR_NAME_EN } from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 const TOTAL_REQUEST_COUNT = 1000;
 const TOTAL_ITERATION_COUNT = 2;
@@ -32,7 +32,9 @@ export const QUICK_SIM_ITERATION_COUNT =
   TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT;
 const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
 
-export function QuickSimRequestButton(totalState: EquipmentInput) {
+export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   let [isRunning, setIsRunning] = useState(false);
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
@@ -57,7 +59,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
     let inputJson = JSON.stringify(totalState);
     localStorage.setItem(SINGLE_INPUT_SAVE_NAME, inputJson);
 
-    let request = createQuickSimRequest(totalState.equipmentDatas[0]);
+    let request = createDpsAnalysisRequest(totalState.equipmentDatas[0]);
 
     if (request instanceof Error) {
       console.error("Error: ", request.message);
@@ -88,7 +90,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
     }
 
     await Promise.all(responsePromises);
-    const formattedResponses: Array<Promise<QuickSimResponse>> = responses.map(
+    const formattedResponses: Array<Promise<DpsAnalysisResponse>> = responses.map(
       async (response) => {
         const data = await response.json();
         return data;
@@ -109,13 +111,16 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
       1.0
     );
 
+    finalResponses.sort((a, b) => b.simulationData[0].simulationSummary.rdps[0] - a.simulationData[0].simulationSummary.rdps[0]);
+    console.log(finalResponses);
+
     response = finalResponses[0];
     response.simulationData[mainPlayerId].simulationSummary = damageSummary;
 
     const responseString = JSON.stringify(response);
-    localStorage.setItem(QUICK_SIM_RESPONSE_SAVE_NAME, responseString);
+    localStorage.setItem(DPS_ANALYSIS_RESPONSE_SAVE_NAME, responseString);
 
-    navigate(`/${QUICKSIM_RESULT_URL}`);
+    navigate(`/${DPS_ANALYSIS_RESULT_URL}`);
   };
   return (
     <Box display="flex" alignItems={"center"}>
@@ -137,7 +142,7 @@ export function QuickSimRequestButton(totalState: EquipmentInput) {
   );
 }
 
-export function createQuickSimRequest(
+export function createDpsAnalysisRequest(
   totalState: SingleEquipmentInputSaveState
 ) {
   let jobAbbrev = totalState.mainPlayerJobAbbrev;
@@ -161,6 +166,17 @@ export function createQuickSimRequest(
     },
   ];
 
+  for (let i = 0; i < totalState.partyMemberJobAbbrevs.length; i++) {
+    if (totalState.partyMemberJobAbbrevs[i] === EMPTY_PARTY_MEMBER) {
+      if (partyInfo[0].partner1Id !== null && partyInfo[0].partner1Id > i) {
+        partyInfo[0].partner1Id -= 1;
+      }
+      if (partyInfo[0].partner2Id !== null && partyInfo[0].partner2Id > i) {
+        partyInfo[0].partner2Id -= 1;
+      }
+    }
+  }
+
   let playerCount = 0;
   for (let i = 0; i < totalState.partyMemberJobAbbrevs.length; i++) {
     let jobAbbrev = totalState.partyMemberJobAbbrevs[i];
@@ -170,9 +186,12 @@ export function createQuickSimRequest(
       continue;
     }
 
+    let LANGUAGE_TEXTS = AppLanguageTexts();
+
+
     let playerTotalState = {
       mainPlayerJobAbbrev: jobAbbrev,
-      race: MIDLANDER_HYUR_NAME_EN,
+      race: LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME,
       foodId: bisEquipments.foodId,
       mainPlayerPartner1Id: null,
       mainPlayerPartner2Id: null,
@@ -225,7 +244,7 @@ export function sendRequestAsync(
       const timeoutId = setTimeout(() => {
         controller.abort();
         reject(new Error("Request timeout"));
-      }, 300000);
+      }, 30000);
 
       const response = await fetch(requestUrl, {
         method: "POST",

@@ -1,7 +1,7 @@
 import { Box, styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 import { PartyContributionData } from "../graph/GraphData";
-import { BEST_TEAMMATE_BUTTON_TEXT, DAMAGE_PROFILE_BUTTON_TEXT, MY_CONTRIBUTION_BUTTON_TEXT, ROTATION_SAMPLE_BUTTON_TEXT } from "../../const/languageTexts";
+import { AppLanguageTexts } from "../../const/languageTexts";
 
 type ViewType = "Best Teammate" | "Damage Profile" | "Rotation Log"; // Define possible view types
 
@@ -28,6 +28,8 @@ export function ResultPageButtonGroup(
   teammatesContributionToMyBuffs: PartyContributionData | null,
   mainPlayerContributionToOthers: PartyContributionData | null
 ) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
   const handleViewChange = (
     _: React.MouseEvent<HTMLElement>,
     newView: ViewType | null
@@ -38,18 +40,16 @@ export function ResultPageButtonGroup(
   };
 
   let bestTeammateButton = (
-    <ToggleButtonCustom value={BEST_TEAMMATE_BUTTON_TEXT}>
-      {BEST_TEAMMATE_BUTTON_TEXT}
+    <ToggleButtonCustom value={LANGUAGE_TEXTS.BEST_TEAMMATE_BUTTON_TEXT}>
+      {LANGUAGE_TEXTS.BEST_TEAMMATE_BUTTON_TEXT}
     </ToggleButtonCustom>
   );
 
   let myContributionsButton = (
-    <ToggleButtonCustom value={MY_CONTRIBUTION_BUTTON_TEXT}>
-      {MY_CONTRIBUTION_BUTTON_TEXT}
+    <ToggleButtonCustom value={LANGUAGE_TEXTS.MY_CONTRIBUTION_BUTTON_TEXT}>
+      {LANGUAGE_TEXTS.MY_CONTRIBUTION_BUTTON_TEXT}
     </ToggleButtonCustom>
   );
-
-  console.log(teammatesContributionToMyBuffs);
 
   return (
     <Box marginTop={4} marginBottom={2}>
@@ -59,8 +59,8 @@ export function ResultPageButtonGroup(
         onChange={handleViewChange}
         aria-label="resultPage"
       >
-        <ToggleButtonCustom value={DAMAGE_PROFILE_BUTTON_TEXT}>
-          {DAMAGE_PROFILE_BUTTON_TEXT}
+        <ToggleButtonCustom value={LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT}>
+          {LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT}
         </ToggleButtonCustom>
         {isValidContributions(teammatesContributionToMyBuffs) ? (
           bestTeammateButton
@@ -72,8 +72,8 @@ export function ResultPageButtonGroup(
         ) : (
           <Box />
         )}
-        <ToggleButtonCustom value={ROTATION_SAMPLE_BUTTON_TEXT}>
-          {ROTATION_SAMPLE_BUTTON_TEXT}
+        <ToggleButtonCustom value={LANGUAGE_TEXTS.ROTATION_SAMPLE_BUTTON_TEXT}>
+          {LANGUAGE_TEXTS.ROTATION_SAMPLE_BUTTON_TEXT}
         </ToggleButtonCustom>
       </ToggleButtonGroup>
     </Box>

@@ -2,7 +2,7 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::machinist::abilities::MachinistDatabase;
 use crate::rotation::priority_table::SkillPrerequisite::{
     And, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not, Or,
-    RelatedSkillCooldownLessOrEqualThan,
+    RelatedSkillCooldownLessOrEqualThan, SkillCooldownWillComeBackMillisecondsBeforeBurst,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
@@ -233,9 +233,9 @@ pub(crate) fn make_machinist_ogcd_priority_table(
                 )),
                 Box::new(Or(
                     Box::new(MillisecondsBeforeBurst(0)),
-                    Box::new(RelatedSkillCooldownLessOrEqualThan(
+                    Box::new(SkillCooldownWillComeBackMillisecondsBeforeBurst(
                         db.reassemble.get_id(),
-                        20000,
+                        0,
                     )),
                 )),
             )),

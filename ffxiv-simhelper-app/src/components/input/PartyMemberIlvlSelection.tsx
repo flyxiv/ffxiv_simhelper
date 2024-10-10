@@ -1,13 +1,11 @@
 import { Box, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import { CustomFormControl } from "./basicform/BasicInputForm";
 import { EquipmentInput } from "../../types/EquipmentInput";
-import { AppConfigurations, ENGLISH_MODE } from "../../Themes";
+import { AppConfigurations } from "../../Themes";
 import { ITEM_BOTTOM_MENU_MIN_HEIGHT } from "../items/Styles";
 
-export const PARTY_MIN_ILVL =
-  AppConfigurations.languageMode === ENGLISH_MODE ? 710 : 690;
-export const PARTY_MAX_ILVL =
-  AppConfigurations.languageMode === ENGLISH_MODE ? 730 : 730;
+export const PARTY_MIN_ILVL = 710;
+export const PARTY_MAX_ILVL = 730;
 
 export function PartyMemberIlvlSelection(
   label: string,
