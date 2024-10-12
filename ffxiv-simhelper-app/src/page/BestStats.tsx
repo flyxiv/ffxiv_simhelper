@@ -102,7 +102,7 @@ export function BestStats() {
               </Box>
             </StatWeightsInputContainer>
 
-            {BasicBottomMenu(totalState, BestStatsRequestButton, LANGUAGE_TEXTS)}
+            {BasicBottomMenu(totalState, BestStatsRequestButton, LANGUAGE_TEXTS, true)}
           </Box>
           {Footer()}
         </Box>

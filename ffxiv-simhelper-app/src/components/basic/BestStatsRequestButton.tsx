@@ -42,7 +42,7 @@ const TEN_INCREASE_AMOUNT = 20;
 
 export const STAT_WEIGHTS_REQUEST_COUNT = 2000;
 
-export function BestStatsRequestButton(totalState: EquipmentInput) {
+export function BestStatsRequestButton(totalState: EquipmentInput, gcdName: string) {
   let [isRunning, setIsRunning] = useState(false);
 
   let RequestButton = styled(Button)`
@@ -50,7 +50,7 @@ export function BestStatsRequestButton(totalState: EquipmentInput) {
   `;
 
   let stats = [""].concat(
-    getStatWeightNames(totalState.equipmentDatas[0].mainPlayerJobAbbrev)
+    getStatWeightNames(totalState.equipmentDatas[0].mainPlayerJobAbbrev, gcdName)
   );
   let totalRequestCount = stats.length;
 
@@ -82,7 +82,7 @@ export function BestStatsRequestButton(totalState: EquipmentInput) {
 
     let requests = stats.map((stat) => {
       return JSON.stringify(
-        createAugmentedRequest(totalState.equipmentDatas[0], stat)
+        createAugmentedRequest(totalState.equipmentDatas[0], stat, gcdName)
       );
     });
 
@@ -143,7 +143,8 @@ export function BestStatsRequestButton(totalState: EquipmentInput) {
 
 function createAugmentedRequest(
   totalState: SingleEquipmentInputSaveState,
-  augmentStatName: string
+  augmentStatName: string,
+  gcdName: string
 ) {
   let jobAbbrev = totalState.mainPlayerJobAbbrev;
   let partner1Id = totalState.mainPlayerPartner1Id;
@@ -179,7 +180,8 @@ function createAugmentedRequest(
         power,
         augmentStatName,
         jobAbbrev,
-        CRIT_INCREASE_AMOUNT
+        CRIT_INCREASE_AMOUNT,
+        gcdName
       );
       power.criticalStrike += augmentAmount;
     }
@@ -188,7 +190,8 @@ function createAugmentedRequest(
         power,
         augmentStatName,
         jobAbbrev,
-        DH_INCREASE_AMOUNT
+        DH_INCREASE_AMOUNT,
+        gcdName
       );
       power.directHit += augmentAmount;
     }
@@ -197,7 +200,8 @@ function createAugmentedRequest(
         power,
         augmentStatName,
         jobAbbrev,
-        DET_INCREASE_AMOUNT
+        DET_INCREASE_AMOUNT,
+        gcdName
       );
       power.determination += augmentAmount;
     }
@@ -206,7 +210,8 @@ function createAugmentedRequest(
         power,
         augmentStatName,
         jobAbbrev,
-        SKS_INCREASE_AMOUNT
+        SKS_INCREASE_AMOUNT,
+        gcdName
       );
       power.skillSpeed += augmentAmount;
     }
@@ -215,7 +220,8 @@ function createAugmentedRequest(
         power,
         augmentStatName,
         jobAbbrev,
-        SPS_INCREASE_AMOUNT
+        SPS_INCREASE_AMOUNT,
+        gcdName
       );
       power.spellSpeed += augmentAmount;
     }
@@ -224,7 +230,8 @@ function createAugmentedRequest(
         power,
         augmentStatName,
         jobAbbrev,
-        TEN_INCREASE_AMOUNT
+        TEN_INCREASE_AMOUNT,
+        gcdName
       );
       power.tenacity += augmentAmount;
     }

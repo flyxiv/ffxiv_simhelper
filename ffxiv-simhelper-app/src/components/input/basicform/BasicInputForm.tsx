@@ -23,7 +23,7 @@ export const inputStyleEquipment = {
     color: "white",
     backgroundColor: AppConfigurations.backgroundThree,
     textAlign: "right",
-    height: "5vh",
+    height: "4vh",
   },
   "& .MuiInputLabel-root": {
     color: AppConfigurations.primary,

@@ -78,7 +78,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse, LANGUAGE_TEXTS: Te
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {combatTimeText}
+                {LANGUAGE_TEXTS.COMBAT_TIME_TEXT}
               </Typography>
             </SkillLogCombatTimeBox>
 
@@ -87,7 +87,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse, LANGUAGE_TEXTS: Te
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {abilityText}
+                {LANGUAGE_TEXTS.ABILITY_TEXT}
               </Typography>
             </SkillIconBox>
 
@@ -96,7 +96,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse, LANGUAGE_TEXTS: Te
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {importantStatusText}
+                {LANGUAGE_TEXTS.IMPORTANT_STATUS_TEXT}
               </Typography>
             </StatusBox>
           </SkillEntityBox>

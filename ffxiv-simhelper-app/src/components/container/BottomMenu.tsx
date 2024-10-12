@@ -10,7 +10,8 @@ import { TextDictionary } from "../../const/languageTexts";
 export function BasicBottomMenu(
   totalState: EquipmentInput,
   buttonComponentFunction: Function,
-  LANGUAGE_TEXTS: TextDictionary
+  LANGUAGE_TEXTS: TextDictionary,
+  needsGcdName: boolean = false
 ) {
   return (
     <Box
@@ -33,7 +34,7 @@ export function BasicBottomMenu(
       >
         {StatSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
         <Box display="inline-block" margin="auto" paddingTop={2}>
-          {buttonComponentFunction(totalState)}
+          {needsGcdName ? buttonComponentFunction(totalState, LANGUAGE_TEXTS.GCD_NAME) : buttonComponentFunction(totalState)}
         </Box>
       </Box>
     </Box>
