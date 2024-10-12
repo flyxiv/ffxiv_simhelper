@@ -143,7 +143,7 @@ function renderTableBasedOnSelectedButton(
     return (
       <ResultBoardBox>
         {SimulationTitle(LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT)}
-        {DamageProfileGraph(responseJson)}
+        {DamageProfileGraph(responseJson, LANGUAGE_TEXTS)}
       </ResultBoardBox>
     );
   } else if (currentlyToggledView == LANGUAGE_TEXTS.MY_CONTRIBUTION_BUTTON_TEXT) {

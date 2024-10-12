@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { ITEM_TOP_MENU_MIN_HEIGHT } from "./Styles";
+import { AppConfigurations } from "../../Themes";
 
 export function PartnerItem(partyMemberJobId: number, jobAbbrev: string, partyMemberLabelText: string) {
   return (
@@ -9,13 +10,13 @@ export function PartnerItem(partyMemberJobId: number, jobAbbrev: string, partyMe
         <img
           src={jobAbbrevToJobIconPath(jobAbbrev)}
           alt={jobAbbrev}
-          width={25}
-          height={25}
+          width={50}
+          height={50}
           style={{ verticalAlign: "middle" }}
         />
       </Box>
       <Box>
-        <Typography variant="body1" alignContent={"center"} color="white">
+        <Typography variant="body1" alignContent={"center"} color="white" fontSize={AppConfigurations.body1FontSize}>
           {`${partyMemberLabelText} ${partyMemberJobId}`}
         </Typography>
       </Box>

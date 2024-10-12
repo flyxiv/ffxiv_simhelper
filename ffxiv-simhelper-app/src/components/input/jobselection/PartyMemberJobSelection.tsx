@@ -5,6 +5,7 @@ import {
   SelectChangeEvent,
   Typography,
   Divider,
+  Box,
 } from "@mui/material";
 import { JobMenuItem } from "../../items/JobMenuItem";
 import { CustomFormControl } from "../basicform/BasicInputForm";
@@ -19,6 +20,7 @@ import {
 } from "../../../types/ffxivdatabase/PartyCompositionMaker";
 import { calculatePlayerPowerFromInputs } from "../../../types/ffxivdatabase/ItemSet";
 import { PLD_EN_NAME, SCH_EN_NAME, TextDictionary } from "../../../const/languageTexts";
+import { ITEM_BOTTOM_MENU_MIN_HEIGHT } from "../../items/Styles";
 
 let ALIGN = "center";
 
@@ -182,9 +184,11 @@ export function PartyMemberJobSelection(
 
         <Divider />
         <MenuItem value="Empty">
-          <Typography variant="body1" color="white">
-            Empty
-          </Typography>
+          <Box height={ITEM_BOTTOM_MENU_MIN_HEIGHT} display="flex" justifyContent={"center"} alignItems={"center"}>
+            <Typography variant="body1" color="white" fontSize={AppConfigurations.body1FontSize}>
+              Empty
+            </Typography>
+          </Box>
         </MenuItem>
       </Select>
     </CustomFormControl>

@@ -1,7 +1,7 @@
-import { Box, MenuItem, Select, Typography } from "@mui/material";
-import { CustomFormControl } from "./BasicInputForm";
-import { AppConfigurations } from "../../../Themes";
+import { FormControl, IconButton, MenuItem, Select, Typography } from "@mui/material";
 import { LanguageMode, toLanguageMode, useLanguage } from "../../../LanguageContext";
+import LanguageIcon from "@mui/icons-material/Language";
+import { AppConfigurations } from "../../../Themes";
 
 const ENGLISH_LANGUAGE_TEXT = "English";
 const KOREAN_LANGUAGE_TEXT = "한국어";
@@ -14,14 +14,19 @@ export function LanguageInputForm(
 
     return (
         <>
-            <CustomFormControl fullWidth>
+            <FormControl variant="outlined" sx={{ minWidth: 120 }}>
                 <Select
-                    labelId={key}
-                    id={key}
+                    labelId="language-selector-label"
+                    id="language-selector"
                     value={language}
                     key={key}
-                    label={key}
-                    onChange={(e) => { setLanguage(toLanguageMode(e.target.value)) }}
+                    onChange={(e) => { setLanguage(toLanguageMode(e.target.value)); }}
+                    label="Language"
+                    IconComponent={() => (
+                        <IconButton>
+                            <LanguageIcon />
+                        </IconButton>
+                    )}
                     MenuProps={{
                         PaperProps: {
                             sx: {
@@ -30,30 +35,10 @@ export function LanguageInputForm(
                         },
                     }}
                 >
-                    <MenuItem value={LanguageMode.ENGLISH_MODE}>
-                        <Box
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="flex-end"
-                        >
-                            <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                                {ENGLISH_LANGUAGE_TEXT}
-                            </Typography>
-                        </Box>
-                    </MenuItem>
-                    <MenuItem value={LanguageMode.KOREAN_MODE}>
-                        <Box
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="flex-end"
-                        >
-                            <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                                {KOREAN_LANGUAGE_TEXT}
-                            </Typography>
-                        </Box>
-                    </MenuItem>
+                    <MenuItem value={LanguageMode.ENGLISH_MODE}><Typography color={"white"}>{ENGLISH_LANGUAGE_TEXT}</Typography></MenuItem>
+                    <MenuItem value={LanguageMode.KOREAN_MODE}><Typography color={"white"}>{KOREAN_LANGUAGE_TEXT}</Typography></MenuItem>
                 </Select>
-            </CustomFormControl>
+            </FormControl>
         </>
     );
 }

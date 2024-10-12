@@ -40,7 +40,7 @@ export const inputStyleSimulationResultTextBox = {
     notched: false,
   },
   label: {
-    transform: "translate(5px, 5px) scale(0.8)",
+    transform: "translate(10px, 0) scale(0.8)",
   },
 };
 
@@ -79,7 +79,6 @@ export function SimulationUpperInputTimeTextBox(
   label: string,
   totalEquipmentState: EquipmentInput,
   setTotalState: Function,
-  timeInputLabelText: string
 ) {
   return (
     <CustomTimeFormControl fullWidth>
@@ -88,7 +87,7 @@ export function SimulationUpperInputTimeTextBox(
         key={`${label}_label`}
         sx={{ fontSize: AppConfigurations.body1FontSize }}
       >
-        {timeInputLabelText}
+        {label}
       </InputLabel>
       <Input
         id={label}

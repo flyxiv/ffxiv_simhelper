@@ -160,7 +160,6 @@ export function getPossibleMateriasForEquipmentSlot(
 
   let firstSubStat = getFirstSubStat(equipment);
 
-  let secondSubStatIdx = -1;
   let casterJob = isCaster(jobAbbrev);
 
   for (let i = 0; i < possibleMaterias.length; i++) {

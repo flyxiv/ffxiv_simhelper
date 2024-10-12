@@ -33,6 +33,9 @@ export const inputStyleEquipment = {
     "&:hover fieldset": {},
     notched: false,
   },
+  label: {
+    transform: "translate(15px, 2vh)",
+  },
 };
 
 export const inputStyleTime = {
@@ -48,22 +51,6 @@ export const inputStyleTime = {
     "& fieldset": {},
     "&:hover fieldset": {},
     notched: false,
-  },
-};
-
-export const inputStyleJob = {
-  "& .MuiInputBase-input": {
-    color: "white",
-    backgroundColor: AppConfigurations.backgroundThree,
-    textAlign: "right",
-    paddingRight: "30px",
-  },
-  "& .MuiInputLabel-root": {
-    color: AppConfigurations.primary,
-  },
-  label: {
-    padding: "0 16px", // padding을 통해 하이라이트 된 레이블을 조정합니다.
-    transform: "translate(14px, 3vh) scale(1)", // 레이블이 Input 내에 위치하도록 합니다.
   },
 };
 

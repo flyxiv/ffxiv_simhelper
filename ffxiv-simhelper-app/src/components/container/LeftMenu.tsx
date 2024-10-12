@@ -134,17 +134,20 @@ function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS
   return (
     <>
       <LeftMenuLogo>
-        <Box display="flex" justifyContent={"center"}>
+        <Box display="flex" justifyContent={"center"} alignItems={"center"}>
           <Box marginRight={0.5}>
             <img src={LOGO_PATH} width={20} height={20} alt="logo" />
           </Box>
           <Typography align="center">
             <b>FFXIV SIMHELPER</b>
           </Typography>
+
         </Box>
       </LeftMenuLogo>
 
-      {LanguageInputForm()}
+      <Box width="95%" display="flex" justifyContent={"flex-end"} marginY={2}>
+        {LanguageInputForm()}
+      </Box>
 
       <LeftMenuNavigationBar paddingY={4} paddingLeft={2}>
         <Typography variant="h3" align="left" sx={{ fontWeight: "bold" }}>
