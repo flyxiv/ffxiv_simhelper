@@ -1,13 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { ITEM_TOP_MENU_MIN_HEIGHT } from "./Styles";
-import { AppLanguageTexts } from "../../const/languageTexts";
 
-export function PartnerItem(partyMemberJobId: number, jobAbbrev: string) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+export function PartnerItem(partyMemberJobId: number, jobAbbrev: string, partyMemberLabelText: string) {
   return (
-    <Box display="flex" justifyContent="left" alignItems={"center"} height={ITEM_TOP_MENU_MIN_HEIGHT}>
+    <Box display="flex" justifyContent="right" alignItems={"center"} height={ITEM_TOP_MENU_MIN_HEIGHT}>
       <Box marginRight={1}>
         <img
           src={jobAbbrevToJobIconPath(jobAbbrev)}
@@ -19,7 +16,7 @@ export function PartnerItem(partyMemberJobId: number, jobAbbrev: string) {
       </Box>
       <Box>
         <Typography variant="body1" alignContent={"center"} color="white">
-          {`${LANGUAGE_TEXTS.PARTY_MEMBER_LABEL_TEXT} ${partyMemberJobId}`}
+          {`${partyMemberLabelText} ${partyMemberJobId}`}
         </Typography>
       </Box>
     </Box>

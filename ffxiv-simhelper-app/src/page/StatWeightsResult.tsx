@@ -68,16 +68,16 @@ export function StatWeightsResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME, LANGUAGE_TEXTS)}
         <Box>
           {AppHeader()}
           <ResultBoardTopBox marginBottom="40px">
             {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
-            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, STAT_WEIGHTS_REQUEST_COUNT, 1)}
+            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, STAT_WEIGHTS_REQUEST_COUNT, 1, LANGUAGE_TEXTS)}
           </ResultBoardTopBox>
           <ResultBoardBox >
             {SimulationTitle(LANGUAGE_TEXTS.BEST_STATS_TEXT)}
-            {StatWeightSummary(statWeightsCalculated)}
+            {StatWeightSummary(statWeightsCalculated, LANGUAGE_TEXTS)}
           </ResultBoardBox>
           {Footer()}
         </Box>

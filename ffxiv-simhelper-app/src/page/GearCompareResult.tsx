@@ -63,7 +63,7 @@ export function GearCompareResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME, LANGUAGE_TEXTS)}
         <Box>
           {AppHeader()}
           <Box className="SimulationResult" sx={{
@@ -82,7 +82,8 @@ export function GearCompareResult() {
                 combatTimeMilliseconds,
                 partyMemberJobAbbrevs,
                 GEAR_COMPARE_ITERATION_COUNT,
-                0.1
+                0.1,
+                LANGUAGE_TEXTS
               )}
             </ResultBoardTopBox>
             <ResultBoardTopBox>
@@ -98,7 +99,8 @@ export function GearCompareResult() {
                 combatTimeMilliseconds,
                 partyMemberJobAbbrevs,
                 GEAR_COMPARE_ITERATION_COUNT,
-                0.1
+                0.1,
+                LANGUAGE_TEXTS
               )}
             </ResultBoardTopBox>
           </Box>

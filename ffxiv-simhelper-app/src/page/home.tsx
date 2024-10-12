@@ -30,7 +30,7 @@ export function Home() {
       }}
     >
       <Box display="flex" width="100vw">
-        {BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME, LANGUAGE_TEXTS)}
         <Box width="100%">
           {AppHeader()}
           <Box className="HomeBody" height="70vh">

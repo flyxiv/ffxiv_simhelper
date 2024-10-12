@@ -52,31 +52,29 @@ export function readFoodData(minIlvl: number, maxIlvl: number) {
   return foodDatabase;
 }
 
-export function foodStatDescriptionString(food: Food) {
+export function foodStatDescriptionString(food: Food, critStatName: string, dhStatName: string, detStatName: string, sksStatName: string, spsStatName: string, tenStatName: string, pieStatName: string) {
   const stats = [];
 
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
   if (food.criticalStrike > 0) {
-    stats.push({ statName: LANGUAGE_TEXTS.CRIT_STAT_NAME, value: food.criticalStrike });
+    stats.push({ statName: critStatName, value: food.criticalStrike });
   }
   if (food.directHit > 0) {
-    stats.push({ statName: LANGUAGE_TEXTS.DH_STAT_NAME, value: food.directHit });
+    stats.push({ statName: dhStatName, value: food.directHit });
   }
   if (food.determination > 0) {
-    stats.push({ statName: LANGUAGE_TEXTS.DET_STAT_NAME, value: food.determination });
+    stats.push({ statName: detStatName, value: food.determination });
   }
   if (food.skillSpeed > 0) {
-    stats.push({ statName: LANGUAGE_TEXTS.SKS_STAT_NAME, value: food.skillSpeed });
+    stats.push({ statName: sksStatName, value: food.skillSpeed });
   }
   if (food.spellSpeed > 0) {
-    stats.push({ statName: LANGUAGE_TEXTS.SPS_STAT_NAME, value: food.spellSpeed });
+    stats.push({ statName: spsStatName, value: food.spellSpeed });
   }
   if (food.tenacity > 0) {
-    stats.push({ statName: LANGUAGE_TEXTS.TEN_STAT_NAME, value: food.tenacity });
+    stats.push({ statName: tenStatName, value: food.tenacity });
   }
   if (food.piety > 0) {
-    stats.push({ statName: LANGUAGE_TEXTS.PIE_STAT_NAME, value: food.piety });
+    stats.push({ statName: pieStatName, value: food.piety });
   }
 
   let descriptionString = "";

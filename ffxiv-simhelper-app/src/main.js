@@ -22,7 +22,7 @@ function createWindow() {
     * 빌드되는 build 폴더의 index.html 파일을 로드합니다.
     * */
     const startUrl = process.env.ELECTRON_START_URL || url.format({
-        pathname: 'index.html',
+        pathname: '/index.html',
         protocol: 'file:',
         slashes: true
     });

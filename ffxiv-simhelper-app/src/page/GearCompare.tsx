@@ -101,7 +101,8 @@ export function GearCompare() {
           GEAR_COMPARE_URL,
           LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
           totalState,
-          setTotalState
+          setTotalState,
+          LANGUAGE_TEXTS
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
@@ -119,7 +120,7 @@ export function GearCompare() {
                     0,
                     totalState,
                     setTotalState,
-                    false,
+                    LANGUAGE_TEXTS,
                     true,
                     true
                   )}
@@ -144,7 +145,7 @@ export function GearCompare() {
                     1,
                     totalState,
                     setTotalState,
-                    false,
+                    LANGUAGE_TEXTS,
                     true,
                     true
                   )}
@@ -155,7 +156,7 @@ export function GearCompare() {
             <GearComparePartyInputContainer paddingTop={10} paddingBottom={40}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
-                {HorizontalPartyInput(totalState, setTotalState)}
+                {HorizontalPartyInput(totalState, setTotalState, LANGUAGE_TEXTS)}
               </CustomizeBoard>
             </GearComparePartyInputContainer>
 

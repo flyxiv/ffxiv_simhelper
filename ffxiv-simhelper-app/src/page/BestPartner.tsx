@@ -86,6 +86,7 @@ export function BestPartner() {
       >
         {BasicLeftMenu(
           LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
@@ -97,6 +98,7 @@ export function BestPartner() {
                   0,
                   totalState,
                   setTotalState,
+                  LANGUAGE_TEXTS
                 )}
               </EquipmentBoard>
             </StatWeightsInputContainer>

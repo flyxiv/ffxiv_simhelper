@@ -11,7 +11,7 @@ import { SkillLogTable } from "./SkillLogTable";
 import { styled, List, Box, Typography, ListItem } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 import { WarningText } from "../basic/WarningText";
-import { AppLanguageTexts, MNK_EN_NAME, SAM_EN_NAME } from "../../const/languageTexts";
+import { MNK_EN_NAME, SAM_EN_NAME, TextDictionary } from "../../const/languageTexts";
 
 const SkillLogCombatTimeBox = styled(Box)`
   ${SkillLogCombatTimeBoxStyle}
@@ -33,7 +33,7 @@ const SkillEntityBox = styled(Box)`
   ${SkillEntityBoxStyle}
 `;
 
-export const SkillLogResult = (response: DpsAnalysisResponse) => {
+export const SkillLogResult = (response: DpsAnalysisResponse, LANGUAGE_TEXTS: TextDictionary) => {
   const mainPlayerId = response.mainPlayerId;
   const simulationDatas = response.simulationData;
 
@@ -57,8 +57,6 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
     );
   }
 
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
 
   return (
     <>
@@ -80,7 +78,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {LANGUAGE_TEXTS.COMBAT_TIME_TEXT}
+                {combatTimeText}
               </Typography>
             </SkillLogCombatTimeBox>
 
@@ -89,7 +87,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {LANGUAGE_TEXTS.ABILITY_TEXT}
+                {abilityText}
               </Typography>
             </SkillIconBox>
 
@@ -98,7 +96,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
                 variant="body1"
                 fontSize={AppConfigurations.body2FontSize}
               >
-                {LANGUAGE_TEXTS.IMPORTANT_STATUS_TEXT}
+                {importantStatusText}
               </Typography>
             </StatusBox>
           </SkillEntityBox>

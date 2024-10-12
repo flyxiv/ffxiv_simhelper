@@ -22,6 +22,9 @@ import {
   MENU_WIDTH_VW_MD,
 } from "./components/container/LeftMenu";
 import { useEffect } from "react";
+import { LanguageMode } from "./LanguageContext";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { AppLanguageTexts } from "./const/languageTexts";
 
 export const SINGLE_INPUT_SAVE_NAME = "mostRecentSingleInput";
 export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
@@ -53,40 +56,102 @@ export const BODY_WIDTH = {
   xl: `${100 - MENU_WIDTH_VW_XL}vw`,
 };
 
+
+export const theme = (language: LanguageMode) => createTheme({
+  palette: {
+    primary: {
+      main: "#BB86FC",
+    },
+
+    secondary: {
+      main: "#03DAC6",
+    },
+  },
+
+  typography: language === LanguageMode.ENGLISH_MODE ? {
+    fontFamily: "Cabinet, Oraniembaum, Oligopoly, Redwing, Arial",
+    h1: {
+      fontSize: "3rem",
+      fontWeight: 900,
+    },
+    h2: {
+      fontSize: "1.75rem",
+      fontWeight: 600,
+    },
+    h3: {
+      fontSize: "1.5rem",
+      fontWeight: 600,
+    },
+  } : {
+    fontFamily: "NotoSansKR, Arial",
+    h1: {
+      fontSize: "3rem",
+      fontWeight: 900,
+    },
+    h2: {
+      fontSize: "1.75rem",
+      fontWeight: 600,
+    },
+    h3: {
+      fontSize: "1.5rem",
+      fontWeight: 600,
+    },
+
+  },
+
+  components: {
+    MuiOutlinedInput: {
+      defaultProps: {
+        notched: false,
+      },
+    },
+    MuiInputLabel: {
+      defaultProps: {
+        shrink: false,
+      },
+    },
+  },
+});
+
 function App() {
+  let language = AppLanguageTexts().language;
+
   return (
-    <Router>
-      <ScrollToTop />
-      <main className="Body">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
+    <ThemeProvider theme={theme(language)}>
+      <Router>
+        <ScrollToTop />
+        <main className="Body">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
 
-          <Route
-            path={`/${DPS_ANALYSIS_RESULT_URL}`}
-            element={<SimulationResult />}
-          />
+            <Route
+              path={`/${DPS_ANALYSIS_RESULT_URL}`}
+              element={<SimulationResult />}
+            />
 
-          <Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
-          <Route
-            path={`/${GEAR_COMPARE_RESULT_URL}`}
-            element={<GearCompareResult />}
-          />
+            <Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
+            <Route
+              path={`/${GEAR_COMPARE_RESULT_URL}`}
+              element={<GearCompareResult />}
+            />
 
-          <Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
-          <Route
-            path={`/${BEST_PARTNER_RESULT_URL}`}
-            element={<BestPartnerResult />}
-          />
+            <Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
+            <Route
+              path={`/${BEST_PARTNER_RESULT_URL}`}
+              element={<BestPartnerResult />}
+            />
 
-          <Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
-          <Route
-            path={`/${BEST_STATS_RESULT_URL}`}
-            element={<StatWeightsResult />}
-          />
-        </Routes>
-      </main>
-    </Router>
+            <Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
+            <Route
+              path={`/${BEST_STATS_RESULT_URL}`}
+              element={<StatWeightsResult />}
+            />
+          </Routes>
+        </main>
+      </Router>
+    </ThemeProvider>
+
   );
 }
 

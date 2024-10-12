@@ -21,14 +21,9 @@ import { CRIT_BASE_DAMAGE } from "./Stats";
 import { ItemSet } from "./ItemSet";
 import { GearSetMaterias } from "./Materia";
 import { SingleEquipmentInputSaveState } from "../EquipmentInput";
-import { AppLanguageTexts, AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DEX_STAT_EN_NAME, DH_STAT_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, INT_STAT_EN_NAME, MCH_EN_NAME, MIND_STAT_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SKS_STAT_EN_NAME, SMN_EN_NAME, SPS_STAT_EN_NAME, STR_STAT_EN_NAME, TEN_STAT_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WD_STAT_EN_NAME, WHM_EN_NAME } from "../../const/languageTexts";
-import { useEffect, useState } from "react";
-import { useLanguage } from "../../LanguageContext";
+import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DEX_STAT_EN_NAME, DH_STAT_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, INT_STAT_EN_NAME, MCH_EN_NAME, MIND_STAT_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SKS_STAT_EN_NAME, SMN_EN_NAME, SPS_STAT_EN_NAME, STR_STAT_EN_NAME, TEN_STAT_EN_NAME, TextDictionary, VPR_EN_NAME, WAR_EN_NAME, WD_STAT_EN_NAME, WHM_EN_NAME } from "../../const/languageTexts";
 
-export const loadPowerNames = () => {
-  let { language } = useLanguage();
-
-  let LANGUAGE_TEXTS = AppLanguageTexts();
+export const loadPowerNames = (LANGUAGE_TEXTS: TextDictionary) => {
   const POWER_NAMES = [
     LANGUAGE_TEXTS.WD_POWER_NAME,
     LANGUAGE_TEXTS.MAIN_STAT_POWER_NAME,
@@ -40,12 +35,6 @@ export const loadPowerNames = () => {
     LANGUAGE_TEXTS.TENACITY_POWER_NAME,
     LANGUAGE_TEXTS.GCD_NAME,
   ]
-
-  let [powerNames, setPowerNames] = useState(POWER_NAMES);
-
-  useEffect(() => {
-    setPowerNames(powerNames);
-  }, [language]);
 
   return { POWER_NAMES };
 }
@@ -114,9 +103,9 @@ export function defaultPlayerPower(): PlayerPower {
 export function getStatByStatName(
   playerPower: PlayerPower,
   statName: string,
-  jobAbbrev: string
+  jobAbbrev: string,
+  gcdName: string
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   switch (statName) {
     case WD_STAT_EN_NAME:
       return `${playerPower.weaponDamage}`;
@@ -137,7 +126,7 @@ export function getStatByStatName(
       return `${playerPower.spellSpeed}`;
     case TEN_STAT_EN_NAME:
       return `${playerPower.tenacity}`;
-    case LANGUAGE_TEXTS.GCD_NAME: {
+    case gcdName: {
       playerPower.gcd = calculateGCD(
         playerPower.speedMultiplier,
         calculateHasteBuff(jobAbbrev)
@@ -149,8 +138,7 @@ export function getStatByStatName(
   }
 }
 
-export function getStatPower(power: PlayerPower, powerName: string) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
+export function getStatPower(power: PlayerPower, powerName: string, LANGUAGE_TEXTS: TextDictionary) {
   switch (powerName) {
     case LANGUAGE_TEXTS.WD_POWER_NAME: {
       return `${(power.weaponDamageMultiplier * 100).toFixed(0)}%`;
@@ -324,10 +312,9 @@ export function getSpeedStatByJobAbbrev(
 export function getStatLostByStatName(
   totalStats: PlayerPower,
   statName: string,
-  jobAbbrev: string
+  jobAbbrev: string,
+  gcdName: string
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
   switch (statName) {
     case WD_STAT_EN_NAME:
       return 0;
@@ -376,7 +363,7 @@ export function getStatLostByStatName(
           totalStats.tenacityMultiplier * 100 - 100
         ) - totalStats.tenacity
       );
-    case LANGUAGE_TEXTS.GCD_NAME:
+    case gcdName:
       return (
         Math.max(getMinNeededStatForCurrentGCD(totalStats.gcd, jobAbbrev), DEFAULT_SPEED) -
         getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
@@ -389,9 +376,9 @@ export function getStatLostByStatName(
 export function getStatNeededByStatName(
   totalStats: PlayerPower,
   statName: string,
-  jobAbbrev: string
+  jobAbbrev: string,
+  gcdName: string
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   switch (statName) {
     case WD_STAT_EN_NAME:
       return 0;
@@ -441,7 +428,7 @@ export function getStatNeededByStatName(
           totalStats.tenacityMultiplier * 100 - 100 + 0.1
         ) - totalStats.tenacity
       );
-    case LANGUAGE_TEXTS.GCD_NAME:
+    case gcdName:
       return (
         getMinNeededStatForCurrentGCD(totalStats.gcd - 0.01, jobAbbrev) -
         getSpeedStatByJobAbbrev(totalStats, jobAbbrev)
@@ -455,9 +442,9 @@ export function getStatNeededByStatNameLadderAmount(
   totalStats: PlayerPower,
   statName: string,
   jobAbbrev: string,
-  amount: number
+  amount: number,
+  gcdName: string,
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   switch (statName) {
     case WD_STAT_EN_NAME:
       return 0;
@@ -498,7 +485,7 @@ export function getStatNeededByStatNameLadderAmount(
       );
     case SKS_STAT_EN_NAME:
     case SPS_STAT_EN_NAME:
-    case LANGUAGE_TEXTS.GCD_NAME:
+    case gcdName:
       return (
         getMinNeededStatForCurrentGCD(
           totalStats.gcd - 0.01 * amount,

@@ -71,7 +71,8 @@ export function BestStats() {
           DPS_ANALYSIS_URL,
           LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
           totalState,
-          setTotalState
+          setTotalState,
+          LANGUAGE_TEXTS
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
@@ -79,14 +80,14 @@ export function BestStats() {
             <StatWeightsInputContainer justifyContent={"center"}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
               <EquipmentBoard>
-                {EquipmentSelectionMenu(0, totalState, setTotalState)}
+                {EquipmentSelectionMenu(0, totalState, setTotalState, LANGUAGE_TEXTS)}
               </EquipmentBoard>
             </StatWeightsInputContainer>
 
             <StatWeightsInputContainer paddingTop={20}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
-                {HorizontalPartyInput(totalState, setTotalState)}
+                {HorizontalPartyInput(totalState, setTotalState, LANGUAGE_TEXTS)}
               </CustomizeBoard>
             </StatWeightsInputContainer>
 
@@ -97,7 +98,7 @@ export function BestStats() {
                 justifyContent="center"
                 paddingBottom={"30vh"}
               >
-                {StatPowerSummary(totalState.equipmentDatas[0])}
+                {StatPowerSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
               </Box>
             </StatWeightsInputContainer>
 

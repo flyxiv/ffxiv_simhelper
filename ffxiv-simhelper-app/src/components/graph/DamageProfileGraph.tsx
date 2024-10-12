@@ -4,8 +4,9 @@ import { SkillIdToIconPathFactory } from "../icon/abilityicon/SkillIconFactory";
 import { iconPathToName } from "../Util";
 import { DamageChartData } from "./GraphData";
 import { Box } from "@mui/material";
+import { TextDictionary } from "../../const/languageTexts";
 
-export const DamageProfileGraph = (response: DpsAnalysisResponse) => {
+export const DamageProfileGraph = (response: DpsAnalysisResponse, LANGUAGE_TEXTS: TextDictionary) => {
   const mainPlayerId = response.mainPlayerId;
   const simulationDatas = response.simulationData;
 
@@ -55,7 +56,7 @@ export const DamageProfileGraph = (response: DpsAnalysisResponse) => {
 
   return (
     <Box>
-      {DamageChartTitle()}
+      {DamageChartTitle(LANGUAGE_TEXTS.SKILL_TITLE_TEXT, LANGUAGE_TEXTS.DAMAGE_PERCENTAGE_TEXT, LANGUAGE_TEXTS.TOTAL_DAMAGE_TEXT, LANGUAGE_TEXTS.CAST_TEXT)}
       {damageProfileData.map((data) => {
         return SkillDamageProfile(
           data,

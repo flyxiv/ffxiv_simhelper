@@ -28,7 +28,7 @@ import { sendRequestAsync } from "./DpsAnalysisRequestButton";
 import { defaultPlayerPower, getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
 import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
-import { AppLanguageTexts } from "../../const/languageTexts";
+import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DEX_STAT_EN_NAME, DH_STAT_EN_NAME, INT_STAT_EN_NAME, MIDLANDER_HYUR_EN_NAME, MIND_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, STR_STAT_EN_NAME, TEN_STAT_EN_NAME, WD_STAT_EN_NAME } from "../../const/languageTexts";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/beststats";
 const WEAPON_DAMAGE_INCREASE = 10;
@@ -157,25 +157,24 @@ function createAugmentedRequest(
   power.autoAttackDelays = autoAttackDelays;
 
   let augmentAmount = 0;
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
 
   if (augmentStatName !== "") {
-    if (augmentStatName === LANGUAGE_TEXTS.WD_STAT_NAME) {
+    if (augmentStatName === WD_STAT_EN_NAME) {
       augmentAmount = WEAPON_DAMAGE_INCREASE;
       power.weaponDamage += WEAPON_DAMAGE_INCREASE;
     }
     if (
-      augmentStatName === LANGUAGE_TEXTS.STR_STAT_EN_NAME ||
-      augmentStatName === LANGUAGE_TEXTS.DEX_STAT_EN_NAME ||
-      augmentStatName === LANGUAGE_TEXTS.INT_STAT_EN_NAME ||
-      augmentStatName === LANGUAGE_TEXTS.MIND_STAT_EN_NAME
+      augmentStatName === STR_STAT_EN_NAME ||
+      augmentStatName === DEX_STAT_EN_NAME ||
+      augmentStatName === INT_STAT_EN_NAME ||
+      augmentStatName === MIND_STAT_EN_NAME
     ) {
       augmentAmount = MAIN_STAT_INCREASE;
       power.mainStat += MAIN_STAT_INCREASE;
     }
 
-    if (augmentStatName === LANGUAGE_TEXTS.CRIT_STAT_EN_NAME) {
+    if (augmentStatName === CRIT_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -184,7 +183,7 @@ function createAugmentedRequest(
       );
       power.criticalStrike += augmentAmount;
     }
-    if (augmentStatName === LANGUAGE_TEXTS.DH_STAT_EN_NAME) {
+    if (augmentStatName === DH_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -193,7 +192,7 @@ function createAugmentedRequest(
       );
       power.directHit += augmentAmount;
     }
-    if (augmentStatName === LANGUAGE_TEXTS.DET_STAT_EN_NAME) {
+    if (augmentStatName === DET_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -202,7 +201,7 @@ function createAugmentedRequest(
       );
       power.determination += augmentAmount;
     }
-    if (augmentStatName === LANGUAGE_TEXTS.SKS_STAT_EN_NAME) {
+    if (augmentStatName === SKS_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -211,7 +210,7 @@ function createAugmentedRequest(
       );
       power.skillSpeed += augmentAmount;
     }
-    if (augmentStatName === LANGUAGE_TEXTS.SPS_STAT_EN_NAME) {
+    if (augmentStatName === SPS_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -220,7 +219,7 @@ function createAugmentedRequest(
       );
       power.spellSpeed += augmentAmount;
     }
-    if (augmentStatName === LANGUAGE_TEXTS.TEN_STAT_EN_NAME) {
+    if (augmentStatName === TEN_STAT_EN_NAME) {
       augmentAmount = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
@@ -265,7 +264,7 @@ function createAugmentedRequest(
 
     let playerTotalState = {
       mainPlayerJobAbbrev: jobAbbrev,
-      race: LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME,
+      race: MIDLANDER_HYUR_EN_NAME,
       foodId: bisEquipments.foodId,
       mainPlayerPartner1Id: null,
       mainPlayerPartner2Id: null,

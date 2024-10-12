@@ -16,7 +16,7 @@ import {
 } from "../../types/ffxivdatabase/PlayerPower";
 import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { StatWeightsData } from "../../page/StatWeightsResult";
-import { AppLanguageTexts } from "../../const/languageTexts";
+import { TextDictionary } from "../../const/languageTexts";
 
 const STAT_SUMMARY_BOX_WIDTH = "3vw";
 const STAT_SUMMARY_TIME_BOX_WIDTH = "6vw";
@@ -50,15 +50,14 @@ export function StatSummaryTypography(text: string) {
 export function StatSummaryTypographyCompare(
   stat: string,
   compareStat: string,
-  statName: string
+  statName: string,
+  gcdName: string
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
   let statValue = parseFloat(stat);
   let compareStatValue = parseFloat(compareStat);
 
-  let isBetter = statName === LANGUAGE_TEXTS.GCD_NAME ? statValue < compareStatValue : statValue > compareStatValue;
-  let isWorse = statName === LANGUAGE_TEXTS.GCD_NAME ? statValue > compareStatValue : statValue < compareStatValue;
+  let isBetter = statName === gcdName ? statValue < compareStatValue : statValue > compareStatValue;
+  let isWorse = statName === gcdName ? statValue > compareStatValue : statValue < compareStatValue;
 
   let color =
     isBetter
@@ -79,11 +78,10 @@ export function SimulationInputSummary(
   jobAbbrev: string,
   combatTimeMilliseconds: number,
   iterationCount: number,
-  variancePercent: number
+  variancePercent: number,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
-  let simulationInputNames = getStatNames(jobAbbrev);
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+  let simulationInputNames = getStatNames(jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
 
   return (
     <Box display="inline-block">
@@ -124,7 +122,7 @@ export function SimulationInputSummary(
           return (
             <SingleStatBox>
               {StatSummaryTypography(
-                getStatByStatName(power, statName, jobAbbrev)
+                getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME)
               )}
             </SingleStatBox>
           );
@@ -140,11 +138,10 @@ export function StatSummaryGearCompare(
   comparePower: PlayerPower,
   combatTimeMilliseconds: number,
   iterationCount: number,
-  variancePercent: number
+  variancePercent: number,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
-  let jobStatNames = getStatNames(jobAbbrev);
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+  let jobStatNames = getStatNames(jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
 
   return (
     <Box display="inline-block">
@@ -185,9 +182,10 @@ export function StatSummaryGearCompare(
           return (
             <SingleStatBox>
               {StatSummaryTypographyCompare(
-                getStatByStatName(power, statName, jobAbbrev),
-                getStatByStatName(comparePower, statName, jobAbbrev),
-                statName
+                getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME),
+                getStatByStatName(comparePower, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME),
+                statName,
+                LANGUAGE_TEXTS.GCD_NAME
               )}
             </SingleStatBox>
           );
@@ -197,24 +195,23 @@ export function StatSummaryGearCompare(
   );
 }
 
-export function StatSummary(totalState: SingleEquipmentInputSaveState) {
-  let jobStatNames = getStatNames(totalState.mainPlayerJobAbbrev);
+export function StatSummary(totalState: SingleEquipmentInputSaveState, nameText: string, compositionName: string, LANGUAGE_TEXTS: TextDictionary) {
+  let jobStatNames = getStatNames(totalState.mainPlayerJobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
   let power = totalState.power;
   let jobAbbrev = totalState.mainPlayerJobAbbrev;
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <Box display="flex" flexDirection={"column"}>
       <StatSummaryBox
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
-        <SingleStatBox>{StatSummaryTypography(LANGUAGE_TEXTS.NAME_TEXT)}</SingleStatBox>
+        <SingleStatBox>{StatSummaryTypography(nameText)}</SingleStatBox>
         {jobStatNames.map((statName) => {
           return (
             <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
           );
         })}
-        <SingleStatBox>{StatSummaryTypography(LANGUAGE_TEXTS.COMPOSITION_NAME)}</SingleStatBox>
+        <SingleStatBox>{StatSummaryTypography(compositionName)}</SingleStatBox>
       </StatSummaryBox>
 
       <StatSummaryBox
@@ -227,7 +224,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
           return (
             <SingleStatBox>
               {StatSummaryTypography(
-                getStatByStatName(power, statName, jobAbbrev)
+                getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME)
               )}
             </SingleStatBox>
           );
@@ -240,7 +237,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
       >
         <SingleStatBox>{StatSummaryTypography(LANGUAGE_TEXTS.PREV_TEXT)}</SingleStatBox>
         {jobStatNames.map((statName) => {
-          let lostStat = getStatLostByStatName(power, statName, jobAbbrev);
+          let lostStat = getStatLostByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
           let color =
             lostStat === 0 ? AppConfigurations.secondary : minusBackgroundColor;
           return (
@@ -268,7 +265,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
           return (
             <SingleStatBox>
               {StatSummaryTypography(
-                getStatNeededByStatName(power, statName, jobAbbrev).toString()
+                getStatNeededByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME).toString()
               )}
             </SingleStatBox>
           );
@@ -279,9 +276,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
   );
 }
 
-export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+export function StatWeightSummary(statWeightsData: StatWeightsData[], LANGUAGE_TEXTS: TextDictionary) {
   return (
     <Box display="inline-block">
       <Box display="flex">
@@ -323,9 +318,9 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
   );
 }
 
-export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
+export function StatPowerSummary(totalState: SingleEquipmentInputSaveState, LANGUAGE_TEXTS: TextDictionary) {
   let power = totalState.power;
-  let { POWER_NAMES } = loadPowerNames();
+  let { POWER_NAMES } = loadPowerNames(LANGUAGE_TEXTS);
 
   return (
     <Box display="inline-block">
@@ -347,7 +342,7 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
         {POWER_NAMES.map((powerName) => {
           return (
             <SinglePowerBox>
-              {StatSummaryTypography(getStatPower(power, powerName))}
+              {StatSummaryTypography(getStatPower(power, powerName, LANGUAGE_TEXTS))}
             </SinglePowerBox>
           );
         })}

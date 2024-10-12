@@ -12,7 +12,6 @@ import { StatusIdToIconPathFactory } from "../icon/abilityicon/StatusIconFactory
 import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
 import { TeammateChartData } from "./GraphData";
 import { AppConfigurations } from "../../Themes";
-import { AppLanguageTexts } from "../../const/languageTexts";
 
 export const JOB_BAR_ITEM_HEIGHT = "65px";
 const IMAGE_SIZE = 30;
@@ -88,20 +87,18 @@ export function JobBarChartTeammate(
   );
 }
 
-export function GraphTitleRow() {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+export function GraphTitleRow(memberText: string, totalText: string) {
   return (
     <PartyMemberBuffBox>
       <PartyMemberIconBox>
         <Typography variant="h6" fontSize={AppConfigurations.body1FontSize}>
-          {LANGUAGE_TEXTS.MEMBER_TEXT}
+          {memberText}
         </Typography>
       </PartyMemberIconBox>
       <BuffTitleBar />
       <TotalRdpsBox>
         <Typography variant="h6" fontSize={AppConfigurations.body2FontSize}>
-          {LANGUAGE_TEXTS.TOTAL_TEXT}
+          {totalText}
         </Typography>
       </TotalRdpsBox>
     </PartyMemberBuffBox>

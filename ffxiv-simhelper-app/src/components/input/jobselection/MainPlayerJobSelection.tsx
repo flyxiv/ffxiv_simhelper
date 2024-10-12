@@ -12,7 +12,7 @@ import {
 import { getRoleByIdAndMainCharacterJob } from "./PartyMemberJobSelection";
 import { calculateHasteBuff, DEFAULT_GCD } from "../../../types/ffxivdatabase/StatCalculator";
 import { mapJobAbbrevToJobBisEquipments } from "../../../const/StatValue";
-import { AppLanguageTexts, AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../../const/languageTexts";
+import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../../const/languageTexts";
 
 let ALIGN = "left";
 
@@ -74,7 +74,7 @@ function resetInvalidPartnersForNewJob(data: SingleEquipmentInputSaveState) {
 export function MainPlayerJobSelection(
   id: number,
   totalEquipmentState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
 ) {
   const handleJobChange = (event: SelectChangeEvent<string>) => {
     let newJobAbbrev = event.target.value;
@@ -218,13 +218,12 @@ function getGcdOptions(jobAbbrev: string) {
 export function MainPlayerGcdSelection(
   id: number,
   totalEquipmentState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
+  speedLabelText: string,
 ) {
   let key = `Job-${id}`;
   let jobAbbrev = totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
   let gcdOptions = getGcdOptions(jobAbbrev);
-
-  const LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <CustomFormControl fullWidth>
@@ -235,7 +234,7 @@ export function MainPlayerGcdSelection(
       >
         <Box display="flex" sx={{ height: "4vh" }} alignItems={"center"} justifyContent={"flex-end"}>
           <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
-            {LANGUAGE_TEXTS.SPEED_LABEL_TEXT}
+            {speedLabelText}
           </Typography>
         </Box>
       </InputLabel>

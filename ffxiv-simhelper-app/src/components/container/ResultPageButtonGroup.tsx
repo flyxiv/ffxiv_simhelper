@@ -1,7 +1,7 @@
 import { Box, styled, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 import { PartyContributionData } from "../graph/GraphData";
-import { AppLanguageTexts } from "../../const/languageTexts";
+import { TextDictionary } from "../../const/languageTexts";
 
 type ViewType = "Best Teammate" | "Damage Profile" | "Rotation Log"; // Define possible view types
 
@@ -26,10 +26,9 @@ export function ResultPageButtonGroup(
   currentlyToggledView: string,
   setCurrentlyToggledView: Function,
   teammatesContributionToMyBuffs: PartyContributionData | null,
-  mainPlayerContributionToOthers: PartyContributionData | null
+  mainPlayerContributionToOthers: PartyContributionData | null,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
   const handleViewChange = (
     _: React.MouseEvent<HTMLElement>,
     newView: ViewType | null

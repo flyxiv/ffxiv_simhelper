@@ -1,4 +1,4 @@
-import { AppLanguageTexts, CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME } from "../../const/languageTexts";
+import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME } from "../../const/languageTexts";
 import { Equipment, getFirstSecondSubStat } from "./Equipment";
 import {
   convertEquipmentToFinalStat,
@@ -162,7 +162,6 @@ export function getPossibleMateriasForEquipmentSlot(
 
   let secondSubStatIdx = -1;
   let casterJob = isCaster(jobAbbrev);
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   for (let i = 0; i < possibleMaterias.length; i++) {
     let [statName, _] = possibleMaterias[i].split("+");
@@ -172,11 +171,11 @@ export function getPossibleMateriasForEquipmentSlot(
       i = i - 1;
     }
 
-    if (!casterJob && statName === LANGUAGE_TEXTS.SPS_STAT_EN_NAME) {
+    if (!casterJob && statName === SPS_STAT_EN_NAME) {
       possibleMaterias.splice(i, 1);
       i = i - 1;
     }
-    if (casterJob && statName === LANGUAGE_TEXTS.SKS_STAT_EN_NAME) {
+    if (casterJob && statName === SKS_STAT_EN_NAME) {
       possibleMaterias.splice(i, 1);
       i = i - 1;
     }

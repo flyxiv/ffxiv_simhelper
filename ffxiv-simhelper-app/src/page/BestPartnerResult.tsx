@@ -72,7 +72,7 @@ export function BestPartnerResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME, LANGUAGE_TEXTS)}
         <Box>
           {AppHeader()}
           <ResultTopBoardBox marginBottom="40px">
@@ -83,12 +83,13 @@ export function BestPartnerResult() {
               responseJson.combatTimeMillisecond,
               null,
               BEST_PARTNER_ITERATION_COUNT,
-              1
+              1,
+              LANGUAGE_TEXTS
             )}
           </ResultTopBoardBox>
           <ResultBoardBox>
             {SimulationTitle(LANGUAGE_TEXTS.OVERALL_TEXT)}
-            {ContributionByRoleTable(simulationDataByRoles[0])}
+            {ContributionByRoleTable(simulationDataByRoles[0], LANGUAGE_TEXTS.TANK_TEXT, LANGUAGE_TEXTS.HEALER_TEXT, LANGUAGE_TEXTS.DPS_TEXT)}
 
             {simulationDataByRoles.slice(1).map((table, index) => {
               let burstMinute = index * 2;
@@ -96,7 +97,7 @@ export function BestPartnerResult() {
               return (
                 <>
                   {SimulationTitle(`${burstMinute}${LANGUAGE_TEXTS.BURST_TEXT}`)}
-                  {ContributionByRoleTable(table)};
+                  {ContributionByRoleTable(table, LANGUAGE_TEXTS.TANK_TEXT, LANGUAGE_TEXTS.HEALER_TEXT, LANGUAGE_TEXTS.DPS_TEXT)};
                 </>
               );
             })}
@@ -118,7 +119,6 @@ function convertToContributionTable(
     ranged: [],
     casters: [],
   };
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   for (let data of partnerSimulationData) {
     switch (data.partnerJobAbbrev) {

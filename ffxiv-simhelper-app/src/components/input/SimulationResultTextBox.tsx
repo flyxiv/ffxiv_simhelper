@@ -7,7 +7,6 @@ import {
   SingleEquipmentInputSaveState,
 } from "../../types/EquipmentInput";
 import { CustomTimeFormControl } from "./basicform/BasicInputForm";
-import { AppLanguageTexts } from "../../const/languageTexts";
 
 export interface InputFormProps {
   label: string;
@@ -74,14 +73,14 @@ export const SimulationResultTextBox: React.FC<InputFormProps> = ({
   );
 };
 
-const TIME_UPPER_LIMIT = 900;
+const TIME_UPPER_LIMIT = 600;
 
 export function SimulationUpperInputTimeTextBox(
   label: string,
   totalEquipmentState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
+  timeInputLabelText: string
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   return (
     <CustomTimeFormControl fullWidth>
       <InputLabel
@@ -89,7 +88,7 @@ export function SimulationUpperInputTimeTextBox(
         key={`${label}_label`}
         sx={{ fontSize: AppConfigurations.body1FontSize }}
       >
-        {LANGUAGE_TEXTS.TIME_INPUT_LABEL_TEXT}
+        {timeInputLabelText}
       </InputLabel>
       <Input
         id={label}

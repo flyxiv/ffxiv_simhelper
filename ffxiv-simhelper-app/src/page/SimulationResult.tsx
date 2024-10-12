@@ -91,7 +91,7 @@ export function SimulationResult() {
       paddingBottom={20}
     >
       <Box display="flex">
-        {BasicLeftMenu(LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME)}
+        {BasicLeftMenu(LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME, LANGUAGE_TEXTS)}
         <Box>
           {AppHeader()}
           <ResultBoardTopBox>
@@ -100,14 +100,15 @@ export function SimulationResult() {
             <Typography sx={{ color: 'white' }}>
               {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
             </Typography>
-            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, QUICK_SIM_ITERATION_COUNT, 1)}
+            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, QUICK_SIM_ITERATION_COUNT, 1, LANGUAGE_TEXTS)}
           </ResultBoardTopBox>
           <Box display="flex" justifyContent={"center"}>
             {ResultPageButtonGroup(
               currentlyToggledView,
               setCurrentlyToggledView,
               teammatesBuffContributionToMyBuffs,
-              mainPlayerContributionToOthers
+              mainPlayerContributionToOthers,
+              LANGUAGE_TEXTS
             )}
           </Box>
           {renderTableBasedOnSelectedButton(
@@ -135,7 +136,7 @@ function renderTableBasedOnSelectedButton(
     return (
       <ResultBoardBox>
         {SimulationTitle(LANGUAGE_TEXTS.BEST_TEAMMATE_BUTTON_TEXT)}
-        {BestTeammateGraph(teammatesContributionToMyBuffs, responseJson.mainPlayerJobAbbrev)}
+        {BestTeammateGraph(teammatesContributionToMyBuffs, responseJson.mainPlayerJobAbbrev, LANGUAGE_TEXTS.MEMBER_TEXT, LANGUAGE_TEXTS.TOTAL_TEXT, LANGUAGE_TEXTS.MNK_ROTATION_WARNING_TEXT)}
       </ResultBoardBox>
     );
   } else if (currentlyToggledView === LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT) {
@@ -149,14 +150,14 @@ function renderTableBasedOnSelectedButton(
     return (
       <ResultBoardBox>
         {SimulationTitle(LANGUAGE_TEXTS.MY_CONTRIBUTION_BUTTON_TEXT)}
-        {MainPlayerContributionGraph(mainPlayerContributionToOthers)}
+        {MainPlayerContributionGraph(mainPlayerContributionToOthers, LANGUAGE_TEXTS.MEMBER_TEXT, LANGUAGE_TEXTS.TOTAL_TEXT)}
       </ResultBoardBox>
     );
   } else if (currentlyToggledView === LANGUAGE_TEXTS.ROTATION_SAMPLE_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
         {SimulationTitle(LANGUAGE_TEXTS.ROTATION_SAMPLE_BUTTON_TEXT)}
-        {SkillLogResult(responseJson)}
+        {SkillLogResult(responseJson, LANGUAGE_TEXTS)}
       </ResultBoardBox>
     );
   } else {

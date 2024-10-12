@@ -69,9 +69,9 @@ function SingleMateriaMenu(
   materiaSlot: number,
   slotName: string,
   totalEquipmentState: EquipmentInput,
-  setTotalEquipmentState: Function
+  setTotalEquipmentState: Function,
+  empty_text: string
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   if (materias === undefined) {
     return <></>;
   }
@@ -132,7 +132,7 @@ function SingleMateriaMenu(
             alignItems={"center"}
             height="100%"
           >
-            <Typography align="center">{LANGUAGE_TEXTS.EMPTY_TEXT}</Typography>
+            <Typography align="center">{empty_text}</Typography>
           </Box>
         </MateriaMenu>
       </Select>

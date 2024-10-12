@@ -18,7 +18,7 @@ import {
   TANK_JOBS,
 } from "../../../types/ffxivdatabase/PartyCompositionMaker";
 import { calculatePlayerPowerFromInputs } from "../../../types/ffxivdatabase/ItemSet";
-import { AppLanguageTexts, PLD_EN_NAME, SCH_EN_NAME } from "../../../const/languageTexts";
+import { PLD_EN_NAME, SCH_EN_NAME, TextDictionary } from "../../../const/languageTexts";
 
 let ALIGN = "center";
 
@@ -89,9 +89,9 @@ export function getRoleByIdAndMainCharacterJob(
 export function PartyMemberJobSelection(
   id: number,
   totalEquipmentState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   let playerId = `${LANGUAGE_TEXTS.PARTY_MEMBER_LABEL_TEXT} ${id}`;
 
   const updateState = (index: number) => (e: SelectChangeEvent<string>) => {

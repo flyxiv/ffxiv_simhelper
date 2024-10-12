@@ -1,8 +1,6 @@
-import { LanguageMode } from "../LanguageContext";
 import { calculatePowerByStat, isCaster } from "../types/ffxivdatabase/ItemSet";
 import { defaultPlayerPower } from "../types/ffxivdatabase/PlayerPower";
 import {
-  AppLanguageTexts,
   AST_EN_NAME,
   BLM_EN_NAME,
   BRD_EN_NAME,

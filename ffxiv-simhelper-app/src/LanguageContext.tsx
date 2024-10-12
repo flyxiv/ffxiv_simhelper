@@ -41,7 +41,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
 };
 
 export const useLanguage = (): LanguageContextType => {
-    console.log(LanguageContext);
     const context = useContext(LanguageContext);
     if (!context) {
         throw new Error('useLanguage must be used within a LanguageProvider');

@@ -15,8 +15,8 @@ import {
 } from "../../App";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { convertToLinkUrl } from "../../page/home";
-import { AppLanguageTexts } from "../../const/languageTexts";
 import { LanguageInputForm } from "../input/basicform/LanguageInputForm";
+import { TextDictionary } from "../../const/languageTexts";
 
 export const MENU_WIDTH_VW_XS = 35;
 export const MENU_WIDTH_VW_SM = 30;
@@ -53,7 +53,8 @@ export function LeftMenuWithLoadout(
   loadoutType: string,
   currentSimulationPage: string,
   totalState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
 
   return (
@@ -71,19 +72,20 @@ export function LeftMenuWithLoadout(
       anchor="left"
     >
       <LeftMenuTotalBar>
-        {DefaultLeftMenuComponents(currentSimulationPage)}
+        {DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}
         {EquipmentLoadouts(
           loadoutCount,
           loadoutType,
           totalState,
-          setTotalState
+          setTotalState,
+          LANGUAGE_TEXTS
         )}
       </LeftMenuTotalBar>
     </Drawer>
   );
 }
 
-export function BasicLeftMenu(currentSimulationPage: string) {
+export function BasicLeftMenu(currentSimulationPage: string, LANGUAGE_TEXTS: TextDictionary) {
   return (
     <Drawer
       sx={{
@@ -99,7 +101,7 @@ export function BasicLeftMenu(currentSimulationPage: string) {
       variant="permanent"
       anchor="left"
     >
-      <LeftMenuTotalBar>{DefaultLeftMenuComponents(currentSimulationPage)}</LeftMenuTotalBar>
+      <LeftMenuTotalBar>{DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}</LeftMenuTotalBar>
     </Drawer>
   );
 }
@@ -128,9 +130,7 @@ const BEST_PARTNER_MENU_LOGO_PATH = "/images/icon_best_partner_w.svg";
 const STAT_WEIGHTS_MENU_LOGO_PATH = "/images/icon_best_stats_w.svg";
 const LOGO_PATH = "/images/left_menu_logo.svg";
 
-function DefaultLeftMenuComponents(currentSimulationPage: string) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS: TextDictionary) {
   return (
     <>
       <LeftMenuLogo>
@@ -194,10 +194,9 @@ function EquipmentLoadouts(
   loadoutCount: number,
   loadoutType: string,
   totalState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
   return (
     <>
       <Box paddingX={2}>
@@ -224,7 +223,8 @@ function EquipmentLoadouts(
               loadoutType,
               totalState,
               setTotalState,
-              getNumberOfEquipmentSets(loadoutType)
+              getNumberOfEquipmentSets(loadoutType),
+              LANGUAGE_TEXTS
             )}
           </Box>
         );

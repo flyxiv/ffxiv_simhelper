@@ -108,7 +108,8 @@ export function DpsAnalysis() {
           DPS_ANALYSIS_URL,
           LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
           totalState,
-          setTotalState
+          setTotalState,
+          LANGUAGE_TEXTS
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
@@ -116,14 +117,14 @@ export function DpsAnalysis() {
             <DpsAnalysisInputContainer justifyContent={"center"}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
               <EquipmentBoard>
-                {EquipmentSelectionMenu(0, totalState, setTotalState)}
+                {EquipmentSelectionMenu(0, totalState, setTotalState, LANGUAGE_TEXTS)}
               </EquipmentBoard>
             </DpsAnalysisInputContainer>
 
             <DpsAnalysisInputContainer paddingTop={20}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
-                {HorizontalPartyInput(totalState, setTotalState)}
+                {HorizontalPartyInput(totalState, setTotalState, LANGUAGE_TEXTS)}
               </CustomizeBoard>
             </DpsAnalysisInputContainer>
 
@@ -134,7 +135,7 @@ export function DpsAnalysis() {
                 justifyContent="center"
                 paddingBottom={"20vh"}
               >
-                {StatPowerSummary(totalState.equipmentDatas[0])}
+                {StatPowerSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
               </Box>
             </DpsAnalysisInputContainer>
 

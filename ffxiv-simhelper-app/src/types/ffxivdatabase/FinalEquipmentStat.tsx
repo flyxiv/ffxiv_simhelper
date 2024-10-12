@@ -1,4 +1,4 @@
-import { AppLanguageTexts, CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME } from "../../const/languageTexts";
+import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME } from "../../const/languageTexts";
 import { Equipment } from "./Equipment";
 import { Materia, updateMateriaValueStatToFinalStat } from "./Materia";
 
