@@ -50,7 +50,7 @@ autoUpdater.on('update-available', () => {
 
     const dialogOpts = {
         type: 'info',
-        buttons: ['Restart', 'Later'],
+        buttons: ['Restart And Install', 'Later'],
         title: 'Application Update',
         message: 'A new version has been downloaded.',
         detail: 'It will be installed after a restart.'
