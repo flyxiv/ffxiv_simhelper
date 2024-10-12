@@ -160,7 +160,7 @@ export function GearCompare() {
               </CustomizeBoard>
             </GearComparePartyInputContainer>
 
-            {GearCompareBottomMenu(totalState)}
+            {GearCompareBottomMenu(totalState, LANGUAGE_TEXTS)}
           </Box>
           {Footer()}
         </Box>

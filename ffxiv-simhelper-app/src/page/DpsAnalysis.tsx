@@ -139,7 +139,7 @@ export function DpsAnalysis() {
               </Box>
             </DpsAnalysisInputContainer>
 
-            {BasicBottomMenu(totalState, DpsAnalysisRequestButton)}
+            {BasicBottomMenu(totalState, DpsAnalysisRequestButton, LANGUAGE_TEXTS)}
           </Box>
           {Footer()}
         </Box>

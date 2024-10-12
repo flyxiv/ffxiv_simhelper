@@ -4,12 +4,13 @@ import { RaceMenuItem } from "../items/RaceMenuItem";
 import { AppConfigurations } from "../../Themes";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { updateOnePlayerPower } from "../../types/ffxivdatabase/ItemSet";
-import { RACES } from "../../const/languageTexts";
+import { RACES, TextDictionary } from "../../const/languageTexts";
 
 export function MainPlayerRaceSelection(
   id: number,
   totalEquipmentState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
   const handleRaceChange = (event: SelectChangeEvent<string>) => {
     let newTotalData = { ...totalEquipmentState };
@@ -53,7 +54,7 @@ export function MainPlayerRaceSelection(
         }}
       >
         {RACES.map((race) => {
-          return RaceMenuItem(race, totalState.mainPlayerJobAbbrev);
+          return RaceMenuItem(race, totalState.mainPlayerJobAbbrev, LANGUAGE_TEXTS);
         })}
       </Select>
     </CustomFormControl>

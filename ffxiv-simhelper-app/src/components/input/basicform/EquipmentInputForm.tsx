@@ -197,7 +197,8 @@ function EquipmentMenuOfOneSlot(
             return EquipmentMenuItem(
               id,
               equipment,
-              totalState.mainPlayerJobAbbrev
+              totalState.mainPlayerJobAbbrev,
+              LANGUAGE_TEXTS
             );
           })}
           <Divider />
@@ -292,7 +293,8 @@ export function EquipmentSelectionMenu(
           {MainPlayerJobSelection(
             id,
             totalEquipmentState,
-            setTotalEquipmentState
+            setTotalEquipmentState,
+            LANGUAGE_TEXTS
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
@@ -305,7 +307,8 @@ export function EquipmentSelectionMenu(
           {MainPlayerRaceSelection(
             id,
             totalEquipmentState,
-            setTotalEquipmentState
+            setTotalEquipmentState,
+            LANGUAGE_TEXTS
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
@@ -348,7 +351,7 @@ export function EquipmentSelectionMenu(
         sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
         <InputEquipmentBox item xs={xs} key={`food_${id}`}>
-          {FoodSelection(id, totalEquipmentState, setTotalEquipmentState, LANGUAGE_TEXTS.FOOD_SLOT_TEXT, LANGUAGE_TEXTS.EMPTY_TEXT)}
+          {FoodSelection(id, totalEquipmentState, setTotalEquipmentState, LANGUAGE_TEXTS)}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
 
@@ -404,7 +407,8 @@ export function BestPartnerInputMenu(
             MainPlayerJobSelectionOnlyBuffJobs(
               id,
               totalEquipmentState,
-              setTotalEquipmentState
+              setTotalEquipmentState,
+              LANGUAGE_TEXTS
             )
           }
         </InputEquipmentBox>
@@ -511,12 +515,11 @@ function FoodSelection(
   id: number,
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function,
-  foodSlotText: string,
-  emptyText: string,
+  LANGUAGE_TEXTS: TextDictionary,
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
 
-  let foodLabel = foodSlotText;
+  let foodLabel = LANGUAGE_TEXTS.FOOD_SLOT_TEXT;
   if (totalState.foodId !== -1) {
     foodLabel = "";
   }
@@ -555,7 +558,7 @@ function FoodSelection(
           }}
         >
           {ALL_FOODS.map((food) => {
-            return FoodMenuItem(food);
+            return FoodMenuItem(food, LANGUAGE_TEXTS);
           })}
           <MenuItem value={-1}>
             <Box
@@ -565,7 +568,7 @@ function FoodSelection(
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                {emptyText}
+                {LANGUAGE_TEXTS.EMPTY_TEXT}
               </Typography>
             </Box>
           </MenuItem>

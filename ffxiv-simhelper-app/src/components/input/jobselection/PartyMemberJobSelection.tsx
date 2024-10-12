@@ -177,7 +177,7 @@ export function PartyMemberJobSelection(
         }}
       >
         {jobAbbrevs.map((jobAbbrev) => {
-          return JobMenuItem(jobAbbrev, ALIGN, false);
+          return JobMenuItem(jobAbbrev, ALIGN, LANGUAGE_TEXTS, false);
         })}
 
         <Divider />

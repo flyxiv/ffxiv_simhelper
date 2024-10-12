@@ -1,5 +1,5 @@
 import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME } from "../../const/languageTexts";
-import { Equipment, getFirstSecondSubStat } from "./Equipment";
+import { Equipment, getFirstSubStat } from "./Equipment";
 import {
   convertEquipmentToFinalStat,
   FinalEquipmentStat,
@@ -158,7 +158,7 @@ export function getPossibleMateriasForEquipmentSlot(
     }
   }
 
-  let [firstSubStat, secondSubStat] = getFirstSecondSubStat(equipment);
+  let firstSubStat = getFirstSubStat(equipment);
 
   let secondSubStatIdx = -1;
   let casterJob = isCaster(jobAbbrev);
@@ -181,19 +181,6 @@ export function getPossibleMateriasForEquipmentSlot(
     }
   }
 
-  for (let i = 0; i < possibleMaterias.length; i++) {
-    let [statName, _] = possibleMaterias[i].split("+");
-
-    if (statName === secondSubStat) {
-      secondSubStatIdx = i;
-    }
-  }
-
-  if (secondSubStatIdx >= 0) {
-    possibleMaterias.push(possibleMaterias[secondSubStatIdx]);
-    possibleMaterias.splice(secondSubStatIdx, 1);
-  }
-
   return possibleMaterias;
 }
 
@@ -205,7 +192,7 @@ export function toMateriaKey(materia: Materia | null) {
 }
 
 export function toMateriaDescription(materia: Materia) {
-  return `${materia.statName} + ${materia.effectiveValue}`;
+  return `${materia.statName}+${materia.effectiveValue}`;
 }
 
 export function addMateriaStatToTotalStat(

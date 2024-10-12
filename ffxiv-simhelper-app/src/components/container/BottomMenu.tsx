@@ -5,10 +5,12 @@ import { EquipmentInput } from "../../types/EquipmentInput";
 import { GearCompareRequestButton } from "../basic/GearCompareRequestButton";
 import { BODY_WIDTH } from "../../App";
 import { MENU_WIDTH } from "./LeftMenu";
+import { TextDictionary } from "../../const/languageTexts";
 
 export function BasicBottomMenu(
   totalState: EquipmentInput,
-  buttonComponentFunction: Function
+  buttonComponentFunction: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
   return (
     <Box
@@ -29,7 +31,7 @@ export function BasicBottomMenu(
         flexDirection="column"
         sx={{ backgroundColor: AppConfigurations.backgroundTwo }}
       >
-        {StatSummary(totalState.equipmentDatas[0])}
+        {StatSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
         <Box display="inline-block" margin="auto" paddingTop={2}>
           {buttonComponentFunction(totalState)}
         </Box>
@@ -38,7 +40,7 @@ export function BasicBottomMenu(
   );
 }
 
-export function GearCompareBottomMenu(totalState: EquipmentInput) {
+export function GearCompareBottomMenu(totalState: EquipmentInput, LANGUAGE_TEXTS: TextDictionary) {
   return (
     <Box
       sx={{
@@ -64,8 +66,8 @@ export function GearCompareBottomMenu(totalState: EquipmentInput) {
           justifyContent="space-evenly"
           sx={{ width: BODY_WIDTH }}
         >
-          {StatSummary(totalState.equipmentDatas[0])}
-          {StatSummary(totalState.equipmentDatas[1])}
+          {StatSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
+          {StatSummary(totalState.equipmentDatas[1], LANGUAGE_TEXTS)}
         </Box>
 
         <Box display="inline-block" margin="auto" paddingTop={2}>

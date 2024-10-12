@@ -1,5 +1,8 @@
 import {
   BODY_SLOT_EN_TEXT,
+  CRIT_STAT_EN_NAME,
+  DET_STAT_EN_NAME,
+  DH_STAT_EN_NAME,
   EARS_SLOT_EN_TEXT,
   FEET_SLOT_EN_TEXT,
   FINGER1_SLOT_EN_TEXT,
@@ -10,7 +13,12 @@ import {
   LEGS_SLOT_EN_TEXT,
   NECK_SLOT_EN_TEXT,
   OFFHAND_SLOT_EN_TEXT,
+  PIE_STAT_EN_NAME,
   PLD_EN_NAME,
+  SKS_STAT_EN_NAME,
+  SPS_STAT_EN_NAME,
+  TEN_STAT_EN_NAME,
+  TextDictionary,
   WEAPON_SLOT_EN_TEXT,
   WRIST_SLOT_EN_TEXT,
 } from "../../const/languageTexts";
@@ -166,56 +174,56 @@ export function readEquipmentData(minItemLevel: number, maxItemLevel: number) {
   };
 }
 
-export function equipmentStatDescriptionString(equipment: Equipment, wdStatName: string, strStatName: string, dexStatName: string, intStatName: string, mndStatName: string, critStatName: string, dhStatName: string, detStatName: string, sksStatName: string, spsStatName: string, tenStatName: string, pieStatName: string) {
+export function equipmentStatDescriptionString(equipment: Equipment, LANGUAGE_TEXTS: TextDictionary) {
   const stats = [];
   if (equipment.weaponDamage > 0) {
-    stats.push({ statName: wdStatName, value: equipment.weaponDamage });
+    stats.push({ statName: LANGUAGE_TEXTS.WD_STAT_NAME, value: equipment.weaponDamage });
   }
   if (equipment.STR > 0) {
     stats.push({
-      statName: strStatName,
+      statName: LANGUAGE_TEXTS.STR_STAT_NAME,
       value: equipment.STR,
     });
   }
   if (equipment.DEX > 0) {
     stats.push({
-      statName: dexStatName,
+      statName: LANGUAGE_TEXTS.DEX_STAT_NAME,
       value: equipment.DEX,
     });
   }
   if (equipment.INT > 0) {
     stats.push({
-      statName: intStatName,
+      statName: LANGUAGE_TEXTS.INT_STAT_NAME,
       value: equipment.INT,
     });
   }
   if (equipment.MND > 0) {
     stats.push({
-      statName: mndStatName,
+      statName: LANGUAGE_TEXTS.MIND_STAT_NAME,
       value: equipment.MND,
     });
   }
 
   if (equipment.criticalStrike > 0) {
-    stats.push({ statName: critStatName, value: equipment.criticalStrike });
+    stats.push({ statName: LANGUAGE_TEXTS.CRIT_STAT_NAME, value: equipment.criticalStrike });
   }
   if (equipment.directHit > 0) {
-    stats.push({ statName: dhStatName, value: equipment.directHit });
+    stats.push({ statName: LANGUAGE_TEXTS.DH_STAT_NAME, value: equipment.directHit });
   }
   if (equipment.determination > 0) {
-    stats.push({ statName: detStatName, value: equipment.determination });
+    stats.push({ statName: LANGUAGE_TEXTS.DET_STAT_NAME, value: equipment.determination });
   }
   if (equipment.skillSpeed > 0) {
-    stats.push({ statName: sksStatName, value: equipment.skillSpeed });
+    stats.push({ statName: LANGUAGE_TEXTS.SKS_STAT_NAME, value: equipment.skillSpeed });
   }
   if (equipment.spellSpeed > 0) {
-    stats.push({ statName: spsStatName, value: equipment.spellSpeed });
+    stats.push({ statName: LANGUAGE_TEXTS.SPS_STAT_NAME, value: equipment.spellSpeed });
   }
   if (equipment.tenacity > 0) {
-    stats.push({ statName: tenStatName, value: equipment.tenacity });
+    stats.push({ statName: LANGUAGE_TEXTS.TEN_STAT_NAME, value: equipment.tenacity });
   }
   if (equipment.piety > 0) {
-    stats.push({ statName: pieStatName, value: equipment.piety });
+    stats.push({ statName: LANGUAGE_TEXTS.PIE_STAT_NAME, value: equipment.piety });
   }
 
   let descriptionString = "";
@@ -259,64 +267,49 @@ export function getEquipmentSlotsOfJob(jobAbbrev: string) {
   ];
 }
 
-export function getFirstSecondSubStat(equipment: Equipment, critStatName: string, dhStatName: string, detStatName: string, sksStatName: string, spsStatName: string, tenStatName: string, pieStatName: string) {
-  let firstSubStat = critStatName;
-  let secondSubStat = dhStatName;
+export function getFirstSubStat(equipment: Equipment) {
+  let firstSubStat = CRIT_STAT_EN_NAME;
   if (equipment.criticalStrike > 0) {
     if (equipment.criticalStrike === equipment.maxSubstat) {
-      firstSubStat = critStatName;
-    } else {
-      secondSubStat = critStatName;
+      firstSubStat = CRIT_STAT_EN_NAME;
     }
   }
 
   if (equipment.directHit > 0) {
     if (equipment.directHit === equipment.maxSubstat) {
-      firstSubStat = dhStatName;
-    } else {
-      secondSubStat = dhStatName;
+      firstSubStat = DH_STAT_EN_NAME;
     }
   }
 
   if (equipment.determination > 0) {
     if (equipment.determination === equipment.maxSubstat) {
-      firstSubStat = detStatName;
-    } else {
-      secondSubStat = detStatName;
+      firstSubStat = DET_STAT_EN_NAME;
     }
   }
 
   if (equipment.skillSpeed > 0) {
     if (equipment.skillSpeed === equipment.maxSubstat) {
-      firstSubStat = sksStatName;
-    } else {
-      secondSubStat = sksStatName;
+      firstSubStat = SKS_STAT_EN_NAME;
     }
   }
 
   if (equipment.spellSpeed > 0) {
     if (equipment.spellSpeed === equipment.maxSubstat) {
-      firstSubStat = spsStatName;
-    } else {
-      secondSubStat = spsStatName;
+      firstSubStat = SPS_STAT_EN_NAME;
     }
   }
 
   if (equipment.tenacity > 0) {
     if (equipment.tenacity === equipment.maxSubstat) {
-      firstSubStat = tenStatName;
-    } else {
-      secondSubStat = tenStatName;
+      firstSubStat = TEN_STAT_EN_NAME;
     }
   }
 
   if (equipment.piety > 0) {
     if (equipment.piety === equipment.maxSubstat) {
-      firstSubStat = pieStatName;
-    } else {
-      secondSubStat = pieStatName;
+      firstSubStat = PIE_STAT_EN_NAME;
     }
   }
 
-  return [firstSubStat, secondSubStat];
+  return firstSubStat;
 }

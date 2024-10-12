@@ -14,7 +14,33 @@
   "home": ".",
   "version": "0.0.0",
   "build": {
-    "icon": "build/icon.png"
+    "icon": "build/icon.png",
+    "extraFiles": [
+      {
+        "from": "../target/release/ffxiv-simhelper.exe",
+        "to": "./ffxiv_simhelper_x86_64.exe"
+      },
+      {
+        "from": "./dist/images",
+        "to": "./images"
+      },
+      {
+        "from": "./dist/.icon-ico",
+        "to": "./.icon-ico"
+      },
+      {
+        "from": "./dist/index.html",
+        "to": "./index.html"
+      },
+      {
+        "from": "./dist/assets",
+        "to": "./assets"
+      },
+      {
+        "from": "./dist/fonts",
+        "to": "./fonts"
+      }
+    ]
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

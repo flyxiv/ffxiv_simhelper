@@ -4,12 +4,14 @@ import {
 } from "../../types/ffxivdatabase/Equipment";
 import { Box, Typography } from "@mui/material";
 import { getEquipmentIconDirectory } from "../icon/equipmenticon/EquipmentIconFactory";
+import { TextDictionary } from "../../const/languageTexts";
 
 export const EQUIPMENT_FOOD_SIZE = "4vh";
 
 export function EquipmentItem(
   equipment: Equipment,
   jobAbbrev: string,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
   return (
     <Box display="flex" alignContent={"center"} height="5vh">
@@ -66,7 +68,7 @@ export function EquipmentItem(
           color="white"
           align="left"
         >
-          {equipmentStatDescriptionString(equipment)}
+          {equipmentStatDescriptionString(equipment, LANGUAGE_TEXTS)}
         </Typography>
       </Box>
     </Box>

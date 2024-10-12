@@ -28,8 +28,6 @@ export function ContributionByRoleTable(
     return bContribution - aContribution;
   });
 
-  console.log(dpsPartnerData);
-
   let maxTankContribution = Math.max.apply(
     null,
     tankPartnerData.map((data) =>
@@ -54,8 +52,6 @@ export function ContributionByRoleTable(
     maxHealerContribution,
     maxDpsContribution
   );
-
-  console.log(maxTankContribution, maxHealerContribution, maxDpsContribution);
 
   return (
     <Grid

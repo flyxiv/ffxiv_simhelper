@@ -195,7 +195,7 @@ export function StatSummaryGearCompare(
   );
 }
 
-export function StatSummary(totalState: SingleEquipmentInputSaveState, nameText: string, compositionName: string, LANGUAGE_TEXTS: TextDictionary) {
+export function StatSummary(totalState: SingleEquipmentInputSaveState, LANGUAGE_TEXTS: TextDictionary) {
   let jobStatNames = getStatNames(totalState.mainPlayerJobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
   let power = totalState.power;
   let jobAbbrev = totalState.mainPlayerJobAbbrev;
@@ -205,13 +205,13 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState, nameText:
       <StatSummaryBox
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
-        <SingleStatBox>{StatSummaryTypography(nameText)}</SingleStatBox>
+        <SingleStatBox>{StatSummaryTypography(LANGUAGE_TEXTS.NAME_TEXT)}</SingleStatBox>
         {jobStatNames.map((statName) => {
           return (
             <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
           );
         })}
-        <SingleStatBox>{StatSummaryTypography(compositionName)}</SingleStatBox>
+        <SingleStatBox>{StatSummaryTypography(LANGUAGE_TEXTS.COMPOSITION_NAME)}</SingleStatBox>
       </StatSummaryBox>
 
       <StatSummaryBox
