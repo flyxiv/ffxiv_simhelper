@@ -7,6 +7,7 @@ export function AppHeader() {
       className="LogoBox"
       display="flex"
       width="100%"
+      minWidth={"1600px"}
       justifyContent="center"
       sx={{ height: LOGO_SIZE, marginY: "30px" }}
     >

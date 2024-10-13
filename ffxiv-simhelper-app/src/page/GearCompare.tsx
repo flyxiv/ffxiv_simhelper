@@ -23,11 +23,14 @@ import { EquipmentInput } from "../types/EquipmentInput";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { AppLanguageTexts } from "../const/languageTexts";
+import { EQUIPMENT_CONTAINER_MIN_WIDTH_PX } from "../components/input/basicform/InputFormWidths";
 
 export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "98%";
 const GEAR_COMPARE_LOADOUNT_COUNT = 6;
 
 const PARTY_INPUT_WIDTH = "80%";
+
+const GEAR_COMPARE_MIN_WIDTH = "1000px";
 
 let GearCompareEquipmentInputContainer = styled(Box)`
   ${InputContainerStyle(GEAR_COMPARE_INPUT_CONTAINER_WIDTH)}
@@ -89,12 +92,15 @@ export function GearCompare() {
 
   const [totalState, setTotalState] = useState(mostRecentInput);
 
+  let containerMinWidth = EQUIPMENT_CONTAINER_MIN_WIDTH_PX(1);
+
   return (
     <>
       <Box
         display="flex"
         sx={{ backgroundColor: AppConfigurations.backgroundOne }}
         width="100vw"
+        minWidth={GEAR_COMPARE_MIN_WIDTH}
       >
         {LeftMenuWithLoadout(
           GEAR_COMPARE_LOADOUNT_COUNT,
@@ -107,15 +113,17 @@ export function GearCompare() {
         <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box display="flex" flexDirection="column" justifyContent={"center"}>
-            <GearCompareEquipmentInputContainer>
-              {SelectionTitle(LANGUAGE_TEXTS.GEAR_COMPARE_INPUT_INFO_TEXT)}
+            <GearCompareEquipmentInputContainer sx={{ minWidth: GEAR_COMPARE_MIN_WIDTH }}>
+              <Box display="flex" justifyContent={"center"} width={"100%"} sx={{ minWidth: GEAR_COMPARE_MIN_WIDTH }}>
+                {SelectionTitle(LANGUAGE_TEXTS.GEAR_COMPARE_INPUT_INFO_TEXT)}
+              </Box>
               <Box
                 display="flex"
                 justifyContent="space-evenly"
                 width={GEAR_COMPARE_INPUT_CONTAINER_WIDTH}
                 padding="1%"
               >
-                <EquipmentBoard>
+                <EquipmentBoard sx={{ minWidth: `${containerMinWidth}` }}>
                   {EquipmentSelectionMenu(
                     0,
                     totalState,
@@ -140,7 +148,7 @@ export function GearCompare() {
                   </Box>
                 </Box>
 
-                <EquipmentBoard>
+                <EquipmentBoard sx={{ minWidth: `${containerMinWidth}px` }}>
                   {EquipmentSelectionMenu(
                     1,
                     totalState,

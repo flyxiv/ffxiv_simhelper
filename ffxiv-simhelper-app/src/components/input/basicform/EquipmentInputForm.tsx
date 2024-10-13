@@ -51,6 +51,8 @@ import {
 import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
 import { AST_EN_NAME, convertToSlotText, DNC_EN_NAME, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, TextDictionary, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
+import { EQUIPMENT_TABLE_ITEM_MIN_WIDTH_PX } from "./InputFormWidths";
+import { HOME_PAGE_MIN_WIDTH_PX } from "../../../App";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -287,7 +289,7 @@ export function EquipmentSelectionMenu(
     <EquipmentGridContainer container>
       <EquipmentGridItemBox
         key={`${id}_JobSelectionItemBox`}
-        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount), minWidth: `600px` }}
       >
         <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
           {MainPlayerJobSelection(
@@ -313,39 +315,41 @@ export function EquipmentSelectionMenu(
         </InputEquipmentBox>
       </EquipmentGridItemBox>
 
-      {getEquipmentSlotsOfJob(mainCharacterJobAbbrev).map((slotName) => {
-        let equipmentKeyString = toEquipmentKeyString(
-          mainCharacterJobAbbrev,
-          slotName
-        );
-        let equipmentsAvailableInSlot =
-          EQUIPMENT_DATABASE_BY_KEYS.get(equipmentKeyString);
-        if (equipmentsAvailableInSlot === undefined) {
-          console.log(equipmentKeyString);
-          return;
-        }
-        return (
-          <EquipmentGridItemBox
-            key={`${id}_equipment_${slotName}_itembox`}
-            sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
-          >
-            <InputEquipmentBox
-              item
-              xs={xs}
-              key={`${id}_${slotName}_equipmentselection`}
+      {
+        getEquipmentSlotsOfJob(mainCharacterJobAbbrev).map((slotName) => {
+          let equipmentKeyString = toEquipmentKeyString(
+            mainCharacterJobAbbrev,
+            slotName
+          );
+          let equipmentsAvailableInSlot =
+            EQUIPMENT_DATABASE_BY_KEYS.get(equipmentKeyString);
+          if (equipmentsAvailableInSlot === undefined) {
+            console.log(equipmentKeyString);
+            return;
+          }
+          return (
+            <EquipmentGridItemBox
+              key={`${id}_equipment_${slotName}_itembox`}
+              sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount), minWidth: `${EQUIPMENT_TABLE_ITEM_MIN_WIDTH_PX}px` }}
             >
-              {EquipmentMenuOfOneSlot(
-                id,
-                slotName,
-                equipmentsAvailableInSlot,
-                totalEquipmentState,
-                setTotalEquipmentState,
-                LANGUAGE_TEXTS
-              )}
-            </InputEquipmentBox>
-          </EquipmentGridItemBox>
-        );
-      })}
+              <InputEquipmentBox
+                item
+                xs={xs}
+                key={`${id}_${slotName}_equipmentselection`}
+              >
+                {EquipmentMenuOfOneSlot(
+                  id,
+                  slotName,
+                  equipmentsAvailableInSlot,
+                  totalEquipmentState,
+                  setTotalEquipmentState,
+                  LANGUAGE_TEXTS
+                )}
+              </InputEquipmentBox>
+            </EquipmentGridItemBox>
+          );
+        })
+      }
       <EquipmentGridItemBox
         key={`food_selectionbox_${id}`}
         sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
@@ -366,23 +370,25 @@ export function EquipmentSelectionMenu(
 
       {PartnerSelectionMenu(id, totalEquipmentState, setTotalEquipmentState, inputCount, LANGUAGE_TEXTS)}
 
-      {hasTimeInput ? (
-        <EquipmentGridItemBox
-          key={`${id}_timeinput`}
-          sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
-        >
-          <InputEquipmentBox item xs={xs}>
-            {SimulationUpperInputTimeTextBox(
-              LANGUAGE_TEXTS.TIME_INPUT_LABEL_TEXT,
-              totalEquipmentState,
-              setTotalEquipmentState,
-            )}
-          </InputEquipmentBox>
-        </EquipmentGridItemBox>
-      ) : (
-        <Box></Box>
-      )}
-    </EquipmentGridContainer>
+      {
+        hasTimeInput ? (
+          <EquipmentGridItemBox
+            key={`${id}_timeinput`}
+            sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
+          >
+            <InputEquipmentBox item xs={xs}>
+              {SimulationUpperInputTimeTextBox(
+                LANGUAGE_TEXTS.TIME_INPUT_LABEL_TEXT,
+                totalEquipmentState,
+                setTotalEquipmentState,
+              )}
+            </InputEquipmentBox>
+          </EquipmentGridItemBox>
+        ) : (
+          <Box></Box>
+        )
+      }
+    </EquipmentGridContainer >
   );
 }
 

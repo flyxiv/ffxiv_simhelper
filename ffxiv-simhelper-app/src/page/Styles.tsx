@@ -27,6 +27,7 @@ export const EquipmentBoardStyle = `
     align-items: center;
     border: 1px solid black;
     background-color: ${AppConfigurations.backgroundTwo};
+    width: 100%;
 `
 
 export const CustomizeBoardSinglePartyInputStyle = (width: string) => `

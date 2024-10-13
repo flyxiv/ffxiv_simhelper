@@ -10,6 +10,7 @@ import {
   GEAR_COMPARE_URL,
   DPS_ANALYSIS_URL,
   BEST_STATS_URL,
+  HOME_PAGE_MIN_WIDTH_PX,
 } from "../App";
 import { AppLanguageTexts } from "../const/languageTexts";
 
@@ -27,6 +28,7 @@ export function Home() {
         backgroundColor: AppConfigurations.backgroundOne,
         width: "100vw",
         height: "100vh",
+        minWidth: `${HOME_PAGE_MIN_WIDTH_PX(2)}px`,
       }}
     >
       <Box display="flex" width="100vw">
@@ -36,6 +38,7 @@ export function Home() {
           <Box className="HomeBody" height="70vh">
             <Box
               width="40%"
+              minWidth="800px"
               display="flex"
               alignItems={"center"}
               flexDirection={"column"}
@@ -61,6 +64,7 @@ export function Home() {
             <Box
               width="40%"
               display="flex"
+              minWidth={"800px"}
               alignItems={"center"}
               flexDirection={"column"}
             >
@@ -107,6 +111,7 @@ function LogoBox(
         border: `4px solid ${color}`,
         backgroundColor: AppConfigurations.backgroundTwo,
         width: "85%",
+        minWidth: "300px",
         height: "15vh",
       }}
       display="flex"

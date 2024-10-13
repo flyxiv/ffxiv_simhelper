@@ -3,6 +3,8 @@ import { Box, styled } from "@mui/material";
 import {
   BODY_WIDTH,
   DPS_ANALYSIS_URL,
+  HOME_PAGE_MIN_WIDTH_PX,
+  PAGE_MIN_WIDTH_PX,
   SINGLE_INPUT_SAVE_NAME,
 } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
@@ -65,6 +67,7 @@ export function BestStats() {
         display="flex"
         sx={{ backgroundColor: AppConfigurations.backgroundOne }}
         width="100vw"
+        minWidth={`${HOME_PAGE_MIN_WIDTH_PX(2)}px`}
       >
         {LeftMenuWithLoadout(
           DPS_ANALYSIS_LOADOUT_COUNT,
@@ -106,7 +109,7 @@ export function BestStats() {
           </Box>
           {Footer()}
         </Box>
-      </Box>
+      </Box >
     </>
   );
 }

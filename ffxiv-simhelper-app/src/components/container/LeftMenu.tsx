@@ -18,18 +18,18 @@ import { convertToLinkUrl } from "../../page/home";
 import { LanguageInputForm } from "../input/basicform/LanguageInputForm";
 import { TextDictionary } from "../../const/languageTexts";
 
-export const MENU_WIDTH_VW_XS = 35;
-export const MENU_WIDTH_VW_SM = 30;
-export const MENU_WIDTH_VW_MD = 25;
+export const MENU_WIDTH_VW_XS = 0;
+export const MENU_WIDTH_VW_SM = 0;
+export const MENU_WIDTH_VW_MD = 0;
 export const MENU_WIDTH_VW_LG = 20;
-export const MENU_WIDTH_VW_XL = 15;
+export const MENU_WIDTH_VW_XL = 20;
 
 export const MENU_WIDTH = {
-  xs: `${MENU_WIDTH_VW_XS}vw`,
-  sm: `${MENU_WIDTH_VW_SM}vw`,
-  md: `${MENU_WIDTH_VW_MD}vw`,
-  lg: `${MENU_WIDTH_VW_LG}vw`,
-  xl: `${MENU_WIDTH_VW_XL}vw`,
+  xs: `${MENU_WIDTH_VW_XS}%`,
+  sm: `${MENU_WIDTH_VW_SM}%`,
+  md: `${MENU_WIDTH_VW_MD}%`,
+  lg: `${MENU_WIDTH_VW_LG}%`,
+  xl: `${MENU_WIDTH_VW_XL}%`,
 };
 
 let LeftMenuLogo = styled(Box)`

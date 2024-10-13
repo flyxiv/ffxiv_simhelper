@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Box, styled } from "@mui/material";
+import { Box, styled, useMediaQuery, useTheme } from "@mui/material";
 import {
   BODY_WIDTH,
   DPS_ANALYSIS_URL,
+  HOME_PAGE_MIN_WIDTH_PX,
   SINGLE_INPUT_SAVE_NAME,
 } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
@@ -96,12 +97,15 @@ export function DpsAnalysis() {
 
   const [totalState, setTotalState] = useState(mostRecentInput);
 
+  const theme = useTheme();
+  const isLgOrUp = useMediaQuery(theme.breakpoints.up('lg'));
+  let itemsInOneRow = isLgOrUp ? 2 : 1;
+
   return (
     <>
       <Box
         display="flex"
-        sx={{ backgroundColor: AppConfigurations.backgroundOne }}
-        width="100vw"
+        sx={{ backgroundColor: AppConfigurations.backgroundOne, minWidth: `${HOME_PAGE_MIN_WIDTH_PX(itemsInOneRow)}px` }}
       >
         {LeftMenuWithLoadout(
           DPS_ANALYSIS_LOADOUT_COUNT,
@@ -113,7 +117,7 @@ export function DpsAnalysis() {
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
-          <Box alignContent={"center"}>
+          <Box alignContent={"center"} width="100%">
             <DpsAnalysisInputContainer justifyContent={"center"}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
               <EquipmentBoard>
@@ -143,7 +147,7 @@ export function DpsAnalysis() {
           </Box>
           {Footer()}
         </Box>
-      </Box>
+      </Box >
     </>
   );
 }
