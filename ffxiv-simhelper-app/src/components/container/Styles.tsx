@@ -194,13 +194,14 @@ export const StatSummaryBoxStyle = `
   margin: auto;
 `;
 
-export const SingleStatBoxStyle = (width: string) => `
+export const SingleStatBoxStyle = (width: string, minWidth: number) => `
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   border: 1px solid #201F28;
   width: ${width};
+  min-width: ${minWidth}px;
   white-space: nowrap;
 `;
 

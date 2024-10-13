@@ -24,11 +24,16 @@ import {
 import { DpsAnalysisRequestButton } from "../components/basic/DpsAnalysisRequestButton";
 import { AppLanguageTexts } from "../const/languageTexts";
 
-export const INPUT_CONTAINER_WIDTH = "70%";
+export const INPUT_CONTAINER_WIDTH ={
+   xs: "90%",
+   sm: "90%",
+   md: "70%"
+}
 export const DPS_ANALYSIS_LOADOUT_COUNT = 6;
 
 let DpsAnalysisInputContainer = styled(Box)`
-  ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}
+  ${InputContainerStyle("10%")},
+  width: ${INPUT_CONTAINER_WIDTH}
 `;
 
 let CustomizeBoard = styled(Box)`

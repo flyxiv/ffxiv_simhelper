@@ -13,20 +13,14 @@ export const AppConfigurations = {
   alert: "#CF6679",
 
   body1FontSize: {
-    xs: "2vh",
-    sm: "2vh",
-    md: "2vh",
-    lg: "2vh",
-    xl: "2vh",
+     xs: 12,
+     lg: 20
+  },
+  body2FontSize: {
+     xs: 8,
+     lg: 16 
   },
 
-  body2FontSize: {
-    xs: "1.5vh",
-    sm: "1.5vh",
-    md: "1.5vh",
-    lg: "1.5vh",
-    xl: "1.5vh",
-  },
 
   electron: true,
 };

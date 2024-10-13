@@ -11,7 +11,7 @@ export const InputContainerStyle = (width: string) => `
     margin-left: auto;
     margin-right: auto;
     align-items: flex-start;
-    width: ${width};
+    font: ${width}
 `
 
 export const CustomizeBoardStyle = `

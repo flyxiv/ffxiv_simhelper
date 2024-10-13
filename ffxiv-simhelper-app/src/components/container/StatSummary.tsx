@@ -17,26 +17,29 @@ import {
 import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { StatWeightsData } from "../../page/StatWeightsResult";
 import { TextDictionary } from "../../const/languageTexts";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 
 const STAT_SUMMARY_BOX_WIDTH = "3vw";
 const STAT_SUMMARY_TIME_BOX_WIDTH = "6vw";
 const POWER_SUMMARY_BOX_WIDTH = "6vw";
-const SUMMARY_FONT_SIZE = "0.9vw";
+const SUMMARY_FONT_SIZE = { xs: 11, sm: 13};
 
 let StatSummaryBox = styled(Box)`
   ${StatSummaryBoxStyle}
 `;
 
 let SinglePowerBox = styled(Box)`
-  ${SingleStatBoxStyle(POWER_SUMMARY_BOX_WIDTH)}
+  ${SingleStatBoxStyle(POWER_SUMMARY_BOX_WIDTH, 65)}
 `;
 
 let SingleStatBox = styled(Box)`
-  ${SingleStatBoxStyle(STAT_SUMMARY_BOX_WIDTH)}
+  ${SingleStatBoxStyle(STAT_SUMMARY_BOX_WIDTH, 35)}
 `;
 
 let SingleStatCombatTimeBox = styled(Box)`
-  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH)}
+  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH, 100)}
 `;
 
 export function StatSummaryTypography(text: string) {
@@ -323,11 +326,24 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState, LANG
   let { POWER_NAMES } = loadPowerNames(LANGUAGE_TEXTS);
 
   return (
+    <Box>
+       StatPowerSummaryInputPower(POWER_NAMES.slice(0, 5), totalState, LANGUAGE_TEXTS)
+       StatPowerSummaryInputPower(POWER_NAMES.slice(5), totalState, LANGUAGE_TEXTS)
+    </Box>
+  );
+}
+
+
+function StatPowerSummaryInputPower(powerNames: Array<string>, totalState: SingleEquipmentInputSaveState, LANGUAGE_TEXTS: TextDictionary) {
+  let power = totalState.power;
+  let first_five_power_names
+
+  return (
     <Box display="inline-block">
       <StatSummaryBox
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
-        {POWER_NAMES.map((powerName) => {
+        {powerNames.map((powerName) => {
           return (
             <SinglePowerBox>{StatSummaryTypography(powerName)}</SinglePowerBox>
           );
@@ -339,7 +355,7 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState, LANG
           backgroundColor: AppConfigurations.backgroundFour,
         }}
       >
-        {POWER_NAMES.map((powerName) => {
+        {powerNames.map((powerName) => {
           return (
             <SinglePowerBox>
               {StatSummaryTypography(getStatPower(power, powerName, LANGUAGE_TEXTS))}

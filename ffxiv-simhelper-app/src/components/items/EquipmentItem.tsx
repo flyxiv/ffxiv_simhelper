@@ -5,6 +5,7 @@ import {
 import { Box, Typography } from "@mui/material";
 import { getEquipmentIconDirectory } from "../icon/equipmenticon/EquipmentIconFactory";
 import { TextDictionary } from "../../const/languageTexts";
+import { AppConfigurations } from "../../Themes";
 
 export const EQUIPMENT_FOOD_SIZE = "4vh";
 
@@ -47,10 +48,7 @@ export function EquipmentItem(
           variant="body2"
           justifyContent={"center"}
           sx={{
-            fontSize: {
-              xs: "1.6vw",
-              lg: "0.9vw"
-            }
+            fontSize: AppConfigurations.body1FontSize
           }}
           color="white"
           align="left"
@@ -60,10 +58,8 @@ export function EquipmentItem(
         <Typography
           variant="body2"
           sx={{
-            fontSize: {
-              xs: "1.4vw",
-              lg: "0.7vw"
-            },
+
+            fontSize: AppConfigurations.body2FontSize
           }}
           color="white"
           align="left"
