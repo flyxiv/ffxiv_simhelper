@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, styled, useMediaQuery, useTheme } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import {
   BODY_WIDTH,
   DPS_ANALYSIS_URL,
@@ -96,14 +96,13 @@ export function DpsAnalysis() {
 
   const [totalState, setTotalState] = useState(mostRecentInput);
 
-  const theme = useTheme();
-
   return (
     <>
       <Box
         display="flex"
         sx={{ backgroundColor: AppConfigurations.backgroundOne }}
         overflow={"auto"}
+        width={"100%"}
       >
         {LeftMenuWithLoadout(
           DPS_ANALYSIS_LOADOUT_COUNT,
@@ -114,38 +113,36 @@ export function DpsAnalysis() {
           LANGUAGE_TEXTS
         )}
         <Box width={BODY_WIDTH} display="flex" alignItems={"center"} flexDirection={"column"}>
-          <Box width="80%" display="flex" alignItems={"center"} flexDirection={"column"}>
-            {AppHeader()}
-            <Box alignContent={"center"} width="100%">
-              <DpsAnalysisInputContainer justifyContent={"center"}>
-                {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
-                <EquipmentBoard width="100%">
-                  {EquipmentSelectionMenu(0, totalState, setTotalState, LANGUAGE_TEXTS)}
-                </EquipmentBoard>
-              </DpsAnalysisInputContainer>
+          {AppHeader()}
+          <Box alignContent={"center"} width="100%">
+            <DpsAnalysisInputContainer justifyContent={"center"}>
+              {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
+              <EquipmentBoard width="100%">
+                {EquipmentSelectionMenu(0, totalState, setTotalState, LANGUAGE_TEXTS)}
+              </EquipmentBoard>
+            </DpsAnalysisInputContainer>
 
-              <DpsAnalysisInputContainer paddingTop={20}>
-                {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
-                <CustomizeBoard>
-                  {HorizontalPartyInput(totalState, setTotalState, LANGUAGE_TEXTS)}
-                </CustomizeBoard>
-              </DpsAnalysisInputContainer>
+            <DpsAnalysisInputContainer paddingTop={20}>
+              {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
+              <CustomizeBoard>
+                {HorizontalPartyInput(totalState, setTotalState, LANGUAGE_TEXTS)}
+              </CustomizeBoard>
+            </DpsAnalysisInputContainer>
 
-              <DpsAnalysisInputContainer marginTop={10}>
-                {SelectionTitle(`3. ${LANGUAGE_TEXTS.PLAYER_POWER_TEXT}`)}
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  paddingBottom={"20vh"}
-                >
-                  {StatPowerSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
-                </Box>
-              </DpsAnalysisInputContainer>
+            <DpsAnalysisInputContainer marginTop={10}>
+              {SelectionTitle(`3. ${LANGUAGE_TEXTS.PLAYER_POWER_TEXT}`)}
+              <Box
+                display="flex"
+                justifyContent="center"
+                paddingBottom={"20vh"}
+              >
+                {StatPowerSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
+              </Box>
+            </DpsAnalysisInputContainer>
 
-              {BasicBottomMenu(totalState, DpsAnalysisRequestButton, LANGUAGE_TEXTS)}
-            </Box>
-            {Footer()}
+            {BasicBottomMenu(totalState, DpsAnalysisRequestButton, LANGUAGE_TEXTS)}
           </Box>
+          {Footer()}
         </Box>
       </Box>
     </>
