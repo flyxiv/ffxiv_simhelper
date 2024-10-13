@@ -20,7 +20,7 @@ import {
 } from "../../../types/ffxivdatabase/PartyCompositionMaker";
 import { calculatePlayerPowerFromInputs } from "../../../types/ffxivdatabase/ItemSet";
 import { PLD_EN_NAME, SCH_EN_NAME, TextDictionary } from "../../../const/languageTexts";
-import { ITEM_BOTTOM_MENU_MIN_HEIGHT } from "../../items/Styles";
+import { BOTTOM_MENU_WIDTH, ITEM_BOTTOM_MENU_MIN_HEIGHT } from "../../items/Styles";
 
 let ALIGN = "center";
 
@@ -177,6 +177,7 @@ export function PartyMemberJobSelection(
             },
           },
         }}
+        sx={{ width: "100%" }}
       >
         {jobAbbrevs.map((jobAbbrev) => {
           return JobMenuItem(jobAbbrev, ALIGN, LANGUAGE_TEXTS, false);
@@ -185,7 +186,7 @@ export function PartyMemberJobSelection(
         <Divider />
         <MenuItem value="Empty">
           <Box height={ITEM_BOTTOM_MENU_MIN_HEIGHT} display="flex" justifyContent={"center"} alignItems={"center"}>
-            <Typography variant="body1" color="white" fontSize={AppConfigurations.body1FontSize}>
+            <Typography variant="body1" color="white" fontSize={AppConfigurations.body1FontSize} align="center">
               Empty
             </Typography>
           </Box>

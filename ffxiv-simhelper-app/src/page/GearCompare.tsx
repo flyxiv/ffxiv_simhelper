@@ -33,10 +33,13 @@ const PARTY_INPUT_WIDTH = "80%";
 const GEAR_COMPARE_MIN_WIDTH = "1000px";
 
 let GearCompareEquipmentInputContainer = styled(Box)`
-  ${InputContainerStyle(GEAR_COMPARE_INPUT_CONTAINER_WIDTH)}
+  ${InputContainerStyle},
+  width: ${PARTY_INPUT_WIDTH}
 `;
+
 let GearComparePartyInputContainer = styled(Box)`
-  ${InputContainerStyle(PARTY_INPUT_WIDTH)}
+  ${InputContainerStyle},
+  width: ${PARTY_INPUT_WIDTH}
 `;
 
 let CustomizeBoard = styled(Box)`

@@ -13,12 +13,18 @@ export const AppConfigurations = {
   alert: "#CF6679",
 
   body1FontSize: {
-     xs: 12,
-     lg: 20
+    xs: 12,
+    sm: 20,
+    md: 24,
+    lg: 14,
+    xl: 18
   },
   body2FontSize: {
-     xs: 8,
-     lg: 16 
+    xs: 8,
+    sm: 16,
+    md: 20,
+    lg: 10,
+    xl: 14
   },
 
   electron: true,

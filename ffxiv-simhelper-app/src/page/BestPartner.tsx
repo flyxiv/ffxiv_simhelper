@@ -27,7 +27,8 @@ export enum JobRole {
 let INPUT_CONTAINER_WIDTH = "70%";
 
 let StatWeightsInputContainer = styled(Box)`
-  ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}
+  ${InputContainerStyle},
+  width: ${INPUT_CONTAINER_WIDTH}
 `;
 
 let EquipmentBoard = styled(Box)`

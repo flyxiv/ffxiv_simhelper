@@ -24,16 +24,10 @@ import {
 import { DpsAnalysisRequestButton } from "../components/basic/DpsAnalysisRequestButton";
 import { AppLanguageTexts } from "../const/languageTexts";
 
-export const INPUT_CONTAINER_WIDTH ={
-   xs: "90%",
-   sm: "90%",
-   md: "70%"
-}
 export const DPS_ANALYSIS_LOADOUT_COUNT = 6;
 
 let DpsAnalysisInputContainer = styled(Box)`
-  ${InputContainerStyle("10%")},
-  width: ${INPUT_CONTAINER_WIDTH}
+  ${InputContainerStyle},
 `;
 
 let CustomizeBoard = styled(Box)`
@@ -127,7 +121,7 @@ export function DpsAnalysis() {
               </EquipmentBoard>
             </DpsAnalysisInputContainer>
 
-            <DpsAnalysisInputContainer paddingTop={20}>
+            <DpsAnalysisInputContainer>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
                 {HorizontalPartyInput(totalState, setTotalState, LANGUAGE_TEXTS)}

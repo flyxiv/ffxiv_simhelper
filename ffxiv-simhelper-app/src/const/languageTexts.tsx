@@ -707,7 +707,7 @@ export const AppLanguageTexts: () => TextDictionary = () => {
       : "2. 파티 관련 설정을 입력해주세요";
   const PARTY_MEMBER_ILVL_TEXT =
     language === LanguageMode.ENGLISH_MODE
-      ? "Party Members iLvl"
+      ? "Party iLvl"
       : "파티원 템렙";
   const POT_LABEL_TEXT =
     language === LanguageMode.ENGLISH_MODE ? "Pot" : "탕약";

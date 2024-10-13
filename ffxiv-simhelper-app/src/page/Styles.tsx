@@ -6,12 +6,12 @@ export const CharacterDetailCustomizeBoardStyle = (width: string) => `
     width: ${width};
 `
 
-export const InputContainerStyle = (width: string) => `
+export const InputContainerStyle = `
     flex-direction: row;
     margin-left: auto;
     margin-right: auto;
     align-items: flex-start;
-    font: ${width}
+    width: 90%;
 `
 
 export const CustomizeBoardStyle = `
