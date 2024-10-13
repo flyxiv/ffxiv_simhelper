@@ -52,7 +52,6 @@ import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
 import { AST_EN_NAME, convertToSlotText, DNC_EN_NAME, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, TextDictionary, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
 import { EQUIPMENT_TABLE_ITEM_MIN_WIDTH_PX } from "./InputFormWidths";
-import { HOME_PAGE_MIN_WIDTH_PX } from "../../../App";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}

@@ -4,7 +4,6 @@ import {
   BODY_WIDTH,
   DPS_ANALYSIS_URL,
   HOME_PAGE_MIN_WIDTH_PX,
-  PAGE_MIN_WIDTH_PX,
   SINGLE_INPUT_SAVE_NAME,
 } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
