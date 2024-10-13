@@ -55,7 +55,7 @@ export const BODY_WIDTH = {
   lg: `${100 - MENU_WIDTH_VW_LG}%`,
   xl: `${100 - MENU_WIDTH_VW_XL}%`,
 };
-export const HOME_PAGE_MIN_WIDTH_PX = (itemsPerRow: number) => itemsPerRow === 2 ? 2400 : 800;
+export const HOME_PAGE_MIN_WIDTH_PX = (itemsPerRow: number) => itemsPerRow === 2 ? 1700 : 100;
 
 
 export const theme = (language: LanguageMode) => createTheme({
