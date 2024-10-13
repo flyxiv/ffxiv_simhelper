@@ -328,7 +328,7 @@ export function StatPowerSummary(totalState: SingleEquipmentInputSaveState, LANG
 
   if (isXs) {
     return (
-      <Box>
+      <Box width="100%" display="flex" justifyContent="center" flexDirection="column">
         {StatPowerSummaryInputPower(POWER_NAMES.slice(0, 5), totalState, LANGUAGE_TEXTS)}
         {StatPowerSummaryInputPower(POWER_NAMES.slice(5), totalState, LANGUAGE_TEXTS)}
       </Box>
@@ -344,7 +344,8 @@ function StatPowerSummaryInputPower(powerNames: Array<string>, totalState: Singl
   let power = totalState.power;
 
   return (
-    <Box display="inline-block">
+    <Box>
+      <Box display="flex" justifyContent="center">
       <StatSummaryBox
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
@@ -354,6 +355,9 @@ function StatPowerSummaryInputPower(powerNames: Array<string>, totalState: Singl
           );
         })}
       </StatSummaryBox>
+      </Box>
+
+      <Box display="flex" justifyContent="center">
 
       <StatSummaryBox
         sx={{
@@ -368,6 +372,7 @@ function StatPowerSummaryInputPower(powerNames: Array<string>, totalState: Singl
           );
         })}
       </StatSummaryBox>
+      </Box>
     </Box>
   );
 }
