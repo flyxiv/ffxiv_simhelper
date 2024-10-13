@@ -21,22 +21,22 @@ import { TextDictionary } from "../../const/languageTexts";
 const STAT_SUMMARY_BOX_WIDTH = "3vw";
 const STAT_SUMMARY_TIME_BOX_WIDTH = "6vw";
 const POWER_SUMMARY_BOX_WIDTH = "6vw";
-const SUMMARY_FONT_SIZE = "0.9vw";
+const SUMMARY_FONT_SIZE = 13;
 
 let StatSummaryBox = styled(Box)`
   ${StatSummaryBoxStyle}
 `;
 
 let SinglePowerBox = styled(Box)`
-  ${SingleStatBoxStyle(POWER_SUMMARY_BOX_WIDTH)}
+  ${SingleStatBoxStyle(POWER_SUMMARY_BOX_WIDTH, 65)}
 `;
 
 let SingleStatBox = styled(Box)`
-  ${SingleStatBoxStyle(STAT_SUMMARY_BOX_WIDTH)}
+  ${SingleStatBoxStyle(STAT_SUMMARY_BOX_WIDTH, 40)}
 `;
 
 let SingleStatCombatTimeBox = styled(Box)`
-  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH)}
+  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH, 100)}
 `;
 
 export function StatSummaryTypography(text: string) {

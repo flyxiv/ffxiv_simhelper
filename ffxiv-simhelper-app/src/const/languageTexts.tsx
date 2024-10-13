@@ -939,7 +939,7 @@ export const AppLanguageTexts: () => TextDictionary = () => {
   const CRT_RATE_POWER_NAME =
     language === LanguageMode.ENGLISH_MODE ? "Crit Rate" : "극대 확률";
   const CRT_POWER_NAME =
-    language === LanguageMode.ENGLISH_MODE ? "Crit" : "극대 피해";
+    language === LanguageMode.ENGLISH_MODE ? "Crit Dmg%" : "극대 피해";
   const DH_RATE_POWER_NAME =
     language === LanguageMode.ENGLISH_MODE ? "DH Rate" : "직격 확률";
   const DET_POWER_NAME =
