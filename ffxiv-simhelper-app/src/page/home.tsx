@@ -11,6 +11,7 @@ import {
   DPS_ANALYSIS_URL,
   BEST_STATS_URL,
   HOME_PAGE_MIN_WIDTH_PX,
+  BODY_WIDTH,
 } from "../App";
 import { AppLanguageTexts } from "../const/languageTexts";
 
@@ -26,14 +27,13 @@ export function Home() {
     <Box
       sx={{
         backgroundColor: AppConfigurations.backgroundOne,
-        width: "100vw",
-        height: "100vh",
-        minWidth: `${HOME_PAGE_MIN_WIDTH_PX(2)}px`,
+        width: "100%",
+        height: "100%",
       }}
     >
-      <Box display="flex" width="100vw">
+      <Box display="flex" width="100vw" overflow="auto">
         {BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME, LANGUAGE_TEXTS)}
-        <Box width="100%">
+        <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box className="HomeBody" height="70vh">
             <Box
