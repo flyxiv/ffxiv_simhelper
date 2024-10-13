@@ -20,7 +20,7 @@ import {
 } from "../../../types/ffxivdatabase/PartyCompositionMaker";
 import { calculatePlayerPowerFromInputs } from "../../../types/ffxivdatabase/ItemSet";
 import { PLD_EN_NAME, SCH_EN_NAME, TextDictionary } from "../../../const/languageTexts";
-import { BOTTOM_MENU_WIDTH, ITEM_BOTTOM_MENU_MIN_HEIGHT } from "../../items/Styles";
+import { ITEM_BOTTOM_MENU_MIN_HEIGHT } from "../../items/Styles";
 
 let ALIGN = "center";
 

@@ -11,7 +11,7 @@ export function JobItem(jobAbbrev: string, align: string, LANGUAGE_TEXTS: TextDi
         component={"img"}
         src={jobAbbrevToJobIconPath(jobAbbrev)}
         alt={jobAbbrev}
-        sx={{ width: '25%', height: 'auto' }} // 부모의 50% 너비로 설정, 높이는 자동 비율 유지
+        sx={{ width: { sx: 20, sm: 25 }, height: 'auto' }} // 부모의 50% 너비로 설정, 높이는 자동 비율 유지
         marginRight={1}
       />
       <Box>
