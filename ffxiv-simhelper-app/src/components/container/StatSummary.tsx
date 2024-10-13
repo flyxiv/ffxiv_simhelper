@@ -17,14 +17,14 @@ import {
 import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { StatWeightsData } from "../../page/StatWeightsResult";
 import { TextDictionary } from "../../const/languageTexts";
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 
 const STAT_SUMMARY_BOX_WIDTH = "3vw";
 const STAT_SUMMARY_TIME_BOX_WIDTH = "6vw";
 const POWER_SUMMARY_BOX_WIDTH = "6vw";
-const SUMMARY_FONT_SIZE = { xs: 11, sm: 13};
+const SUMMARY_FONT_SIZE = { xs: 11, sm: 13 };
 
 let StatSummaryBox = styled(Box)`
   ${StatSummaryBoxStyle}
@@ -322,21 +322,26 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[], LANGUAGE_T
 }
 
 export function StatPowerSummary(totalState: SingleEquipmentInputSaveState, LANGUAGE_TEXTS: TextDictionary) {
-  let power = totalState.power;
   let { POWER_NAMES } = loadPowerNames(LANGUAGE_TEXTS);
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
 
-  return (
-    <Box>
-       StatPowerSummaryInputPower(POWER_NAMES.slice(0, 5), totalState, LANGUAGE_TEXTS)
-       StatPowerSummaryInputPower(POWER_NAMES.slice(5), totalState, LANGUAGE_TEXTS)
-    </Box>
-  );
+  if (isXs) {
+    return (
+      <Box>
+        {StatPowerSummaryInputPower(POWER_NAMES.slice(0, 5), totalState, LANGUAGE_TEXTS)}
+        {StatPowerSummaryInputPower(POWER_NAMES.slice(5), totalState, LANGUAGE_TEXTS)}
+      </Box>
+    );
+  }
+  else {
+    return StatPowerSummaryInputPower(POWER_NAMES, totalState, LANGUAGE_TEXTS)
+  }
 }
 
 
 function StatPowerSummaryInputPower(powerNames: Array<string>, totalState: SingleEquipmentInputSaveState, LANGUAGE_TEXTS: TextDictionary) {
   let power = totalState.power;
-  let first_five_power_names
 
   return (
     <Box display="inline-block">
