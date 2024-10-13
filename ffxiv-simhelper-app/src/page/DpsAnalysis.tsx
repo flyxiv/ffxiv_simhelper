@@ -106,6 +106,7 @@ export function DpsAnalysis() {
       <Box
         display="flex"
         sx={{ backgroundColor: AppConfigurations.backgroundOne, minWidth: `${HOME_PAGE_MIN_WIDTH_PX(itemsInOneRow)}px` }}
+        overflow={"auto"}
       >
         {LeftMenuWithLoadout(
           DPS_ANALYSIS_LOADOUT_COUNT,
@@ -120,7 +121,7 @@ export function DpsAnalysis() {
           <Box alignContent={"center"} width="100%">
             <DpsAnalysisInputContainer justifyContent={"center"}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
-              <EquipmentBoard>
+              <EquipmentBoard width="100%">
                 {EquipmentSelectionMenu(0, totalState, setTotalState, LANGUAGE_TEXTS)}
               </EquipmentBoard>
             </DpsAnalysisInputContainer>

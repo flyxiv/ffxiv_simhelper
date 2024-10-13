@@ -10,7 +10,6 @@ import {
   GEAR_COMPARE_URL,
   DPS_ANALYSIS_URL,
   BEST_STATS_URL,
-  HOME_PAGE_MIN_WIDTH_PX,
   BODY_WIDTH,
 } from "../App";
 import { AppLanguageTexts } from "../const/languageTexts";
@@ -38,7 +37,7 @@ export function Home() {
           <Box className="HomeBody" height="70vh">
             <Box
               width="40%"
-              minWidth="800px"
+              minWidth="400px"
               display="flex"
               alignItems={"center"}
               flexDirection={"column"}
@@ -64,7 +63,7 @@ export function Home() {
             <Box
               width="40%"
               display="flex"
-              minWidth={"800px"}
+              minWidth={"400px"}
               alignItems={"center"}
               flexDirection={"column"}
             >
