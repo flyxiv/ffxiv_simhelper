@@ -108,6 +108,7 @@ export function DpsAnalysis() {
         sx={{ backgroundColor: AppConfigurations.backgroundOne }}
         overflow={"auto"}
         width={"100%"}
+        minWidth={"800px"}
       >
         {LeftMenuWithLoadout(
           DPS_ANALYSIS_LOADOUT_COUNT,

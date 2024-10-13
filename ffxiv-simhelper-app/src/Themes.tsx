@@ -21,6 +21,5 @@ export const AppConfigurations = {
      lg: 16 
   },
 
-
   electron: true,
 };
