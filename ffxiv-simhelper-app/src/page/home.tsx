@@ -2,7 +2,7 @@ import { SimLinkIcon } from "../components/image/SimUIIcon";
 import "./Home.css";
 import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
-import { Box, Link, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Link } from "@mui/material";
 import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import {
@@ -13,6 +13,7 @@ import {
   BODY_WIDTH,
 } from "../App";
 import { AppLanguageTexts, TextDictionary } from "../const/languageTexts";
+import { isMobile } from "../util";
 
 const dpsAnalysisButtonImagePath = "/images/icon_dps_analysis_C.svg";
 const gearCompareSimButtonImagePath = "/images/icon_gear_compare_C.svg";
@@ -21,9 +22,6 @@ const bestPartnerButtonImagePath = "/images/icon_best_partner_C.svg";
 
 export function Home() {
   let LANGUAGE_TEXTS = AppLanguageTexts();
-  const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
-
 
   return (
     <Box
@@ -37,7 +35,7 @@ export function Home() {
         <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box className="HomeBody">
-            {isXs ? OneColumnHomePage(LANGUAGE_TEXTS) : TwoColumnHomePage(LANGUAGE_TEXTS)}
+            {isMobile() ? OneColumnHomePage(LANGUAGE_TEXTS) : TwoColumnHomePage(LANGUAGE_TEXTS)}
           </Box>
           {Footer()}
         </Box>

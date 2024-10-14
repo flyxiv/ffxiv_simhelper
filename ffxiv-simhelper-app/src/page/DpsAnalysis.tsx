@@ -100,7 +100,6 @@ export function DpsAnalysis() {
       <Box
         display="flex"
         sx={{ backgroundColor: AppConfigurations.backgroundOne }}
-        overflow={"auto"}
         width={"100%"}
       >
         {LeftMenuWithLoadout(

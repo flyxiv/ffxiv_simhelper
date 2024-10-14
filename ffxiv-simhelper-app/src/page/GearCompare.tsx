@@ -22,15 +22,15 @@ import { defaultDoubleEquipmentInput } from "../const/DefaultDoubleEquipmentInpu
 import { EquipmentInput } from "../types/EquipmentInput";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowDownwardIcom from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { AppLanguageTexts } from "../const/languageTexts";
-import { EQUIPMENT_CONTAINER_MIN_WIDTH_PX } from "../components/input/basicform/InputFormWidths";
+import { isMobile } from "../util";
 
 export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "98%";
 const GEAR_COMPARE_LOADOUNT_COUNT = 6;
 
-const PARTY_INPUT_WIDTH = "80%";
-
-const GEAR_COMPARE_MIN_WIDTH = "1000px";
+const PARTY_INPUT_WIDTH = "90%";
 
 let GearCompareEquipmentInputContainer = styled(Box)`
   ${InputContainerStyle},
@@ -95,15 +95,12 @@ export function GearCompare() {
 
   const [totalState, setTotalState] = useState(mostRecentInput);
 
-  let containerMinWidth = EQUIPMENT_CONTAINER_MIN_WIDTH_PX(1);
-
   return (
     <>
       <Box
         display="flex"
         sx={{ backgroundColor: AppConfigurations.backgroundOne }}
-        width="100vw"
-        minWidth={GEAR_COMPARE_MIN_WIDTH}
+        width="100%"
       >
         {LeftMenuWithLoadout(
           GEAR_COMPARE_LOADOUNT_COUNT,
@@ -116,8 +113,8 @@ export function GearCompare() {
         <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box display="flex" flexDirection="column" justifyContent={"center"}>
-            <GearCompareEquipmentInputContainer sx={{ minWidth: GEAR_COMPARE_MIN_WIDTH }}>
-              <Box display="flex" justifyContent={"center"} width={"100%"} sx={{ minWidth: GEAR_COMPARE_MIN_WIDTH }}>
+            <GearCompareEquipmentInputContainer>
+              <Box display="flex" justifyContent={"center"} width={"100%"}>
                 {SelectionTitle(LANGUAGE_TEXTS.GEAR_COMPARE_INPUT_INFO_TEXT)}
               </Box>
               <Box
@@ -125,8 +122,9 @@ export function GearCompare() {
                 justifyContent="space-evenly"
                 width={GEAR_COMPARE_INPUT_CONTAINER_WIDTH}
                 padding="1%"
+                flexDirection={isMobile() ? "column" : "row"}
               >
-                <EquipmentBoard sx={{ minWidth: `${containerMinWidth}` }}>
+                <EquipmentBoard>
                   {EquipmentSelectionMenu(
                     0,
                     totalState,
@@ -137,21 +135,10 @@ export function GearCompare() {
                   )}
                 </EquipmentBoard>
 
-                <Box
-                  display={"flex"}
-                  flexDirection={"column"}
-                  justifyContent={"center"}
-                  marginX={2}
-                >
-                  <Box marginBottom={5}>
-                    {LoadLeftEquipmentToRightButton(totalState, setTotalState)}
-                  </Box>
-                  <Box marginTop={5}>
-                    {LoadRightEquipmentToLeftButton(totalState, setTotalState)}
-                  </Box>
-                </Box>
+                {isMobile() ? LoadUpBottonButton(totalState, setTotalState) : LoadLeftRightButton(totalState, setTotalState)}
 
-                <EquipmentBoard sx={{ minWidth: `${containerMinWidth}px` }}>
+
+                <EquipmentBoard>
                   {EquipmentSelectionMenu(
                     1,
                     totalState,
@@ -180,6 +167,39 @@ export function GearCompare() {
   );
 }
 
+function LoadLeftRightButton(totalState: EquipmentInput, setTotalState: Function) {
+  return <Box
+    display={"flex"}
+    flexDirection={"column"}
+    justifyContent={"center"}
+    marginX={2}
+  >
+    <Box marginBottom={5}>
+      {LoadLeftEquipmentToRightButton(totalState, setTotalState)}
+    </Box>
+    <Box marginTop={5}>
+      {LoadRightEquipmentToLeftButton(totalState, setTotalState)}
+    </Box>
+  </Box>
+}
+
+function LoadUpBottonButton(totalState: EquipmentInput, setTotalState: Function) {
+  return <Box
+    display={"flex"}
+    flexDirection={"row"}
+    justifyContent={"center"}
+    marginY={2}
+  >
+    <Box marginRight={1}>
+      {LoadTopEquipmentToBottomButton(totalState, setTotalState)}
+    </Box>
+    <Box marginLeft={1}>
+      {LoadBottomEquipmentToTopButton(totalState, setTotalState)}
+    </Box>
+  </Box>
+}
+
+
 function LoadLeftEquipmentToRightButton(
   totalState: EquipmentInput,
   setTotalState: Function
@@ -190,6 +210,31 @@ function LoadLeftEquipmentToRightButton(
     <Button
       variant="contained"
       endIcon={<ArrowForwardIcon />}
+      onClick={() => {
+        let newTotalState = { ...totalState };
+        newTotalState.equipmentDatas[1] = JSON.parse(
+          JSON.stringify(totalState.equipmentDatas[0])
+        );
+        setTotalState(newTotalState);
+      }}
+      sx={{ fontSize: AppConfigurations.body2FontSize }}
+    >
+      {LANGUAGE_TEXTS.COPY_BUTTON_TEXT}
+    </Button>
+  );
+}
+
+
+function LoadTopEquipmentToBottomButton(
+  totalState: EquipmentInput,
+  setTotalState: Function
+) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+  return (
+    <Button
+      variant="contained"
+      endIcon={<ArrowDownwardIcom />}
       onClick={() => {
         let newTotalState = { ...totalState };
         newTotalState.equipmentDatas[1] = JSON.parse(
@@ -218,6 +263,31 @@ function LoadRightEquipmentToLeftButton(
         let newTotalState = { ...totalState };
         newTotalState.equipmentDatas[0] = JSON.parse(
           JSON.stringify(totalState.equipmentDatas[1])
+        );
+        setTotalState(newTotalState);
+      }}
+      sx={{ fontSize: AppConfigurations.body2FontSize }}
+    >
+      {LANGUAGE_TEXTS.COPY_BUTTON_TEXT}
+    </Button>
+  );
+}
+
+
+function LoadBottomEquipmentToTopButton(
+  totalState: EquipmentInput,
+  setTotalState: Function
+) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+  return (
+    <Button
+      variant="contained"
+      endIcon={<ArrowUpwardIcon />}
+      onClick={() => {
+        let newTotalState = { ...totalState };
+        newTotalState.equipmentDatas[1] = JSON.parse(
+          JSON.stringify(totalState.equipmentDatas[0])
         );
         setTotalState(newTotalState);
       }}

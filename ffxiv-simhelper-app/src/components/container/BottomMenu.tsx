@@ -6,6 +6,7 @@ import { GearCompareRequestButton } from "../basic/GearCompareRequestButton";
 import { BODY_WIDTH } from "../../App";
 import { MENU_WIDTH } from "./LeftMenu";
 import { TextDictionary } from "../../const/languageTexts";
+import { isMobile } from "../../util";
 
 export function BasicBottomMenu(
   totalState: EquipmentInput,
@@ -61,20 +62,54 @@ export function GearCompareBottomMenu(totalState: EquipmentInput, LANGUAGE_TEXTS
         display="flex"
         flexDirection="column"
         alignContent="center"
+
+        sx={{ width: "100%" }}
       >
-        <Box
-          display="flex"
-          justifyContent="space-evenly"
-          sx={{ width: BODY_WIDTH }}
-        >
-          {StatSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
-          {StatSummary(totalState.equipmentDatas[1], LANGUAGE_TEXTS)}
-        </Box>
+        {isMobile() ? MobileStatSummaryMenu(totalState, LANGUAGE_TEXTS) : PCStatSummaryMenu(totalState, LANGUAGE_TEXTS)}
 
         <Box display="inline-block" margin="auto" paddingTop={2}>
           {GearCompareRequestButton(totalState)}
         </Box>
       </Box>
+    </Box>
+  );
+}
+
+
+function MobileStatSummaryMenu(totalState: EquipmentInput, LANGUAGE_TEXTS: TextDictionary) {
+  return (
+    <Box
+      paddingY={3}
+      display="flex"
+      flexDirection="column"
+      alignContent="center"
+    >
+      <Box
+        display="flex"
+        flexDirection={"column"}
+        justifyContent={"center"}
+        sx={{ width: BODY_WIDTH }}
+      >
+        <Box marginBottom={1}>
+          {StatSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
+        </Box>
+        <Box marginTop={1}>
+          {StatSummary(totalState.equipmentDatas[1], LANGUAGE_TEXTS)}
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+function PCStatSummaryMenu(totalState: EquipmentInput, LANGUAGE_TEXTS: TextDictionary) {
+  return (
+    <Box
+      display="flex"
+      flexDirection={"row"}
+      justifyContent={"space-evenly"}
+    >
+      {StatSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
+      {StatSummary(totalState.equipmentDatas[1], LANGUAGE_TEXTS)}
     </Box>
   );
 }

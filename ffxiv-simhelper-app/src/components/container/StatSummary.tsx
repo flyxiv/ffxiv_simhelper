@@ -17,8 +17,7 @@ import {
 import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { StatWeightsData } from "../../page/StatWeightsResult";
 import { TextDictionary } from "../../const/languageTexts";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { isMobile } from "../../util";
 
 
 const STAT_SUMMARY_BOX_WIDTH = "3vw";
@@ -323,10 +322,7 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[], LANGUAGE_T
 
 export function StatPowerSummary(totalState: SingleEquipmentInputSaveState, LANGUAGE_TEXTS: TextDictionary) {
   let { POWER_NAMES } = loadPowerNames(LANGUAGE_TEXTS);
-  const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.only('xs'));
-
-  if (isXs) {
+  if (isMobile()) {
     return (
       <Box width="100%" display="flex" justifyContent="center" flexDirection="column">
         {StatPowerSummaryInputPower(POWER_NAMES.slice(0, 5), totalState, LANGUAGE_TEXTS)}
@@ -346,32 +342,32 @@ function StatPowerSummaryInputPower(powerNames: Array<string>, totalState: Singl
   return (
     <Box>
       <Box display="flex" justifyContent="center">
-      <StatSummaryBox
-        sx={{ backgroundColor: AppConfigurations.backgroundThree }}
-      >
-        {powerNames.map((powerName) => {
-          return (
-            <SinglePowerBox>{StatSummaryTypography(powerName)}</SinglePowerBox>
-          );
-        })}
-      </StatSummaryBox>
+        <StatSummaryBox
+          sx={{ backgroundColor: AppConfigurations.backgroundThree }}
+        >
+          {powerNames.map((powerName) => {
+            return (
+              <SinglePowerBox>{StatSummaryTypography(powerName)}</SinglePowerBox>
+            );
+          })}
+        </StatSummaryBox>
       </Box>
 
       <Box display="flex" justifyContent="center">
 
-      <StatSummaryBox
-        sx={{
-          backgroundColor: AppConfigurations.backgroundFour,
-        }}
-      >
-        {powerNames.map((powerName) => {
-          return (
-            <SinglePowerBox>
-              {StatSummaryTypography(getStatPower(power, powerName, LANGUAGE_TEXTS))}
-            </SinglePowerBox>
-          );
-        })}
-      </StatSummaryBox>
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundFour,
+          }}
+        >
+          {powerNames.map((powerName) => {
+            return (
+              <SinglePowerBox>
+                {StatSummaryTypography(getStatPower(power, powerName, LANGUAGE_TEXTS))}
+              </SinglePowerBox>
+            );
+          })}
+        </StatSummaryBox>
       </Box>
     </Box>
   );
