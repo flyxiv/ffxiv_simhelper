@@ -30,10 +30,9 @@ export function Home() {
       sx={{
         backgroundColor: AppConfigurations.backgroundOne,
         width: "100%",
-        height: "100%",
       }}
     >
-      <Box display="flex" width="100vw" overflow="auto">
+      <Box display="flex" width="100%" overflow="auto" minHeight="100%">
         {BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME, LANGUAGE_TEXTS)}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
