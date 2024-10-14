@@ -36,7 +36,7 @@ export function Home() {
         {BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME, LANGUAGE_TEXTS)}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
-          <Box className="HomeBody" height="70vh">
+          <Box className="HomeBody">
             {isXs ? OneColumnHomePage(LANGUAGE_TEXTS) : TwoColumnHomePage(LANGUAGE_TEXTS)}
           </Box>
           {Footer()}
@@ -64,7 +64,7 @@ function LogoBox(
         backgroundColor: AppConfigurations.backgroundTwo,
         width: "85%",
         minWidth: "300px",
-        height: "15vh",
+        height: "10vh",
       }}
       display="flex"
       alignItems={"center"}
