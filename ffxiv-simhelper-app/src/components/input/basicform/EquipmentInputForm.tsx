@@ -395,10 +395,11 @@ export function BestPartnerInputMenu(
   id: number,
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function,
-  LANGUAGE_TEXTS: TextDictionary
+  LANGUAGE_TEXTS: TextDictionary,
+  isDouble: boolean = false
 ) {
   let xs = 12;
-  let inputCount = 1;
+  let inputCount = isDouble ? 2 : 1;
 
   return (
     <EquipmentGridContainer container>
@@ -418,7 +419,7 @@ export function BestPartnerInputMenu(
         </InputEquipmentBox>
       </EquipmentGridItemBox>
       <EquipmentGridItemBox
-        key={`${id} _timeinput`}
+        key={`${id}_timeinput`}
         sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
         <InputEquipmentBox item xs={xs}>
