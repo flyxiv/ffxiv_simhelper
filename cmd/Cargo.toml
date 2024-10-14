@@ -9,13 +9,13 @@ path = "src/main.rs"
 doc = false
 
 [[bin]]
-name = "profile-quicksim"
-path = "src/profile_quicksim.rs"
+name = "profile-dpsanalysis"
+path = "src/profile_dpsanalysis.rs"
 doc = false
 
 [[bin]]
-name = "profile-statweight"
-path = "src/profile_statweight.rs"
+name = "profile-beststats"
+path = "src/profile_beststats.rs"
 doc = false
 
 [dependencies.ffxiv-simhelper-dps-simulator]

@@ -1,5 +1,5 @@
-mod profile_quicksim;
-mod profile_statweight;
+mod profile_dpsanalysis;
+mod profile_beststats;
 
 use ffxiv_simhelper_api::api_server::api_router::create_ffxiv_simhelper_service_router;
 use log::LevelFilter::Info;

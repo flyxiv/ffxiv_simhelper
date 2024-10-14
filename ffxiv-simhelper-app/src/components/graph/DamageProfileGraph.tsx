@@ -5,7 +5,6 @@ import { iconPathToName } from "../Util";
 import { DamageChartData } from "./GraphData";
 import { Box } from "@mui/material";
 import { TextDictionary } from "../../const/languageTexts";
-import { TABLE_WIDTH } from "../../page/SimulationResult";
 
 export const DamageProfileGraph = (response: DpsAnalysisResponse, LANGUAGE_TEXTS: TextDictionary) => {
   const mainPlayerId = response.mainPlayerId;
