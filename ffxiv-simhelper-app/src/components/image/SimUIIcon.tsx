@@ -26,7 +26,7 @@ export const SimLinkIcon = (
         </Typography>
         <Box marginTop={1}>
           <Typography variant="body2" sx={{
-            fontSize: AppConfigurations.body2FontSize
+            fontSize: AppConfigurations.logoFontSize
           }} color="white">
             {description}
           </Typography>

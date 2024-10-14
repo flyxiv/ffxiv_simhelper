@@ -62,9 +62,10 @@ export function SkillDamageProfile(
 
   return (
     <SkillBox>
-      <Box display="flex" width="200px">
+      <Box display="flex" width="10%">
         <SkillIconBox>
-          <img
+          <Box
+            component={"img"}
             src={data.icon.valueOf()}
             width={imageSize}
             height={imageSize}
@@ -73,7 +74,7 @@ export function SkillDamageProfile(
         </SkillIconBox>
         <SkillNameBox>
           <Box>
-            <Typography variant="body2" fontSize={"min(1.2vh, 0.8vw)"} align="right" >
+            <Typography variant="body2" fontSize={AppConfigurations.body2FontSize} align="right" >
               {data.name}
             </Typography>
           </Box>

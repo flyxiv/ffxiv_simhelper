@@ -6,9 +6,9 @@ export const minusTextColor = "#850B21";
 
 export const statusBoxWidth = "22vw";
 export const ResultBoardBoxStyle = `
+  width: 90%;
   min-height: 50vh;
   background-color: ${AppConfigurations.backgroundTwo};
-  width: 60vw;
   align-items: center;
   justify-content: flex-start;
   display: flex;
@@ -18,7 +18,6 @@ export const ResultBoardBoxStyle = `
 
 export const ResultBoardTopBoxStyle = `
   background-color: ${AppConfigurations.backgroundTwo};
-  width: 60vw;
   align-items: center;
   justify-content: flex-start;
   display: flex;
@@ -48,8 +47,11 @@ export const DpsSummaryBoxStyle = `
 `;
 
 export const DpsBoxStyle = `
-  width: 6vw;
-  height: 6vw;
+  width: 15%;
+  aspect-ratio: 1;
+  max-width: 200px;
+  max-height: 80px;
+  
   padding: 10px;
   margin: 0.4vw;
   display: flex;
@@ -111,7 +113,6 @@ export const StatTextBoxStyle = `
 export const SkillLogTableStyle = `
   background-color: ${AppConfigurations.backgroundThree};
   display: flex;
-  width: 45vw;
   flex-direction: column;
   justify-content: left;
   align-items: left;
@@ -125,12 +126,12 @@ export const SkillLogRowStyle = `
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 45vw;
+  width: 100%;
 `;
 
 export const SkillLogCombatTimeBoxStyle = `
   color: white;
-  width: 5vw;
+  width: 25%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -152,7 +153,7 @@ export const SkillIconBoxStyle = `
   flex-direction: row;
   justify-content: left;
   align-items: center;
-  width: 12vw;
+  width: 25%;
   margin: 10px;
 `;
 

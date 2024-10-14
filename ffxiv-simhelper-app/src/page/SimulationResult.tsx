@@ -13,7 +13,7 @@ import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { DamageProfileGraph } from "../components/graph/DamageProfileGraph";
 import { SkillLogResult } from "../components/container/SkillLog";
 import { ResultPageButtonGroup } from "../components/container/ResultPageButtonGroup";
-import { DPS_ANALYSIS_RESPONSE_SAVE_NAME } from "../App";
+import { BODY_WIDTH, DPS_ANALYSIS_RESPONSE_SAVE_NAME } from "../App";
 import { PartyContributionData } from "../components/graph/GraphData";
 import {
   MainPlayerContributionGraph,
@@ -84,41 +84,38 @@ export function SimulationResult() {
   return (
     <Box
       display="flex"
-      flexDirection={"column"}
       sx={{ backgroundColor: AppConfigurations.backgroundOne }}
-      width="100vw"
+      width="100%"
       alignItems={"center"}
       paddingBottom={20}
     >
-      <Box display="flex">
-        {BasicLeftMenu(LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME, LANGUAGE_TEXTS)}
-        <Box>
-          {AppHeader()}
-          <ResultBoardTopBox>
-            {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
-            {DpsSummary(mainPlayerSimulationData, "99.9% RDPS")}
-            <Typography sx={{ color: 'white' }}>
-              {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
-            </Typography>
-            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, QUICK_SIM_ITERATION_COUNT, 1, LANGUAGE_TEXTS)}
-          </ResultBoardTopBox>
-          <Box display="flex" justifyContent={"center"}>
-            {ResultPageButtonGroup(
-              currentlyToggledView,
-              setCurrentlyToggledView,
-              teammatesBuffContributionToMyBuffs,
-              mainPlayerContributionToOthers,
-              LANGUAGE_TEXTS
-            )}
-          </Box>
-          {renderTableBasedOnSelectedButton(
+      {BasicLeftMenu(LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME, LANGUAGE_TEXTS)}
+      <Box display="flex" width={BODY_WIDTH} justifyContent={"center"} flexDirection={"column"} alignItems={"center"}>
+        {AppHeader()}
+        <ResultBoardTopBox>
+          {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
+          {DpsSummary(mainPlayerSimulationData, "99.9% RDPS")}
+          <Typography sx={{ color: 'white' }}>
+            {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
+          </Typography>
+          {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, QUICK_SIM_ITERATION_COUNT, 1, LANGUAGE_TEXTS)}
+        </ResultBoardTopBox>
+        <Box display="flex" justifyContent={"center"}>
+          {ResultPageButtonGroup(
             currentlyToggledView,
-            responseJson,
+            setCurrentlyToggledView,
             teammatesBuffContributionToMyBuffs,
-            mainPlayerContributionToOthers
+            mainPlayerContributionToOthers,
+            LANGUAGE_TEXTS
           )}
-          {Footer()}
         </Box>
+        {renderTableBasedOnSelectedButton(
+          currentlyToggledView,
+          responseJson,
+          teammatesBuffContributionToMyBuffs,
+          mainPlayerContributionToOthers
+        )}
+        {Footer()}
       </Box>
     </Box>
   );

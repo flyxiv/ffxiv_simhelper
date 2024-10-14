@@ -5,6 +5,7 @@ import { iconPathToName } from "../Util";
 import { DamageChartData } from "./GraphData";
 import { Box } from "@mui/material";
 import { TextDictionary } from "../../const/languageTexts";
+import { TABLE_WIDTH } from "../../page/SimulationResult";
 
 export const DamageProfileGraph = (response: DpsAnalysisResponse, LANGUAGE_TEXTS: TextDictionary) => {
   const mainPlayerId = response.mainPlayerId;
@@ -55,7 +56,7 @@ export const DamageProfileGraph = (response: DpsAnalysisResponse, LANGUAGE_TEXTS
   let highestDamageOfSingleSkill = damageProfileData[0].pdps;
 
   return (
-    <Box>
+    <Box width={"95%"}>
       {DamageChartTitle(LANGUAGE_TEXTS.SKILL_TITLE_TEXT, LANGUAGE_TEXTS.DAMAGE_PERCENTAGE_TEXT, LANGUAGE_TEXTS.TOTAL_DAMAGE_TEXT, LANGUAGE_TEXTS.CAST_TEXT)}
       {damageProfileData.map((data) => {
         return SkillDamageProfile(

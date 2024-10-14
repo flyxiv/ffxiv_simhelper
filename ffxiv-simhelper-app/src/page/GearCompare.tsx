@@ -188,12 +188,12 @@ function LoadUpBottonButton(totalState: EquipmentInput, setTotalState: Function)
     display={"flex"}
     flexDirection={"row"}
     justifyContent={"center"}
-    marginY={2}
+    marginY={1}
   >
-    <Box marginRight={1}>
+    <Box marginRight={2}>
       {LoadTopEquipmentToBottomButton(totalState, setTotalState)}
     </Box>
-    <Box marginLeft={1}>
+    <Box marginLeft={2}>
       {LoadBottomEquipmentToTopButton(totalState, setTotalState)}
     </Box>
   </Box>

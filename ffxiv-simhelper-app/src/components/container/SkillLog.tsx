@@ -70,7 +70,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse, LANGUAGE_TEXTS: Te
           WarningText(LANGUAGE_TEXTS.SAMURAI_ROTATION_WARNING_TEXT)
           : response.mainPlayerJobAbbrev === MNK_EN_NAME ? WarningText(LANGUAGE_TEXTS.MNK_ROTATION_WARNING_TEXT) : <Box></Box>
       }
-      <SkillLogTableList>
+      <SkillLogTableList sx={{ width: { xs: "100%", sm: "100%" }, overflow: "auto" }}>
         <ListItem>
           <SkillEntityBox>
             <SkillLogCombatTimeBox>
@@ -102,7 +102,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse, LANGUAGE_TEXTS: Te
           </SkillEntityBox>
         </ListItem>
         {SkillLogTable(mainPlayerRotationLog)}
-      </SkillLogTableList>
+      </SkillLogTableList >
     </>
   );
 };

@@ -26,6 +26,14 @@ export const AppConfigurations = {
     lg: 10,
     xl: 14
   },
+  logoFontSize: {
+    xs: 8,
+    sm: 12,
+    md: 12,
+    lg: 12,
+    xl: 12
+  },
+
 
   electron: true,
 };
