@@ -57,6 +57,7 @@ export function ResultPageButtonGroup(
         exclusive
         onChange={handleViewChange}
         aria-label="resultPage"
+        sx={{ flexWrap: "wrap" }}
       >
         <ToggleButtonCustom value={LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT}>
           {LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT}

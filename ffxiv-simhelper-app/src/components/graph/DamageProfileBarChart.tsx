@@ -62,7 +62,7 @@ export function SkillDamageProfile(
 
   return (
     <SkillBox>
-      <Box display="flex" width="10%">
+      <Box display="flex" sx={{width: {xs: "50%", sm: "30%", md:"25%", lg: "20%", xl: "20%"}}}>
         <SkillIconBox>
           <Box
             component={"img"}
@@ -72,9 +72,9 @@ export function SkillDamageProfile(
             alt="icon"
           />
         </SkillIconBox>
-        <SkillNameBox>
-          <Box>
-            <Typography variant="body2" fontSize={AppConfigurations.body2FontSize} align="right" >
+        <SkillNameBox width="100%">
+          <Box width="100%">
+            <Typography sx={{fontSize: {xs: 8, sm: 8, md: 10, lg: 12, xl: 14}, wordBreak: 'break-word'}} align="right">
               {data.name}
             </Typography>
           </Box>
@@ -111,10 +111,10 @@ export const DamageChartTitle = (skillTitleText: string, damagePercentageText: s
 
   return (
     <SkillBox>
-      <Box display="flex" width="200px">
+      <Box display="flex"  sx={{width: {xs: "40%", sm: "30%", md:"25%", lg: "20%", xl: "20%"}}}>
         <SkillIconBox />
-        <SkillNameBox>
-          <Typography variant="body2" fontSize={AppConfigurations.body2FontSize}>
+        <SkillNameBox width="100%">
+          <Typography variant="body2" fontSize={AppConfigurations.body2FontSize} align="right">
             {skillTitleText}
           </Typography>
         </SkillNameBox>

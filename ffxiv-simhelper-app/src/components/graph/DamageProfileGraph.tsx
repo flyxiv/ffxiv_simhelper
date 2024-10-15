@@ -55,7 +55,7 @@ export const DamageProfileGraph = (response: DpsAnalysisResponse, LANGUAGE_TEXTS
   let highestDamageOfSingleSkill = damageProfileData[0].pdps;
 
   return (
-    <Box width={"95%"}>
+    <Box width={{ xs: "95%", sm: "90%", md: "85%", lg: "80%", xl: "75%"}}>
       {DamageChartTitle(LANGUAGE_TEXTS.SKILL_TITLE_TEXT, LANGUAGE_TEXTS.DAMAGE_PERCENTAGE_TEXT, LANGUAGE_TEXTS.TOTAL_DAMAGE_TEXT, LANGUAGE_TEXTS.CAST_TEXT)}
       {damageProfileData.map((data) => {
         return SkillDamageProfile(

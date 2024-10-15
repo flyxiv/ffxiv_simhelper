@@ -95,7 +95,7 @@ export function SimulationResult() {
         <ResultBoardTopBox sx={{width: "90%"}}>
           {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
           {DpsSummary(mainPlayerSimulationData, "99.9% RDPS")}
-          <Typography sx={{ color: 'white' }}>
+          <Typography sx={{ color: 'white' }} align="center">
             {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
           </Typography>
           {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, QUICK_SIM_ITERATION_COUNT, 1, LANGUAGE_TEXTS)}
@@ -120,6 +120,9 @@ export function SimulationResult() {
     </Box>
   );
 }
+
+
+export const RESULT_BOARD_BOX_WIDTH = {xs: "90%", sm: "85%", md: "80%", lg: "75%", xl: "70%"}
 
 function renderTableBasedOnSelectedButton(
   currentlyToggledView: string,

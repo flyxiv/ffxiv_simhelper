@@ -22,7 +22,8 @@ export const ResultBoardTopBoxStyle = `
   justify-content: flex-start;
   display: flex;
   flex-direction: column;
-  padding-bottom: 50px;
+  width: 90%;
+  padding-bottom: 20px;
 `;
 
 export const TitleBoxStyle = `
@@ -61,8 +62,8 @@ export const DpsBoxStyle = `
 `;
 
 export const PlayerInfoBoxStyle = `
-  width: 90%;
-  margin: 1vh;
+  width: 80%;
+  margin: 3px;
   background: ${AppConfigurations.backgroundThree};
   display: flex;
   flex-direction: column;

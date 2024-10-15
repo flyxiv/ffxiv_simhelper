@@ -92,7 +92,6 @@ export const SkillNameStyle = `
     align-items: center;
     justify-content: flex-end;
     margin-right: 10px;
-    width: 60%;
 `;
 
 export const SkillIconBoxStyle = `
@@ -102,10 +101,11 @@ export const SkillIconBoxStyle = `
     padding-left: 0.5vw;
     width: 40%; 
     max-width: 50px;
+    margin-right: 5px;
 `;
 
 export const SkillBarBoxStyle = `
-    width: 60%;
+    width: 80%;
     align-items: center;
     height: ${imageSize};
     display: flex;
