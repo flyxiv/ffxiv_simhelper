@@ -9,6 +9,11 @@ path = "src/main.rs"
 doc = false
 
 [[bin]]
+name = "ffxiv-simhelper-local"
+path = "src/local_server.rs"
+doc = false
+
+[[bin]]
 name = "profile-dpsanalysis"
 path = "src/profile_dpsanalysis.rs"
 doc = false
@@ -36,3 +41,9 @@ tokio = "1.36.0"
 serde = { version = "1.0.196", features = ["derive"] }
 log = "0.4.20"
 itertools = "0.13.0"
+tokio-rustls = "0.26.0"
+tower-service = "0.3.2"
+hyper-util = { version = "0.1" }
+rustls-pemfile = "2.2.0"
+futures-util = { version = "0.3", default-features = false }
+hyper = { version = "1.0.0", features = ["full"] }
