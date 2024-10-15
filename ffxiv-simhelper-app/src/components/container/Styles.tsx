@@ -48,10 +48,9 @@ export const DpsSummaryBoxStyle = `
 `;
 
 export const DpsBoxStyle = `
-  width: 15%;
+  width: 17%;
   aspect-ratio: 1;
   max-width: 200px;
-  max-height: 80px;
   
   padding: 10px;
   margin: 0.4vw;
