@@ -234,7 +234,7 @@ export function MainPlayerGcdSelection(
         key={`${key}_label`}
         sx={{ fontSize: AppConfigurations.body1FontSize }}
       >
-        <Box display="flex" sx={{ height: "4vh" }} alignItems={"center"} justifyContent={"flex-end"}>
+        <Box display="flex" sx={{ height: "3vh" }} alignItems={"center"} justifyContent={"center"}>
           <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
             {speedLabelText}
           </Typography>
