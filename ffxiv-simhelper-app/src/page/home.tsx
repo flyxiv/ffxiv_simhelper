@@ -52,6 +52,7 @@ function LogoBox(
   description: string,
   color: string
 ) {
+
   return (
 
     <Box
@@ -101,14 +102,6 @@ function OneColumnHomePage(LANGUAGE_TEXTS: TextDictionary) {
         )}
 
         {LogoBox(
-          BEST_PARTNER_URL,
-          bestPartnerButtonImagePath,
-          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
-          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
-          LANGUAGE_TEXTS.BEST_PARTNER_DESCRIPTION_TEXT,
-          AppConfigurations.secondary
-        )}
-        {LogoBox(
           GEAR_COMPARE_URL,
           gearCompareSimButtonImagePath,
           LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
@@ -117,6 +110,14 @@ function OneColumnHomePage(LANGUAGE_TEXTS: TextDictionary) {
           AppConfigurations.secondary
         )}
 
+        {LogoBox(
+          BEST_PARTNER_URL,
+          bestPartnerButtonImagePath,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_DESCRIPTION_TEXT,
+          AppConfigurations.secondary
+        )}
         {LogoBox(
           BEST_STATS_URL,
           statWeightsButtonImagePath,
