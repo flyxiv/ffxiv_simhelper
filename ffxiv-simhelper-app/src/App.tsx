@@ -69,21 +69,7 @@ export const theme = (language: LanguageMode) => createTheme({
     },
   },
 
-  typography: language === LanguageMode.ENGLISH_MODE ? {
-    fontFamily: "Cabinet, Oraniembaum, Oligopoly, Redwing, Arial",
-    h1: {
-      fontSize: "3rem",
-      fontWeight: 900,
-    },
-    h2: {
-      fontSize: "1.75rem",
-      fontWeight: 600,
-    },
-    h3: {
-      fontSize: "1.5rem",
-      fontWeight: 600,
-    },
-  } : {
+  typography: {
     fontFamily: "NotoSansKR, Arial",
     h1: {
       fontSize: "3rem",
