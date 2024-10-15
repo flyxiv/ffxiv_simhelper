@@ -38,7 +38,7 @@ let SingleStatBox = styled(Box)`
 `;
 
 let SingleStatCombatTimeBox = styled(Box)`
-  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH, 70)}
+  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH, 80)}
 `;
 
 export function StatSummaryTypography(text: string) {
@@ -86,72 +86,72 @@ export function SimulationInputSummary(
   let simulationInputNames = getStatNames(jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
 
   return (
-   <>
-    <Box display="flex">
-      <StatSummaryBox
-        sx={{ backgroundColor: AppConfigurations.backgroundThree }}
-      >
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.TIME_TEXT)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.ITERATION_NAME)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.VARIANCE_NAME)}
-        </SingleStatCombatTimeBox>
-      </StatSummaryBox>
-    </Box>
-    <Box display="flex">
-      <StatSummaryBox
-        sx={{
-          backgroundColor: AppConfigurations.backgroundFour,
-        }}
-      >
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(`${combatTimeMilliseconds.toFixed(0)}`)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(iterationCount.toString())}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(`${variancePercent.toFixed(1)}%`)}
-        </SingleStatCombatTimeBox>
-      </StatSummaryBox>
-    </Box>
-    <Box display="flex">
-      <StatSummaryBox
-        sx={{
-          backgroundColor: AppConfigurations.backgroundThree,
-        }}
-      >
+    <>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{ backgroundColor: AppConfigurations.backgroundThree }}
+        >
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.TIME_TEXT)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.ITERATION_NAME)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.VARIANCE_NAME)}
+          </SingleStatCombatTimeBox>
+        </StatSummaryBox>
+      </Box>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundFour,
+          }}
+        >
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(`${combatTimeMilliseconds.toFixed(0)}`)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(iterationCount.toString())}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(`${variancePercent.toFixed(1)}%`)}
+          </SingleStatCombatTimeBox>
+        </StatSummaryBox>
+      </Box>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundThree,
+          }}
+        >
 
-        {simulationInputNames.map((statName) => {
-          return (
-            <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
-          );
-        })}
-      </StatSummaryBox>
-    </Box>
-    <Box display="flex">
+          {simulationInputNames.map((statName) => {
+            return (
+              <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
+            );
+          })}
+        </StatSummaryBox>
+      </Box>
+      <Box display="flex">
 
-      <StatSummaryBox
-        sx={{
-          backgroundColor: AppConfigurations.backgroundFour,
-        }}
-      >
-        {simulationInputNames.map((statName) => {
-          return (
-            <SingleStatBox>
-              {StatSummaryTypography(
-                getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME)
-              )}
-            </SingleStatBox>
-          );
-        })}
-       </StatSummaryBox>
-    </Box>
-   </>
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundFour,
+          }}
+        >
+          {simulationInputNames.map((statName) => {
+            return (
+              <SingleStatBox>
+                {StatSummaryTypography(
+                  getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME)
+                )}
+              </SingleStatBox>
+            );
+          })}
+        </StatSummaryBox>
+      </Box>
+    </>
   );
 }
 

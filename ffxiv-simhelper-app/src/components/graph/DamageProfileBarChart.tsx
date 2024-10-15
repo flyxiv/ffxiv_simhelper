@@ -41,6 +41,9 @@ const SkillBarBox = styled(Box)`
   ${SkillBarBoxStyle}
 `;
 
+const SKILL_BOX_WIDTH = { xs: "50%", sm: "30%", md: "25%", lg: "25%", xl: "20%" };
+const SKILL_BOX_MAX_WIDTH = "200px";
+
 // One row of Damage Profile column in DpsAnalysis Result
 // 1. Skill Icon
 // 2. Skill Name
@@ -62,7 +65,7 @@ export function SkillDamageProfile(
 
   return (
     <SkillBox>
-      <Box display="flex" sx={{width: {xs: "50%", sm: "30%", md:"25%", lg: "20%", xl: "20%"}}}>
+      <Box display="flex" sx={{ width: SKILL_BOX_WIDTH, maxWidth: SKILL_BOX_MAX_WIDTH }}>
         <SkillIconBox>
           <Box
             component={"img"}
@@ -74,7 +77,7 @@ export function SkillDamageProfile(
         </SkillIconBox>
         <SkillNameBox width="100%">
           <Box width="100%">
-            <Typography sx={{fontSize: {xs: 8, sm: 8, md: 10, lg: 12, xl: 14}, wordBreak: 'break-word'}} align="right">
+            <Typography sx={{ fontSize: { xs: 8, sm: 8, md: 10, lg: 12, xl: 14 }, wordBreak: 'break-word' }} align="right">
               {data.name}
             </Typography>
           </Box>
@@ -111,7 +114,7 @@ export const DamageChartTitle = (skillTitleText: string, damagePercentageText: s
 
   return (
     <SkillBox>
-      <Box display="flex"  sx={{width: {xs: "40%", sm: "30%", md:"25%", lg: "20%", xl: "20%"}}}>
+      <Box display="flex" sx={{ width: SKILL_BOX_WIDTH, maxWidth: SKILL_BOX_MAX_WIDTH }}>
         <SkillIconBox />
         <SkillNameBox width="100%">
           <Typography variant="body2" fontSize={AppConfigurations.body2FontSize} align="right">

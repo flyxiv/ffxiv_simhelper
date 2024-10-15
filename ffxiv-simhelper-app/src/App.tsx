@@ -22,9 +22,7 @@ import {
   MENU_WIDTH_VW_MD,
 } from "./components/container/LeftMenu";
 import { useEffect } from "react";
-import { LanguageMode } from "./LanguageContext";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { AppLanguageTexts } from "./const/languageTexts";
 
 export const SINGLE_INPUT_SAVE_NAME = "mostRecentSingleInput";
 export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
@@ -58,7 +56,7 @@ export const BODY_WIDTH = {
 export const HOME_PAGE_MIN_WIDTH_PX = (itemsPerRow: number) => itemsPerRow === 2 ? 1700 : 100;
 
 
-export const theme = (language: LanguageMode) => createTheme({
+export const theme = () => createTheme({
   palette: {
     primary: {
       main: "#BB86FC",
@@ -101,10 +99,8 @@ export const theme = (language: LanguageMode) => createTheme({
 });
 
 function App() {
-  let language = AppLanguageTexts().language;
-
   return (
-    <ThemeProvider theme={theme(language)}>
+    <ThemeProvider theme={theme()}>
       <Router>
         <ScrollToTop />
         <main className="Body">
