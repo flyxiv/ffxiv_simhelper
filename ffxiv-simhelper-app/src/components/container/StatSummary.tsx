@@ -20,9 +20,9 @@ import { TextDictionary } from "../../const/languageTexts";
 import { isMobile } from "../../util";
 
 
-const STAT_SUMMARY_BOX_WIDTH = "3vw";
-const STAT_SUMMARY_TIME_BOX_WIDTH = "6vw";
-const POWER_SUMMARY_BOX_WIDTH = "6vw";
+const STAT_SUMMARY_BOX_WIDTH = "50px";
+const STAT_SUMMARY_TIME_BOX_WIDTH = "50px";
+const POWER_SUMMARY_BOX_WIDTH = "20%";
 const SUMMARY_FONT_SIZE = { xs: 11, sm: 13 };
 
 let StatSummaryBox = styled(Box)`
@@ -38,7 +38,7 @@ let SingleStatBox = styled(Box)`
 `;
 
 let SingleStatCombatTimeBox = styled(Box)`
-  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH, 100)}
+  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH, 70)}
 `;
 
 export function StatSummaryTypography(text: string) {
@@ -86,7 +86,8 @@ export function SimulationInputSummary(
   let simulationInputNames = getStatNames(jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
 
   return (
-    <Box display="inline-block">
+   <>
+    <Box display="flex">
       <StatSummaryBox
         sx={{ backgroundColor: AppConfigurations.backgroundThree }}
       >
@@ -99,13 +100,9 @@ export function SimulationInputSummary(
         <SingleStatCombatTimeBox>
           {StatSummaryTypography(LANGUAGE_TEXTS.VARIANCE_NAME)}
         </SingleStatCombatTimeBox>
-        {simulationInputNames.map((statName) => {
-          return (
-            <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
-          );
-        })}
       </StatSummaryBox>
-
+    </Box>
+    <Box display="flex">
       <StatSummaryBox
         sx={{
           backgroundColor: AppConfigurations.backgroundFour,
@@ -120,6 +117,29 @@ export function SimulationInputSummary(
         <SingleStatCombatTimeBox>
           {StatSummaryTypography(`${variancePercent.toFixed(1)}%`)}
         </SingleStatCombatTimeBox>
+      </StatSummaryBox>
+    </Box>
+    <Box display="flex">
+      <StatSummaryBox
+        sx={{
+          backgroundColor: AppConfigurations.backgroundThree,
+        }}
+      >
+
+        {simulationInputNames.map((statName) => {
+          return (
+            <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
+          );
+        })}
+      </StatSummaryBox>
+    </Box>
+    <Box display="flex">
+
+      <StatSummaryBox
+        sx={{
+          backgroundColor: AppConfigurations.backgroundFour,
+        }}
+      >
         {simulationInputNames.map((statName) => {
           return (
             <SingleStatBox>
@@ -129,8 +149,9 @@ export function SimulationInputSummary(
             </SingleStatBox>
           );
         })}
-      </StatSummaryBox>
+       </StatSummaryBox>
     </Box>
+   </>
   );
 }
 

@@ -30,7 +30,7 @@ const TOTAL_REQUEST_COUNT = 1;
 const TOTAL_ITERATION_COUNT = 1;
 export const QUICK_SIM_ITERATION_COUNT =
   TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT;
-const REQUEST_URL = "http://34.93.227.176:13406/api/v1/simulate";
+const REQUEST_URL = "https://www.ffxivsimhelper.com:13406/api/v1/simulate";
 
 export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
   let [isRunning, setIsRunning] = useState(false);

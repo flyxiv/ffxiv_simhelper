@@ -61,6 +61,7 @@ export const DpsBoxStyle = `
 `;
 
 export const PlayerInfoBoxStyle = `
+  width: 90%;
   margin: 1vh;
   background: ${AppConfigurations.backgroundThree};
   display: flex;
@@ -81,7 +82,7 @@ export const PlayerInfoJobTitleStyle = `
 `;
 
 export const PlayerStatInfoBoxStyle = `
-  width: 40vw;
+  width: 80%;
   background: ${AppConfigurations.backgroundThree};
 `;
 
@@ -93,7 +94,8 @@ export const StatOneLineBoxStyle = `
 `;
 
 export const StatBoxStyle = `
-  width: 8vw;
+  width: 10%;
+  max-width: 50px;
   padding: 10px;
   margin: 0.4vw;
   align-items: center;
@@ -195,14 +197,14 @@ export const StatSummaryBoxStyle = `
   margin: auto;
 `;
 
-export const SingleStatBoxStyle = (width: string, minWidth: number) => `
+export const SingleStatBoxStyle = (width: string, maxWidth: number) => `
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   border: 1px solid #201F28;
   width: ${width};
-  min-width: ${minWidth}px;
+  max-width: ${maxWidth}px;
   white-space: nowrap;
 `;
 

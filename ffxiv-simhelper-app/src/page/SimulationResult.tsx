@@ -92,7 +92,7 @@ export function SimulationResult() {
       {BasicLeftMenu(LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME, LANGUAGE_TEXTS)}
       <Box display="flex" width={BODY_WIDTH} justifyContent={"center"} flexDirection={"column"} alignItems={"center"}>
         {AppHeader()}
-        <ResultBoardTopBox>
+        <ResultBoardTopBox sx={{width: "90%"}}>
           {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
           {DpsSummary(mainPlayerSimulationData, "99.9% RDPS")}
           <Typography sx={{ color: 'white' }}>

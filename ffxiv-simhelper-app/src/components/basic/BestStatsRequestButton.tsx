@@ -30,7 +30,7 @@ import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
 import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DEX_STAT_EN_NAME, DH_STAT_EN_NAME, INT_STAT_EN_NAME, MIDLANDER_HYUR_EN_NAME, MIND_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, STR_STAT_EN_NAME, TEN_STAT_EN_NAME, WD_STAT_EN_NAME } from "../../const/languageTexts";
 
-const REQUEST_URL = "http://localhost:13406/api/v1/beststats";
+const REQUEST_URL = "https://www.ffxivsimhelper.com:13406/api/v1/beststats";
 const WEAPON_DAMAGE_INCREASE = 10;
 const MAIN_STAT_INCREASE = 100;
 const CRIT_INCREASE_AMOUNT = 20;
