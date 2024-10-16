@@ -19,7 +19,6 @@ export function BasicBottomMenu(
       sx={{
         position: "fixed",
         bottom: 0,
-        left: MENU_WIDTH,
         width: BODY_WIDTH,
         backgroundColor: AppConfigurations.backgroundTwo,
         display: "flex",
@@ -48,7 +47,6 @@ export function GearCompareBottomMenu(totalState: EquipmentInput, LANGUAGE_TEXTS
       sx={{
         position: "fixed",
         bottom: 0,
-        left: MENU_WIDTH,
         width: BODY_WIDTH,
         backgroundColor: AppConfigurations.backgroundTwo,
         display: "flex",
