@@ -22,7 +22,7 @@ import { isMobile } from "../../util";
 
 const STAT_SUMMARY_BOX_WIDTH = "50px";
 const STAT_SUMMARY_TIME_BOX_WIDTH = "65px";
-const POWER_SUMMARY_BOX_WIDTH = "6vw";
+const POWER_SUMMARY_BOX_WIDTH = "65px";
 const STAT_WEIGHT_SUMMARY_BOX_WIDTH = "200px";
 const SUMMARY_FONT_SIZE = { xs: 11, sm: 13 };
 
