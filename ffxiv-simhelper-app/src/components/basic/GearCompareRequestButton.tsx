@@ -20,12 +20,11 @@ import { SimulationSummary } from "../../types/CombatSimulationResult";
 import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
 
-const TOTAL_REQUEST_COUNT = 100;
-const TOTAL_ITERATION_COUNT = 8;
+const REQUEST_URL = `${AppConfigurations.requestServer}/api/v1/gearcompare`;
+const TOTAL_REQUEST_COUNT = AppConfigurations.isApp ? 500 : 1;
+const TOTAL_ITERATION_COUNT = AppConfigurations.isApp ? 8 : 1;
 export const GEAR_COMPARE_ITERATION_COUNT = TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT;
 const HIGH_PERCENTILE = 0.95;
-
-const REQUEST_URL = "https://www.ffxivsimhelper.com:13406/api/v1/gearcompare";
 
 export function GearCompareRequestButton(totalState: EquipmentInput) {
   let [isRunning, setIsRunning] = useState(false);

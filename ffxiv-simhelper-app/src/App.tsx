@@ -1,6 +1,8 @@
 import {
-  HashRouter as Router,
+  BrowserRouter,
+  HashRouter,
   Route,
+  Router,
   Routes,
   useLocation,
 } from "react-router-dom";
@@ -23,6 +25,7 @@ import {
 } from "./components/container/LeftMenu";
 import { useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { AppConfigurations } from "./Themes";
 
 export const SINGLE_INPUT_SAVE_NAME = "mostRecentSingleInput";
 export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
@@ -101,44 +104,88 @@ export const theme = () => createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme()}>
-      <Router>
-        <ScrollToTop />
-        <main className="Body">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
+      {AppConfigurations.isApp ? AppWithHashRouter() : AppWithRouter()}
 
-            <Route
-              path={`/${DPS_ANALYSIS_RESULT_URL}`}
-              element={<SimulationResult />}
-            />
-
-            <Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
-            <Route
-              path={`/${GEAR_COMPARE_RESULT_URL}`}
-              element={<GearCompareResult />}
-            />
-
-            <Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
-            <Route
-              path={`/${BEST_PARTNER_RESULT_URL}`}
-              element={<BestPartnerResult />}
-            />
-
-            <Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
-            <Route
-              path={`/${BEST_STATS_RESULT_URL}`}
-              element={<StatWeightsResult />}
-            />
-          </Routes>
-        </main>
-      </Router>
     </ThemeProvider>
 
   );
 }
 
 export default App;
+
+function AppWithHashRouter() {
+  return (
+    <HashRouter>
+      <ScrollToTop />
+      <main className="Body">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
+
+          <Route
+            path={`/${DPS_ANALYSIS_RESULT_URL}`}
+            element={<SimulationResult />}
+          />
+
+          <Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
+          <Route
+            path={`/${GEAR_COMPARE_RESULT_URL}`}
+            element={<GearCompareResult />}
+          />
+
+          <Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
+          <Route
+            path={`/${BEST_PARTNER_RESULT_URL}`}
+            element={<BestPartnerResult />}
+          />
+
+          <Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
+          <Route
+            path={`/${BEST_STATS_RESULT_URL}`}
+            element={<StatWeightsResult />}
+          />
+        </Routes>
+      </main>
+    </HashRouter>
+  )
+}
+
+function AppWithRouter() {
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      <main className="Body">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
+
+          <Route
+            path={`/${DPS_ANALYSIS_RESULT_URL}`}
+            element={<SimulationResult />}
+          />
+
+          <Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
+          <Route
+            path={`/${GEAR_COMPARE_RESULT_URL}`}
+            element={<GearCompareResult />}
+          />
+
+          <Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
+          <Route
+            path={`/${BEST_PARTNER_RESULT_URL}`}
+            element={<BestPartnerResult />}
+          />
+
+          <Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
+          <Route
+            path={`/${BEST_STATS_RESULT_URL}`}
+            element={<StatWeightsResult />}
+          />
+        </Routes>
+      </main>
+    </BrowserRouter>
+  )
+}
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
