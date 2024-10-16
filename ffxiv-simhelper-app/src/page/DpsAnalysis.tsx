@@ -24,11 +24,10 @@ import {
 import { DpsAnalysisRequestButton } from "../components/basic/DpsAnalysisRequestButton";
 import { AppLanguageTexts } from "../const/languageTexts";
 
-export const INPUT_CONTAINER_WIDTH = "70%";
 export const DPS_ANALYSIS_LOADOUT_COUNT = 6;
 
 let DpsAnalysisInputContainer = styled(Box)`
-  ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}
+  ${InputContainerStyle},
 `;
 
 let CustomizeBoard = styled(Box)`
@@ -101,29 +100,30 @@ export function DpsAnalysis() {
       <Box
         display="flex"
         sx={{ backgroundColor: AppConfigurations.backgroundOne }}
-        width="100vw"
+        width={"100%"}
       >
         {LeftMenuWithLoadout(
           DPS_ANALYSIS_LOADOUT_COUNT,
           DPS_ANALYSIS_URL,
           LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
           totalState,
-          setTotalState
+          setTotalState,
+          LANGUAGE_TEXTS
         )}
-        <Box width={BODY_WIDTH}>
+        <Box width={BODY_WIDTH} display="flex" alignItems={"center"} flexDirection={"column"}>
           {AppHeader()}
-          <Box alignContent={"center"}>
+          <Box alignContent={"center"} width="100%">
             <DpsAnalysisInputContainer justifyContent={"center"}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
-              <EquipmentBoard>
-                {EquipmentSelectionMenu(0, totalState, setTotalState)}
+              <EquipmentBoard width="100%">
+                {EquipmentSelectionMenu(0, totalState, setTotalState, LANGUAGE_TEXTS)}
               </EquipmentBoard>
             </DpsAnalysisInputContainer>
 
-            <DpsAnalysisInputContainer paddingTop={20}>
+            <DpsAnalysisInputContainer>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
-                {HorizontalPartyInput(totalState, setTotalState)}
+                {HorizontalPartyInput(totalState, setTotalState, LANGUAGE_TEXTS)}
               </CustomizeBoard>
             </DpsAnalysisInputContainer>
 
@@ -134,11 +134,11 @@ export function DpsAnalysis() {
                 justifyContent="center"
                 paddingBottom={"20vh"}
               >
-                {StatPowerSummary(totalState.equipmentDatas[0])}
+                {StatPowerSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
               </Box>
             </DpsAnalysisInputContainer>
 
-            {BasicBottomMenu(totalState, DpsAnalysisRequestButton)}
+            {BasicBottomMenu(totalState, DpsAnalysisRequestButton, LANGUAGE_TEXTS)}
           </Box>
           {Footer()}
         </Box>

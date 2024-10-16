@@ -31,10 +31,13 @@ import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
 import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
-import { AppLanguageTexts } from "../../const/languageTexts";
+import { BRD_EN_NAME, DNC_EN_NAME, MIDLANDER_HYUR_EN_NAME, MNK_EN_NAME } from "../../const/languageTexts";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
 export const BEST_PARTNER_ITERATION_COUNT = 2000;
+
+// classes like MNK, DNC, BRD eat more buffs when more players are in the party. We can't simulate full party because it's too slow, so add a little boost to these classes.
+const PARTY_MEMBER_RELATED_CLASS_MULTIPLIER = 11;
 
 interface PartnerKey {
   jobAbbrev: string;
@@ -167,22 +170,17 @@ function createBestPartnerRequest(
     },
   ];
 
-  let playerCount = 0;
-  let bisEquipments = mapJobAbbrevToJobBisEquipments(jobAbbrev);
+  let partnerBisEquipments = mapJobAbbrevToJobBisEquipments(partnerJobAbbrev);
 
-
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
-
-  if (bisEquipments !== undefined) {
-    let playerTotalState = {
-      mainPlayerJobAbbrev: jobAbbrev,
-      race: LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME,
-      foodId: bisEquipments.foodId,
+  if (partnerBisEquipments !== undefined) {
+    let partnerTotalState = {
+      mainPlayerJobAbbrev: partnerJobAbbrev,
+      race: MIDLANDER_HYUR_EN_NAME,
+      foodId: partnerBisEquipments.foodId,
       mainPlayerPartner1Id: null,
       mainPlayerPartner2Id: null,
-      itemSet: bisEquipments.itemSet,
-      gearSetMaterias: bisEquipments.gearSetMaterias,
+      itemSet: partnerBisEquipments.itemSet,
+      gearSetMaterias: partnerBisEquipments.gearSetMaterias,
       combatTimeMillisecond: 0,
       partyMemberJobAbbrevs: [],
       partyMemberIds: [],
@@ -191,31 +189,36 @@ function createBestPartnerRequest(
       power: defaultPlayerPower(),
       compositionBuffPercent: 0,
     }
-    let partnerPower = calculatePlayerPowerFromInputs(playerTotalState);
-    let autoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
-    if (autoAttackDelays === undefined) {
-      autoAttackDelays = 0;
+    let partnerPower = calculatePlayerPowerFromInputs(partnerTotalState);
+
+    if (partnerJobAbbrev === BRD_EN_NAME || partnerJobAbbrev === DNC_EN_NAME || partnerJobAbbrev === MNK_EN_NAME) {
+      partnerPower.mainStatMultiplier = Math.floor(partnerPower.mainStatMultiplier * PARTY_MEMBER_RELATED_CLASS_MULTIPLIER / 10 * 1000) / 1000;
     }
-    partnerPower.autoAttackDelays = autoAttackDelays;
+
+    let partnerAutoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
+    if (partnerAutoAttackDelays === undefined) {
+      partnerAutoAttackDelays = 0;
+    }
+    partnerPower.autoAttackDelays = partnerAutoAttackDelays;
 
     partyInfo.push({
-      playerId: playerCount + 1,
+      playerId: 1,
       partner1Id: null,
       partner2Id: null,
       jobAbbrev: partnerJobAbbrev,
       power: partnerPower,
     });
-
-    playerCount++;
   }
 
-  return {
+  const request = {
     mainPlayerId: 0,
     combatTimeMillisecond: totalState.combatTimeMillisecond,
     party: partyInfo,
     partyIlvlAdjustment: calculateIlvlAdjustment(totalState.partyMemberIlvl),
     usePot: totalState.usePot === USE_POT_VAL,
   };
+
+  return request;
 }
 
 function createAllPossiblePartnerList(mainPlayerJobAbbrev: string) {

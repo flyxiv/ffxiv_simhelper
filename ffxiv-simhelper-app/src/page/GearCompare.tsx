@@ -22,18 +22,24 @@ import { defaultDoubleEquipmentInput } from "../const/DefaultDoubleEquipmentInpu
 import { EquipmentInput } from "../types/EquipmentInput";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowDownwardIcom from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { AppLanguageTexts } from "../const/languageTexts";
+import { isMobile } from "../util";
 
 export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "98%";
 const GEAR_COMPARE_LOADOUNT_COUNT = 6;
 
-const PARTY_INPUT_WIDTH = "80%";
+const PARTY_INPUT_WIDTH = "90%";
 
 let GearCompareEquipmentInputContainer = styled(Box)`
-  ${InputContainerStyle(GEAR_COMPARE_INPUT_CONTAINER_WIDTH)}
+  ${InputContainerStyle},
+  width: ${PARTY_INPUT_WIDTH}
 `;
+
 let GearComparePartyInputContainer = styled(Box)`
-  ${InputContainerStyle(PARTY_INPUT_WIDTH)}
+  ${InputContainerStyle},
+  width: ${PARTY_INPUT_WIDTH}
 `;
 
 let CustomizeBoard = styled(Box)`
@@ -94,57 +100,50 @@ export function GearCompare() {
       <Box
         display="flex"
         sx={{ backgroundColor: AppConfigurations.backgroundOne }}
-        width="100vw"
+        width="100%"
       >
         {LeftMenuWithLoadout(
           GEAR_COMPARE_LOADOUNT_COUNT,
           GEAR_COMPARE_URL,
           LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
           totalState,
-          setTotalState
+          setTotalState,
+          LANGUAGE_TEXTS
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box display="flex" flexDirection="column" justifyContent={"center"}>
             <GearCompareEquipmentInputContainer>
-              {SelectionTitle(LANGUAGE_TEXTS.GEAR_COMPARE_INPUT_INFO_TEXT)}
+              <Box display="flex" justifyContent={"center"} width={"100%"}>
+                {SelectionTitle(LANGUAGE_TEXTS.GEAR_COMPARE_INPUT_INFO_TEXT)}
+              </Box>
               <Box
                 display="flex"
                 justifyContent="space-evenly"
                 width={GEAR_COMPARE_INPUT_CONTAINER_WIDTH}
                 padding="1%"
+                flexDirection={isMobile() ? "column" : "row"}
               >
                 <EquipmentBoard>
                   {EquipmentSelectionMenu(
                     0,
                     totalState,
                     setTotalState,
-                    false,
+                    LANGUAGE_TEXTS,
                     true,
                     true
                   )}
                 </EquipmentBoard>
 
-                <Box
-                  display={"flex"}
-                  flexDirection={"column"}
-                  justifyContent={"center"}
-                  marginX={2}
-                >
-                  <Box marginBottom={5}>
-                    {LoadLeftEquipmentToRightButton(totalState, setTotalState)}
-                  </Box>
-                  <Box marginTop={5}>
-                    {LoadRightEquipmentToLeftButton(totalState, setTotalState)}
-                  </Box>
-                </Box>
+                {isMobile() ? LoadUpBottonButton(totalState, setTotalState) : LoadLeftRightButton(totalState, setTotalState)}
+
 
                 <EquipmentBoard>
                   {EquipmentSelectionMenu(
                     1,
                     totalState,
                     setTotalState,
-                    false,
+                    LANGUAGE_TEXTS,
                     true,
                     true
                   )}
@@ -155,11 +154,11 @@ export function GearCompare() {
             <GearComparePartyInputContainer paddingTop={10} paddingBottom={40}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
-                {HorizontalPartyInput(totalState, setTotalState)}
+                {HorizontalPartyInput(totalState, setTotalState, LANGUAGE_TEXTS)}
               </CustomizeBoard>
             </GearComparePartyInputContainer>
 
-            {GearCompareBottomMenu(totalState)}
+            {GearCompareBottomMenu(totalState, LANGUAGE_TEXTS)}
           </Box>
           {Footer()}
         </Box>
@@ -167,6 +166,39 @@ export function GearCompare() {
     </>
   );
 }
+
+function LoadLeftRightButton(totalState: EquipmentInput, setTotalState: Function) {
+  return <Box
+    display={"flex"}
+    flexDirection={"column"}
+    justifyContent={"center"}
+    marginX={2}
+  >
+    <Box marginBottom={5}>
+      {LoadLeftEquipmentToRightButton(totalState, setTotalState)}
+    </Box>
+    <Box marginTop={5}>
+      {LoadRightEquipmentToLeftButton(totalState, setTotalState)}
+    </Box>
+  </Box>
+}
+
+function LoadUpBottonButton(totalState: EquipmentInput, setTotalState: Function) {
+  return <Box
+    display={"flex"}
+    flexDirection={"row"}
+    justifyContent={"center"}
+    marginY={1}
+  >
+    <Box marginRight={2}>
+      {LoadTopEquipmentToBottomButton(totalState, setTotalState)}
+    </Box>
+    <Box marginLeft={2}>
+      {LoadBottomEquipmentToTopButton(totalState, setTotalState)}
+    </Box>
+  </Box>
+}
+
 
 function LoadLeftEquipmentToRightButton(
   totalState: EquipmentInput,
@@ -178,6 +210,31 @@ function LoadLeftEquipmentToRightButton(
     <Button
       variant="contained"
       endIcon={<ArrowForwardIcon />}
+      onClick={() => {
+        let newTotalState = { ...totalState };
+        newTotalState.equipmentDatas[1] = JSON.parse(
+          JSON.stringify(totalState.equipmentDatas[0])
+        );
+        setTotalState(newTotalState);
+      }}
+      sx={{ fontSize: AppConfigurations.body2FontSize }}
+    >
+      {LANGUAGE_TEXTS.COPY_BUTTON_TEXT}
+    </Button>
+  );
+}
+
+
+function LoadTopEquipmentToBottomButton(
+  totalState: EquipmentInput,
+  setTotalState: Function
+) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+  return (
+    <Button
+      variant="contained"
+      endIcon={<ArrowDownwardIcom />}
       onClick={() => {
         let newTotalState = { ...totalState };
         newTotalState.equipmentDatas[1] = JSON.parse(
@@ -206,6 +263,31 @@ function LoadRightEquipmentToLeftButton(
         let newTotalState = { ...totalState };
         newTotalState.equipmentDatas[0] = JSON.parse(
           JSON.stringify(totalState.equipmentDatas[1])
+        );
+        setTotalState(newTotalState);
+      }}
+      sx={{ fontSize: AppConfigurations.body2FontSize }}
+    >
+      {LANGUAGE_TEXTS.COPY_BUTTON_TEXT}
+    </Button>
+  );
+}
+
+
+function LoadBottomEquipmentToTopButton(
+  totalState: EquipmentInput,
+  setTotalState: Function
+) {
+  let LANGUAGE_TEXTS = AppLanguageTexts();
+
+  return (
+    <Button
+      variant="contained"
+      endIcon={<ArrowUpwardIcon />}
+      onClick={() => {
+        let newTotalState = { ...totalState };
+        newTotalState.equipmentDatas[1] = JSON.parse(
+          JSON.stringify(totalState.equipmentDatas[0])
         );
         setTotalState(newTotalState);
       }}

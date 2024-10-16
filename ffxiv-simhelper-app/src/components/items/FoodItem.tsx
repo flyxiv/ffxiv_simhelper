@@ -3,8 +3,9 @@ import { Food, foodStatDescriptionString } from "../../types/ffxivdatabase/Food"
 import { getFoodIconPath } from "../icon/foodicon/FoodIconFactory";
 import { EQUIPMENT_FOOD_SIZE } from "./EquipmentItem";
 import { AppConfigurations } from "../../Themes";
+import { TextDictionary } from "../../const/languageTexts";
 
-export function FoodItem(food: Food) {
+export function FoodItem(food: Food, LANGUAGE_TEXTS: TextDictionary) {
   let imageSize = {
     xs: 30,
     sm: 30,
@@ -46,7 +47,7 @@ export function FoodItem(food: Food) {
               fontSize: AppConfigurations.body2FontSize
             }}
           >
-            {foodStatDescriptionString(food)}
+            {foodStatDescriptionString(food, LANGUAGE_TEXTS)}
           </Typography>
         </Box>
       </Box>

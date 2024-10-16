@@ -24,17 +24,15 @@ import { aggregateDamageStatisticsFromSampleRuns } from "./GearCompareRequestBut
 import { AppConfigurations } from "../../Themes";
 import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
-import { AppLanguageTexts } from "../../const/languageTexts";
+import { MIDLANDER_HYUR_EN_NAME } from "../../const/languageTexts";
 
-const TOTAL_REQUEST_COUNT = 1000;
-const TOTAL_ITERATION_COUNT = 2;
+const TOTAL_REQUEST_COUNT = AppConfigurations.electron ? 1000 : 1;
+const TOTAL_ITERATION_COUNT = AppConfigurations.electron ? 2 : 1;
 export const QUICK_SIM_ITERATION_COUNT =
   TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT;
-const REQUEST_URL = "http://localhost:13406/api/v1/simulate";
+const REQUEST_URL = "https://www.ffxivsimhelper.com:13406/api/v1/simulate";
 
 export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
   let [isRunning, setIsRunning] = useState(false);
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
@@ -186,12 +184,9 @@ export function createDpsAnalysisRequest(
       continue;
     }
 
-    let LANGUAGE_TEXTS = AppLanguageTexts();
-
-
     let playerTotalState = {
       mainPlayerJobAbbrev: jobAbbrev,
-      race: LANGUAGE_TEXTS.MIDLANDER_HYUR_EN_NAME,
+      race: MIDLANDER_HYUR_EN_NAME,
       foodId: bisEquipments.foodId,
       mainPlayerPartner1Id: null,
       mainPlayerPartner2Id: null,

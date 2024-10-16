@@ -13,7 +13,7 @@ import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { DamageProfileGraph } from "../components/graph/DamageProfileGraph";
 import { SkillLogResult } from "../components/container/SkillLog";
 import { ResultPageButtonGroup } from "../components/container/ResultPageButtonGroup";
-import { DPS_ANALYSIS_RESPONSE_SAVE_NAME } from "../App";
+import { BODY_WIDTH, DPS_ANALYSIS_RESPONSE_SAVE_NAME } from "../App";
 import { PartyContributionData } from "../components/graph/GraphData";
 import {
   MainPlayerContributionGraph,
@@ -84,44 +84,45 @@ export function SimulationResult() {
   return (
     <Box
       display="flex"
-      flexDirection={"column"}
       sx={{ backgroundColor: AppConfigurations.backgroundOne }}
-      width="100vw"
+      width="100%"
       alignItems={"center"}
       paddingBottom={20}
     >
-      <Box display="flex">
-        {BasicLeftMenu(LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME)}
-        <Box>
-          {AppHeader()}
-          <ResultBoardTopBox>
-            {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
-            {DpsSummary(mainPlayerSimulationData, "99.9% RDPS")}
-            <Typography sx={{ color: 'white' }}>
-              {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
-            </Typography>
-            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, QUICK_SIM_ITERATION_COUNT, 1)}
-          </ResultBoardTopBox>
-          <Box display="flex" justifyContent={"center"}>
-            {ResultPageButtonGroup(
-              currentlyToggledView,
-              setCurrentlyToggledView,
-              teammatesBuffContributionToMyBuffs,
-              mainPlayerContributionToOthers
-            )}
-          </Box>
-          {renderTableBasedOnSelectedButton(
+      {BasicLeftMenu(LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME, LANGUAGE_TEXTS)}
+      <Box display="flex" width={BODY_WIDTH} justifyContent={"center"} flexDirection={"column"} alignItems={"center"}>
+        {AppHeader()}
+        <ResultBoardTopBox sx={{width: "90%"}}>
+          {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
+          {DpsSummary(mainPlayerSimulationData, "99.9% RDPS")}
+          <Typography sx={{ color: 'white' }} align="center">
+            {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
+          </Typography>
+          {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, QUICK_SIM_ITERATION_COUNT, 1, LANGUAGE_TEXTS)}
+        </ResultBoardTopBox>
+        <Box display="flex" justifyContent={"center"}>
+          {ResultPageButtonGroup(
             currentlyToggledView,
-            responseJson,
+            setCurrentlyToggledView,
             teammatesBuffContributionToMyBuffs,
-            mainPlayerContributionToOthers
+            mainPlayerContributionToOthers,
+            LANGUAGE_TEXTS
           )}
-          {Footer()}
         </Box>
+        {renderTableBasedOnSelectedButton(
+          currentlyToggledView,
+          responseJson,
+          teammatesBuffContributionToMyBuffs,
+          mainPlayerContributionToOthers
+        )}
+        {Footer()}
       </Box>
     </Box>
   );
 }
+
+
+export const RESULT_BOARD_BOX_WIDTH = {xs: "90%", sm: "85%", md: "80%", lg: "75%", xl: "70%"}
 
 function renderTableBasedOnSelectedButton(
   currentlyToggledView: string,
@@ -135,28 +136,28 @@ function renderTableBasedOnSelectedButton(
     return (
       <ResultBoardBox>
         {SimulationTitle(LANGUAGE_TEXTS.BEST_TEAMMATE_BUTTON_TEXT)}
-        {BestTeammateGraph(teammatesContributionToMyBuffs, responseJson.mainPlayerJobAbbrev)}
+        {BestTeammateGraph(teammatesContributionToMyBuffs, responseJson.mainPlayerJobAbbrev, LANGUAGE_TEXTS.MEMBER_TEXT, LANGUAGE_TEXTS.TOTAL_TEXT, LANGUAGE_TEXTS.MNK_ROTATION_WARNING_TEXT)}
       </ResultBoardBox>
     );
   } else if (currentlyToggledView === LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
         {SimulationTitle(LANGUAGE_TEXTS.DAMAGE_PROFILE_BUTTON_TEXT)}
-        {DamageProfileGraph(responseJson)}
+        {DamageProfileGraph(responseJson, LANGUAGE_TEXTS)}
       </ResultBoardBox>
     );
   } else if (currentlyToggledView == LANGUAGE_TEXTS.MY_CONTRIBUTION_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
         {SimulationTitle(LANGUAGE_TEXTS.MY_CONTRIBUTION_BUTTON_TEXT)}
-        {MainPlayerContributionGraph(mainPlayerContributionToOthers)}
+        {MainPlayerContributionGraph(mainPlayerContributionToOthers, LANGUAGE_TEXTS.MEMBER_TEXT, LANGUAGE_TEXTS.TOTAL_TEXT)}
       </ResultBoardBox>
     );
   } else if (currentlyToggledView === LANGUAGE_TEXTS.ROTATION_SAMPLE_BUTTON_TEXT) {
     return (
       <ResultBoardBox>
         {SimulationTitle(LANGUAGE_TEXTS.ROTATION_SAMPLE_BUTTON_TEXT)}
-        {SkillLogResult(responseJson)}
+        {SkillLogResult(responseJson, LANGUAGE_TEXTS)}
       </ResultBoardBox>
     );
   } else {

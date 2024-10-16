@@ -11,7 +11,7 @@ import { SkillLogTable } from "./SkillLogTable";
 import { styled, List, Box, Typography, ListItem } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 import { WarningText } from "../basic/WarningText";
-import { AppLanguageTexts, MNK_EN_NAME, SAM_EN_NAME } from "../../const/languageTexts";
+import { MNK_EN_NAME, SAM_EN_NAME, TextDictionary } from "../../const/languageTexts";
 
 const SkillLogCombatTimeBox = styled(Box)`
   ${SkillLogCombatTimeBoxStyle}
@@ -33,7 +33,7 @@ const SkillEntityBox = styled(Box)`
   ${SkillEntityBoxStyle}
 `;
 
-export const SkillLogResult = (response: DpsAnalysisResponse) => {
+export const SkillLogResult = (response: DpsAnalysisResponse, LANGUAGE_TEXTS: TextDictionary) => {
   const mainPlayerId = response.mainPlayerId;
   const simulationDatas = response.simulationData;
 
@@ -57,8 +57,6 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
     );
   }
 
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
 
   return (
     <>
@@ -72,7 +70,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
           WarningText(LANGUAGE_TEXTS.SAMURAI_ROTATION_WARNING_TEXT)
           : response.mainPlayerJobAbbrev === MNK_EN_NAME ? WarningText(LANGUAGE_TEXTS.MNK_ROTATION_WARNING_TEXT) : <Box></Box>
       }
-      <SkillLogTableList>
+      <SkillLogTableList sx={{ width: { xs: "100%", sm: "100%" }, overflow: "auto" }}>
         <ListItem>
           <SkillEntityBox>
             <SkillLogCombatTimeBox>
@@ -104,7 +102,7 @@ export const SkillLogResult = (response: DpsAnalysisResponse) => {
           </SkillEntityBox>
         </ListItem>
         {SkillLogTable(mainPlayerRotationLog)}
-      </SkillLogTableList>
+      </SkillLogTableList >
     </>
   );
 };

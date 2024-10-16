@@ -10,7 +10,7 @@ import {
 } from "../SimulationResultTextBox";
 import { EquipmentInput } from "../../../types/EquipmentInput";
 import { PartyMemberIlvlSelection } from "../PartyMemberIlvlSelection";
-import { AppLanguageTexts } from "../../../const/languageTexts";
+import { TextDictionary } from "../../../const/languageTexts";
 
 const HorizontalInputGridContainer = styled(Grid)`
   ${HorizontalInputGridContainerStyle}
@@ -32,9 +32,9 @@ const InputJobBox = styled(Grid)`
 export function HorizontalPartyInput(
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
   let xs = 14;
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   return (
     <HorizontalInputGridContainer container>
       <HorizontalInputBox>
@@ -59,7 +59,8 @@ export function HorizontalPartyInput(
                 {PartyMemberJobSelection(
                   playerId,
                   totalEquipmentState,
-                  setTotalEquipmentState
+                  setTotalEquipmentState,
+                  LANGUAGE_TEXTS
                 )}
               </InputJobBox>
             </InputBox>

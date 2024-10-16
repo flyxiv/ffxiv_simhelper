@@ -53,6 +53,7 @@ export function PartyMemberIlvlSelection(
             },
           },
         }}
+        sx={{ width: "100%" }}
       >
         {possibleIlvls.map((ilvl) => {
           return (

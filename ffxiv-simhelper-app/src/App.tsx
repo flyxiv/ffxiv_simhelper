@@ -22,6 +22,7 @@ import {
   MENU_WIDTH_VW_MD,
 } from "./components/container/LeftMenu";
 import { useEffect } from "react";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 export const SINGLE_INPUT_SAVE_NAME = "mostRecentSingleInput";
 export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
@@ -46,47 +47,94 @@ export const BEST_STATS_URL = "beststats";
 export const BEST_STATS_RESULT_URL = "beststatssimulationresult";
 
 export const BODY_WIDTH = {
-  xs: `${100 - MENU_WIDTH_VW_XS}vw`,
-  sm: `${100 - MENU_WIDTH_VW_SM}vw`,
-  md: `${100 - MENU_WIDTH_VW_MD}vw`,
-  lg: `${100 - MENU_WIDTH_VW_LG}vw`,
-  xl: `${100 - MENU_WIDTH_VW_XL}vw`,
+  xs: `${100 - MENU_WIDTH_VW_XS}%`,
+  sm: `${100 - MENU_WIDTH_VW_SM}%`,
+  md: `${100 - MENU_WIDTH_VW_MD}%`,
+  lg: `${100 - MENU_WIDTH_VW_LG}%`,
+  xl: `${100 - MENU_WIDTH_VW_XL}%`,
 };
+export const HOME_PAGE_MIN_WIDTH_PX = (itemsPerRow: number) => itemsPerRow === 2 ? 1700 : 100;
+
+
+export const theme = () => createTheme({
+  palette: {
+    primary: {
+      main: "#BB86FC",
+    },
+
+    secondary: {
+      main: "#03DAC6",
+    },
+  },
+
+  typography: {
+    fontFamily: "NotoSansKR, Arial",
+    h1: {
+      fontSize: "3rem",
+      fontWeight: 900,
+    },
+    h2: {
+      fontSize: "1.75rem",
+      fontWeight: 600,
+    },
+    h3: {
+      fontSize: "1.5rem",
+      fontWeight: 600,
+    },
+
+  },
+
+  components: {
+    MuiOutlinedInput: {
+      defaultProps: {
+        notched: false,
+      },
+    },
+    MuiInputLabel: {
+      defaultProps: {
+        shrink: false,
+      },
+    },
+  },
+});
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <main className="Body">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
+    <ThemeProvider theme={theme()}>
+      <Router>
+        <ScrollToTop />
+        <main className="Body">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
 
-          <Route
-            path={`/${DPS_ANALYSIS_RESULT_URL}`}
-            element={<SimulationResult />}
-          />
+            <Route
+              path={`/${DPS_ANALYSIS_RESULT_URL}`}
+              element={<SimulationResult />}
+            />
 
-          <Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
-          <Route
-            path={`/${GEAR_COMPARE_RESULT_URL}`}
-            element={<GearCompareResult />}
-          />
+            <Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
+            <Route
+              path={`/${GEAR_COMPARE_RESULT_URL}`}
+              element={<GearCompareResult />}
+            />
 
-          <Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
-          <Route
-            path={`/${BEST_PARTNER_RESULT_URL}`}
-            element={<BestPartnerResult />}
-          />
+            <Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
+            <Route
+              path={`/${BEST_PARTNER_RESULT_URL}`}
+              element={<BestPartnerResult />}
+            />
 
-          <Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
-          <Route
-            path={`/${BEST_STATS_RESULT_URL}`}
-            element={<StatWeightsResult />}
-          />
-        </Routes>
-      </main>
-    </Router>
+            <Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
+            <Route
+              path={`/${BEST_STATS_RESULT_URL}`}
+              element={<StatWeightsResult />}
+            />
+          </Routes>
+        </main>
+      </Router>
+    </ThemeProvider>
+
   );
 }
 

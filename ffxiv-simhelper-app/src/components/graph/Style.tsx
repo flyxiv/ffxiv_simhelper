@@ -83,6 +83,7 @@ export const SkillBoxStyle = `
     align-items: flex-start;
     color: white;
     width: 100%;
+    margin-bottom: 30px;
 `;
 
 export const SkillNameStyle = `
@@ -90,7 +91,6 @@ export const SkillNameStyle = `
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: 100px;
     margin-right: 10px;
 `;
 
@@ -99,11 +99,13 @@ export const SkillIconBoxStyle = `
     flex-direction: column;
     justify-content: left;
     padding-left: 0.5vw;
-    width: 40px;
+    width: 40%; 
+    max-width: 50px;
+    margin-right: 5px;
 `;
 
 export const SkillBarBoxStyle = `
-    width: 22vw;
+    width: 80%;
     align-items: center;
     height: ${imageSize};
     display: flex;
@@ -115,7 +117,7 @@ export const SkillBarStyle = (portion: number) => `
 `;
 
 export const SkillPercentageBoxStyle = `
-  width: 4vw;
+  width: 15%;
   height: ${imageSize};
   display: flex;
   align-items: center;
@@ -123,7 +125,7 @@ export const SkillPercentageBoxStyle = `
 `;
 
 export const TotalDamageBoxStyle = `
-    width: 100px;
+    width: 25%;
     height: ${imageSize};
     display: flex;
     align-items: center;
@@ -132,7 +134,7 @@ export const TotalDamageBoxStyle = `
 `;
 
 export const SkillCountBoxStyle = `
-    width: 50px;
+    width: 15%;
     height: ${imageSize};
     align-items: center;
     display: flex;

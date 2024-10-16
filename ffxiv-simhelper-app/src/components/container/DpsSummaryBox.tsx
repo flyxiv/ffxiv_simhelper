@@ -131,7 +131,7 @@ export const GearCompareDpsBox = (
             whiteSpace: "nowrap",
             overflow: "hidden",
             textOverflow: "ellipsis",
-            fontSize: "1vw",
+            fontSize: AppConfigurations.body2FontSize,
           }}
         >
           {dpsName}
@@ -143,7 +143,7 @@ export const GearCompareDpsBox = (
       <Box className="DpsCompare">
         <Typography
           variant="h5"
-          fontSize={"1vw"}
+          fontSize={AppConfigurations.body1FontSize}
           color={percentColor}
           fontWeight="bold"
         >

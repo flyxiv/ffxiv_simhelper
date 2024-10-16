@@ -21,7 +21,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 60vw;
     background-color: #DBE2EF;
 }
 
@@ -31,7 +30,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 60vw;
 }
 
 .BestTeammateGraph {
@@ -40,6 +38,5 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 60vw;
     background-color: #3F72AF;
 }

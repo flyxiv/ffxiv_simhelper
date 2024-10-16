@@ -16,28 +16,36 @@ import {
 } from "../../types/ffxivdatabase/PlayerPower";
 import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { StatWeightsData } from "../../page/StatWeightsResult";
-import { AppLanguageTexts } from "../../const/languageTexts";
+import { TextDictionary } from "../../const/languageTexts";
+import { isMobile } from "../../util";
 
-const STAT_SUMMARY_BOX_WIDTH = "3vw";
-const STAT_SUMMARY_TIME_BOX_WIDTH = "6vw";
-const POWER_SUMMARY_BOX_WIDTH = "6vw";
-const SUMMARY_FONT_SIZE = "0.9vw";
+
+const STAT_SUMMARY_BOX_WIDTH = "50px";
+const STAT_SUMMARY_TIME_BOX_WIDTH = "65px";
+const POWER_SUMMARY_BOX_WIDTH = "65px";
+const STAT_WEIGHT_SUMMARY_BOX_WIDTH = "200px";
+const SUMMARY_FONT_SIZE = { xs: 11, sm: 13 };
 
 let StatSummaryBox = styled(Box)`
   ${StatSummaryBoxStyle}
 `;
 
 let SinglePowerBox = styled(Box)`
-  ${SingleStatBoxStyle(POWER_SUMMARY_BOX_WIDTH)}
+  ${SingleStatBoxStyle(POWER_SUMMARY_BOX_WIDTH, 65)}
 `;
 
 let SingleStatBox = styled(Box)`
-  ${SingleStatBoxStyle(STAT_SUMMARY_BOX_WIDTH)}
+  ${SingleStatBoxStyle(STAT_SUMMARY_BOX_WIDTH, 35)}
 `;
 
 let SingleStatCombatTimeBox = styled(Box)`
-  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH)}
+  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH, 85)}
 `;
+
+let SingleStatWeightBox = styled(Box)`
+  ${SingleStatBoxStyle(STAT_WEIGHT_SUMMARY_BOX_WIDTH, 200)}
+`;
+
 
 export function StatSummaryTypography(text: string) {
   return (
@@ -50,15 +58,14 @@ export function StatSummaryTypography(text: string) {
 export function StatSummaryTypographyCompare(
   stat: string,
   compareStat: string,
-  statName: string
+  statName: string,
+  gcdName: string
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
   let statValue = parseFloat(stat);
   let compareStatValue = parseFloat(compareStat);
 
-  let isBetter = statName === LANGUAGE_TEXTS.GCD_NAME ? statValue < compareStatValue : statValue > compareStatValue;
-  let isWorse = statName === LANGUAGE_TEXTS.GCD_NAME ? statValue > compareStatValue : statValue < compareStatValue;
+  let isBetter = statName === gcdName ? statValue < compareStatValue : statValue > compareStatValue;
+  let isWorse = statName === gcdName ? statValue > compareStatValue : statValue < compareStatValue;
 
   let color =
     isBetter
@@ -79,58 +86,81 @@ export function SimulationInputSummary(
   jobAbbrev: string,
   combatTimeMilliseconds: number,
   iterationCount: number,
-  variancePercent: number
+  variancePercent: number,
+  LANGUAGE_TEXTS: TextDictionary,
+  showStats: boolean
 ) {
-  let simulationInputNames = getStatNames(jobAbbrev);
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+  let simulationInputNames = [LANGUAGE_TEXTS.GCD_NAME];
+  if (showStats) {
+    simulationInputNames = getStatNames(jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
+  }
 
   return (
-    <Box display="inline-block">
-      <StatSummaryBox
-        sx={{ backgroundColor: AppConfigurations.backgroundThree }}
-      >
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.TIME_TEXT)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.ITERATION_NAME)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.VARIANCE_NAME)}
-        </SingleStatCombatTimeBox>
-        {simulationInputNames.map((statName) => {
-          return (
-            <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
-          );
-        })}
-      </StatSummaryBox>
+    <>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{ backgroundColor: AppConfigurations.backgroundThree }}
+        >
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.TIME_TEXT)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.ITERATION_NAME)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.VARIANCE_NAME)}
+          </SingleStatCombatTimeBox>
+        </StatSummaryBox>
+      </Box>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundFour,
+          }}
+        >
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(`${combatTimeMilliseconds.toFixed(0)}`)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(iterationCount.toString())}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(`${variancePercent.toFixed(1)}%`)}
+          </SingleStatCombatTimeBox>
+        </StatSummaryBox>
+      </Box>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundThree,
+          }}
+        >
 
-      <StatSummaryBox
-        sx={{
-          backgroundColor: AppConfigurations.backgroundFour,
-        }}
-      >
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(`${combatTimeMilliseconds.toFixed(0)}`)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(iterationCount.toString())}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(`${variancePercent.toFixed(1)}%`)}
-        </SingleStatCombatTimeBox>
-        {simulationInputNames.map((statName) => {
-          return (
-            <SingleStatBox>
-              {StatSummaryTypography(
-                getStatByStatName(power, statName, jobAbbrev)
-              )}
-            </SingleStatBox>
-          );
-        })}
-      </StatSummaryBox>
-    </Box>
+          {simulationInputNames.map((statName) => {
+            return (
+              <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
+            );
+          })}
+        </StatSummaryBox>
+      </Box>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundFour,
+          }}
+        >
+          {simulationInputNames.map((statName) => {
+            return (
+              <SingleStatBox>
+                {StatSummaryTypography(
+                  getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME)
+                )}
+              </SingleStatBox>
+            );
+          })}
+        </StatSummaryBox>
+      </Box>
+    </>
   );
 }
 
@@ -140,68 +170,90 @@ export function StatSummaryGearCompare(
   comparePower: PlayerPower,
   combatTimeMilliseconds: number,
   iterationCount: number,
-  variancePercent: number
+  variancePercent: number,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
-  let jobStatNames = getStatNames(jobAbbrev);
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+  let jobStatNames = getStatNames(jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
 
   return (
-    <Box display="inline-block">
-      <StatSummaryBox
-        sx={{ backgroundColor: AppConfigurations.backgroundThree }}
-      >
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.TIME_TEXT)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.ITERATION_NAME)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.VARIANCE_NAME)}
-        </SingleStatCombatTimeBox>
-        {jobStatNames.map((statName) => {
-          return (
-            <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
-          );
-        })}
-      </StatSummaryBox>
+    <Box>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{ backgroundColor: AppConfigurations.backgroundThree }}
+        >
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.TIME_TEXT)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.ITERATION_NAME)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.VARIANCE_NAME)}
+          </SingleStatCombatTimeBox>
+        </StatSummaryBox>
+      </Box>
 
-      <StatSummaryBox
-        sx={{
-          backgroundColor: AppConfigurations.backgroundFour,
-        }}
-      >
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(`${combatTimeMilliseconds / 1000}`)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(iterationCount.toString())}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(`${variancePercent.toFixed(1)}%`)}
-        </SingleStatCombatTimeBox>
-        {jobStatNames.map((statName) => {
-          return (
-            <SingleStatBox>
-              {StatSummaryTypographyCompare(
-                getStatByStatName(power, statName, jobAbbrev),
-                getStatByStatName(comparePower, statName, jobAbbrev),
-                statName
-              )}
-            </SingleStatBox>
-          );
-        })}
-      </StatSummaryBox>
-    </Box>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundFour,
+          }}
+        >
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(`${combatTimeMilliseconds / 1000}`)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(iterationCount.toString())}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(`${variancePercent.toFixed(1)}%`)}
+          </SingleStatCombatTimeBox>
+        </StatSummaryBox>
+      </Box>
+
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundThree,
+          }}
+        >
+          {jobStatNames.map((statName) => {
+            return (
+              <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
+            );
+          })}
+        </StatSummaryBox>
+      </Box>
+
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundFour,
+          }}
+        >
+
+          {jobStatNames.map((statName) => {
+            return (
+              <SingleStatBox>
+                {StatSummaryTypographyCompare(
+                  getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME),
+                  getStatByStatName(comparePower, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME),
+                  statName,
+                  LANGUAGE_TEXTS.GCD_NAME
+                )}
+              </SingleStatBox>
+            );
+          })}
+        </StatSummaryBox>
+      </Box>
+    </Box >
   );
 }
 
-export function StatSummary(totalState: SingleEquipmentInputSaveState) {
-  let jobStatNames = getStatNames(totalState.mainPlayerJobAbbrev);
+export function StatSummary(totalState: SingleEquipmentInputSaveState, LANGUAGE_TEXTS: TextDictionary) {
+  let jobStatNames = getStatNames(totalState.mainPlayerJobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
   let power = totalState.power;
   let jobAbbrev = totalState.mainPlayerJobAbbrev;
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <Box display="flex" flexDirection={"column"}>
@@ -227,7 +279,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
           return (
             <SingleStatBox>
               {StatSummaryTypography(
-                getStatByStatName(power, statName, jobAbbrev)
+                getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME)
               )}
             </SingleStatBox>
           );
@@ -240,7 +292,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
       >
         <SingleStatBox>{StatSummaryTypography(LANGUAGE_TEXTS.PREV_TEXT)}</SingleStatBox>
         {jobStatNames.map((statName) => {
-          let lostStat = getStatLostByStatName(power, statName, jobAbbrev);
+          let lostStat = getStatLostByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
           let color =
             lostStat === 0 ? AppConfigurations.secondary : minusBackgroundColor;
           return (
@@ -268,7 +320,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
           return (
             <SingleStatBox>
               {StatSummaryTypography(
-                getStatNeededByStatName(power, statName, jobAbbrev).toString()
+                getStatNeededByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME).toString()
               )}
             </SingleStatBox>
           );
@@ -279,11 +331,9 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState) {
   );
 }
 
-export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+export function StatWeightSummary(statWeightsData: StatWeightsData[], LANGUAGE_TEXTS: TextDictionary) {
   return (
-    <Box display="inline-block">
+    <Box>
       <Box display="flex">
         <StatSummaryBox
           sx={{ backgroundColor: AppConfigurations.backgroundThree }}
@@ -293,7 +343,7 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
         <StatSummaryBox
           sx={{ backgroundColor: AppConfigurations.backgroundThree }}
         >
-          <SingleStatBox sx={{ width: "15vw" }}>{StatSummaryTypography(LANGUAGE_TEXTS.BEST_STATS_NAME_TEXT)}</SingleStatBox>
+          <SingleStatWeightBox>{StatSummaryTypography(LANGUAGE_TEXTS.BEST_STATS_NAME_TEXT)}</SingleStatWeightBox>
         </StatSummaryBox>
       </Box>
 
@@ -308,13 +358,13 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
               </SingleStatBox>
             </StatSummaryBox>
             <StatSummaryBox
-              sx={{ backgroundColor: AppConfigurations.backgroundFour, width: "15vw" }}
+              sx={{ backgroundColor: AppConfigurations.backgroundFour }}
             >
-              <SingleStatBox sx={{ width: "15vw" }}>
+              <SingleStatWeightBox>
                 {StatSummaryTypography(
                   `${statWeightData.rdpsIncreasePerPoint.toFixed(2)}`
                 )}
-              </SingleStatBox>
+              </SingleStatWeightBox>
             </StatSummaryBox>
           </Box>
         );
@@ -323,35 +373,55 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[]) {
   );
 }
 
-export function StatPowerSummary(totalState: SingleEquipmentInputSaveState) {
+export function StatPowerSummary(totalState: SingleEquipmentInputSaveState, LANGUAGE_TEXTS: TextDictionary) {
+  let { POWER_NAMES } = loadPowerNames(LANGUAGE_TEXTS);
+  if (isMobile()) {
+    return (
+      <Box width="100%" display="flex" justifyContent="center" flexDirection="column">
+        {StatPowerSummaryInputPower(POWER_NAMES.slice(0, 5), totalState, LANGUAGE_TEXTS)}
+        {StatPowerSummaryInputPower(POWER_NAMES.slice(5), totalState, LANGUAGE_TEXTS)}
+      </Box>
+    );
+  }
+  else {
+    return StatPowerSummaryInputPower(POWER_NAMES, totalState, LANGUAGE_TEXTS)
+  }
+}
+
+
+function StatPowerSummaryInputPower(powerNames: Array<string>, totalState: SingleEquipmentInputSaveState, LANGUAGE_TEXTS: TextDictionary) {
   let power = totalState.power;
-  let { POWER_NAMES } = loadPowerNames();
 
   return (
-    <Box display="inline-block">
-      <StatSummaryBox
-        sx={{ backgroundColor: AppConfigurations.backgroundThree }}
-      >
-        {POWER_NAMES.map((powerName) => {
-          return (
-            <SinglePowerBox>{StatSummaryTypography(powerName)}</SinglePowerBox>
-          );
-        })}
-      </StatSummaryBox>
+    <Box>
+      <Box display="flex" justifyContent="center">
+        <StatSummaryBox
+          sx={{ backgroundColor: AppConfigurations.backgroundThree }}
+        >
+          {powerNames.map((powerName) => {
+            return (
+              <SinglePowerBox>{StatSummaryTypography(powerName)}</SinglePowerBox>
+            );
+          })}
+        </StatSummaryBox>
+      </Box>
 
-      <StatSummaryBox
-        sx={{
-          backgroundColor: AppConfigurations.backgroundFour,
-        }}
-      >
-        {POWER_NAMES.map((powerName) => {
-          return (
-            <SinglePowerBox>
-              {StatSummaryTypography(getStatPower(power, powerName))}
-            </SinglePowerBox>
-          );
-        })}
-      </StatSummaryBox>
+      <Box display="flex" justifyContent="center">
+
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundFour,
+          }}
+        >
+          {powerNames.map((powerName) => {
+            return (
+              <SinglePowerBox>
+                {StatSummaryTypography(getStatPower(power, powerName, LANGUAGE_TEXTS))}
+              </SinglePowerBox>
+            );
+          })}
+        </StatSummaryBox>
+      </Box>
     </Box>
   );
 }

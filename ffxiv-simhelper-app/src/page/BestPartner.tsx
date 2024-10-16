@@ -27,7 +27,8 @@ export enum JobRole {
 let INPUT_CONTAINER_WIDTH = "70%";
 
 let StatWeightsInputContainer = styled(Box)`
-  ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}
+  ${InputContainerStyle},
+  width: ${INPUT_CONTAINER_WIDTH}
 `;
 
 let EquipmentBoard = styled(Box)`
@@ -86,6 +87,7 @@ export function BestPartner() {
       >
         {BasicLeftMenu(
           LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
@@ -97,6 +99,7 @@ export function BestPartner() {
                   0,
                   totalState,
                   setTotalState,
+                  LANGUAGE_TEXTS
                 )}
               </EquipmentBoard>
             </StatWeightsInputContainer>

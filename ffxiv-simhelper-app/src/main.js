@@ -1,6 +1,9 @@
 import { spawn } from 'child_process';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog } from 'electron';
 import url from 'url';
+import pkg from 'electron-updater';
+const { autoUpdater } = pkg;
+import log from 'electron-log';
 
 const exePath = "./ffxiv_simhelper_x86_64.exe";
 const backendProcess = spawn(exePath, [], {
@@ -22,7 +25,7 @@ function createWindow() {
     * 빌드되는 build 폴더의 index.html 파일을 로드합니다.
     * */
     const startUrl = process.env.ELECTRON_START_URL || url.format({
-        pathname: 'index.html',
+        pathname: '/index.html',
         protocol: 'file:',
         slashes: true
     });
@@ -34,7 +37,48 @@ function createWindow() {
 
 }
 
-app.on('ready', createWindow);
+autoUpdater.on('checking-for-update', () => {
+    log.info('Checking for update...');
+});
+
+autoUpdater.on('update-not-available', () => {
+    log.info('Update not available.');
+});
+
+autoUpdater.on('update-available', () => {
+    log.info('Update available');
+
+    const dialogOpts = {
+        type: 'info',
+        buttons: ['Restart And Install', 'Later'],
+        title: 'Application Update',
+        message: 'A new version has been downloaded.',
+        detail: 'It will be installed after a restart.'
+    };
+
+    dialog.showMessageBox(dialogOpts).then((returnValue) => {
+        if (returnValue.response === 0) { // 'Restart' 클릭 시
+            autoUpdater.quitAndInstall();
+        }
+    });
+});
+
+autoUpdater.on('update-downloaded', () => {
+    log.info('Update downloaded');
+
+});
+
+app.on('ready', () => {
+    createWindow();
+
+    autoUpdater.logger = log;
+    autoUpdater.logger.transports.file.level = 'info';
+
+
+    autoUpdater.checkForUpdatesAndNotify().catch(err => {
+        console.error('Update check failed: ', err);
+    });
+});
 
 app.on("window-all-closed", async () => {
     app.quit();

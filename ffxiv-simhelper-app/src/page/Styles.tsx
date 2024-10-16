@@ -6,12 +6,12 @@ export const CharacterDetailCustomizeBoardStyle = (width: string) => `
     width: ${width};
 `
 
-export const InputContainerStyle = (width: string) => `
+export const InputContainerStyle = `
     flex-direction: row;
     margin-left: auto;
     margin-right: auto;
     align-items: flex-start;
-    width: ${width};
+    width: 90%;
 `
 
 export const CustomizeBoardStyle = `
@@ -27,6 +27,7 @@ export const EquipmentBoardStyle = `
     align-items: center;
     border: 1px solid black;
     background-color: ${AppConfigurations.backgroundTwo};
+    width: 100%;
 `
 
 export const CustomizeBoardSinglePartyInputStyle = (width: string) => `

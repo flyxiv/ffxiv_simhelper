@@ -2,7 +2,7 @@ import { Box, styled } from "@mui/material";
 import { ResultBoardBoxStyle, ResultBoardTopBoxStyle } from "../components/container/Styles";
 import { PlayerInfo } from "../components/container/PlayerInfo";
 import { SimulationTitle } from "../components/basic/SimulationTitle";
-import { STAT_WEIGHTS_RESPONSE_SAVE_NAME } from "../App";
+import { BODY_WIDTH, STAT_WEIGHTS_RESPONSE_SAVE_NAME } from "../App";
 import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
@@ -12,21 +12,21 @@ import { StatWeightSummary } from "../components/container/StatSummary";
 import { EMPTY_PARTY_MEMBER } from "../types/PartyStates";
 import { STAT_WEIGHTS_REQUEST_COUNT } from "../components/basic/BestStatsRequestButton";
 import { AppLanguageTexts } from "../const/languageTexts";
+import "./SimulationResult.css";
 
 export interface StatWeightsData {
   statName: string;
   rdpsIncreasePerPoint: number;
 }
 
-const ResultBoardBox = styled(Box)`
-  ${ResultBoardBoxStyle}
-`;
-
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
 `;
 
-export const TABLE_WIDTH = "80%";
+const ResultBoardBox = styled(Box)`
+  ${ResultBoardBoxStyle}
+`;
+
 
 export function StatWeightsResult() {
   let LANGUAGE_TEXTS = AppLanguageTexts();
@@ -63,23 +63,28 @@ export function StatWeightsResult() {
       display="flex"
       flexDirection={"column"}
       sx={{ backgroundColor: AppConfigurations.backgroundOne }}
-      width="100vw"
+      width="100%"
       alignItems={"center"}
+      justifyContent={"center"}
       paddingBottom={20}
     >
-      <Box display="flex">
-        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME)}
-        <Box>
+      <Box display="flex" width="100%" justifyContent={"center"} alignItems={"center"}>
+        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME, LANGUAGE_TEXTS)}
+        <Box width={BODY_WIDTH} justifyContent={"center"}>
           {AppHeader()}
-          <ResultBoardTopBox marginBottom="40px">
-            {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
-            {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, STAT_WEIGHTS_REQUEST_COUNT, 1)}
-          </ResultBoardTopBox>
-          <ResultBoardBox >
-            {SimulationTitle(LANGUAGE_TEXTS.BEST_STATS_TEXT)}
-            {StatWeightSummary(statWeightsCalculated)}
-          </ResultBoardBox>
-          {Footer()}
+          <Box className="SimulationResult" sx={{
+            backgroundColor: AppConfigurations.backgroundOne
+          }}>
+            <ResultBoardTopBox marginBottom="40px">
+              {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
+              {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, STAT_WEIGHTS_REQUEST_COUNT, 1, LANGUAGE_TEXTS)}
+            </ResultBoardTopBox>
+            <ResultBoardBox>
+              {SimulationTitle(LANGUAGE_TEXTS.BEST_STATS_TEXT)}
+              {StatWeightSummary(statWeightsCalculated, LANGUAGE_TEXTS)}
+            </ResultBoardBox>
+            {Footer()}
+          </Box>
         </Box>
       </Box>
     </Box>

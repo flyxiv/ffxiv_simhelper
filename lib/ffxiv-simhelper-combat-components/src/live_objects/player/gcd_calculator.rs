@@ -28,22 +28,94 @@ mod tests {
 
     struct GcdCalculatorStruct {}
 
-    impl GcdCalculator for GcdCalculatorStruct
+    impl GcdCalculator for GcdCalculatorStruct {}
+
     #[test]
     fn gcd_calculation_test() {
-        let gcd_calculator = GcdCalculatorStruct{};
+        let gcd_calculator = GcdCalculatorStruct {};
 
-        // test 1. MNK at 955 SKS, which is
+        // test 1. MNK at 955 SKS(102.5%) is the start of 1.94 GCD
+        let skill_speed_multiplier = 1.025;
+        let speed_buff_reducer = 0.80;
+        let gcd_delay = 2500;
 
+        let monk_gcd_millisecond = gcd_calculator.calculate_speed_buffed_cooldown_millisecond(
+            gcd_delay,
+            skill_speed_multiplier,
+            speed_buff_reducer,
+        );
 
-        // test 2. VPR at 530 SKS, skill of GCD 3s with 15% speed buff
+        assert_eq!(
+            monk_gcd_millisecond, 1940,
+            "GCD calculation has to be 1940, but it is {}",
+            monk_gcd_millisecond
+        );
 
-        // test 3. BLM at 1930 SPS, skill of GCD 2.8s with ley line speed buff
+        // test 2. BLM at 1283 SPS(104.0%), skill of GCD 2.5 is 2.40, 2.5 with leyline is 2.04, 2.8 is 2.68, and 2.8 with leyline is 2.28
+        let blm_speed_multiplier = 1.040;
+        let speed_buff_reducer_with_leyline = 0.85;
 
+        let blm_normal_gcd_speed = gcd_calculator.calculate_speed_buffed_cooldown_millisecond(
+            2500,
+            blm_speed_multiplier,
+            1.0,
+        );
 
-        // test 4. PCT at 420(default) SPS, skill of GCD 2.8 with Hyperphantasia
+        let blm_fire4_gcd_speed = gcd_calculator.calculate_speed_buffed_cooldown_millisecond(
+            2800,
+            blm_speed_multiplier,
+            1.0,
+        );
 
+        let blm_normal_gcd_with_leyline = gcd_calculator
+            .calculate_speed_buffed_cooldown_millisecond(
+                2500,
+                blm_speed_multiplier,
+                speed_buff_reducer_with_leyline,
+            );
 
-        // test 3. BLM at 1930 SPS, sill of GCD 2.5 with ley line speed buff
+        let blm_fire4_gcd_with_leyline = gcd_calculator
+            .calculate_speed_buffed_cooldown_millisecond(
+                2800,
+                blm_speed_multiplier,
+                speed_buff_reducer_with_leyline,
+            );
+
+        assert_eq!(
+            blm_normal_gcd_speed, 2400,
+            "GCD calculation has to be 2400, but it is {}",
+            blm_normal_gcd_speed
+        );
+        assert_eq!(
+            blm_fire4_gcd_speed, 2680,
+            "GCD calculation has to be 2680, but it is {}",
+            blm_fire4_gcd_speed
+        );
+        assert_eq!(
+            blm_normal_gcd_with_leyline, 2040,
+            "GCD calculation has to be 2040, but it is {}",
+            blm_normal_gcd_with_leyline
+        );
+        assert_eq!(
+            blm_fire4_gcd_with_leyline, 2280,
+            "GCD calculation has to be 2280, but it is {}",
+            blm_fire4_gcd_with_leyline
+        );
+
+        // test 3. PCT at 420(default) SPS, skill of GCD 3.30 is 2.47 with Hyperphantasia
+        let pct_speed_multiplier = 1.0;
+        let pct_speed_buff_reducer = 0.75;
+
+        let pct_gcd_speed = gcd_calculator.calculate_speed_buffed_cooldown_millisecond(
+            3300,
+            pct_speed_multiplier,
+            pct_speed_buff_reducer,
+        );
+
+        assert_eq!(
+            pct_gcd_speed, 2470,
+            "GCD calculation has to be 2470, but it is {}",
+            pct_gcd_speed
+        );
     }
 }

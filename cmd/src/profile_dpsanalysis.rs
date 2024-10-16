@@ -1,11 +1,11 @@
-use ffxiv_simhelper_api::api_handler::statweights::stat_weights;
-use ffxiv_simhelper_api::request::simulation_api_request::PlayerInfoRequest;
-use ffxiv_simhelper_api::request::stat_weights_api_request::StatWeightsApiRequest;
+use ffxiv_simhelper_api::api_handler::dpsanalysis::dps_analysis;
+use ffxiv_simhelper_api::request::simulation_api_request::{
+    PlayerInfoRequest, SimulationApiRequest,
+};
 use ffxiv_simhelper_combat_components::live_objects::player::player_power::PlayerPower;
 use ffxiv_simhelper_combat_components::types::PlayerIdType;
 use itertools::Itertools;
 use log::{Level, LevelFilter, Metadata, Record, SetLoggerError};
-use tokio::time::Instant;
 
 struct SimpleLogger;
 
@@ -33,7 +33,7 @@ pub fn init(log_level: LevelFilter) -> Result<(), SetLoggerError> {
 
 #[allow(unused)]
 fn main() {
-    let party_members = vec!["PLD", "NIN", "WAR", "WHM", "SGE", "DRG", "BRD", "PCT"];
+    let party_members = vec!["PLD", "NIN", "WAR", "WHM", "SGE", "DRG", "BRD", "BLM"];
     let party = party_members
         .iter()
         .enumerate()
@@ -66,22 +66,25 @@ fn main() {
         })
         .collect_vec();
 
-    let request = StatWeightsApiRequest {
+    let request = SimulationApiRequest {
         main_player_id: 0,
         combat_time_millisecond: 600000,
         party,
-        stat_name: "DET".to_string(),
-        augment_amount: 500,
         party_ilvl_adjustment: 100.0,
         use_pot: true,
     };
 
-    let new = Instant::now();
-
-    for _ in 0..8 {
-        let response = stat_weights(request.clone());
-        println!("{:?}", response.unwrap().dps);
-    }
-
-    println!("{}ms elapsed", new.elapsed().as_millis());
+    let response = dps_analysis(request, 1);
+    println!(
+        "{:?}",
+        response
+            .unwrap()
+            .simulation_data
+            .last()
+            .unwrap()
+            .rotation_log
+            .last()
+            .unwrap()
+            .skill_id
+    );
 }

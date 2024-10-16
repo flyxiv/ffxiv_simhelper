@@ -5,6 +5,7 @@ import {
   SelectChangeEvent,
   Typography,
   Divider,
+  Box,
 } from "@mui/material";
 import { JobMenuItem } from "../../items/JobMenuItem";
 import { CustomFormControl } from "../basicform/BasicInputForm";
@@ -18,7 +19,8 @@ import {
   TANK_JOBS,
 } from "../../../types/ffxivdatabase/PartyCompositionMaker";
 import { calculatePlayerPowerFromInputs } from "../../../types/ffxivdatabase/ItemSet";
-import { AppLanguageTexts, PLD_EN_NAME, SCH_EN_NAME } from "../../../const/languageTexts";
+import { PLD_EN_NAME, SCH_EN_NAME, TextDictionary } from "../../../const/languageTexts";
+import { ITEM_BOTTOM_MENU_MIN_HEIGHT } from "../../items/Styles";
 
 let ALIGN = "center";
 
@@ -89,9 +91,9 @@ export function getRoleByIdAndMainCharacterJob(
 export function PartyMemberJobSelection(
   id: number,
   totalEquipmentState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   let playerId = `${LANGUAGE_TEXTS.PARTY_MEMBER_LABEL_TEXT} ${id}`;
 
   const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
@@ -175,16 +177,19 @@ export function PartyMemberJobSelection(
             },
           },
         }}
+        sx={{ width: "100%" }}
       >
         {jobAbbrevs.map((jobAbbrev) => {
-          return JobMenuItem(jobAbbrev, ALIGN, false);
+          return JobMenuItem(jobAbbrev, ALIGN, LANGUAGE_TEXTS, false);
         })}
 
         <Divider />
         <MenuItem value="Empty">
-          <Typography variant="body1" color="white">
-            Empty
-          </Typography>
+          <Box height={ITEM_BOTTOM_MENU_MIN_HEIGHT} display="flex" justifyContent={"center"} alignItems={"center"}>
+            <Typography variant="body1" color="white" fontSize={AppConfigurations.body1FontSize} align="center">
+              Empty
+            </Typography>
+          </Box>
         </MenuItem>
       </Select>
     </CustomFormControl>

@@ -96,7 +96,9 @@ export const makeMainPlayerContributionData = (
 };
 
 export const MainPlayerContributionGraph = (
-  mainPlayerContributionData: null | PartyContributionData
+  mainPlayerContributionData: null | PartyContributionData,
+  memberText: string,
+  totalText: string
 ) => {
   if (mainPlayerContributionData === null) {
     return;
@@ -117,7 +119,7 @@ export const MainPlayerContributionGraph = (
 
   return (
     <Box width={TABLE_WIDTH}>
-      {GraphTitleRow()}
+      {GraphTitleRow(memberText, totalText)}
       <GraphBox>
         {contributionData.map((data) => {
           return JobBarChartTeammate(data, maxContribution);

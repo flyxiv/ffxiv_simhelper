@@ -236,7 +236,213 @@ const PIE_STAT_KR_NAME = "신앙";
 
 
 
-export const AppLanguageTexts = () => {
+export interface TextDictionary {
+  PLD_JOB_NAME: string,
+  WAR_JOB_NAME: string,
+  DRK_JOB_NAME: string,
+  GNB_JOB_NAME: string,
+  WHM_JOB_NAME: string,
+  SCH_JOB_NAME: string,
+  AST_JOB_NAME: string,
+
+  SGE_JOB_NAME: string,
+
+  DRG_JOB_NAME: string,
+  MNK_JOB_NAME: string,
+  NIN_JOB_NAME: string,
+  SAM_JOB_NAME: string,
+  RPR_JOB_NAME: string,
+  VPR_JOB_NAME: string,
+
+  BRD_JOB_NAME: string,
+  MCH_JOB_NAME: string,
+  DNC_JOB_NAME: string,
+
+  BLM_JOB_NAME: string,
+  SMN_JOB_NAME: string,
+  RDM_JOB_NAME: string,
+  PCT_JOB_NAME: string,
+
+
+  // Menu Text
+  NAVIGATE_TEXT: string,
+  SAVED_GEARSETS_TEXT: string,
+  LOADOUT_NAME_LABEL_TEXT: string,
+  LOADOUT_WRITE_TEXT: string,
+  LOADOUT_LOAD_TEXT: string,
+  DEFAULT_LOADOUT_TEXT: string,
+  LOAD_COMPLETE_TEXT: string,
+  LOADOUT_NAME_TEXT: string,
+
+  OVERWRITE_CONFIRM_TEXT: string,
+
+  LOAD_CONFIRM_TEXT: string,
+  CONFIRM_TEXT: string,
+
+  CANCEL_TEXT: string,
+
+  // Player Text
+  JOB_TEXT: string,
+  RACE_TEXT: string,
+  WEAPON_SLOT_TEXT: string,
+  OFFHAND_SLOT_TEXT: string,
+  HEAD_SLOT_TEXT: string,
+  BODY_SLOT_TEXT: string,
+  HANDS_SLOT_TEXT: string,
+  LEGS_SLOT_TEXT: string,
+  FEET_SLOT_TEXT: string,
+  EARS_SLOT_TEXT: string,
+  NECK_SLOT_TEXT: string,
+  WRIST_SLOT_TEXT: string,
+  FINGER1_SLOT_TEXT: string,
+  FINGER2_SLOT_TEXT: string,
+  FOOD_SLOT_TEXT: string,
+  AST_MELEE_PARTNER_TEXT: string,
+  AST_RANGED_PARTNER_TEXT: string,
+  DNC_PARTNER_TEXT: string,
+  FINGER_SLOT_TEXT: string,
+  MIDLANDER_HYUR_NAME: string,
+  HIGHLANDER_HYUR_NAME: string,
+  WILDWOOD_ELEZEN_NAME: string,
+  DUSKWIGHT_ELEZEN_NAME: string,
+  PLAINSFOLK_LALAFELL_NAME: string,
+  DUNESFOLK_LALAFELL_NAME: string,
+  SEEKER_OF_THE_SUN_MIQOTE_NAME: string,
+  KEEPER_OF_THE_MOON_MIQOTE_NAME: string,
+  SEA_WOLVES_ROEGADYN_NAME: string,
+  HELLSGUARD_ROEGADYN_NAME: string,
+  RAEN_AU_RA_NAME: string,
+  XAELA_AU_RA_NAME: string,
+  HELIONS_HROTHGAR_NAME: string,
+  THE_LOST_HROTHGAR_NAME: string,
+  RAVA_VIERA_NAME: string,
+  VEENA_VIERA_NAME: string,
+
+  // Page Names
+  HOME_PAGE_NAME: string,
+  DPS_ANALYSIS_PAGE_NAME: string,
+  GEAR_COMPARE_PAGE_NAME: string,
+  BEST_PARTNER_PAGE_NAME: string,
+  BEST_STAT_PAGE_NAME: string,
+  PLAYER_POWER_TEXT: string,
+  DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT: string,
+  PARTY_MEMBER_ILVL_TEXT: string,
+  POT_LABEL_TEXT: string,
+  USE_POT_TEXT: string,
+  NO_POT_TEXT: string,
+
+  // Home
+  DPS_ANALYSIS_DESCRIPTION_TEXT: string,
+  GEAR_COMPARE_DESCRIPTION_TEXT: string,
+  BEST_STATS_DESCRIPTION_TEXT: string,
+  BEST_PARTNER_DESCRIPTION_TEXT: string,
+
+  // Quick Sim
+  DPS_ANALYSIS_INPUT_INFO_TEXT: string,
+
+  // Gear Compare
+  GEAR_COMPARE_INPUT_INFO_TEXT: string,
+  COPY_BUTTON_TEXT: string,
+
+  // Best Partner
+  BEST_PARTNER_INPUT_INFO_TEXT: string,
+
+  SPEED_LABEL_TEXT: string,
+
+  // Results Text
+  SIMULATION_RESULT_TEXT: string,
+  PARTY_MEMBERS_TEXT: string,
+  TIME_TEXT: string,
+
+  EDPS_EXPLANATION_TEXT: string,
+
+  // Dps Analysis Results
+  DAMAGE_PROFILE_BUTTON_TEXT: string,
+  SKILL_TITLE_TEXT: string,
+  DAMAGE_PERCENTAGE_TEXT: string,
+  TOTAL_DAMAGE_TEXT: string,
+  CAST_TEXT: string,
+
+  BEST_TEAMMATE_BUTTON_TEXT: string,
+  MEMBER_TEXT: string,
+  TOTAL_TEXT: string,
+
+  MY_CONTRIBUTION_BUTTON_TEXT: string,
+
+  ROTATION_SAMPLE_WARNING_TEXT: string,
+
+  SAMURAI_ROTATION_WARNING_TEXT: string,
+
+  MNK_ROTATION_WARNING_TEXT: string,
+
+  ROTATION_SAMPLE_BUTTON_TEXT: string,
+  COMBAT_TIME_TEXT: string,
+  ABILITY_TEXT: string,
+  IMPORTANT_STATUS_TEXT: string,
+
+  GEARSET1_TEXT: string,
+  GEARSET2_TEXT: string,
+
+  // Best Partner Results
+  BEST_PARTNER_BY_ROLE_TEXT: string,
+  TANK_TEXT: string,
+  HEALER_TEXT: string,
+  DPS_TEXT: string,
+
+  OVERALL_TEXT: string,
+  BURST_SECTION_TITLE_TEXT: string,
+  BURST_TEXT: string,
+
+  // Best Stats Results
+  BEST_STATS_TEXT: string,
+
+  BEST_STATS_NAME_TEXT: string,
+
+  EMPTY_TEXT: string,
+
+  NAME_TEXT: string,
+  STAT_TEXT: string,
+  PREV_TEXT: string,
+  NEXT_TEXT: string,
+
+  WD_STAT_NAME: string,
+
+  STR_STAT_NAME: string,
+  DEX_STAT_NAME: string,
+  INT_STAT_NAME: string,
+  MIND_STAT_NAME: string,
+
+  CRIT_STAT_NAME: string,
+  DH_STAT_NAME: string,
+  DET_STAT_NAME: string,
+  SKS_STAT_NAME: string,
+  SPS_STAT_NAME: string,
+  TEN_STAT_NAME: string,
+  PIE_STAT_NAME: string,
+
+  // Power Names
+  ITERATION_NAME: string,
+  VARIANCE_NAME: string,
+  COMPOSITION_NAME: string,
+  WD_POWER_NAME: string,
+  MAIN_STAT_POWER_NAME: string,
+  CRT_RATE_POWER_NAME: string,
+  CRT_POWER_NAME: string,
+  DH_RATE_POWER_NAME: string,
+  DET_POWER_NAME: string,
+  SPEED_POWER_NAME: string,
+  TENACITY_POWER_NAME: string,
+  GCD_NAME: string,
+
+  // Party Input Text
+  TIME_INPUT_LABEL_TEXT: string,
+  PARTY_MEMBER_LABEL_TEXT: string,
+
+  language: LanguageMode
+}
+
+
+export const AppLanguageTexts: () => TextDictionary = () => {
   let { language } = useLanguage();
 
   // Job Names
@@ -501,7 +707,7 @@ export const AppLanguageTexts = () => {
       : "2. 파티 관련 설정을 입력해주세요";
   const PARTY_MEMBER_ILVL_TEXT =
     language === LanguageMode.ENGLISH_MODE
-      ? "Party Members iLvl"
+      ? "Party iLvl"
       : "파티원 템렙";
   const POT_LABEL_TEXT =
     language === LanguageMode.ENGLISH_MODE ? "Pot" : "탕약";
@@ -733,7 +939,7 @@ export const AppLanguageTexts = () => {
   const CRT_RATE_POWER_NAME =
     language === LanguageMode.ENGLISH_MODE ? "Crit Rate" : "극대 확률";
   const CRT_POWER_NAME =
-    language === LanguageMode.ENGLISH_MODE ? "Crit" : "극대 피해";
+    language === LanguageMode.ENGLISH_MODE ? "Crit Dmg%" : "극대 피해";
   const DH_RATE_POWER_NAME =
     language === LanguageMode.ENGLISH_MODE ? "DH Rate" : "직격 확률";
   const DET_POWER_NAME =
@@ -968,9 +1174,7 @@ export const AppLanguageTexts = () => {
   return texts;
 }
 
-export function convertToRaceTextName(raceName: string) {
-  const LANGUAGE_TEXTS = AppLanguageTexts();
-
+export function convertToRaceTextName(raceName: string, LANGUAGE_TEXTS: TextDictionary) {
   switch (raceName) {
     case MIDLANDER_HYUR_EN_NAME:
       return LANGUAGE_TEXTS.MIDLANDER_HYUR_NAME;
@@ -1009,9 +1213,7 @@ export function convertToRaceTextName(raceName: string) {
   }
 }
 
-export function convertToSlotText(slotName: string) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+export function convertToSlotText(slotName: string, LANGUAGE_TEXTS: TextDictionary) {
   switch (slotName) {
     case JOB_EN_TEXT:
       return LANGUAGE_TEXTS.JOB_TEXT;
@@ -1057,9 +1259,7 @@ export function convertToSlotText(slotName: string) {
 }
 
 
-export const convertToJobText = (jobAbbrev: string) => {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+export const convertToJobText = (jobAbbrev: string, LANGUAGE_TEXTS: TextDictionary) => {
   switch (jobAbbrev) {
     case PLD_EN_NAME:
       return LANGUAGE_TEXTS.PLD_JOB_NAME;

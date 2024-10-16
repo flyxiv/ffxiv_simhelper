@@ -15,21 +15,21 @@ import {
 } from "../../App";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { convertToLinkUrl } from "../../page/home";
-import { AppLanguageTexts } from "../../const/languageTexts";
 import { LanguageInputForm } from "../input/basicform/LanguageInputForm";
+import { TextDictionary } from "../../const/languageTexts";
 
-export const MENU_WIDTH_VW_XS = 35;
-export const MENU_WIDTH_VW_SM = 30;
-export const MENU_WIDTH_VW_MD = 25;
+export const MENU_WIDTH_VW_XS = 0;
+export const MENU_WIDTH_VW_SM = 0;
+export const MENU_WIDTH_VW_MD = 0;
 export const MENU_WIDTH_VW_LG = 20;
-export const MENU_WIDTH_VW_XL = 15;
+export const MENU_WIDTH_VW_XL = 20;
 
 export const MENU_WIDTH = {
-  xs: `${MENU_WIDTH_VW_XS}vw`,
-  sm: `${MENU_WIDTH_VW_SM}vw`,
-  md: `${MENU_WIDTH_VW_MD}vw`,
-  lg: `${MENU_WIDTH_VW_LG}vw`,
-  xl: `${MENU_WIDTH_VW_XL}vw`,
+  xs: `${MENU_WIDTH_VW_XS}%`,
+  sm: `${MENU_WIDTH_VW_SM}%`,
+  md: `${MENU_WIDTH_VW_MD}%`,
+  lg: `${MENU_WIDTH_VW_LG}%`,
+  xl: `${MENU_WIDTH_VW_XL}%`,
 };
 
 let LeftMenuLogo = styled(Box)`
@@ -53,7 +53,8 @@ export function LeftMenuWithLoadout(
   loadoutType: string,
   currentSimulationPage: string,
   totalState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
 
   return (
@@ -71,19 +72,20 @@ export function LeftMenuWithLoadout(
       anchor="left"
     >
       <LeftMenuTotalBar>
-        {DefaultLeftMenuComponents(currentSimulationPage)}
+        {DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}
         {EquipmentLoadouts(
           loadoutCount,
           loadoutType,
           totalState,
-          setTotalState
+          setTotalState,
+          LANGUAGE_TEXTS
         )}
       </LeftMenuTotalBar>
     </Drawer>
   );
 }
 
-export function BasicLeftMenu(currentSimulationPage: string) {
+export function BasicLeftMenu(currentSimulationPage: string, LANGUAGE_TEXTS: TextDictionary) {
   return (
     <Drawer
       sx={{
@@ -99,7 +101,7 @@ export function BasicLeftMenu(currentSimulationPage: string) {
       variant="permanent"
       anchor="left"
     >
-      <LeftMenuTotalBar>{DefaultLeftMenuComponents(currentSimulationPage)}</LeftMenuTotalBar>
+      <LeftMenuTotalBar>{DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}</LeftMenuTotalBar>
     </Drawer>
   );
 }
@@ -128,23 +130,24 @@ const BEST_PARTNER_MENU_LOGO_PATH = "/images/icon_best_partner_w.svg";
 const STAT_WEIGHTS_MENU_LOGO_PATH = "/images/icon_best_stats_w.svg";
 const LOGO_PATH = "/images/left_menu_logo.svg";
 
-function DefaultLeftMenuComponents(currentSimulationPage: string) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS: TextDictionary) {
   return (
     <>
       <LeftMenuLogo>
-        <Box display="flex" justifyContent={"center"}>
+        <Box display="flex" justifyContent={"center"} alignItems={"center"}>
           <Box marginRight={0.5}>
             <img src={LOGO_PATH} width={20} height={20} alt="logo" />
           </Box>
           <Typography align="center">
             <b>FFXIV SIMHELPER</b>
           </Typography>
+
         </Box>
       </LeftMenuLogo>
 
-      {LanguageInputForm()}
+      <Box width="95%" display="flex" justifyContent={"flex-end"} marginY={2}>
+        {LanguageInputForm()}
+      </Box>
 
       <LeftMenuNavigationBar paddingY={4} paddingLeft={2}>
         <Typography variant="h3" align="left" sx={{ fontWeight: "bold" }}>
@@ -194,10 +197,9 @@ function EquipmentLoadouts(
   loadoutCount: number,
   loadoutType: string,
   totalState: EquipmentInput,
-  setTotalState: Function
+  setTotalState: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
   return (
     <>
       <Box paddingX={2}>
@@ -224,7 +226,8 @@ function EquipmentLoadouts(
               loadoutType,
               totalState,
               setTotalState,
-              getNumberOfEquipmentSets(loadoutType)
+              getNumberOfEquipmentSets(loadoutType),
+              LANGUAGE_TEXTS
             )}
           </Box>
         );

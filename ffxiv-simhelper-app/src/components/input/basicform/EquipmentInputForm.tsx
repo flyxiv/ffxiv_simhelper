@@ -50,7 +50,7 @@ import {
 } from "../../../types/EquipmentInput";
 import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
-import { AppLanguageTexts, AST_EN_NAME, convertToSlotText, DNC_EN_NAME, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
+import { AST_EN_NAME, convertToSlotText, DNC_EN_NAME, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, TextDictionary, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -75,16 +75,14 @@ const EquipmentMenu = styled(MenuItem)`
   ${MenuItemStyle}
 `;
 
-let PLAYER_EQUIPMENTS = new Map();
-
 function EquipmentMenuOfOneSlot(
   id: number,
   slotName: string,
   equipmentsAvailableInSlot: Equipment[],
   totalEquipmentState: EquipmentInput,
-  setTotalEquipmentState: Function
+  setTotalEquipmentState: Function,
+  LANGUAGE_TEXTS: TextDictionary,
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   let totalState = totalEquipmentState.equipmentDatas[id];
   let key = `${slotName}-${id}-equipment`;
   let slotEquipmentId = totalState.itemSet[slotNameToSlotIndex(slotName)];
@@ -126,7 +124,7 @@ function EquipmentMenuOfOneSlot(
     }
   }
 
-  let currentEquipment = PLAYER_EQUIPMENTS.get(currentEquipmentId);
+  let currentEquipment = EQUIPMENT_DATABASE_BY_ID.get(currentEquipmentId);
   const updateEquipmentState = (e: SelectChangeEvent<number>) => {
     let newEquipmentId = e.target.value;
 
@@ -142,7 +140,7 @@ function EquipmentMenuOfOneSlot(
     let newGearSetMaterias = [...totalState.gearSetMaterias];
 
     let materiaSlotCount = 0;
-    currentEquipment = PLAYER_EQUIPMENTS.get(newEquipmentId);
+    currentEquipment = EQUIPMENT_DATABASE_BY_ID.get(newEquipmentId);
     if (currentEquipment !== undefined) {
       materiaSlotCount = currentEquipment.pentameldable
         ? 5
@@ -160,7 +158,7 @@ function EquipmentMenuOfOneSlot(
     updateOnePlayerPower(id, newTotalData, setTotalEquipmentState);
   };
 
-  let slotLabel = convertToSlotText(slotName);
+  let slotLabel = convertToSlotText(slotName, LANGUAGE_TEXTS);
   if (currentEquipmentId !== -1) {
     slotLabel = "";
   }
@@ -199,7 +197,8 @@ function EquipmentMenuOfOneSlot(
             return EquipmentMenuItem(
               id,
               equipment,
-              totalState.mainPlayerJobAbbrev
+              totalState.mainPlayerJobAbbrev,
+              LANGUAGE_TEXTS
             );
           })}
           <Divider />
@@ -231,7 +230,8 @@ function EquipmentMenuOfOneSlot(
           slotName,
           currentEquipment,
           totalEquipmentState,
-          setTotalEquipmentState
+          setTotalEquipmentState,
+          LANGUAGE_TEXTS.EMPTY_TEXT
         )}
       </MateriaBox>
 
@@ -274,7 +274,7 @@ export function EquipmentSelectionMenu(
   id: number,
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function,
-  onlyBuffJobs: boolean = false,
+  LANGUAGE_TEXTS: TextDictionary,
   hasTimeInput: boolean = true,
   isDouble: boolean = false
 ) {
@@ -282,7 +282,6 @@ export function EquipmentSelectionMenu(
   let mainCharacterJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
   let inputCount = isDouble ? 2 : 1;
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <EquipmentGridContainer container>
@@ -291,17 +290,12 @@ export function EquipmentSelectionMenu(
         sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
         <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
-          {onlyBuffJobs
-            ? MainPlayerJobSelectionOnlyBuffJobs(
-              id,
-              totalEquipmentState,
-              setTotalEquipmentState
-            )
-            : MainPlayerJobSelection(
-              id,
-              totalEquipmentState,
-              setTotalEquipmentState
-            )}
+          {MainPlayerJobSelection(
+            id,
+            totalEquipmentState,
+            setTotalEquipmentState,
+            LANGUAGE_TEXTS
+          )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
       <EquipmentGridItemBox
@@ -313,85 +307,86 @@ export function EquipmentSelectionMenu(
           {MainPlayerRaceSelection(
             id,
             totalEquipmentState,
-            setTotalEquipmentState
+            setTotalEquipmentState,
+            LANGUAGE_TEXTS
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
 
-      {getEquipmentSlotsOfJob(mainCharacterJobAbbrev).map((slotName) => {
-        let equipmentKeyString = toEquipmentKeyString(
-          mainCharacterJobAbbrev,
-          slotName
-        );
-        let equipmentsAvailableInSlot =
-          EQUIPMENT_DATABASE_BY_KEYS.get(equipmentKeyString);
-        if (equipmentsAvailableInSlot === undefined) {
-          console.log(equipmentKeyString);
-          return;
-        }
-        return (
+      {
+        getEquipmentSlotsOfJob(mainCharacterJobAbbrev).map((slotName) => {
+          let equipmentKeyString = toEquipmentKeyString(
+            mainCharacterJobAbbrev,
+            slotName
+          );
+          let equipmentsAvailableInSlot =
+            EQUIPMENT_DATABASE_BY_KEYS.get(equipmentKeyString);
+          if (equipmentsAvailableInSlot === undefined) {
+            console.log(equipmentKeyString);
+            return;
+          }
+          return (
+            <EquipmentGridItemBox
+              key={`${id}_equipment_${slotName}_itembox`}
+              sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
+            >
+              <InputEquipmentBox
+                item
+                xs={xs}
+                key={`${id}_${slotName} _equipmentselection`}
+              >
+                {EquipmentMenuOfOneSlot(
+                  id,
+                  slotName,
+                  equipmentsAvailableInSlot,
+                  totalEquipmentState,
+                  setTotalEquipmentState,
+                  LANGUAGE_TEXTS
+                )}
+              </InputEquipmentBox>
+            </EquipmentGridItemBox>
+          );
+        })
+      }
+      <EquipmentGridItemBox
+        key={`food_selectionbox_${id} `}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
+      >
+        <InputEquipmentBox item xs={xs} key={`food_${id} `}>
+          {FoodSelection(id, totalEquipmentState, setTotalEquipmentState, LANGUAGE_TEXTS)}
+        </InputEquipmentBox>
+      </EquipmentGridItemBox>
+
+      <EquipmentGridItemBox
+        key={`pot_selectionbox_${id} `}
+        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
+      >
+        <InputEquipmentBox item xs={xs} key={`pot_${id} `}>
+          {PotSelection(id, totalEquipmentState, setTotalEquipmentState, LANGUAGE_TEXTS.POT_LABEL_TEXT, LANGUAGE_TEXTS.USE_POT_TEXT, LANGUAGE_TEXTS.NO_POT_TEXT)}
+        </InputEquipmentBox>
+      </EquipmentGridItemBox>
+
+      {PartnerSelectionMenu(id, totalEquipmentState, setTotalEquipmentState, inputCount, LANGUAGE_TEXTS)}
+
+      {
+        hasTimeInput ? (
           <EquipmentGridItemBox
-            key={`${id}_equipment_${slotName}_itembox`}
+            key={`${id} _timeinput`}
             sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
           >
-            <InputEquipmentBox
-              item
-              xs={xs}
-              key={`${id}_${slotName}_equipmentselection`}
-            >
-              {EquipmentMenuOfOneSlot(
-                id,
-                slotName,
-                equipmentsAvailableInSlot,
+            <InputEquipmentBox item xs={xs}>
+              {SimulationUpperInputTimeTextBox(
+                LANGUAGE_TEXTS.TIME_INPUT_LABEL_TEXT,
                 totalEquipmentState,
-                setTotalEquipmentState
+                setTotalEquipmentState,
               )}
             </InputEquipmentBox>
           </EquipmentGridItemBox>
-        );
-      })}
-      <EquipmentGridItemBox
-        key={`food_selectionbox_${id}`}
-        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
-      >
-        <InputEquipmentBox item xs={xs} key={`food_${id}`}>
-          {FoodSelection(id, totalEquipmentState, setTotalEquipmentState)}
-        </InputEquipmentBox>
-      </EquipmentGridItemBox>
-
-      {PartnerSelectionMenu(
-        id,
-        totalEquipmentState,
-        setTotalEquipmentState,
-        inputCount
-      )}
-
-      <EquipmentGridItemBox
-        key={`pot_selectionbox_${id}`}
-        sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
-      >
-        <InputEquipmentBox item xs={xs} key={`pot_${id}`}>
-          {PotSelection(id, totalEquipmentState, setTotalEquipmentState)}
-        </InputEquipmentBox>
-      </EquipmentGridItemBox>
-
-      {hasTimeInput ? (
-        <EquipmentGridItemBox
-          key={`${id}_timeinput`}
-          sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
-        >
-          <InputEquipmentBox item xs={xs}>
-            {SimulationUpperInputTimeTextBox(
-              LANGUAGE_TEXTS.TIME_INPUT_LABEL_TEXT,
-              totalEquipmentState,
-              setTotalEquipmentState
-            )}
-          </InputEquipmentBox>
-        </EquipmentGridItemBox>
-      ) : (
-        <Box></Box>
-      )}
-    </EquipmentGridContainer>
+        ) : (
+          <Box></Box>
+        )
+      }
+    </EquipmentGridContainer >
   );
 }
 
@@ -400,23 +395,25 @@ export function BestPartnerInputMenu(
   id: number,
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function,
+  LANGUAGE_TEXTS: TextDictionary,
+  isDouble: boolean = false
 ) {
   let xs = 12;
-  let inputCount = 1;
-  let LANGUAGE_TEXTS = AppLanguageTexts();
+  let inputCount = isDouble ? 2 : 1;
 
   return (
     <EquipmentGridContainer container>
       <EquipmentGridItemBox
-        key={`${id}_JobSelectionItemBox`}
+        key={`${id} _JobSelectionItemBox`}
         sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
-        <InputEquipmentBox item xs={xs} key={`Job_${id}`}>
+        <InputEquipmentBox item xs={xs} key={`Job_${id} `}>
           {
             MainPlayerJobSelectionOnlyBuffJobs(
               id,
               totalEquipmentState,
-              setTotalEquipmentState
+              setTotalEquipmentState,
+              LANGUAGE_TEXTS
             )
           }
         </InputEquipmentBox>
@@ -429,19 +426,20 @@ export function BestPartnerInputMenu(
           {MainPlayerGcdSelection(
             0,
             totalEquipmentState,
-            setTotalEquipmentState
+            setTotalEquipmentState,
+            LANGUAGE_TEXTS.SPEED_LABEL_TEXT
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
       <EquipmentGridItemBox
-        key={`${id}_timeinput`}
+        key={`${id} _timeinput`}
         sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
         <InputEquipmentBox item xs={xs}>
           {SimulationUpperInputTimeTextBox(
             LANGUAGE_TEXTS.TIME_INPUT_LABEL_TEXT,
             totalEquipmentState,
-            setTotalEquipmentState
+            setTotalEquipmentState,
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
@@ -453,40 +451,43 @@ function PartnerSelectionMenu(
   id: number,
   totalEquipmentState: EquipmentInput,
   setTotalEquipmentState: Function,
-  inputCount: number
+  inputCount: number,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
   let mainPlayerJobAbbrev =
     totalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev;
-
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   if (mainPlayerJobAbbrev === AST_EN_NAME) {
     return (
       <>
         <EquipmentGridItemBox
-          key={`partner1_${id}_grid`}
+          key={`partner1_${id} _grid`}
           sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
         >
-          <InputEquipmentBox item xs={12} key={`partner1_${id}`}>
+          <InputEquipmentBox item xs={12} key={`partner1_${id} `}>
             {Partner1Selection(
               id,
               totalEquipmentState,
               setTotalEquipmentState,
-              LANGUAGE_TEXTS.AST_MELEE_PARTNER_TEXT
+              LANGUAGE_TEXTS.AST_MELEE_PARTNER_TEXT,
+              LANGUAGE_TEXTS.PARTY_MEMBER_LABEL_TEXT,
+              LANGUAGE_TEXTS.EMPTY_TEXT
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
 
         <EquipmentGridItemBox
-          key={`partner2_${id}_grid`}
+          key={`partner2_${id} _grid`}
           sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
         >
-          <InputEquipmentBox item xs={12} key={`partner2_${id}`}>
+          <InputEquipmentBox item xs={12} key={`partner2_${id} `}>
             {Partner2Selection(
               id,
               totalEquipmentState,
               setTotalEquipmentState,
-              LANGUAGE_TEXTS.AST_RANGED_PARTNER_TEXT
+              LANGUAGE_TEXTS.AST_RANGED_PARTNER_TEXT,
+              LANGUAGE_TEXTS.PARTY_MEMBER_LABEL_TEXT,
+              LANGUAGE_TEXTS.EMPTY_TEXT
             )}
           </InputEquipmentBox>
         </EquipmentGridItemBox>
@@ -495,15 +496,17 @@ function PartnerSelectionMenu(
   } else if (mainPlayerJobAbbrev === DNC_EN_NAME) {
     return (
       <EquipmentGridItemBox
-        key={`partner1_${id}_grid`}
+        key={`partner1_${id} _grid`}
         sx={{ width: EQUIPMENT_ITEM_WIDTH(inputCount) }}
       >
-        <InputEquipmentBox item xs={12} key={`partner1_${id}`}>
+        <InputEquipmentBox item xs={12} key={`partner1_${id} `}>
           {Partner1Selection(
             id,
             totalEquipmentState,
             setTotalEquipmentState,
-            LANGUAGE_TEXTS.DNC_PARTNER_TEXT
+            LANGUAGE_TEXTS.DNC_PARTNER_TEXT,
+            LANGUAGE_TEXTS.PARTY_MEMBER_LABEL_TEXT,
+            LANGUAGE_TEXTS.EMPTY_TEXT
           )}
         </InputEquipmentBox>
       </EquipmentGridItemBox>
@@ -516,10 +519,10 @@ function PartnerSelectionMenu(
 function FoodSelection(
   id: number,
   totalEquipmentState: EquipmentInput,
-  setTotalEquipmentState: Function
+  setTotalEquipmentState: Function,
+  LANGUAGE_TEXTS: TextDictionary,
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   let foodLabel = LANGUAGE_TEXTS.FOOD_SLOT_TEXT;
   if (totalState.foodId !== -1) {
@@ -537,7 +540,7 @@ function FoodSelection(
     updateOnePlayerPower(id, newTotalData, setTotalEquipmentState);
   };
 
-  let key = `food-${id}`;
+  let key = `food - ${id} `;
 
   return (
     <>
@@ -560,7 +563,7 @@ function FoodSelection(
           }}
         >
           {ALL_FOODS.map((food) => {
-            return FoodMenuItem(food);
+            return FoodMenuItem(food, LANGUAGE_TEXTS);
           })}
           <MenuItem value={-1}>
             <Box
@@ -583,12 +586,13 @@ function FoodSelection(
 function PotSelection(
   id: number,
   totalEquipmentState: EquipmentInput,
-  setTotalEquipmentState: Function
+  setTotalEquipmentState: Function,
+  potLabelText: string,
+  usePotText: string,
+  noPotText: string
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
-  let label = LANGUAGE_TEXTS.POT_LABEL_TEXT;
+  let label = potLabelText;
 
   const updateUsePot = (e: SelectChangeEvent<number>) => {
     let newState = { ...totalEquipmentState };
@@ -602,7 +606,7 @@ function PotSelection(
     setTotalEquipmentState(newState);
   };
 
-  let key = `pot-${id}`;
+  let key = `pot - ${id} `;
 
   return (
     <>
@@ -631,7 +635,7 @@ function PotSelection(
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                {LANGUAGE_TEXTS.USE_POT_TEXT}
+                {usePotText}
               </Typography>
             </Box>
           </MenuItem>
@@ -643,7 +647,7 @@ function PotSelection(
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
-                {LANGUAGE_TEXTS.NO_POT_TEXT}
+                {noPotText}
               </Typography>
             </Box>
           </MenuItem>

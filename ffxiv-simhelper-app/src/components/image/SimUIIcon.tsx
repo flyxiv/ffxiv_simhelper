@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
+import { isMobile } from "../../util";
 
 export const SimLinkIcon = (
   buttonImagePath: string,
@@ -20,12 +21,12 @@ export const SimLinkIcon = (
         />
       </Box>
       <Box>
-        <Typography variant="h4" color={color}>
+        <Typography variant={isMobile() ? "h5" : "h4"} color={color}>
           <b>{title}</b>
         </Typography>
         <Box marginTop={1}>
           <Typography variant="body2" sx={{
-            fontSize: AppConfigurations.body2FontSize
+            fontSize: AppConfigurations.logoFontSize
           }} color="white">
             {description}
           </Typography>

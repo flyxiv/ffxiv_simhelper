@@ -10,8 +10,10 @@ import {
   GEAR_COMPARE_URL,
   DPS_ANALYSIS_URL,
   BEST_STATS_URL,
+  BODY_WIDTH,
 } from "../App";
-import { AppLanguageTexts } from "../const/languageTexts";
+import { AppLanguageTexts, TextDictionary } from "../const/languageTexts";
+import { isMobile } from "../util";
 
 const dpsAnalysisButtonImagePath = "/images/icon_dps_analysis_C.svg";
 const gearCompareSimButtonImagePath = "/images/icon_gear_compare_C.svg";
@@ -25,63 +27,15 @@ export function Home() {
     <Box
       sx={{
         backgroundColor: AppConfigurations.backgroundOne,
-        width: "100vw",
-        height: "100vh",
+        width: "100%",
       }}
     >
-      <Box display="flex" width="100vw">
-        {BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME)}
-        <Box width="100%">
+      <Box display="flex" width="100%" overflow="auto" minHeight="100%">
+        {BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME, LANGUAGE_TEXTS)}
+        <Box width={BODY_WIDTH}>
           {AppHeader()}
-          <Box className="HomeBody" height="70vh">
-            <Box
-              width="40%"
-              display="flex"
-              alignItems={"center"}
-              flexDirection={"column"}
-            >
-              {LogoBox(
-                DPS_ANALYSIS_URL,
-                dpsAnalysisButtonImagePath,
-                LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
-                LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
-                LANGUAGE_TEXTS.DPS_ANALYSIS_DESCRIPTION_TEXT,
-                AppConfigurations.primary
-              )}
-
-              {LogoBox(
-                BEST_PARTNER_URL,
-                bestPartnerButtonImagePath,
-                LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
-                LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
-                LANGUAGE_TEXTS.BEST_PARTNER_DESCRIPTION_TEXT,
-                AppConfigurations.secondary
-              )}
-            </Box>
-            <Box
-              width="40%"
-              display="flex"
-              alignItems={"center"}
-              flexDirection={"column"}
-            >
-              {LogoBox(
-                GEAR_COMPARE_URL,
-                gearCompareSimButtonImagePath,
-                LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
-                LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
-                LANGUAGE_TEXTS.GEAR_COMPARE_DESCRIPTION_TEXT,
-                AppConfigurations.secondary
-              )}
-
-              {LogoBox(
-                BEST_STATS_URL,
-                statWeightsButtonImagePath,
-                LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
-                LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
-                LANGUAGE_TEXTS.BEST_STATS_DESCRIPTION_TEXT,
-                AppConfigurations.primary
-              )}
-            </Box>
+          <Box className="HomeBody">
+            {isMobile() ? OneColumnHomePage(LANGUAGE_TEXTS) : TwoColumnHomePage(LANGUAGE_TEXTS)}
           </Box>
           {Footer()}
         </Box>
@@ -98,6 +52,7 @@ function LogoBox(
   description: string,
   color: string
 ) {
+
   return (
 
     <Box
@@ -107,7 +62,8 @@ function LogoBox(
         border: `4px solid ${color}`,
         backgroundColor: AppConfigurations.backgroundTwo,
         width: "85%",
-        height: "15vh",
+        minWidth: "300px",
+        height: "10vh",
       }}
       display="flex"
       alignItems={"center"}
@@ -124,4 +80,110 @@ function LogoBox(
 
 export function convertToLinkUrl(urlName: string): string {
   return AppConfigurations.electron ? `/index.html#/${urlName}` : `/${urlName}`;
+}
+
+function OneColumnHomePage(LANGUAGE_TEXTS: TextDictionary) {
+  return (
+    <>
+      <Box
+        width="100%"
+        minWidth="400px"
+        display="flex"
+        alignItems={"center"}
+        flexDirection={"column"}
+      >
+        {LogoBox(
+          DPS_ANALYSIS_URL,
+          dpsAnalysisButtonImagePath,
+          LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
+          LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
+          LANGUAGE_TEXTS.DPS_ANALYSIS_DESCRIPTION_TEXT,
+          AppConfigurations.primary
+        )}
+
+        {LogoBox(
+          GEAR_COMPARE_URL,
+          gearCompareSimButtonImagePath,
+          LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
+          LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
+          LANGUAGE_TEXTS.GEAR_COMPARE_DESCRIPTION_TEXT,
+          AppConfigurations.secondary
+        )}
+
+        {LogoBox(
+          BEST_PARTNER_URL,
+          bestPartnerButtonImagePath,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_DESCRIPTION_TEXT,
+          AppConfigurations.secondary
+        )}
+        {LogoBox(
+          BEST_STATS_URL,
+          statWeightsButtonImagePath,
+          LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_STATS_DESCRIPTION_TEXT,
+          AppConfigurations.primary
+        )}
+      </Box>
+    </>
+  )
+}
+
+function TwoColumnHomePage(LANGUAGE_TEXTS: TextDictionary) {
+  return (
+    <>
+      <Box
+        width="40%"
+        minWidth="400px"
+        display="flex"
+        alignItems={"center"}
+        flexDirection={"column"}
+      >
+        {LogoBox(
+          DPS_ANALYSIS_URL,
+          dpsAnalysisButtonImagePath,
+          LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
+          LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
+          LANGUAGE_TEXTS.DPS_ANALYSIS_DESCRIPTION_TEXT,
+          AppConfigurations.primary
+        )}
+
+        {LogoBox(
+          BEST_PARTNER_URL,
+          bestPartnerButtonImagePath,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_DESCRIPTION_TEXT,
+          AppConfigurations.secondary
+        )}
+      </Box>
+      <Box
+        width="40%"
+        display="flex"
+        minWidth={"400px"}
+        alignItems={"center"}
+        flexDirection={"column"}
+      >
+        {LogoBox(
+          GEAR_COMPARE_URL,
+          gearCompareSimButtonImagePath,
+          LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
+          LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
+          LANGUAGE_TEXTS.GEAR_COMPARE_DESCRIPTION_TEXT,
+          AppConfigurations.secondary
+        )}
+
+        {LogoBox(
+          BEST_STATS_URL,
+          statWeightsButtonImagePath,
+          LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_STATS_DESCRIPTION_TEXT,
+          AppConfigurations.primary
+        )}
+      </Box>
+    </>
+  )
 }

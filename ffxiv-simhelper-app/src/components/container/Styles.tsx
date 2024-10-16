@@ -6,9 +6,9 @@ export const minusTextColor = "#850B21";
 
 export const statusBoxWidth = "22vw";
 export const ResultBoardBoxStyle = `
+  width: 90%;
   min-height: 50vh;
   background-color: ${AppConfigurations.backgroundTwo};
-  width: 60vw;
   align-items: center;
   justify-content: flex-start;
   display: flex;
@@ -18,12 +18,12 @@ export const ResultBoardBoxStyle = `
 
 export const ResultBoardTopBoxStyle = `
   background-color: ${AppConfigurations.backgroundTwo};
-  width: 60vw;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   display: flex;
   flex-direction: column;
-  padding-bottom: 50px;
+  width: 90%;
+  padding-bottom: 20px;
 `;
 
 export const TitleBoxStyle = `
@@ -48,8 +48,10 @@ export const DpsSummaryBoxStyle = `
 `;
 
 export const DpsBoxStyle = `
-  width: 6vw;
-  height: 6vw;
+  width: 17%;
+  aspect-ratio: 1;
+  max-width: 200px;
+  
   padding: 10px;
   margin: 0.4vw;
   display: flex;
@@ -59,7 +61,8 @@ export const DpsBoxStyle = `
 `;
 
 export const PlayerInfoBoxStyle = `
-  margin: 1vh;
+  width: 80%;
+  margin: 3px;
   background: ${AppConfigurations.backgroundThree};
   display: flex;
   flex-direction: column;
@@ -79,7 +82,7 @@ export const PlayerInfoJobTitleStyle = `
 `;
 
 export const PlayerStatInfoBoxStyle = `
-  width: 40vw;
+  width: 80%;
   background: ${AppConfigurations.backgroundThree};
 `;
 
@@ -91,7 +94,8 @@ export const StatOneLineBoxStyle = `
 `;
 
 export const StatBoxStyle = `
-  width: 8vw;
+  width: 10%;
+  max-width: 50px;
   padding: 10px;
   margin: 0.4vw;
   align-items: center;
@@ -111,7 +115,6 @@ export const StatTextBoxStyle = `
 export const SkillLogTableStyle = `
   background-color: ${AppConfigurations.backgroundThree};
   display: flex;
-  width: 45vw;
   flex-direction: column;
   justify-content: left;
   align-items: left;
@@ -125,12 +128,12 @@ export const SkillLogRowStyle = `
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 45vw;
+  width: 100%;
 `;
 
 export const SkillLogCombatTimeBoxStyle = `
   color: white;
-  width: 5vw;
+  width: 25%;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -152,7 +155,7 @@ export const SkillIconBoxStyle = `
   flex-direction: row;
   justify-content: left;
   align-items: center;
-  width: 12vw;
+  width: 25%;
   margin: 10px;
 `;
 
@@ -194,13 +197,14 @@ export const StatSummaryBoxStyle = `
   margin: auto;
 `;
 
-export const SingleStatBoxStyle = (width: string) => `
+export const SingleStatBoxStyle = (width: string, maxWidth: number) => `
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   border: 1px solid #201F28;
   width: ${width};
+  max-width: ${maxWidth}px;
   white-space: nowrap;
 `;
 

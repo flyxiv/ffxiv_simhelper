@@ -106,3 +106,85 @@ impl OwnerTracker for BuffStatus {
         self.owner_id
     }
 }
+
+impl Default for BuffStatus {
+    fn default() -> Self {
+        BuffStatus {
+            id: 0,
+            stacks: 0,
+            duration_millisecond: 0,
+            duration_left_millisecond: 0,
+            status_info: vec![],
+            name: "".to_string(),
+            max_stacks: 0,
+            trigger_proc_event_on_gcd: vec![],
+            owner_id: 0,
+            is_raidwide: false,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::status::status_info::StatusInfo;
+
+    use super::BuffStatus;
+
+    #[test]
+    fn generate_proc_event_test() {
+        let mut buff_status = BuffStatus::default();
+
+        let proc_chance = 0.50;
+
+        buff_status.trigger_proc_event_on_gcd.push((
+            FfxivEvent::Damage(0, 0, 0, 0, false, false, vec![], None, false, 0),
+            proc_chance * 100 as PercentType,
+        ));
+
+        let iteration_count = 1000;
+
+        let mut events = vec![];
+
+        for _ in 0..iteration_count {
+            let proc_events = buff_status.generate_proc_event(i);
+
+            events.extend(proc_events);
+        }
+
+        let proc_lower_bound = (proc_chance - 0.05) * iteration_count as f64;
+        let proc_upper_bound = (proc_chance + 0.05) * iteration_count as f64;
+
+        assert!(
+            events.len() >= proc_lower_bound as usize && events.len() <= proc_upper_bound as usize,
+            "Proc event count is not in the range of {} to {}: it is {}",
+            proc_lower_bound,
+            proc_upper_bound,
+            events.len()
+        );
+    }
+
+    #[test]
+    fn get_damage_buff_infos_test() {
+        let mut buff_status = BuffStatus::default();
+
+        buff_status.status_info = vec![
+            StatusInfo::DamagePercent(10),
+            StatusInfo::CritHitRatePercent(10),
+            StatusInfo::DirectHitRatePercent(10),
+            StatusInfo::IncreaseMainStat(10, 800),
+            StatusInfo::SpeedByStack(vec![1, 2, 4, 10]),
+            StatusInfo::SpeedOnlyAutoAttack(10),
+            StatusInfo::SpeedPercent(10),
+        ];
+
+        let damage_buffs = buff_status.get_damage_buff_infos();
+        let answer = vec![
+            StatusInfo::DamagePercent(10),
+            StatusInfo::CritHitRatePercent(10),
+            StatusInfo::DirectHitRatePercent(10),
+            StatusInfo::IncreaseMainStat(10, 800),
+        ];
+
+        assert_eq!(damage_buffs, answer, "{}", damage_buffs.len());
+    }
+}

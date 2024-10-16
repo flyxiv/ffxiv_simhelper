@@ -22,7 +22,7 @@ export function Footer() {
         sx={{ fontSize: AppConfigurations.body2FontSize }}
       >
         <p>
-          Creator: Fly Ninetynine@Aegis(Elemental DC) | Kkoo Eat@Aegis | Essnah{" "}
+          Creator: Fly Ninetynine@Aegis | Kkoo Eat@Aegis | Essnah{" "}
         </p>
         <p>Email: ns090200@gmail.com</p>
       </Typography>

@@ -8,7 +8,7 @@ import {
   defaultSingleEquipmentInput,
 } from "../../const/DefaultSingleEquipmentInput";
 import { BEST_PARTNER_URL } from "../../App";
-import { AppLanguageTexts } from "../../const/languageTexts";
+import { PLD_EN_NAME, SCH_EN_NAME, TextDictionary } from "../../const/languageTexts";
 
 export const inputStyle = {
   width: "60%",
@@ -38,21 +38,17 @@ interface LoadoutMetaData {
   jobAbbrev: string;
 }
 
-export function DefaultLoadoutMetadata(): LoadoutMetaData {
-  const LANGUAGE_TEXTS = AppLanguageTexts();
-
+export function DefaultLoadoutMetadata(defaultLoadoutText: string): LoadoutMetaData {
   return {
-    loadoutName: LANGUAGE_TEXTS.DEFAULT_LOADOUT_TEXT,
-    jobAbbrev: LANGUAGE_TEXTS.PLD_EN_NAME,
+    loadoutName: defaultLoadoutText,
+    jobAbbrev: PLD_EN_NAME,
   };
 }
 
-export function DefaultBestPartnerLoadoutMetadata(): LoadoutMetaData {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
+export function DefaultBestPartnerLoadoutMetadata(defaultLoadoutText: string): LoadoutMetaData {
   return {
-    loadoutName: LANGUAGE_TEXTS.DEFAULT_LOADOUT_TEXT,
-    jobAbbrev: LANGUAGE_TEXTS.SCH_EN_NAME,
+    loadoutName: defaultLoadoutText,
+    jobAbbrev: SCH_EN_NAME,
   };
 }
 
@@ -64,10 +60,9 @@ export function LoadoutBox(
   simulationName: string,
   totalState: EquipmentInput,
   setTotalState: Function,
-  numberOfEquipmentSets: number
+  numberOfEquipmentSets: number,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
-
   let [textFieldInputLoadoutName, setTextFieldInputLoadoutName] = useState(LANGUAGE_TEXTS.LOADOUT_NAME_TEXT);
   let [textColor, setColor] = useState(BLUR_COLOR);
   let loadoutSaveKey = `${simulationName}-${loadoutId}`;
@@ -77,8 +72,8 @@ export function LoadoutBox(
   let savedLoadoutMetadataString = localStorage.getItem(loadoutMetadataSaveKey);
   let savedLoadoutMetadata =
     simulationName !== BEST_PARTNER_URL
-      ? DefaultLoadoutMetadata()
-      : DefaultBestPartnerLoadoutMetadata();
+      ? DefaultLoadoutMetadata(LANGUAGE_TEXTS.DEFAULT_LOADOUT_TEXT)
+      : DefaultBestPartnerLoadoutMetadata(LANGUAGE_TEXTS.DEFAULT_LOADOUT_TEXT);
 
   if (savedLoadoutMetadataString !== null) {
     savedLoadoutMetadata = JSON.parse(savedLoadoutMetadataString);
@@ -159,13 +154,15 @@ export function LoadoutBox(
             totalState,
             setLoadoutMetadata,
             setBlur,
+            LANGUAGE_TEXTS
           )}
           {LoadoutLoadButton(
             loadoutSaveKey,
             simulationName,
             setTotalState,
             numberOfEquipmentSets,
-            setBlur
+            setBlur,
+            LANGUAGE_TEXTS
           )}
         </Box>
       </Box>
@@ -179,7 +176,8 @@ function LoadoutOverwriteButton(
   textFieldInputLoadoutName: string,
   totalState: EquipmentInput,
   setLoadoutMetadata: Function,
-  setBlur: Function
+  setBlur: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [buttonClickConfirmed, setButtonClickConfirmed] = useState(false);
@@ -213,8 +211,6 @@ function LoadoutOverwriteButton(
       setButtonClickConfirmed(false); // 상태 초기화
     }
   }, [buttonClickConfirmed]);
-
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <>
@@ -263,7 +259,8 @@ function LoadoutLoadButton(
   simulationName: string,
   setTotalState: Function,
   numberOfEquipmentSets: number,
-  setBlur: Function
+  setBlur: Function,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [buttonClickConfirmed, setButtonClickConfirmed] = useState(false);
@@ -300,7 +297,6 @@ function LoadoutLoadButton(
       setButtonClickConfirmed(false); // 상태 초기화
     }
   }, [buttonClickConfirmed]);
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   return (
     <>
@@ -328,7 +324,7 @@ function LoadoutLoadButton(
       >
         <DialogContent>
           <DialogContentText id="confirm-dialog-description">
-            {LANGUAGE_TEXTS.LOAD_CONFIRM_TEXT}
+            {LANGUAGE_TEXTS.LOADOUT_LOAD_TEXT}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

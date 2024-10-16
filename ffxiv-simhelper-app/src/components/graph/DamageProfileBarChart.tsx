@@ -1,4 +1,3 @@
-import { AppLanguageTexts } from "../../const/languageTexts";
 import { AppConfigurations } from "../../Themes";
 import { DamageChartData } from "./GraphData";
 import {
@@ -42,6 +41,9 @@ const SkillBarBox = styled(Box)`
   ${SkillBarBoxStyle}
 `;
 
+const SKILL_BOX_WIDTH = { xs: "50%", sm: "30%", md: "25%", lg: "25%", xl: "20%" };
+const SKILL_BOX_MAX_WIDTH = "200px";
+
 // One row of Damage Profile column in DpsAnalysis Result
 // 1. Skill Icon
 // 2. Skill Name
@@ -63,18 +65,19 @@ export function SkillDamageProfile(
 
   return (
     <SkillBox>
-      <Box display="flex" width="200px">
+      <Box display="flex" sx={{ width: SKILL_BOX_WIDTH, maxWidth: SKILL_BOX_MAX_WIDTH }}>
         <SkillIconBox>
-          <img
+          <Box
+            component={"img"}
             src={data.icon.valueOf()}
             width={imageSize}
             height={imageSize}
             alt="icon"
           />
         </SkillIconBox>
-        <SkillNameBox>
-          <Box>
-            <Typography variant="body2" fontSize={"min(1.2vh, 0.8vw)"} align="right" >
+        <SkillNameBox width="100%">
+          <Box width="100%">
+            <Typography sx={{ fontSize: { xs: 8, sm: 8, md: 10, lg: 12, xl: 14 }, wordBreak: 'break-word' }} align="right">
               {data.name}
             </Typography>
           </Box>
@@ -107,17 +110,15 @@ const SkillPercentBox = styled(Box)`
   ${SkillPercentageBoxStyle}
 `;
 
-export const DamageChartTitle = () => {
-
-  let LANGUAGE_TEXTS = AppLanguageTexts();
+export const DamageChartTitle = (skillTitleText: string, damagePercentageText: string, totalDamageText: string, castText: string) => {
 
   return (
     <SkillBox>
-      <Box display="flex" width="200px">
+      <Box display="flex" sx={{ width: SKILL_BOX_WIDTH, maxWidth: SKILL_BOX_MAX_WIDTH }}>
         <SkillIconBox />
-        <SkillNameBox>
-          <Typography variant="body2" fontSize={AppConfigurations.body2FontSize}>
-            {LANGUAGE_TEXTS.SKILL_TITLE_TEXT}
+        <SkillNameBox width="100%">
+          <Typography variant="body2" fontSize={AppConfigurations.body2FontSize} align="right">
+            {skillTitleText}
           </Typography>
         </SkillNameBox>
       </Box>
@@ -126,19 +127,19 @@ export const DamageChartTitle = () => {
 
       <SkillPercentBox>
         <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-          {LANGUAGE_TEXTS.DAMAGE_PERCENTAGE_TEXT}
+          {damagePercentageText}
         </Typography>
       </SkillPercentBox>
 
       <TotalDamageBox>
         <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-          {LANGUAGE_TEXTS.TOTAL_DAMAGE_TEXT}
+          {totalDamageText}
         </Typography>
       </TotalDamageBox>
 
       <SkillCountBox>
         <Typography variant="body1" fontSize={AppConfigurations.body2FontSize} align="right">
-          {LANGUAGE_TEXTS.CAST_TEXT}
+          {castText}
         </Typography>
       </SkillCountBox>
     </SkillBox>

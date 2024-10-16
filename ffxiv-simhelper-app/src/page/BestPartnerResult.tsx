@@ -5,7 +5,7 @@ import {
 } from "../components/container/Styles";
 import { PlayerInfo } from "../components/container/PlayerInfo";
 import { SimulationTitle } from "../components/basic/SimulationTitle";
-import { BEST_PARTNER_RESPONSE_SAVE_NAME } from "../App";
+import { BEST_PARTNER_RESPONSE_SAVE_NAME, BODY_WIDTH } from "../App";
 import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
 import { AppHeader } from "../components/image/AppHeader";
@@ -18,6 +18,7 @@ import { SimulationDataByRole } from "../types/ffxivdatabase/PartyCompositionMak
 import { ContributionByRoleTable } from "../components/graph/ContributionByRoleTable";
 import { BEST_PARTNER_ITERATION_COUNT } from "../components/basic/BestPartnerRequestButton";
 import { AppLanguageTexts, AST_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PLD_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../const/languageTexts";
+import "./SimulationResult.css"
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -67,41 +68,46 @@ export function BestPartnerResult() {
       display="flex"
       flexDirection={"column"}
       sx={{ backgroundColor: AppConfigurations.backgroundOne }}
-      width="100vw"
+      width="100%"
       alignItems={"center"}
       paddingBottom={20}
     >
-      <Box display="flex">
-        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME)}
-        <Box>
-          {AppHeader()}
-          <ResultTopBoardBox marginBottom="40px">
-            {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
-            {PlayerInfo(
-              responseJson.mainPlayerPower,
-              mainPlayerJob,
-              responseJson.combatTimeMillisecond,
-              null,
-              BEST_PARTNER_ITERATION_COUNT,
-              1
-            )}
-          </ResultTopBoardBox>
-          <ResultBoardBox>
-            {SimulationTitle(LANGUAGE_TEXTS.OVERALL_TEXT)}
-            {ContributionByRoleTable(simulationDataByRoles[0])}
+      <Box display="flex" width="100%">
+        {BasicLeftMenu(LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME, LANGUAGE_TEXTS)}
+        <Box width={BODY_WIDTH}>
+          <Box className="SimulationResult" sx={{
+            backgroundColor: AppConfigurations.backgroundOne
+          }}>
+            {AppHeader()}
+            <ResultTopBoardBox marginBottom="40px">
+              {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
+              {PlayerInfo(
+                responseJson.mainPlayerPower,
+                mainPlayerJob,
+                responseJson.combatTimeMillisecond,
+                null,
+                BEST_PARTNER_ITERATION_COUNT,
+                1,
+                LANGUAGE_TEXTS
+              )}
+            </ResultTopBoardBox>
+            <ResultBoardBox>
+              {SimulationTitle(LANGUAGE_TEXTS.OVERALL_TEXT)}
+              {ContributionByRoleTable(simulationDataByRoles[0], LANGUAGE_TEXTS.TANK_TEXT, LANGUAGE_TEXTS.HEALER_TEXT, LANGUAGE_TEXTS.DPS_TEXT)}
 
-            {simulationDataByRoles.slice(1).map((table, index) => {
-              let burstMinute = index * 2;
+              {simulationDataByRoles.slice(1).map((table, index) => {
+                let burstMinute = index * 2;
 
-              return (
-                <>
-                  {SimulationTitle(`${burstMinute}${LANGUAGE_TEXTS.BURST_TEXT}`)}
-                  {ContributionByRoleTable(table)};
-                </>
-              );
-            })}
-          </ResultBoardBox>
-          {Footer()}
+                return (
+                  <>
+                    {SimulationTitle(`${burstMinute}${LANGUAGE_TEXTS.BURST_TEXT}`)}
+                    {ContributionByRoleTable(table, LANGUAGE_TEXTS.TANK_TEXT, LANGUAGE_TEXTS.HEALER_TEXT, LANGUAGE_TEXTS.DPS_TEXT)};
+                  </>
+                );
+              })}
+            </ResultBoardBox>
+            {Footer()}
+          </Box>
         </Box>
       </Box>
     </Box>
@@ -118,7 +124,6 @@ function convertToContributionTable(
     ranged: [],
     casters: [],
   };
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   for (let data of partnerSimulationData) {
     switch (data.partnerJobAbbrev) {

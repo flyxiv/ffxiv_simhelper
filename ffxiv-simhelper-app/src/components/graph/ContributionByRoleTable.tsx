@@ -6,15 +6,16 @@ import {
 import { BestPartnerBuffBarStyle, BuffBarBoxStyle } from "./Style";
 import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
 import { AppConfigurations } from "../../Themes";
-import { AppLanguageTexts } from "../../const/languageTexts";
 
 const MAX_RANKINGS = 4;
 const RANKING_ITEM_HEIGHT = "4vh";
 
 export function ContributionByRoleTable(
-  simulationDataByRole: SimulationDataByRole
+  simulationDataByRole: SimulationDataByRole,
+  tankText: string,
+  healerText: string,
+  dpsText: string,
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   let tankPartnerData = simulationDataByRole.tanks;
   let healerPartnerData = simulationDataByRole.healers;
   let dpsPartnerData = simulationDataByRole.melee;
@@ -26,8 +27,6 @@ export function ContributionByRoleTable(
     let bContribution = b.buffContribution === null ? 0 : b.buffContribution;
     return bContribution - aContribution;
   });
-
-  console.log(dpsPartnerData);
 
   let maxTankContribution = Math.max.apply(
     null,
@@ -54,8 +53,6 @@ export function ContributionByRoleTable(
     maxDpsContribution
   );
 
-  console.log(maxTankContribution, maxHealerContribution, maxDpsContribution);
-
   return (
     <Grid
       container
@@ -70,7 +67,7 @@ export function ContributionByRoleTable(
       <Grid container item xs={6} direction="column" spacing={3}>
         <Grid item>
           {ContributionTableSingleRole(
-            LANGUAGE_TEXTS.TANK_TEXT,
+            tankText,
             tankPartnerData,
             maxContribution,
             maxTankContribution
@@ -78,7 +75,7 @@ export function ContributionByRoleTable(
         </Grid>
         <Grid item>
           {ContributionTableSingleRole(
-            LANGUAGE_TEXTS.HEALER_TEXT,
+            healerText,
             healerPartnerData,
             maxContribution,
             maxHealerContribution
@@ -88,7 +85,7 @@ export function ContributionByRoleTable(
 
       <Grid item xs={6}>
         {ContributionTableSingleRole(
-          LANGUAGE_TEXTS.DPS_TEXT,
+          dpsText,
           dpsPartnerData,
           maxContribution,
           maxDpsContribution

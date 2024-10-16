@@ -23,7 +23,6 @@ import {
 import { MenuItemStyle } from "../../../components/items/Styles";
 import { AppConfigurations } from "../../../Themes";
 import { EquipmentInput } from "../../../types/EquipmentInput";
-import { AppLanguageTexts } from "../../../const/languageTexts";
 
 const MateriaMenu = styled(MenuItem)`
   ${MenuItemStyle}
@@ -36,7 +35,8 @@ export function MateriaInputTable(
   slotName: string,
   equipment: Equipment | undefined,
   totalEquipmentState: EquipmentInput,
-  setTotalEquipmentState: Function
+  setTotalEquipmentState: Function,
+  emptyText: string
 ) {
   let totalState = totalEquipmentState.equipmentDatas[id];
   let materiasInSlot =
@@ -55,7 +55,8 @@ export function MateriaInputTable(
           materiaSlot,
           slotName,
           totalEquipmentState,
-          setTotalEquipmentState
+          setTotalEquipmentState,
+          emptyText
         );
       })}
     </Box>
@@ -69,9 +70,9 @@ function SingleMateriaMenu(
   materiaSlot: number,
   slotName: string,
   totalEquipmentState: EquipmentInput,
-  setTotalEquipmentState: Function
+  setTotalEquipmentState: Function,
+  emptyText: string
 ) {
-  let LANGUAGE_TEXTS = AppLanguageTexts();
   if (materias === undefined) {
     return <></>;
   }
@@ -132,7 +133,7 @@ function SingleMateriaMenu(
             alignItems={"center"}
             height="100%"
           >
-            <Typography align="center">{LANGUAGE_TEXTS.EMPTY_TEXT}</Typography>
+            <Typography align="center" sx={{ fontSize: AppConfigurations.body2FontSize }}>{emptyText}</Typography>
           </Box>
         </MateriaMenu>
       </Select>

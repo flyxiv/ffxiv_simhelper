@@ -1,5 +1,5 @@
 import totalFoodJson from "../../assets/data/food_data.json";
-import { AppLanguageTexts } from "../../const/languageTexts";
+import { TextDictionary } from "../../const/languageTexts";
 
 export const FOOD_MIN_ILVL = 680;
 export const FOOD_MAX_ILVL = 710;
@@ -52,10 +52,8 @@ export function readFoodData(minIlvl: number, maxIlvl: number) {
   return foodDatabase;
 }
 
-export function foodStatDescriptionString(food: Food) {
+export function foodStatDescriptionString(food: Food, LANGUAGE_TEXTS: TextDictionary) {
   const stats = [];
-
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   if (food.criticalStrike > 0) {
     stats.push({ statName: LANGUAGE_TEXTS.CRIT_STAT_NAME, value: food.criticalStrike });

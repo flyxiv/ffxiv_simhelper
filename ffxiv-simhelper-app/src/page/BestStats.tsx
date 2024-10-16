@@ -28,7 +28,8 @@ import { AppLanguageTexts } from "../const/languageTexts";
 let INPUT_CONTAINER_WIDTH = "70%";
 
 let StatWeightsInputContainer = styled(Box)`
-  ${InputContainerStyle(INPUT_CONTAINER_WIDTH)}
+  ${InputContainerStyle},
+  width: ${INPUT_CONTAINER_WIDTH}
 `;
 
 let CustomizeBoard = styled(Box)`
@@ -65,13 +66,15 @@ export function BestStats() {
         display="flex"
         sx={{ backgroundColor: AppConfigurations.backgroundOne }}
         width="100vw"
+        overflow={"auto"}
       >
         {LeftMenuWithLoadout(
           DPS_ANALYSIS_LOADOUT_COUNT,
           DPS_ANALYSIS_URL,
           LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
           totalState,
-          setTotalState
+          setTotalState,
+          LANGUAGE_TEXTS
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
@@ -79,14 +82,14 @@ export function BestStats() {
             <StatWeightsInputContainer justifyContent={"center"}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
               <EquipmentBoard>
-                {EquipmentSelectionMenu(0, totalState, setTotalState)}
+                {EquipmentSelectionMenu(0, totalState, setTotalState, LANGUAGE_TEXTS)}
               </EquipmentBoard>
             </StatWeightsInputContainer>
 
             <StatWeightsInputContainer paddingTop={20}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
               <CustomizeBoard>
-                {HorizontalPartyInput(totalState, setTotalState)}
+                {HorizontalPartyInput(totalState, setTotalState, LANGUAGE_TEXTS)}
               </CustomizeBoard>
             </StatWeightsInputContainer>
 
@@ -97,15 +100,15 @@ export function BestStats() {
                 justifyContent="center"
                 paddingBottom={"30vh"}
               >
-                {StatPowerSummary(totalState.equipmentDatas[0])}
+                {StatPowerSummary(totalState.equipmentDatas[0], LANGUAGE_TEXTS)}
               </Box>
             </StatWeightsInputContainer>
 
-            {BasicBottomMenu(totalState, BestStatsRequestButton)}
+            {BasicBottomMenu(totalState, BestStatsRequestButton, LANGUAGE_TEXTS, true)}
           </Box>
           {Footer()}
         </Box>
-      </Box>
+      </Box >
     </>
   );
 }

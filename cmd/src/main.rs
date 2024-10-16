@@ -1,43 +1,34 @@
-mod profile_quicksim;
-mod profile_statweight;
-
+use axum_server::tls_rustls::RustlsConfig;
 use ffxiv_simhelper_api::api_server::api_router::create_ffxiv_simhelper_service_router;
-use log::LevelFilter::Info;
-use log::{info, Level, LevelFilter, Metadata, Record, SetLoggerError};
+use std::{net::SocketAddr, path::PathBuf};
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-struct SimpleLogger;
-
-impl log::Log for SimpleLogger {
-    fn enabled(&self, metadata: &Metadata) -> bool {
-        metadata.level() <= Level::Info
-    }
-
-    fn log(&self, record: &Record) {
-        if self.enabled(record.metadata()) {
-            println!("{} - {}", record.level(), record.args());
-        }
-    }
-
-    fn flush(&self) {}
-}
-
-static LOGGER: SimpleLogger = SimpleLogger;
-pub fn init(log_level: LevelFilter) -> Result<(), SetLoggerError> {
-    log::set_logger(&LOGGER).map(|()| log::set_max_level(log_level))
-}
-
-const PORT_NUMBER: i32 = 13406;
-
+#[cfg(not(target_os = "windows"))]
 #[tokio::main]
 async fn main() {
-    info!("Loading Logger");
-    init(Info).expect("failed to load logger");
+    tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| format!("{}=debug", env!("CARGO_CRATE_NAME")).into()),
+        )
+        .with(tracing_subscriber::fmt::layer())
+        .init();
+
+    // configure certificate and private key used by https
+    let config = RustlsConfig::from_pem_file(
+        PathBuf::from("/etc/letsencrypt/live/www.ffxivsimhelper.com/fullchain.pem"),
+        PathBuf::from("/etc/letsencrypt/live/www.ffxivsimhelper.com/privkey.pem"),
+    )
+    .await
+    .unwrap();
 
     let app = create_ffxiv_simhelper_service_router();
 
-    info!("Started Server at port {}", PORT_NUMBER);
-    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", PORT_NUMBER))
+    // run https server
+    let addr = SocketAddr::from(([127, 0, 0, 1], 13406));
+    tracing::debug!("listening on {}", addr);
+    axum_server::bind_rustls(addr, config)
+        .serve(app.into_make_service())
         .await
         .unwrap();
-    axum::serve(listener, app).await.unwrap();
 }

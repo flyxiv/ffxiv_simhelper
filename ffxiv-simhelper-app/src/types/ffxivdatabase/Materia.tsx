@@ -1,5 +1,5 @@
-import { AppLanguageTexts, CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME } from "../../const/languageTexts";
-import { Equipment, getFirstSecondSubStat } from "./Equipment";
+import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME } from "../../const/languageTexts";
+import { Equipment, getFirstSubStat } from "./Equipment";
 import {
   convertEquipmentToFinalStat,
   FinalEquipmentStat,
@@ -158,11 +158,9 @@ export function getPossibleMateriasForEquipmentSlot(
     }
   }
 
-  let [firstSubStat, secondSubStat] = getFirstSecondSubStat(equipment);
+  let firstSubStat = getFirstSubStat(equipment);
 
-  let secondSubStatIdx = -1;
   let casterJob = isCaster(jobAbbrev);
-  let LANGUAGE_TEXTS = AppLanguageTexts();
 
   for (let i = 0; i < possibleMaterias.length; i++) {
     let [statName, _] = possibleMaterias[i].split("+");
@@ -172,27 +170,14 @@ export function getPossibleMateriasForEquipmentSlot(
       i = i - 1;
     }
 
-    if (!casterJob && statName === LANGUAGE_TEXTS.SPS_STAT_EN_NAME) {
+    if (!casterJob && statName === SPS_STAT_EN_NAME) {
       possibleMaterias.splice(i, 1);
       i = i - 1;
     }
-    if (casterJob && statName === LANGUAGE_TEXTS.SKS_STAT_EN_NAME) {
+    if (casterJob && statName === SKS_STAT_EN_NAME) {
       possibleMaterias.splice(i, 1);
       i = i - 1;
     }
-  }
-
-  for (let i = 0; i < possibleMaterias.length; i++) {
-    let [statName, _] = possibleMaterias[i].split("+");
-
-    if (statName === secondSubStat) {
-      secondSubStatIdx = i;
-    }
-  }
-
-  if (secondSubStatIdx >= 0) {
-    possibleMaterias.push(possibleMaterias[secondSubStatIdx]);
-    possibleMaterias.splice(secondSubStatIdx, 1);
   }
 
   return possibleMaterias;
@@ -206,7 +191,7 @@ export function toMateriaKey(materia: Materia | null) {
 }
 
 export function toMateriaDescription(materia: Materia) {
-  return `${materia.statName} + ${materia.effectiveValue}`;
+  return `${materia.statName}+${materia.effectiveValue}`;
 }
 
 export function addMateriaStatToTotalStat(
