@@ -1,33 +1,40 @@
 use crate::api_handler::create_simulation_board;
+use crate::config::AppState;
 use crate::errors::Result;
 use crate::request::simulation_api_request::SimulationApiRequest;
 use crate::response::best_partner_api_response::BestPartnerApiResponse;
 use crate::response::convert_simulation_result::create_response_from_simulation_result;
+use axum::extract::State;
 use axum::Json;
 use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 use itertools::Itertools;
 
-const BEST_PARTNER_SIMULATION_COUNT: usize = 4000;
 const WANTED_CONTRIBUTION_PERCENTILE: f64 = 0.50;
 
 pub(crate) async fn best_partner_api_handler(
+    State(app_state): State<AppState>,
     Json(request): Json<SimulationApiRequest>,
 ) -> Result<Json<BestPartnerApiResponse>> {
-    Ok(Json(best_partner(request)?))
+    Ok(Json(best_partner(request, app_state)?))
 }
 
-const ARRAY_REPEAT_VALUE: Vec<i32> = Vec::new();
-
-pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiResponse> {
+pub fn best_partner(
+    request: SimulationApiRequest,
+    app_state: AppState,
+) -> Result<BestPartnerApiResponse> {
+    let best_partner_simulation_count = app_state.config.best_partner_request_count;
     let main_player_id = request.main_player_id;
     let main_player_power = request.party[main_player_id as usize].power.clone();
     let main_player_job_abbrev = request.party[main_player_id as usize].job_abbrev.clone();
 
     // first contains total, after that contains contribution at every burst phase
-    let mut partner_contributions: [Vec<i32>; BEST_PARTNER_SIMULATION_COUNT] =
-        [ARRAY_REPEAT_VALUE; BEST_PARTNER_SIMULATION_COUNT];
+    let mut partner_contributions: Vec<Vec<i32>> =
+        Vec::with_capacity(best_partner_simulation_count);
 
-    for simulation_idx in 0..BEST_PARTNER_SIMULATION_COUNT {
+    for _ in 0..best_partner_simulation_count {
+        let mut contribution =
+            Vec::with_capacity((request.combat_time_millisecond as usize / 120000) + 1);
+
         let simulation_board = create_simulation_board(request.clone())?;
         simulation_board.run_simulation();
 
@@ -46,8 +53,10 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
             .map(|response| response.contributed_rdps as i32)
             .collect_vec();
 
-        partner_contributions[simulation_idx].push(partner_contribution as i32);
-        partner_contributions[simulation_idx].extend(partner_contribution_each_burst);
+        contribution.push(partner_contribution as i32);
+        contribution.extend(partner_contribution_each_burst);
+
+        partner_contributions.push(contribution);
     }
 
     let mut max_len = 0;
@@ -77,7 +86,7 @@ pub fn best_partner(request: SimulationApiRequest) -> Result<BestPartnerApiRespo
         let burst_contribution_top_nth_percentile = burst_contributions
             .into_iter()
             .sorted()
-            .nth((WANTED_CONTRIBUTION_PERCENTILE * BEST_PARTNER_SIMULATION_COUNT as f64) as usize)
+            .nth((WANTED_CONTRIBUTION_PERCENTILE * best_partner_simulation_count as f64) as usize)
             .unwrap();
 
         contributed_dps.push(burst_contribution_top_nth_percentile);

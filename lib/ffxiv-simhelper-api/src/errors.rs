@@ -14,6 +14,10 @@ pub enum FfxivSimbotServiceError {
     InvalidResponse(String),
     #[error("Invalid Job String: {0}")]
     InvalidJobString(String),
+    #[error("Error Parsing Config File: {0}")]
+    ConfigParseError(#[from] serde_yaml::Error),
+    #[error("Error Opening File: {0}")]
+    FileOpenError(#[from] std::io::Error),
 }
 
 impl IntoResponse for FfxivSimbotServiceError {

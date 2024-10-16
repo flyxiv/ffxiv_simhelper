@@ -19,6 +19,7 @@ thiserror = "1"
 tower-http = { version = "0.5", features = ["cors"] }
 log = "0.4.20"
 lazy_static = "1.4.0"
+serde_yaml = "0.9"
 
 [dependencies.ffxiv-simhelper-combat-components]
 version = "0.1.0"
