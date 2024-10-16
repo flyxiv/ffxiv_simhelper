@@ -159,7 +159,7 @@ export function MainPlayerJobSelectionOnlyBuffJobs(
 
     newTotalEquipmentState.equipmentDatas[id].mainPlayerJobAbbrev = newJobAbbrev;
     newTotalEquipmentState.equipmentDatas[id].power.speedMultiplier = 1;
-    newTotalEquipmentState.equipmentDatas[id].power.gcd = Math.floor(DEFAULT_GCD * calculateHasteBuff(newJobAbbrev) / 100)
+    newTotalEquipmentState.equipmentDatas[id].power.gcd = Math.floor(DEFAULT_GCD * calculateHasteBuff(newJobAbbrev) / 100) / 100
 
     setTotalState(newTotalEquipmentState);
   };
@@ -249,7 +249,7 @@ export function MainPlayerGcdSelection(
         onChange={(e) => {
           let newGcd = parseFloat(e.target.value);
           let newTotalState = { ...totalEquipmentState };
-          let maxGcd = Math.floor(DEFAULT_GCD * calculateHasteBuff(jobAbbrev)) / 100;
+          let maxGcd = Math.floor(DEFAULT_GCD * (calculateHasteBuff(jobAbbrev) / 100)) / 100;
           let newSpeedMultiplier = Math.floor(maxGcd / newGcd * 1000) / 1000;
 
           newTotalState.equipmentDatas[id].power.gcd = newGcd;

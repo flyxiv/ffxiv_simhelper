@@ -33,7 +33,7 @@ import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
 import { MIDLANDER_HYUR_EN_NAME } from "../../const/languageTexts";
 
-const REQUEST_URL = "https://www.ffxivsimhelper.com:13406/api/v1/bestpartner";
+const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
 export const BEST_PARTNER_ITERATION_COUNT = 2000;
 
 interface PartnerKey {
@@ -167,19 +167,17 @@ function createBestPartnerRequest(
     },
   ];
 
-  let playerCount = 0;
-  let bisEquipments = mapJobAbbrevToJobBisEquipments(jobAbbrev);
+  let partnerBisEquipments = mapJobAbbrevToJobBisEquipments(partnerJobAbbrev);
 
-
-  if (bisEquipments !== undefined) {
-    let playerTotalState = {
-      mainPlayerJobAbbrev: jobAbbrev,
+  if (partnerBisEquipments !== undefined) {
+    let partnerTotalState = {
+      mainPlayerJobAbbrev: partnerJobAbbrev,
       race: MIDLANDER_HYUR_EN_NAME,
-      foodId: bisEquipments.foodId,
+      foodId: partnerBisEquipments.foodId,
       mainPlayerPartner1Id: null,
       mainPlayerPartner2Id: null,
-      itemSet: bisEquipments.itemSet,
-      gearSetMaterias: bisEquipments.gearSetMaterias,
+      itemSet: partnerBisEquipments.itemSet,
+      gearSetMaterias: partnerBisEquipments.gearSetMaterias,
       combatTimeMillisecond: 0,
       partyMemberJobAbbrevs: [],
       partyMemberIds: [],
@@ -188,31 +186,31 @@ function createBestPartnerRequest(
       power: defaultPlayerPower(),
       compositionBuffPercent: 0,
     }
-    let partnerPower = calculatePlayerPowerFromInputs(playerTotalState);
-    let autoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
-    if (autoAttackDelays === undefined) {
-      autoAttackDelays = 0;
+    let partnerPower = calculatePlayerPowerFromInputs(partnerTotalState);
+    let partnerAutoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
+    if (partnerAutoAttackDelays === undefined) {
+      partnerAutoAttackDelays = 0;
     }
-    partnerPower.autoAttackDelays = autoAttackDelays;
+    partnerPower.autoAttackDelays = partnerAutoAttackDelays;
 
     partyInfo.push({
-      playerId: playerCount + 1,
+      playerId: 1,
       partner1Id: null,
       partner2Id: null,
       jobAbbrev: partnerJobAbbrev,
       power: partnerPower,
     });
-
-    playerCount++;
   }
 
-  return {
+  const request = {
     mainPlayerId: 0,
     combatTimeMillisecond: totalState.combatTimeMillisecond,
     party: partyInfo,
     partyIlvlAdjustment: calculateIlvlAdjustment(totalState.partyMemberIlvl),
     usePot: totalState.usePot === USE_POT_VAL,
   };
+
+  return request;
 }
 
 function createAllPossiblePartnerList(mainPlayerJobAbbrev: string) {
