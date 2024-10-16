@@ -3,6 +3,7 @@ use ffxiv_simhelper_api::api_server::api_router::create_ffxiv_simhelper_service_
 use std::{net::SocketAddr, path::PathBuf};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+#[cfg(not(target_os = "windows"))]
 #[tokio::main]
 async fn main() {
     tracing_subscriber::registry()
@@ -31,5 +32,3 @@ async fn main() {
         .await
         .unwrap();
 }
-
-

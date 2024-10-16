@@ -3,10 +3,7 @@ name = "ffxiv-simhelper-cmd"
 version = "0.1.0"
 edition = "2021"
 
-[[bin]]
-name = "ffxiv-simhelper"
-path = "src/main.rs"
-doc = false
+
 
 [[bin]]
 name = "ffxiv-simhelper-local"
@@ -21,6 +18,11 @@ doc = false
 [[bin]]
 name = "profile-beststats"
 path = "src/profile_beststats.rs"
+doc = false
+
+[[target.'cfg(not(target_os = "windows"))'.bin]]
+name = "ffxiv-simhelper"
+path = "src/main.rs"
 doc = false
 
 [dependencies.ffxiv-simhelper-dps-simulator]
@@ -40,7 +42,8 @@ axum = "0.7"
 serde = { version = "1.0.196", features = ["derive"] }
 log = "0.4.20"
 itertools = "0.13.0"
-axum-server = { version = "0.7", features = ["tls-rustls"] }
 tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+axum-server = { version = "<0.7", features = ["tls-rustls"] }
