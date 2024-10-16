@@ -1,5 +1,2 @@
-# Etro Data File Paths
-equipment_json_file_name: equipment_data.json
-jobs_json_file_name: jobs_data.json
-food_json_file_name: food_data.json
-clans_json_file_name: clans_data.json
+best_partner_request_count: 1000
+best_stats_simulation_count: 2000

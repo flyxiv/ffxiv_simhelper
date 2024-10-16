@@ -1,10 +1,12 @@
 use ffxiv_simhelper_api::api_handler::statweights::stat_weights;
+use ffxiv_simhelper_api::config::{AppState, FfxivSimhelperConfig};
 use ffxiv_simhelper_api::request::best_stats_api_request::BestStatsApiRequest;
 use ffxiv_simhelper_api::request::simulation_api_request::PlayerInfoRequest;
 use ffxiv_simhelper_combat_components::live_objects::player::player_power::PlayerPower;
 use ffxiv_simhelper_combat_components::types::PlayerIdType;
 use itertools::Itertools;
 use log::{Level, LevelFilter, Metadata, Record, SetLoggerError};
+use std::path::PathBuf;
 use tokio::time::Instant;
 
 struct SimpleLogger;
@@ -78,8 +80,15 @@ fn main() {
 
     let new = Instant::now();
 
+    let config_directory = PathBuf::from("./config/local_server_config.yml");
+
+    let backend_config = FfxivSimhelperConfig::try_new(config_directory)
+        .expect("Failed to load backend config file");
+
+    let app_state = AppState::from(backend_config);
+
     for _ in 0..8 {
-        let response = stat_weights(request.clone());
+        let response = stat_weights(request.clone(), app_state.clone());
         println!("{:?}", response.unwrap().dps);
     }
 

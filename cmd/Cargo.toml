@@ -20,7 +20,7 @@ name = "profile-beststats"
 path = "src/profile_beststats.rs"
 doc = false
 
-[[target.'cfg(not(target_os = "windows"))'.bin]]
+[[bin]]
 name = "ffxiv-simhelper"
 path = "src/main.rs"
 doc = false

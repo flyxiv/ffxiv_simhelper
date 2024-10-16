@@ -1,5 +1,6 @@
 use axum_server::tls_rustls::RustlsConfig;
 use ffxiv_simhelper_api::api_server::api_router::create_ffxiv_simhelper_service_router;
+use ffxiv_simhelper_api::config::{AppState, FfxivSimhelperConfig};
 use std::{net::SocketAddr, path::PathBuf};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -22,7 +23,13 @@ async fn main() {
     .await
     .unwrap();
 
-    let app = create_ffxiv_simhelper_service_router();
+    let config_directory = PathBuf::from("./config/backend_server_config.yml");
+
+    let backend_config = FfxivSimhelperConfig::try_new(config_directory)
+        .expect("Failed to load backend config file");
+    let app_state = AppState::from(backend_config);
+
+    let app = create_ffxiv_simhelper_service_router(app_state);
 
     // run https server
     let addr = SocketAddr::from(([127, 0, 0, 1], 13406));
