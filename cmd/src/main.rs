@@ -32,7 +32,7 @@ async fn main() {
     let app = create_ffxiv_simhelper_service_router(app_state);
 
     // run https server
-    let addr = SocketAddr::from(([127, 0, 0, 1], 13406));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 13406));
     tracing::debug!("listening on {}", addr);
     axum_server::bind_rustls(addr, config)
         .serve(app.into_make_service())
