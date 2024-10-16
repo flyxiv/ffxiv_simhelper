@@ -31,10 +31,13 @@ import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
 import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
-import { MIDLANDER_HYUR_EN_NAME } from "../../const/languageTexts";
+import { BRD_EN_NAME, DNC_EN_NAME, MIDLANDER_HYUR_EN_NAME, MNK_EN_NAME } from "../../const/languageTexts";
 
 const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
 export const BEST_PARTNER_ITERATION_COUNT = 2000;
+
+// classes like MNK, DNC, BRD eat more buffs when more players are in the party. We can't simulate full party because it's too slow, so add a little boost to these classes.
+const PARTY_MEMBER_RELATED_CLASS_MULTIPLIER = 11;
 
 interface PartnerKey {
   jobAbbrev: string;
@@ -187,6 +190,11 @@ function createBestPartnerRequest(
       compositionBuffPercent: 0,
     }
     let partnerPower = calculatePlayerPowerFromInputs(partnerTotalState);
+
+    if (partnerJobAbbrev === BRD_EN_NAME || partnerJobAbbrev === DNC_EN_NAME || partnerJobAbbrev === MNK_EN_NAME) {
+      partnerPower.mainStatMultiplier = Math.floor(partnerPower.mainStatMultiplier * PARTY_MEMBER_RELATED_CLASS_MULTIPLIER / 10 * 1000) / 1000;
+    }
+
     let partnerAutoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);
     if (partnerAutoAttackDelays === undefined) {
       partnerAutoAttackDelays = 0;

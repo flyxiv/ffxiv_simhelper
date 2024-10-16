@@ -87,9 +87,13 @@ export function SimulationInputSummary(
   combatTimeMilliseconds: number,
   iterationCount: number,
   variancePercent: number,
-  LANGUAGE_TEXTS: TextDictionary
+  LANGUAGE_TEXTS: TextDictionary,
+  showStats: boolean
 ) {
-  let simulationInputNames = getStatNames(jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
+  let simulationInputNames = [LANGUAGE_TEXTS.GCD_NAME];
+  if (showStats) {
+    simulationInputNames = getStatNames(jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
+  }
 
   return (
     <>
