@@ -6,6 +6,12 @@ yarn install
 
 # dev testing
 ```bash
+# for app
+$Env:NODE_ENV="application"
+
+# for server
+$Env:NODE_ENV="server"
+
 yarn dev
 ```
 
@@ -21,4 +27,3 @@ yarn electron-pack
 cd dist
 # execute file
 ```
-

@@ -13,6 +13,7 @@ import { EMPTY_PARTY_MEMBER } from "../types/PartyStates";
 import { STAT_WEIGHTS_REQUEST_COUNT } from "../components/basic/BestStatsRequestButton";
 import { AppLanguageTexts } from "../const/languageTexts";
 import "./SimulationResult.css";
+import { DemoWarningText } from "../components/basic/WarningText";
 
 export interface StatWeightsData {
   statName: string;
@@ -75,6 +76,7 @@ export function StatWeightsResult() {
           <Box className="SimulationResult" sx={{
             backgroundColor: AppConfigurations.backgroundOne
           }}>
+            {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
             <ResultBoardTopBox marginBottom="40px">
               {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
               {PlayerInfo(responseJson.mainPlayerPower, mainPlayerJob, responseJson.combatTimeMillisecond, partyMemberJobAbbrevs, STAT_WEIGHTS_REQUEST_COUNT, 1, LANGUAGE_TEXTS)}

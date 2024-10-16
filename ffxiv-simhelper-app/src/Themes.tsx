@@ -41,6 +41,6 @@ export const AppConfigurations = {
 
 
   isApp: process.env.NODE_ENV !== ServiceMode.Server,
-  requestServer: process.env.NODE_ENV !== ServiceMode.Server ? "https://www.ffxivsimhelper.com:13406" : "http://localhost:13406"
+  requestServer: process.env.NODE_ENV !== ServiceMode.Server ? "http://localhost:13406" : "https://www.ffxivsimhelper.com:13406"
 };
 

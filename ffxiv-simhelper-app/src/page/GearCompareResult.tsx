@@ -69,6 +69,7 @@ export function GearCompareResult() {
           <Box className="SimulationResult" sx={{
             backgroundColor: AppConfigurations.backgroundOne
           }}>
+            {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
             <ResultBoardTopBox marginBottom="50px">
               {SimulationTitle(LANGUAGE_TEXTS.GEARSET1_TEXT)}
               {GearCompareDpsSummary(simulationData1, simulationData2)}

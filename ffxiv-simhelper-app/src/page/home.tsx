@@ -14,6 +14,7 @@ import {
 } from "../App";
 import { AppLanguageTexts, TextDictionary } from "../const/languageTexts";
 import { isMobile } from "../util";
+import { DemoWarningText } from "../components/basic/WarningText";
 
 const dpsAnalysisButtonImagePath = "/images/icon_dps_analysis_C.svg";
 const gearCompareSimButtonImagePath = "/images/icon_gear_compare_C.svg";
@@ -30,17 +31,18 @@ export function Home() {
         width: "100%",
       }}
     >
+      {BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME, LANGUAGE_TEXTS)}
       <Box display="flex" width="100%" overflow="auto" minHeight="100%">
-        {BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME, LANGUAGE_TEXTS)}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
+          {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
           <Box className="HomeBody">
             {isMobile() ? OneColumnHomePage(LANGUAGE_TEXTS) : TwoColumnHomePage(LANGUAGE_TEXTS)}
           </Box>
           {Footer()}
         </Box>
       </Box>
-    </Box>
+    </Box >
   );
 }
 

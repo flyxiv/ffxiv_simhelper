@@ -26,6 +26,7 @@ import { Footer } from "../components/basic/Footer";
 import { PlayerInfo } from "../components/container/PlayerInfo";
 import { QUICK_SIM_ITERATION_COUNT } from "../components/basic/DpsAnalysisRequestButton";
 import { AppLanguageTexts } from "../const/languageTexts";
+import { DemoWarningText } from "../components/basic/WarningText";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -92,7 +93,8 @@ export function SimulationResult() {
       {BasicLeftMenu(LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME, LANGUAGE_TEXTS)}
       <Box display="flex" width={BODY_WIDTH} justifyContent={"center"} flexDirection={"column"} alignItems={"center"}>
         {AppHeader()}
-        <ResultBoardTopBox sx={{width: "90%"}}>
+        {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
+        <ResultBoardTopBox sx={{ width: "90%" }}>
           {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
           {DpsSummary(mainPlayerSimulationData, "99.9% RDPS")}
           <Typography sx={{ color: 'white' }} align="center">
@@ -122,7 +124,7 @@ export function SimulationResult() {
 }
 
 
-export const RESULT_BOARD_BOX_WIDTH = {xs: "90%", sm: "85%", md: "80%", lg: "75%", xl: "70%"}
+export const RESULT_BOARD_BOX_WIDTH = { xs: "90%", sm: "85%", md: "80%", lg: "75%", xl: "70%" }
 
 function renderTableBasedOnSelectedButton(
   currentlyToggledView: string,

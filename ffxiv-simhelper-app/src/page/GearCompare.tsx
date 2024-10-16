@@ -26,6 +26,7 @@ import ArrowDownwardIcom from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { AppLanguageTexts } from "../const/languageTexts";
 import { isMobile } from "../util";
+import { DemoWarningText } from "../components/basic/WarningText";
 
 export const GEAR_COMPARE_INPUT_CONTAINER_WIDTH = "98%";
 const GEAR_COMPARE_LOADOUNT_COUNT = 6;
@@ -112,6 +113,7 @@ export function GearCompare() {
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
+          {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
           <Box display="flex" flexDirection="column" justifyContent={"center"}>
             <GearCompareEquipmentInputContainer>
               <Box display="flex" justifyContent={"center"} width={"100%"}>
