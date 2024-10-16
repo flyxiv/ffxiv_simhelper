@@ -26,8 +26,8 @@ import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
 import { MIDLANDER_HYUR_EN_NAME } from "../../const/languageTexts";
 
-const TOTAL_REQUEST_COUNT = AppConfigurations.electron ? 1000 : 1;
-const TOTAL_ITERATION_COUNT = AppConfigurations.electron ? 2 : 1;
+const TOTAL_REQUEST_COUNT = AppConfigurations.isApp ? 1000 : 1;
+const TOTAL_ITERATION_COUNT = AppConfigurations.isApp ? 2 : 1;
 export const QUICK_SIM_ITERATION_COUNT =
   TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT;
 const REQUEST_URL = "https://www.ffxivsimhelper.com:13406/api/v1/simulate";

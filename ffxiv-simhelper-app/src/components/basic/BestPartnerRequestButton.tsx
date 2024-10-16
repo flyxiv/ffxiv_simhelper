@@ -33,8 +33,8 @@ import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
 import { BRD_EN_NAME, DNC_EN_NAME, MIDLANDER_HYUR_EN_NAME, MNK_EN_NAME } from "../../const/languageTexts";
 
-const REQUEST_URL = "http://localhost:13406/api/v1/bestpartner";
-export const BEST_PARTNER_ITERATION_COUNT = 2000;
+const REQUEST_URL = `${AppConfigurations.requestServer}/api/v1/bestpartner`;
+export const BEST_PARTNER_ITERATION_COUNT = AppConfigurations.isApp ? 2000 : 1;
 
 // classes like MNK, DNC, BRD eat more buffs when more players are in the party. We can't simulate full party because it's too slow, so add a little boost to these classes.
 const PARTY_MEMBER_RELATED_CLASS_MULTIPLIER = 11;
@@ -45,6 +45,7 @@ interface PartnerKey {
 }
 
 export function BestPartnerRequestButton(totalState: EquipmentInput) {
+  console.log(REQUEST_URL);
   let [isRunning, setIsRunning] = useState(false);
   let RequestButton = styled(Button)`
     ${requestButtonStyle}

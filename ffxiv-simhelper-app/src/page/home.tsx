@@ -79,7 +79,7 @@ function LogoBox(
 }
 
 export function convertToLinkUrl(urlName: string): string {
-  return AppConfigurations.electron ? `/index.html#/${urlName}` : `/${urlName}`;
+  return AppConfigurations.isApp ? `/index.html#/${urlName}` : `/${urlName}`;
 }
 
 function OneColumnHomePage(LANGUAGE_TEXTS: TextDictionary) {

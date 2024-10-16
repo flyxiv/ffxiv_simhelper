@@ -1,3 +1,8 @@
+enum ServiceMode {
+  App = 'application',
+  Server = 'server',
+}
+
 export const AppConfigurations = {
   backgroundOne: "#121212",
   backgroundTwo: "#201F28",
@@ -35,5 +40,7 @@ export const AppConfigurations = {
   },
 
 
-  electron: true,
+  isApp: process.env.NODE_ENV !== ServiceMode.Server,
+  requestServer: process.env.NODE_ENV !== ServiceMode.Server ? "https://www.ffxivsimhelper.com:13406" : "http://localhost:13406"
 };
+
