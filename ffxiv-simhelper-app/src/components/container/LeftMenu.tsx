@@ -162,7 +162,7 @@ function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS
           }}
         />
 
-        {NavigationMenu("/index.html", LANGUAGE_TEXTS.HOME_PAGE_NAME, HOME_MENU_LOGO_PATH, currentSimulationPage)}
+        {NavigationMenu(AppConfigurations.isApp ? "/index.html" : "/", LANGUAGE_TEXTS.HOME_PAGE_NAME, HOME_MENU_LOGO_PATH, currentSimulationPage)}
         {NavigationMenu(
           convertToLinkUrl(DPS_ANALYSIS_URL),
           LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
