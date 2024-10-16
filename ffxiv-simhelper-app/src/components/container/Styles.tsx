@@ -19,7 +19,7 @@ export const ResultBoardBoxStyle = `
 export const ResultBoardTopBoxStyle = `
   background-color: ${AppConfigurations.backgroundTwo};
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   display: flex;
   flex-direction: column;
   width: 90%;

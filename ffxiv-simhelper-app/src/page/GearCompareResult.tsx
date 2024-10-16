@@ -4,7 +4,7 @@ import { GearCompareDpsSummary } from "../components/container/DpsSummaryBox";
 import { ResultBoardTopBoxStyle } from "../components/container/Styles";
 import { SimulationTitle } from "../components/basic/SimulationTitle";
 import { StatComparePlayerInfo } from "../components/container/PlayerInfo";
-import { GEAR_COMPARE_RESPONSE_SAVE_NAME } from "../App";
+import { BODY_WIDTH, GEAR_COMPARE_RESPONSE_SAVE_NAME } from "../App";
 import { GearCompareResponse } from "../types/GearCompareResponse";
 import { AppConfigurations } from "../Themes";
 import { BasicLeftMenu } from "../components/container/LeftMenu";
@@ -58,13 +58,13 @@ export function GearCompareResult() {
       display="flex"
       flexDirection={"column"}
       sx={{ backgroundColor: AppConfigurations.backgroundOne }}
-      width="100vw"
+      width="100%"
       alignItems={"center"}
       paddingBottom={20}
     >
-      <Box display="flex">
+      <Box display="flex" width="100%" justifyContent={"center"} alignItems={"center"}>
         {BasicLeftMenu(LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME, LANGUAGE_TEXTS)}
-        <Box>
+        <Box width={BODY_WIDTH}>
           {AppHeader()}
           <Box className="SimulationResult" sx={{
             backgroundColor: AppConfigurations.backgroundOne
@@ -72,7 +72,7 @@ export function GearCompareResult() {
             <ResultBoardTopBox marginBottom="50px">
               {SimulationTitle(LANGUAGE_TEXTS.GEARSET1_TEXT)}
               {GearCompareDpsSummary(simulationData1, simulationData2)}
-              <Typography sx={{ color: 'white' }}>
+              <Typography sx={{ color: 'white' }} align="center">
                 {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
               </Typography>
               {StatComparePlayerInfo(
@@ -89,7 +89,7 @@ export function GearCompareResult() {
             <ResultBoardTopBox>
               {SimulationTitle(LANGUAGE_TEXTS.GEARSET2_TEXT)}
               {GearCompareDpsSummary(simulationData2, simulationData1)}
-              <Typography sx={{ color: 'white' }}>
+              <Typography sx={{ color: 'white' }} align="center">
                 {LANGUAGE_TEXTS.EDPS_EXPLANATION_TEXT}
               </Typography>
               {StatComparePlayerInfo(

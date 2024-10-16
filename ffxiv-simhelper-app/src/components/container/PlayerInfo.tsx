@@ -34,18 +34,18 @@ export function PlayerInfo(power: PlayerPower, job: string, combatTimeMillisecon
 
 function PartyMemberJobsInfo(partyMemberJobAbbrevs: string[], partyMembersText: string) {
   return (
-     <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-      <Box marginRight={2}>
-        <Typography variant="h6" color="white"> {partyMembersText} </Typography>
+    <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+      <Box>
+        <Typography variant="h6" color="white" align="center"> {partyMembersText} </Typography>
       </Box>
 
 
-    <Box display="flex" alignItems="center" justifyContent="left" marginBottom="30px" border="1px solid black" padding={1}>
-      {partyMemberJobAbbrevs.map((partyMemberJobAbbrev) => {
-        return JobIconFactory(partyMemberJobAbbrev, 30);
-      })}
+      <Box display="flex" alignItems="center" justifyContent="left" marginBottom="30px" border="1px solid black" padding={1}>
+        {partyMemberJobAbbrevs.map((partyMemberJobAbbrev) => {
+          return JobIconFactory(partyMemberJobAbbrev, 30);
+        })}
+      </Box>
     </Box>
-</Box>
   );
 }
 

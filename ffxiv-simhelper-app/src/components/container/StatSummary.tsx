@@ -21,8 +21,9 @@ import { isMobile } from "../../util";
 
 
 const STAT_SUMMARY_BOX_WIDTH = "50px";
-const STAT_SUMMARY_TIME_BOX_WIDTH = "50px";
+const STAT_SUMMARY_TIME_BOX_WIDTH = "65px";
 const POWER_SUMMARY_BOX_WIDTH = "6vw";
+const STAT_WEIGHT_SUMMARY_BOX_WIDTH = "200px";
 const SUMMARY_FONT_SIZE = { xs: 11, sm: 13 };
 
 let StatSummaryBox = styled(Box)`
@@ -38,8 +39,13 @@ let SingleStatBox = styled(Box)`
 `;
 
 let SingleStatCombatTimeBox = styled(Box)`
-  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH, 80)}
+  ${SingleStatBoxStyle(STAT_SUMMARY_TIME_BOX_WIDTH, 85)}
 `;
+
+let SingleStatWeightBox = styled(Box)`
+  ${SingleStatBoxStyle(STAT_WEIGHT_SUMMARY_BOX_WIDTH, 200)}
+`;
+
 
 export function StatSummaryTypography(text: string) {
   return (
@@ -134,7 +140,6 @@ export function SimulationInputSummary(
         </StatSummaryBox>
       </Box>
       <Box display="flex">
-
         <StatSummaryBox
           sx={{
             backgroundColor: AppConfigurations.backgroundFour,
@@ -167,54 +172,77 @@ export function StatSummaryGearCompare(
   let jobStatNames = getStatNames(jobAbbrev, LANGUAGE_TEXTS.GCD_NAME);
 
   return (
-    <Box display="inline-block">
-      <StatSummaryBox
-        sx={{ backgroundColor: AppConfigurations.backgroundThree }}
-      >
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.TIME_TEXT)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.ITERATION_NAME)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(LANGUAGE_TEXTS.VARIANCE_NAME)}
-        </SingleStatCombatTimeBox>
-        {jobStatNames.map((statName) => {
-          return (
-            <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
-          );
-        })}
-      </StatSummaryBox>
+    <Box>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{ backgroundColor: AppConfigurations.backgroundThree }}
+        >
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.TIME_TEXT)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.ITERATION_NAME)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(LANGUAGE_TEXTS.VARIANCE_NAME)}
+          </SingleStatCombatTimeBox>
+        </StatSummaryBox>
+      </Box>
 
-      <StatSummaryBox
-        sx={{
-          backgroundColor: AppConfigurations.backgroundFour,
-        }}
-      >
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(`${combatTimeMilliseconds / 1000}`)}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(iterationCount.toString())}
-        </SingleStatCombatTimeBox>
-        <SingleStatCombatTimeBox>
-          {StatSummaryTypography(`${variancePercent.toFixed(1)}%`)}
-        </SingleStatCombatTimeBox>
-        {jobStatNames.map((statName) => {
-          return (
-            <SingleStatBox>
-              {StatSummaryTypographyCompare(
-                getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME),
-                getStatByStatName(comparePower, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME),
-                statName,
-                LANGUAGE_TEXTS.GCD_NAME
-              )}
-            </SingleStatBox>
-          );
-        })}
-      </StatSummaryBox>
-    </Box>
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundFour,
+          }}
+        >
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(`${combatTimeMilliseconds / 1000}`)}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(iterationCount.toString())}
+          </SingleStatCombatTimeBox>
+          <SingleStatCombatTimeBox>
+            {StatSummaryTypography(`${variancePercent.toFixed(1)}%`)}
+          </SingleStatCombatTimeBox>
+        </StatSummaryBox>
+      </Box>
+
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundThree,
+          }}
+        >
+          {jobStatNames.map((statName) => {
+            return (
+              <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
+            );
+          })}
+        </StatSummaryBox>
+      </Box>
+
+      <Box display="flex">
+        <StatSummaryBox
+          sx={{
+            backgroundColor: AppConfigurations.backgroundFour,
+          }}
+        >
+
+          {jobStatNames.map((statName) => {
+            return (
+              <SingleStatBox>
+                {StatSummaryTypographyCompare(
+                  getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME),
+                  getStatByStatName(comparePower, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME),
+                  statName,
+                  LANGUAGE_TEXTS.GCD_NAME
+                )}
+              </SingleStatBox>
+            );
+          })}
+        </StatSummaryBox>
+      </Box>
+    </Box >
   );
 }
 
@@ -301,7 +329,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState, LANGUAGE_
 
 export function StatWeightSummary(statWeightsData: StatWeightsData[], LANGUAGE_TEXTS: TextDictionary) {
   return (
-    <Box display="inline-block">
+    <Box>
       <Box display="flex">
         <StatSummaryBox
           sx={{ backgroundColor: AppConfigurations.backgroundThree }}
@@ -311,7 +339,7 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[], LANGUAGE_T
         <StatSummaryBox
           sx={{ backgroundColor: AppConfigurations.backgroundThree }}
         >
-          <SingleStatBox sx={{ width: "15vw" }}>{StatSummaryTypography(LANGUAGE_TEXTS.BEST_STATS_NAME_TEXT)}</SingleStatBox>
+          <SingleStatWeightBox>{StatSummaryTypography(LANGUAGE_TEXTS.BEST_STATS_NAME_TEXT)}</SingleStatWeightBox>
         </StatSummaryBox>
       </Box>
 
@@ -326,13 +354,13 @@ export function StatWeightSummary(statWeightsData: StatWeightsData[], LANGUAGE_T
               </SingleStatBox>
             </StatSummaryBox>
             <StatSummaryBox
-              sx={{ backgroundColor: AppConfigurations.backgroundFour, width: "15vw" }}
+              sx={{ backgroundColor: AppConfigurations.backgroundFour }}
             >
-              <SingleStatBox sx={{ width: "15vw" }}>
+              <SingleStatWeightBox>
                 {StatSummaryTypography(
                   `${statWeightData.rdpsIncreasePerPoint.toFixed(2)}`
                 )}
-              </SingleStatBox>
+              </SingleStatWeightBox>
             </StatSummaryBox>
           </Box>
         );
