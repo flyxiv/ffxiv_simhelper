@@ -148,7 +148,7 @@ export function BasicLeftMenu(currentSimulationPage: string, LANGUAGE_TEXTS: Tex
         onClose={toggleDrawer}
         anchor="left"
       >
-        <LeftMenuTotalBar>{DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}</LeftMenuTotalBar>
+        <LeftMenuTotalBar minHeight="100vh">{DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}</LeftMenuTotalBar>
       </Drawer>
     </>
   );
