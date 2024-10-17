@@ -49,13 +49,7 @@ export const BEST_PARTNER_RESULT_URL = "bestpartnersimulationresult";
 export const BEST_STATS_URL = "beststats";
 export const BEST_STATS_RESULT_URL = "beststatssimulationresult";
 
-export const BODY_WIDTH = {
-  xs: `${100 - MENU_WIDTH_VW_XS}%`,
-  sm: `${100 - MENU_WIDTH_VW_SM}%`,
-  md: `${100 - MENU_WIDTH_VW_MD}%`,
-  lg: `${100 - MENU_WIDTH_VW_LG}%`,
-  xl: `${100 - MENU_WIDTH_VW_XL}%`,
-};
+export const BODY_WIDTH = "100%";
 export const HOME_PAGE_MIN_WIDTH_PX = (itemsPerRow: number) => itemsPerRow === 2 ? 1700 : 100;
 
 

@@ -24,6 +24,7 @@ import {
 import { BestStatsRequestButton } from "../components/basic/BestStatsRequestButton";
 import { isNotValid, DPS_ANALYSIS_LOADOUT_COUNT } from "./DpsAnalysis";
 import { AppLanguageTexts } from "../const/languageTexts";
+import { DemoWarningText } from "../components/basic/WarningText";
 
 let INPUT_CONTAINER_WIDTH = "70%";
 
@@ -78,6 +79,7 @@ export function BestStats() {
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
+          {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
           <Box alignContent={"center"}>
             <StatWeightsInputContainer justifyContent={"center"}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}

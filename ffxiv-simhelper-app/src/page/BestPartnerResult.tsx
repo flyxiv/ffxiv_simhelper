@@ -19,6 +19,7 @@ import { ContributionByRoleTable } from "../components/graph/ContributionByRoleT
 import { BEST_PARTNER_ITERATION_COUNT } from "../components/basic/BestPartnerRequestButton";
 import { AppLanguageTexts, AST_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PLD_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../const/languageTexts";
 import "./SimulationResult.css"
+import { DemoWarningText } from "../components/basic/WarningText";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -79,6 +80,7 @@ export function BestPartnerResult() {
             backgroundColor: AppConfigurations.backgroundOne
           }}>
             {AppHeader()}
+            {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
             <ResultTopBoardBox marginBottom="40px">
               {SimulationTitle(LANGUAGE_TEXTS.SIMULATION_RESULT_TEXT)}
               {PlayerInfo(
@@ -88,7 +90,8 @@ export function BestPartnerResult() {
                 null,
                 BEST_PARTNER_ITERATION_COUNT,
                 1,
-                LANGUAGE_TEXTS
+                LANGUAGE_TEXTS,
+                false
               )}
             </ResultTopBoardBox>
             <ResultBoardBox>

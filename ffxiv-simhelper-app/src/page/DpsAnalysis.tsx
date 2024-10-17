@@ -23,6 +23,7 @@ import {
 } from "./Styles";
 import { DpsAnalysisRequestButton } from "../components/basic/DpsAnalysisRequestButton";
 import { AppLanguageTexts } from "../const/languageTexts";
+import { DemoWarningText } from "../components/basic/WarningText";
 
 export const DPS_ANALYSIS_LOADOUT_COUNT = 6;
 
@@ -112,6 +113,7 @@ export function DpsAnalysis() {
         )}
         <Box width={BODY_WIDTH} display="flex" alignItems={"center"} flexDirection={"column"}>
           {AppHeader()}
+          {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
           <Box alignContent={"center"} width="100%">
             <DpsAnalysisInputContainer justifyContent={"center"}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}

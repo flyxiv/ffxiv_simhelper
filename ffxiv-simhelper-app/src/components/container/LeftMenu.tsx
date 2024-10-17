@@ -1,4 +1,4 @@
-import { Box, Divider, Drawer, Link, styled, Typography } from "@mui/material";
+import { Box, Divider, Drawer, IconButton, Link, styled, Typography } from "@mui/material";
 import {
   LeftMenuLogoStyle,
   LeftMenuNavigationBarStyle,
@@ -17,6 +17,8 @@ import { EquipmentInput } from "../../types/EquipmentInput";
 import { convertToLinkUrl } from "../../page/home";
 import { LanguageInputForm } from "../input/basicform/LanguageInputForm";
 import { TextDictionary } from "../../const/languageTexts";
+import { useState } from "react";
+import MenuIcon from "@mui/icons-material/Menu";
 
 export const MENU_WIDTH_VW_XS = 0;
 export const MENU_WIDTH_VW_SM = 0;
@@ -56,53 +58,99 @@ export function LeftMenuWithLoadout(
   setTotalState: Function,
   LANGUAGE_TEXTS: TextDictionary
 ) {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
 
   return (
-    <Drawer
-      sx={{
-        width: MENU_WIDTH,
-        flexShrink: 0,
-        "& .MuiDrawer-paper": {
+    <>
+      <Box
+        position="fixed"
+        top={16}
+        left={16}
+        zIndex={2}
+      >
+        <IconButton onClick={toggleDrawer} sx={{
+          backgroundColor: "white",
+          '&:hover': {
+            backgroundColor: "gray"
+          }
+        }}>
+          <MenuIcon />
+        </IconButton>
+      </Box>
+      <Drawer
+        sx={{
           width: MENU_WIDTH,
-          backgroundColor: `${AppConfigurations.backgroundOne}`,
-          scrollbarWidth: "none",
-        },
-      }}
-      variant="permanent"
-      anchor="left"
-    >
-      <LeftMenuTotalBar>
-        {DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}
-        {EquipmentLoadouts(
-          loadoutCount,
-          loadoutType,
-          totalState,
-          setTotalState,
-          LANGUAGE_TEXTS
-        )}
-      </LeftMenuTotalBar>
-    </Drawer>
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: MENU_WIDTH,
+            backgroundColor: `${AppConfigurations.backgroundOne}`,
+            scrollbarWidth: "none",
+          },
+        }}
+        open={isDrawerOpen}
+        onClose={toggleDrawer}
+        anchor="left"
+      >
+        <LeftMenuTotalBar>
+          {DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}
+          {EquipmentLoadouts(
+            loadoutCount,
+            loadoutType,
+            totalState,
+            setTotalState,
+            LANGUAGE_TEXTS
+          )}
+        </LeftMenuTotalBar>
+      </Drawer>
+    </>
   );
 }
 
 export function BasicLeftMenu(currentSimulationPage: string, LANGUAGE_TEXTS: TextDictionary) {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
   return (
-    <Drawer
-      sx={{
-        width: MENU_WIDTH,
-        flexShrink: 0,
-        "& .MuiDrawer-paper": {
+    <>
+      <Box
+        position="fixed"
+        top={16}
+        left={16}
+        zIndex={2}
+      >
+        <IconButton onClick={toggleDrawer} sx={{
+          backgroundColor: "white",
+          '&:hover': {
+            backgroundColor: 'gray'
+          }
+        }}>
+          <MenuIcon />
+        </IconButton>
+      </Box>
+      <Drawer
+        sx={{
           width: MENU_WIDTH,
-          boxSizing: "border-box",
-          backgroundColor: `${AppConfigurations.backgroundOne}`,
-          scrollbarWidth: "none",
-        },
-      }}
-      variant="permanent"
-      anchor="left"
-    >
-      <LeftMenuTotalBar>{DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}</LeftMenuTotalBar>
-    </Drawer>
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: MENU_WIDTH,
+            boxSizing: "border-box",
+            backgroundColor: `${AppConfigurations.backgroundOne}`,
+            scrollbarWidth: "none",
+          },
+        }}
+        open={isDrawerOpen}
+        onClose={toggleDrawer}
+        anchor="left"
+      >
+        <LeftMenuTotalBar minHeight="100vh">{DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}</LeftMenuTotalBar>
+      </Drawer>
+    </>
   );
 }
 

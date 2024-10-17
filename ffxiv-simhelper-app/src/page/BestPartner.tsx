@@ -15,6 +15,7 @@ import { SelectionTitle } from "../components/basic/SelectionTitle";
 import { EquipmentBoardStyle, InputContainerStyle } from "./Styles";
 import { BestPartnerRequestButton } from "../components/basic/BestPartnerRequestButton";
 import { AppLanguageTexts, AST_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PLD_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../const/languageTexts";
+import { DemoWarningText } from "../components/basic/WarningText";
 
 export enum JobRole {
   TANK,
@@ -91,6 +92,7 @@ export function BestPartner() {
         )}
         <Box width={BODY_WIDTH}>
           {AppHeader()}
+          {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
           <Box alignContent={"center"} minHeight={"60vh"}>
             <StatWeightsInputContainer justifyContent={"center"}>
               {SelectionTitle(LANGUAGE_TEXTS.BEST_PARTNER_INPUT_INFO_TEXT)}
