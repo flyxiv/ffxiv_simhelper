@@ -7,8 +7,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build-local": "NODE_ENV=application tsc -b && vite build",
-    "build-server": "NODE_ENV=production tsc -b && vite build",
+    "build-local": "export NODE_ENV=application && tsc -b && vite build",
+    "build-server": "export NODE_ENV=server && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "electron-start": "electron . ELECTRON_START_URL=http://localhost:5173",

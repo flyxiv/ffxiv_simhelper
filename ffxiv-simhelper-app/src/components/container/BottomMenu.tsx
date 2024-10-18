@@ -4,7 +4,6 @@ import { StatSummary } from "./StatSummary";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { GearCompareRequestButton } from "../basic/GearCompareRequestButton";
 import { BODY_WIDTH } from "../../App";
-import { MENU_WIDTH } from "./LeftMenu";
 import { TextDictionary } from "../../const/languageTexts";
 import { isMobile } from "../../util";
 
