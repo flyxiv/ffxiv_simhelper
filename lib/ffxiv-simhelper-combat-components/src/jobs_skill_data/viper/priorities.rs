@@ -6,7 +6,7 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::viper::abilities::ViperDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BuffGreaterDurationThan, BufforDebuffLessThan, Combo, HasResource, HasResourceExactly,
+    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, HasResourceExactly,
     MillisecondsBeforeBurst, Not, Or,
 };
 use crate::types::{PlayerIdType, SkillIdType};
@@ -110,6 +110,17 @@ pub(crate) fn make_viper_opener(db: &ViperDatabase, use_pots: bool) -> Vec<Opene
 }
 
 pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPriorityInfo> {
+    let steel_needs_refresh = Box::new(And(
+        Box::new(Not(Box::new(HasBufforDebuff(db.honed_reavers.get_id())))),
+        Box::new(BufforDebuffLessThan(db.honed_steels.get_id(), 37000)),
+    ));
+    let dread_needs_refresh = Box::new(And(
+        Box::new(Not(Box::new(HasBufforDebuff(db.honed_steels.get_id())))),
+        Box::new(BufforDebuffLessThan(db.honed_reavers.get_id(), 37000)),
+    ));
+
+    let needs_refresh = Or(steel_needs_refresh, dread_needs_refresh);
+
     vec![
         SkillPriorityInfo {
             skill_id: db.reawaken_proc.get_id(),
@@ -150,23 +161,68 @@ pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPrio
                 Box::new(Or(
                     Box::new(And(
                         Box::new(MillisecondsBeforeBurst(70000)),
-                        Box::new(Not(Box::new(MillisecondsBeforeBurst(40000)))),
+                        Box::new(Not(Box::new(MillisecondsBeforeBurst(45000)))),
                     )),
                     Box::new(MillisecondsBeforeBurst(0)),
                 )),
             )),
         },
         SkillPriorityInfo {
+            skill_id: db.uncoiled_fury.get_id(),
+            prerequisite: Some(Or(
+                Box::new(MillisecondsBeforeBurst(0)),
+                Box::new(Not(Box::new(MillisecondsBeforeBurst(3000)))),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.flankstings_strike.get_id(),
+            prerequisite: Some(And(
+                Box::new(Combo(Some(3))),
+                Box::new(needs_refresh.clone()),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.flanksbane_fang.get_id(),
+            prerequisite: Some(And(
+                Box::new(Combo(Some(3))),
+                Box::new(needs_refresh.clone()),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.hindsting_strike.get_id(),
+            prerequisite: Some(And(
+                Box::new(Combo(Some(3))),
+                Box::new(needs_refresh.clone()),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.hindsbane_fang.get_id(),
+            prerequisite: Some(And(
+                Box::new(Combo(Some(3))),
+                Box::new(needs_refresh.clone()),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.hunters_sting.get_id(),
+            prerequisite: Some(And(
+                Box::new(Combo(Some(2))),
+                Box::new(needs_refresh.clone()),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.swiftskins_sting.get_id(),
+            prerequisite: Some(And(
+                Box::new(Combo(Some(2))),
+                Box::new(needs_refresh.clone()),
+            )),
+        },
+        SkillPriorityInfo {
             skill_id: db.steel_fangs.get_id(),
-            prerequisite: Some(BufforDebuffLessThan(db.honed_steels.get_id(), 7000)),
+            prerequisite: Some(needs_refresh.clone()),
         },
         SkillPriorityInfo {
             skill_id: db.dread_fangs.get_id(),
-            prerequisite: Some(BufforDebuffLessThan(db.honed_reavers.get_id(), 7000)),
-        },
-        SkillPriorityInfo {
-            skill_id: db.uncoiled_fury.get_id(),
-            prerequisite: Some(Not(Box::new(MillisecondsBeforeBurst(3000)))),
+            prerequisite: Some(needs_refresh.clone()),
         },
         SkillPriorityInfo {
             skill_id: db.vicewinder.get_id(),
@@ -189,17 +245,11 @@ pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPrio
             prerequisite: Some(Combo(Some(3))),
         },
         SkillPriorityInfo {
-            skill_id: db.swiftskins_sting.get_id(),
-            prerequisite: Some(And(
-                Box::new(Combo(Some(2))),
-                Box::new(BuffGreaterDurationThan(
-                    db.hunters_instinct.id,
-                    db.swiftscaled.id,
-                )),
-            )),
+            skill_id: db.hunters_sting.get_id(),
+            prerequisite: Some(Combo(Some(2))),
         },
         SkillPriorityInfo {
-            skill_id: db.hunters_sting.get_id(),
+            skill_id: db.swiftskins_sting.get_id(),
             prerequisite: Some(Combo(Some(2))),
         },
         SkillPriorityInfo {

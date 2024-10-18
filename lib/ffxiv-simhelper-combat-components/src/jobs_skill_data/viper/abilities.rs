@@ -270,7 +270,7 @@ impl ViperDatabase {
             is_speed_buffed: true,
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
-            resource_required: vec![],
+            resource_required: vec![Resource(9, 1)],
             resource_created: Default::default(),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
@@ -304,7 +304,7 @@ impl ViperDatabase {
             cooldown_reduced_by_speed: true,
             cooldown_millisecond: 0,
             resource_required: vec![],
-            resource_created: Default::default(),
+            resource_created: HashMap::from([(9, 1)]),
             is_guaranteed_crit: false,
             current_cooldown_millisecond: 0,
             stacks: 1,
@@ -317,7 +317,7 @@ impl ViperDatabase {
             id: 2105,
             name: String::from("Flanksting Strike"),
             player_id,
-            potency: 400,
+            potency: 500,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -350,7 +350,7 @@ impl ViperDatabase {
             id: 2106,
             name: String::from("Flanksbane Fang"),
             player_id,
-            potency: 400,
+            potency: 500,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -383,7 +383,7 @@ impl ViperDatabase {
             id: 2107,
             name: String::from("Hindsting Strike"),
             player_id,
-            potency: 400,
+            potency: 500,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -416,7 +416,7 @@ impl ViperDatabase {
             id: 2108,
             name: String::from("Hindsbane Fang"),
             player_id,
-            potency: 400,
+            potency: 500,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,

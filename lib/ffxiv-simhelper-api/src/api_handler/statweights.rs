@@ -1,5 +1,5 @@
 use crate::api_handler::create_simulation_board;
-use crate::config::{AppState, FfxivSimhelperConfig};
+use crate::config::AppState;
 use crate::errors::Result;
 use crate::request::best_stats_api_request::BestStatsApiRequest;
 use crate::request::simulation_api_request::SimulationApiRequest;

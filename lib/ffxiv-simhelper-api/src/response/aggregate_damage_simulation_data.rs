@@ -4,7 +4,6 @@ use ffxiv_simhelper_combat_components::live_objects::player::StatusKey;
 use ffxiv_simhelper_combat_components::types::{MultiplierType, TimeType};
 use ffxiv_simhelper_combat_components::types::{PlayerIdType, SkillIdType};
 use itertools::izip;
-use log::info;
 use std::collections::HashMap;
 
 const MINUTE_IN_MILLISECOND: TimeType = 60000;
@@ -102,7 +101,7 @@ pub(crate) fn aggregate_skill_damage(
                     Some(burst_damage_minute)
                 };
 
-                let mut rdps_contribution_entry = skill_damage_entry
+                let rdps_contribution_entry = skill_damage_entry
                     .total_rdps_contribution
                     .entry(status_key)
                     .or_insert(0.0);

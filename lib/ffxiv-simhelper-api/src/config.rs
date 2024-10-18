@@ -1,7 +1,5 @@
 use crate::errors::Result;
-use log::info;
 use serde::Serialize;
-use std::env;
 use std::path::PathBuf;
 use std::sync::Arc;
 

@@ -14,7 +14,7 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-const VIPER_STACK_COUNT: usize = 9;
+const VIPER_STACK_COUNT: usize = 10;
 
 const SERPENT_OFFERINGS_MAX: ResourceType = 100;
 const RATTLING_COIL_MAX: ResourceType = 3;
@@ -29,6 +29,7 @@ const VIPER_MAX_STACKS: [ResourceType; VIPER_STACK_COUNT] = [
     1,
     1,
     REAWAKEN_STACK_MAX,
+    1,
     1,
 ];
 
