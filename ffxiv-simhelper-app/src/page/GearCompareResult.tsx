@@ -12,6 +12,7 @@ import { AppHeader } from "../components/image/AppHeader";
 import { Footer } from "../components/basic/Footer";
 import { GEAR_COMPARE_ITERATION_COUNT } from "../components/basic/GearCompareRequestButton";
 import { AppLanguageTexts } from "../const/languageTexts";
+import { DemoWarningText } from "../components/basic/WarningText";
 
 const ResultBoardTopBox = styled(Box)`
   ${ResultBoardTopBoxStyle}
@@ -69,7 +70,7 @@ export function GearCompareResult() {
           <Box className="SimulationResult" sx={{
             backgroundColor: AppConfigurations.backgroundOne
           }}>
-            {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
+            {AppConfigurations.isApp ? <Box /> : DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
             <ResultBoardTopBox marginBottom="50px">
               {SimulationTitle(LANGUAGE_TEXTS.GEARSET1_TEXT)}
               {GearCompareDpsSummary(simulationData1, simulationData2)}

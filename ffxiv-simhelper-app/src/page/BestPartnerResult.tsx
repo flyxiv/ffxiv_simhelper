@@ -43,10 +43,11 @@ export function BestPartnerResult() {
   }
 
   let responseJson = JSON.parse(response) as BestPartnerResponseTable;
+  console.log(responseJson);
   let mainPlayerJob = responseJson.mainPlayerJobAbbrev;
   let contributionTable = responseJson.partnerSimulationData;
 
-  let burst_count = contributionTable[0].contributedDps.length;
+  let burst_count = contributionTable[0].contributedDamage.length;
 
   let simulationDataByRoles: Array<SimulationDataByRole> = [];
 
@@ -54,7 +55,7 @@ export function BestPartnerResult() {
     let singleBurstResponses = contributionTable.map((response) => {
       return {
         partnerJobAbbrev: response.partnerJobAbbrev,
-        contributedDps: response.contributedDps[i],
+        contributedDamage: response.contributedDamage[i],
         minute: (i - 1) * 2,
       };
     });
@@ -136,7 +137,7 @@ function convertToContributionTable(
       case GNB_EN_NAME:
         table.tanks.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
+          buffContribution: data.contributedDamage === undefined ? 0 : data.contributedDamage,
         });
         break;
 
@@ -146,7 +147,7 @@ function convertToContributionTable(
       case SGE_EN_NAME:
         table.healers.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
+          buffContribution: data.contributedDamage === undefined ? 0 : data.contributedDamage,
         });
         break;
 
@@ -158,7 +159,7 @@ function convertToContributionTable(
       case VPR_EN_NAME:
         table.melee.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
+          buffContribution: data.contributedDamage === undefined ? 0 : data.contributedDamage,
         });
         break;
 
@@ -167,14 +168,14 @@ function convertToContributionTable(
       case DNC_EN_NAME:
         table.ranged.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
+          buffContribution: data.contributedDamage === undefined ? 0 : data.contributedDamage,
         });
         break;
 
       default:
         table.casters.push({
           jobAbbrev: data.partnerJobAbbrev,
-          buffContribution: data.contributedDps === undefined ? 0 : data.contributedDps,
+          buffContribution: data.contributedDamage === undefined ? 0 : data.contributedDamage,
         });
         break;
     }

@@ -26,11 +26,11 @@ import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
 import { MIDLANDER_HYUR_EN_NAME } from "../../const/languageTexts";
 
-const TOTAL_REQUEST_COUNT = AppConfigurations.isApp ? 1000 : 1;
+const TOTAL_REQUEST_COUNT = AppConfigurations.isApp ? 500 : 1;
 const TOTAL_ITERATION_COUNT = AppConfigurations.isApp ? 2 : 1;
 export const QUICK_SIM_ITERATION_COUNT =
   TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT;
-const REQUEST_URL = "https://www.ffxivsimhelper.com:13406/api/v1/simulate";
+const REQUEST_URL = `${AppConfigurations.requestServer}/api/v1/simulate`;
 
 export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
   let [isRunning, setIsRunning] = useState(false);
@@ -110,7 +110,6 @@ export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
     );
 
     finalResponses.sort((a, b) => b.simulationData[0].simulationSummary.rdps[0] - a.simulationData[0].simulationSummary.rdps[0]);
-    console.log(finalResponses);
 
     response = finalResponses[0];
     response.simulationData[mainPlayerId].simulationSummary = damageSummary;
