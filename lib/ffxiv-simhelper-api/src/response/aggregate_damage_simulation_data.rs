@@ -76,6 +76,11 @@ pub(crate) fn aggregate_skill_damage(
         for damage_log in damage_logs_of_single_player.iter() {
             let damage_time_milliseconds = damage_log.time;
             let damage_minute = damage_time_milliseconds / MINUTE_IN_MILLISECOND;
+            let burst_damage_minute = if damage_minute % 2 == 1 {
+                damage_minute - 1
+            } else {
+                damage_minute
+            };
 
             let skill_damage_entry = skill_damage_table
                 .entry(damage_log.skill_id)
@@ -90,12 +95,11 @@ pub(crate) fn aggregate_skill_damage(
                     rdps_contribution.player_id,
                 );
 
-                // only consider passive raidbuffs at even minutes:4 seconds to 30 seconds
                 let time_key = if PASSIVE_RAIDBUFFS.contains(&rdps_contribution.raid_buff_status_id)
                 {
                     None
                 } else {
-                    Some(damage_minute)
+                    Some(burst_damage_minute)
                 };
 
                 let mut rdps_contribution_entry = skill_damage_entry

@@ -88,12 +88,11 @@ export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
     }
 
     await Promise.all(responsePromises);
-    const formattedResponses: Array<Promise<DpsAnalysisResponse>> = responses.map(
-      async (response) => {
+    const formattedResponses: Array<Promise<DpsAnalysisResponse>> =
+      responses.map(async (response) => {
         const data = await response.json();
         return data;
-      }
-    );
+      });
 
     const finalResponses = await Promise.all(formattedResponses);
     // Use mean/max for the summary and the very first request for the other results.
@@ -109,7 +108,11 @@ export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
       1.0
     );
 
-    finalResponses.sort((a, b) => b.simulationData[0].simulationSummary.rdps[0] - a.simulationData[0].simulationSummary.rdps[0]);
+    finalResponses.sort(
+      (a, b) =>
+        b.simulationData[0].simulationSummary.rdps[0] -
+        a.simulationData[0].simulationSummary.rdps[0]
+    );
 
     response = finalResponses[0];
     response.simulationData[mainPlayerId].simulationSummary = damageSummary;

@@ -31,7 +31,12 @@ import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
 import { defaultPlayerPower } from "../../types/ffxivdatabase/PlayerPower";
 import { calculatePlayerPowerFromInputs } from "../../types/ffxivdatabase/ItemSet";
-import { BRD_EN_NAME, DNC_EN_NAME, MIDLANDER_HYUR_EN_NAME, MNK_EN_NAME } from "../../const/languageTexts";
+import {
+  BRD_EN_NAME,
+  DNC_EN_NAME,
+  MIDLANDER_HYUR_EN_NAME,
+  MNK_EN_NAME,
+} from "../../const/languageTexts";
 
 const REQUEST_URL = `${AppConfigurations.requestServer}/api/v1/bestpartner`;
 export const BEST_PARTNER_ITERATION_COUNT = AppConfigurations.isApp ? 2000 : 1;
@@ -189,11 +194,21 @@ function createBestPartnerRequest(
       usePot: 1,
       power: defaultPlayerPower(),
       compositionBuffPercent: 0,
-    }
+    };
     let partnerPower = calculatePlayerPowerFromInputs(partnerTotalState);
 
-    if (partnerJobAbbrev === BRD_EN_NAME || partnerJobAbbrev === DNC_EN_NAME || partnerJobAbbrev === MNK_EN_NAME) {
-      partnerPower.mainStatMultiplier = Math.floor(partnerPower.mainStatMultiplier * PARTY_MEMBER_RELATED_CLASS_MULTIPLIER / 10 * 1000) / 1000;
+    if (
+      partnerJobAbbrev === BRD_EN_NAME ||
+      partnerJobAbbrev === DNC_EN_NAME ||
+      partnerJobAbbrev === MNK_EN_NAME
+    ) {
+      partnerPower.mainStatMultiplier =
+        Math.floor(
+          ((partnerPower.mainStatMultiplier *
+            PARTY_MEMBER_RELATED_CLASS_MULTIPLIER) /
+            10) *
+            1000
+        ) / 1000;
     }
 
     let partnerAutoAttackDelays = AUTO_ATTACK_DELAYS.get(jobAbbrev);

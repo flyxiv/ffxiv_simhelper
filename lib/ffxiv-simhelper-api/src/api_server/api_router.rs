@@ -9,6 +9,7 @@ use axum::routing::{get, post};
 use axum::Router;
 use tower_http::cors::{Any, CorsLayer};
 
+/// Server router for FFXIV SimHelper service.
 pub fn create_ffxiv_simhelper_service_router(app_state: AppState) -> Router {
     let cors_layer = CorsLayer::new()
         .allow_methods(Method::POST)
