@@ -108,6 +108,8 @@ export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
       1.0
     );
 
+    finalResponses.filter((response) => response.mainPlayerId === undefined);
+
     finalResponses.sort(
       (a, b) =>
         b.simulationData[0].simulationSummary.rdps[0] -

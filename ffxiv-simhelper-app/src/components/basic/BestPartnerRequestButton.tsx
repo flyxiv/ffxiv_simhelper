@@ -50,7 +50,6 @@ interface PartnerKey {
 }
 
 export function BestPartnerRequestButton(totalState: EquipmentInput) {
-  console.log(REQUEST_URL);
   let [isRunning, setIsRunning] = useState(false);
   let RequestButton = styled(Button)`
     ${requestButtonStyle}
@@ -207,7 +206,7 @@ function createBestPartnerRequest(
           ((partnerPower.mainStatMultiplier *
             PARTY_MEMBER_RELATED_CLASS_MULTIPLIER) /
             10) *
-            1000
+          1000
         ) / 1000;
     }
 

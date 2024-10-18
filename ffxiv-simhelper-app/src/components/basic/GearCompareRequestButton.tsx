@@ -92,6 +92,7 @@ export function GearCompareRequestButton(totalState: EquipmentInput) {
       });
 
     const finalResponses = await Promise.all(formattedResponses);
+    finalResponses.filter((response) => response.simulationGear1 === undefined);
 
     // Use mean/max for the summary and the very first request for the other results.
     let response = finalResponses[0];

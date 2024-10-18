@@ -113,6 +113,8 @@ export function BestStatsRequestButton(totalState: EquipmentInput, gcdName: stri
       });
 
     const finalResponses = await Promise.all(formattedResponses);
+    finalResponses.filter((response) => response.statName === undefined);
+
     statWeightsResponseTable.statAugmentedSimulationData = finalResponses;
 
     let responseString = JSON.stringify(statWeightsResponseTable);
