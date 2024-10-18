@@ -1,4 +1,4 @@
-import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DEX_STAT_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, DUNESFOLK_LALAFELL_EN_NAME, DUSKWIGHT_ELEZEN_EN_NAME, GNB_EN_NAME, HELIONS_HROTHGAR_EN_NAME, HELLSGUARD_ROEGADYN_EN_NAME, HIGHLANDER_HYUR_EN_NAME, INT_STAT_EN_NAME, KEEPER_OF_THE_MOON_MIQOTE_EN_NAME, MCH_EN_NAME, MIDLANDER_HYUR_EN_NAME, MIND_STAT_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLAINSFOLK_LALAFELL_EN_NAME, PLD_EN_NAME, RAEN_AU_RA_EN_NAME, RAVA_VIERA_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SEA_WOLVES_ROEGADYN_EN_NAME, SEEKER_OF_THE_SUN_MIQOTE_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, STR_STAT_EN_NAME, THE_LOST_HROTHGAR_EN_NAME, VEENA_VIERA_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME, WILDWOOD_ELEZEN_EN_NAME, XAELA_AU_RA_EN_NAME } from "./languageTexts";
+import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DEX_STAT_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, DUNESFOLK_LALAFELL_EN_NAME, DUSKWIGHT_ELEZEN_EN_NAME, GNB_EN_NAME, HELIONS_HROTHGAR_EN_NAME, HELLSGUARD_ROEGADYN_EN_NAME, HIGHLANDER_HYUR_EN_NAME, INT_STAT_EN_NAME, KEEPER_OF_THE_MOON_MIQOTE_EN_NAME, MCH_EN_NAME, MIDLANDER_HYUR_EN_NAME, MIND_STAT_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLAINSFOLK_LALAFELL_EN_NAME, PLD_EN_NAME, RAEN_AU_RA_EN_NAME, RAVA_VIERA_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SEA_WOLVES_ROEGADYN_EN_NAME, SEEKER_OF_THE_SUN_MIQOTE_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, STR_STAT_EN_NAME, TextDictionary, THE_LOST_HROTHGAR_EN_NAME, VEENA_VIERA_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME, WILDWOOD_ELEZEN_EN_NAME, XAELA_AU_RA_EN_NAME } from "./languageTexts";
 
 interface RaceInfo {
   STR: number;
@@ -164,7 +164,7 @@ export function getBaseMainStat(jobAbbrev: string, race: string): number {
 
   return (
     mainStat +
-    getRaceMainStatByName(getMainStatNameByJob(jobAbbrev), raceMainStat)
+    getRaceMainStatByName(getMainStatKeyByJob(jobAbbrev), raceMainStat)
   );
 }
 
@@ -190,7 +190,7 @@ function getRaceMainStatByName(mainStatName: string, stats: RaceInfo): number {
   }
 }
 
-export function getMainStatNameByJob(job: string): string {
+export function getMainStatKeyByJob(job: string): string {
   switch (job) {
     case PLD_EN_NAME:
     case WAR_EN_NAME:
@@ -214,5 +214,32 @@ export function getMainStatNameByJob(job: string): string {
       return MIND_STAT_EN_NAME;
     default:
       return INT_STAT_EN_NAME;
+  }
+}
+
+export function getMainStatNameByJob(job: string, LANGUAGE_TEXTS: TextDictionary): string {
+  switch (job) {
+    case PLD_EN_NAME:
+    case WAR_EN_NAME:
+    case DRK_EN_NAME:
+    case GNB_EN_NAME:
+    case MNK_EN_NAME:
+    case DRG_EN_NAME:
+    case SAM_EN_NAME:
+    case RPR_EN_NAME:
+      return LANGUAGE_TEXTS.STR_STAT_NAME;
+    case NIN_EN_NAME:
+    case VPR_EN_NAME:
+    case BRD_EN_NAME:
+    case MCH_EN_NAME:
+    case DNC_EN_NAME:
+      return LANGUAGE_TEXTS.DEX_STAT_NAME;
+    case WHM_EN_NAME:
+    case SCH_EN_NAME:
+    case AST_EN_NAME:
+    case SGE_EN_NAME:
+      return LANGUAGE_TEXTS.MIND_STAT_NAME;
+    default:
+      return LANGUAGE_TEXTS.INT_STAT_NAME;
   }
 }

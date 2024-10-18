@@ -11,6 +11,7 @@ type LanguageContextType = {
 };
 
 export function toLanguageMode(value: string): LanguageMode {
+    console.log(value);
     switch (value) {
         case LanguageMode.ENGLISH_MODE:
             return LanguageMode.ENGLISH_MODE;
@@ -21,7 +22,7 @@ export function toLanguageMode(value: string): LanguageMode {
     }
 }
 
-const LANGUAGE_MODE_SAVE_NAME = 'languageMode';
+export const LANGUAGE_MODE_SAVE_NAME = 'languageMode';
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 interface LanguageProviderProps {

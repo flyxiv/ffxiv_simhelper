@@ -232,13 +232,16 @@ export function MainPlayerGcdSelection(
       <InputLabel
         id="SlotSelect"
         key={`${key}_label`}
-        sx={{ fontSize: AppConfigurations.body1FontSize }}
+        sx={{
+          fontSize: AppConfigurations.body1FontSize,
+          display: 'flex',
+          height: '50%',
+          alignItems: "center"
+        }}
       >
-        <Box display="flex" sx={{ height: "100%" }} alignItems={"center"} justifyContent={"center"}>
-          <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
-            {speedLabelText}
-          </Typography>
-        </Box>
+        <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
+          {speedLabelText}
+        </Typography>
       </InputLabel>
 
       <Select
@@ -279,6 +282,6 @@ export function MainPlayerGcdSelection(
         }
 
       </Select>
-    </CustomFormControl>
+    </CustomFormControl >
   );
 }

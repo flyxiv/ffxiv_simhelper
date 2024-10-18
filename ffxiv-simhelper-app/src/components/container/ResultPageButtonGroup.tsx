@@ -3,7 +3,7 @@ import { AppConfigurations } from "../../Themes";
 import { PartyContributionData } from "../graph/GraphData";
 import { TextDictionary } from "../../const/languageTexts";
 
-type ViewType = "Best Teammate" | "Damage Profile" | "Rotation Log"; // Define possible view types
+type ViewType = "Best Teammate" | "Damage Profile" | "Rotation Log" | "My Contributions"; // Define possible view types
 
 const ToggleButtonCustomStyle = {
   "&.Mui-selected, &.Mui-selected:hover": {

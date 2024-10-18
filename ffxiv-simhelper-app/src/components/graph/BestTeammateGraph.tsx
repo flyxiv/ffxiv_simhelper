@@ -42,20 +42,21 @@ export const makeBestTeammateData = (
 
     for (let j = 0; j < simulationDatas[i].partyContributionTable.length; j++) {
       let rdpsEntry = simulationDatas[i].partyContributionTable[j];
+      let rdps = rdpsEntry.contributedDamage / response.combatTimeMillisecond * 1000;
       if (rdpsEntry.partyMemberId === mainPlayerId) {
         let currentRdpsOfStatus = rdpsByStatus.get(rdpsEntry.statusId) || 0;
         let currentTotalRdpsOfBuff =
           totalRdpsByStatus.get(rdpsEntry.statusId) || 0;
         rdpsByStatus.set(
           rdpsEntry.statusId,
-          currentRdpsOfStatus + rdpsEntry.contributedRdps
+          currentRdpsOfStatus + rdps
         );
         totalRdpsByStatus.set(
           rdpsEntry.statusId,
-          currentTotalRdpsOfBuff + rdpsEntry.contributedRdps
+          currentTotalRdpsOfBuff + rdps
         );
         teammateChartData.totalRdps +=
-          simulationDatas[i].partyContributionTable[j].contributedRdps;
+          simulationDatas[i].partyContributionTable[j].contributedDamage / response.combatTimeMillisecond * 1000;
       }
     }
 
@@ -69,6 +70,9 @@ export const makeBestTeammateData = (
   }
 
   contributionData.sort((a, b) => b.totalRdps - a.totalRdps);
+  console.log(contributionData);
+  console.log(totalRdpsByStatus);
+
 
   let teammatesContributionToMyBuffs = {
     totalRdpsByStatus: totalRdpsByStatus,

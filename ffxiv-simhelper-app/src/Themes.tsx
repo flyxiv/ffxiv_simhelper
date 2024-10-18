@@ -19,15 +19,15 @@ export const AppConfigurations = {
 
   body1FontSize: {
     xs: 12,
-    sm: 20,
-    md: 24,
+    sm: 15,
+    md: 18,
     lg: 14,
     xl: 18
   },
   body2FontSize: {
     xs: 8,
-    sm: 16,
-    md: 20,
+    sm: 11,
+    md: 14,
     lg: 10,
     xl: 14
   },

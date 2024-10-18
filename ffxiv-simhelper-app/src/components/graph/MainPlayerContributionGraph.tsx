@@ -40,8 +40,8 @@ export const makeMainPlayerContributionData = (
     });
   }
 
-  let totalRdpsByStatus = new Map<number, number>();
-  let totalRdpsByKey = new Map<string, number>();
+  let totalContributionByStatus = new Map<number, number>();
+  let totalContributionByKey = new Map<string, number>();
 
   let partyContributionsOfMainPlayer =
     simulationDatas[mainPlayerId].partyContributionTable;
@@ -55,24 +55,26 @@ export const makeMainPlayerContributionData = (
     let statusKey = { statusId: statusId, playerId: partyMemberId };
     let statusKeyString = statusKeyToString(statusKey);
 
-    let currentRdpsOfStatus = rdpsEntries.get(statusKeyString) || 0;
+    let currentDamageOfStatus = rdpsEntries.get(statusKeyString) || 0;
     rdpsEntries.set(
       statusKeyString,
-      currentRdpsOfStatus + partyContribution.contributedRdps
+      currentDamageOfStatus + partyContribution.contributedDamage
     );
   }
 
   rdpsEntries.forEach((rdps, statusKeyString) => {
     let statusKey = statusKeyStringToKey(statusKeyString);
-    let rdpsOfStatus = totalRdpsByStatus.get(statusKey.statusId) || 0;
-    let rdpsOfKey = totalRdpsByKey.get(statusKeyString) || 0;
+    let contributionOfStatus = totalContributionByStatus.get(statusKey.statusId) || 0;
+    let contributionOfKey = totalContributionByKey.get(statusKeyString) || 0;
 
-    totalRdpsByStatus.set(statusKey.statusId, rdpsOfStatus + rdps);
-    totalRdpsByKey.set(statusKeyString, rdpsOfKey + rdps);
+    totalContributionByStatus.set(statusKey.statusId, contributionOfStatus + rdps);
+    totalContributionByKey.set(statusKeyString, contributionOfKey + rdps);
   });
 
-  totalRdpsByKey.forEach((rdps, statusKeyString) => {
+  totalContributionByKey.forEach((totalContribution, statusKeyString) => {
     let statusKey = statusKeyStringToKey(statusKeyString);
+
+    let rdps = totalContribution / response.combatTimeMillisecond * 1000;
 
     let playerId = statusKey.playerId;
     let contributionData = mainPlayerContributionData[playerId - 1];
@@ -80,7 +82,7 @@ export const makeMainPlayerContributionData = (
     contributionData.totalRdps += rdps;
     contributionData.rdpsEntry.push({
       statusId: statusKey.statusId,
-      rdps: rdps,
+      rdps
     });
   });
 
@@ -89,8 +91,14 @@ export const makeMainPlayerContributionData = (
   );
   mainPlayerContributionData.sort((a, b) => b.totalRdps - a.totalRdps);
 
+  const totalRdpsByStatus = new Map<number, number>();
+  for (const [statusId, contribution] of totalContributionByStatus) {
+    let rdps = Math.floor(contribution / response.combatTimeMillisecond * 1000);
+    totalRdpsByStatus.set(statusId, rdps);
+  }
+
   setMainPlayerContributionToOthers({
-    totalRdpsByStatus: totalRdpsByStatus,
+    totalRdpsByStatus,
     contributionData: mainPlayerContributionData,
   });
 };

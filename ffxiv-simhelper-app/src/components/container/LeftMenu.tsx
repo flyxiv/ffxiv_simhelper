@@ -20,9 +20,9 @@ import { TextDictionary } from "../../const/languageTexts";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 
-export const MENU_WIDTH_VW_XS = 0;
-export const MENU_WIDTH_VW_SM = 0;
-export const MENU_WIDTH_VW_MD = 0;
+export const MENU_WIDTH_VW_XS = 80;
+export const MENU_WIDTH_VW_SM = 60;
+export const MENU_WIDTH_VW_MD = 40;
 export const MENU_WIDTH_VW_LG = 20;
 export const MENU_WIDTH_VW_XL = 20;
 
@@ -193,7 +193,7 @@ function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS
         </Box>
       </LeftMenuLogo>
 
-      <Box width="95%" display="flex" justifyContent={"flex-end"} marginY={2}>
+      <Box width="95%" display="flex" justifyContent={"flex-start"} marginY={2} marginLeft={2}>
         {LanguageInputForm()}
       </Box>
 

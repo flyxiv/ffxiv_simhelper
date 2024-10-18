@@ -5,7 +5,7 @@ import { AppConfigurations } from "../../Themes";
 import { convertToRaceTextName, TextDictionary } from "../../const/languageTexts";
 
 export function RaceItem(race: string, jobAbbrev: string, LANGUAGE_TEXTS: TextDictionary) {
-  let mainStatName = getMainStatNameByJob(jobAbbrev);
+  let mainStatName = getMainStatNameByJob(jobAbbrev, LANGUAGE_TEXTS);
 
   return (
     <Box display="flex" alignItems={"center"} height={ITEM_TOP_MENU_MIN_HEIGHT}>

@@ -1,5 +1,5 @@
 import { FormControl, IconButton, MenuItem, Select, Typography } from "@mui/material";
-import { LanguageMode, toLanguageMode, useLanguage } from "../../../LanguageContext";
+import { LANGUAGE_MODE_SAVE_NAME, LanguageMode, toLanguageMode, useLanguage } from "../../../LanguageContext";
 import LanguageIcon from "@mui/icons-material/Language";
 import { AppConfigurations } from "../../../Themes";
 
@@ -20,7 +20,7 @@ export function LanguageInputForm(
                     id="language-selector"
                     value={language}
                     key={key}
-                    onChange={(e) => { setLanguage(toLanguageMode(e.target.value)); }}
+                    onChange={(e) => { const languageMode = toLanguageMode(e.target.value); setLanguage(languageMode); localStorage.setItem(LANGUAGE_MODE_SAVE_NAME, languageMode); }}
                     label="Language"
                     IconComponent={() => (
                         <IconButton>

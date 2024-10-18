@@ -13,7 +13,7 @@ const PlayerInfoJobTitle = styled(Box)`
   ${PlayerInfoJobTitleStyle}
 `;
 
-export function PlayerInfo(power: PlayerPower, job: string, combatTimeMilliseconds: number, partyMemberJobAbbrevs: string[] | null = null, iterationCount: number, variancePercent: number, LANGUAGE_TEXTS: TextDictionary) {
+export function PlayerInfo(power: PlayerPower, job: string, combatTimeMilliseconds: number, partyMemberJobAbbrevs: string[] | null = null, iterationCount: number, variancePercent: number, LANGUAGE_TEXTS: TextDictionary, showStats: boolean = true) {
 
   return (
     <PlayerInfoBox>
@@ -27,7 +27,7 @@ export function PlayerInfo(power: PlayerPower, job: string, combatTimeMillisecon
         ? PartyMemberJobsInfo(partyMemberJobAbbrevs, LANGUAGE_TEXTS.PARTY_MEMBERS_TEXT)
         : null}
 
-      {SimulationInputSummary(power, job, combatTimeMilliseconds / 1000, iterationCount, variancePercent, LANGUAGE_TEXTS)}
+      {SimulationInputSummary(power, job, combatTimeMilliseconds / 1000, iterationCount, variancePercent, LANGUAGE_TEXTS, showStats)}
     </PlayerInfoBox>
   );
 }

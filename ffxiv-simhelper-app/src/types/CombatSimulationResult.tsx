@@ -8,7 +8,7 @@ export interface PartyContribution {
   skillId: number;
   partyMemberId: number;
   statusId: number;
-  contributedRdps: number;
+  contributedDamage: number;
 }
 
 export interface PartyBurstContribution {

@@ -2,7 +2,6 @@ import {
   BrowserRouter,
   HashRouter,
   Route,
-  Router,
   Routes,
   useLocation,
 } from "react-router-dom";
@@ -16,13 +15,6 @@ import { BestPartner } from "./page/BestPartner";
 import { GearCompareResult } from "./page/GearCompareResult";
 import { BestPartnerResult } from "./page/BestPartnerResult";
 import { StatWeightsResult } from "./page/StatWeightsResult";
-import {
-  MENU_WIDTH_VW_LG,
-  MENU_WIDTH_VW_XS,
-  MENU_WIDTH_VW_XL,
-  MENU_WIDTH_VW_SM,
-  MENU_WIDTH_VW_MD,
-} from "./components/container/LeftMenu";
 import { useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { AppConfigurations } from "./Themes";
