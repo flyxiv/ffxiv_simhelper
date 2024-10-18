@@ -45,15 +45,13 @@ pub fn best_partner(
             main_player_job_abbrev.clone(),
         );
 
-        let partner_contribution = response.simulation_data[1].simulation_summary.edps[0]
-            - response.simulation_data[1].simulation_summary.rdps[0];
         let partner_contribution_each_burst = response.simulation_data[1]
             .party_burst_contribution_table
             .iter()
-            .map(|response| response.contributed_rdps as i32)
+            .map(|response| response.contributed_damage)
             .collect_vec();
 
-        contribution.push(partner_contribution as i32);
+        contribution.push(partner_contribution_each_burst.iter().sum());
         contribution.extend(partner_contribution_each_burst);
 
         partner_contributions.push(contribution);
@@ -69,7 +67,7 @@ pub fn best_partner(
 
     let burst_count = max_len;
 
-    let mut contributed_dps: Vec<i32> = Vec::with_capacity(burst_count);
+    let mut contributed_damage: Vec<i32> = Vec::with_capacity(burst_count);
 
     for burst_idx in 0..burst_count {
         let burst_contributions: Vec<i32> = partner_contributions
@@ -89,11 +87,11 @@ pub fn best_partner(
             .nth((WANTED_CONTRIBUTION_PERCENTILE * best_partner_simulation_count as f64) as usize)
             .unwrap();
 
-        contributed_dps.push(burst_contribution_top_nth_percentile);
+        contributed_damage.push(burst_contribution_top_nth_percentile);
     }
 
     Ok(BestPartnerApiResponse {
-        contributed_dps,
+        contributed_damage,
         partner_job_abbrev: request.party[1].job_abbrev.clone(),
     })
 }

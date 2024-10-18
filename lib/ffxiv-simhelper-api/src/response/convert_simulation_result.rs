@@ -139,7 +139,6 @@ fn calculate_damage_profile_response(
 fn create_party_contribution_response(
     player_id: PlayerIdType,
     skill_damage_table: &HashMap<SkillIdType, SkillDamageAggregate>,
-    combat_time_millisecond: TimeType,
 ) -> Vec<PartyContributionResponse> {
     let mut party_contribution_responses = vec![];
 
@@ -148,7 +147,6 @@ fn create_party_contribution_response(
             skill_damage_aggregate.total_rdps_contribution.iter()
         {
             let party_member_id = status_key.player_id;
-            let contributed_rdps = damage_to_dps(*contributed_damage, combat_time_millisecond);
 
             if party_member_id == player_id {
                 continue;
@@ -158,7 +156,7 @@ fn create_party_contribution_response(
                 skill_id: *skill_id,
                 party_member_id,
                 status_id: status_key.status_id,
-                contributed_rdps,
+                contributed_damage: *contributed_damage as i32,
             })
         }
     }
@@ -169,23 +167,19 @@ fn create_party_contribution_response(
 fn create_party_burst_contribution_response(
     player_id: PlayerIdType,
     skill_burst_damage_table: &HashMap<(PlayerIdType, TimeType), MultiplierType>,
-    combat_time_millisecond: TimeType,
 ) -> Vec<PartyBurstContributionResponse> {
     let mut party_contribution_responses = vec![];
 
     for ((party_member_id, minute), skill_burst_damage_aggregate) in skill_burst_damage_table {
-        let contributed_rdps =
-            damage_to_dps(*skill_burst_damage_aggregate, combat_time_millisecond);
-
         if *party_member_id == player_id {
             continue;
         }
 
         party_contribution_responses.push(PartyBurstContributionResponse {
             party_member_id: *party_member_id,
-            contributed_rdps,
+            contributed_damage: *skill_burst_damage_aggregate as i32,
             minute: *minute,
-        })
+        });
     }
 
     party_contribution_responses
@@ -240,11 +234,7 @@ pub(crate) fn create_response_from_simulation_result(
         .iter()
         .enumerate()
         .map(|(player_id, skill_damage_table)| {
-            create_party_contribution_response(
-                player_id as PlayerIdType,
-                skill_damage_table,
-                combat_time_millisecond,
-            )
+            create_party_contribution_response(player_id as PlayerIdType, skill_damage_table)
         })
         .collect_vec();
 
@@ -255,7 +245,6 @@ pub(crate) fn create_response_from_simulation_result(
             create_party_burst_contribution_response(
                 player_id as PlayerIdType,
                 skill_burst_damage_tables,
-                combat_time_millisecond,
             )
         })
         .collect_vec();

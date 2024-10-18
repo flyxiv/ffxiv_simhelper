@@ -4,14 +4,13 @@ use ffxiv_simhelper_combat_components::live_objects::player::StatusKey;
 use ffxiv_simhelper_combat_components::types::{MultiplierType, TimeType};
 use ffxiv_simhelper_combat_components::types::{PlayerIdType, SkillIdType};
 use itertools::izip;
+use log::info;
 use std::collections::HashMap;
 
 const MINUTE_IN_MILLISECOND: TimeType = 60000;
 
 // standard step, wanderer, mages ballad and armys paeon
 const PASSIVE_RAIDBUFFS: [SkillIdType; 4] = [1500, 1302, 1304, 1306];
-const PASSIVE_END_MILLISECOND: TimeType = 30000;
-const PASSIVE_START_MILLISECOND: TimeType = 4000;
 
 // Sum up all damage profile for each skill.
 #[derive(Clone)]
@@ -94,20 +93,12 @@ pub(crate) fn aggregate_skill_damage(
                 // only consider passive raidbuffs at even minutes:4 seconds to 30 seconds
                 let time_key = if PASSIVE_RAIDBUFFS.contains(&rdps_contribution.raid_buff_status_id)
                 {
-                    let time_offset = damage_time_milliseconds % MINUTE_IN_MILLISECOND;
-                    if time_offset >= PASSIVE_START_MILLISECOND
-                        && time_offset <= PASSIVE_END_MILLISECOND
-                        && damage_minute % 2 == 0
-                    {
-                        Some(damage_minute)
-                    } else {
-                        None
-                    }
+                    None
                 } else {
                     Some(damage_minute)
                 };
 
-                let rdps_contribution_entry = skill_damage_entry
+                let mut rdps_contribution_entry = skill_damage_entry
                     .total_rdps_contribution
                     .entry(status_key)
                     .or_insert(0.0);

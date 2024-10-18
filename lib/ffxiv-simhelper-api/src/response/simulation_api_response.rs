@@ -69,7 +69,7 @@ pub struct PartyContributionResponse {
     pub skill_id: SkillIdType,
     pub party_member_id: PlayerIdType,
     pub status_id: SkillIdType,
-    pub contributed_rdps: DpsType,
+    pub contributed_damage: i32,
 }
 
 #[derive(Debug, Serialize, Clone)]
@@ -77,7 +77,7 @@ pub struct PartyContributionResponse {
 pub struct PartyBurstContributionResponse {
     pub minute: TimeType,
     pub party_member_id: PlayerIdType,
-    pub contributed_rdps: DpsType,
+    pub contributed_damage: i32,
 }
 
 /// Records the rdps/pdps contribution of each skill
