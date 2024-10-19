@@ -13,7 +13,6 @@ export function TimeInput(inputFormProps: InputFormProps) {
         label="Job Name"
         onChange={(event) => {
           inputFormProps.setState(event.target.value);
-          console.log(event.target.value);
         }}
       >
         {TimeMenu(0, 30)}

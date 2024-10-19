@@ -70,9 +70,6 @@ export const makeBestTeammateData = (
   }
 
   contributionData.sort((a, b) => b.totalRdps - a.totalRdps);
-  console.log(contributionData);
-  console.log(totalRdpsByStatus);
-
 
   let teammatesContributionToMyBuffs = {
     totalRdpsByStatus: totalRdpsByStatus,

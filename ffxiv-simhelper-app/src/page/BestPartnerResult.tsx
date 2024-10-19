@@ -43,7 +43,6 @@ export function BestPartnerResult() {
   }
 
   let responseJson = JSON.parse(response) as BestPartnerResponseTable;
-  console.log(responseJson);
   let mainPlayerJob = responseJson.mainPlayerJobAbbrev;
   let contributionTable = responseJson.partnerSimulationData;
 

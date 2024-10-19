@@ -5,7 +5,7 @@ import { AppConfigurations } from "../../Themes";
 
 export function PartnerItem(partyMemberJobId: number, jobAbbrev: string, partyMemberLabelText: string) {
   return (
-    <Box display="flex" justifyContent={"left"} alignItems={"center"} height={ITEM_TOP_MENU_MIN_HEIGHT}>
+    <Box display="flex" justifyContent={"right"} alignItems={"center"} height={ITEM_TOP_MENU_MIN_HEIGHT}>
       <Box
         component={"img"}
         src={jobAbbrevToJobIconPath(jobAbbrev)}
