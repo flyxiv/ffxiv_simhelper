@@ -6,6 +6,11 @@ use axum::Json;
 
 const NUMBER_OF_ITERATIONS_PER_REQUEST_GEAR_COMPARE: usize = 8;
 
+/// GearCompare API Request Handler
+///
+/// # Description
+/// 1) Compares the DPS of two different gearsets in PDPS/RDPS/EDPS.
+/// 2) Most accurate simulation of FFXIV SimHelper: does 4000 iterations for each gearset.
 pub async fn gear_compare_api_handler(
     Json(request): Json<GearCompareApiRequest>,
 ) -> Result<Json<GearCompareApiResponse>> {

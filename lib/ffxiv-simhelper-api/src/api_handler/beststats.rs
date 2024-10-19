@@ -20,6 +20,13 @@ pub(crate) async fn best_stats_api_handler(
     Ok(Json(best_stats(request, app_state)?))
 }
 
+/// Best Partner API Handler
+///
+/// Simulates the main player's RDPS in the input party composition and returns the median value
+/// after configured number of iterations set by the config file.
+///
+/// App requests this API for each combat stat except PIE(WD, STR, CRT, etc) (which is 7-8 requests in total) to find how much RDPS is expected to increase
+/// for 1 stat point increase of each stat.
 pub fn best_stats(
     request: BestStatsApiRequest,
     app_state: AppState,

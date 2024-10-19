@@ -16,6 +16,9 @@ use std::collections::HashMap;
 
 /// All possible damage related events in a FFXIV combat.
 /// the last TimeType element is always the time of the event.
+///
+/// The simulation is done like a CPU scheduler, where the events are scheduled in a priority queue in chronological order and executed when it is their turn.
+/// Each event can generate new events and add them to the queue, which is repeated until the target combat time is reached.
 #[derive(Clone)]
 pub enum FfxivEvent {
     /// owner_player_id, turn, threshold limit time

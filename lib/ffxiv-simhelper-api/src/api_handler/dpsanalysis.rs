@@ -8,9 +8,6 @@ use ffxiv_simhelper_dps_simulator::combat_simulator::SimulationBoard;
 
 const NUMBER_OF_ITERATIONS_PER_REQUEST_DPS_ANALYSIS: usize = 2;
 
-/// DpsAnalysis API Request Handler
-/// The most basic simulation of FFXIV SimHelper
-/// 1) In-depth analysis of character's DPS
 pub(crate) async fn dps_analysis_api_handler(
     Json(request): Json<SimulationApiRequest>,
 ) -> Result<Json<SimulationApiResponse>> {
@@ -20,6 +17,21 @@ pub(crate) async fn dps_analysis_api_handler(
     )?))
 }
 
+/// DpsAnalysis API Request Handler
+/// The most basic and important simulation of FFXIV SimHelper. All other simulation APIs are technically a syntactic sugar
+/// that uses this Simulation multiple times to get the desired result.
+///
+/// # Features
+/// In-depth analysis of main player's DPS -
+/// 1) Damage profile of each skill,
+/// 2) main player's buffs given/taken,
+/// 3) Sample rotation log.
+///
+/// ## App Usage
+/// 1) Dps Analysis Button requests this API multiple times(so that they can record the progression bar).
+/// 2) Server simulates the DPS number_of_iterations times for each request.
+///     * This is done because React Apps can only send about 1000 requests at a time, so we had to split the number of requests sent and number of iterations for each request.
+/// 3) App receives the simulation result, aggregates all the response they got and displays the DPS Analysis Results.
 pub fn dps_analysis(
     request: SimulationApiRequest,
     number_of_iterations: usize,

@@ -8,28 +8,81 @@ const TANK_MULTIPLIER: MultiplierType = 190.0 / 440.0;
 const MAIN_STAT_BASE_NON_TANK: StatType = 440;
 const MAIN_STAT_BASE_TANK: StatType = 440;
 
-/// The main/sub stats of players that are converted to
-/// actual in-game power of characters
+/// The power specification of the player. Contains the player's stats and stat ladder multiplier values of each player.
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct PlayerPower {
+    /// The auto attack delay of the weapon the player is using. This value is usually a constant value for each job. The table of job -> auto attack delay is kept in the application frontend. Server
+    /// just receives this value and uses it.
+    /// Auto attack damage is adjusted by this value by (auto_attack_delays) / 3.
+    ///
+    /// ex) if auto_attack_delays is 2.82 and base auto attack damage was 300, then its actual auto attack damage is 300 * (2.82 / 3) = 282
     pub auto_attack_delays: MultiplierType,
+
+    /// The critical strike rate of the player.
+    /// value must be >=0.0 and <=1.0
+    /// ex) if critical_strike_rate is 0.354, then the player has 35.4% chance to critical strike.
     pub critical_strike_rate: MultiplierType,
+
+    /// The critical strike damage multiplier of the player.
+    /// value must be >= 1.0
+    /// ex) if critical_strike_damage is 1.700, and skill's normal damage was 100, then that skill's damage will be 100 * 1.700 = 170 when it crits.
     pub critical_strike_damage: MultiplierType,
+
+    /// The direct hit rate of the player.
+    /// value must be >=0.0 and <=1.0
+    /// ex) if direct_hit_rate is 0.354, then the player has 35.4% chance to direct hit.
     pub direct_hit_rate: MultiplierType,
+
+    /// The determination multiplier of the player.
+    /// value must be >= 1.0
+    /// ex) if determination_multiplier is 1.201, and a skill's damage was 100 when its determination_multiplier was 1.000, then that skill's damage will be 100 * 1.201 = 120.1 when the player has 1.201 determination_multiplier.
     pub determination_multiplier: MultiplierType,
+
+    /// The tenacity multiplier of the player.
+    /// ex) if tenacity_multiplier is 1.201, and a skill's damage was 100 when its tenacity_multiplier was 1.000, then that skill's damage will be 100 * 1.201 = 120.1 when the player has 1.201 tenacity_multiplier.
     pub tenacity_multiplier: MultiplierType,
+
+    /// The speed multiplier of the player.
+    /// Used for GCD calculation and dot damage calculation.
     pub speed_multiplier: MultiplierType,
+
+    /// The weapon damage multiplier of the player.
+    /// ex) if weapon_damage_multiplier is 1.96, and a skill's damage was 100 when its weapon_damage_multiplier was 1.00, then that skill's damage will be 100 * 1.96 = 196 when the player has 1.96 weapon_damage_multiplier.
     pub weapon_damage_multiplier: MultiplierType,
+
+    /// The main stat multiplier of the player.
+    /// must be >= 1.0
+    /// ex) if main_stat_multiplier is 23.96, and a skill's damage was 100 when its main_stat_multiplier was 1.00, then that skill's damage will be 100 * 23.96 = 2396 when the player has 23.96 main_stat_multiplier.
     pub main_stat_multiplier: MultiplierType,
+
+    /// in 6.2, auto_direct_hits were added, which boosts the damage of guaranteed direct hit skills.  
+    /// must be >= 0.0 and <= 1.0
+    /// ex) if auto_direct_hit_increase is 0.071, and a direct hit guaranteed skill's damage was 100 when its direct hit rate was 0.000, then that skill's damage will be 100 * (1 + 0.071) = 107.1 when the player has 0.071 auto_direct_hit_increase.
     pub auto_direct_hit_increase: MultiplierType,
+
+    /// The weapon damage of the player. Not used directly in the backend, and just passes this value to the response so that the app can use it in the result page.
     pub weapon_damage: StatType,
+
+    /// The main stat of the player (one of STR, DEX, INT, MND depending on the player's job). Not used directly in the backend, and just passes this value to the response so that the app can use it in the result page.
     pub main_stat: StatType,
+
+    /// The critical strike substat value of the player. Not used directly in the backend, and just passes this value to the response so that the app can use it in the result page.
     pub critical_strike: StatType,
+
+    /// The direct hit substat value of the player. Not used directly in the backend, and just passes this value to the response so that the app can use it in the result page.
     pub direct_hit: StatType,
+
+    /// The determination substat value of the player. Not used directly in the backend, and just passes this value to the response so that the app can use it in the result page.
     pub determination: StatType,
+
+    /// The skill speed substat value of the player. Not used directly in the backend, and just passes this value to the response so that the app can use it in the result page.
     pub skill_speed: StatType,
+
+    /// The spell speed substat value of the player. Not used directly in the backend, and just passes this value to the response so that the app can use it in the result page.
     pub spell_speed: StatType,
+
+    /// The tenacity substat value of the player. Not used directly in the backend, and just passes this value to the response so that the app can use it in the result page.
     pub tenacity: StatType,
 }
 

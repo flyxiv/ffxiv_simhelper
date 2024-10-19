@@ -319,7 +319,7 @@ impl SummonerDatabase {
             use_type: UseType::NoTarget,
         };
 
-        let wyrmwave_ticker = AutoAttackTicker::new_with_auto_attack(
+        let wyrmwave_ticker = AutoAttackTicker::create_summoner_pet_auto_attack(
             1600,
             player_id,
             wyrmwave.clone(),
@@ -327,7 +327,7 @@ impl SummonerDatabase {
             15000,
             ffxiv_event_queue.clone(),
         );
-        let phoenix_ticker = AutoAttackTicker::new_with_auto_attack(
+        let phoenix_ticker = AutoAttackTicker::create_summoner_pet_auto_attack(
             1601,
             player_id,
             scarlet_flame.clone(),
@@ -335,7 +335,7 @@ impl SummonerDatabase {
             15000,
             ffxiv_event_queue.clone(),
         );
-        let solar_bahamut_ticker = AutoAttackTicker::new_with_auto_attack(
+        let solar_bahamut_ticker = AutoAttackTicker::create_summoner_pet_auto_attack(
             1602,
             player_id,
             luxwave.clone(),

@@ -25,6 +25,8 @@ pub struct AutoAttackTicker {
     trait_percent: PercentType,
     duration_millisecond: TimeType,
     damage_category: DamageCategory,
+
+    /// described in get_auto_attack_interval_tuning_value_of_job
     job_tuning_value: MultiplierType,
 }
 
@@ -40,6 +42,9 @@ impl EventTicker for AutoAttackTicker {
                 let speed = (player.borrow().get_gcd_delay_millisecond(&self.auto_attack)
                     as MultiplierType
                     / self.job_tuning_value) as TimeType;
+
+                // player's GCD delay can change dynamically due to general speed/auto attack speed buffs,
+                // so we have to update the auto attack interval every time we generate a tick event.
                 self.auto_attack_interval = speed;
 
                 self.event_queue
@@ -139,7 +144,7 @@ impl AutoAttackTicker {
         }
     }
 
-    pub fn new_with_auto_attack(
+    pub fn create_summoner_pet_auto_attack(
         id: SkillIdType,
         player_id: PlayerIdType,
         auto_attack: AttackSkill,
@@ -162,8 +167,9 @@ impl AutoAttackTicker {
     }
 }
 
-/// while ten-chi-jin or dancing jobs can't auto attack but we can't implement that.
-/// so we adjust the auto attack interval based on actual logs so that auto attack swing
+/// There are many variables to auto attack casts:
+/// jobs like NIN and DNC can't auto attack while using ten-chi-jin or standard step. This is too hard to implement directly.
+/// So instead we adjust the auto attack interval based on actual logs so that auto attack casts
 /// matches the actual logs.
 fn get_auto_attack_interval_tuning_value_of_job(job_abbrev: &String) -> MultiplierType {
     match job_abbrev.as_str() {

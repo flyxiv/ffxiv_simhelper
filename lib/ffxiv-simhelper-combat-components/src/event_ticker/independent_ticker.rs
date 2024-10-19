@@ -11,7 +11,7 @@ use std::cell::RefCell;
 use std::cmp::Reverse;
 use std::rc::Rc;
 
-/// Generator of ticks that run independent of any other events
+/// Generator of ticks that runs independently of any other events, having its own timer and intervals.
 /// ex) Bard's Song Ticks
 #[derive(Clone)]
 pub struct IndependentTicker {

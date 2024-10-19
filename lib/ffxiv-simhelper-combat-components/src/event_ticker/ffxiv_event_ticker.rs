@@ -10,10 +10,21 @@ use crate::types::{PlayerIdType, StatusTable};
 use std::cell::RefCell;
 use std::rc::Rc;
 
+/// Generator of various kinds of tick events that happen in FFXIV Combat.
 #[derive(Clone)]
 pub enum FfxivEventTicker {
-    AutoAttackTicker(AutoAttackTicker),
+    /// The "Server Tick" for DOT damages. Activates all DOT ticks every 3 seconds.
     GlobalTicker(GlobalTicker),
+
+    /// Physical jobs deal an auto attack in the same interval as their
+    /// GCD. However, the auto attack's delay is decided by the player's GCD delay at the time the
+    /// auto attack is used(it could change if GCD buff/debuff expires), so the ticker has to get
+    /// real time GCD delay from the player every time the next auto attack is activated.
+    /// SMN's pet auto attacks are also included in this ticker.
+    AutoAttackTicker(AutoAttackTicker),
+
+    /// Tickers that run independently of any other events. Stack resource
+    /// ticks are usually this kind ex) bard's song ticks.
     IndependentTicker(IndependentTicker),
 }
 
