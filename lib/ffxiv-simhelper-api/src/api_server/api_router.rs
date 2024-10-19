@@ -1,7 +1,7 @@
 use crate::api_handler::bestpartner::best_partner_api_handler;
+use crate::api_handler::beststats::best_stats_api_handler;
 use crate::api_handler::dpsanalysis::dps_analysis_api_handler;
 use crate::api_handler::gearcompare::gear_compare_api_handler;
-use crate::api_handler::statweights::best_stats_api_handler;
 use crate::config::AppState;
 use axum::http::header::CONTENT_TYPE;
 use axum::http::{Method, StatusCode};

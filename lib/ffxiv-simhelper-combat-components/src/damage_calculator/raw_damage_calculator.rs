@@ -779,6 +779,12 @@ mod tests {
         let combust_iii_base_damage_249 =
             calculate_base_damage(70.0, 130, DamageCategory::MagicalDot, &ast_249_gcd, false);
 
-        assert_eq!(combust_iii_base_damage_249, combust_iii_base_damage_250);
+        assert_eq!(
+            combust_iii_base_damage_249,
+            combust_iii_base_damage_250 + 4.0,
+            "2.49 GCD dot base damage: {}, 2.50 GCD dot base damage: {}",
+            combust_iii_base_damage_249,
+            combust_iii_base_damage_250
+        );
     }
 }

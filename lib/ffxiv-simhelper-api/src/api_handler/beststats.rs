@@ -17,10 +17,10 @@ pub(crate) async fn best_stats_api_handler(
     State(app_state): State<AppState>,
     Json(request): Json<BestStatsApiRequest>,
 ) -> Result<Json<StatWeightsApiResponse>> {
-    Ok(Json(stat_weights(request, app_state)?))
+    Ok(Json(best_stats(request, app_state)?))
 }
 
-pub fn stat_weights(
+pub fn best_stats(
     request: BestStatsApiRequest,
     app_state: AppState,
 ) -> Result<StatWeightsApiResponse> {

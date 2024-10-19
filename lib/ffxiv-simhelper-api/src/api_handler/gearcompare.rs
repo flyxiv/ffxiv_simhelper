@@ -6,7 +6,7 @@ use axum::Json;
 
 const NUMBER_OF_ITERATIONS_PER_REQUEST_GEAR_COMPARE: usize = 8;
 
-pub(crate) async fn gear_compare_api_handler(
+pub async fn gear_compare_api_handler(
     Json(request): Json<GearCompareApiRequest>,
 ) -> Result<Json<GearCompareApiResponse>> {
     let simulation_response1 = dps_analysis(

@@ -8,9 +8,9 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 pub mod bestpartner;
+pub mod beststats;
 pub mod dpsanalysis;
 pub mod gearcompare;
-pub mod statweights;
 
 fn create_simulation_board(request: SimulationApiRequest) -> Result<FfxivSimulationBoard> {
     let combat_time_millisecond = request.combat_time_millisecond;
