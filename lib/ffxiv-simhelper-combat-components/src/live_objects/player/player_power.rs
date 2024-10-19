@@ -113,3 +113,56 @@ fn convert_main_stat_to_multiplier(main_stat: StatType, role: Role) -> Multiplie
 
     1.0 + main_stat_multiplier_increase_percent / 100.0
 }
+
+#[cfg(test)]
+mod tests {
+    use super::convert_main_stat_to_multiplier;
+
+    #[test]
+    fn convert_main_stat_to_multiplier_test() {
+        let main_stat1 = 5042;
+        let main_stat2 = 4994;
+        let main_stat3 = 4849;
+
+        let tank_main_stat1 = 4842;
+        let tank_main_stat2 = 4987;
+        let tank_main_stat3 = 4999;
+
+        let non_tank_job_abbrev = "AST".to_string();
+        let tank_job_abbrev = "PLD".to_string();
+
+        let non_tank_main_stat_multiplier1 = convert_main_stat_to_multiplier(
+            main_stat1,
+            super::job_abbrev_to_role(&non_tank_job_abbrev),
+        );
+        let non_tank_main_stat_multiplier2 = convert_main_stat_to_multiplier(
+            main_stat2,
+            super::job_abbrev_to_role(&non_tank_job_abbrev),
+        );
+        let non_tank_main_stat_multiplier3 = convert_main_stat_to_multiplier(
+            main_stat3,
+            super::job_abbrev_to_role(&non_tank_job_abbrev),
+        );
+
+        let tank_main_stat_multiplier1 = convert_main_stat_to_multiplier(
+            tank_main_stat1,
+            super::job_abbrev_to_role(&tank_job_abbrev),
+        );
+        let tank_main_stat_multiplier2 = convert_main_stat_to_multiplier(
+            tank_main_stat2,
+            super::job_abbrev_to_role(&tank_job_abbrev),
+        );
+        let tank_main_stat_multiplier3 = convert_main_stat_to_multiplier(
+            tank_main_stat3,
+            super::job_abbrev_to_role(&tank_job_abbrev),
+        );
+
+        assert_eq!(non_tank_main_stat_multiplier1, 25.78);
+        assert_eq!(non_tank_main_stat_multiplier2, 25.52);
+        assert_eq!(non_tank_main_stat_multiplier3, 24.74);
+
+        assert_eq!(tank_main_stat_multiplier1, 20.00);
+        assert_eq!(tank_main_stat_multiplier2, 20.63);
+        assert_eq!(tank_main_stat_multiplier3, 20.84);
+    }
+}
