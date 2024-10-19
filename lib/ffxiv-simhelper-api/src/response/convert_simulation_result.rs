@@ -1,6 +1,7 @@
 use crate::response::aggregate_damage_simulation_data::{
     aggregate_contribution, aggregate_player_damage_statistics, aggregate_skill_damage,
-    aggregate_status_damages, PlayerDamageAggregate, RaidbuffDamageAggregate, SkillDamageAggregate,
+    aggregate_status_damages, RaidbuffDamageAggregate, TotalDamageAggregateForEachPlayer,
+    TotalDamageAggregateForEachSkill,
 };
 use crate::response::from_with_time::FromWithTime;
 use crate::response::simulation_api_response::{
@@ -32,9 +33,9 @@ fn damage_to_dps(damage: DpsType, time: TimeType) -> DpsType {
     damage / (time / 1000) as DpsType
 }
 
-impl FromWithTime<PlayerDamageAggregate> for SimulationSummaryResponse {
+impl FromWithTime<TotalDamageAggregateForEachPlayer> for SimulationSummaryResponse {
     fn from_with_time(
-        player_damage_aggregate: PlayerDamageAggregate,
+        player_damage_aggregate: TotalDamageAggregateForEachPlayer,
         combat_time_millisecond: TimeType,
     ) -> Self {
         let given_contributions = player_damage_aggregate
@@ -69,7 +70,7 @@ impl FromWithTime<PlayerDamageAggregate> for SimulationSummaryResponse {
 
 fn create_skill_damage_profile_response(
     skill_id: SkillIdType,
-    skill_damage_aggregate: &SkillDamageAggregate,
+    skill_damage_aggregate: &TotalDamageAggregateForEachSkill,
     combat_time_millisecond: TimeType,
 ) -> DamageProfileResponse {
     let total_damage = skill_damage_aggregate.total_raw_damage
@@ -111,7 +112,7 @@ fn create_status_damage_profile_response(
 }
 
 fn calculate_damage_profile_response(
-    skill_damage_tables: &HashMap<SkillIdType, SkillDamageAggregate>,
+    skill_damage_tables: &HashMap<SkillIdType, TotalDamageAggregateForEachSkill>,
     status_damage_aggregate: &HashMap<SkillIdType, RaidbuffDamageAggregate>,
     combat_time_millisecond: TimeType,
 ) -> Vec<DamageProfileResponse> {
@@ -138,7 +139,7 @@ fn calculate_damage_profile_response(
 
 fn create_party_contribution_response(
     player_id: PlayerIdType,
-    skill_damage_table: &HashMap<SkillIdType, SkillDamageAggregate>,
+    skill_damage_table: &HashMap<SkillIdType, TotalDamageAggregateForEachSkill>,
 ) -> Vec<PartyContributionResponse> {
     let mut party_contribution_responses = vec![];
 
@@ -200,19 +201,25 @@ pub(crate) fn create_response_from_simulation_result(
         .map(|party_simulation_result| party_simulation_result.damage_log.clone())
         .collect_vec();
 
+    // damage logs -> damage profile for each skill
     let (skill_damage_tables, skill_burst_damage_tables) =
         aggregate_skill_damage(&damage_logs_of_all_players);
 
+    // damage profile for each skill => damage profile for each raidbuff
     let status_damage_aggregates = aggregate_status_damages(&skill_damage_tables);
+
+    // damage profile for each skill => total contribution of each player to each raidbuff
     let party_damage_contribution_table = skill_damage_tables
         .iter()
         .map(|skill_damage_table| aggregate_contribution(skill_damage_table))
         .collect_vec();
 
-    let player_simulation =
+    // damage profile for each skill => damage profile(total raw damage, total contribution, total buffs taken) for each player
+    let player_damage_profile =
         aggregate_player_damage_statistics(&party_damage_contribution_table, &skill_damage_tables);
 
-    let summaries = player_simulation
+    // raw damage, buffs taken, buffs given => summary(pdps, rdps, adps, edps) for each player
+    let summaries = player_damage_profile
         .iter()
         .map(|player_damage_aggregate| {
             SimulationSummaryResponse::from_with_time(
@@ -222,6 +229,7 @@ pub(crate) fn create_response_from_simulation_result(
         })
         .collect_vec();
 
+    // convert to response type
     let damage_profile_responses = izip!(&skill_damage_tables, &status_damage_aggregates)
         .map(|(skill_damage_table, status_damage_aggregate)| {
             calculate_damage_profile_response(

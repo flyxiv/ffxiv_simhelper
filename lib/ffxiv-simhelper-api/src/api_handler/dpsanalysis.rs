@@ -50,7 +50,7 @@ pub fn dps_analysis(
 
         response.simulation_data[0]
             .simulation_summary
-            .drain(&iteration_response.simulation_data[0].simulation_summary);
+            .extend(&iteration_response.simulation_data[0].simulation_summary);
     }
 
     Ok(response)

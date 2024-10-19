@@ -14,7 +14,7 @@ pub(crate) type ResourceIdType = u8;
 pub(crate) type StackType = i8;
 
 pub type TimeType = i32;
-pub(crate) type StatusIdType = u16;
+pub type StatusIdType = u16;
 pub type DpsType = f64;
 pub type PotencyType = u16;
 pub type SkillIdType = u16;

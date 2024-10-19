@@ -38,6 +38,7 @@ pub(crate) struct ViperDatabase {
 
     #[allow(unused)]
     pub(crate) hunters_instinct: BuffStatus,
+
     #[allow(unused)]
     pub(crate) swiftscaled: BuffStatus,
     pub(crate) honed_steels: BuffStatus,

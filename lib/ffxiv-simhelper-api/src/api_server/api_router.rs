@@ -10,6 +10,14 @@ use axum::Router;
 use tower_http::cors::{Any, CorsLayer};
 
 /// Server router for FFXIV SimHelper service.
+/// # Current Supported APIs
+/// ---
+/// | API route           | Request Type           | Description                                                                                          |
+/// |---------------------|------------------------|------------------------------------------------------------------------------------------------------|
+/// | /api/v1/simulate    | POST(application/json) | In-depth analysis of player's detailed damage profile. (1000 iterations)                             |
+/// | /api/v1/gearcompare | POST(application/json) | Detailed simulation of expected DPS for two different gearsets. (4000 iterations each)               |
+/// | /api/v1/bestpartner | POST(application/json) | Finds out which jobs contributes the most to the main player's raidbuffs (1000 iteration/partner)    |
+/// | /api/v1/statweights | POST(application/json) | Finds out the expected DPS increase per stat point for each character stats (1000 iteration/stat)    |
 pub fn create_ffxiv_simhelper_service_router(app_state: AppState) -> Router {
     let cors_layer = CorsLayer::new()
         .allow_methods(Method::POST)

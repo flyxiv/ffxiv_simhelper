@@ -1,4 +1,4 @@
-pub(crate) mod aggregate_damage_simulation_data;
+pub mod aggregate_damage_simulation_data;
 pub(crate) mod best_partner_api_response;
 pub mod convert_simulation_result;
 pub(crate) mod from_with_time;
