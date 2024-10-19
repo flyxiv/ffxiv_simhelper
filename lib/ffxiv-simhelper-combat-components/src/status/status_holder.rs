@@ -22,14 +22,16 @@ pub trait StatusHolder<S: Status>: Sized {
         let status_table = self.get_status_table();
 
         if status_table.borrow().contains_key(&key) {
-            let mut status = status_table.borrow_mut();
-            let status = status.get_mut(&key).unwrap();
+            let mut status_table = status_table.borrow_mut();
+            let old_status = status_table.get(&key).unwrap();
 
             let new_duration = min(
-                status.get_duration_left_millisecond() + duration_millisecond,
+                old_status.get_duration_left_millisecond() + duration_millisecond,
                 max_duration_millisecond,
             );
-            status.set_duration_left_millisecond(new_duration)
+
+            status.set_duration_left_millisecond(new_duration);
+            status_table.insert(key, status);
         } else {
             status.start_duration();
             status_table.borrow_mut().insert(key, status);

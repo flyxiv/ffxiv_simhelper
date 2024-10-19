@@ -5,6 +5,7 @@ use ffxiv_simhelper_combat_components::types::{MultiplierType, TimeType};
 use ffxiv_simhelper_combat_components::types::{PlayerIdType, SkillIdType};
 use itertools::izip;
 use std::collections::HashMap;
+use log::info;
 
 const MINUTE_IN_MILLISECOND: TimeType = 60000;
 
@@ -72,6 +73,8 @@ pub(crate) fn aggregate_skill_damage(
         let mut skill_damage_table = HashMap::new();
         let mut skill_burst_damage_table = HashMap::new();
 
+        let mut highest_burst_minute = 0;
+
         for damage_log in damage_logs_of_single_player.iter() {
             let damage_time_milliseconds = damage_log.time;
             let damage_minute = damage_time_milliseconds / MINUTE_IN_MILLISECOND;
@@ -109,6 +112,9 @@ pub(crate) fn aggregate_skill_damage(
                 *rdps_contribution_entry += rdps_contribution.contributed_damage;
 
                 if let Some(minute) = time_key {
+                    debug_assert!(highest_burst_minute <= minute, "{}, {}", highest_burst_minute, minute);
+                    highest_burst_minute = minute;
+
                     let skill_burst_damage_entry = skill_burst_damage_table
                         .entry((rdps_contribution.player_id, minute))
                         .or_insert(0.0);

@@ -58,9 +58,8 @@ pub struct FfxivSimulationBoard {
 
 impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationBoard {
     fn run_simulation(&self) {
-        let start_time = SystemTime::now();
         loop {
-            if self.combat_time_exceeded_finish_time(self.finish_combat_time_millisecond) {
+            if self.combat_time_exceeded_finish_time() {
                 debug!("combat finished");
                 break;
             }
@@ -68,9 +67,6 @@ impl SimulationBoard<FfxivTarget, FfxivPlayer, AttackSkill> for FfxivSimulationB
             let next_event = self.event_queue.borrow_mut().pop().unwrap().0;
             self.simulate_event(next_event);
         }
-        let end_time = SystemTime::now();
-        let elapsed_time = end_time.duration_since(start_time).unwrap();
-        debug!("elapsed time: {:?}", elapsed_time);
     }
 
     fn create_simulation_result(&self) -> SimulationResult {
@@ -324,8 +320,8 @@ impl FfxivSimulationBoard {
     }
 
     #[inline]
-    fn combat_time_exceeded_finish_time(&self, target_combat_time_millisecond: TimeType) -> bool {
-        *self.current_combat_time_millisecond.borrow() >= target_combat_time_millisecond
+    fn combat_time_exceeded_finish_time(&self) -> bool {
+        *self.current_combat_time_millisecond.borrow() >= self.finish_combat_time_millisecond
     }
 
     fn handle_damage_event(

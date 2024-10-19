@@ -230,7 +230,7 @@ fn calculate_crit_direct_hit_damage_direct_damage(
     is_guaranteed_direct_hit: bool,
     damage_category: DamageCategory,
 ) -> (MultiplierType, HashMap<StatusKey, MultiplierType>, bool) {
-    let damage_variance: MultiplierType = get_damage_variance_multiplier();
+    let mut damage_variance: MultiplierType = get_damage_variance_multiplier();
 
     debug_assert!(
         damage_variance >= 0.95 && damage_variance <= 1.05,
@@ -427,7 +427,7 @@ mod tests {
         skill::damage_category::DamageCategory,
     };
     use std::collections::HashMap;
-
+    use crate::live_objects::player::player_power::PlayerPower;
     use super::get_damage_variance_multiplier;
 
     #[test]
@@ -723,5 +723,72 @@ mod tests {
             base_damage_answer_auto_attack_lower_bound,
             base_damage_answer_auto_attack_upper_bound
         );
+    }
+
+    #[test]
+    fn ast_dot_base_damage_test() {
+        // ref. https://github.com/flyxiv/ffxiv_simhelper_public/issues/35
+        // AST 2.49 GCD and 2.50 GCD differs DOT damage by 5%
+        // make sure the dot ticks are similar, since speed multiplier increase of 0.1% won't give that much buff.
+
+        let ast_250_gcd = PlayerPower {
+            auto_attack_delays: 2.5,
+            critical_strike_rate: 0.23,
+            critical_strike_damage: 1.58,
+            direct_hit_rate: 0.146,
+            auto_direct_hit_increase: 0.4,
+            determination_multiplier: 1.131,
+            tenacity_multiplier: 1.0,
+            speed_multiplier: 1.00,
+            weapon_damage_multiplier: 1.96,
+            main_stat_multiplier: 24.72,
+            weapon_damage: 132,
+            main_stat: 3300,
+            critical_strike: 2560,
+            direct_hit: 2500,
+            determination: 2500,
+            skill_speed: 2500,
+            tenacity: 400,
+            spell_speed: 2500,
+        };
+
+        let ast_249_gcd = PlayerPower {
+            auto_attack_delays: 2.5,
+            critical_strike_rate: 0.23,
+            critical_strike_damage: 1.58,
+            direct_hit_rate: 0.138,
+            auto_direct_hit_increase: 0.4,
+            determination_multiplier: 1.131,
+            tenacity_multiplier: 1.0,
+            speed_multiplier: 1.001,
+            weapon_damage_multiplier: 1.96,
+            main_stat_multiplier: 24.72,
+            weapon_damage: 132,
+            main_stat: 3300,
+            critical_strike: 2560,
+            direct_hit: 2500,
+            determination: 2500,
+            skill_speed: 2500,
+            tenacity: 400,
+            spell_speed: 2500,
+        };
+
+        let combust_iii_base_damage_250 = calculate_base_damage(
+            70.0,
+            130,
+            DamageCategory::MagicalDot,
+            &ast_250_gcd,
+            false,
+        );
+
+        let combust_iii_base_damage_249 = calculate_base_damage(
+            70.0,
+            130,
+            DamageCategory::MagicalDot,
+            &ast_249_gcd,
+            false,
+        );
+
+        assert_eq!(combust_iii_base_damage_249, combust_iii_base_damage_250);
     }
 }

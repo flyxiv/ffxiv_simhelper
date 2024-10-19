@@ -126,6 +126,8 @@ impl Default for BuffStatus {
 
 #[cfg(test)]
 mod tests {
+    use crate::event::ffxiv_event::FfxivEvent;
+    use crate::event_ticker::PercentType;
     use crate::status::status_info::StatusInfo;
 
     use super::BuffStatus;
@@ -137,8 +139,8 @@ mod tests {
         let proc_chance = 0.50;
 
         buff_status.trigger_proc_event_on_gcd.push((
-            FfxivEvent::Damage(0, 0, 0, 0, false, false, vec![], None, false, 0),
-            proc_chance * 100 as PercentType,
+            FfxivEvent::RemoveTargetBuff(0, 0, 0, 0),
+            (proc_chance * 100.0) as PercentType,
         ));
 
         let iteration_count = 1000;
@@ -146,7 +148,7 @@ mod tests {
         let mut events = vec![];
 
         for _ in 0..iteration_count {
-            let proc_events = buff_status.generate_proc_event(i);
+            let proc_events = buff_status.generate_proc_event(0);
 
             events.extend(proc_events);
         }
@@ -166,12 +168,13 @@ mod tests {
     #[test]
     fn get_damage_buff_infos_test() {
         let mut buff_status = BuffStatus::default();
+        buff_status.stacks = 2;
 
         buff_status.status_info = vec![
             StatusInfo::DamagePercent(10),
             StatusInfo::CritHitRatePercent(10),
             StatusInfo::DirectHitRatePercent(10),
-            StatusInfo::IncreaseMainStat(10, 800),
+            StatusInfo::IncreaseMainStat(800, 10),
             StatusInfo::SpeedByStack(vec![1, 2, 4, 10]),
             StatusInfo::SpeedOnlyAutoAttack(10),
             StatusInfo::SpeedPercent(10),
@@ -179,10 +182,10 @@ mod tests {
 
         let damage_buffs = buff_status.get_damage_buff_infos();
         let answer = vec![
-            StatusInfo::DamagePercent(10),
+            StatusInfo::DamagePercent(20),
             StatusInfo::CritHitRatePercent(10),
             StatusInfo::DirectHitRatePercent(10),
-            StatusInfo::IncreaseMainStat(10, 800),
+            StatusInfo::IncreaseMainStat(800, 10),
         ];
 
         assert_eq!(damage_buffs, answer, "{}", damage_buffs.len());

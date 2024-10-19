@@ -22,6 +22,10 @@ impl PartialEq<Self> for StatusInfo {
             (StatusInfo::CritHitRatePercent(a), StatusInfo::CritHitRatePercent(b)) => a == b,
             (StatusInfo::DirectHitRatePercent(a), StatusInfo::DirectHitRatePercent(b)) => a == b,
             (StatusInfo::SpeedPercent(a), StatusInfo::SpeedPercent(b)) => a == b,
+            (StatusInfo::SpeedByStack(a), StatusInfo::SpeedByStack(b)) => a == b,
+            (StatusInfo::SpeedOnlyAutoAttack(a), StatusInfo::SpeedOnlyAutoAttack(b)) => a == b,
+            (StatusInfo::IncreaseMainStat(a, b), StatusInfo::IncreaseMainStat(c, d)) => a == c && b == d,
+            (StatusInfo::None, StatusInfo::None) => true,
             _ => false,
         }
     }

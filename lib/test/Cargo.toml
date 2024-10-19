@@ -14,6 +14,7 @@ sorted-vec = "0.8"
 log = "0.4.20"
 rand = "0.8.5"
 serde = { version = "1.0.196", features = ["derive"] }
+itertools = "0.13"
 
 [dependencies.ffxiv-simhelper-combat-components]
 version = "0.1.0"
@@ -22,3 +23,8 @@ path = "../ffxiv-simhelper-combat-components"
 [dependencies.ffxiv-simhelper-dps-simulator]
 version = "0.1.0"
 path = "../ffxiv-simhelper-dps-simulator"
+
+[dependencies.ffxiv-simhelper-api]
+version = "0.1.0"
+path = "../ffxiv-simhelper-api"
+
