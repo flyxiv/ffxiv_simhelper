@@ -51,6 +51,7 @@ pub(crate) enum SkillPrerequisite {
     ResourceGreaterOrEqualThanAnotherResourceBy(ResourceIdType, ResourceIdType, ResourceType),
 
     /// Skill1 id, Skill2 id
+    #[allow(unused)]
     BuffGreaterDurationThan(SkillIdType, SkillIdType),
 }
 

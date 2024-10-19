@@ -230,7 +230,7 @@ fn calculate_crit_direct_hit_damage_direct_damage(
     is_guaranteed_direct_hit: bool,
     damage_category: DamageCategory,
 ) -> (MultiplierType, HashMap<StatusKey, MultiplierType>, bool) {
-    let mut damage_variance: MultiplierType = get_damage_variance_multiplier();
+    let damage_variance: MultiplierType = get_damage_variance_multiplier();
 
     debug_assert!(
         damage_variance >= 0.95 && damage_variance <= 1.05,
@@ -422,13 +422,13 @@ impl Default for FfxivRawDamageCalculator {
 
 #[cfg(test)]
 mod tests {
+    use super::get_damage_variance_multiplier;
+    use crate::live_objects::player::player_power::PlayerPower;
     use crate::{
         damage_calculator::raw_damage_calculator::{calculate_base_damage, decide_crit_direct_hit},
         skill::damage_category::DamageCategory,
     };
     use std::collections::HashMap;
-    use crate::live_objects::player::player_power::PlayerPower;
-    use super::get_damage_variance_multiplier;
 
     #[test]
     fn damage_variance_multiplier_test() {
@@ -773,21 +773,11 @@ mod tests {
             spell_speed: 2500,
         };
 
-        let combust_iii_base_damage_250 = calculate_base_damage(
-            70.0,
-            130,
-            DamageCategory::MagicalDot,
-            &ast_250_gcd,
-            false,
-        );
+        let combust_iii_base_damage_250 =
+            calculate_base_damage(70.0, 130, DamageCategory::MagicalDot, &ast_250_gcd, false);
 
-        let combust_iii_base_damage_249 = calculate_base_damage(
-            70.0,
-            130,
-            DamageCategory::MagicalDot,
-            &ast_249_gcd,
-            false,
-        );
+        let combust_iii_base_damage_249 =
+            calculate_base_damage(70.0, 130, DamageCategory::MagicalDot, &ast_249_gcd, false);
 
         assert_eq!(combust_iii_base_damage_249, combust_iii_base_damage_250);
     }

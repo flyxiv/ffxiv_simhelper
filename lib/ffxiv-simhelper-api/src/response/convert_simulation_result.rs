@@ -16,7 +16,6 @@ use ffxiv_simhelper_combat_components::types::{SkillIdType, TimeType};
 use ffxiv_simhelper_dps_simulator::simulation_result::SimulationResult;
 use itertools::{izip, Itertools};
 use std::collections::HashMap;
-use log::info;
 
 pub(crate) fn convert_to_skill_log_response(skill_log: &SkillLog) -> SkillLogResponse {
     SkillLogResponse {
@@ -183,9 +182,7 @@ fn create_party_burst_contribution_response(
         });
     }
 
-    party_contribution_responses.sort_by(
-        |a, b| a.minute.cmp(&b.minute)
-    );
+    party_contribution_responses.sort_by(|a, b| a.minute.cmp(&b.minute));
 
     party_contribution_responses
 }

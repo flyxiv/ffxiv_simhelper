@@ -36,7 +36,9 @@ pub(crate) struct ViperDatabase {
     pub(crate) uncoiled_fury: AttackSkill,
     pub(crate) death_rattle: AttackSkill,
 
+    #[allow(unused)]
     pub(crate) hunters_instinct: BuffStatus,
+    #[allow(unused)]
     pub(crate) swiftscaled: BuffStatus,
     pub(crate) honed_steels: BuffStatus,
     pub(crate) honed_reavers: BuffStatus,

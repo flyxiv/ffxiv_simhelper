@@ -79,6 +79,19 @@ pub(crate) fn make_sage_opener(db: &SageDatabase, use_pots: bool) -> Vec<Opener>
         Opener::GcdOpener(db.gcd.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.phlegma.get_id()),
+        Opener::OgcdOpener((Some(db.psyche.get_id()), None)),
+        Opener::GcdOpener(db.phlegma.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.gcd.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.gcd.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.gcd.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.gcd.get_id()),
+        Opener::OgcdOpener((None, None)),
+        Opener::GcdOpener(db.dot.get_id()),
+        Opener::OgcdOpener((None, None)),
     ]);
 
     openers

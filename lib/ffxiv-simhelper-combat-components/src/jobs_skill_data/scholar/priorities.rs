@@ -90,6 +90,7 @@ pub(crate) fn make_scholar_opener(db: &ScholarDatabase, use_pots: bool) -> Vec<O
         Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
         Opener::GcdOpener(db.broil_iv.get_id()),
         Opener::OgcdOpener((Some(db.energy_drain.get_id()), None)),
+        Opener::GcdOpener(db.biolysis.get_id()),
     ]);
 
     openers

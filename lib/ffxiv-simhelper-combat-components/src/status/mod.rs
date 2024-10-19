@@ -1,6 +1,6 @@
 use crate::id_entity::IdEntity;
 use crate::status::status_info::StatusInfo;
-use crate::types::{SkillIdType, SkillStackType, SnapshotTable, TimeType};
+use crate::types::{SkillIdType, SkillStackType, TimeType};
 
 pub mod buff_status;
 pub mod debuff_status;
