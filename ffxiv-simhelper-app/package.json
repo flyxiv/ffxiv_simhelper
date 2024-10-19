@@ -7,12 +7,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build-local": "export NODE_ENV=application && tsc -b && vite build",
+    "build-local-linux": "export NODE_ENV=application && tsc -b && vite build",
+    "build-local": "tsc -b && vite build",
     "build-server": "export NODE_ENV=server && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "electron-start": "electron . ELECTRON_START_URL=http://localhost:5173",
-    "electron-pack": "yarn build && electron-builder build -c.extraMetadata.main=src/main.js --publish=never",
+    "electron-pack": "yarn build-local && electron-builder build -c.extraMetadata.main=src/main.js --publish=never",
     "electron-publish-release": "yarn build && electron-builder --publish=always"
   },
   "main": "src/main.js",
@@ -23,8 +24,12 @@
     "icon": "build/icon.png",
     "extraFiles": [
       {
-        "from": "../target/release/ffxiv-simhelper.exe",
+        "from": "../target/release/ffxiv-simhelper-local.exe",
         "to": "./ffxiv_simhelper_x86_64.exe"
+      },
+      {
+        "from": "../config/backend_local_config.yml",
+        "to": "./config/backend_local_config.yml"
       },
       {
         "from": "./dist/images",
