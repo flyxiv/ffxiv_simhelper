@@ -277,7 +277,7 @@ export function setPartyCompositionBuffPercent(
     partyBuffPercent += 1;
   }
 
-  if (partyBuffPercent >= 2) {
+  if (partyBuffPercent >= 3) {
     input.compositionBuffPercent = partyBuffPercent;
   } else {
     input.compositionBuffPercent = 0;
