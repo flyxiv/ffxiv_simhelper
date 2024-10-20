@@ -4,7 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 
-
 [[bin]]
 name = "ffxiv-simhelper-local"
 path = "src/local_server.rs"
@@ -36,6 +35,11 @@ path = "../lib/ffxiv-simhelper-combat-components"
 [dependencies.ffxiv-simhelper-api]
 version = "0.1.0"
 path = "../lib/ffxiv-simhelper-api"
+
+[dependencies.ffxiv-simhelper-tests]
+version = "0.1.0"
+path = "../lib/tests"
+
 
 [dependencies]
 axum = "0.7"

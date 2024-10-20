@@ -1,7 +1,12 @@
+#[allow(unused)]
 use axum_server::tls_rustls::RustlsConfig;
+#[allow(unused)]
 use ffxiv_simhelper_api::api_server::api_router::create_ffxiv_simhelper_service_router;
+#[allow(unused)]
 use ffxiv_simhelper_api::config::{AppState, FfxivSimhelperConfig};
+#[allow(unused)]
 use std::{net::SocketAddr, path::PathBuf};
+#[allow(unused)]
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[cfg(not(target_os = "windows"))]

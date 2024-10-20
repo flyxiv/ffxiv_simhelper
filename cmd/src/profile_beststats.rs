@@ -1,4 +1,4 @@
-use ffxiv_simhelper_api::api_handler::statweights::stat_weights;
+use ffxiv_simhelper_api::api_handler::beststats::best_stats;
 use ffxiv_simhelper_api::config::{AppState, FfxivSimhelperConfig};
 use ffxiv_simhelper_api::request::best_stats_api_request::BestStatsApiRequest;
 use ffxiv_simhelper_api::request::simulation_api_request::PlayerInfoRequest;
@@ -88,7 +88,7 @@ fn main() {
     let app_state = AppState::from(backend_config);
 
     for _ in 0..8 {
-        let response = stat_weights(request.clone(), app_state.clone());
+        let response = best_stats(request.clone(), app_state.clone());
         println!("{:?}", response.unwrap().dps);
     }
 
