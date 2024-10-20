@@ -81,7 +81,7 @@ impl CombatResource for SamuraiCombatResources {
         (vec![], vec![])
     }
 
-    fn trigger_on_crit(&mut self) {}
+    fn trigger_on_gcd_crit(&mut self) {}
 
     fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0

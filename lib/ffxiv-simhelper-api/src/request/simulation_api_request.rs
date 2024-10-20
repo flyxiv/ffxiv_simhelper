@@ -175,6 +175,6 @@ pub struct PlayerInfoRequest {
     /// The job abbreviation of the player's combat job. ex) "DRG", "NIN", "AST", "DNC"
     pub job_abbrev: String,
 
-    /// The power specification of the player. Contains the player's stats and stat ladder multiplier values of each player.
+    /// Description is done in declaration of PlayerPower struct. 
     pub power: PlayerPower,
 }

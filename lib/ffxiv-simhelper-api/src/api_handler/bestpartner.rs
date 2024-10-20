@@ -18,6 +18,12 @@ pub(crate) async fn best_partner_api_handler(
     Ok(Json(best_partner(request, app_state)?))
 }
 
+/// Best Partner API Handler
+/// 
+/// Simulates a party with the main player and a partner player, and returns the median partner player's contribution 
+/// to the main player's DPS after configured number of iterations set by the config file.
+/// 
+/// App requests this API for each job other than the main player's job(which will be 20 requests in total) to find the best partner.
 pub fn best_partner(
     request: SimulationApiRequest,
     app_state: AppState,

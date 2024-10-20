@@ -368,7 +368,7 @@ impl FfxivSimulationBoard {
         );
 
         if is_crit && is_gcd {
-            player.borrow_mut().update_on_crit();
+            player.borrow_mut().update_on_gcd_crit();
         }
 
         if player.borrow().get_id() != self.main_player_id {

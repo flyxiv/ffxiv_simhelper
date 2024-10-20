@@ -22,6 +22,26 @@ use std::collections::HashMap;
 #[derive(Clone)]
 pub enum FfxivEvent {
     /// owner_player_id, turn, threshold limit time
+    ///
+    /// # oGCD Turn Explanation
+    /// Normally the player can weave one-three oGCD skills between GCD skills, meaning **the number of oGCD skills that can be weaved between GCD is dynamic.**
+    ///
+    /// ## Possible Design Choices
+    /// 1) You can create a separate event for each oGCD skill cast
+    ///    * this makes the oGCD implementation simpler, but it makes it hard to optimize skill selection, because **the effect of the later skills can't be simulated by the former skill**
+    ///    * ex) when the player can use Ten-Chi-Jin, Bhavacakra and Dream Within a Dream, the player has to choose the highest priority skill between the three as the first oGCD skill, because
+    ///      the effect of the later skills can't be simulated by the former skill.
+    ///    * If Ten-Chi-Jin was the highest priority skill, the player can't cast anything else when they are locked in Ten-Chi-Jin, so they lose the second oGCD slot.
+    ///
+    /// 2) You can create a single event that checks how many oGCD skills can be weaved between GCDs, and return the list of oGCDs that will be cast between this GCD turn in order
+    ///    * this implementation is harder, but it allows the player to simulate all possible oGCD combinations and choose the best one.
+    ///    * in the above example, the player will know that when Ten-Chi-Jin is the first oGCD only one oGCD skill will be used, and by using Bhavacakra or Dream Within a Dream first and then ten-chi-jin they can
+    ///      double-weave oGCDs, they will choose the latter one, which will be a smarter choice
+    ///
+    /// ## FFXIV Simhelper Design Decision
+    /// FFXIV Simhelper chooses the second option.
+    /// The oGCD Player Turn gives "threshold time limit" to the oGCD turn, which is the time of the next GCD event, and the earliest time oGCD can be used is the current time.
+    /// Given these information, player figures out how many oGCD can be weaved between GCDs and returns its best optimized list of oGCDs that will be cast between this GCD turn in order.  
     PlayerTurn(PlayerIdType, FfxivTurnType, TimeType, TimeType),
     /// player_id, target_id, skill_id
     UseSkill(PlayerIdType, Option<PlayerIdType>, SkillIdType, TimeType),

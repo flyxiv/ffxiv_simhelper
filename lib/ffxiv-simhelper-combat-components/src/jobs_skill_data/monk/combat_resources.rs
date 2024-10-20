@@ -98,7 +98,7 @@ impl CombatResource for MonkCombatResources {
         0
     }
     fn update_stack_timer(&mut self, _: TimeType) {}
-    fn trigger_on_crit(&mut self) {
+    fn trigger_on_gcd_crit(&mut self) {
         self.add_resource(CHAKRA_STACK_ID, 1)
     }
 }

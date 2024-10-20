@@ -1,7 +1,6 @@
 /// Represents what type of skill the player can use the next turn.
 /// GCD: Global Cooldown Skill
-/// oGCD1: First oGCD Skill after a GCD skill
-/// oGCD2: Second oGCD Skill after a GCD
+/// oGCD: oGCD Skill after a GCD skill
 #[derive(Clone, Copy)]
 pub enum FfxivTurnType {
     Gcd,

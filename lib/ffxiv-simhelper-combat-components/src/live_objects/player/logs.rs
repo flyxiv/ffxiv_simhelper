@@ -1,16 +1,20 @@
+/// Records skill use events and damage events, stored for each player.
+/// This is used as raw data to create simulation summary.
 use crate::damage_calculator::DamageRdpsProfile;
 use crate::live_objects::player::StatusKey;
 use crate::types::{MultiplierType, PlayerIdType, SkillIdType, TimeType};
 use std::collections::HashMap;
 
-/// Records skill use events and damage events, stored for each player.
-/// This is used as raw data to create simulation summary.
 #[derive(Debug, Clone)]
 pub struct SkillLog {
     pub time: TimeType,
     pub skill_id: SkillIdType,
     pub target_id: Option<PlayerIdType>,
+
+    /// Records important buffs that the player had at the time of skill usage.
     pub buffs: Vec<SkillIdType>,
+
+    /// Records important debuffs that the player had at the time of skill usage.
     pub debuffs: Vec<SkillIdType>,
 }
 
@@ -19,6 +23,8 @@ pub struct DamageLog {
     pub time: TimeType,
     pub skill_id: SkillIdType,
     pub raw_damage: MultiplierType,
+
+    /// Records how much the skill contributed to each raidbuff
     pub rdps_contribution: Vec<RdpsContribution>,
 }
 

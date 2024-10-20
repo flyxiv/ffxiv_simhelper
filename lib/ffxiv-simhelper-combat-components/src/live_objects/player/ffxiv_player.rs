@@ -32,28 +32,53 @@ use std::rc::Rc;
 pub const FFXIV_EVENT_QUEUE_INITIAL_CAPACITY: usize = 20;
 pub static TARGET_ID: PlayerIdType = 100;
 
-// The Abstraction for an actual FFXIV Player in the combat.
+/// The Abstraction for an actual FFXIV Player which stores data needed for simulating combat.
+///
+/// # 1. Combat Job Related Data
+/// Has infos for simulating their combat job such as player power, resources, skill priorities and skill db.
+///
+/// # 2. Logging Data
+/// Logs the combat data as damage logs and skill logs which will be used to create simulation result after the simulation is finished.
 pub struct FfxivPlayer {
-    // Stat/Job Data about the player
+    /// player_id of the player
     pub id: PlayerIdType,
+
+    /// 3-letter abbreviation of the player's combat job ex) PLD, DRG, WHM
     pub job_abbrev: String,
+
+    /// Power data of the player. Specific explanation in the PlayerPower struct.
     pub power: PlayerPower,
 
+    /// Skill priority table of the combat job of the player.
+    /// Simulation is done by reading this priority table from highest priority and selecting
+    /// the first skill that 1) can be used and 2) meets the priority conditions.
     pub priority_table: FfxivPriorityTable,
 
-    // Realtime Combat Data about the player
+    /// Stores buffs the player currently has.
     pub buff_list: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
     pub(crate) combat_resources: RefCell<FfxivCombatResources>,
     pub(crate) internal_event_queue: RefCell<Vec<FfxivPlayerInternalEvent>>,
+
+    /// The main event queue of the simulation board. This is used to push events that skills of this player generated directly
+    /// into the simulation event queue.
     pub event_queue: Rc<RefCell<FfxivEventQueue>>,
+
+    /// Calculates the next GCD/oGCD turn of the player and inserts it to the main event queue.
     pub turn_calculator: RefCell<PlayerTurnCalculator>,
 
-    // profile tables. Saved and returned later on the response the show combat simulation results.
-    // Saves how much % of the total damage each damage skill contributed to the total damage.
+    /// profile tables. Saved and returned later on the response the show combat simulation results.
+    /// Saves how much % of the total damage each damage skill contributed to the total damage.
     pub damage_logs: Vec<DamageLog>,
+
+    /// Saves history of the skills and status of the player in chronological order
     pub skill_logs: Vec<SkillLog>,
+
+    /// Saves the very first turn of the player's job. Some jobs start with oGCD and some with GCD.
+    /// Must be a FfxivEvent::PlayerTurn event.
     pub start_turn: FfxivEvent,
 
+    /// Keeps track of how long time elapsed since the player's last event.
+    /// Updating status at every time change is inefficient, so we stack elapsed time until the player's next turn and update status at once.
     pub elapsed_time: TimeType,
 }
 
@@ -366,8 +391,8 @@ impl FfxivPlayer {
         gcd_cooldown + charging_time
     }
 
-    pub fn update_on_crit(&self) {
-        self.combat_resources.borrow_mut().trigger_on_crit();
+    pub fn update_on_gcd_crit(&self) {
+        self.combat_resources.borrow_mut().trigger_on_gcd_crit();
     }
 
     pub fn print_skill_debug(&self, skill_id: SkillIdType) -> String {

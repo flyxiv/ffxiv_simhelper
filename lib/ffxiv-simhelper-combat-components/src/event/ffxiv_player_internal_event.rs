@@ -9,12 +9,19 @@ use crate::types::{SkillIdType, TimeType};
 pub enum FfxivPlayerInternalEvent {
     /// stack id, increase amount
     IncreaseResource(ResourceIdType, ResourceType),
+
+    /// stack id, increase amount
     UseResource(ResourceIdType, ResourceType),
+
     /// skill ID
     StartCooldown(SkillIdType),
+
     /// combo ID
     UpdateCombo(ComboType),
+
     /// turn type, combat time, charge time, cast time, gcd cooldown, delay of current turn
+    /// gcd cooldown is the value with charging time added!
+    /// ex) Suiton: 1500ms charge time, 1500ms gcd cooldown -> 3000ms gcd cooldown
     UpdateTurn(
         FfxivTurnType,
         TimeType,

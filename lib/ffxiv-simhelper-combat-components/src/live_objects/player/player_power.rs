@@ -119,6 +119,90 @@ mod tests {
     use super::convert_main_stat_to_multiplier;
 
     #[test]
+    fn add_main_stat_test() {
+        let power1 = super::PlayerPower {
+            auto_attack_delays: 2.96,
+            critical_strike_rate: 0.374,
+            critical_strike_damage: 1.724,
+            direct_hit_rate: 0.421,
+            determination_multiplier: 1.211,
+            tenacity_multiplier: 1.000,
+            speed_multiplier: 1.000,
+            weapon_damage_multiplier: 1.96,
+            main_stat_multiplier: 23.96,
+            auto_direct_hit_increase: 0.071,
+            weapon_damage: 144,
+            main_stat: 5104,
+            critical_strike: 3122,
+            direct_hit: 2596,
+            determination: 2106,
+            skill_speed: 420,
+            spell_speed: 420,
+            tenacity: 420,
+        };
+
+        // Test 1. Non-tank job
+        let job_abbrev = "DRG".to_string();
+        let maximum_increase = 391;
+        let increase_percent = 10;
+
+        let power_after_pot =
+            super::add_main_stat(&power1, &job_abbrev, maximum_increase, increase_percent);
+
+        assert_eq!(
+            power_after_pot.main_stat,
+            power1.main_stat + maximum_increase
+        );
+        assert_eq!(power_after_pot.main_stat_multiplier, 28.22);
+
+        // Test 2. Tank job
+        let job_abbrev2 = "PLD".to_string();
+
+        let power_after_pot2 =
+            super::add_main_stat(&power1, &job_abbrev2, maximum_increase, increase_percent);
+
+        assert_eq!(
+            power_after_pot2.main_stat,
+            power1.main_stat + maximum_increase
+        );
+        assert_eq!(power_after_pot2.main_stat_multiplier, 22.82);
+
+        // Test 3. Increase amount is less than maximum increase
+        let power2 = super::PlayerPower {
+            auto_attack_delays: 2.96,
+            critical_strike_rate: 0.374,
+            critical_strike_damage: 1.724,
+            direct_hit_rate: 0.421,
+            determination_multiplier: 1.211,
+            tenacity_multiplier: 1.000,
+            speed_multiplier: 1.000,
+            weapon_damage_multiplier: 1.96,
+            main_stat_multiplier: 23.96,
+            auto_direct_hit_increase: 0.071,
+            weapon_damage: 144,
+            main_stat: 2052,
+            critical_strike: 3122,
+            direct_hit: 2596,
+            determination: 2106,
+            skill_speed: 420,
+            spell_speed: 420,
+            tenacity: 420,
+        };
+
+        let power_after_pot3 =
+            super::add_main_stat(&power2, &job_abbrev, maximum_increase, increase_percent);
+
+        assert_eq!(power_after_pot3.main_stat, power2.main_stat + 205);
+        assert_eq!(power_after_pot3.main_stat_multiplier, 10.78);
+
+        let power_after_pot4 =
+            super::add_main_stat(&power2, &job_abbrev2, maximum_increase, increase_percent);
+
+        assert_eq!(power_after_pot4.main_stat, power2.main_stat + 205);
+        assert_eq!(power_after_pot4.main_stat_multiplier, 8.84);
+    }
+
+    #[test]
     fn convert_main_stat_to_multiplier_test() {
         let main_stat1 = 5042;
         let main_stat2 = 4994;
@@ -126,7 +210,7 @@ mod tests {
 
         let tank_main_stat1 = 4842;
         let tank_main_stat2 = 4987;
-        let tank_main_stat3 = 4999;
+        let tank_main_stat3 = 5035;
 
         let non_tank_job_abbrev = "AST".to_string();
         let tank_job_abbrev = "PLD".to_string();

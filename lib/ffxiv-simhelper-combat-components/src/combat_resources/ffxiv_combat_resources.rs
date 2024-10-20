@@ -505,29 +505,29 @@ impl CombatResource for FfxivCombatResources {
         }
     }
 
-    fn trigger_on_crit(&mut self) {
+    fn trigger_on_gcd_crit(&mut self) {
         match self {
-            Self::Paladin(paladin_resources) => paladin_resources.trigger_on_crit(),
-            Self::Warrior(warrior_resources) => warrior_resources.trigger_on_crit(),
-            Self::Darkknight(darkknight_resources) => darkknight_resources.trigger_on_crit(),
-            Self::Gunbreaker(gunbreaker_resources) => gunbreaker_resources.trigger_on_crit(),
-            Self::Whitemage(whitemage_resources) => whitemage_resources.trigger_on_crit(),
-            Self::Scholar(scholar_resources) => scholar_resources.trigger_on_crit(),
-            Self::Astrologian(astrologian_resources) => astrologian_resources.trigger_on_crit(),
-            Self::Sage(sage_resources) => sage_resources.trigger_on_crit(),
-            Self::Dragoon(dragoon_resources) => dragoon_resources.trigger_on_crit(),
-            Self::Monk(monk_resources) => monk_resources.trigger_on_crit(),
-            Self::Ninja(ninja_resources) => ninja_resources.trigger_on_crit(),
-            Self::Samurai(samurai_resources) => samurai_resources.trigger_on_crit(),
-            Self::Reaper(reaper_resources) => reaper_resources.trigger_on_crit(),
-            Self::Viper(viper_resources) => viper_resources.trigger_on_crit(),
-            Self::Bard(bard_resources) => bard_resources.trigger_on_crit(),
-            Self::Machinist(machinist_resources) => machinist_resources.trigger_on_crit(),
-            Self::Dancer(dancer_resources) => dancer_resources.trigger_on_crit(),
-            Self::Blackmage(blackmage_resources) => blackmage_resources.trigger_on_crit(),
-            Self::Summoner(summoner_resources) => summoner_resources.trigger_on_crit(),
-            Self::Redmage(redmage_resources) => redmage_resources.trigger_on_crit(),
-            Self::Pictomancer(pictomancer_resources) => pictomancer_resources.trigger_on_crit(),
+            Self::Paladin(paladin_resources) => paladin_resources.trigger_on_gcd_crit(),
+            Self::Warrior(warrior_resources) => warrior_resources.trigger_on_gcd_crit(),
+            Self::Darkknight(darkknight_resources) => darkknight_resources.trigger_on_gcd_crit(),
+            Self::Gunbreaker(gunbreaker_resources) => gunbreaker_resources.trigger_on_gcd_crit(),
+            Self::Whitemage(whitemage_resources) => whitemage_resources.trigger_on_gcd_crit(),
+            Self::Scholar(scholar_resources) => scholar_resources.trigger_on_gcd_crit(),
+            Self::Astrologian(astrologian_resources) => astrologian_resources.trigger_on_gcd_crit(),
+            Self::Sage(sage_resources) => sage_resources.trigger_on_gcd_crit(),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.trigger_on_gcd_crit(),
+            Self::Monk(monk_resources) => monk_resources.trigger_on_gcd_crit(),
+            Self::Ninja(ninja_resources) => ninja_resources.trigger_on_gcd_crit(),
+            Self::Samurai(samurai_resources) => samurai_resources.trigger_on_gcd_crit(),
+            Self::Reaper(reaper_resources) => reaper_resources.trigger_on_gcd_crit(),
+            Self::Viper(viper_resources) => viper_resources.trigger_on_gcd_crit(),
+            Self::Bard(bard_resources) => bard_resources.trigger_on_gcd_crit(),
+            Self::Machinist(machinist_resources) => machinist_resources.trigger_on_gcd_crit(),
+            Self::Dancer(dancer_resources) => dancer_resources.trigger_on_gcd_crit(),
+            Self::Blackmage(blackmage_resources) => blackmage_resources.trigger_on_gcd_crit(),
+            Self::Summoner(summoner_resources) => summoner_resources.trigger_on_gcd_crit(),
+            Self::Redmage(redmage_resources) => redmage_resources.trigger_on_gcd_crit(),
+            Self::Pictomancer(pictomancer_resources) => pictomancer_resources.trigger_on_gcd_crit(),
         }
     }
 }

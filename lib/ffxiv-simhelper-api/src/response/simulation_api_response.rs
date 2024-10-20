@@ -129,6 +129,10 @@ pub struct SkillLogResponse {
     pub time: TimeType,
     pub skill_id: SkillIdType,
     pub target: Option<PlayerIdType>,
+
+    /// Records important buffs that the player had at the time of skill usage.
     pub buffs: Vec<SkillIdType>,
+
+    /// Records important debuffs that the player had at the time of skill usage.
     pub debuffs: Vec<SkillIdType>,
 }

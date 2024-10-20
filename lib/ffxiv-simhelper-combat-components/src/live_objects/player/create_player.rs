@@ -61,6 +61,7 @@ pub(crate) static SUMMONER_START_TIME_MILLISECOND: TimeType = -1500;
 pub(crate) static REDMAGE_START_TIME_MILLISECOND: TimeType = -5500;
 pub(crate) static PICTOMANCER_START_TIME_MILLISECOND: TimeType = -4500;
 
+/// Factory methods for creating FfxivPlayer instances.
 impl FfxivPlayer {
     pub fn new_paladin(
         player_id: PlayerIdType,

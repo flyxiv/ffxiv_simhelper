@@ -23,6 +23,7 @@ use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
 use crate::types::SkillIdType;
 
+/// Skill Priority Table for each combat job in FFXIV.
 #[derive(Clone)]
 pub enum FfxivPriorityTable {
     Paladin(PaladinPriorityTable),

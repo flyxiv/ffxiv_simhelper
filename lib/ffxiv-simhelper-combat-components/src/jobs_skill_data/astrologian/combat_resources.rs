@@ -103,7 +103,7 @@ impl CombatResource for AstrologianCombatResources {
         (ffxiv_event, vec![])
     }
 
-    fn trigger_on_crit(&mut self) {}
+    fn trigger_on_gcd_crit(&mut self) {}
 
     fn get_next_buff_target(&self, skill_id: SkillIdType) -> PlayerIdType {
         if skill_id == 505 {

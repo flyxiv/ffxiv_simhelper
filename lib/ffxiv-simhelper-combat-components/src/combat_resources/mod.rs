@@ -15,7 +15,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 // Saves all the combat related resources for the player's job
-// resources include stack, combo, cooldown of each skill
+// resources include stack, combo, skill list
 pub(crate) trait CombatResource: Clone + Sized {
     fn get_skills_mut(&mut self) -> &mut SkillTable<AttackSkill>;
     fn get_skills(&self) -> &SkillTable<AttackSkill>;
@@ -24,6 +24,7 @@ pub(crate) trait CombatResource: Clone + Sized {
         skill
     }
 
+    /// Some events reduce other skill's cooldown ex) WAR's fell cleave reduce infuriate's cooldown by 5s
     fn reduce_cooldown(&mut self, skill_id: SkillIdType, reduce_amount: TimeType) {
         let skill = self.get_skills_mut().get_mut(&skill_id).unwrap();
         skill.update_cooldown(reduce_amount);
@@ -41,7 +42,9 @@ pub(crate) trait CombatResource: Clone + Sized {
         skill.start_cooldown(player);
     }
 
-    // Add conditional trigger event on skill
+    // Add additional event on skill
+    // that are too complex to be implemented by the current combat simulation logic
+    // ex) MCH's wildfire, which stacks up damage and explodes after certain amount of time
     fn trigger_on_event(
         &mut self,
         skill_id: SkillIdType,
@@ -51,7 +54,8 @@ pub(crate) trait CombatResource: Clone + Sized {
         player: &FfxivPlayer,
     ) -> SkillEvents;
 
-    fn trigger_on_crit(&mut self);
+    // monk gets their chakra stack every time they crit their GCD skill.
+    fn trigger_on_gcd_crit(&mut self);
 
     fn get_next_buff_target(&self, skill_id: SkillIdType) -> PlayerIdType;
 
