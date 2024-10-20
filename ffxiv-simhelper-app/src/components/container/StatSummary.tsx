@@ -35,7 +35,7 @@ let SinglePowerBox = styled(Box)`
 `;
 
 let SingleStatBox = styled(Box)`
-  ${SingleStatBoxStyle(STAT_SUMMARY_BOX_WIDTH, 35)}
+  ${SingleStatBoxStyle(STAT_SUMMARY_BOX_WIDTH, 40)}
 `;
 
 let SingleStatCombatTimeBox = styled(Box)`
