@@ -16,9 +16,10 @@
     "electron-pack": "yarn build-local && electron-builder build -c.extraMetadata.main=src/main.js --publish=never",
     "electron-publish-release": "yarn build && electron-builder --publish=always"
   },
+  "license": "Proprietary - No Commercial Use",
   "main": "src/main.js",
   "home": ".",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "build": {
     "appId": "com.ffxiv-simhelper.app",
     "icon": "build/icon.png",
