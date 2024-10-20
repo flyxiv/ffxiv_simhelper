@@ -19,6 +19,7 @@ use std::rc::Rc;
 
 const MACHINIST_STACKS_COUNT: usize = 2;
 
+const MIN_QUEEN_BATTERY: PotencyType = 5;
 const QUEEN_BASE_POTENCY: PotencyType = 900;
 const QUEEN_DELAY_MILLISECOND: TimeType = 5000;
 const QUEEN_POTENCY_PER_STACK: PotencyType = 180;
@@ -89,6 +90,7 @@ impl CombatResource for MachinistCombatResources {
             let (potency, delay) = self.wildfire_damage_incoming.unwrap();
 
             if delay == 0 {
+                // if wildfire debuff expired, burst the stacked up damage.
                 ffxiv_events.push(Damage(
                     player.get_id(),
                     WILDFIRE_ID,
@@ -107,6 +109,7 @@ impl CombatResource for MachinistCombatResources {
                 ));
                 self.wildfire_damage_incoming = None;
             } else {
+                // if wildfire debuff exists and skill is a GCD skill, increase the wildfire potency.
                 let skill = self.skills.get(&skill_id).unwrap();
                 if skill.gcd_cooldown_millisecond > 0 {
                     self.wildfire_damage_incoming =
@@ -141,9 +144,10 @@ impl CombatResource for MachinistCombatResources {
         }
 
         if skill_id == AUTOMATON_QUEEN_ID {
+            // if Automaton Queen is used, consume all battery stacks and increase the potency depending on how much battery stack is used.
             let current_stack = self.get_resource(BATTERY_ID);
-            let potency =
-                QUEEN_BASE_POTENCY + QUEEN_POTENCY_PER_STACK * (current_stack as PotencyType - 5);
+            let potency = QUEEN_BASE_POTENCY
+                + QUEEN_POTENCY_PER_STACK * (current_stack as PotencyType - MIN_QUEEN_BATTERY);
             self.queen_damage_incoming = Some((potency, QUEEN_DELAY_MILLISECOND));
 
             self.resources[BATTERY_ID as usize] = 0;

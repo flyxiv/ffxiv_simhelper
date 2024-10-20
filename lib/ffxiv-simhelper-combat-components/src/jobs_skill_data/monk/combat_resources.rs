@@ -27,7 +27,6 @@ const PERFECT_MAX_STACK: ResourceType = 3;
 const CHAKRA_STACK_ID: ResourceIdType = 0;
 const FIRES_REPLY_STACK_ID: ResourceIdType = 9;
 
-/// chakra, perfect1, perfect2, perfect3, lunar, solar, leaping, raptor, coeurl, fires reply
 const MONK_MAX_STACKS: [ResourceType; MONK_STACKS_COUNT] = [
     CHAKRA_MAX_STACK,
     PERFECT_MAX_STACK,
@@ -41,6 +40,24 @@ const MONK_MAX_STACKS: [ResourceType; MONK_STACKS_COUNT] = [
     1,
 ];
 
+/// Monk Combat Resources Mechanism
+/// Only uses double lunar opener
+///
+/// ## Resource Explanation
+/// resource[0]: chakra stack
+/// resource[1]: the perfect balance stack for the Opo-Opo chakra
+/// resource[2]: the perfect balance stack for the Raptor chakra
+/// resource[3]: the perfect balance stack for the Coeurl chakra
+/// resource[4]: lunar nadi
+/// resource[5]: solar nadi
+/// resource[6]: opo-opo fury
+/// resource[7]: raptor fury
+/// resource[8]: coeurl fury
+///
+/// ## Skill Usage
+/// 3 of opo-opo chakra with lunar-solar nadi -> phantom rush
+/// 3 of opo-opo chakra -> elixir burst
+/// 1, 1, 1 of each chakra -> rising pheonix
 #[derive(Clone)]
 pub(crate) struct MonkCombatResources {
     skills: SkillTable<AttackSkill>,

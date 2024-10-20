@@ -14,14 +14,13 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-const SAMURAI_STACK_COUNT: usize = 6;
+const SAMURAI_STACK_COUNT: usize = 5;
 
 const GENKI_MAX_STACK: ResourceType = 100;
 const MEDITATION_MAX_STACK: ResourceType = 3;
 const SEN_1_MAX_STACK: ResourceType = 1;
 const SEN_2_MAX_STACK: ResourceType = 1;
 const SEN_3_MAX_STACK: ResourceType = 1;
-const FILLER_MAX_STACK: ResourceType = 1;
 
 const SAMURAI_MAX_STACKS: [ResourceType; SAMURAI_STACK_COUNT] = [
     GENKI_MAX_STACK,
@@ -29,7 +28,6 @@ const SAMURAI_MAX_STACKS: [ResourceType; SAMURAI_STACK_COUNT] = [
     SEN_1_MAX_STACK,
     SEN_2_MAX_STACK,
     SEN_3_MAX_STACK,
-    FILLER_MAX_STACK,
 ];
 
 #[derive(Clone)]
@@ -94,7 +92,7 @@ impl SamuraiCombatResources {
         Self {
             skills: make_samurai_skill_list(player_id),
             current_combo: None,
-            resources: [0, 0, 0, 0, 0, 0],
+            resources: [0, 0, 0, 0, 0],
         }
     }
 }

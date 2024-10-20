@@ -33,6 +33,22 @@ const SUMMONER_MAX_STACKS: [ResourceType; SUMMONER_STACK_COUNT] = [
     SOLAR_BAHAMUT_MAX_STACK,
 ];
 
+/// Summoner Combat Resources Mechanism
+///
+/// # 1. Resource Explanation
+/// - resource[0]: Aether Stack used by Energy Drain
+///
+/// - resource[1]: Increases when Ifrit is summoned
+/// - resource[2]: Increases when Titan is summoned
+/// - resource[3]: Increases when Garuda is summoned
+///
+/// * Ifrit/Titan/Garuda stack is required for summoning Trance Skills such as Solar Bahamut/Bahamut/Pheonix
+///
+/// - resource[4] : Trance stack - Determines whether next non-solar bahamut trance is bahamut or pheonix.
+///                                Stack is raised when Bahamut trance is used, and Pheonix trance uses the stack.
+/// - resource[5] : Solar Bahamut stack - Determines whether next trance is Solar Bahamut's turn or Bahamut/Pheonix's turn.
+///                                       Stack is raised when Solar Bahamut is used, and Bahamut/Pheonix trance uses the stack.
+///
 #[derive(Clone)]
 pub(crate) struct SummonerCombatResources {
     skills: SkillTable<AttackSkill>,

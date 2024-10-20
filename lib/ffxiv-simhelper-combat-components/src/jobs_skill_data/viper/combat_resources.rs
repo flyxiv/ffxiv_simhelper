@@ -33,11 +33,26 @@ const VIPER_MAX_STACKS: [ResourceType; VIPER_STACK_COUNT] = [
     1,
 ];
 
+/// Viper Combat Resources Mechanism
+///
+/// # 0. Term Explanation
+/// - Normal Filler: **The 170 potency fillers (Twinfang/Twinblood bite, Uncoiled Twinfang/Uncoiled Twinblood)**
+///                  These fillers are merged to one skill for performance reasons.
+///
+/// # 1. Resource Explanation
+/// - resource[0]: Serpent Offerings
+/// - resource[1]: Normal Filler 1 Flag. Increases when using skills that generate normal fillers: Uncoiled Fury/Hunter's Coil/Swiftskin's Coil
+/// - resource[2]: Normal Filler 2 Flag. Increases when using skills that generate normal fillers: Uncoiled Fury/Hunter's Coil/Swiftskin's Coil
+/// - resource[3]: Reawaken Filler Flag. Increases when Reawaken combos are used.
+/// - resource[4]: Rattling Coil
+/// - resource[5]: Hunter's coil Flag. Increases when Vicewinder is used, and consumed when using Hunter's Coil.
+/// - resource[6]: Swiftskin's Coil Flag. Increases when Vicewinder is used, and consumed when using Swiftskin's Coil.
+/// - resource[7]: Reawaken Combo Stack. Increases by 5 Reawaken is used, and Reawaken combos consume the stack.
+/// - resource[8]: Death Rattle Flag.
+/// - resource[9]: Swiftskin/Hunter's sting flag. Used to interweave Swiftskin and Hunter's sting. Swiftskin generates the stack, and Hunter's sting consumes it.
 #[derive(Clone)]
-#[allow(unused)]
 pub(crate) struct ViperCombatResources {
     skills: SkillTable<AttackSkill>,
-    player_id: PlayerIdType,
     current_combo: ComboType,
 
     resources: [ResourceType; VIPER_STACK_COUNT],
@@ -96,7 +111,6 @@ impl ViperCombatResources {
     pub(crate) fn new(player_id: PlayerIdType) -> Self {
         Self {
             skills: make_viper_skill_list(player_id),
-            player_id,
             current_combo: None,
 
             resources: [0; VIPER_STACK_COUNT],

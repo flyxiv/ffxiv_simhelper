@@ -40,6 +40,18 @@ const REAPER_MAX_STACKS: [ResourceType; REAPER_STACK_COUNT] = [
     100,
 ];
 
+/// Reaper Combat Resources Mechanism
+///
+/// # 1. Resource Explanation
+/// - resource[0]: soul gauge
+/// - resource[1]: enshroud gauge
+/// - resource[2]: soul reaver stack - gets one stack when blood stalk is used. Gallows or Gibbet comsumes the stack
+/// - resource[3]: enshroud stack - gets five stacks when enshroud is used. Cross/Void Reaping + Communio consumes the stack
+/// - resource[4]: lemures stack - gets one stacks when Cross/Void reaping is used. Lemure's slice consumes 2 stacks
+/// - resource[5]: executioner stack - gets two stacks when gluttony is used. Executioner's Gallows/Gibbet consumes the stack
+/// - resource[6]: Combo refresh stack - when two enshroud is used consecutively, RPR needs to use a combo GCD(slice, waxing slice or infernal slice) to refresh the combo.
+///                This stack is increased whenever enshroud is used, and is reset to 0 every time RPR uses a combo GCD
+///                RPR must use a GCD to refresh the combo when the stack reaches 2
 #[derive(Clone)]
 pub(crate) struct ReaperCombatResources {
     skills: SkillTable<AttackSkill>,

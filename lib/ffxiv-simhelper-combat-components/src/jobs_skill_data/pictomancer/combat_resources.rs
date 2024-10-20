@@ -56,6 +56,23 @@ const PICTOMANCER_MAX_STACKS: [ResourceType; PICTOMANCER_STACK_COUNT] = [
     CREATURE_STACK_MAX,
 ];
 
+/// Pictomancer Combat Resources Mechanism
+///
+/// # 1. Resource Explanation
+/// - resource[0]: Pallete stack
+/// - resource[1]: Hammer stack - 3 stacks when striking muse is used, and a hammer skill uses one stack each.
+/// - resource[2]: Starry sky stack - 1 stack when starry sky motif is used, and starry muse skill uses this stack.
+///
+/// - resource[3]: Shot stack - used to determine if mog of the ages/retribution of the madeem can be used. 1 stack increases every time creature muse is used. When there's 2 stacks of this stack, mog of the ages or retribution of the madeem can be used.
+/// - resource[4]: Black paint stack
+/// - resource[5]: Hard GCD stack - CYM uses this stack.
+/// - resource[6]: Shot moogle - 1 stack when mog of the ages is used. Used to determine whether it is claw/maw motif to be drawn or pom/winged motif to be drawn.
+///
+/// - resource[7]: Hammer ready - 1 stack when hammer motif is used. Striking muse consumes this stack.
+/// - resource[8]: Hyperphantasia stack
+/// - resource[9]: Has creature - 1 stack when creature motif is used. Used to tell the PCT there is already a creature drawn so you can't draw any more creatures.
+///
+/// **retribution of the madeem uses all shot moogle and shot stack to reset the creature related stacks**
 #[derive(Clone)]
 pub(crate) struct PictomancerCombatResources {
     skills: SkillTable<AttackSkill>,
