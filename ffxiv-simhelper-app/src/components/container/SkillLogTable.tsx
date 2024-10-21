@@ -9,9 +9,9 @@ import {
   StatusIconBoxStyle,
   statusBoxWidth,
 } from "./Styles";
-import { iconPathToName } from "../Util";
 import { AppConfigurations } from "../../Themes";
-import { StatusIdToIcon } from "..//icon/abilityicon/StatusIconFactory";
+import { StatusIdToIcon } from "../icon/abilityicon/StatusIconFactory";
+import { parseSkillName } from "../icon/abilityicon/util";
 
 const SkillLogRowBox = styled(Box)`
   ${SkillLogRowStyle}
@@ -51,8 +51,7 @@ const SkillEntity = (
   buffs: number[],
   debuffs: number[]
 ) => {
-  let skillIcon = skillIdToIcon(skillId);
-  let skillName = iconPathToName(skillIcon);
+  let { icon: skillIcon, name: skillName } = skillIdToIcon(skillId);
 
   const StatusBox = styled(Box)`
     ${StatusIconBoxStyle(statusBoxWidth)}
@@ -71,7 +70,7 @@ const SkillEntity = (
 
         <Box marginLeft={2}>
           <Typography variant="body1" fontSize={AppConfigurations.body2FontSize}>
-            {skillName}
+            {parseSkillName(skillName)}
           </Typography>
         </Box>
       </SkillIconBox>

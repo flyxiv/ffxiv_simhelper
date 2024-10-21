@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
+import { BuyMeACoffee } from "../../components/icon/BuyMeACoffeeIcon";
 
 export function Footer() {
   return (
@@ -14,6 +15,7 @@ export function Footer() {
       }}
       display="flex"
       justifyContent="center"
+      flexDirection={"column"}
       color="white"
       height="20vh"
     >
@@ -26,6 +28,8 @@ export function Footer() {
         </p>
         <p>Email: ns090200@gmail.com</p>
       </Typography>
+
+      {BuyMeACoffee()}
     </Box>
   );
 }

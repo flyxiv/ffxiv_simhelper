@@ -1,7 +1,6 @@
 import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 import { DamageChartTitle, SkillDamageProfile } from "./DamageProfileBarChart";
 import { skillIdToIcon } from "../icon/abilityicon/SkillIconFactory";
-import { iconPathToName } from "../Util";
 import { DamageChartData } from "./GraphData";
 import { Box } from "@mui/material";
 import { TextDictionary } from "../../const/languageTexts";
@@ -38,8 +37,7 @@ export const DamageProfileGraph = (response: DpsAnalysisResponse, LANGUAGE_TEXTS
       continue;
     }
 
-    let iconPath = skillIdToIcon(profile.id);
-    let skillName = iconPathToName(iconPath);
+    let { icon: iconPath, name: skillName } = skillIdToIcon(profile.id);
     totalDps += profile.pdpsContribution;
 
     damageProfileData.push({

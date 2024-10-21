@@ -39,8 +39,10 @@ export const SMN_EN_NAME = "SMN";
 export const RDM_EN_NAME = "RDM";
 export const PCT_EN_NAME = "PCT";
 
-export const DEMO_WARNING_EN = "This home page is a demo version of the app. It will simulate only 1 iteration for each analysis. For the full version, please download the app at: https://junyeopn.github.io/blog/docs/ffxivsimhelperen/";
-export const DEMO_WARNING_KR = "이 홈페이지는 앱의 데모 버전이고, 각 시뮬을 1회씩만 진행합니다. 써보고 마음에 드신다면 https://junyeopn.github.io/blog/docs/ffxivsimhelperkr/ 에서 앱을 다운로드 받아보세요."
+export const DEMO_WARNING_EN = "!!! This home page is a demo version of the app. It will simulate only 1 iteration for each analysis. For the full version, please download the app by clicking here";
+export const DEMO_WARNING_KR = "!!! 이 홈페이지는 앱의 데모 버전이고, 각 시뮬을 1회씩만 진행합니다. 써보고 마음에 드신다면 이 텍스트를 클릭해서 앱을 다운로드하세요.";
+export const BUY_ME_A_COFFEE_EN = "!!! We're raising money to buy a good enough server to host this homepage properly. Help us by buying us a coffee with the link at the bottom!";
+export const BUY_ME_A_COFFEE_KR = "!!! 제대로 된 서버 운영을 하기 위해 모금중입니다. 앱이 마음에 드셨다면 밑의 Buy Me A Coffee 링크로 후원 부탁드립니다!";
 
 export const MIDLANDER_HYUR_EN_NAME = "Midlander Hyur";
 
@@ -238,6 +240,7 @@ const PIE_STAT_KR_NAME = "신앙";
 
 
 export interface TextDictionary {
+  BUY_ME_A_COFFEE_TEXT: string,
   DEMO_WARNING_TEXT: string,
   PLD_JOB_NAME: string,
   WAR_JOB_NAME: string,
@@ -447,6 +450,7 @@ export interface TextDictionary {
 export const AppLanguageTexts: () => TextDictionary = () => {
   let { language } = useLanguage();
   const DEMO_WARNING_TEXT = language === LanguageMode.ENGLISH_MODE ? DEMO_WARNING_EN : DEMO_WARNING_KR;
+  const BUY_ME_A_COFFEE_TEXT = language === LanguageMode.ENGLISH_MODE ? BUY_ME_A_COFFEE_EN : BUY_ME_A_COFFEE_KR;
 
   // Job Names
   const PLD_JOB_NAME =
@@ -965,6 +969,7 @@ export const AppLanguageTexts: () => TextDictionary = () => {
 
   let allTexts = {
     DEMO_WARNING_TEXT,
+    BUY_ME_A_COFFEE_TEXT,
     PLD_JOB_NAME,
     WAR_JOB_NAME,
     DRK_JOB_NAME,

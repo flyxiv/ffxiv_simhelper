@@ -14,7 +14,7 @@ import {
 } from "../App";
 import { AppLanguageTexts, TextDictionary } from "../const/languageTexts";
 import { isMobile } from "../util";
-import { DemoWarningText } from "../components/basic/WarningText";
+import { DemoWarningText, DonationComponent } from "../components/basic/WarningText";
 import dpsAnalysisButtonImagePath from "@/assets/images/icon_dps_analysis_C.svg";
 import gearCompareSimButtonImagePath from "@/assets/images/icon_gear_compare_C.svg";
 import statWeightsButtonImagePath from "@/assets/images/icon_best_stats_C.svg";
@@ -34,7 +34,12 @@ export function Home() {
       <Box display="flex" width="100%" overflow="auto" minHeight="100%">
         <Box width={BODY_WIDTH}>
           {AppHeader()}
-          {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
+          <Box marginBottom={2}>
+            {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
+          </Box>
+          <Box marginBottom={2}>
+            {DonationComponent(LANGUAGE_TEXTS.BUY_ME_A_COFFEE_TEXT)}
+          </Box>
           <Box className="HomeBody">
             {isMobile() ? OneColumnHomePage(LANGUAGE_TEXTS) : TwoColumnHomePage(LANGUAGE_TEXTS)}
           </Box>

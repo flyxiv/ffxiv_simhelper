@@ -40,6 +40,7 @@ export interface Food {
   piety: number;
 }
 
+// Parses food.json file in the asset
 export function readFoodData(minIlvl: number, maxIlvl: number) {
   let foodDataFiltered = totalFood.filter(
     (food: Food) => food.itemLevel >= minIlvl && food.itemLevel <= maxIlvl

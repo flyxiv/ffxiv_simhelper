@@ -126,7 +126,7 @@ const StatusIdToIconPath = (statusId: number) => {
       return actionIconDirectory + "/pot.png";
 
     default:
-      return `unknown skill id: ${statusId}`;
+      return `unknown status id: ${statusId}`;
   }
 };
 
