@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import "./JobIconFactory.css";
-import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory";
 
-function jobAbbrevToJobIconName(jobAbbrev: String) {
+const jobIcons = import.meta.glob(`/src/assets/images/jobicons/**/*.png`, { eager: true });
+
+function jobAbbrevToJobIconPath(jobAbbrev: String) {
   switch (jobAbbrev) {
     case "PLD":
       return "tank/Paladin";
@@ -44,20 +45,29 @@ function jobAbbrevToJobIconName(jobAbbrev: String) {
       return "dps/RedMage";
     case "BLM":
       return "dps/BlackMage";
-    case "PCT":
+    default:
       return "dps/Pictomancer";
   }
 }
 
-export function jobAbbrevToJobIconPath(jobAbbrev: String) {
+export function jobAbbrevToJobIcon(jobAbbrev: String) {
+  const jobIconPath = jobAbbrevToJobIconPath(jobAbbrev);
+  let jobIconFullPath = `/src/assets/images/jobicons/${jobIconPath}.png`;
+  const jobIconModule = jobIcons[jobIconFullPath] as { default: string } | undefined;
+
+  if (!jobIconModule) {
+    return "";
+  }
+
   return (
-    `${IMAGES_DIRECTORY}/jobicons/${jobAbbrevToJobIconName(jobAbbrev)}.png`
+    jobIconModule.default
   );
 }
 
 export const JobIconFactory = (jobAbbrev: String, sizePixel: number) => {
-  const jobIcon = jobAbbrevToJobIconPath(jobAbbrev);
   const size = sizePixel.toString() + "px";
+
+  let jobIcon = jobAbbrevToJobIcon(jobAbbrev);
 
   return (
     <Box className="JobIconBox">

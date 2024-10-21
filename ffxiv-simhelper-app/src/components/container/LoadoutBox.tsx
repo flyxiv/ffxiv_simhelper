@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, styled, TextField, Typography } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
-import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
+import { jobAbbrevToJobIcon } from "../icon/jobicon/JobIconFactory";
 import { useEffect, useState } from "react";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import {
@@ -117,7 +117,7 @@ export function LoadoutBox(
         </Typography>
         <Box marginX={1}>
           <img
-            src={jobAbbrevToJobIconPath(loadoutMetadata.jobAbbrev)}
+            src={jobAbbrevToJobIcon(loadoutMetadata.jobAbbrev)}
             alt={loadoutMetadata.jobAbbrev}
             width={25}
             height={25}

@@ -23,7 +23,7 @@ code {
      Modern Browsers => woff
      IE6-IE8 => eot
   */
-  src: url("/fonts/NotoSansKR-Regular.ttf") format("truetype");
+  src: url("./assets/fonts/NotoSansKR-Regular.ttf") format("truetype");
 
   /* 사용할 폰트의 기본 스타일 */
   font-weight: 400;

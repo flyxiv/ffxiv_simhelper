@@ -1,8 +1,8 @@
-import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory";
+export const ACTION_ICONS = import.meta.glob('/src/assets/images/actions/**/*', { eager: true });
 
 // Only support raid/personal buff/debuff icons for now
-export const StatusIdToIconPathFactory = (statusId: number) => {
-  const actionIconDirectory = `${IMAGES_DIRECTORY}/actions`;
+const StatusIdToIconPath = (statusId: number) => {
+  const actionIconDirectory = `/src/assets/images/actions`;
   switch (statusId) {
     // PLD
     case 1900:
@@ -129,3 +129,14 @@ export const StatusIdToIconPathFactory = (statusId: number) => {
       return `unknown skill id: ${statusId}`;
   }
 };
+
+export const StatusIdToIcon = (statusId: number) => {
+  const iconPath = StatusIdToIconPath(statusId);
+  const actionIconFullPath = ACTION_ICONS[iconPath] as { default: string } | undefined;
+
+  if (!actionIconFullPath) {
+    return "unknown";
+  }
+
+  return actionIconFullPath.default;
+}

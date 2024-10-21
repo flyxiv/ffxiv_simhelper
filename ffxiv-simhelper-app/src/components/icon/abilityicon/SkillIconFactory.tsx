@@ -1,7 +1,7 @@
-import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory";
+import { ACTION_ICONS } from "./StatusIconFactory";
 
-export const SkillIdToIconPathFactory = (skillId: number) => {
-  const actionIconDirectory = `${IMAGES_DIRECTORY}/actions`;
+export const SkillIdToIconPath = (skillId: number) => {
+  const actionIconDirectory = `/src/assets/images/actions`;
   switch (skillId) {
     // PLD
     case 1900:
@@ -969,3 +969,14 @@ export const SkillIdToIconPathFactory = (skillId: number) => {
       return `unknown skill id: ${skillId}`;
   }
 };
+
+export const skillIdToIcon = (statusId: number) => {
+  const iconPath = SkillIdToIconPath(statusId);
+  const actionIconFullPath = ACTION_ICONS[iconPath] as { default: string } | undefined;
+
+  if (!actionIconFullPath) {
+    return "unknown";
+  }
+
+  return actionIconFullPath.default;
+}

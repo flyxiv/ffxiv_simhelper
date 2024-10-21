@@ -1,6 +1,6 @@
 import { SkillLog } from "../../types/CombatSimulationResult";
 import { Box, ListItem, Typography, styled } from "@mui/material";
-import { SkillIdToIconPathFactory } from "../icon/abilityicon/SkillIconFactory";
+import { skillIdToIcon } from "../icon/abilityicon/SkillIconFactory";
 import {
   SkillEntityBoxStyle,
   SkillIconBoxStyle,
@@ -9,9 +9,9 @@ import {
   StatusIconBoxStyle,
   statusBoxWidth,
 } from "./Styles";
-import { StatusIdToIconPathFactory } from "../icon/abilityicon/StatusIconFactory";
 import { iconPathToName } from "../Util";
 import { AppConfigurations } from "../../Themes";
+import { StatusIdToIcon } from "..//icon/abilityicon/StatusIconFactory";
 
 const SkillLogRowBox = styled(Box)`
   ${SkillLogRowStyle}
@@ -51,7 +51,7 @@ const SkillEntity = (
   buffs: number[],
   debuffs: number[]
 ) => {
-  let skillIcon = SkillIdToIconPathFactory(skillId);
+  let skillIcon = skillIdToIcon(skillId);
   let skillName = iconPathToName(skillIcon);
 
   const StatusBox = styled(Box)`
@@ -78,7 +78,7 @@ const SkillEntity = (
 
       <StatusBox>
         {buffs.map((buffId) => {
-          let iconPath = StatusIdToIconPathFactory(buffId);
+          let iconPath = StatusIdToIcon(buffId);
 
           if (iconPath.includes("unknown")) {
             return <></>;
@@ -86,7 +86,7 @@ const SkillEntity = (
             return (
               <>
                 <img
-                  src={StatusIdToIconPathFactory(buffId)}
+                  src={iconPath}
                   alt={buffId.toString()}
                   height={30}
                   width={30}
@@ -96,14 +96,14 @@ const SkillEntity = (
           }
         })}
         {debuffs.map((debuffId) => {
-          let iconPath = StatusIdToIconPathFactory(debuffId);
+          let iconPath = StatusIdToIcon(debuffId);
 
           if (iconPath.includes("unknown")) {
             return <></>;
           } else {
             return (
               <img
-                src={StatusIdToIconPathFactory(debuffId)}
+                src={iconPath}
                 alt={debuffId.toString()}
                 height={30}
                 width={30}

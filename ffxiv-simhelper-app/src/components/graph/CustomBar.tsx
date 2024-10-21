@@ -1,4 +1,4 @@
-import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
+import { jobAbbrevToJobIcon } from "../icon/jobicon/JobIconFactory";
 
 interface JobImageTickProps {
   payload: { value: string };
@@ -13,7 +13,7 @@ interface AbilityImageTickProps {
 }
 
 export const JobImageTick = (props: JobImageTickProps) => {
-  const jobIcon = jobAbbrevToJobIconPath(props.payload.value);
+  const jobIcon = jobAbbrevToJobIcon(props.payload.value);
 
   return (
     <g transform={`translate(${props.x},${props.y})`}>

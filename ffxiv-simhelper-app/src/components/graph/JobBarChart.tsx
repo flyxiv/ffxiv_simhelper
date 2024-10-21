@@ -8,7 +8,7 @@ import {
   TotalRdpsBoxStyle,
   BuffTitleBarStyle,
 } from "./Style";
-import { StatusIdToIconPathFactory } from "../icon/abilityicon/StatusIconFactory";
+import { StatusIdToIcon } from "../icon/abilityicon/StatusIconFactory";
 import { JobIconFactory } from "../icon/jobicon/JobIconFactory";
 import { TeammateChartData } from "./GraphData";
 import { AppConfigurations } from "../../Themes";
@@ -60,7 +60,7 @@ export function JobBarChartTeammate(
         </Box>
         <Bar height="40px" display="flex" alignItems="center" justifyContent="center">
           <img
-            src={StatusIdToIconPathFactory(entry.statusId)}
+            src={StatusIdToIcon(entry.statusId)}
             alt={"rdps"}
             width={IMAGE_SIZE_PX}
             height={IMAGE_SIZE_PX}

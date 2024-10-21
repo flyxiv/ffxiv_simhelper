@@ -4,7 +4,7 @@ import {
   SimulationDataByRole,
 } from "../../types/ffxivdatabase/PartyCompositionMaker";
 import { BestPartnerBuffBarStyle, BuffBarBoxStyle } from "./Style";
-import { jobAbbrevToJobIconPath } from "../icon/jobicon/JobIconFactory";
+import { jobAbbrevToJobIcon } from "../icon/jobicon/JobIconFactory";
 import { AppConfigurations } from "../../Themes";
 
 const MAX_RANKINGS = 4;
@@ -122,7 +122,7 @@ function ContributionTableSingleRole(
       <Box display="flex" marginY={1} height={RANKING_ITEM_HEIGHT}>
         <Box height={RANKING_ITEM_HEIGHT} display="flex" alignItems={"center"}>
           <img
-            src={jobAbbrevToJobIconPath(data.jobAbbrev)}
+            src={jobAbbrevToJobIcon(data.jobAbbrev)}
             alt={"rdps"}
             width={25}
             height={25}

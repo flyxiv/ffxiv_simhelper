@@ -1,6 +1,6 @@
 import { DpsAnalysisResponse } from "../../types/DpsAnalysisResponse";
 import { DamageChartTitle, SkillDamageProfile } from "./DamageProfileBarChart";
-import { SkillIdToIconPathFactory } from "../icon/abilityicon/SkillIconFactory";
+import { skillIdToIcon } from "../icon/abilityicon/SkillIconFactory";
 import { iconPathToName } from "../Util";
 import { DamageChartData } from "./GraphData";
 import { Box } from "@mui/material";
@@ -38,7 +38,7 @@ export const DamageProfileGraph = (response: DpsAnalysisResponse, LANGUAGE_TEXTS
       continue;
     }
 
-    let iconPath = SkillIdToIconPathFactory(profile.id);
+    let iconPath = skillIdToIcon(profile.id);
     let skillName = iconPathToName(iconPath);
     totalDps += profile.pdpsContribution;
 
@@ -55,7 +55,7 @@ export const DamageProfileGraph = (response: DpsAnalysisResponse, LANGUAGE_TEXTS
   let highestDamageOfSingleSkill = damageProfileData[0].pdps;
 
   return (
-    <Box width={{ xs: "95%", sm: "90%", md: "85%", lg: "80%", xl: "75%"}}>
+    <Box width={{ xs: "95%", sm: "90%", md: "85%", lg: "80%", xl: "75%" }}>
       {DamageChartTitle(LANGUAGE_TEXTS.SKILL_TITLE_TEXT, LANGUAGE_TEXTS.DAMAGE_PERCENTAGE_TEXT, LANGUAGE_TEXTS.TOTAL_DAMAGE_TEXT, LANGUAGE_TEXTS.CAST_TEXT)}
       {damageProfileData.map((data) => {
         return SkillDamageProfile(

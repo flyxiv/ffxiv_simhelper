@@ -1,4 +1,3 @@
-import { IMAGES_DIRECTORY } from "../../../const/BaseDirectory";
 import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../../const/languageTexts";
 import { LEFTSLOTS, WEAPONSLOTS } from "../../../types/ffxivdatabase/Equipment";
 
@@ -13,26 +12,35 @@ const SLAYING_CATEGORY_NAME = "Slaying";
 
 const ALL_CATEGORIES = [AIMING_CATEGORY_NAME.toLowerCase(), CASTING_CATEGORY_NAME.toLowerCase(), FENDING_CATEGORY_NAME.toLowerCase(), HEALING_CATEGORY_NAME.toLowerCase(), MAIMING_CATEGORY_NAME.toLowerCase(), SCOUTING_CATEGORY_NAME.toLowerCase(), STRIKING_CATEGORY_NAME.toLowerCase(), SLAYING_CATEGORY_NAME.toLowerCase()];
 
+const equipmentIcons = import.meta.glob(`/src/assets/images/equipment/**/*.png`, { eager: true });
+
 export function getEquipmentIconDirectory(
   slotName: string,
   jobAbbrev: string,
   equipmentName: string
 ) {
-  let base_directory = `${IMAGES_DIRECTORY}/equipment`;
+  let base_directory = `/src/assets/images/equipment`;
   let equipmentIconName = equipmentName.toLowerCase().replace(/ /g, "_");
 
   let isJobSpecificEquipment = ALL_CATEGORIES.filter((category) => equipmentIconName.includes(category)).length === 0;
 
+  let equipmentIconFullPath = "";
   if (WEAPONSLOTS.includes(slotName)) {
-    return `${base_directory}/${slotName}/${jobAbbrev}/${equipmentIconName}.png`;
+    equipmentIconFullPath = `${base_directory}/${slotName}/${jobAbbrev}/${equipmentIconName}.png`;
+  } else if (isJobSpecificEquipment) {
+    equipmentIconFullPath = `${base_directory}/${slotName}/JobSpecific/${jobAbbrev}/${equipmentIconName}.png`;
+  } else {
+    let category = getEquipmentCategory(slotName, jobAbbrev);
+
+    equipmentIconFullPath = `${base_directory}/${slotName}/${category}/${equipmentIconName}.png`;
+  }
+  const equipmentIconModule = equipmentIcons[equipmentIconFullPath] as { default: string } | undefined;
+
+  if (!equipmentIconModule) {
+    return "";
   }
 
-  if (isJobSpecificEquipment) {
-    return `${base_directory}/${slotName}/JobSpecific/${jobAbbrev}/${equipmentIconName}.png`;
-  }
-  let category = getEquipmentCategory(slotName, jobAbbrev);
-
-  return `${base_directory}/${slotName}/${category}/${equipmentIconName}.png`;
+  return equipmentIconModule.default;
 }
 
 function getEquipmentCategory(equipmentSlot: string, jobAbbrev: string) {
