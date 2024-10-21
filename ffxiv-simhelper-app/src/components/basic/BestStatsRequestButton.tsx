@@ -40,7 +40,7 @@ const SKS_INCREASE_AMOUNT = 2;
 const SPS_INCREASE_AMOUNT = 2;
 const TEN_INCREASE_AMOUNT = 20;
 
-export const STAT_WEIGHTS_REQUEST_COUNT = AppConfigurations.isApp ? 2000 : 1;
+export const STAT_WEIGHTS_REQUEST_COUNT = AppConfigurations.isApp ? 1000 : 1;
 
 export function BestStatsRequestButton(totalState: EquipmentInput, gcdName: string) {
   let [isRunning, setIsRunning] = useState(false);
@@ -214,7 +214,7 @@ function createAugmentedRequest(
         jobAbbrev,
         SKS_INCREASE_AMOUNT,
         gcdName
-      );
+      ) + 50;
       power.skillSpeed += augmentAmount;
     }
     if (augmentStatName === SPS_STAT_EN_NAME) {
@@ -224,7 +224,7 @@ function createAugmentedRequest(
         jobAbbrev,
         SPS_INCREASE_AMOUNT,
         gcdName
-      );
+      ) + 50;
       power.spellSpeed += augmentAmount;
     }
     if (augmentStatName === TEN_STAT_EN_NAME) {
