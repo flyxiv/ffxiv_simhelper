@@ -171,12 +171,12 @@ function NavigationMenu(link: string, text: string, iconPath: string, currentSim
   );
 }
 
-const HOME_MENU_LOGO_PATH = "/images/icon_home_w.svg";
-const DPS_ANALYSIS_MENU_LOGO_PATH = "/images/icon_dps_analysis_w.svg";
-const GEAR_COMPARE_MENU_LOGO_PATH = "/images/icon_gear_compare_w.svg";
-const BEST_PARTNER_MENU_LOGO_PATH = "/images/icon_best_partner_w.svg";
-const STAT_WEIGHTS_MENU_LOGO_PATH = "/images/icon_best_stats_w.svg";
-const LOGO_PATH = "/images/left_menu_logo.svg";
+import HOME_MENU_LOGO_PATH from "/src/assets/images/icon_home_w.svg";
+import DPS_ANALYSIS_MENU_LOGO_PATH from "/src/assets/images/icon_dps_analysis_w.svg";
+import GEAR_COMPARE_MENU_LOGO_PATH from "/src/assets/images/icon_gear_compare_w.svg";
+import BEST_PARTNER_MENU_LOGO_PATH from "/src/assets/images/icon_best_partner_w.svg";
+import STAT_WEIGHTS_MENU_LOGO_PATH from "/src/assets/images/icon_best_stats_w.svg";
+import LEFT_MENU_LOGO_PATH from "/src/assets/images/left_menu_logo.svg";
 
 function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS: TextDictionary) {
   return (
@@ -184,7 +184,7 @@ function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS
       <LeftMenuLogo>
         <Box display="flex" justifyContent={"center"} alignItems={"center"}>
           <Box marginRight={0.5}>
-            <img src={LOGO_PATH} width={20} height={20} alt="logo" />
+            <img src={LEFT_MENU_LOGO_PATH} width={20} height={20} alt="logo" />
           </Box>
           <Typography align="center">
             <b>FFXIV SIMHELPER</b>
