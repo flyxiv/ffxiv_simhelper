@@ -15,10 +15,10 @@ import {
 import { AppLanguageTexts, TextDictionary } from "../const/languageTexts";
 import { isMobile } from "../util";
 import { DemoWarningText, DonationComponent } from "../components/basic/WarningText";
-import dpsAnalysisButtonImagePath from "@/assets/images/icon_dps_analysis_C.svg";
-import gearCompareSimButtonImagePath from "@/assets/images/icon_gear_compare_C.svg";
-import statWeightsButtonImagePath from "@/assets/images/icon_best_stats_C.svg";
-import bestPartnerButtonImagePath from "@/assets/images/icon_best_partner_C.svg";
+import dpsAnalysisButtonImagePath from "/src/assets/images/icon_dps_analysis_C.svg";
+import gearCompareSimButtonImagePath from "/src/assets/images/icon_gear_compare_C.svg";
+import statWeightsButtonImagePath from "/src/assets/images/icon_best_stats_C.svg";
+import bestPartnerButtonImagePath from "/src/assets/images/icon_best_partner_C.svg";
 
 export function Home() {
   let LANGUAGE_TEXTS = AppLanguageTexts();
