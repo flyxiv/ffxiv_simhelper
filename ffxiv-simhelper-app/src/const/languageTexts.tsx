@@ -952,7 +952,7 @@ export const AppLanguageTexts: () => TextDictionary = () => {
   const DET_POWER_NAME =
     language === LanguageMode.ENGLISH_MODE ? "Det Rate" : "의지 효과";
   const SPEED_POWER_NAME =
-    language === LanguageMode.ENGLISH_MODE ? "Speed" : "도트/평타 위력";
+    language === LanguageMode.ENGLISH_MODE ? "Speed" : "도트/평타";
   const TENACITY_POWER_NAME =
     language === LanguageMode.ENGLISH_MODE ? "Tenacity" : "불굴 효과";
   const GCD_NAME =

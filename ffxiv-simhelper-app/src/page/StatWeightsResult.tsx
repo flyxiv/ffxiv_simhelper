@@ -42,7 +42,6 @@ export function StatWeightsResult() {
   }
 
   let responseJson = JSON.parse(response) as BestStatsResponseTable;
-  console.log(responseJson);
   let mainPlayerJob = responseJson.mainPlayerJobAbbrev;
   let partyMemberJobAbbrevs = responseJson.partyMemberJobAbbrevs.filter((job) => job !== EMPTY_PARTY_MEMBER);
   let statWeightsTable = responseJson.statAugmentedSimulationData;

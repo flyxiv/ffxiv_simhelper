@@ -17,7 +17,11 @@ function createWindow() {
         width: 1920,
         height: 1080,
         icon: './images/icon.png',
+        menuBarVisible: false,
+        autoHideMenuBar: true,
     });
+
+    win.removeMenu();
 
     /*
     * ELECTRON_START_URL을 직접 제공할경우 해당 URL을 로드합니다.

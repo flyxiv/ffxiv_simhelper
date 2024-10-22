@@ -22,7 +22,7 @@ import { isMobile } from "../../util";
 
 const STAT_SUMMARY_BOX_WIDTH = "50px";
 const STAT_SUMMARY_TIME_BOX_WIDTH = "65px";
-const POWER_SUMMARY_BOX_WIDTH = "65px";
+const POWER_SUMMARY_BOX_WIDTH = "70px";
 const STAT_WEIGHT_SUMMARY_BOX_WIDTH = "200px";
 const SUMMARY_FONT_SIZE = { xs: 11, sm: 13 };
 
@@ -31,7 +31,7 @@ let StatSummaryBox = styled(Box)`
 `;
 
 let SinglePowerBox = styled(Box)`
-  ${SingleStatBoxStyle(POWER_SUMMARY_BOX_WIDTH, 65)}
+  ${SingleStatBoxStyle(POWER_SUMMARY_BOX_WIDTH, 70)}
 `;
 
 let SingleStatBox = styled(Box)`

@@ -127,10 +127,6 @@ export function getStatByStatName(
     case TEN_STAT_EN_NAME:
       return `${playerPower.tenacity}`;
     case gcdName: {
-      playerPower.gcd = calculateGCD(
-        playerPower.speedMultiplier,
-        calculateHasteBuff(jobAbbrev)
-      ) / 100;
       return `${playerPower.gcd.toFixed(2)}`;
     }
     default:

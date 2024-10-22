@@ -15,6 +15,8 @@ import {
   calculateCriticalStrikePercentIncrease,
   calculateDeterminationPercentIncrease,
   calculateDirectHitPercentIncrease,
+  calculateGCD,
+  calculateHasteBuff,
   calculateMainStatPercentIncrease,
   calculateSpeedPercentIncrease,
   calculateTenacityPercentIncrease,
@@ -189,6 +191,10 @@ export function calculatePlayerPowerFromInputs(
   power.mainStat = Math.floor(power.mainStat * (1 + totalState.compositionBuffPercent / 100));
 
   calculatePowerByStat(power, totalState.mainPlayerJobAbbrev);
+  power.gcd = calculateGCD(
+    power.speedMultiplier,
+    calculateHasteBuff(totalState.mainPlayerJobAbbrev)
+  ) / 100;
 
   return power;
 }
@@ -247,6 +253,7 @@ export function updateOnePlayerPower(
 
   let newTotalState = { ...totalState };
   newTotalState.equipmentDatas[id].power = updatedPower;
+  console.log("newTotalState: ", newTotalState);
 
   setTotalState({
     ...newTotalState,
