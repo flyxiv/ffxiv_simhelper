@@ -31,6 +31,7 @@ pub trait StatusHolder<S: Status>: Sized {
             );
 
             status.set_duration_left_millisecond(new_duration);
+            status_table.remove(&key);
             status_table.insert(key, status);
         } else {
             status.start_duration();
