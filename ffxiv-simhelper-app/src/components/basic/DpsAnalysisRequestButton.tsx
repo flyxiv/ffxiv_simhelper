@@ -243,7 +243,7 @@ export function sendRequestAsync(
       const timeoutId = setTimeout(() => {
         controller.abort();
         reject(new Error("Request timeout"));
-      }, 1000);
+      }, 60000);
 
       const response = await fetch(requestUrl, {
         method: "POST",
