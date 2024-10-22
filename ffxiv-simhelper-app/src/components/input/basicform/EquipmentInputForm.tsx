@@ -1,9 +1,6 @@
 import {
   styled,
-  InputLabel,
   Grid,
-  Select,
-  SelectChangeEvent,
   MenuItem,
   Box,
   Typography,
@@ -52,6 +49,7 @@ import {
 import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
 import { AST_EN_NAME, convertToSlotText, DNC_EN_NAME, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, TextDictionary, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
+import React from "react";
 
 const topMenuInputStyle = {
   "& .MuiInputBase-input": {
@@ -152,12 +150,8 @@ function EquipmentMenuOfOneSlot(
   }
 
   let currentEquipment = EQUIPMENT_DATABASE_BY_ID.get(currentEquipmentId);
-  const updateEquipmentState = (e: SelectChangeEvent<number>) => {
-    let newEquipmentId = e.target.value;
-
-    if (typeof newEquipmentId === "string") {
-      newEquipmentId = parseInt(newEquipmentId);
-    }
+  const updateEquipmentState = (value: string) => {
+    let newEquipmentId = parseInt(value);
     let newTotalData = { ...totalEquipmentState };
     let newData = newTotalData.equipmentDatas[id];
     let newSet = [...totalState.itemSet];
@@ -195,12 +189,11 @@ function EquipmentMenuOfOneSlot(
       <CustomFormControl fullWidth>
         <TopMenuInput
           select
-          labelId={key}
           id={key}
           value={totalState.itemSet[slotNameToSlotIndex(slotName)]}
           key={key}
           label={slotLabel}
-          onChange={updateEquipmentState}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => updateEquipmentState(e.target.value)}
           SelectProps={{
             MenuProps: {
               PaperProps: {
@@ -547,11 +540,8 @@ function FoodSelection(
     foodLabel = "";
   }
 
-  const updateFoodState = (e: SelectChangeEvent<number>) => {
-    let newFoodId = e.target.value;
-    if (typeof newFoodId === "string") {
-      newFoodId = parseInt(newFoodId);
-    }
+  const updateFoodState = (value: string) => {
+    let newFoodId = parseInt(value);
     let newTotalData = { ...totalEquipmentState };
     newTotalData.equipmentDatas[id].foodId = newFoodId;
 
@@ -565,12 +555,11 @@ function FoodSelection(
       <CustomFormControl fullWidth>
         <TopMenuInput
           select
-          labelId={key}
           id={key}
           value={totalState.foodId}
           key={key}
           label={foodLabel}
-          onChange={updateFoodState}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => updateFoodState(e.target.value)}
           SelectProps={{
             MenuProps: {
               PaperProps: {
@@ -613,12 +602,9 @@ function PotSelection(
   let totalState = totalEquipmentState.equipmentDatas[id];
   let label = potLabelText;
 
-  const updateUsePot = (e: SelectChangeEvent<number>) => {
+  const updateUsePot = (value: string) => {
     let newState = { ...totalEquipmentState };
-    let usePot = e.target.value;
-    if (typeof usePot === "string") {
-      usePot = parseInt(usePot);
-    }
+    let usePot = parseInt(value);
 
     newState.equipmentDatas[id].usePot = usePot;
 
@@ -632,12 +618,11 @@ function PotSelection(
       <CustomFormControl fullWidth>
         <TopMenuInput
           select
-          labelId={key}
           id={key}
           value={totalState.usePot}
           key={key}
           label={label}
-          onChange={updateUsePot}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => updateUsePot(e.target.value)}
           SelectProps={{
             MenuProps: {
               PaperProps: {

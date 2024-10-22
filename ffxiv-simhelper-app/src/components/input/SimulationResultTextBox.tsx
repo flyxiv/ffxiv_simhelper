@@ -1,4 +1,4 @@
-import { Box, InputLabel, TextField, styled } from "@mui/material";
+import { Box, TextField, styled } from "@mui/material";
 import { AppConfigurations } from "../../Themes";
 import { InputGridItemStyle } from "./Styles";
 import { CharacterStats } from "../../types/CharacterStates";
@@ -7,6 +7,7 @@ import {
   SingleEquipmentInputSaveState,
 } from "../../types/EquipmentInput";
 import { CustomTimeFormControl } from "./basicform/BasicInputForm";
+import { TopMenuInput } from "./basicform/EquipmentInputForm";
 
 export interface InputFormProps {
   label: string;
@@ -82,14 +83,8 @@ export function SimulationUpperInputTimeTextBox(
 ) {
   return (
     <CustomTimeFormControl fullWidth>
-      <InputLabel
-        id="SlotSelect"
-        key={`${label}_label`}
-        sx={{ fontSize: AppConfigurations.body1FontSize }}
-      >
-        {label}
-      </InputLabel>
-      <Input
+      <TopMenuInput
+        label={label}
         id={label}
         value={
           totalEquipmentState.equipmentDatas[0].combatTimeMillisecond / 1000
@@ -117,7 +112,7 @@ export function SimulationUpperInputTimeTextBox(
           },
         }}
         InputProps={{ sx: { fontSize: AppConfigurations.body1FontSize } }}
-      ></Input>
+      />
     </CustomTimeFormControl>
   );
 }

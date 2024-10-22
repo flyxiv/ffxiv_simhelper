@@ -1,4 +1,4 @@
-import { MenuItem, SelectChangeEvent, Typography } from "@mui/material";
+import { MenuItem, Typography } from "@mui/material";
 import { CustomFormControl } from "./basicform/BasicInputForm";
 import { styled, Box } from "@mui/material";
 import { InputGridItemStyle } from "./Styles";
@@ -21,13 +21,13 @@ export function Partner1Selection(
   partyMemberLabelText: string,
   emptyText: string
 ) {
-  const handlePartnerChange = (event: SelectChangeEvent<string>) => {
+  const handlePartnerChange = (value: string) => {
     let newState = { ...totalEquipmentState };
 
-    if (event.target.value === EMPTY_PARTY_MEMBER) {
+    if (value === EMPTY_PARTY_MEMBER) {
       newState.equipmentDatas[id].mainPlayerPartner1Id = null;
     } else {
-      newState.equipmentDatas[id].mainPlayerPartner1Id = parseInt(event.target.value);
+      newState.equipmentDatas[id].mainPlayerPartner1Id = parseInt(value);
     }
 
     setTotalEquipmentState({ ...newState });
@@ -54,7 +54,7 @@ export function Partner1Selection(
           value={currentPartnerId === null ? EMPTY_PARTY_MEMBER : currentPartnerId.toString()}
           key={`${id}_partner1`}
           label={labelText}
-          onChange={handlePartnerChange}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => handlePartnerChange(e.target.value)}
           SelectProps={{
             MenuProps: {
               PaperProps: {
@@ -83,13 +83,13 @@ export function Partner2Selection(
   partyMemberLabelText: string,
   emptyText: string
 ) {
-  const handlePartnerChange = (event: SelectChangeEvent<string>) => {
+  const handlePartnerChange = (value: string) => {
     let newState = { ...totalEquipmentState };
 
-    if (event.target.value === EMPTY_PARTY_MEMBER) {
+    if (value === EMPTY_PARTY_MEMBER) {
       newState.equipmentDatas[id].mainPlayerPartner2Id = null;
     } else {
-      newState.equipmentDatas[id].mainPlayerPartner2Id = parseInt(event.target.value);
+      newState.equipmentDatas[id].mainPlayerPartner2Id = parseInt(value);
     }
 
     setTotalEquipmentState({ ...newState });
@@ -116,7 +116,7 @@ export function Partner2Selection(
           value={currentPartnerId === null ? EMPTY_PARTY_MEMBER : currentPartnerId.toString()}
           key={`${id}_partner2`}
           label={labelText}
-          onChange={handlePartnerChange}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => handlePartnerChange(e.target.value)}
           SelectProps={{
             MenuProps: {
               PaperProps: {

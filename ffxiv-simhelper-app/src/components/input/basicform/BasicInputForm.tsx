@@ -23,7 +23,7 @@ export const inputStyleEquipment = {
     color: "white",
     backgroundColor: AppConfigurations.backgroundThree,
     textAlign: "right",
-    height: "4vh",
+    height: "5vh",
   },
   "& .MuiInputLabel-root": {
     color: AppConfigurations.primary,
@@ -34,7 +34,7 @@ export const inputStyleEquipment = {
     notched: false,
   },
   label: {
-    transform: "translate(15px, 2vh)",
+    transform: "translate(15px, 3vh)",
   },
 };
 
