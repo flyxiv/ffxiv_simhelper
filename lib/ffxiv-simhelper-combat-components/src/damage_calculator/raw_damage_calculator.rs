@@ -542,6 +542,7 @@ mod tests {
             skill_speed: 2500,
             tenacity: 400,
             spell_speed: 2500,
+            gcd: 2.5,
         };
 
         let base_damage_answer = 21500.0;
@@ -603,6 +604,7 @@ mod tests {
             skill_speed: 2500,
             tenacity: 400,
             spell_speed: 2500,
+            gcd: 2.5,
         };
 
         let potency_magical_dot = 75.0;
@@ -649,6 +651,7 @@ mod tests {
             skill_speed: 2500,
             tenacity: 400,
             spell_speed: 2500,
+            gcd: 2.5,
         };
 
         let potency_physical_dot = 50.0;
@@ -697,6 +700,7 @@ mod tests {
             skill_speed: 2500,
             tenacity: 400,
             spell_speed: 2500,
+            gcd: 2.5,
         };
 
         // samurai auto attack
@@ -750,6 +754,7 @@ mod tests {
             skill_speed: 2500,
             tenacity: 400,
             spell_speed: 2500,
+            gcd: 2.50,
         };
 
         let ast_249_gcd = PlayerPower {
@@ -771,6 +776,7 @@ mod tests {
             skill_speed: 2500,
             tenacity: 400,
             spell_speed: 2500,
+            gcd: 2.49,
         };
 
         let combust_iii_base_damage_250 =

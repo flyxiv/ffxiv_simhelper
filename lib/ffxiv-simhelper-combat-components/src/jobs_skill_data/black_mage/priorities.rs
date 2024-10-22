@@ -125,7 +125,10 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
             skill_id: db.xenoglossy.get_id(),
             prerequisite: Some(And(
                 Box::new(HasBufforDebuff(db.umbral_ice1.get_id())),
-                Box::new(Not(Box::new(HasBufforDebuff(db.swiftcast.get_id())))),
+                Box::new(And(
+                    Box::new(Not(Box::new(HasBufforDebuff(db.swiftcast.get_id())))),
+                    Box::new(Not(Box::new(HasBufforDebuff(db.triplecast_buff.get_id())))),
+                )),
             )),
         },
         SkillPriorityInfo {
@@ -264,7 +267,6 @@ pub(crate) fn make_blackmage_ogcd_priority_table(
             skill_id: db.transpose_ice_to_fire.get_id(),
             prerequisite: Some(Combo(Some(3))),
         },
-
         SkillPriorityInfo {
             skill_id: db.leylines.get_id(),
             prerequisite: None,
