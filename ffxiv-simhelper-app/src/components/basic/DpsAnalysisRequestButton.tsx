@@ -104,7 +104,7 @@ export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
 
     let damageSummary = aggregateDamageStatisticsFromSampleRuns(
       damageSummaries,
-      TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT,
+      finalResponses.length * TOTAL_ITERATION_COUNT,
       1.0
     );
 
@@ -243,7 +243,7 @@ export function sendRequestAsync(
       const timeoutId = setTimeout(() => {
         controller.abort();
         reject(new Error("Request timeout"));
-      }, 30000);
+      }, 1000);
 
       const response = await fetch(requestUrl, {
         method: "POST",

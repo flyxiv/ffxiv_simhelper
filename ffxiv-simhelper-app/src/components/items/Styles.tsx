@@ -23,5 +23,5 @@ export const MenuItemStyle = `
 
 
 export const ITEM_BOTTOM_MENU_MIN_HEIGHT = "4vh";
-export const ITEM_TOP_MENU_MIN_HEIGHT = "4vh";
+export const ITEM_TOP_MENU_MIN_HEIGHT = "5vh";
 export const BOTTOM_MENU_WIDTH = "20%";

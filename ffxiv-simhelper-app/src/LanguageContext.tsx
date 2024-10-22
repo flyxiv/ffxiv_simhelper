@@ -11,7 +11,6 @@ type LanguageContextType = {
 };
 
 export function toLanguageMode(value: string): LanguageMode {
-    console.log(value);
     switch (value) {
         case LanguageMode.ENGLISH_MODE:
             return LanguageMode.ENGLISH_MODE;

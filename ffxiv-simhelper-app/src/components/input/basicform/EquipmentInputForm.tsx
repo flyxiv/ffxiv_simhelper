@@ -8,6 +8,7 @@ import {
   Box,
   Typography,
   Divider,
+  TextField,
 } from "@mui/material";
 import { CustomFormControl } from "./BasicInputForm";
 import {
@@ -41,7 +42,7 @@ import { ALL_FOODS } from "../../../types/ffxivdatabase/Food";
 import { EMPTY_MATERIA, Materia } from "../../../types/ffxivdatabase/Materia";
 import { EquipmentSubStatTable } from "../../../components/container/EquipmentSubStatBox";
 import { MateriaInputTable } from "./MateriaInputForm";
-import { MenuItemStyle } from "../../../components/items/Styles";
+import { ITEM_TOP_MENU_MIN_HEIGHT, MenuItemStyle } from "../../../components/items/Styles";
 import { AppConfigurations } from "../../../Themes";
 import {
   EquipmentInput,
@@ -51,6 +52,32 @@ import {
 import { SimulationUpperInputTimeTextBox } from "../SimulationResultTextBox";
 import { Partner1Selection, Partner2Selection } from "../PartnerSelection";
 import { AST_EN_NAME, convertToSlotText, DNC_EN_NAME, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, TextDictionary, WEAPON_SLOT_EN_TEXT } from "../../../const/languageTexts";
+
+const topMenuInputStyle = {
+  "& .MuiInputBase-input": {
+    color: "white",
+    backgroundColor: AppConfigurations.backgroundThree,
+    textAlign: "right",
+    height: ITEM_TOP_MENU_MIN_HEIGHT,
+  },
+  "& .MuiInputLabel-root": {
+    color: AppConfigurations.primary,
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {},
+    "&:hover fieldset": {},
+    notched: false,
+    backgroundColor: AppConfigurations.backgroundThree
+  },
+  "& .MuiSelect-root": {
+    backgroundColor: AppConfigurations.backgroundThree,
+  },
+  label: {
+    transform: "translate(15px, 3vh)",
+  },
+};
+
+export const TopMenuInput = styled(TextField)(({ }) => topMenuInputStyle);
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}
@@ -166,30 +193,21 @@ function EquipmentMenuOfOneSlot(
   return (
     <>
       <CustomFormControl fullWidth>
-        <InputLabel
-          id="SlotSelect"
-          key={`${key}_label`}
-          sx={{ fontSize: AppConfigurations.body1FontSize }}
-        >
-          {slotLabel}
-        </InputLabel>
-        <Select
+        <TopMenuInput
+          select
           labelId={key}
           id={key}
-          value={currentEquipmentId}
+          value={totalState.itemSet[slotNameToSlotIndex(slotName)]}
           key={key}
-          label={slotName}
+          label={slotLabel}
           onChange={updateEquipmentState}
-          MenuProps={{
-            PaperProps: {
-              sx: {
-                backgroundColor: AppConfigurations.backgroundThree,
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  backgroundColor: AppConfigurations.backgroundThree,
+                },
               },
-            },
-          }}
-          sx={{
-            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "transparent",
             },
           }}
         >
@@ -222,7 +240,7 @@ function EquipmentMenuOfOneSlot(
           ) : (
             <Box></Box>
           )}
-        </Select>
+        </TopMenuInput>
       </CustomFormControl>
       <MateriaBox>
         {MateriaInputTable(
@@ -545,19 +563,20 @@ function FoodSelection(
   return (
     <>
       <CustomFormControl fullWidth>
-        <InputLabel id="FoodSelect">
-          <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{foodLabel} </Typography></InputLabel>
-        <Select
+        <TopMenuInput
+          select
           labelId={key}
           id={key}
           value={totalState.foodId}
           key={key}
-          label="food"
+          label={foodLabel}
           onChange={updateFoodState}
-          MenuProps={{
-            PaperProps: {
-              sx: {
-                backgroundColor: AppConfigurations.backgroundThree,
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  backgroundColor: AppConfigurations.backgroundThree,
+                },
               },
             },
           }}
@@ -577,8 +596,8 @@ function FoodSelection(
               </Typography>
             </Box>
           </MenuItem>
-        </Select>
-      </CustomFormControl>
+        </TopMenuInput>
+      </CustomFormControl >
     </>
   );
 }
@@ -611,18 +630,20 @@ function PotSelection(
   return (
     <>
       <CustomFormControl fullWidth>
-        <InputLabel id="FoodSelect"><Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>{label}</Typography></InputLabel>
-        <Select
+        <TopMenuInput
+          select
           labelId={key}
           id={key}
           value={totalState.usePot}
           key={key}
-          label={key}
+          label={label}
           onChange={updateUsePot}
-          MenuProps={{
-            PaperProps: {
-              sx: {
-                backgroundColor: AppConfigurations.backgroundThree,
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                sx: {
+                  backgroundColor: AppConfigurations.backgroundThree,
+                },
               },
             },
           }}
@@ -630,8 +651,8 @@ function PotSelection(
           <MenuItem value={USE_POT_VAL}>
             <Box
               display="flex"
-              height="100%"
               alignItems="center"
+              height="100%"
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
@@ -642,8 +663,8 @@ function PotSelection(
           <MenuItem value={NO_POT_VAL}>
             <Box
               display="flex"
-              height="100%"
               alignItems="center"
+              height="100%"
               justifyContent="flex-end"
             >
               <Typography variant="body2" color="white" sx={{ fontSize: AppConfigurations.body1FontSize }}>
@@ -651,7 +672,7 @@ function PotSelection(
               </Typography>
             </Box>
           </MenuItem>
-        </Select>
+        </TopMenuInput>
       </CustomFormControl>
     </>
   );

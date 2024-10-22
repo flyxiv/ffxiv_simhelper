@@ -109,12 +109,12 @@ export function GearCompareRequestButton(totalState: EquipmentInput) {
 
     let aggregatedDamageSummary1 = aggregateDamageStatisticsFromSampleRuns(
       damageSummaries1,
-      TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT,
+      finalResponses.length * TOTAL_ITERATION_COUNT,
       HIGH_PERCENTILE
     );
     let aggregatedDamageSummary2 = aggregateDamageStatisticsFromSampleRuns(
       damageSummaries2,
-      TOTAL_REQUEST_COUNT * TOTAL_ITERATION_COUNT,
+      finalResponses.length * TOTAL_ITERATION_COUNT,
       HIGH_PERCENTILE
     );
 

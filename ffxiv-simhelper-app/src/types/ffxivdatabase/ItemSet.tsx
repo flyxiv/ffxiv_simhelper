@@ -277,7 +277,6 @@ export function updateOnePlayerPower(
 
   let newTotalState = { ...totalState };
   newTotalState.equipmentDatas[id].power = updatedPower;
-  console.log("newTotalState: ", newTotalState);
 
   setTotalState({
     ...newTotalState,
