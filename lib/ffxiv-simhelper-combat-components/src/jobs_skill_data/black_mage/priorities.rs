@@ -227,21 +227,53 @@ pub(crate) fn make_blackmage_ogcd_priority_table(
     use_pot: bool,
 ) -> Vec<SkillPriorityInfo> {
     let mut ogcd_priorities = if use_pot {
-        vec![SkillPriorityInfo {
-            skill_id: db.potion.get_id(),
-            prerequisite: None,
-        }]
+        vec![
+            SkillPriorityInfo {
+                skill_id: db.swiftcast.get_id(),
+                prerequisite: Some(And(
+                    Box::new(HasBufforDebuff(db.umbral_ice1.get_id())),
+                    Box::new(Not(Box::new(HasBufforDebuff(db.triplecast_buff.get_id())))),
+                )),
+            },
+            SkillPriorityInfo {
+                skill_id: db.transpose_fire_to_ice.get_id(),
+                prerequisite: Some(Or(
+                    Box::new(HasBufforDebuff(db.triplecast.get_id())),
+                    Box::new(HasSkillStacks(db.swiftcast.get_id(), 1)),
+                )),
+            },
+            SkillPriorityInfo {
+                skill_id: db.transpose_ice_to_fire.get_id(),
+                prerequisite: Some(Combo(Some(3))),
+            },
+            SkillPriorityInfo {
+                skill_id: db.potion.get_id(),
+                prerequisite: None,
+            },
+        ]
     } else {
-        vec![]
+        vec![
+            SkillPriorityInfo {
+                skill_id: db.swiftcast.get_id(),
+                prerequisite: Some(And(
+                    Box::new(HasBufforDebuff(db.umbral_ice1.get_id())),
+                    Box::new(Not(Box::new(HasBufforDebuff(db.triplecast_buff.get_id())))),
+                )),
+            },
+            SkillPriorityInfo {
+                skill_id: db.transpose_fire_to_ice.get_id(),
+                prerequisite: Some(Or(
+                    Box::new(HasBufforDebuff(db.triplecast.get_id())),
+                    Box::new(HasSkillStacks(db.swiftcast.get_id(), 1)),
+                )),
+            },
+            SkillPriorityInfo {
+                skill_id: db.transpose_ice_to_fire.get_id(),
+                prerequisite: Some(Combo(Some(3))),
+            },
+        ]
     };
     ogcd_priorities.extend(vec![
-        SkillPriorityInfo {
-            skill_id: db.swiftcast.get_id(),
-            prerequisite: Some(And(
-                Box::new(HasBufforDebuff(db.umbral_ice1.get_id())),
-                Box::new(Not(Box::new(HasBufforDebuff(db.triplecast_buff.get_id())))),
-            )),
-        },
         SkillPriorityInfo {
             skill_id: db.manafont.get_id(),
             prerequisite: None,
@@ -255,17 +287,6 @@ pub(crate) fn make_blackmage_ogcd_priority_table(
                     1000,
                 )))),
             )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.transpose_fire_to_ice.get_id(),
-            prerequisite: Some(Or(
-                Box::new(HasBufforDebuff(db.triplecast.get_id())),
-                Box::new(HasSkillStacks(db.swiftcast.get_id(), 1)),
-            )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.transpose_ice_to_fire.get_id(),
-            prerequisite: Some(Combo(Some(3))),
         },
         SkillPriorityInfo {
             skill_id: db.leylines.get_id(),
