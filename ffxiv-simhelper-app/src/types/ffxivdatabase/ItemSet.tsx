@@ -9,14 +9,18 @@ import { convertEquipmentToItemStat } from "./ItemStats";
 import { getBaseMainStat } from "../../const/StartStats";
 
 import { addMateriaStatToTotalStat } from "./Materia";
-import { defaultPlayerPower, isTank, PlayerPower, setPartyCompositionBuffPercent } from "./PlayerPower";
+import {
+  defaultPlayerPower,
+  isTank,
+  PlayerPower,
+  setPartyCompositionBuffPercent,
+} from "./PlayerPower";
 import {
   calculateAutoDirectHitIncrease,
   calculateCriticalStrikePercentIncrease,
   calculateDeterminationPercentIncrease,
   calculateDirectHitPercentIncrease,
   calculateGCD,
-  calculateHasteBuff,
   calculateMainStatPercentIncrease,
   calculateSpeedPercentIncrease,
   calculateTenacityPercentIncrease,
@@ -27,7 +31,28 @@ import {
   EquipmentInput,
   SingleEquipmentInputSaveState,
 } from "../EquipmentInput";
-import { AST_EN_NAME, BLM_EN_NAME, BODY_SLOT_EN_TEXT, EARS_SLOT_EN_TEXT, FEET_SLOT_EN_TEXT, FINGER1_SLOT_EN_TEXT, FINGER2_SLOT_EN_TEXT, HANDS_SLOT_EN_TEXT, HEAD_SLOT_EN_TEXT, LEGS_SLOT_EN_TEXT, NECK_SLOT_EN_TEXT, OFFHAND_SLOT_EN_TEXT, PCT_EN_NAME, RDM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, WEAPON_SLOT_EN_TEXT, WHM_EN_NAME, WRIST_SLOT_EN_TEXT } from "../../const/languageTexts";
+import {
+  AST_EN_NAME,
+  BLM_EN_NAME,
+  BODY_SLOT_EN_TEXT,
+  EARS_SLOT_EN_TEXT,
+  FEET_SLOT_EN_TEXT,
+  FINGER1_SLOT_EN_TEXT,
+  FINGER2_SLOT_EN_TEXT,
+  HANDS_SLOT_EN_TEXT,
+  HEAD_SLOT_EN_TEXT,
+  LEGS_SLOT_EN_TEXT,
+  NECK_SLOT_EN_TEXT,
+  OFFHAND_SLOT_EN_TEXT,
+  PCT_EN_NAME,
+  RDM_EN_NAME,
+  SCH_EN_NAME,
+  SGE_EN_NAME,
+  SMN_EN_NAME,
+  WEAPON_SLOT_EN_TEXT,
+  WHM_EN_NAME,
+  WRIST_SLOT_EN_TEXT,
+} from "../../const/languageTexts";
 import { FOOD_DATABASE } from "./Food";
 
 export const WEAPON_SLOT_ID = 0;
@@ -188,13 +213,12 @@ export function calculatePlayerPowerFromInputs(
   }
 
   setPartyCompositionBuffPercent(totalState);
-  power.mainStat = Math.floor(power.mainStat * (1 + totalState.compositionBuffPercent / 100));
+  power.mainStat = Math.floor(
+    power.mainStat * (1 + totalState.compositionBuffPercent / 100)
+  );
 
   calculatePowerByStat(power, totalState.mainPlayerJobAbbrev);
-  power.gcd = calculateGCD(
-    power.speedMultiplier,
-    calculateHasteBuff(totalState.mainPlayerJobAbbrev)
-  ) / 100;
+  power.gcd = calculateGCD(power, totalState.mainPlayerJobAbbrev) / 100;
 
   return power;
 }

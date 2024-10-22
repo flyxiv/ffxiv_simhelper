@@ -1,4 +1,26 @@
-import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../const/languageTexts";
+import {
+  AST_EN_NAME,
+  BLM_EN_NAME,
+  BRD_EN_NAME,
+  DNC_EN_NAME,
+  DRG_EN_NAME,
+  DRK_EN_NAME,
+  GNB_EN_NAME,
+  MCH_EN_NAME,
+  MNK_EN_NAME,
+  NIN_EN_NAME,
+  PCT_EN_NAME,
+  PLD_EN_NAME,
+  RDM_EN_NAME,
+  RPR_EN_NAME,
+  SAM_EN_NAME,
+  SCH_EN_NAME,
+  SGE_EN_NAME,
+  SMN_EN_NAME,
+  VPR_EN_NAME,
+  WAR_EN_NAME,
+  WHM_EN_NAME,
+} from "../../const/languageTexts";
 import {
   DEFAULT_CRITICAL_STRIKE,
   DEFAULT_DETERMINATION,
@@ -8,6 +30,7 @@ import {
   DEFAULT_SPEED,
   DEFAULT_TENACITY,
 } from "../../const/StatValue";
+import { PlayerPower } from "./PlayerPower";
 
 const DEFAULT_DIVIDEND = 2780.0;
 export const DEFAULT_GCD = 250;
@@ -51,7 +74,6 @@ export const BASE_WEAPON_DAMAGE_PER_JOB = new Map([
   [PCT_EN_NAME, 50],
 ]);
 
-
 export function calculateHasteBuff(jobAbbrev: string) {
   switch (jobAbbrev) {
     case NIN_EN_NAME:
@@ -76,15 +98,23 @@ export function calculateMultiplierPercentIncrease(
   return Math.floor((slope * (stat - baseValue)) / DEFAULT_DIVIDEND) / 10;
 }
 
+export function calculateGCD(power: PlayerPower, jobAbbrev: string) {
+  return calculateGCDWithMultipliers(
+    power.speedMultiplier,
+    calculateHasteBuff(jobAbbrev)
+  );
+}
 
 // calculate GCD in percent. ex) GCD 1.94 -> 194
-export function calculateGCD(
+export function calculateGCDWithMultipliers(
   speedMultiplier: number,
   hasteBuffPercent: number
 ) {
   let gcdMultiplier = 2 - speedMultiplier;
 
-  return Math.floor(Math.floor(DEFAULT_GCD * gcdMultiplier * 10) * hasteBuffPercent / 1000)
+  return Math.floor(
+    (Math.floor(DEFAULT_GCD * gcdMultiplier * 10) * hasteBuffPercent) / 1000
+  );
 }
 
 export function calculateWeaponMultiplierPercent(
@@ -229,8 +259,11 @@ export function getMinNeededStatForCurrentGCD(
   let speedIncrease = 0;
 
   while (speedIncrease < 500) {
-    let nextSpeedLadderStat = getMinNeededStatForCurrentSpeed(speedIncrease / 10);
-    let nextGCD = calculateGCD(1 + speedIncrease / 1000, hasteBuff) / 100;
+    let nextSpeedLadderStat = getMinNeededStatForCurrentSpeed(
+      speedIncrease / 10
+    );
+    let nextGCD =
+      calculateGCDWithMultipliers(1 + speedIncrease / 1000, hasteBuff) / 100;
 
     if (nextGCD <= currentGCD) {
       return nextSpeedLadderStat;
