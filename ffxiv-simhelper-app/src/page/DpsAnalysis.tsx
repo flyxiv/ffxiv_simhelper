@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { Box, styled } from "@mui/material";
-import {
-  BODY_WIDTH,
-  DPS_ANALYSIS_URL,
-  SINGLE_INPUT_SAVE_NAME,
-} from "../App";
+import { BODY_WIDTH, DPS_ANALYSIS_URL, SINGLE_INPUT_SAVE_NAME } from "../App";
 import { EquipmentSelectionMenu } from "../components/input/basicform/EquipmentInputForm";
 import { StatPowerSummary } from "../components/container/StatSummary";
 import { HorizontalPartyInput } from "../components/input/partyinput/HorizontalPartyInput";
@@ -61,7 +57,6 @@ export function isNotValid(input: EquipmentInput) {
       return true;
     }
 
-
     if (input.equipmentDatas[i].usePot === undefined) {
       return true;
     }
@@ -111,21 +106,37 @@ export function DpsAnalysis() {
           setTotalState,
           LANGUAGE_TEXTS
         )}
-        <Box width={BODY_WIDTH} display="flex" alignItems={"center"} flexDirection={"column"}>
+        <Box
+          width={BODY_WIDTH}
+          display="flex"
+          alignItems={"center"}
+          flexDirection={"column"}
+        >
           {AppHeader()}
           {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
           <Box alignContent={"center"} width="100%">
             <DpsAnalysisInputContainer justifyContent={"center"}>
               {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_INPUT_INFO_TEXT)}
               <EquipmentBoard width="100%">
-                {EquipmentSelectionMenu(0, totalState, setTotalState, LANGUAGE_TEXTS)}
+                {EquipmentSelectionMenu(
+                  0,
+                  totalState,
+                  setTotalState,
+                  LANGUAGE_TEXTS
+                )}
               </EquipmentBoard>
             </DpsAnalysisInputContainer>
 
             <DpsAnalysisInputContainer>
-              {SelectionTitle(LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT)}
+              {SelectionTitle(
+                LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT
+              )}
               <CustomizeBoard>
-                {HorizontalPartyInput(totalState, setTotalState, LANGUAGE_TEXTS)}
+                {HorizontalPartyInput(
+                  totalState,
+                  setTotalState,
+                  LANGUAGE_TEXTS
+                )}
               </CustomizeBoard>
             </DpsAnalysisInputContainer>
 
@@ -140,7 +151,11 @@ export function DpsAnalysis() {
               </Box>
             </DpsAnalysisInputContainer>
 
-            {BasicBottomMenu(totalState, DpsAnalysisRequestButton, LANGUAGE_TEXTS)}
+            {BasicBottomMenu(
+              totalState,
+              DpsAnalysisRequestButton,
+              LANGUAGE_TEXTS
+            )}
           </Box>
           {Footer()}
         </Box>

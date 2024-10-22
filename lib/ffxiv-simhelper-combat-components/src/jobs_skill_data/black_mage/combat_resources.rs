@@ -42,7 +42,7 @@ const RESOURCE_MAX_STACKS: [ResourceType; BLACK_MAGE_STACK_COUNT] = [
 ///
 /// Resource[2]: Fire 4 flare star stack -> 6 stacks and you can use flare star
 /// Resource[3]: Flare Star stack -> 1 stack when flare star is used -> indicates the fire phase is over and you need to cast blizzard or manafont to get back to fire phase
-/// Resource[4]: Conversion to Blizzard stack -> 1 stack when you transpose to move from fire to ice -> indicates that you need to use swiftcast to quick cast a blizzard 3
+/// Resource[4]: Conversion to Blizzard stack -> 1 stack when you use flare star -> indicates that you need to switch to ice(by blizzard3 or transpose) or refresh by using manafont
 #[derive(Clone)]
 pub(crate) struct BlackmageCombatResources {
     skills: SkillTable<AttackSkill>,

@@ -43,6 +43,7 @@ fn create_party_info(party_members: &[&str]) -> Vec<PlayerInfoRequest> {
                 direct_hit: 2500,
                 determination: 2500,
                 skill_speed: 2500,
+                gcd: 2.5,
 
                 tenacity: 400,
                 spell_speed: 2500,
