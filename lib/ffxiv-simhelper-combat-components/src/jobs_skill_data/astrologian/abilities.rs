@@ -32,6 +32,7 @@ pub(crate) struct AstrologianDatabase {
     pub(crate) combust_iii_dot: DebuffStatus,
     pub(crate) the_balance_ready: BuffStatus,
     pub(crate) the_spear_ready: BuffStatus,
+    pub(crate) divination_buff: BuffStatus,
 
     pub(crate) potion: AttackSkill,
 }
@@ -565,6 +566,7 @@ impl AstrologianDatabase {
             lord_of_crowns_buff,
             the_spear_ready,
             the_balance_ready,
+            divination_buff,
 
             combust_iii_dot,
 

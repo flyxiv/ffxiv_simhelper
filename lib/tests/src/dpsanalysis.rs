@@ -156,7 +156,7 @@ mod tests {
         let jobs = ALL_FFXIV_COMBAT_JOBS;
         let longest_possible_combat_time_millisecond = 600000;
 
-        let testing_gcd_count = 75;
+        let testing_gcd_count = 90;
 
         for job in jobs {
             let party_members = vec![job];

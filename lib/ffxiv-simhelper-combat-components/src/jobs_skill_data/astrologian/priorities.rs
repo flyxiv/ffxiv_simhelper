@@ -191,7 +191,7 @@ pub(crate) fn make_astrologian_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.oracle.get_id(),
-            prerequisite: None,
+            prerequisite: Some(BufforDebuffLessThan(db.divination_buff.get_id(), 15000)),
         },
     ]);
 
