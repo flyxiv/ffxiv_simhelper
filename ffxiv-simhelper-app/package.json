@@ -33,20 +33,12 @@
         "to": "./config/backend_local_config.yml"
       },
       {
-        "from": "./dist/images",
-        "to": "./images"
-      },
-      {
         "from": "./dist/index.html",
         "to": "./index.html"
       },
       {
         "from": "./dist/assets",
         "to": "./assets"
-      },
-      {
-        "from": "./dist/fonts",
-        "to": "./fonts"
       }
     ],
     "publish": {

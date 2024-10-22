@@ -153,7 +153,7 @@ export function SimulationInputSummary(
             return (
               <SingleStatBox>
                 {StatSummaryTypography(
-                  getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME)
+                  getStatByStatName(power, statName, LANGUAGE_TEXTS.GCD_NAME)
                 )}
               </SingleStatBox>
             );
@@ -236,8 +236,8 @@ export function StatSummaryGearCompare(
             return (
               <SingleStatBox>
                 {StatSummaryTypographyCompare(
-                  getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME),
-                  getStatByStatName(comparePower, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME),
+                  getStatByStatName(power, statName, LANGUAGE_TEXTS.GCD_NAME),
+                  getStatByStatName(comparePower, statName, LANGUAGE_TEXTS.GCD_NAME),
                   statName,
                   LANGUAGE_TEXTS.GCD_NAME
                 )}
@@ -279,7 +279,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState, LANGUAGE_
           return (
             <SingleStatBox>
               {StatSummaryTypography(
-                getStatByStatName(power, statName, jobAbbrev, LANGUAGE_TEXTS.GCD_NAME)
+                getStatByStatName(power, statName, LANGUAGE_TEXTS.GCD_NAME)
               )}
             </SingleStatBox>
           );

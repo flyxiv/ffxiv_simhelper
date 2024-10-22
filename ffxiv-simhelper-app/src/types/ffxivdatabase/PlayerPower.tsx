@@ -6,8 +6,6 @@ import {
   DEFAULT_TENACITY,
 } from "../../const/StatValue";
 import {
-  calculateGCD,
-  calculateHasteBuff,
   DEFAULT_GCD,
   getMinNeededStatForCurrentCriticalStrike,
   getMinNeededStatForCurrentDetermination,
@@ -103,7 +101,6 @@ export function defaultPlayerPower(): PlayerPower {
 export function getStatByStatName(
   playerPower: PlayerPower,
   statName: string,
-  jobAbbrev: string,
   gcdName: string
 ) {
   switch (statName) {
