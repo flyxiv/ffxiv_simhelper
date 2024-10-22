@@ -251,19 +251,19 @@ pub(crate) fn make_blackmage_ogcd_priority_table(
             prerequisite: Some(Combo(Some(3))),
         },
         SkillPriorityInfo {
+            skill_id: db.swiftcast.get_id(),
+            prerequisite: Some(And(
+                Box::new(HasBufforDebuff(db.umbral_ice1.get_id())),
+                Box::new(Not(Box::new(HasBufforDebuff(db.triplecast_buff.get_id())))),
+            )),
+        },
+        SkillPriorityInfo {
             skill_id: db.leylines.get_id(),
             prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.amplifier.get_id(),
             prerequisite: Some(Not(Box::new(HasResource(0, 2)))),
-        },
-        SkillPriorityInfo {
-            skill_id: db.swiftcast.get_id(),
-            prerequisite: Some(And(
-                Box::new(HasBufforDebuff(db.umbral_ice1.get_id())),
-                Box::new(Not(Box::new(HasBufforDebuff(db.triplecast_buff.get_id())))),
-            )),
         },
     ]);
 

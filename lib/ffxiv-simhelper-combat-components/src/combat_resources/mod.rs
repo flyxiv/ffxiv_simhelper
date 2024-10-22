@@ -1,4 +1,4 @@
-pub(crate) mod ffxiv_combat_resources;
+pub mod ffxiv_combat_resources;
 
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
 use crate::live_objects::player::StatusKey;

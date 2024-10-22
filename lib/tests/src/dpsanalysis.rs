@@ -4,6 +4,7 @@ mod tests {
         assert_test_value_is_in_range, create_party_info, create_simulation_api_request_for_testing,
     };
     use ffxiv_simhelper_api::api_handler::dpsanalysis::dps_analysis;
+    use ffxiv_simhelper_combat_components::combat_resources::ffxiv_combat_resources::ALL_FFXIV_COMBAT_JOBS;
     use itertools::Itertools;
 
     #[test]
@@ -146,5 +147,45 @@ mod tests {
             lower_bound,
             upper_bound,
         );
+    }
+
+    #[test]
+    fn test_various_gcds() {
+        // Job's dps rotation changes on different GCDs.
+        // Test all jobs in serveral GCDs once to assure the logic is safe.
+        let jobs = ALL_FFXIV_COMBAT_JOBS;
+        let longest_possible_combat_time_millisecond = 600000;
+
+        let testing_gcd_count = 75;
+
+        for job in jobs {
+            let party_members = vec![job];
+            let party = create_party_info(&party_members);
+
+            for speed_multiplier_increase in 0..testing_gcd_count {
+                println!(
+                    "Testing job {} with speed multiplier increase {}",
+                    job,
+                    2 * speed_multiplier_increase
+                );
+                let mut party_with_testing_gcd = party.clone();
+                party_with_testing_gcd[0].power.speed_multiplier =
+                    1.0 + 0.002 * speed_multiplier_increase as f64;
+
+                let request = create_simulation_api_request_for_testing(
+                    longest_possible_combat_time_millisecond,
+                    party_with_testing_gcd,
+                );
+
+                let response = dps_analysis(request, 1);
+
+                assert!(
+                    response.is_ok(),
+                    "job {}'s simulation returns error at speed multiplier {}",
+                    job,
+                    speed_multiplier_increase
+                );
+            }
+        }
     }
 }

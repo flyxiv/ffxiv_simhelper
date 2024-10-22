@@ -1,6 +1,6 @@
 use std::fmt::{Debug, Display, Formatter};
 
-pub(crate) mod combat_resources;
+pub mod combat_resources;
 pub mod consts;
 pub mod damage_calculator;
 pub mod event;

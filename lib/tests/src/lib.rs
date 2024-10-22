@@ -81,6 +81,7 @@ fn create_simulation_api_request_for_testing(
 }
 
 #[cfg(test)]
+#[allow(unused)]
 fn create_gear_compare_api_for_testing(
     combat_time_millisecond: TimeType,
     party1: Vec<PlayerInfoRequest>,

@@ -33,7 +33,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-const ALL_FFXIV_COMBAT_JOBS: [&str; 21] = [
+pub const ALL_FFXIV_COMBAT_JOBS: [&str; 21] = [
     "PLD", "WAR", "DRK", "GNB", "WHM", "SCH", "AST", "SGE", "MNK", "DRG", "NIN", "SAM", "RPR",
     "VPR", "BRD", "DNC", "MCH", "BLM", "SMN", "RDM", "PCT",
 ];
