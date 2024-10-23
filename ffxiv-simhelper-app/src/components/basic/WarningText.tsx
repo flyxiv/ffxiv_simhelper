@@ -7,7 +7,7 @@ export function WarningText(text: string) {
     return (
         <Link href={language === LanguageMode.KOREAN_MODE ? "https://junyeopn.github.io/blog/docs/ffxivsimhelperkr" : "https://junyeopn.github.io/blog/docs/ffxivsimhelperen/"}>
             <Typography
-                sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}
+                sx={{ fontSize: AppConfigurations.warningTextSize, color: "white" }}
                 align="center"
             >
                 {text}
@@ -19,7 +19,7 @@ export function WarningText(text: string) {
 function DonationText(text: string) {
     return (
         <Typography
-            sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}
+            sx={{ fontSize: AppConfigurations.warningTextSize, color: "white" }}
             align="center"
         >
             {text}

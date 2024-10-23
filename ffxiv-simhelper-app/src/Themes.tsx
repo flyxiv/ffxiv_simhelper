@@ -31,6 +31,14 @@ export const AppConfigurations = {
     lg: 10,
     xl: 14
   },
+  warningTextSize: {
+    xs: 12,
+    sm: 12,
+    md: 14,
+    lg: 14,
+    xl: 14
+  },
+
   logoFontSize: {
     xs: 12,
     sm: 12,
