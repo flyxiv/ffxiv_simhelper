@@ -247,7 +247,10 @@ pub(crate) fn make_reaper_ogcd_priority_table(
                         )),
                         Box::new(HasResource(0, 70)),
                     )),
-                    Box::new(MillisecondsBeforeBurst(9000)),
+                    Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.arcane_circle.get_id(),
+                        6500,
+                    )),
                 )),
                 Box::new(And(
                     Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
@@ -281,14 +284,20 @@ pub(crate) fn make_reaper_ogcd_priority_table(
                     Box::new(HasResource(0, 100)),
                 )),
                 Box::new(And(
-                    Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
                     Box::new(And(
-                        Box::new(Not(Box::new(MillisecondsBeforeBurst(0)))),
+                        Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
                         Box::new(And(
-                            Box::new(Not(Box::new(HasResource(6, 2)))),
-                            Box::new(Not(Box::new(HasResource(5, 1)))),
+                            Box::new(Not(Box::new(MillisecondsBeforeBurst(0)))),
+                            Box::new(And(
+                                Box::new(Not(Box::new(HasResource(6, 2)))),
+                                Box::new(Not(Box::new(HasResource(5, 1)))),
+                            )),
                         )),
                     )),
+                    Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                        db.gluttony.get_id(),
+                        2500,
+                    )))),
                 )),
             )),
         },

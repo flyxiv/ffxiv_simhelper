@@ -32,7 +32,7 @@ export const AppConfigurations = {
     xl: 14
   },
   logoFontSize: {
-    xs: 8,
+    xs: 12,
     sm: 12,
     md: 12,
     lg: 12,

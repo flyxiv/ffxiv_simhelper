@@ -1,4 +1,4 @@
-import { Box, Divider, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+import { Box, Divider, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { CustomFormControl } from "../basicform/BasicInputForm";
 import { JobMenuItem } from "../../items/JobMenuItem";
 import {
@@ -13,6 +13,8 @@ import { getRoleByIdAndMainCharacterJob } from "./PartyMemberJobSelection";
 import { calculateHasteBuff, DEFAULT_GCD } from "../../../types/ffxivdatabase/StatCalculator";
 import { mapJobAbbrevToJobBisEquipments } from "../../../const/StatValue";
 import { AST_EN_NAME, BLM_EN_NAME, BRD_EN_NAME, DNC_EN_NAME, DRG_EN_NAME, DRK_EN_NAME, GNB_EN_NAME, MCH_EN_NAME, MNK_EN_NAME, NIN_EN_NAME, PCT_EN_NAME, PLD_EN_NAME, RDM_EN_NAME, RPR_EN_NAME, SAM_EN_NAME, SCH_EN_NAME, SGE_EN_NAME, SMN_EN_NAME, TextDictionary, VPR_EN_NAME, WAR_EN_NAME, WHM_EN_NAME } from "../../../const/languageTexts";
+import { TopMenuInput } from "../basicform/EquipmentInputForm";
+import { ITEM_TOP_MENU_MIN_HEIGHT } from "../../items/Styles";
 
 let ALIGN = "left";
 
@@ -229,40 +231,30 @@ export function MainPlayerGcdSelection(
 
   return (
     <CustomFormControl fullWidth>
-      <InputLabel
-        id="SlotSelect"
-        key={`${key}_label`}
-        sx={{
-          fontSize: AppConfigurations.body1FontSize,
-          display: 'flex',
-          height: '50%',
-          alignItems: "center"
-        }}
-      >
-        <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
-          {speedLabelText}
-        </Typography>
-      </InputLabel>
-
-      <Select
-        labelId={key}
+      <TopMenuInput
+        select
         id={key}
-        value={(totalEquipmentState.equipmentDatas[id].power.gcd).toFixed(2)}
-        label={key}
-        onChange={(e) => {
-          let newGcd = parseFloat(e.target.value);
-          let newTotalState = { ...totalEquipmentState };
-          let maxGcd = Math.floor(DEFAULT_GCD * (calculateHasteBuff(jobAbbrev) / 100)) / 100;
-          let newSpeedMultiplier = Math.floor(maxGcd / newGcd * 1000) / 1000;
+        value={totalEquipmentState.equipmentDatas[id].power.gcd}
+        key={key}
+        label={speedLabelText}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+          {
+            let newGcd = parseFloat(e.target.value);
+            let newTotalState = { ...totalEquipmentState };
+            let maxGcd = Math.floor(DEFAULT_GCD * (calculateHasteBuff(jobAbbrev) / 100)) / 100;
+            let newSpeedMultiplier = Math.floor(maxGcd / newGcd * 1000) / 1000;
 
-          newTotalState.equipmentDatas[id].power.gcd = newGcd;
-          newTotalState.equipmentDatas[id].power.speedMultiplier = newSpeedMultiplier;
-          setTotalState(newTotalState);
+            newTotalState.equipmentDatas[id].power.gcd = newGcd;
+            newTotalState.equipmentDatas[id].power.speedMultiplier = newSpeedMultiplier;
+            setTotalState(newTotalState);
+          }
         }}
-        MenuProps={{
-          PaperProps: {
-            sx: {
-              backgroundColor: AppConfigurations.backgroundThree,
+        SelectProps={{
+          MenuProps: {
+            PaperProps: {
+              sx: {
+                backgroundColor: AppConfigurations.backgroundThree,
+              },
             },
           },
         }}
@@ -271,7 +263,7 @@ export function MainPlayerGcdSelection(
           gcdOptions.map((gcd) => {
             return (
               <MenuItem value={(gcd / 100).toFixed(2)}>
-                <Box display="flex" sx={{ height: "4vh" }} alignItems={"center"} justifyContent={"flex-end"}>
+                <Box display="flex" sx={{ height: ITEM_TOP_MENU_MIN_HEIGHT }} alignItems={"center"} justifyContent={"flex-end"}>
                   <Typography sx={{ fontSize: AppConfigurations.body2FontSize, color: "white" }}>
                     {`${(gcd / 100).toFixed(2)}`}
                   </Typography>
@@ -280,8 +272,7 @@ export function MainPlayerGcdSelection(
             )
           })
         }
-
-      </Select>
+      </TopMenuInput>
     </CustomFormControl >
   );
 }

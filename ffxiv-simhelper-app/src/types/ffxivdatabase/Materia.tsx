@@ -1,4 +1,4 @@
-import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME } from "../../const/languageTexts";
+import { convertToSubStatName, CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME, TextDictionary } from "../../const/languageTexts";
 import { Equipment, getFirstSubStat } from "./Equipment";
 import {
   convertEquipmentToFinalStat,
@@ -190,8 +190,14 @@ export function toMateriaKey(materia: Materia | null) {
   return `${materia.statName}+${materia.maxValue}`;
 }
 
-export function toMateriaDescription(materia: Materia) {
-  return `${materia.statName}+${materia.effectiveValue}`;
+export function toMateriaDescription(materia: Materia, LANGUAGE_TEXTS: TextDictionary) {
+  return `${convertToSubStatName(materia.statName, LANGUAGE_TEXTS)}+${materia.effectiveValue}`;
+}
+
+// {StatName}+{Value} -> {StatNameText(KR/EN)}+{Value}
+export function materiaKeyToText(materiaKey: string, LANGUAGE_TEXTS: TextDictionary) {
+  let [statName, value] = materiaKey.split("+");
+  return `${convertToSubStatName(statName, LANGUAGE_TEXTS)}+${value}`;
 }
 
 export function addMateriaStatToTotalStat(

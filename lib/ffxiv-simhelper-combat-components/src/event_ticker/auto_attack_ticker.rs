@@ -116,9 +116,10 @@ impl AutoAttackTicker {
             "BRD" | "MCH" => 80,
             "VPR" => 95,
             "MNK" => 90,
-            "RPR" => 85,
+            "RPR" => 90,
             "DRG" => 90,
             "SAM" => 85,
+            "DNC" => 90,
             _ => 100,
         };
 
@@ -178,7 +179,7 @@ fn get_auto_attack_interval_tuning_value_of_job(job_abbrev: &String) -> Multipli
         "SAM" => 0.88,
         "BRD" => 0.82,
         "MCH" => 0.93,
-        "RPR" => 0.71,
+        "RPR" => 0.75,
         "DRK" => 0.90,
         "WAR" => 0.75,
         "GNB" => 0.9,

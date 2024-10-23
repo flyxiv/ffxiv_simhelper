@@ -1,15 +1,18 @@
 import { Box, Typography } from "@mui/material";
 import {
   Materia,
+  materiaKeyToText,
   toMateriaDescription,
   toMateriaKey,
 } from "../../types/ffxivdatabase/Materia";
 import { getMateriaIconPath } from "../icon/materiaicon/MateriaIconFactory";
 import { AppConfigurations } from "../../Themes";
+import { TextDictionary } from "../../const/languageTexts";
 
 export function MateriaItem(
   materiaKey: string,
-  currentlyEquippedMateria: Materia
+  currentlyEquippedMateria: Materia,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
   let imageSize = "3vh";
 
@@ -37,14 +40,14 @@ export function MateriaItem(
         <Typography
           variant="body2"
           alignContent={"center"}
-          color={isNotFullyUsed ? "red" : "white"}
+          color={isNotFullyUsed && isSelected ? "red" : "white"}
           sx={{
             fontSize: AppConfigurations.body2FontSize,
           }}
         >
           {isSelected
-            ? toMateriaDescription(currentlyEquippedMateria)
-            : materiaKey}
+            ? toMateriaDescription(currentlyEquippedMateria, LANGUAGE_TEXTS)
+            : materiaKeyToText(materiaKey, LANGUAGE_TEXTS)}
         </Typography>
       </Box>
     </Box>

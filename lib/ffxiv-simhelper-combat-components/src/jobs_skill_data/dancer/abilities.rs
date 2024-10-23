@@ -103,8 +103,8 @@ impl DancerDatabase {
             owner_id: player_id,
             duration_left_millisecond: 0,
             status_info: vec![
-                StatusInfo::CritHitRatePercent(20),
-                StatusInfo::DirectHitRatePercent(20),
+                StatusInfo::CritHitRatePercent(18),
+                StatusInfo::DirectHitRatePercent(18),
             ],
             duration_millisecond: 20000,
             is_raidwide: false,
@@ -327,7 +327,7 @@ impl DancerDatabase {
                     standard_step_buff.clone(),
                     60000,
                     60000,
-                    0,
+                    3500,
                 ),
                 ApplyBuff(
                     player_id,
@@ -335,7 +335,7 @@ impl DancerDatabase {
                     standard_step_proc_buff.clone(),
                     60000,
                     60000,
-                    0,
+                    3500,
                 ),
                 ApplyBuff(
                     player_id,
@@ -343,7 +343,7 @@ impl DancerDatabase {
                     standard_step_buff.clone(),
                     60000,
                     60000,
-                    0,
+                    3500,
                 ),
                 ApplyBuff(
                     player_id,
@@ -351,7 +351,7 @@ impl DancerDatabase {
                     standard_step_proc_buff.clone(),
                     60000,
                     60000,
-                    0,
+                    3500,
                 ),
                 ApplyBuff(
                     player_id,
@@ -359,7 +359,7 @@ impl DancerDatabase {
                     last_dance_ready.clone(),
                     30000,
                     30000,
-                    0,
+                    3500,
                 ),
             ],
             proc_events: vec![],

@@ -1318,3 +1318,19 @@ export const convertToJobText = (jobAbbrev: string, LANGUAGE_TEXTS: TextDictiona
 };
 
 
+export function convertToSubStatName(statName: string, LANGUAGE_TEXTS: TextDictionary) {
+  switch (statName) {
+    case CRIT_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.CRIT_STAT_NAME;
+    case DH_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.DH_STAT_NAME;
+    case DET_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.DET_STAT_NAME;
+    case SKS_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.SKS_STAT_NAME;
+    case SPS_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.SPS_STAT_NAME;
+    default:
+      return LANGUAGE_TEXTS.TEN_STAT_NAME;
+  }
+}

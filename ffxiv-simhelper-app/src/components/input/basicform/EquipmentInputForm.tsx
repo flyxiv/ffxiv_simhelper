@@ -242,7 +242,7 @@ function EquipmentMenuOfOneSlot(
           currentEquipment,
           totalEquipmentState,
           setTotalEquipmentState,
-          LANGUAGE_TEXTS.EMPTY_TEXT
+          LANGUAGE_TEXTS
         )}
       </MateriaBox>
 
