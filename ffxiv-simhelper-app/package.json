@@ -45,6 +45,16 @@
       "provider": "github",
       "owner": "flyxiv",
       "repo": "ffxiv_simhelper_public"
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
     }
   },
   "dependencies": {
