@@ -20,9 +20,9 @@ use std::rc::Rc;
 const MACHINIST_STACKS_COUNT: usize = 2;
 
 const MIN_QUEEN_BATTERY: PotencyType = 5;
-const QUEEN_BASE_POTENCY: PotencyType = 1000;
+const QUEEN_BASE_POTENCY: PotencyType = 900;
 const QUEEN_DELAY_MILLISECOND: TimeType = 5000;
-const QUEEN_POTENCY_PER_STACK: PotencyType = 200;
+const QUEEN_POTENCY_PER_STACK: PotencyType = 180;
 const HEAT_MAX: ResourceType = 100;
 const BATTERY_MAX: ResourceType = 10;
 
