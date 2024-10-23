@@ -234,7 +234,7 @@ export function MainPlayerGcdSelection(
       <TopMenuInput
         select
         id={key}
-        value={totalEquipmentState.equipmentDatas[id].power.gcd}
+        value={(totalEquipmentState.equipmentDatas[id].power.gcd).toFixed(2)}
         key={key}
         label={speedLabelText}
         onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
