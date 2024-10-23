@@ -176,7 +176,10 @@ pub(crate) fn make_warrior_ogcd_priority_table(
                 Box::new(Not(Box::new(HasResource(0, 50)))),
                 Box::new(Or(
                     Box::new(MillisecondsBeforeBurst(0)),
-                    Box::new(SkillPrerequisite::HasSkillStacks(db.infuriate.get_id(), 2)),
+                    Box::new(SkillPrerequisite::RelatedSkillCooldownLessOrEqualThan(
+                        db.infuriate.get_id(),
+                        30000,
+                    )),
                 )),
             )),
         },

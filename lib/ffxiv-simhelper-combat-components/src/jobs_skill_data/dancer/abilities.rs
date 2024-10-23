@@ -98,6 +98,7 @@ impl DancerDatabase {
                 20,
             )],
         };
+        // we nerf by 10% (20 -> 18) b/c it's eating too much.
         let devilment_buff: BuffStatus = BuffStatus {
             id: 1504,
             owner_id: player_id,

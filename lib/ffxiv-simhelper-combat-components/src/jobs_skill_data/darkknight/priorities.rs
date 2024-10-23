@@ -175,6 +175,13 @@ pub(crate) fn make_darkknight_ogcd_priority_table(
             prerequisite: Some(MillisecondsBeforeBurst(0)),
         },
         SkillPriorityInfo {
+            skill_id: db.edge_of_shadow.get_id(),
+            prerequisite: Some(Or(
+                Box::new(MillisecondsBeforeBurst(0)),
+                Box::new(BufforDebuffLessThan(db.darkside.get_id(), 3000)),
+            )),
+        },
+        SkillPriorityInfo {
             skill_id: db.carve_and_spit.get_id(),
             prerequisite: None,
         },
@@ -189,13 +196,6 @@ pub(crate) fn make_darkknight_ogcd_priority_table(
         SkillPriorityInfo {
             skill_id: db.salt_and_darkness.get_id(),
             prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.edge_of_shadow.get_id(),
-            prerequisite: Some(Or(
-                Box::new(MillisecondsBeforeBurst(0)),
-                Box::new(BufforDebuffLessThan(db.darkside.get_id(), 3000)),
-            )),
         },
     ]);
 

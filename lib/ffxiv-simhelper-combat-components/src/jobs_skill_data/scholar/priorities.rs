@@ -122,7 +122,7 @@ pub(crate) fn make_scholar_ogcd_priority_table(
     let mut ogcd_priorities = if use_pots {
         vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
-            prerequisite: None,
+            prerequisite: Some(MillisecondsBeforeBurst(12000)),
         }]
     } else {
         vec![]
@@ -137,12 +137,25 @@ pub(crate) fn make_scholar_ogcd_priority_table(
             prerequisite: None,
         },
         SkillPriorityInfo {
+            skill_id: db.baneful_impaction.get_id(),
+            prerequisite: Some(SkillPrerequisite::And(
+                Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                    db.dissipation.get_id(),
+                    10000,
+                )))),
+                Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                    db.aetherflow.get_id(),
+                    10000,
+                )))),
+            )),
+        },
+        SkillPriorityInfo {
             skill_id: db.energy_drain.get_id(),
             prerequisite: Some(Or(
                 Box::new(MillisecondsBeforeBurst(0)),
                 Box::new(Or(
                     Box::new(RelatedSkillCooldownLessOrEqualThan(
-                        db.aetherflow.get_id(),
+                        db.dissipation.get_id(),
                         8000,
                     )),
                     Box::new(RelatedSkillCooldownLessOrEqualThan(
@@ -154,10 +167,6 @@ pub(crate) fn make_scholar_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.aetherflow.get_id(),
-            prerequisite: None,
-        },
-        SkillPriorityInfo {
-            skill_id: db.baneful_impaction.get_id(),
             prerequisite: None,
         },
     ]);
