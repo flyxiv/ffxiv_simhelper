@@ -13,13 +13,13 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "electron-start": "electron . ELECTRON_START_URL=http://localhost:5173",
-    "electron-pack": "yarn build-local && electron-builder build -c.extraMetadata.main=src/main.js --publish=never",
-    "electron-publish-release": "yarn build && electron-builder --publish=always"
+    "electron-pack": "cargo build --bin ffxiv-simhelper-local --release && yarn build-local && electron-builder build -c.extraMetadata.main=src/main.js --publish=never",
+    "electron-publish-release": "cargo build --bin ffxiv-simhelper-local --release && yarn build && electron-builder --publish=always"
   },
   "license": "Proprietary - No Commercial Use",
   "main": "src/main.js",
   "home": ".",
-  "version": "0.0.5",
+  "version": "1.0.0-beta",
   "build": {
     "appId": "com.ffxiv-simhelper.app",
     "icon": "build/icon.png",
