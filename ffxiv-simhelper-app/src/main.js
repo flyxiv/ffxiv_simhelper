@@ -49,9 +49,7 @@ autoUpdater.on('update-not-available', () => {
     log.info('Update not available.');
 });
 
-autoUpdater.on('update-available', () => {
-    log.info('Update available');
-
+autoUpdater.on('update-downloaded', () => {
     const dialogOpts = {
         type: 'info',
         buttons: ['Restart And Install', 'Later'],
@@ -61,15 +59,10 @@ autoUpdater.on('update-available', () => {
     };
 
     dialog.showMessageBox(dialogOpts).then((returnValue) => {
-        if (returnValue.response === 0) { // 'Restart' 클릭 시
+        if (returnValue.response === 0) {
             autoUpdater.quitAndInstall();
         }
     });
-});
-
-autoUpdater.on('update-downloaded', () => {
-    log.info('Update downloaded');
-
 });
 
 app.on('ready', () => {
