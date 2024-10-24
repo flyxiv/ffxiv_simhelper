@@ -28,7 +28,7 @@ import { sendRequestAsync } from "./DpsAnalysisRequestButton";
 import { defaultPlayerPower, getStatNeededByStatNameLadderAmount } from "../../types/ffxivdatabase/PlayerPower";
 import { StopButton } from "./StopButton";
 import { AppConfigurations } from "../../Themes";
-import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DEX_STAT_EN_NAME, DH_STAT_EN_NAME, INT_STAT_EN_NAME, MIDLANDER_HYUR_EN_NAME, MIND_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, STR_STAT_EN_NAME, TEN_STAT_EN_NAME, WD_STAT_EN_NAME } from "../../const/languageTexts";
+import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DEX_STAT_EN_NAME, DH_STAT_EN_NAME, INT_STAT_EN_NAME, MIDLANDER_HYUR_EN_NAME, MIND_STAT_EN_NAME, SKS_STAT_EN_NAME, SMN_EN_NAME, SPS_STAT_EN_NAME, STR_STAT_EN_NAME, TEN_STAT_EN_NAME, WD_STAT_EN_NAME } from "../../const/languageTexts";
 
 const REQUEST_URL = `${AppConfigurations.requestServer}/api/v1/beststats`;
 const WEAPON_DAMAGE_INCREASE = 10;
@@ -209,23 +209,26 @@ function createAugmentedRequest(
       power.determination += augmentAmount;
     }
     if (augmentStatName === SKS_STAT_EN_NAME) {
-      augmentAmount = getStatNeededByStatNameLadderAmount(
+      let augmentAmountSpeed = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
         jobAbbrev,
         SKS_INCREASE_AMOUNT,
         gcdName
-      ) + 50;
+      );
+      augmentAmount = jobAbbrev === SMN_EN_NAME ? augmentAmountSpeed : augmentAmountSpeed + 50;
       power.skillSpeed += augmentAmount;
     }
     if (augmentStatName === SPS_STAT_EN_NAME) {
-      augmentAmount = getStatNeededByStatNameLadderAmount(
+      let augmentAmountSpeed = getStatNeededByStatNameLadderAmount(
         power,
         augmentStatName,
         jobAbbrev,
         SPS_INCREASE_AMOUNT,
         gcdName
-      ) + 50;
+      );
+      augmentAmount = jobAbbrev === SMN_EN_NAME ? augmentAmountSpeed : augmentAmountSpeed + 50;
+
       power.spellSpeed += augmentAmount;
     }
     if (augmentStatName === TEN_STAT_EN_NAME) {

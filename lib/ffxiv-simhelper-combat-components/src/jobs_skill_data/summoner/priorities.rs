@@ -94,8 +94,6 @@ pub(crate) fn make_summoner_opener(db: &SummonerDatabase, use_pots: bool) -> Vec
         )),
         GcdOpener(db.umbral_impulse.get_id()),
         OgcdOpener((Some(db.sunflare.get_id()), Some(db.necrotize.get_id()))),
-        GcdOpener(db.umbral_impulse.get_id()),
-        OgcdOpener((Some(db.searing_flash.get_id()), None)),
     ]);
 
     openers

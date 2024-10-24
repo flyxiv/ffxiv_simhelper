@@ -68,7 +68,7 @@ impl SummonerDatabase {
         let caster_skills = CasterGlobalSkill::new(player_id);
         let swiftcast_buff = caster_skills.swiftcast_buff.clone();
         let swiftcast = caster_skills.swiftcast.clone();
-
+        let trance_state_duration = 15000;
         let further_ruin: BuffStatus = BuffStatus {
             id: 1600,
             name: String::from("Further Ruin"),
@@ -101,7 +101,7 @@ impl SummonerDatabase {
             owner_id: player_id,
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
-            duration_millisecond: 15000,
+            duration_millisecond: trance_state_duration,
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
@@ -113,7 +113,7 @@ impl SummonerDatabase {
             owner_id: player_id,
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
-            duration_millisecond: 15000,
+            duration_millisecond: trance_state_duration,
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
@@ -194,7 +194,7 @@ impl SummonerDatabase {
             owner_id: player_id,
             duration_left_millisecond: 0,
             status_info: vec![StatusInfo::None],
-            duration_millisecond: 15000,
+            duration_millisecond: trance_state_duration,
             is_raidwide: false,
             trigger_proc_event_on_gcd: vec![],
         };
@@ -491,7 +491,14 @@ impl SummonerDatabase {
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyBuff(player_id, player_id, bahamut_state.clone(), 15000, 15000, 0),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    bahamut_state.clone(),
+                    trance_state_duration,
+                    trance_state_duration,
+                    0,
+                ),
                 AddTicker(FfxivEventTicker::AutoAttackTicker(wyrmwave_ticker), 0),
             ],
             proc_events: vec![],
@@ -900,7 +907,14 @@ impl SummonerDatabase {
             potency: 0,
             trait_percent: 130,
             additional_skill_events: vec![
-                ApplyBuff(player_id, player_id, pheonix_state.clone(), 15000, 15000, 0),
+                ApplyBuff(
+                    player_id,
+                    player_id,
+                    pheonix_state.clone(),
+                    trance_state_duration,
+                    trance_state_duration,
+                    0,
+                ),
                 AddTicker(FfxivEventTicker::AutoAttackTicker(phoenix_ticker), 0),
             ],
             proc_events: vec![],
@@ -1013,8 +1027,8 @@ impl SummonerDatabase {
                     player_id,
                     player_id,
                     solar_bahamut_state.clone(),
-                    15000,
-                    15000,
+                    trance_state_duration,
+                    trance_state_duration,
                     0,
                 ),
                 AddTicker(FfxivEventTicker::AutoAttackTicker(solar_bahamut_ticker), 0),
