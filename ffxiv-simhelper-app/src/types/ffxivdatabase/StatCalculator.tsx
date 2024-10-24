@@ -133,7 +133,6 @@ export function calculateMainStatPercentIncrease(
   isTank: boolean
 ) {
   if (isTank) {
-    console.log('check');
     return Math.floor(
       MAIN_STAT_SLOPE_TANK * (mainStat - DEFAULT_MAIN_STAT_TANK)
     );

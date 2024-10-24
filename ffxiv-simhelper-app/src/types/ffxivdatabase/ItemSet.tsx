@@ -230,7 +230,6 @@ export function calculatePowerByStat(power: PlayerPower, jobAbbrev: string) {
   power.mainStatMultiplier =
     1 +
     calculateMainStatPercentIncrease(power.mainStat, isTank(jobAbbrev)) / 100;
-  console.log(power.mainStatMultiplier);
   let criticalStrikeIncrease =
     calculateCriticalStrikePercentIncrease(power.criticalStrike) / 100;
   power.criticalStrikeRate = CRIT_BASE_PERCENT + criticalStrikeIncrease;
