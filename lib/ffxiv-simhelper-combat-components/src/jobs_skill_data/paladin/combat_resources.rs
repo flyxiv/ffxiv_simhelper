@@ -14,11 +14,19 @@ use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
 
+/// Paladin combat resources
+///
+/// # resources
+/// 0: Blade of honor ready
+/// 1: Blade of faith ready
+/// 2: Blade of truth ready
+/// 3: Blade of valor ready
+///
 #[derive(Clone)]
 pub(crate) struct PaladinCombatResources {
     skills: SkillTable<AttackSkill>,
     current_combo: ComboType,
-    resources: [ResourceType; 1],
+    resources: [ResourceType; 4],
 }
 
 impl CombatResource for PaladinCombatResources {
@@ -31,9 +39,8 @@ impl CombatResource for PaladinCombatResources {
     }
 
     fn add_resource(&mut self, resource_id: ResourceIdType, resource_amount: ResourceType) {
-        if resource_id == 0 {
-            self.resources[0] = min(1, resource_amount + self.resources[0]);
-        }
+        let resource_id = resource_id as usize;
+        self.resources[resource_id] = min(1, self.resources[resource_id] + resource_amount);
     }
 
     fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
@@ -73,7 +80,7 @@ impl PaladinCombatResources {
         Self {
             skills: make_paladin_skill_list(player_id),
             current_combo: None,
-            resources: [0],
+            resources: [0, 0, 0, 0],
         }
     }
 }

@@ -108,19 +108,19 @@ pub(crate) fn make_paladin_gcd_priority_table(db: &PaladinDatabase) -> Vec<Skill
     vec![
         SkillPriorityInfo {
             skill_id: db.confiteor.get_id(),
-            prerequisite: Some(HasBufforDebuff(db.confiteor_ready.get_id())),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.blade_of_faith.get_id(),
-            prerequisite: Some(Combo(Some(4))),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.blade_of_truth.get_id(),
-            prerequisite: Some(Combo(Some(5))),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.blade_of_valor.get_id(),
-            prerequisite: Some(Combo(Some(6))),
+            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.goring_blade.get_id(),
