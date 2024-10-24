@@ -9,7 +9,7 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::summoner::abilities::SummonerDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
+    BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, MillisecondsBeforeBurst, Not,
 };
 
 #[derive(Clone)]
@@ -220,7 +220,7 @@ pub(crate) fn make_summoner_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.searing_flash.get_id(),
-            prerequisite: None,
+            prerequisite: Some(BufforDebuffLessThan(db.searing_light_buff.get_id(), 15000)),
         },
         SkillPriorityInfo {
             skill_id: db.sunflare.get_id(),
