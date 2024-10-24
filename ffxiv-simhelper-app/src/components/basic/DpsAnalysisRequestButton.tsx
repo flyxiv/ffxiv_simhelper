@@ -218,7 +218,7 @@ export function createDpsAnalysisRequest(
       partner1Id: null,
       partner2Id: null,
       jobAbbrev: jobAbbrev,
-      power: power,
+      power: bisPower,
     });
 
     playerCount++;

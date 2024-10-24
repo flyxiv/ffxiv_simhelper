@@ -178,7 +178,6 @@ export function getMainStatOfRace(race: string, mainStatName: string): number {
 }
 
 function getRaceMainStatByName(mainStatName: string, stats: RaceInfo): number {
-  console.log(mainStatName);
   switch (mainStatName) {
     case STR_STAT_EN_NAME:
       return stats.STR;
