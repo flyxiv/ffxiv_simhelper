@@ -442,6 +442,8 @@ export interface TextDictionary {
   // Party Input Text
   TIME_INPUT_LABEL_TEXT: string,
   PARTY_MEMBER_LABEL_TEXT: string,
+  PARTY_COMPOSITION_DESCRIPTION_TEXT: string,
+  PARTY_COMPOSITION_PAGE_NAME: string,
 
   language: LanguageMode
 }
@@ -451,6 +453,8 @@ export const AppLanguageTexts: () => TextDictionary = () => {
   let { language } = useLanguage();
   const DEMO_WARNING_TEXT = language === LanguageMode.ENGLISH_MODE ? DEMO_WARNING_EN : DEMO_WARNING_KR;
   const BUY_ME_A_COFFEE_TEXT = language === LanguageMode.ENGLISH_MODE ? BUY_ME_A_COFFEE_EN : BUY_ME_A_COFFEE_KR;
+  const PARTY_COMPOSITION_PAGE_NAME = language === LanguageMode.ENGLISH_MODE ? "Party Composition" : "파티 구성";
+  const PARTY_COMPOSITION_DESCRIPTION_TEXT = language === LanguageMode.ENGLISH_MODE ? "Find out which party members are best for your current composition." : "현 조합에 최적인 파티 멤버들을 찾아보세요.";
 
   // Job Names
   const PLD_JOB_NAME =
@@ -995,6 +999,9 @@ export const AppLanguageTexts: () => TextDictionary = () => {
     SMN_JOB_NAME,
     RDM_JOB_NAME,
     PCT_JOB_NAME,
+
+    PARTY_COMPOSITION_DESCRIPTION_TEXT,
+    PARTY_COMPOSITION_PAGE_NAME,
 
 
     // Menu Text

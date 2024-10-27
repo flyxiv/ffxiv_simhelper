@@ -14,13 +14,18 @@ import { EquipmentInput } from "../../../types/EquipmentInput";
 import { isHealer, isTank } from "../../../types/ffxivdatabase/PlayerPower";
 import {
   BUFF_JOBS_LIST,
+  CASTER_JOBS,
+  DPS_BUFF_JOBS,
   DPS_JOBS,
   HEALER_JOBS,
+  MELEE_JOBS,
+  RANGED_JOBS,
   TANK_JOBS,
 } from "../../../types/ffxivdatabase/PartyCompositionMaker";
 import { calculatePlayerPowerFromInputs } from "../../../types/ffxivdatabase/ItemSet";
 import { PLD_EN_NAME, SCH_EN_NAME, TextDictionary } from "../../../const/languageTexts";
 import { ITEM_BOTTOM_MENU_MIN_HEIGHT } from "../../items/Styles";
+import { PartyComposition } from "../../../page/PartyComposition";
 
 let ALIGN = "center";
 
@@ -185,6 +190,103 @@ export function PartyMemberJobSelection(
 
         <Divider />
         <MenuItem value="Empty">
+          <Box height={ITEM_BOTTOM_MENU_MIN_HEIGHT} display="flex" justifyContent={"center"} alignItems={"center"}>
+            <Typography variant="body1" color="white" fontSize={AppConfigurations.body1FontSize} align="center">
+              Empty
+            </Typography>
+          </Box>
+        </MenuItem>
+      </Select>
+    </CustomFormControl>
+  );
+}
+
+
+function getValidJobForSlot(
+  id: number,
+  partyComposition: PartyComposition,
+) {
+  switch (id) {
+    case 0:
+    case 1:
+      return TANK_JOBS;
+    case 2:
+      return HEALER_JOBS.filter((job) => job !== partyComposition[3]);
+    case 3:
+      return HEALER_JOBS.filter((job) => job !== partyComposition[2]);
+    case 4:
+      return MELEE_JOBS
+    case 5:
+      return RANGED_JOBS
+    case 6:
+      return CASTER_JOBS
+    default:
+      let possibleJobs = [];
+      for (let job of DPS_JOBS) {
+        if (!(job in DPS_BUFF_JOBS) || !(partyComposition.includes(job))) {
+          possibleJobs.push(job);
+        }
+      }
+
+      return possibleJobs;
+  }
+}
+
+
+export function PartyMemberJobSelectionPartyComposition(
+  id: number,
+  partyComposition: PartyComposition,
+  setPartyComposition: Function,
+  LANGUAGE_TEXTS: TextDictionary
+) {
+  let playerId = `${LANGUAGE_TEXTS.PARTY_MEMBER_LABEL_TEXT} ${id}`;
+
+  const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
+    let newPartyComposition = [...partyComposition];
+    newPartyComposition[index] = e.target.value;
+
+    setPartyComposition(newPartyComposition);
+  };
+
+  let key = `job-select-partymember-${id}`;
+  let possiblejobAbbrevs = getValidJobForSlot(id, partyComposition);
+
+  let playerLabelText = id < 2 ? LANGUAGE_TEXTS.TANK_TEXT : id < 4 ? LANGUAGE_TEXTS.HEALER_TEXT : LANGUAGE_TEXTS.DPS_TEXT;
+  let playerLabel = `${playerLabelText} ${id}`;
+
+  return (
+    <CustomFormControl fullWidth>
+      <InputLabel id="JobSelect">
+        <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
+          {playerLabel}
+        </Typography>
+      </InputLabel>
+      <Select
+        labelId={playerId}
+        id={key}
+        value={
+          partyComposition[id]
+        }
+        key={key}
+        label="Job Name"
+        onChange={(event) => {
+          updateState(id)(event);
+        }}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              backgroundColor: AppConfigurations.backgroundThree,
+            },
+          },
+        }}
+        sx={{ width: "100%" }}
+      >
+        {possiblejobAbbrevs.map((jobAbbrev) => {
+          return JobMenuItem(jobAbbrev, ALIGN, LANGUAGE_TEXTS, false);
+        })}
+
+        <Divider />
+        <MenuItem value="*">
           <Box height={ITEM_BOTTOM_MENU_MIN_HEIGHT} display="flex" justifyContent={"center"} alignItems={"center"}>
             <Typography variant="body1" color="white" fontSize={AppConfigurations.body1FontSize} align="center">
               Empty

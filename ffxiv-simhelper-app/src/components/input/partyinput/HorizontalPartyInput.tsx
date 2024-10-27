@@ -1,5 +1,5 @@
 import { Grid, Box, styled } from "@mui/material";
-import { PartyMemberJobSelection } from "../jobselection/PartyMemberJobSelection";
+import { PartyMemberJobSelection, PartyMemberJobSelectionPartyComposition } from "../jobselection/PartyMemberJobSelection";
 import {
   HorizontalInputGridContainerStyle,
   HorizontalInputGridItemStyle,
@@ -11,6 +11,7 @@ import {
 import { EquipmentInput } from "../../../types/EquipmentInput";
 import { PartyMemberIlvlSelection } from "../PartyMemberIlvlSelection";
 import { TextDictionary } from "../../../const/languageTexts";
+import { PartyComposition } from "../../../page/PartyComposition";
 
 const HorizontalInputGridContainer = styled(Grid)`
   ${HorizontalInputGridContainerStyle}
@@ -60,6 +61,36 @@ export function HorizontalPartyInput(
                   playerId,
                   totalEquipmentState,
                   setTotalEquipmentState,
+                  LANGUAGE_TEXTS
+                )}
+              </InputJobBox>
+            </InputBox>
+          </InputGridItem>
+        </HorizontalInputBox>
+      ))}
+
+    </HorizontalInputGridContainer>
+  );
+}
+
+
+export function HorizontalPartyInputPartyComposition(
+  partyComposition: PartyComposition,
+  setPartyComposition: Function,
+  LANGUAGE_TEXTS: TextDictionary
+) {
+  let xs = 14;
+  return (
+    <HorizontalInputGridContainer container>
+      {[0, 1, 2, 3, 4, 5, 6, 7].map((playerId) => (
+        <HorizontalInputBox key={playerId}>
+          <InputGridItem item xs={xs}>
+            <InputBox marginBottom={0.5} key={playerId}>
+              <InputJobBox item xs={xs} key={`Job-${playerId}`}>
+                {PartyMemberJobSelectionPartyComposition(
+                  playerId,
+                  partyComposition,
+                  setPartyComposition,
                   LANGUAGE_TEXTS
                 )}
               </InputJobBox>

@@ -11,6 +11,7 @@ import {
   DPS_ANALYSIS_URL,
   BEST_STATS_URL,
   BODY_WIDTH,
+  PARTY_COMPOSITION_URL,
 } from "../App";
 import { AppLanguageTexts, TextDictionary } from "../const/languageTexts";
 import { isMobile } from "../util";
@@ -132,6 +133,15 @@ function OneColumnHomePage(LANGUAGE_TEXTS: TextDictionary) {
           LANGUAGE_TEXTS.BEST_STATS_DESCRIPTION_TEXT,
           AppConfigurations.primary
         )}
+
+        {LogoBox(
+          PARTY_COMPOSITION_URL,
+          bestPartnerButtonImagePath,
+          LANGUAGE_TEXTS.PARTY_COMPOSITION_PAGE_NAME,
+          LANGUAGE_TEXTS.PARTY_COMPOSITION_PAGE_NAME,
+          LANGUAGE_TEXTS.PARTY_COMPOSITION_DESCRIPTION_TEXT,
+          AppConfigurations.secondary
+        )}
       </Box>
     </>
   )
@@ -164,6 +174,16 @@ function TwoColumnHomePage(LANGUAGE_TEXTS: TextDictionary) {
           LANGUAGE_TEXTS.BEST_PARTNER_DESCRIPTION_TEXT,
           AppConfigurations.secondary
         )}
+
+        {LogoBox(
+          PARTY_COMPOSITION_URL,
+          bestPartnerButtonImagePath,
+          LANGUAGE_TEXTS.PARTY_COMPOSITION_PAGE_NAME,
+          LANGUAGE_TEXTS.PARTY_COMPOSITION_PAGE_NAME,
+          LANGUAGE_TEXTS.PARTY_COMPOSITION_DESCRIPTION_TEXT,
+          AppConfigurations.primary
+        )
+        }
       </Box>
       <Box
         width="40%"

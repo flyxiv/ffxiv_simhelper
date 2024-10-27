@@ -18,6 +18,7 @@ import { StatWeightsResult } from "./page/StatWeightsResult";
 import { useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { AppConfigurations } from "./Themes";
+import { PartyComposition } from "./page/PartyComposition";
 
 export const SINGLE_INPUT_SAVE_NAME = "mostRecentSingleInput";
 export const BEST_PARTNER_INPUT_SAVE_NAME = "mostRecentBestPartnerInput";
@@ -40,6 +41,8 @@ export const BEST_PARTNER_RESULT_URL = "bestpartnersimulationresult";
 
 export const BEST_STATS_URL = "beststats";
 export const BEST_STATS_RESULT_URL = "beststatssimulationresult";
+
+export const PARTY_COMPOSITION_URL = "partycomposition";
 
 export const BODY_WIDTH = "100%";
 export const HOME_PAGE_MIN_WIDTH_PX = (itemsPerRow: number) => itemsPerRow === 2 ? 1700 : 100;
@@ -129,6 +132,11 @@ function AppWithHashRouter() {
           <Route
             path={`/${BEST_STATS_RESULT_URL}`}
             element={<StatWeightsResult />}
+          />
+
+          <Route
+            path={`/${PARTY_COMPOSITION_URL}`}
+            element={<PartyComposition />}
           />
         </Routes>
       </main>
