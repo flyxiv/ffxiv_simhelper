@@ -37,6 +37,7 @@ export const DEFAULT_DIRECT_HIT = 420;
 export const DEFAULT_DETERMINATION = 440;
 export const DEFAULT_SPEED = 420;
 export const DEFAULT_TENACITY = 420;
+export const DEFAULT_PIETY = 440;
 
 export const CURRENT_MAX_PARTY_ILVL = 730;
 

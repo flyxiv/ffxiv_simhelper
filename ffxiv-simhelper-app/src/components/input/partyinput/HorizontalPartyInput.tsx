@@ -82,7 +82,7 @@ export function HorizontalPartyInputPartyComposition(
   let xs = 14;
   return (
     <HorizontalInputGridContainer container>
-      {[0, 1, 2, 3, 4, 5, 6, 7].map((playerId) => (
+      {partyComposition.map((_, playerId) => (
         <HorizontalInputBox key={playerId}>
           <InputGridItem item xs={xs}>
             <InputBox marginBottom={0.5} key={playerId}>

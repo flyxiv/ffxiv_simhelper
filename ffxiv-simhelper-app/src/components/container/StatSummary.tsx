@@ -16,7 +16,7 @@ import {
 } from "../../types/ffxivdatabase/PlayerPower";
 import { SingleEquipmentInputSaveState } from "../../types/EquipmentInput";
 import { StatWeightsData } from "../../page/StatWeightsResult";
-import { TextDictionary } from "../../const/languageTexts";
+import { convertToStatName, TextDictionary } from "../../const/languageTexts";
 import { isMobile } from "../../util";
 
 
@@ -138,7 +138,7 @@ export function SimulationInputSummary(
 
           {simulationInputNames.map((statName) => {
             return (
-              <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
+              <SingleStatBox>{StatSummaryTypography(convertToStatName(statName, LANGUAGE_TEXTS))}</SingleStatBox>
             );
           })}
         </StatSummaryBox>
@@ -219,7 +219,7 @@ export function StatSummaryGearCompare(
         >
           {jobStatNames.map((statName) => {
             return (
-              <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
+              <SingleStatBox>{StatSummaryTypography(convertToStatName(statName, LANGUAGE_TEXTS))}</SingleStatBox>
             );
           })}
         </StatSummaryBox>
@@ -263,7 +263,7 @@ export function StatSummary(totalState: SingleEquipmentInputSaveState, LANGUAGE_
         <SingleStatBox>{StatSummaryTypography(LANGUAGE_TEXTS.NAME_TEXT)}</SingleStatBox>
         {jobStatNames.map((statName) => {
           return (
-            <SingleStatBox>{StatSummaryTypography(statName)}</SingleStatBox>
+            <SingleStatBox>{StatSummaryTypography(convertToStatName(statName, LANGUAGE_TEXTS))}</SingleStatBox>
           );
         })}
         <SingleStatBox>{StatSummaryTypography(LANGUAGE_TEXTS.COMPOSITION_NAME)}</SingleStatBox>

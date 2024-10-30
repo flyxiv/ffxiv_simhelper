@@ -16,6 +16,11 @@ export interface TeammateChartData {
   jobName: String;
 }
 
+export interface PartyCompositionChartData {
+  totalRdps: number;
+  key: string[];
+}
+
 export interface PartyContributionData {
   totalRdpsByStatus: Map<number, number>;
   contributionData: Array<TeammateChartData>;

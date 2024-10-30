@@ -1,4 +1,4 @@
-import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME } from "../../const/languageTexts";
+import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, PIE_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME } from "../../const/languageTexts";
 import { Equipment } from "./Equipment";
 import { Materia, updateMateriaValueStatToFinalStat } from "./Materia";
 
@@ -69,6 +69,9 @@ export function addMateriaMaxValueToEquipment(
       case SPS_STAT_EN_NAME:
         finalEquipmentStat.spellSpeed += materia.maxValue;
         break;
+      case PIE_STAT_EN_NAME:
+        finalEquipmentStat.piety += materia.maxValue;
+        break;
       default:
         finalEquipmentStat.tenacity += materia.maxValue;
         break;
@@ -115,6 +118,9 @@ function trimExcessStats(finalStats: FinalEquipmentStat) {
   if (finalStats.tenacity > finalStats.maxSubstat) {
     finalStats.tenacity = finalStats.maxSubstat;
   }
+  if (finalStats.piety > finalStats.maxSubstat) {
+    finalStats.piety = finalStats.maxSubstat;
+  }
   return finalStats;
 }
 
@@ -133,6 +139,8 @@ export function accessSubStatByKey(
       return finalStats.skillSpeed;
     case SPS_STAT_EN_NAME:
       return finalStats.spellSpeed;
+    case PIE_STAT_EN_NAME:
+      return finalStats.piety;
     default:
       return finalStats.tenacity;
   }

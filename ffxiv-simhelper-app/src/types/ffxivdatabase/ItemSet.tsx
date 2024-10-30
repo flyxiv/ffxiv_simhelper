@@ -12,6 +12,7 @@ import { addMateriaStatToTotalStat } from "./Materia";
 import {
   defaultPlayerPower,
   isTank,
+  MANA_DEFAULT_TICK_INCREASE,
   PlayerPower,
   setPartyCompositionBuffPercent,
 } from "./PlayerPower";
@@ -22,6 +23,7 @@ import {
   calculateDirectHitPercentIncrease,
   calculateGCD,
   calculateMainStatPercentIncrease,
+  calculatePietyPercentIncrease,
   calculateSpeedPercentIncrease,
   calculateTenacityPercentIncrease,
   calculateWeaponMultiplierPercent,
@@ -210,6 +212,7 @@ export function calculatePlayerPowerFromInputs(
       Math.floor(power.spellSpeed / 10)
     );
     power.tenacity += Math.min(food.tenacity, Math.floor(power.tenacity / 10));
+    power.piety += Math.min(food.piety, Math.floor(power.piety / 10));
   }
 
   setPartyCompositionBuffPercent(totalState);
@@ -246,6 +249,7 @@ export function calculatePowerByStat(power: PlayerPower, jobAbbrev: string) {
 
   power.tenacityMultiplier =
     1 + calculateTenacityPercentIncrease(power.tenacity) / 100;
+  power.manaIncreasePerTick = MANA_DEFAULT_TICK_INCREASE + calculatePietyPercentIncrease(power.piety) * 10;
 
   power.autoDirectHitIncrease = calculateAutoDirectHitIncrease(power.directHit);
 }

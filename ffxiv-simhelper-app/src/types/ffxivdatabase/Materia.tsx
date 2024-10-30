@@ -1,4 +1,4 @@
-import { convertToSubStatName, CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME, TextDictionary } from "../../const/languageTexts";
+import { convertToStatName, CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, PIE_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME, TextDictionary } from "../../const/languageTexts";
 import { Equipment, getFirstSubStat } from "./Equipment";
 import {
   convertEquipmentToFinalStat,
@@ -15,23 +15,27 @@ export const EMPTY_MATERIA = {
   effectiveValue: 0,
 };
 
+const BIG_MATERIA_STAT = 54;
+const SMALL_MATERIA_STAT = 18;
 
 export const NON_PENTAMELDABLE_MATERIAS = [
-  `${CRIT_STAT_EN_NAME}+54`,
-  `${DH_STAT_EN_NAME}+54`,
-  `${DET_STAT_EN_NAME}+54`,
-  `${SKS_STAT_EN_NAME}+54`,
-  `${SPS_STAT_EN_NAME}+54`,
-  `${TEN_STAT_EN_NAME}+54`,
+  `${CRIT_STAT_EN_NAME}+${BIG_MATERIA_STAT}`,
+  `${DH_STAT_EN_NAME}+${BIG_MATERIA_STAT}`,
+  `${DET_STAT_EN_NAME}+${BIG_MATERIA_STAT}`,
+  `${SKS_STAT_EN_NAME}+${BIG_MATERIA_STAT}`,
+  `${SPS_STAT_EN_NAME}+${BIG_MATERIA_STAT}`,
+  `${TEN_STAT_EN_NAME}+${BIG_MATERIA_STAT}`,
+  `${PIE_STAT_EN_NAME}+${BIG_MATERIA_STAT}`,
 ];
 
 export const PENTAMELDABLE_MATERIAS = [
-  `${CRIT_STAT_EN_NAME}+18`,
-  `${DH_STAT_EN_NAME}+18`,
-  `${DET_STAT_EN_NAME}+18`,
-  `${SKS_STAT_EN_NAME}+18`,
-  `${SPS_STAT_EN_NAME}+18`,
-  `${TEN_STAT_EN_NAME}+18`,
+  `${CRIT_STAT_EN_NAME}+${SMALL_MATERIA_STAT}`,
+  `${DH_STAT_EN_NAME}+${SMALL_MATERIA_STAT}`,
+  `${DET_STAT_EN_NAME}+${SMALL_MATERIA_STAT}`,
+  `${SKS_STAT_EN_NAME}+${SMALL_MATERIA_STAT}`,
+  `${SPS_STAT_EN_NAME}+${SMALL_MATERIA_STAT}`,
+  `${TEN_STAT_EN_NAME}+${SMALL_MATERIA_STAT}`,
+  `${PIE_STAT_EN_NAME}+${SMALL_MATERIA_STAT}`,
 ];
 
 
@@ -97,12 +101,21 @@ export function updateMateriaValueStatToFinalStat(
         materia.effectiveValue = materia.maxValue;
       }
       break;
-    default:
+    case TEN_STAT_EN_NAME:
       if (finalStats.tenacity + materia.maxValue > finalStats.maxSubstat) {
         materia.effectiveValue = finalStats.maxSubstat - finalStats.tenacity;
         finalStats.tenacity = finalStats.maxSubstat;
       } else {
         finalStats.tenacity += materia.maxValue;
+        materia.effectiveValue = materia.maxValue;
+      }
+      break;
+    default:
+      if (finalStats.piety + materia.maxValue > finalStats.maxSubstat) {
+        materia.effectiveValue = finalStats.maxSubstat - finalStats.piety;
+        finalStats.piety = finalStats.maxSubstat;
+      } else {
+        finalStats.piety += materia.maxValue;
         materia.effectiveValue = materia.maxValue;
       }
       break;
@@ -191,13 +204,13 @@ export function toMateriaKey(materia: Materia | null) {
 }
 
 export function toMateriaDescription(materia: Materia, LANGUAGE_TEXTS: TextDictionary) {
-  return `${convertToSubStatName(materia.statName, LANGUAGE_TEXTS)}+${materia.effectiveValue}`;
+  return `${convertToStatName(materia.statName, LANGUAGE_TEXTS)}+${materia.effectiveValue}`;
 }
 
 // {StatName}+{Value} -> {StatNameText(KR/EN)}+{Value}
 export function materiaKeyToText(materiaKey: string, LANGUAGE_TEXTS: TextDictionary) {
   let [statName, value] = materiaKey.split("+");
-  return `${convertToSubStatName(statName, LANGUAGE_TEXTS)}+${value}`;
+  return `${convertToStatName(statName, LANGUAGE_TEXTS)}+${value}`;
 }
 
 export function addMateriaStatToTotalStat(
@@ -219,6 +232,9 @@ export function addMateriaStatToTotalStat(
       break;
     case SPS_STAT_EN_NAME:
       totalStats.spellSpeed += materia.effectiveValue;
+      break;
+    case PIE_STAT_EN_NAME:
+      totalStats.piety += materia.effectiveValue;
       break;
     default:
       totalStats.tenacity += materia.effectiveValue;

@@ -118,14 +118,6 @@ function OneColumnHomePage(LANGUAGE_TEXTS: TextDictionary) {
         )}
 
         {LogoBox(
-          BEST_PARTNER_URL,
-          bestPartnerButtonImagePath,
-          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
-          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
-          LANGUAGE_TEXTS.BEST_PARTNER_DESCRIPTION_TEXT,
-          AppConfigurations.secondary
-        )}
-        {LogoBox(
           BEST_STATS_URL,
           statWeightsButtonImagePath,
           LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
@@ -135,12 +127,20 @@ function OneColumnHomePage(LANGUAGE_TEXTS: TextDictionary) {
         )}
 
         {LogoBox(
+          BEST_PARTNER_URL,
+          bestPartnerButtonImagePath,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+          LANGUAGE_TEXTS.BEST_PARTNER_DESCRIPTION_TEXT,
+          AppConfigurations.secondary
+        )}
+        {LogoBox(
           PARTY_COMPOSITION_URL,
           bestPartnerButtonImagePath,
           LANGUAGE_TEXTS.PARTY_COMPOSITION_PAGE_NAME,
           LANGUAGE_TEXTS.PARTY_COMPOSITION_PAGE_NAME,
           LANGUAGE_TEXTS.PARTY_COMPOSITION_DESCRIPTION_TEXT,
-          AppConfigurations.secondary
+          AppConfigurations.primary
         )}
       </Box>
     </>

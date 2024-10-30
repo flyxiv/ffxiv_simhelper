@@ -11,7 +11,7 @@ import {
   EquipmentSubStatBoxStyle,
 } from "./Styles";
 import { AppConfigurations } from "../../Themes";
-import { CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME } from "../../const/languageTexts";
+import { convertToStatName, CRIT_STAT_EN_NAME, DET_STAT_EN_NAME, DH_STAT_EN_NAME, PIE_STAT_EN_NAME, SKS_STAT_EN_NAME, SPS_STAT_EN_NAME, TEN_STAT_EN_NAME, TextDictionary } from "../../const/languageTexts";
 
 const EquipmentSubStatBox = styled(Box)`
   ${EquipmentSubStatBoxStyle}
@@ -29,7 +29,8 @@ const EquipmentSingleBox = styled(Box)`
 
 export function EquipmentSubStatTable(
   equipment: Equipment,
-  materias: Materia[] | undefined
+  materias: Materia[] | undefined,
+  LANGUAGE_TEXTS: TextDictionary
 ) {
   let finalStats = addMateriaMaxValueToEquipment(equipment, materias);
   let nonZeroSubStats = [];
@@ -50,6 +51,9 @@ export function EquipmentSubStatTable(
   }
   if (finalStats.tenacity > 0) {
     nonZeroSubStats.push(TEN_STAT_EN_NAME);
+  }
+  if (finalStats.piety > 0) {
+    nonZeroSubStats.push(PIE_STAT_EN_NAME);
   }
 
   let numberOfSubStats = nonZeroSubStats.length;
@@ -75,7 +79,7 @@ export function EquipmentSubStatTable(
             paddingY={2}
           >
             <EquipmentSingleBox sx={{ backgroundColor: AppConfigurations.backgroundThree }}>
-              <Typography variant="body2" align="center">{subStatName}</Typography>
+              <Typography variant="body2" align="center">{convertToStatName(subStatName, LANGUAGE_TEXTS)}</Typography>
             </EquipmentSingleBox>
             <EquipmentSingleBox alignContent={"center"}>
               <Typography variant="body2" sx={{ backgroundColor: AppConfigurations.backgroundFour }} align="center">

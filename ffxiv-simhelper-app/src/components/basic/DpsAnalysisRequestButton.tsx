@@ -67,7 +67,6 @@ export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
 
     let body = JSON.stringify(request);
 
-    console.log(body);
     let responsePromises = [];
     let responses: Array<Response> = [];
     const incrementState = (count: number) => {

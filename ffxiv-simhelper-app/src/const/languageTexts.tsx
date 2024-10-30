@@ -445,6 +445,8 @@ export interface TextDictionary {
   PARTY_COMPOSITION_DESCRIPTION_TEXT: string,
   PARTY_COMPOSITION_PAGE_NAME: string,
 
+  MANA_PER_TICK_POWER_NAME: string,
+
   language: LanguageMode
 }
 
@@ -959,6 +961,8 @@ export const AppLanguageTexts: () => TextDictionary = () => {
     language === LanguageMode.ENGLISH_MODE ? "Speed" : "도트/평타";
   const TENACITY_POWER_NAME =
     language === LanguageMode.ENGLISH_MODE ? "Tenacity" : "불굴 효과";
+  const MANA_PER_TICK_POWER_NAME =
+    language === LanguageMode.ENGLISH_MODE ? "MP / Tick" : "틱당 마나";
   const GCD_NAME =
     language === LanguageMode.ENGLISH_MODE ? "GCD" : "글쿨";
 
@@ -972,6 +976,7 @@ export const AppLanguageTexts: () => TextDictionary = () => {
 
 
   let allTexts = {
+    MANA_PER_TICK_POWER_NAME,
     DEMO_WARNING_TEXT,
     BUY_ME_A_COFFEE_TEXT,
     PLD_JOB_NAME,
@@ -1325,8 +1330,8 @@ export const convertToJobText = (jobAbbrev: string, LANGUAGE_TEXTS: TextDictiona
 };
 
 
-export function convertToSubStatName(statName: string, LANGUAGE_TEXTS: TextDictionary) {
-  switch (statName) {
+export function convertToStatName(statEnName: string, LANGUAGE_TEXTS: TextDictionary) {
+  switch (statEnName) {
     case CRIT_STAT_EN_NAME:
       return LANGUAGE_TEXTS.CRIT_STAT_NAME;
     case DH_STAT_EN_NAME:
@@ -1337,7 +1342,21 @@ export function convertToSubStatName(statName: string, LANGUAGE_TEXTS: TextDicti
       return LANGUAGE_TEXTS.SKS_STAT_NAME;
     case SPS_STAT_EN_NAME:
       return LANGUAGE_TEXTS.SPS_STAT_NAME;
-    default:
+    case TEN_STAT_EN_NAME:
       return LANGUAGE_TEXTS.TEN_STAT_NAME;
+    case STR_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.STR_STAT_NAME;
+    case DEX_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.DEX_STAT_NAME;
+    case INT_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.INT_STAT_NAME;
+    case MIND_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.MIND_STAT_NAME;
+    case WD_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.WD_STAT_NAME;
+    case PIE_STAT_EN_NAME:
+      return LANGUAGE_TEXTS.PIE_STAT_NAME;
+    default:
+      return LANGUAGE_TEXTS.GCD_NAME;
   }
 }

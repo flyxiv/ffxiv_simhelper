@@ -239,8 +239,6 @@ export function PartyMemberJobSelectionPartyComposition(
   setPartyComposition: Function,
   LANGUAGE_TEXTS: TextDictionary
 ) {
-  let playerId = `${LANGUAGE_TEXTS.PARTY_MEMBER_LABEL_TEXT} ${id}`;
-
   const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
     let newPartyComposition = [...partyComposition];
     newPartyComposition[index] = e.target.value;
@@ -252,7 +250,8 @@ export function PartyMemberJobSelectionPartyComposition(
   let possiblejobAbbrevs = getValidJobForSlot(id, partyComposition);
 
   let playerLabelText = id < 2 ? LANGUAGE_TEXTS.TANK_TEXT : id < 4 ? LANGUAGE_TEXTS.HEALER_TEXT : LANGUAGE_TEXTS.DPS_TEXT;
-  let playerLabel = `${playerLabelText} ${id}`;
+  let playerId = id < 2 ? id : id < 4 ? id - 2 : id - 4;
+  let playerLabel = `${playerLabelText} ${playerId}`;
 
   return (
     <CustomFormControl fullWidth>
@@ -262,7 +261,7 @@ export function PartyMemberJobSelectionPartyComposition(
         </Typography>
       </InputLabel>
       <Select
-        labelId={playerId}
+        labelId={playerLabel}
         id={key}
         value={
           partyComposition[id]

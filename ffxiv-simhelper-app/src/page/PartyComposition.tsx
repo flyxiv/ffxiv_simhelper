@@ -17,6 +17,7 @@ import { ResultBoardBoxStyle } from "../components/container/Styles";
 import { PartyCompositionGraph } from "../components/graph/CompositionBarChart";
 import alasql from "alasql";
 import { PartyCompositionChartData } from "../components/graph/GraphData";
+import partyRdpsTableJson from "../assets/data/party_rdps_table.json";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -36,12 +37,8 @@ interface PartyCompositionRdpsData {
     rdps: number;
 }
 
-const rdpsData: PartyCompositionRdpsData[] = [
-    { tank1: "PLD", tank2: "PLD", healer1: "WHM", healer2: "AST", melee: "DRG", other: "MCH", ranged: "MCH", caster: "PCT", rdps: 183020 },
-    { tank1: "PLD", tank2: "PLD", healer1: "WHM", healer2: "AST", melee: "DRG", other: "MCH", ranged: "MCH", caster: "RDM", rdps: 181020 },
-    { tank1: "PLD", tank2: "PLD", healer1: "WHM", healer2: "AST", melee: "DRG", other: "MCH", ranged: "MCH", caster: "SMN", rdps: 180000 },
-    { tank1: "PLD", tank2: "PLD", healer1: "WHM", healer2: "AST", melee: "DRG", other: "MCH", ranged: "MCH", caster: "BLM", rdps: 173200 }
-]
+
+const rdpsData: PartyCompositionRdpsData[] = partyRdpsTableJson as PartyCompositionRdpsData[];
 
 
 let PartyCompositionInputContainer = styled(Box)`
@@ -108,7 +105,7 @@ export function PartyComposition() {
     let LANGUAGE_TEXTS = AppLanguageTexts();
 
     let [partyComposition, setPartyComposition] = useState(DEFAULT_COMPOSITION);
-    let queryString = `SELECT * FROM ? ${toQueryString(partyComposition)}`;
+    let queryString = `SELECT * FROM ? ${toQueryString(partyComposition)} LIMIT ${MAX_COMPOSITION_COUNT}`;
     let currentRecommendedPartyCompositions: PartyCompositionRdpsData[] = alasql(queryString, [rdpsData]);
     let partyCompositionChartData = currentRecommendedPartyCompositions.map(toPartyCompositionChartData);
 

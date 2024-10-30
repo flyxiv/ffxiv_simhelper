@@ -27,6 +27,7 @@ import {
   DEFAULT_DIRECT_HIT,
   DEFAULT_MAIN_STAT_NON_TANK,
   DEFAULT_MAIN_STAT_TANK,
+  DEFAULT_PIETY,
   DEFAULT_SPEED,
   DEFAULT_TENACITY,
 } from "../../const/StatValue";
@@ -49,6 +50,7 @@ const DH_SLOPE = 550;
 const DET_SLOPE = 140;
 const SPEED_SLOPE = 130;
 const TENACITY_SLOPE = 112;
+const PIETY_SLOPE = 150;
 
 export const BASE_WEAPON_DAMAGE_PER_JOB = new Map([
   [PLD_EN_NAME, 44],
@@ -172,6 +174,15 @@ export function calculateTenacityPercentIncrease(tenacityStat: number) {
   );
 }
 
+
+export function calculatePietyPercentIncrease(pietyStat: number) {
+  return calculateMultiplierPercentIncrease(
+    pietyStat,
+    DEFAULT_PIETY,
+    PIETY_SLOPE
+  )
+}
+
 export function calculateSpeedPercentIncrease(speedStat: number) {
   return calculateMultiplierPercentIncrease(
     speedStat,
@@ -238,6 +249,14 @@ export function getMinNeededStatForCurrentTenacity(currentPercent: number) {
     currentPercent,
     TENACITY_SLOPE,
     DEFAULT_TENACITY
+  );
+}
+
+export function getMinNeededStatForCurrentPiety(currentMil: number) {
+  return getMinNeededStatForStatLadder(
+    currentMil / 10,
+    PIETY_SLOPE,
+    DEFAULT_PIETY
   );
 }
 

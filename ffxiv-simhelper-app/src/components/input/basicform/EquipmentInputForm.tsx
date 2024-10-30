@@ -252,7 +252,8 @@ function EquipmentMenuOfOneSlot(
         ) : (
           EquipmentSubStatTable(
             currentEquipment,
-            totalState.gearSetMaterias[slotNameToSlotIndex(slotName)]
+            totalState.gearSetMaterias[slotNameToSlotIndex(slotName)],
+            LANGUAGE_TEXTS
           )
         )}
       </EquipmentStatBox>

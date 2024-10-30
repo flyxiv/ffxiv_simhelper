@@ -2,6 +2,7 @@ import {
   DEFAULT_CRITICAL_STRIKE,
   DEFAULT_DETERMINATION,
   DEFAULT_DIRECT_HIT,
+  DEFAULT_PIETY,
   DEFAULT_SPEED,
   DEFAULT_TENACITY,
 } from "../../const/StatValue";
@@ -12,6 +13,7 @@ import {
   getMinNeededStatForCurrentDirectHit,
   getMinNeededStatForCurrentGCD,
   getMinNeededStatForCurrentMainStat,
+  getMinNeededStatForCurrentPiety,
   getMinNeededStatForCurrentSpeed,
   getMinNeededStatForCurrentTenacity,
 } from "./StatCalculator";
@@ -37,6 +39,7 @@ import {
   MNK_EN_NAME,
   NIN_EN_NAME,
   PCT_EN_NAME,
+  PIE_STAT_EN_NAME,
   PLD_EN_NAME,
   RDM_EN_NAME,
   RPR_EN_NAME,
@@ -55,6 +58,8 @@ import {
   WHM_EN_NAME,
 } from "../../const/languageTexts";
 
+export const MANA_DEFAULT_TICK_INCREASE = 200;
+
 export const loadPowerNames = (LANGUAGE_TEXTS: TextDictionary) => {
   const POWER_NAMES = [
     LANGUAGE_TEXTS.WD_POWER_NAME,
@@ -65,6 +70,7 @@ export const loadPowerNames = (LANGUAGE_TEXTS: TextDictionary) => {
     LANGUAGE_TEXTS.DET_POWER_NAME,
     LANGUAGE_TEXTS.SPEED_POWER_NAME,
     LANGUAGE_TEXTS.TENACITY_POWER_NAME,
+    LANGUAGE_TEXTS.MANA_PER_TICK_POWER_NAME,
     LANGUAGE_TEXTS.GCD_NAME,
   ];
 
@@ -90,6 +96,7 @@ export interface PlayerPower {
   speedMultiplier: number;
   tenacityMultiplier: number;
   autoAttackDelays: number;
+  manaIncreasePerTick: number;
 
   // https://www.akhmorning.com/allagan-studies/stats/dh/#formulae
   // 6.2 introduced increased damage for guaranteed direct hits
@@ -116,7 +123,7 @@ export function defaultPlayerPower(): PlayerPower {
     skillSpeed: DEFAULT_SPEED,
     spellSpeed: DEFAULT_SPEED,
     tenacity: DEFAULT_TENACITY,
-    piety: 0,
+    piety: DEFAULT_PIETY,
     weaponDamageMultiplier: 0,
     mainStatMultiplier: 0,
     criticalStrikeRate: 0,
@@ -127,6 +134,7 @@ export function defaultPlayerPower(): PlayerPower {
     tenacityMultiplier: 0,
     autoDirectHitIncrease: 0,
     autoAttackDelays: 0,
+    manaIncreasePerTick: MANA_DEFAULT_TICK_INCREASE,
     gcd: DEFAULT_GCD,
   };
 }
@@ -156,6 +164,8 @@ export function getStatByStatName(
       return `${playerPower.spellSpeed}`;
     case TEN_STAT_EN_NAME:
       return `${playerPower.tenacity}`;
+    case PIE_STAT_EN_NAME:
+      return `${playerPower.piety}`;
     case gcdName: {
       return `${playerPower.gcd.toFixed(2)}`;
     }
@@ -193,6 +203,9 @@ export function getStatPower(
     }
     case LANGUAGE_TEXTS.TENACITY_POWER_NAME: {
       return `${(power.tenacityMultiplier * 100).toFixed(1)}%`;
+    }
+    case LANGUAGE_TEXTS.MANA_PER_TICK_POWER_NAME: {
+      return `${power.manaIncreasePerTick}`;
     }
     case LANGUAGE_TEXTS.GCD_NAME: {
       return `${power.gcd.toFixed(2)}`;
@@ -392,6 +405,12 @@ export function getStatLostByStatName(
           totalStats.tenacityMultiplier * 100 - 100
         ) - totalStats.tenacity
       );
+    case PIE_STAT_EN_NAME:
+      return (
+        getMinNeededStatForCurrentPiety(
+          totalStats.manaIncreasePerTick - MANA_DEFAULT_TICK_INCREASE
+        ) - totalStats.piety
+      )
     case gcdName:
       return (
         Math.max(
@@ -459,6 +478,12 @@ export function getStatNeededByStatName(
           totalStats.tenacityMultiplier * 100 - 100 + 0.1
         ) - totalStats.tenacity
       );
+    case PIE_STAT_EN_NAME:
+      return (
+        getMinNeededStatForCurrentPiety(
+          totalStats.manaIncreasePerTick - MANA_DEFAULT_TICK_INCREASE + 1
+        ) - totalStats.piety
+      )
     case gcdName:
       return (
         getMinNeededStatForCurrentGCD(totalStats.gcd - 0.01, jobAbbrev) -
