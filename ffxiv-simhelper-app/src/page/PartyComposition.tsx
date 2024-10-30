@@ -18,6 +18,7 @@ import { PartyCompositionGraph } from "../components/graph/CompositionBarChart";
 import alasql from "alasql";
 import { PartyCompositionChartData } from "../components/graph/GraphData";
 import partyRdpsTableJson from "../assets/data/party_rdps_table.json";
+import { PartyPosition } from "../components/input/jobselection/PartyMemberJobSelection";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -85,7 +86,11 @@ function toQueryString(partyComposition: PartyComposition): string {
 
     for (let i = 0; i < partyComposition.length; i++) {
         if (partyComposition[i] !== "*") {
-            filters.push(`${indexToRole(i)} = '${partyComposition[i]}'`);
+            if (i === PartyPosition.Other || i === PartyPosition.Melee || i === PartyPosition.Caster) {
+                filters.push(`(${indexToRole(PartyPosition.Other)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Melee)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Caster)} = '${partyComposition[i]}')`);
+            } else {
+                filters.push(`${indexToRole(i)} = '${partyComposition[i]}'`);
+            }
         }
     }
 
@@ -105,9 +110,14 @@ export function PartyComposition() {
     let LANGUAGE_TEXTS = AppLanguageTexts();
 
     let [partyComposition, setPartyComposition] = useState(DEFAULT_COMPOSITION);
+
+    // !!!!! rdpsData (=assets/data/party_rdps_table.json) MUST BE SORTED in descending order of rdps !!!!! 
+    let minRdps = rdpsData[rdpsData.length - 1].rdps
+
     let queryString = `SELECT * FROM ? ${toQueryString(partyComposition)} LIMIT ${MAX_COMPOSITION_COUNT}`;
     let currentRecommendedPartyCompositions: PartyCompositionRdpsData[] = alasql(queryString, [rdpsData]);
     let partyCompositionChartData = currentRecommendedPartyCompositions.map(toPartyCompositionChartData);
+    let maxRdps = partyCompositionChartData.map((data) => data.totalRdps).reduce((a, b) => Math.max(a, b), 0);
 
     return (
         <>
@@ -128,7 +138,7 @@ export function PartyComposition() {
                 >
                     {AppHeader()}
                     {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
-                    <Box alignContent={"center"} width="100%">
+                    <Box width="100%">
                         <PartyCompositionInputContainer>
                             {SelectionTitle(
                                 LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT
@@ -143,10 +153,10 @@ export function PartyComposition() {
                         </PartyCompositionInputContainer>
 
                     </Box>
-                    <Box>
+                    <Box alignContent={"center"} width="100%" display="flex" flexDirection="column" alignItems={"center"}>
                         <ResultBoardBox>
                             {SelectionTitle(LANGUAGE_TEXTS.OVERALL_TEXT)}
-                            {PartyCompositionGraph(partyCompositionChartData)}
+                            {PartyCompositionGraph(partyCompositionChartData, minRdps, maxRdps)}
                         </ResultBoardBox>
                         <Box />
                         {Footer()}

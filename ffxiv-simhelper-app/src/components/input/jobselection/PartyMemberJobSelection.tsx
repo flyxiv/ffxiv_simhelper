@@ -202,7 +202,7 @@ export function PartyMemberJobSelection(
 }
 
 
-enum PartyPosition {
+export enum PartyPosition {
   Tank1 = 0,
   Tank2 = 1,
   Healer1 = 2,

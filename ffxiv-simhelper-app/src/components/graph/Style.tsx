@@ -1,5 +1,5 @@
 import { AppConfigurations } from "../../Themes";
-const rdpsColors = ["#FF4848", "#FF6C6C", "#FF9999", "#FFB7B7", "#FFDADA"];
+export const rdpsColors = ["#FF4848", "#FF6C6C", "#FF9999", "#FFB7B7", "#FFDADA"];
 export const imageSize = "30px";
 export const barHeight = "15px";
 
@@ -59,12 +59,23 @@ export const PartyMemberBuffBoxStyle = `
 
 export const PartyMemberIconBoxStyle = `
     display: flex;
-    width: 10%;
     flex-direction: column;
+    width: 10%;
     padding-left: 10px;
     justify-items: flex-end;
     align-items: center;
 `;
+
+export const PartyCompositionIconBoxStyle = `
+    display: flex;
+    flex-direction: column;
+    width: 440px;
+    padding-left: 10px;
+    justify-items: center;
+    align-items: center;
+`;
+
+
 
 export const TotalRdpsBoxStyle = `
     color: white;
