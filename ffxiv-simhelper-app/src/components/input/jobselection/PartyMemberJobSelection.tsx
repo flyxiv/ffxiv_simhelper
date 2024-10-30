@@ -202,33 +202,56 @@ export function PartyMemberJobSelection(
 }
 
 
+enum PartyPosition {
+  Tank1 = 0,
+  Tank2 = 1,
+  Healer1 = 2,
+  Healer2 = 3,
+  Melee = 4,
+  Other = 5,
+  Ranged = 6,
+  Caster = 7,
+}
+
 function getValidJobForSlot(
   id: number,
   partyComposition: PartyComposition,
 ) {
-  switch (id) {
-    case 0:
-    case 1:
+  switch (id as PartyPosition) {
+    case PartyPosition.Tank1:
+    case PartyPosition.Tank2:
       return TANK_JOBS;
-    case 2:
+    case PartyPosition.Healer1:
       return HEALER_JOBS.filter((job) => job !== partyComposition[3]);
-    case 3:
+    case PartyPosition.Healer2:
       return HEALER_JOBS.filter((job) => job !== partyComposition[2]);
-    case 4:
-      return MELEE_JOBS
-    case 5:
-      return RANGED_JOBS
-    case 6:
-      return CASTER_JOBS
-    default:
+    case PartyPosition.Melee:
+      let possibleMeleeJobs = [];
+      for (let job of MELEE_JOBS) {
+        if (!(DPS_BUFF_JOBS.includes(job)) || (partyComposition[PartyPosition.Other] !== job)) {
+          possibleMeleeJobs.push(job);
+        }
+      }
+      return possibleMeleeJobs;
+    case PartyPosition.Other:
       let possibleJobs = [];
       for (let job of DPS_JOBS) {
-        if (!(job in DPS_BUFF_JOBS) || !(partyComposition.includes(job))) {
+        if (!(DPS_BUFF_JOBS.includes(job)) || ((partyComposition[PartyPosition.Melee] !== job) && (partyComposition[PartyPosition.Caster] !== job))) {
           possibleJobs.push(job);
         }
       }
-
       return possibleJobs;
+    case PartyPosition.Caster:
+      let possibleCasterJobs = [];
+
+      for (let job of CASTER_JOBS) {
+        if (!(DPS_BUFF_JOBS.includes(job)) || (partyComposition[PartyPosition.Other] !== job)) {
+          possibleCasterJobs.push(job);
+        }
+      }
+      return possibleCasterJobs;
+    default:
+      return RANGED_JOBS
   }
 }
 
@@ -249,8 +272,8 @@ export function PartyMemberJobSelectionPartyComposition(
   let key = `job-select-partymember-${id}`;
   let possiblejobAbbrevs = getValidJobForSlot(id, partyComposition);
 
-  let playerLabelText = id < 2 ? LANGUAGE_TEXTS.TANK_TEXT : id < 4 ? LANGUAGE_TEXTS.HEALER_TEXT : LANGUAGE_TEXTS.DPS_TEXT;
-  let playerId = id < 2 ? id : id < 4 ? id - 2 : id - 4;
+  let playerLabelText = id < PartyPosition.Healer1 ? LANGUAGE_TEXTS.TANK_TEXT : id < PartyPosition.Melee ? LANGUAGE_TEXTS.HEALER_TEXT : LANGUAGE_TEXTS.DPS_TEXT;
+  let playerId = id < PartyPosition.Healer1 ? id + 1 : id < PartyPosition.Melee ? id - 1 : id - 3;
   let playerLabel = `${playerLabelText} ${playerId}`;
 
   return (
