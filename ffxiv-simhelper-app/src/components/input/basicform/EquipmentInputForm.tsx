@@ -39,7 +39,7 @@ import { ALL_FOODS } from "../../../types/ffxivdatabase/Food";
 import { EMPTY_MATERIA, Materia } from "../../../types/ffxivdatabase/Materia";
 import { EquipmentSubStatTable } from "../../../components/container/EquipmentSubStatBox";
 import { MateriaInputTable } from "./MateriaInputForm";
-import { ITEM_TOP_MENU_MIN_HEIGHT, MenuItemStyle } from "../../../components/items/Styles";
+import { ITEM_BOTTOM_MENU_MIN_HEIGHT, ITEM_TOP_MENU_MIN_HEIGHT, MenuItemStyle } from "../../../components/items/Styles";
 import { AppConfigurations } from "../../../Themes";
 import {
   EquipmentInput,
@@ -73,9 +73,35 @@ const topMenuInputStyle = {
   label: {
     transform: "translate(15px, 3vh)",
   },
-};
+}
+
+const bottomMenuInputStyle = {
+  "& .MuiInputBase-input": {
+    color: "white",
+    backgroundColor: AppConfigurations.backgroundThree,
+    textAlign: "right",
+    height: ITEM_BOTTOM_MENU_MIN_HEIGHT,
+  },
+  "& .MuiInputLabel-root": {
+    color: AppConfigurations.primary,
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {},
+    "&:hover fieldset": {},
+    notched: false,
+    backgroundColor: AppConfigurations.backgroundThree
+  },
+  "& .MuiSelect-root": {
+    backgroundColor: AppConfigurations.backgroundThree,
+  },
+  label: {
+    transform: "translate(10px, 0px)",
+  },
+}
+
 
 export const TopMenuInput = styled(TextField)(({ }) => topMenuInputStyle);
+export const BottomMenuInput = styled(TextField)(({ }) => bottomMenuInputStyle);
 
 const EquipmentGridContainer = styled(Grid)`
   ${EquipmentGridContainerStyle}

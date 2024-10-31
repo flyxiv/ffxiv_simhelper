@@ -26,6 +26,7 @@ import { calculatePlayerPowerFromInputs } from "../../../types/ffxivdatabase/Ite
 import { PLD_EN_NAME, SCH_EN_NAME, TextDictionary } from "../../../const/languageTexts";
 import { ITEM_BOTTOM_MENU_MIN_HEIGHT } from "../../items/Styles";
 import { PartyComposition } from "../../../page/PartyComposition";
+import { BottomMenuInput } from "../basicform/EquipmentInputForm";
 
 let ALIGN = "center";
 
@@ -99,14 +100,12 @@ export function PartyMemberJobSelection(
   setTotalState: Function,
   LANGUAGE_TEXTS: TextDictionary
 ) {
-  let playerId = `${LANGUAGE_TEXTS.PARTY_MEMBER_LABEL_TEXT} ${id}`;
-
-  const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
+  const updateState = (index: number) => (value: string) => {
     const newJobNames =
       totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs.map(
         (jobName, i) => {
           if (i === index) {
-            return e.target.value;
+            return value;
           }
           return jobName;
         }
@@ -118,7 +117,7 @@ export function PartyMemberJobSelection(
       (partyId) => partyId !== id
     );
 
-    if (e.target.value !== "Empty") {
+    if (value !== "Empty") {
       newAvailablePartyIds.push(id);
     }
     newAvailablePartyIds.sort((a, b) => a - b);
@@ -159,30 +158,22 @@ export function PartyMemberJobSelection(
 
   return (
     <CustomFormControl fullWidth>
-      <InputLabel id="JobSelect">
-        <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
-          {playerLabel}
-        </Typography>
-      </InputLabel>
-      <Select
-        labelId={playerId}
+      <BottomMenuInput
+        select
         id={key}
-        value={
-          totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[id - 1]
-        }
+        value={totalEquipmentState.equipmentDatas[0].partyMemberJobAbbrevs[id - 1]}
         key={key}
-        label="Job Name"
-        onChange={(event) => {
-          updateState(id - 1)(event);
-        }}
-        MenuProps={{
-          PaperProps: {
-            sx: {
-              backgroundColor: AppConfigurations.backgroundThree,
+        label={playerLabel}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => updateState(id - 1)(e.target.value)}
+        SelectProps={{
+          MenuProps: {
+            PaperProps: {
+              sx: {
+                backgroundColor: AppConfigurations.backgroundThree,
+              },
             },
           },
         }}
-        sx={{ width: "100%" }}
       >
         {jobAbbrevs.map((jobAbbrev) => {
           return JobMenuItem(jobAbbrev, ALIGN, LANGUAGE_TEXTS, false);
@@ -196,7 +187,7 @@ export function PartyMemberJobSelection(
             </Typography>
           </Box>
         </MenuItem>
-      </Select>
+      </BottomMenuInput>
     </CustomFormControl>
   );
 }
@@ -262,14 +253,14 @@ export function PartyMemberJobSelectionPartyComposition(
   setPartyComposition: Function,
   LANGUAGE_TEXTS: TextDictionary
 ) {
-  const updateState = (index: number) => (e: SelectChangeEvent<string>) => {
+  const updateState = (index: number) => (value: string) => {
     let newPartyComposition = [...partyComposition];
-    newPartyComposition[index] = e.target.value;
+    newPartyComposition[index] = value;
 
     setPartyComposition(newPartyComposition);
   };
 
-  let key = `job-select-partymember-${id}`;
+  let key = `job-select-partycomposition-${id}`;
   let possiblejobAbbrevs = getValidJobForSlot(id, partyComposition);
 
   let playerLabelText = id < PartyPosition.Healer1 ? LANGUAGE_TEXTS.TANK_TEXT : id < PartyPosition.Melee ? LANGUAGE_TEXTS.HEALER_TEXT : LANGUAGE_TEXTS.DPS_TEXT;
@@ -278,30 +269,22 @@ export function PartyMemberJobSelectionPartyComposition(
 
   return (
     <CustomFormControl fullWidth>
-      <InputLabel id="JobSelect">
-        <Typography sx={{ fontSize: AppConfigurations.body1FontSize }}>
-          {playerLabel}
-        </Typography>
-      </InputLabel>
-      <Select
-        labelId={playerLabel}
+      <BottomMenuInput
+        select
         id={key}
-        value={
-          partyComposition[id]
-        }
+        value={partyComposition[id]}
         key={key}
-        label="Job Name"
-        onChange={(event) => {
-          updateState(id)(event);
-        }}
-        MenuProps={{
-          PaperProps: {
-            sx: {
-              backgroundColor: AppConfigurations.backgroundThree,
+        label={playerLabel}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => updateState(id)(e.target.value)}
+        SelectProps={{
+          MenuProps: {
+            PaperProps: {
+              sx: {
+                backgroundColor: AppConfigurations.backgroundThree,
+              },
             },
           },
         }}
-        sx={{ width: "100%" }}
       >
         {possiblejobAbbrevs.map((jobAbbrev) => {
           return JobMenuItem(jobAbbrev, ALIGN, LANGUAGE_TEXTS, false);
@@ -311,11 +294,11 @@ export function PartyMemberJobSelectionPartyComposition(
         <MenuItem value="*">
           <Box height={ITEM_BOTTOM_MENU_MIN_HEIGHT} display="flex" justifyContent={"center"} alignItems={"center"}>
             <Typography variant="body1" color="white" fontSize={AppConfigurations.body1FontSize} align="center">
-              Empty
+              All
             </Typography>
           </Box>
         </MenuItem>
-      </Select>
+      </BottomMenuInput>
     </CustomFormControl>
   );
 }

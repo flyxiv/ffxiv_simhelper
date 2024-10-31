@@ -19,6 +19,7 @@ import alasql from "alasql";
 import { PartyCompositionChartData } from "../components/graph/GraphData";
 import partyRdpsTableJson from "../assets/data/party_rdps_table.json";
 import { PartyPosition } from "../components/input/jobselection/PartyMemberJobSelection";
+import { SimulationTitle } from "../components/basic/SimulationTitle";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -88,6 +89,8 @@ function toQueryString(partyComposition: PartyComposition): string {
         if (partyComposition[i] !== "*") {
             if (i === PartyPosition.Other || i === PartyPosition.Melee || i === PartyPosition.Caster) {
                 filters.push(`(${indexToRole(PartyPosition.Other)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Melee)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Caster)} = '${partyComposition[i]}')`);
+            } else if (i === PartyPosition.Healer1 || i === PartyPosition.Healer2) {
+                filters.push(`(${indexToRole(PartyPosition.Healer1)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Healer2)} = '${partyComposition[i]}')`);
             } else {
                 filters.push(`${indexToRole(i)} = '${partyComposition[i]}'`);
             }
@@ -113,11 +116,12 @@ export function PartyComposition() {
 
     // !!!!! rdpsData (=assets/data/party_rdps_table.json) MUST BE SORTED in descending order of rdps !!!!! 
     let minRdps = rdpsData[rdpsData.length - 1].rdps
+    let maxRdps = rdpsData[0].rdps
 
     let queryString = `SELECT * FROM ? ${toQueryString(partyComposition)} LIMIT ${MAX_COMPOSITION_COUNT}`;
     let currentRecommendedPartyCompositions: PartyCompositionRdpsData[] = alasql(queryString, [rdpsData]);
     let partyCompositionChartData = currentRecommendedPartyCompositions.map(toPartyCompositionChartData);
-    let maxRdps = partyCompositionChartData.map((data) => data.totalRdps).reduce((a, b) => Math.max(a, b), 0);
+    let maxRdpsOfPossibleComposition = partyCompositionChartData.map((data) => data.totalRdps).reduce((a, b) => Math.max(a, b), 0);
 
     return (
         <>
@@ -138,10 +142,10 @@ export function PartyComposition() {
                 >
                     {AppHeader()}
                     {DemoWarningText(LANGUAGE_TEXTS.DEMO_WARNING_TEXT)}
-                    <Box width="100%">
+                    <Box width="100%" marginBottom={10}>
                         <PartyCompositionInputContainer>
                             {SelectionTitle(
-                                LANGUAGE_TEXTS.DPS_ANALYSIS_PARTY_INPUT_INFO_TEXT
+                                LANGUAGE_TEXTS.PARTY_COMPOSITION_INPUT_TEXT
                             )}
                             <CustomizeBoard>
                                 {HorizontalPartyInputPartyComposition(
@@ -155,8 +159,8 @@ export function PartyComposition() {
                     </Box>
                     <Box alignContent={"center"} width="100%" display="flex" flexDirection="column" alignItems={"center"}>
                         <ResultBoardBox>
-                            {SelectionTitle(LANGUAGE_TEXTS.OVERALL_TEXT)}
-                            {PartyCompositionGraph(partyCompositionChartData, minRdps, maxRdps)}
+                            {SimulationTitle(LANGUAGE_TEXTS.PARTY_COMPOSITION_RESULT_TEXT)}
+                            {PartyCompositionGraph(partyCompositionChartData, minRdps, maxRdpsOfPossibleComposition, maxRdps)}
                         </ResultBoardBox>
                         <Box />
                         {Footer()}

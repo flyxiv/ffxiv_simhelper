@@ -4,9 +4,7 @@ import {
   BuffBarBoxStyle,
   BuffBarStyle,
   PartyMemberBuffBoxStyle,
-  PartyMemberIconBoxStyle,
   TotalRdpsBoxStyle,
-  BuffTitleBarStyle,
   PartyCompositionIconBoxStyle,
 } from "./Style";
 import { PartyCompositionChartData } from "./GraphData";
@@ -33,14 +31,16 @@ const TotalRdpsBox = styled(Box)`
 function JobBarChartPartyComposition(
   data: PartyCompositionChartData,
   minContribution: number,
+  maxContributionOfPossibleCompositions: number,
   maxContribution: number,
   index: number
 ) {
-  let totalRdps = Math.round(data.totalRdps);
-  let maxDiff = maxContribution - minContribution;
+  let totalRdpsRounded = Math.round(data.totalRdps);
+  let rdpsText = `${totalRdpsRounded}(${(data.totalRdps / maxContribution * 100).toFixed(1)}%)`;
+  let maxDiff = maxContributionOfPossibleCompositions - minContribution;
   let diff = data.totalRdps - minContribution;
 
-  console.log(minContribution, maxContribution);
+  console.log(minContribution, maxContributionOfPossibleCompositions);
   let BuffBarBox = styled(Box)`
       ${BuffBarBoxStyle((100 * diff) / maxDiff)}
     `;
@@ -74,7 +74,7 @@ function JobBarChartPartyComposition(
         </TotalBuffBox>
       </Box>
       <TotalRdpsBox sx={{ height: "60px" }}>
-        <Typography variant="h6" align="center">{totalRdps}</Typography>
+        <Typography variant="h6" align="center">{rdpsText}</Typography>
       </TotalRdpsBox>
     </PartyMemberBuffBox>
   );
@@ -103,10 +103,11 @@ export function GraphTitleRow(memberText: string, totalText: string) {
 export function PartyCompositionGraph(
   data: PartyCompositionChartData[],
   minContribution: number,
-  maxContribution: number
+  maxContributionOfPossibleComposition: number,
+  maxComposition: number
 ) {
   let partyCompositionBars = data.map((entry, index) => {
-    return JobBarChartPartyComposition(entry, minContribution, maxContribution, index);
+    return JobBarChartPartyComposition(entry, minContribution, maxContributionOfPossibleComposition, maxComposition, index);
   });
 
   return (

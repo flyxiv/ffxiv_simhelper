@@ -446,6 +446,8 @@ export interface TextDictionary {
   PARTY_COMPOSITION_PAGE_NAME: string,
 
   MANA_PER_TICK_POWER_NAME: string,
+  PARTY_COMPOSITION_INPUT_TEXT: string,
+  PARTY_COMPOSITION_RESULT_TEXT: string,
 
   language: LanguageMode
 }
@@ -974,8 +976,17 @@ export const AppLanguageTexts: () => TextDictionary = () => {
   const PARTY_MEMBER_LABEL_TEXT =
     language === LanguageMode.ENGLISH_MODE ? "Party Member" : "파티원";
 
+  const PARTY_COMPOSITION_INPUT_TEXT =
+    language === LanguageMode.ENGLISH_MODE ? "Search Filter" : "조합 검색 필터";
+  const PARTY_COMPOSITION_RESULT_TEXT =
+    language === LanguageMode.ENGLISH_MODE
+      ? "RDPS Ranking(6:30 Sim)"
+      : "RDPS 순위(6:30 시뮬)";
+
 
   let allTexts = {
+    PARTY_COMPOSITION_INPUT_TEXT,
+    PARTY_COMPOSITION_RESULT_TEXT,
     MANA_PER_TICK_POWER_NAME,
     DEMO_WARNING_TEXT,
     BUY_ME_A_COFFEE_TEXT,

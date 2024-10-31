@@ -27,8 +27,8 @@ export const ResultBoardTopBoxStyle = `
 `;
 
 export const TitleBoxStyle = `
-  background-color: white;
-  color: black;
+  background-color: ${AppConfigurations.primaryVariant};
+  color: white;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 40px;
