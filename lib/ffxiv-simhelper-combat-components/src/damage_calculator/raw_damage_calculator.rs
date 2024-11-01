@@ -524,6 +524,7 @@ mod tests {
         let potency = 310.0;
         let trait_percent = 130;
         let player_power = crate::live_objects::player::player_power::PlayerPower {
+            piety: 440,
             auto_attack_delays: 3.0,
             critical_strike_rate: 0.15,
             critical_strike_damage: 1.5,
@@ -586,6 +587,7 @@ mod tests {
     fn magical_dot_base_damage_test() {
         let trait_percent = 130;
         let player_power = crate::live_objects::player::player_power::PlayerPower {
+            piety: 440,
             auto_attack_delays: 3.0,
             critical_strike_rate: 0.15,
             critical_strike_damage: 1.5,
@@ -633,6 +635,7 @@ mod tests {
     #[test]
     fn physical_dot_damage_test() {
         let player_power_physical = crate::live_objects::player::player_power::PlayerPower {
+            piety: 440,
             auto_attack_delays: 2.64,
             critical_strike_rate: 0.176,
             critical_strike_damage: 1.526,
@@ -697,6 +700,7 @@ mod tests {
             critical_strike: 2560,
             direct_hit: 2500,
             determination: 2500,
+            piety: 440,
             skill_speed: 2500,
             tenacity: 400,
             spell_speed: 2500,
@@ -754,10 +758,12 @@ mod tests {
             skill_speed: 2500,
             tenacity: 400,
             spell_speed: 2500,
+            piety: 440,
             gcd: 2.50,
         };
 
         let ast_249_gcd = PlayerPower {
+            piety: 440,
             auto_attack_delays: 2.5,
             critical_strike_rate: 0.23,
             critical_strike_damage: 1.58,
