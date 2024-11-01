@@ -694,7 +694,7 @@ impl MachinistDatabase {
             cooldown_reduced_by_speed: false,
             cooldown_millisecond: 10000,
             resource_required: vec![UseBuff(hypercharged.id)],
-            resource_created: Default::default(),
+            resource_created: HashMap::from([(2, 1)]),
             current_cooldown_millisecond: 0,
             stacks: 1,
             max_stacks: 1,

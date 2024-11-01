@@ -85,6 +85,9 @@ pub struct PlayerPower {
     /// The tenacity substat value of the player. Not used directly in the backend, and just passes this value to the response so that the app can use it in the result page.
     pub tenacity: StatType,
 
+    /// The piety substat value of the player. Not used directly in the backend, and just passes this value to the response so that the app can use it in the result page.
+    pub piety: StatType,
+
     /// Not used in backend. Just copies value from request.
     pub gcd: MultiplierType,
 }
@@ -142,6 +145,7 @@ mod tests {
             skill_speed: 420,
             spell_speed: 420,
             tenacity: 420,
+            piety: 440,
             gcd: 2.5,
         };
 
@@ -191,6 +195,7 @@ mod tests {
             skill_speed: 420,
             spell_speed: 420,
             tenacity: 420,
+            piety: 440,
             gcd: 2.5,
         };
 

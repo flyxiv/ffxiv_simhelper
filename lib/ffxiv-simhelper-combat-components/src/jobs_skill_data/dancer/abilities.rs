@@ -13,7 +13,8 @@ use crate::status::status_info::StatusInfo;
 use crate::types::PlayerIdType;
 use std::collections::HashMap;
 
-const PROC_PERCENT: PercentType = 55;
+const PROC_PERCENT: PercentType = 50;
+const STACK_PROC_PERCENT: PercentType = 15;
 
 pub(crate) struct DancerDatabase {
     pub(crate) cascade: AttackSkill,
@@ -68,7 +69,7 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![(
                 FfxivEvent::IncreasePlayerResource(player_id, 0, 10, 0),
-                20,
+                STACK_PROC_PERCENT,
             )],
         };
         let technical_step_buff: BuffStatus = BuffStatus {
@@ -95,10 +96,9 @@ impl DancerDatabase {
             max_stacks: 1,
             trigger_proc_event_on_gcd: vec![(
                 FfxivEvent::IncreasePlayerResource(player_id, 0, 10, 0),
-                20,
+                STACK_PROC_PERCENT,
             )],
         };
-        // we nerf by 10% (20 -> 18) b/c it's eating too much.
         let devilment_buff: BuffStatus = BuffStatus {
             id: 1504,
             owner_id: player_id,

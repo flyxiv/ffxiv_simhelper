@@ -181,6 +181,8 @@ export function aggregateDamageStatisticsFromSampleRuns(
   let medianIndex = Math.floor(totalRequestCount / 2);
   let percentileIndex = Math.floor(totalRequestCount * highPercentile) - 1;
 
+  console.log(totalDps);
+
   let medianDps = totalDps[medianIndex];
   let medianRdps = totalRdps[medianIndex];
   let medianEdps = totalEdps[medianIndex];

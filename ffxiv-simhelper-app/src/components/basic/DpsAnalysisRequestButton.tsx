@@ -109,6 +109,8 @@ export function DpsAnalysisRequestButton(totalState: EquipmentInput) {
       1.0
     );
 
+    console.log(damageSummary);
+
     finalResponses.filter((response) => response.mainPlayerId === undefined);
 
     finalResponses.sort(

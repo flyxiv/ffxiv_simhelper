@@ -17,7 +17,8 @@ use std::cmp::{max, min};
 use std::collections::HashMap;
 use std::rc::Rc;
 
-const MACHINIST_STACKS_COUNT: usize = 2;
+const MACHINIST_STACKS_COUNT: usize = 3;
+const HYPERCHARGE_ID: SkillIdType = 1411;
 
 const MIN_QUEEN_BATTERY: PotencyType = 5;
 const QUEEN_BASE_POTENCY: PotencyType = 900;
@@ -34,7 +35,8 @@ const WILDFIRE_DELAY_MILLISECOND: TimeType = 10000;
 
 const BATTERY_ID: ResourceIdType = 1;
 
-const MACHINIST_MAX_STACKS: [ResourceType; MACHINIST_STACKS_COUNT] = [HEAT_MAX, BATTERY_MAX];
+/// resource 3: used free hypercharge flag to ensure two hypercharges in one burst
+const MACHINIST_MAX_STACKS: [ResourceType; MACHINIST_STACKS_COUNT] = [HEAT_MAX, BATTERY_MAX, 1];
 
 #[derive(Clone)]
 pub(crate) struct MachinistCombatResources {
@@ -85,6 +87,10 @@ impl CombatResource for MachinistCombatResources {
         player: &FfxivPlayer,
     ) -> SkillEvents {
         let mut ffxiv_events = vec![];
+
+        if skill_id == HYPERCHARGE_ID {
+            self.resources[2] = 0;
+        }
 
         if self.wildfire_damage_incoming.is_some() {
             let (potency, delay) = self.wildfire_damage_incoming.unwrap();

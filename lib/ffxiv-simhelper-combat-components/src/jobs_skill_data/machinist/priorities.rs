@@ -172,6 +172,26 @@ pub(crate) fn make_machinist_ogcd_priority_table(
     db: &MachinistDatabase,
     use_pots: bool,
 ) -> Vec<SkillPriorityInfo> {
+    let can_use_hypercharge = And(
+        Box::new(And(
+            Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                db.drill.get_id(),
+                8000,
+            )))),
+            Box::new(And(
+                Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                    db.air_anchor.get_id(),
+                    8000,
+                )))),
+                Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                    db.chainsaw.get_id(),
+                    8000,
+                )))),
+            )),
+        )),
+        Box::new(Not(Box::new(HasBufforDebuff(db.hypercharge_buff.get_id())))),
+    );
+
     let mut ogcd_priorites = if use_pots {
         vec![SkillPriorityInfo {
             skill_id: db.potion.get_id(),
@@ -192,28 +212,6 @@ pub(crate) fn make_machinist_ogcd_priority_table(
                 db.wildfire.get_id(),
                 105000,
             )))),
-        },
-        SkillPriorityInfo {
-            skill_id: db.hypercharge.get_id(),
-            prerequisite: Some(And(
-                Box::new(And(
-                    Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
-                        db.drill.get_id(),
-                        8000,
-                    )))),
-                    Box::new(And(
-                        Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
-                            db.air_anchor.get_id(),
-                            8000,
-                        )))),
-                        Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
-                            db.chainsaw.get_id(),
-                            8000,
-                        )))),
-                    )),
-                )),
-                Box::new(Not(Box::new(HasBufforDebuff(db.hypercharge_buff.get_id())))),
-            )),
         },
         SkillPriorityInfo {
             skill_id: db.reassemble.get_id(),
@@ -243,6 +241,16 @@ pub(crate) fn make_machinist_ogcd_priority_table(
                             0,
                         )),
                     )),
+                )),
+            )),
+        },
+        SkillPriorityInfo {
+            skill_id: db.hypercharge.get_id(),
+            prerequisite: Some(And(
+                Box::new(can_use_hypercharge),
+                Box::new(Or(
+                    Box::new(HasResource(0, 90)),
+                    Box::new(HasResource(2, 1)),
                 )),
             )),
         },

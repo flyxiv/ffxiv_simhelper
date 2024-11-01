@@ -91,6 +91,8 @@ function toQueryString(partyComposition: PartyComposition): string {
                 filters.push(`(${indexToRole(PartyPosition.Other)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Melee)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Caster)} = '${partyComposition[i]}')`);
             } else if (i === PartyPosition.Healer1 || i === PartyPosition.Healer2) {
                 filters.push(`(${indexToRole(PartyPosition.Healer1)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Healer2)} = '${partyComposition[i]}')`);
+            } else if (i === PartyPosition.Tank1 || i === PartyPosition.Tank2) {
+                filters.push(`(${indexToRole(PartyPosition.Tank1)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Tank2)} = '${partyComposition[i]}')`);
             } else {
                 filters.push(`${indexToRole(i)} = '${partyComposition[i]}'`);
             }

@@ -220,7 +220,7 @@ async def main():
 
     left_compositions = []
 
-    for tank in TANK_SPECS:
+    for tank1 in TANK_SPECS:
         for tank2 in TANK_SPECS:
             for i, heal1 in enumerate(HEALER_SPECS):
                 for j in range(i + 1, len(HEALER_SPECS)):
@@ -233,13 +233,15 @@ async def main():
                                 for other in OTHER_SPECS:
                                     if other in ["PCT", "RDM", "SMN", "MNK", "NIN", "DRG", "RPR", "BRD", "DNC"] and (other == caster or other == ranged or other == melee):
                                         continue
+
+
+                                    key_list = sorted([tank1, tank2, heal1, heal2, melee, ranged, caster, other])
+                                    key = "".join(key_list)
+
+                                    if key in table:
+                                        continue 
                                     
-                                    key = f"{tank}, {tank2}, {heal1}, {heal2}, {melee}, {ranged}, {caster}, {other}"
-                                    key_inversed = f"{tank2}, {tank}, {heal2}, {heal1}, {other}, {ranged}, {caster}, {melee}"
-                                    if key in table or key_inversed in table:
-                                        continue
-                                    else:
-                                        left_compositions.append({"tank": tank, "tank2": tank2, "heal1": heal1, "heal2": heal2, "melee": melee, "ranged": ranged, "caster": caster, "other": other, "key": key})
+                                    left_compositions.append({"tank": tank, "tank2": tank2, "heal1": heal1, "heal2": heal2, "melee": melee, "ranged": ranged, "caster": caster, "other": other, "key": key})
     
     for composition in tqdm.tqdm(left_compositions):
         tank = composition["tank"]

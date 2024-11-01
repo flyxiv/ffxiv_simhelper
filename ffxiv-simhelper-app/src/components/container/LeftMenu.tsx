@@ -12,6 +12,7 @@ import {
   GEAR_COMPARE_URL,
   DPS_ANALYSIS_URL,
   BEST_STATS_URL,
+  PARTY_COMPOSITION_URL,
 } from "../../App";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { convertToLinkUrl } from "../../page/home";
@@ -233,6 +234,12 @@ function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS
         {NavigationMenu(
           convertToLinkUrl(BEST_STATS_URL),
           LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
+          STAT_WEIGHTS_MENU_LOGO_PATH,
+          currentSimulationPage
+        )}
+        {NavigationMenu(
+          convertToLinkUrl(PARTY_COMPOSITION_URL),
+          LANGUAGE_TEXTS.PARTY_COMPOSITION_PAGE_NAME,
           STAT_WEIGHTS_MENU_LOGO_PATH,
           currentSimulationPage
         )}
