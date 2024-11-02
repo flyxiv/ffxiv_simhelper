@@ -1,18 +1,18 @@
 import { Box, Divider, Drawer, IconButton, Link, styled, Typography } from "@mui/material";
 import {
-  LeftMenuLogoStyle,
-  LeftMenuNavigationBarStyle,
-  LeftMenuNavigationItemStyle,
-  LeftMenuTotalBarStyle,
+	LeftMenuLogoStyle,
+	LeftMenuNavigationBarStyle,
+	LeftMenuNavigationItemStyle,
+	LeftMenuTotalBarStyle,
 } from "./Styles";
 import { AppConfigurations } from "../../Themes";
 import { LoadoutBox } from "./LoadoutBox";
 import {
-  BEST_PARTNER_URL,
-  GEAR_COMPARE_URL,
-  DPS_ANALYSIS_URL,
-  BEST_STATS_URL,
-  PARTY_COMPOSITION_URL,
+	BEST_PARTNER_URL,
+	GEAR_COMPARE_URL,
+	DPS_ANALYSIS_URL,
+	BEST_STATS_URL,
+	PARTY_COMPOSITION_URL,
 } from "../../App";
 import { EquipmentInput } from "../../types/EquipmentInput";
 import { convertToLinkUrl } from "../../page/home";
@@ -28,11 +28,11 @@ export const MENU_WIDTH_VW_LG = 20;
 export const MENU_WIDTH_VW_XL = 20;
 
 export const MENU_WIDTH = {
-  xs: `${MENU_WIDTH_VW_XS}%`,
-  sm: `${MENU_WIDTH_VW_SM}%`,
-  md: `${MENU_WIDTH_VW_MD}%`,
-  lg: `${MENU_WIDTH_VW_LG}%`,
-  xl: `${MENU_WIDTH_VW_XL}%`,
+	xs: `${MENU_WIDTH_VW_XS}%`,
+	sm: `${MENU_WIDTH_VW_SM}%`,
+	md: `${MENU_WIDTH_VW_MD}%`,
+	lg: `${MENU_WIDTH_VW_LG}%`,
+	xl: `${MENU_WIDTH_VW_XL}%`,
 };
 
 let LeftMenuLogo = styled(Box)`
@@ -52,124 +52,124 @@ let LeftMenuNavigationItem = styled(Box)`
 `;
 
 export function LeftMenuWithLoadout(
-  loadoutCount: number,
-  loadoutType: string,
-  currentSimulationPage: string,
-  totalState: EquipmentInput,
-  setTotalState: Function,
-  LANGUAGE_TEXTS: TextDictionary
+	loadoutCount: number,
+	loadoutType: string,
+	currentSimulationPage: string,
+	totalState: EquipmentInput,
+	setTotalState: Function,
+	LANGUAGE_TEXTS: TextDictionary
 ) {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
+	const toggleDrawer = () => {
+		setIsDrawerOpen(!isDrawerOpen);
+	};
 
-  return (
-    <>
-      <Box
-        position="fixed"
-        top={16}
-        left={16}
-        zIndex={2}
-      >
-        <IconButton onClick={toggleDrawer} sx={{
-          backgroundColor: "white",
-          '&:hover': {
-            backgroundColor: "gray"
-          }
-        }}>
-          <MenuIcon />
-        </IconButton>
-      </Box>
-      <Drawer
-        sx={{
-          width: MENU_WIDTH,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: MENU_WIDTH,
-            backgroundColor: `${AppConfigurations.backgroundOne}`,
-            scrollbarWidth: "none",
-          },
-        }}
-        open={isDrawerOpen}
-        onClose={toggleDrawer}
-        anchor="left"
-      >
-        <LeftMenuTotalBar>
-          {DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}
-          {EquipmentLoadouts(
-            loadoutCount,
-            loadoutType,
-            totalState,
-            setTotalState,
-            LANGUAGE_TEXTS
-          )}
-        </LeftMenuTotalBar>
-      </Drawer>
-    </>
-  );
+	return (
+		<>
+			<Box
+				position="fixed"
+				top={16}
+				left={16}
+				zIndex={2}
+			>
+				<IconButton onClick={toggleDrawer} sx={{
+					backgroundColor: "white",
+					'&:hover': {
+						backgroundColor: "gray"
+					}
+				}}>
+					<MenuIcon />
+				</IconButton>
+			</Box>
+			<Drawer
+				sx={{
+					width: MENU_WIDTH,
+					flexShrink: 0,
+					"& .MuiDrawer-paper": {
+						width: MENU_WIDTH,
+						backgroundColor: `${AppConfigurations.backgroundOne}`,
+						scrollbarWidth: "none",
+					},
+				}}
+				open={isDrawerOpen}
+				onClose={toggleDrawer}
+				anchor="left"
+			>
+				<LeftMenuTotalBar>
+					{DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}
+					{EquipmentLoadouts(
+						loadoutCount,
+						loadoutType,
+						totalState,
+						setTotalState,
+						LANGUAGE_TEXTS
+					)}
+				</LeftMenuTotalBar>
+			</Drawer>
+		</>
+	);
 }
 
 export function BasicLeftMenu(currentSimulationPage: string, LANGUAGE_TEXTS: TextDictionary) {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
-  return (
-    <>
-      <Box
-        position="fixed"
-        top={16}
-        left={16}
-        zIndex={2}
-      >
-        <IconButton onClick={toggleDrawer} sx={{
-          backgroundColor: "white",
-          '&:hover': {
-            backgroundColor: 'gray'
-          }
-        }}>
-          <MenuIcon />
-        </IconButton>
-      </Box>
-      <Drawer
-        sx={{
-          width: MENU_WIDTH,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: MENU_WIDTH,
-            boxSizing: "border-box",
-            backgroundColor: `${AppConfigurations.backgroundOne}`,
-            scrollbarWidth: "none",
-          },
-        }}
-        open={isDrawerOpen}
-        onClose={toggleDrawer}
-        anchor="left"
-      >
-        <LeftMenuTotalBar minHeight="100vh">{DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}</LeftMenuTotalBar>
-      </Drawer>
-    </>
-  );
+	const toggleDrawer = () => {
+		setIsDrawerOpen(!isDrawerOpen);
+	};
+	return (
+		<>
+			<Box
+				position="fixed"
+				top={16}
+				left={16}
+				zIndex={2}
+			>
+				<IconButton onClick={toggleDrawer} sx={{
+					backgroundColor: "white",
+					'&:hover': {
+						backgroundColor: 'gray'
+					}
+				}}>
+					<MenuIcon />
+				</IconButton>
+			</Box>
+			<Drawer
+				sx={{
+					width: MENU_WIDTH,
+					flexShrink: 0,
+					"& .MuiDrawer-paper": {
+						width: MENU_WIDTH,
+						boxSizing: "border-box",
+						backgroundColor: `${AppConfigurations.backgroundOne}`,
+						scrollbarWidth: "none",
+					},
+				}}
+				open={isDrawerOpen}
+				onClose={toggleDrawer}
+				anchor="left"
+			>
+				<LeftMenuTotalBar minHeight="100vh">{DefaultLeftMenuComponents(currentSimulationPage, LANGUAGE_TEXTS)}</LeftMenuTotalBar>
+			</Drawer>
+		</>
+	);
 }
 
 function NavigationMenu(link: string, text: string, iconPath: string, currentSimulationPage: string) {
-  return (
-    <LeftMenuNavigationItem sx={{ paddingY: 1 }}>
-      <Link href={link} color="inherit" underline="hover">
-        <Box display="flex" alignItems="center" sx={{ backgroundColor: currentSimulationPage === text ? AppConfigurations.backgroundFour : AppConfigurations.backgroundThree, width: "80%" }}>
-          <Box marginRight={1}>
-            <img src={iconPath} alt={text} height={20} width={20} />
-          </Box>
-          <Typography variant="body2" align="left">
-            {text}
-          </Typography>
-        </Box>
-      </Link>
-    </LeftMenuNavigationItem>
-  );
+	return (
+		<LeftMenuNavigationItem sx={{ paddingY: 1 }}>
+			<Link href={link} color="inherit" underline="hover">
+				<Box display="flex" alignItems="center" sx={{ backgroundColor: currentSimulationPage === text ? AppConfigurations.backgroundFour : AppConfigurations.backgroundThree, width: "80%" }}>
+					<Box marginRight={1}>
+						<img src={iconPath} alt={text} height={20} width={20} />
+					</Box>
+					<Typography variant="body2" align="left">
+						{text}
+					</Typography>
+				</Box>
+			</Link>
+		</LeftMenuNavigationItem>
+	);
 }
 
 import HOME_MENU_LOGO_PATH from "/src/assets/images/icon_home_w.svg";
@@ -178,123 +178,124 @@ import GEAR_COMPARE_MENU_LOGO_PATH from "/src/assets/images/icon_gear_compare_w.
 import BEST_PARTNER_MENU_LOGO_PATH from "/src/assets/images/icon_best_partner_w.svg";
 import STAT_WEIGHTS_MENU_LOGO_PATH from "/src/assets/images/icon_best_stats_w.svg";
 import LEFT_MENU_LOGO_PATH from "/src/assets/images/left_menu_logo.svg";
+import PARTY_COMPOSITION_MENU_LOGO_PATH from "/src/assets/images/icon_party_composition_w.svg";
 
 function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS: TextDictionary) {
-  return (
-    <>
-      <LeftMenuLogo>
-        <Box display="flex" justifyContent={"center"} alignItems={"center"}>
-          <Box marginRight={0.5}>
-            <img src={LEFT_MENU_LOGO_PATH} width={20} height={20} alt="logo" />
-          </Box>
-          <Typography align="center">
-            <b>FFXIV SIMHELPER</b>
-          </Typography>
+	return (
+		<>
+			<LeftMenuLogo>
+				<Box display="flex" justifyContent={"center"} alignItems={"center"}>
+					<Box marginRight={0.5}>
+						<img src={LEFT_MENU_LOGO_PATH} width={20} height={20} alt="logo" />
+					</Box>
+					<Typography align="center">
+						<b>FFXIV SIMHELPER</b>
+					</Typography>
 
-        </Box>
-      </LeftMenuLogo>
+				</Box>
+			</LeftMenuLogo>
 
-      <Box width="95%" display="flex" justifyContent={"flex-start"} marginY={2} marginLeft={2}>
-        {LanguageInputForm()}
-      </Box>
+			<Box width="95%" display="flex" justifyContent={"flex-start"} marginY={2} marginLeft={2}>
+				{LanguageInputForm()}
+			</Box>
 
-      <LeftMenuNavigationBar paddingY={4} paddingLeft={2}>
-        <Typography variant="h3" align="left" sx={{ fontWeight: "bold" }}>
-          {LANGUAGE_TEXTS.NAVIGATE_TEXT}
-        </Typography>
+			<LeftMenuNavigationBar paddingY={4} paddingLeft={2}>
+				<Typography variant="h3" align="left" sx={{ fontWeight: "bold" }}>
+					{LANGUAGE_TEXTS.NAVIGATE_TEXT}
+				</Typography>
 
-        <Divider
-          sx={{
-            borderBottomWidth: 3,
-            marginY: 2,
-            bgcolor: `${AppConfigurations.backgroundTwo}`,
-          }}
-        />
+				<Divider
+					sx={{
+						borderBottomWidth: 3,
+						marginY: 2,
+						bgcolor: `${AppConfigurations.backgroundTwo}`,
+					}}
+				/>
 
-        {NavigationMenu(AppConfigurations.isApp ? "/index.html" : "/", LANGUAGE_TEXTS.HOME_PAGE_NAME, HOME_MENU_LOGO_PATH, currentSimulationPage)}
-        {NavigationMenu(
-          convertToLinkUrl(DPS_ANALYSIS_URL),
-          LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
-          DPS_ANALYSIS_MENU_LOGO_PATH,
-          currentSimulationPage
-        )}
-        {NavigationMenu(
-          convertToLinkUrl(GEAR_COMPARE_URL),
-          LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
-          GEAR_COMPARE_MENU_LOGO_PATH,
-          currentSimulationPage
-        )}
-        {NavigationMenu(
-          convertToLinkUrl(BEST_PARTNER_URL),
-          LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
-          BEST_PARTNER_MENU_LOGO_PATH,
-          currentSimulationPage
+				{NavigationMenu(AppConfigurations.isApp ? "/index.html" : "/", LANGUAGE_TEXTS.HOME_PAGE_NAME, HOME_MENU_LOGO_PATH, currentSimulationPage)}
+				{NavigationMenu(
+					convertToLinkUrl(DPS_ANALYSIS_URL),
+					LANGUAGE_TEXTS.DPS_ANALYSIS_PAGE_NAME,
+					DPS_ANALYSIS_MENU_LOGO_PATH,
+					currentSimulationPage
+				)}
+				{NavigationMenu(
+					convertToLinkUrl(GEAR_COMPARE_URL),
+					LANGUAGE_TEXTS.GEAR_COMPARE_PAGE_NAME,
+					GEAR_COMPARE_MENU_LOGO_PATH,
+					currentSimulationPage
+				)}
+				{NavigationMenu(
+					convertToLinkUrl(BEST_PARTNER_URL),
+					LANGUAGE_TEXTS.BEST_PARTNER_PAGE_NAME,
+					BEST_PARTNER_MENU_LOGO_PATH,
+					currentSimulationPage
 
-        )}
-        {NavigationMenu(
-          convertToLinkUrl(BEST_STATS_URL),
-          LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
-          STAT_WEIGHTS_MENU_LOGO_PATH,
-          currentSimulationPage
-        )}
-        {NavigationMenu(
-          convertToLinkUrl(PARTY_COMPOSITION_URL),
-          LANGUAGE_TEXTS.PARTY_COMPOSITION_PAGE_NAME,
-          STAT_WEIGHTS_MENU_LOGO_PATH,
-          currentSimulationPage
-        )}
-      </LeftMenuNavigationBar>
-    </>
-  );
+				)}
+				{NavigationMenu(
+					convertToLinkUrl(BEST_STATS_URL),
+					LANGUAGE_TEXTS.BEST_STAT_PAGE_NAME,
+					STAT_WEIGHTS_MENU_LOGO_PATH,
+					currentSimulationPage
+				)}
+				{NavigationMenu(
+					convertToLinkUrl(PARTY_COMPOSITION_URL),
+					LANGUAGE_TEXTS.PARTY_COMPOSITION_PAGE_NAME,
+					PARTY_COMPOSITION_MENU_LOGO_PATH,
+					currentSimulationPage
+				)}
+			</LeftMenuNavigationBar>
+		</>
+	);
 }
 
 function EquipmentLoadouts(
-  loadoutCount: number,
-  loadoutType: string,
-  totalState: EquipmentInput,
-  setTotalState: Function,
-  LANGUAGE_TEXTS: TextDictionary
+	loadoutCount: number,
+	loadoutType: string,
+	totalState: EquipmentInput,
+	setTotalState: Function,
+	LANGUAGE_TEXTS: TextDictionary
 ) {
-  return (
-    <>
-      <Box paddingX={2}>
-        <Typography
-          variant="h3"
-          align="left"
-          sx={{ fontWeight: "bold", paddingLeft: 2 }}
-        >
-          {LANGUAGE_TEXTS.SAVED_GEARSETS_TEXT}
-        </Typography>
-        <Divider
-          sx={{
-            borderBottomWidth: 3,
-            marginY: 2,
-            bgcolor: `${AppConfigurations.backgroundTwo}`,
-          }}
-        />
-      </Box>
-      {[...Array(loadoutCount).keys()].map((loadoutId) => {
-        return (
-          <Box paddingY={4} marginX={4}>
-            {LoadoutBox(
-              loadoutId + 1,
-              loadoutType,
-              totalState,
-              setTotalState,
-              getNumberOfEquipmentSets(loadoutType),
-              LANGUAGE_TEXTS
-            )}
-          </Box>
-        );
-      })}
-    </>
-  );
+	return (
+		<>
+			<Box paddingX={2}>
+				<Typography
+					variant="h3"
+					align="left"
+					sx={{ fontWeight: "bold", paddingLeft: 2 }}
+				>
+					{LANGUAGE_TEXTS.SAVED_GEARSETS_TEXT}
+				</Typography>
+				<Divider
+					sx={{
+						borderBottomWidth: 3,
+						marginY: 2,
+						bgcolor: `${AppConfigurations.backgroundTwo}`,
+					}}
+				/>
+			</Box>
+			{[...Array(loadoutCount).keys()].map((loadoutId) => {
+				return (
+					<Box paddingY={4} marginX={4}>
+						{LoadoutBox(
+							loadoutId + 1,
+							loadoutType,
+							totalState,
+							setTotalState,
+							getNumberOfEquipmentSets(loadoutType),
+							LANGUAGE_TEXTS
+						)}
+					</Box>
+				);
+			})}
+		</>
+	);
 }
 
 function getNumberOfEquipmentSets(loadoutType: string) {
-  if (loadoutType === GEAR_COMPARE_URL) {
-    return 2;
-  } else {
-    return 1;
-  }
+	if (loadoutType === GEAR_COMPARE_URL) {
+		return 2;
+	} else {
+		return 1;
+	}
 }
