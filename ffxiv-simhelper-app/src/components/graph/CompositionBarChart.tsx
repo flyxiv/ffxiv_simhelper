@@ -6,11 +6,13 @@ import {
 	PartyMemberBuffBoxStyle,
 	TotalRdpsBoxStyle,
 	PartyCompositionIconBoxStyle,
+	PartyCompositionMobileIconBoxStyle,
 } from "./Style";
 import { PartyCompositionChartData } from "./GraphData";
 import { AppConfigurations } from "../../Themes";
 import { jobAbbrevToJobIcon } from "../icon/jobicon/JobIconFactory";
 import { TextDictionary } from "../../const/languageTexts";
+import { isMobile } from "../../util";
 
 export const JOB_BAR_ITEM_HEIGHT = "65px";
 
@@ -20,6 +22,10 @@ const PartyMemberBuffBox = styled(Box)`
 
 const PartyCompositionIconBox = styled(Box)`
   ${PartyCompositionIconBoxStyle}
+`;
+
+const PartyCompositionMobileIconBox = styled(Box)`
+  ${PartyCompositionMobileIconBoxStyle}
 `;
 
 const TotalBuffBox = styled(Box)`
@@ -41,7 +47,6 @@ function JobBarChartPartyComposition(
 	let maxDiff = maxContributionOfPossibleCompositions - minContribution;
 	let diff = data.totalRdps - minContribution;
 
-	console.log(minContribution, maxContributionOfPossibleCompositions);
 	let BuffBarBox = styled(Box)`
       ${BuffBarBoxStyle((100 * diff) / maxDiff)}
     `;
@@ -81,25 +86,70 @@ function JobBarChartPartyComposition(
 	);
 }
 
+
+function JobBarChartPartyCompositionMobile(
+	data: PartyCompositionChartData,
+	maxContribution: number,
+) {
+	let totalRdpsRounded = Math.round(data.totalRdps);
+	let rdpsText = `${totalRdpsRounded}(${(data.totalRdps / maxContribution * 100).toFixed(1)}%)`;
+
+	return (
+		<PartyMemberBuffBox height="85px" display="flex" flexDirection={"column"} justifyContent={"center"} alignItems={"center"}>
+			<PartyCompositionMobileIconBox height="60px">
+				<Box display="flex" alignItems="center">
+					{data.key.slice(0, 4).map((key) => {
+						return (
+							<Box component="img"
+								src={jobAbbrevToJobIcon(key)}
+								alt={"rdps"}
+								width={25}
+								height={25}
+								margin={0.5}
+							/>
+						);
+					})}
+				</Box>
+				<Box display="flex" alignItems="center">
+					{data.key.slice(4, 8).map((key) => {
+						return (
+							<Box component="img"
+								src={jobAbbrevToJobIcon(key)}
+								alt={"rdps"}
+								width={25}
+								height={25}
+								margin={0.5}
+							/>
+						);
+					})}
+				</Box>
+			</PartyCompositionMobileIconBox>
+			<TotalRdpsBox sx={{ height: "60px", width: "100%", marginX: 2, alignItems: "center", display: "flex" }}>
+				<Typography variant="h6" align="right">{rdpsText}</Typography>
+			</TotalRdpsBox>
+		</PartyMemberBuffBox>
+	);
+}
+
+
 export function GraphTitleRow(memberText: string, totalText: string) {
 	return (
 		<PartyMemberBuffBox sx={{ width: "100%" }}>
-			<PartyCompositionIconBox sx={{ width: "440px" }}>
+			<PartyCompositionIconBox sx={{ width: isMobile() ? "300px" : "440px" }}>
 				<Typography variant="h6" fontSize={AppConfigurations.body1FontSize} align="center">
 					{memberText}
 				</Typography>
 			</PartyCompositionIconBox>
 			<Box width="60%" />
 
-			<TotalRdpsBox sx={{ width: "15%" }} paddingRight={2}>
-				<Typography variant="h6" fontSize={AppConfigurations.body1FontSize} align="center">
+			<TotalRdpsBox sx={{ width: isMobile() ? "100%" : "15%" }} paddingRight={2}>
+				<Typography variant="h6" fontSize={AppConfigurations.body1FontSize} align={isMobile() ? "left" : "center"}>
 					{totalText}
 				</Typography>
 			</TotalRdpsBox>
 		</PartyMemberBuffBox>
 	);
 }
-
 
 export function PartyCompositionGraph(
 	data: PartyCompositionChartData[],
@@ -109,7 +159,7 @@ export function PartyCompositionGraph(
 	LANGUAGE_TEXTS: TextDictionary
 ) {
 	let partyCompositionBars = data.map((entry, index) => {
-		return JobBarChartPartyComposition(entry, minContribution, maxContributionOfPossibleComposition, maxComposition, index);
+		return isMobile() ? JobBarChartPartyCompositionMobile(entry, maxComposition) : JobBarChartPartyComposition(entry, minContribution, maxContributionOfPossibleComposition, maxComposition, index);
 	});
 
 	return (

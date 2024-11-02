@@ -1,8 +1,8 @@
 .HomeBody {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    height: 80vh;
-    width: 100%;
-    padding-top: 20px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	min-height: 80vh;
+	width: 100%;
+	padding-top: 20px;
 }

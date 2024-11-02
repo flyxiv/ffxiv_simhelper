@@ -88,11 +88,22 @@ function toQueryString(partyComposition: PartyComposition): string {
 	for (let i = 0; i < partyComposition.length; i++) {
 		if (partyComposition[i] !== "*") {
 			if (i === PartyPosition.Other || i === PartyPosition.Melee || i === PartyPosition.Caster) {
-				filters.push(`(${indexToRole(PartyPosition.Other)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Melee)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Caster)} = '${partyComposition[i]}')`);
+				if (partyComposition[i] === partyComposition[PartyPosition.Melee] && partyComposition[i] === partyComposition[PartyPosition.Other]) {
+					filters.push(`(${indexToRole(PartyPosition.Melee)} = '${partyComposition[i]}' AND ${indexToRole(PartyPosition.Other)} = '${partyComposition[i]}')`);
+				}
+				else if (partyComposition[i] === partyComposition[PartyPosition.Caster] && partyComposition[i] === partyComposition[PartyPosition.Other]) {
+					filters.push(`(${indexToRole(PartyPosition.Caster)} = '${partyComposition[i]}' AND ${indexToRole(PartyPosition.Other)} = '${partyComposition[i]}')`);
+				} else {
+					filters.push(`(${indexToRole(PartyPosition.Other)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Melee)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Caster)} = '${partyComposition[i]}')`);
+				}
 			} else if (i === PartyPosition.Healer1 || i === PartyPosition.Healer2) {
 				filters.push(`(${indexToRole(PartyPosition.Healer1)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Healer2)} = '${partyComposition[i]}')`);
 			} else if (i === PartyPosition.Tank1 || i === PartyPosition.Tank2) {
-				filters.push(`(${indexToRole(PartyPosition.Tank1)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Tank2)} = '${partyComposition[i]}')`);
+				if (partyComposition[i] === partyComposition[PartyPosition.Tank1] && partyComposition[i] === partyComposition[PartyPosition.Tank2]) {
+					filters.push(`(${indexToRole(PartyPosition.Tank1)} = '${partyComposition[i]}' AND ${indexToRole(PartyPosition.Tank2)} = '${partyComposition[i]}')`);
+				} else {
+					filters.push(`(${indexToRole(PartyPosition.Tank1)} = '${partyComposition[i]}' OR ${indexToRole(PartyPosition.Tank2)} = '${partyComposition[i]}')`);
+				}
 			} else {
 				filters.push(`${indexToRole(i)} = '${partyComposition[i]}'`);
 			}

@@ -75,7 +75,14 @@ export const PartyCompositionIconBoxStyle = `
     align-items: center;
 `;
 
-
+export const PartyCompositionMobileIconBoxStyle = `
+    display: flex;
+    width: 150px;
+    padding-left: 10px;
+    justify-items: center;
+    align-items: center;
+	flex-direction: column;
+`;
 
 export const TotalRdpsBoxStyle = `
     color: white;

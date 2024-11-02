@@ -984,8 +984,8 @@ export const AppLanguageTexts: () => TextDictionary = () => {
 		language === LanguageMode.ENGLISH_MODE ? "Search Filter" : "조합 검색 필터";
 	const PARTY_COMPOSITION_RESULT_TEXT =
 		language === LanguageMode.ENGLISH_MODE
-			? "RDPS Ranking(6:30 Sim)"
-			: "RDPS 순위(6:30 시뮬)";
+			? "RDPS Ranking(6:30 Sim, Top 50)"
+			: "RDPS 순위(6:30 시뮬, 상위 50)";
 
 
 	let allTexts = {
