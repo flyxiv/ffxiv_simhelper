@@ -33,7 +33,7 @@ export function Home() {
 			}}
 		>
 			{BasicLeftMenu(LANGUAGE_TEXTS.HOME_PAGE_NAME, LANGUAGE_TEXTS)}
-			<Box display="flex" width="100%" overflow="auto" minHeight="100%">
+			<Box display="flex" width="100%" overflow="auto" minHeight="120%">
 				<Box width={BODY_WIDTH}>
 					{AppHeader()}
 					<Box marginBottom={2}>

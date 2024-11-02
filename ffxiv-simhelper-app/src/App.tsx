@@ -1,9 +1,9 @@
 import {
-  BrowserRouter,
-  HashRouter,
-  Route,
-  Routes,
-  useLocation,
+	BrowserRouter,
+	HashRouter,
+	Route,
+	Routes,
+	useLocation,
 } from "react-router-dom";
 import "./App.css";
 import { SimulationResult } from "./page/SimulationResult";
@@ -49,144 +49,148 @@ export const HOME_PAGE_MIN_WIDTH_PX = (itemsPerRow: number) => itemsPerRow === 2
 
 
 export const theme = () => createTheme({
-  palette: {
-    primary: {
-      main: "#BB86FC",
-    },
+	palette: {
+		primary: {
+			main: "#BB86FC",
+		},
 
-    secondary: {
-      main: "#03DAC6",
-    },
-  },
+		secondary: {
+			main: "#03DAC6",
+		},
+	},
 
-  typography: {
-    fontFamily: "NotoSansKR, Arial",
-    h1: {
-      fontSize: "3rem",
-      fontWeight: 900,
-    },
-    h2: {
-      fontSize: "1.75rem",
-      fontWeight: 600,
-    },
-    h3: {
-      fontSize: "1.5rem",
-      fontWeight: 600,
-    },
+	typography: {
+		fontFamily: "NotoSansKR, Arial",
+		h1: {
+			fontSize: "3rem",
+			fontWeight: 900,
+		},
+		h2: {
+			fontSize: "1.75rem",
+			fontWeight: 600,
+		},
+		h3: {
+			fontSize: "1.5rem",
+			fontWeight: 600,
+		},
 
-  },
+	},
 
-  components: {
-    MuiOutlinedInput: {
-      defaultProps: {
-        notched: false,
-      },
-    },
-    MuiInputLabel: {
-      defaultProps: {
-        shrink: false,
-      },
-    },
-  },
+	components: {
+		MuiOutlinedInput: {
+			defaultProps: {
+				notched: false,
+			},
+		},
+		MuiInputLabel: {
+			defaultProps: {
+				shrink: false,
+			},
+		},
+	},
 });
 
 function App() {
-  return (
-    <ThemeProvider theme={theme()}>
-      {AppConfigurations.isApp ? AppWithHashRouter() : AppWithRouter()}
+	return (
+		<ThemeProvider theme={theme()}>
+			{AppConfigurations.isApp ? AppWithHashRouter() : AppWithRouter()}
 
-    </ThemeProvider>
+		</ThemeProvider>
 
-  );
+	);
 }
 
 export default App;
 
 function AppWithHashRouter() {
-  return (
-    <HashRouter>
-      <ScrollToTop />
-      <main className="Body">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
+	return (
+		<HashRouter>
+			<ScrollToTop />
+			<main className="Body">
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
 
-          <Route
-            path={`/${DPS_ANALYSIS_RESULT_URL}`}
-            element={<SimulationResult />}
-          />
+					<Route
+						path={`/${DPS_ANALYSIS_RESULT_URL}`}
+						element={<SimulationResult />}
+					/>
 
-          <Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
-          <Route
-            path={`/${GEAR_COMPARE_RESULT_URL}`}
-            element={<GearCompareResult />}
-          />
+					<Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
+					<Route
+						path={`/${GEAR_COMPARE_RESULT_URL}`}
+						element={<GearCompareResult />}
+					/>
 
-          <Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
-          <Route
-            path={`/${BEST_PARTNER_RESULT_URL}`}
-            element={<BestPartnerResult />}
-          />
+					<Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
+					<Route
+						path={`/${BEST_PARTNER_RESULT_URL}`}
+						element={<BestPartnerResult />}
+					/>
 
-          <Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
-          <Route
-            path={`/${BEST_STATS_RESULT_URL}`}
-            element={<StatWeightsResult />}
-          />
+					<Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
+					<Route
+						path={`/${BEST_STATS_RESULT_URL}`}
+						element={<StatWeightsResult />}
+					/>
 
-          <Route
-            path={`/${PARTY_COMPOSITION_URL}`}
-            element={<PartyComposition />}
-          />
-        </Routes>
-      </main>
-    </HashRouter>
-  )
+					<Route
+						path={`/${PARTY_COMPOSITION_URL}`}
+						element={<PartyComposition />}
+					/>
+				</Routes>
+			</main>
+		</HashRouter>
+	)
 }
 
 function AppWithRouter() {
-  return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <main className="Body">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
+	return (
+		<BrowserRouter>
+			<ScrollToTop />
+			<main className="Body">
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path={`/${DPS_ANALYSIS_URL}`} element={<DpsAnalysis />} />
 
-          <Route
-            path={`/${DPS_ANALYSIS_RESULT_URL}`}
-            element={<SimulationResult />}
-          />
+					<Route
+						path={`/${DPS_ANALYSIS_RESULT_URL}`}
+						element={<SimulationResult />}
+					/>
 
-          <Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
-          <Route
-            path={`/${GEAR_COMPARE_RESULT_URL}`}
-            element={<GearCompareResult />}
-          />
+					<Route path={`/${GEAR_COMPARE_URL}`} element={<GearCompare />} />
+					<Route
+						path={`/${GEAR_COMPARE_RESULT_URL}`}
+						element={<GearCompareResult />}
+					/>
 
-          <Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
-          <Route
-            path={`/${BEST_PARTNER_RESULT_URL}`}
-            element={<BestPartnerResult />}
-          />
+					<Route path={`/${BEST_PARTNER_URL}`} element={<BestPartner />} />
+					<Route
+						path={`/${BEST_PARTNER_RESULT_URL}`}
+						element={<BestPartnerResult />}
+					/>
 
-          <Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
-          <Route
-            path={`/${BEST_STATS_RESULT_URL}`}
-            element={<StatWeightsResult />}
-          />
-        </Routes>
-      </main>
-    </BrowserRouter>
-  )
+					<Route path={`/${BEST_STATS_URL}`} element={<BestStats />} />
+					<Route
+						path={`/${BEST_STATS_RESULT_URL}`}
+						element={<StatWeightsResult />}
+					/>
+					<Route
+						path={`/${PARTY_COMPOSITION_URL}`}
+						element={<PartyComposition />}
+					/>
+				</Routes>
+			</main>
+		</BrowserRouter>
+	)
 }
 
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+	const { pathname } = useLocation();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [pathname]);
 
-  return null;
+	return null;
 };
