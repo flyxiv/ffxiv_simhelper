@@ -162,7 +162,7 @@ export function PartyComposition() {
 					<Box alignContent={"center"} width="100%" display="flex" flexDirection="column" alignItems={"center"}>
 						<ResultBoardBox>
 							{SimulationTitle(LANGUAGE_TEXTS.PARTY_COMPOSITION_RESULT_TEXT)}
-							{PartyCompositionGraph(partyCompositionChartData, minRdps, maxRdpsOfPossibleComposition, maxRdps)}
+							{PartyCompositionGraph(partyCompositionChartData, minRdps, maxRdpsOfPossibleComposition, maxRdps, LANGUAGE_TEXTS)}
 						</ResultBoardBox>
 						<Box />
 						{Footer()}

@@ -114,7 +114,7 @@ export function PartyCompositionGraph(
 
 	return (
 		<Box width="80%" display="flex" flexDirection={"column"} justifyContent={"center"} alignItems={"center"}>
-			{GraphTitleRow("Party Composition", "Median RDPS")}
+			{GraphTitleRow(LANGUAGE_TEXTS.PARTY_COMPOSITION_TEXT, LANGUAGE_TEXTS.TOTAL_RDPS_TEXT)}
 			{partyCompositionBars}
 		</Box>
 	);
