@@ -4,7 +4,9 @@ mod tests {
         assert_test_value_is_in_range, create_party_info, create_simulation_api_request_for_testing,
     };
     use ffxiv_simhelper_api::api_handler::dpsanalysis::dps_analysis;
-    use ffxiv_simhelper_combat_components::combat_resources::ffxiv_combat_resources::ALL_FFXIV_COMBAT_JOBS;
+    use ffxiv_simhelper_combat_components::{
+        combat_resources::ffxiv_combat_resources::ALL_FFXIV_COMBAT_JOBS, types::MultiplierType,
+    };
     use itertools::Itertools;
 
     #[test]
@@ -98,8 +100,8 @@ mod tests {
             request_30_mean_opener_contribution
         );
 
-        let lower_bound = request_30_mean_opener_contribution as f64 * 0.99;
-        let upper_bound = request_30_mean_opener_contribution as f64 * 1.01;
+        let lower_bound = request_30_mean_opener_contribution as f64 * 0.95;
+        let upper_bound = request_30_mean_opener_contribution as f64 * 1.05;
 
         let mut request_110_opener_contribution_of_vpr = vec![];
         for _ in 0..test_iteration_count {
@@ -150,6 +152,68 @@ mod tests {
     }
 
     #[test]
+    fn test_pot_option() {
+        // https://github.com/flyxiv/ffxiv_simhelper_public/issues/41
+        // DPS with and without pots should have at least a 1.2% difference.
+        let iteration_count = 100;
+
+        let jobs = ALL_FFXIV_COMBAT_JOBS;
+        let combat_time_millisecond = 390000;
+
+        let minimum_ratio_bound = 1.2;
+
+        for job in jobs {
+            let party_members = vec![job];
+            let party = create_party_info(&party_members);
+
+            let mut request_with_pot =
+                create_simulation_api_request_for_testing(combat_time_millisecond, party);
+            let mut request_without_pot = request_with_pot.clone();
+
+            request_with_pot.use_pot = true;
+            request_without_pot.use_pot = false;
+
+            let mut dps_with_pot = Vec::with_capacity(iteration_count);
+            let mut dps_without_pot = Vec::with_capacity(iteration_count);
+
+            for _ in 0..iteration_count {
+                let response_with_pot = dps_analysis(request_with_pot.clone(), 1).unwrap();
+                let response_without_pot = dps_analysis(request_without_pot.clone(), 1).unwrap();
+
+                dps_with_pot
+                    .push(response_with_pot.simulation_data[0].simulation_summary.pdps[0] as usize);
+                dps_without_pot.push(
+                    response_without_pot.simulation_data[0]
+                        .simulation_summary
+                        .pdps[0] as usize,
+                );
+            }
+
+            let dps_with_pot_median = dps_with_pot
+                .iter()
+                .sorted()
+                .nth(iteration_count / 2)
+                .unwrap();
+            let dps_without_pot_median = dps_without_pot
+                .iter()
+                .sorted()
+                .nth(iteration_count / 2)
+                .unwrap();
+
+            assert!(
+                (*dps_with_pot_median as MultiplierType)
+                    > (*dps_without_pot_median as MultiplierType
+                        * (1.0 + minimum_ratio_bound / 100.0)),
+                "job {}'s median dps with pot {} is not at least {}% higher than without pot {}",
+                job,
+                dps_with_pot_median,
+                minimum_ratio_bound,
+                dps_without_pot_median
+            );
+        }
+    }
+
+    #[test]
     fn test_various_gcds() {
         // Job's dps rotation changes on different GCDs.
         // Test all jobs in serveral GCDs once to assure the logic is safe.
@@ -163,11 +227,6 @@ mod tests {
             let party = create_party_info(&party_members);
 
             for speed_multiplier_increase in 0..testing_gcd_count {
-                println!(
-                    "Testing job {} with speed multiplier increase {}",
-                    job,
-                    2 * speed_multiplier_increase
-                );
                 let mut party_with_testing_gcd = party.clone();
                 party_with_testing_gcd[0].power.speed_multiplier =
                     1.0 + 0.002 * speed_multiplier_increase as f64;

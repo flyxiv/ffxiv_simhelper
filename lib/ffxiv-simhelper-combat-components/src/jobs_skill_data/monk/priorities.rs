@@ -279,10 +279,6 @@ pub(crate) fn make_monk_ogcd_priority_table(
             )),
         },
         SkillPriorityInfo {
-            skill_id: db.potion.get_id(),
-            prerequisite: Some(MillisecondsBeforeBurst(9000)),
-        },
-        SkillPriorityInfo {
             skill_id: db.brotherhood.get_id(),
             prerequisite: None,
         },

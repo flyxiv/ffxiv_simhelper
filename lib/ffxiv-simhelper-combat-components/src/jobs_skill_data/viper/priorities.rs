@@ -110,25 +110,46 @@ pub(crate) fn make_viper_opener(db: &ViperDatabase, use_pots: bool) -> Vec<Opene
 }
 
 const COMBO_REFRESH_TIME_MILLISECOND: TimeType = 9000;
-const COMBO_MAX_TIME_LEFT_MILLISECOND: TimeType = 9000;
+const HONED_BUFF_MIN_TIME_LEFT_MILLISECOND: TimeType = COMBO_REFRESH_TIME_MILLISECOND + 7500;
+
+const COMBO_REAWAKEN_MIN_TIME_LEFT_MILLISECOND: TimeType = 15000;
+const REAWAKEN_HONED_BUFF_MIN_TIME_LEFT_MILLISECOND: TimeType =
+    COMBO_REAWAKEN_MIN_TIME_LEFT_MILLISECOND + 7500;
 
 pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPriorityInfo> {
     let steel_needs_refresh = Box::new(And(
         Box::new(Not(Box::new(HasBufforDebuff(db.honed_reavers.get_id())))),
         Box::new(BufforDebuffLessThan(
             db.honed_steels.get_id(),
-            COMBO_MAX_TIME_LEFT_MILLISECOND,
+            HONED_BUFF_MIN_TIME_LEFT_MILLISECOND,
         )),
     ));
     let dread_needs_refresh = Box::new(And(
         Box::new(Not(Box::new(HasBufforDebuff(db.honed_steels.get_id())))),
         Box::new(BufforDebuffLessThan(
             db.honed_reavers.get_id(),
-            COMBO_MAX_TIME_LEFT_MILLISECOND,
+            HONED_BUFF_MIN_TIME_LEFT_MILLISECOND,
         )),
     ));
 
     let needs_refresh = Or(steel_needs_refresh, dread_needs_refresh);
+
+    let steel_needs_refresh_reawaken = Box::new(And(
+        Box::new(Not(Box::new(HasBufforDebuff(db.honed_reavers.get_id())))),
+        Box::new(BufforDebuffLessThan(
+            db.honed_steels.get_id(),
+            REAWAKEN_HONED_BUFF_MIN_TIME_LEFT_MILLISECOND,
+        )),
+    ));
+    let dread_needs_refresh_reawaken = Box::new(And(
+        Box::new(Not(Box::new(HasBufforDebuff(db.honed_steels.get_id())))),
+        Box::new(BufforDebuffLessThan(
+            db.honed_reavers.get_id(),
+            REAWAKEN_HONED_BUFF_MIN_TIME_LEFT_MILLISECOND,
+        )),
+    ));
+
+    let needs_refresh_reawaken = Or(steel_needs_refresh_reawaken, dread_needs_refresh_reawaken);
 
     vec![
         SkillPriorityInfo {
@@ -165,14 +186,20 @@ pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPrio
         },
         SkillPriorityInfo {
             skill_id: db.reawaken.get_id(),
-            prerequisite: Some(Or(
-                Box::new(HasResource(0, 100)),
+            prerequisite: Some(And(
                 Box::new(Or(
-                    Box::new(And(
-                        Box::new(MillisecondsBeforeBurst(70000)),
-                        Box::new(Not(Box::new(MillisecondsBeforeBurst(45000)))),
+                    Box::new(HasResource(0, 100)),
+                    Box::new(Or(
+                        Box::new(And(
+                            Box::new(MillisecondsBeforeBurst(70000)),
+                            Box::new(Not(Box::new(MillisecondsBeforeBurst(45000)))),
+                        )),
+                        Box::new(MillisecondsBeforeBurst(0)),
                     )),
-                    Box::new(MillisecondsBeforeBurst(0)),
+                )),
+                Box::new(And(
+                    Box::new(Not(Box::new(ComboTimeLeftLessOrEqualTo(15000)))),
+                    Box::new(Not(Box::new(needs_refresh_reawaken.clone()))),
                 )),
             )),
         },

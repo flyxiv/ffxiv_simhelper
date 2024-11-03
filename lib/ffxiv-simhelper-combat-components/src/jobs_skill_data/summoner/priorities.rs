@@ -76,7 +76,7 @@ pub(crate) fn make_summoner_opener(db: &SummonerDatabase, use_pots: bool) -> Vec
             GcdOpener(db.ruin_iii.get_id()),
             OgcdOpener((None, None)),
             GcdOpener(db.summon_solar_bahamut.get_id()),
-            OgcdOpener((Some(db.potion.get_id()), None)),
+            OgcdOpener((None, None)),
         ]
     };
 

@@ -18,36 +18,74 @@ mod dpsanalysis;
 
 #[cfg(test)]
 fn create_party_info(party_members: &[&str]) -> Vec<PlayerInfoRequest> {
+    use ffxiv_simhelper_combat_components::live_objects::player::role::{job_abbrev_to_role, Role};
+
+    let normal_power = PlayerPower {
+        auto_attack_delays: 3.0,
+        critical_strike_rate: 0.244,
+        critical_strike_damage: 1.594,
+        direct_hit_rate: 0.338,
+        auto_direct_hit_increase: 0.067,
+        determination_multiplier: 1.086,
+        tenacity_multiplier: 1.00,
+        speed_multiplier: 1.00,
+        weapon_damage_multiplier: 1.96,
+        main_stat_multiplier: 24.92,
+        weapon_damage: 132,
+        main_stat: 4882,
+        piety: 440,
+        critical_strike: 2560,
+        direct_hit: 2500,
+        determination: 2500,
+        skill_speed: 2500,
+        gcd: 2.5,
+
+        tenacity: 400,
+        spell_speed: 2500,
+    };
+
+    let tank_power = PlayerPower {
+        auto_attack_delays: 3.0,
+        critical_strike_rate: 0.248,
+        critical_strike_damage: 1.598,
+        direct_hit_rate: 0.207,
+        auto_direct_hit_increase: 0.067,
+        determination_multiplier: 1.094,
+        tenacity_multiplier: 1.018,
+        speed_multiplier: 1.00,
+        weapon_damage_multiplier: 1.92,
+        main_stat_multiplier: 20.00,
+        weapon_damage: 132,
+        main_stat: 4882,
+        piety: 440,
+        critical_strike: 2560,
+        direct_hit: 2500,
+        determination: 2500,
+        skill_speed: 2500,
+        gcd: 2.5,
+
+        tenacity: 400,
+        spell_speed: 2500,
+    };
+
     party_members
         .iter()
         .enumerate()
-        .map(|(i, job)| PlayerInfoRequest {
-            player_id: i as PlayerIdType,
-            partner1_id: None,
-            partner2_id: None,
-            job_abbrev: job.to_string(),
-            power: PlayerPower {
-                auto_attack_delays: 3.0,
-                critical_strike_rate: 0.15,
-                critical_strike_damage: 1.5,
-                direct_hit_rate: 0.23,
-                auto_direct_hit_increase: 0.1,
-                determination_multiplier: 1.06,
-                tenacity_multiplier: 1.060,
-                speed_multiplier: 1.06,
-                weapon_damage_multiplier: 1.60,
-                main_stat_multiplier: 16.0,
-                weapon_damage: 132,
-                main_stat: 3300,
-                critical_strike: 2560,
-                direct_hit: 2500,
-                determination: 2500,
-                skill_speed: 2500,
-                gcd: 2.5,
+        .map(|(i, job)| {
+            let job_abbrev = String::from(job.to_uppercase());
+            let istank = job_abbrev_to_role(&job_abbrev) == Role::Tank;
 
-                tenacity: 400,
-                spell_speed: 2500,
-            },
+            PlayerInfoRequest {
+                player_id: i as PlayerIdType,
+                partner1_id: None,
+                partner2_id: None,
+                job_abbrev: job.to_string(),
+                power: if istank {
+                    tank_power.clone()
+                } else {
+                    normal_power.clone()
+                },
+            }
         })
         .collect_vec()
 }

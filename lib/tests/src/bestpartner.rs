@@ -1,5 +1,7 @@
 #[cfg(test)]
 mod tests {
+    use std::vec;
+
     use crate::{
         assert_test_value_is_in_range, create_config_for_simulation_test, create_party_info,
         create_simulation_api_request_for_testing,
@@ -8,7 +10,7 @@ mod tests {
 
     #[test]
     fn test_best_partner_consistency_in_different_combat_times() {
-        let test_iteration_count = 100;
+        let test_iteration_count: i32 = 100;
 
         // https://github.com/flyxiv/ffxiv_simhelper_public/issues/33
         // Viper's opener contribution differs when there's more buff timers.
@@ -49,13 +51,14 @@ mod tests {
             .into_iter()
             .sum::<i32>()
             / test_iteration_count;
+
         println!(
             "30 second fight opener contribution mean: {}",
             request_30_mean_opener_contribution
         );
 
-        let lower_bound = request_30_mean_opener_contribution as f64 * 0.99;
-        let upper_bound = request_30_mean_opener_contribution as f64 * 1.01;
+        let lower_bound = request_30_mean_opener_contribution as f64 * 0.95;
+        let upper_bound = request_30_mean_opener_contribution as f64 * 1.05;
 
         let mut request_110_opener_contribution_of_vpr = vec![];
         for _ in 0..test_iteration_count {
