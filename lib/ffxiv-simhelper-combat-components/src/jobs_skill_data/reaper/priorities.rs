@@ -244,14 +244,14 @@ pub(crate) fn make_reaper_ogcd_priority_table(
                         Box::new(And(
                             Box::new(RelatedSkillCooldownLessOrEqualThan(
                                 db.gluttony.get_id(),
-                                15000,
+                                20000,
                             )),
                             Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
                                 db.gluttony.get_id(),
-                                11000,
+                                13000,
                             )))),
                         )),
-                        Box::new(HasResource(0, 70)),
+                        Box::new(HasResource(0, 60)),
                     )),
                     Box::new(RelatedSkillCooldownLessOrEqualThan(
                         db.arcane_circle.get_id(),
@@ -260,7 +260,7 @@ pub(crate) fn make_reaper_ogcd_priority_table(
                 )),
                 Box::new(And(
                     Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
-                    Box::new(Not(Box::new(HasResource(6, 2)))),
+                    Box::new(Not(Box::new(ComboTimeLeftLessOrEqualTo(13000)))),
                 )),
             )),
         },
@@ -276,7 +276,7 @@ pub(crate) fn make_reaper_ogcd_priority_table(
             skill_id: db.gluttony.get_id(),
             prerequisite: Some(And(
                 Box::new(Not(Box::new(HasBufforDebuff(db.enshroud_status.get_id())))),
-                Box::new(Not(Box::new(HasResource(6, 2)))),
+                Box::new(Not(Box::new(ComboTimeLeftLessOrEqualTo(7500)))),
             )),
         },
         SkillPriorityInfo {
@@ -295,7 +295,7 @@ pub(crate) fn make_reaper_ogcd_priority_table(
                         Box::new(And(
                             Box::new(Not(Box::new(MillisecondsBeforeBurst(0)))),
                             Box::new(And(
-                                Box::new(Not(Box::new(HasResource(6, 2)))),
+                                Box::new(Not(Box::new(ComboTimeLeftLessOrEqualTo(5500)))),
                                 Box::new(Not(Box::new(HasResource(5, 1)))),
                             )),
                         )),

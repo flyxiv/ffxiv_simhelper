@@ -23,8 +23,6 @@ lazy_static! {
 
 const REAPER_STACK_COUNT: usize = 6;
 
-const ENSHROUD_COUNT_ID: ResourceIdType = 6;
-
 const SOUL_GAUGE_MAX: ResourceType = 100;
 const ENSHROUD_GAUGE_MAX: ResourceType = 100;
 const SOUL_REAVER_MAX: ResourceType = 1;
@@ -100,16 +98,12 @@ impl CombatResource for ReaperCombatResources {
 
     fn trigger_on_event(
         &mut self,
-        skill_id: SkillIdType,
+        _: SkillIdType,
         _: Rc<RefCell<HashMap<StatusKey, BuffStatus>>>,
         _: Rc<RefCell<HashMap<StatusKey, DebuffStatus>>>,
         _: TimeType,
         _: &FfxivPlayer,
     ) -> SkillEvents {
-        if REAPER_NORMAL_GCD_IDS.contains(&skill_id) {
-            self.resources[ENSHROUD_COUNT_ID as usize] = 0;
-        }
-
         (vec![], vec![])
     }
 

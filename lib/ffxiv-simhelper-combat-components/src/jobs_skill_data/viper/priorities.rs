@@ -6,10 +6,10 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::viper::abilities::ViperDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, HasResourceExactly,
-    MillisecondsBeforeBurst, Not, Or,
+    And, BufforDebuffLessThan, Combo, ComboTimeLeftLessOrEqualTo, HasBufforDebuff, HasResource,
+    HasResourceExactly, MillisecondsBeforeBurst, Not, Or,
 };
-use crate::types::{PlayerIdType, SkillIdType};
+use crate::types::{PlayerIdType, SkillIdType, TimeType};
 
 #[derive(Clone)]
 pub struct ViperPriorityTable {
@@ -109,14 +109,23 @@ pub(crate) fn make_viper_opener(db: &ViperDatabase, use_pots: bool) -> Vec<Opene
     opener
 }
 
+const COMBO_REFRESH_TIME_MILLISECOND: TimeType = 9000;
+const COMBO_MAX_TIME_LEFT_MILLISECOND: TimeType = 9000;
+
 pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPriorityInfo> {
     let steel_needs_refresh = Box::new(And(
         Box::new(Not(Box::new(HasBufforDebuff(db.honed_reavers.get_id())))),
-        Box::new(BufforDebuffLessThan(db.honed_steels.get_id(), 37000)),
+        Box::new(BufforDebuffLessThan(
+            db.honed_steels.get_id(),
+            COMBO_MAX_TIME_LEFT_MILLISECOND,
+        )),
     ));
     let dread_needs_refresh = Box::new(And(
         Box::new(Not(Box::new(HasBufforDebuff(db.honed_steels.get_id())))),
-        Box::new(BufforDebuffLessThan(db.honed_reavers.get_id(), 37000)),
+        Box::new(BufforDebuffLessThan(
+            db.honed_reavers.get_id(),
+            COMBO_MAX_TIME_LEFT_MILLISECOND,
+        )),
     ));
 
     let needs_refresh = Or(steel_needs_refresh, dread_needs_refresh);
@@ -178,51 +187,75 @@ pub(crate) fn make_viper_gcd_priority_table(db: &ViperDatabase) -> Vec<SkillPrio
             skill_id: db.flankstings_strike.get_id(),
             prerequisite: Some(And(
                 Box::new(Combo(Some(3))),
-                Box::new(needs_refresh.clone()),
+                Box::new(Or(
+                    Box::new(needs_refresh.clone()),
+                    Box::new(ComboTimeLeftLessOrEqualTo(COMBO_REFRESH_TIME_MILLISECOND)),
+                )),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.flanksbane_fang.get_id(),
             prerequisite: Some(And(
                 Box::new(Combo(Some(3))),
-                Box::new(needs_refresh.clone()),
+                Box::new(Or(
+                    Box::new(needs_refresh.clone()),
+                    Box::new(ComboTimeLeftLessOrEqualTo(COMBO_REFRESH_TIME_MILLISECOND)),
+                )),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.hindsting_strike.get_id(),
             prerequisite: Some(And(
                 Box::new(Combo(Some(3))),
-                Box::new(needs_refresh.clone()),
+                Box::new(Or(
+                    Box::new(needs_refresh.clone()),
+                    Box::new(ComboTimeLeftLessOrEqualTo(COMBO_REFRESH_TIME_MILLISECOND)),
+                )),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.hindsbane_fang.get_id(),
             prerequisite: Some(And(
                 Box::new(Combo(Some(3))),
-                Box::new(needs_refresh.clone()),
+                Box::new(Or(
+                    Box::new(needs_refresh.clone()),
+                    Box::new(ComboTimeLeftLessOrEqualTo(COMBO_REFRESH_TIME_MILLISECOND)),
+                )),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.hunters_sting.get_id(),
             prerequisite: Some(And(
                 Box::new(Combo(Some(2))),
-                Box::new(needs_refresh.clone()),
+                Box::new(Or(
+                    Box::new(needs_refresh.clone()),
+                    Box::new(ComboTimeLeftLessOrEqualTo(COMBO_REFRESH_TIME_MILLISECOND)),
+                )),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.swiftskins_sting.get_id(),
             prerequisite: Some(And(
                 Box::new(Combo(Some(2))),
-                Box::new(needs_refresh.clone()),
+                Box::new(Or(
+                    Box::new(needs_refresh.clone()),
+                    Box::new(ComboTimeLeftLessOrEqualTo(COMBO_REFRESH_TIME_MILLISECOND)),
+                )),
             )),
         },
         SkillPriorityInfo {
             skill_id: db.steel_fangs.get_id(),
-            prerequisite: Some(needs_refresh.clone()),
+            prerequisite: Some(Or(
+                Box::new(needs_refresh.clone()),
+                Box::new(ComboTimeLeftLessOrEqualTo(COMBO_REFRESH_TIME_MILLISECOND)),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.dread_fangs.get_id(),
-            prerequisite: Some(needs_refresh.clone()),
+            prerequisite: Some(Or(
+                Box::new(needs_refresh.clone()),
+                Box::new(ComboTimeLeftLessOrEqualTo(COMBO_REFRESH_TIME_MILLISECOND)),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.vicewinder.get_id(),
