@@ -20,6 +20,7 @@ import { PartyCompositionChartData } from "../components/graph/GraphData";
 import partyRdpsTableJson from "../assets/data/party_rdps_table.json";
 import { PartyPosition } from "../components/input/jobselection/PartyMemberJobSelection";
 import { SimulationTitle } from "../components/basic/SimulationTitle";
+import { isMobile } from "../util";
 
 const ResultBoardBox = styled(Box)`
   ${ResultBoardBoxStyle}
@@ -124,6 +125,7 @@ function toPartyCompositionChartData(partyComposition: PartyCompositionRdpsData)
 
 export function PartyComposition() {
 	let LANGUAGE_TEXTS = AppLanguageTexts();
+	let isMobileScreen = isMobile();
 
 	let [partyComposition, setPartyComposition] = useState(DEFAULT_COMPOSITION);
 
@@ -173,7 +175,7 @@ export function PartyComposition() {
 					<Box alignContent={"center"} width="100%" display="flex" flexDirection="column" alignItems={"center"}>
 						<ResultBoardBox>
 							{SimulationTitle(LANGUAGE_TEXTS.PARTY_COMPOSITION_RESULT_TEXT)}
-							{PartyCompositionGraph(partyCompositionChartData, minRdps, maxRdpsOfPossibleComposition, maxRdps, LANGUAGE_TEXTS)}
+							{PartyCompositionGraph(partyCompositionChartData, minRdps, maxRdpsOfPossibleComposition, maxRdps, isMobileScreen, LANGUAGE_TEXTS)}
 						</ResultBoardBox>
 						<Box />
 						{Footer()}

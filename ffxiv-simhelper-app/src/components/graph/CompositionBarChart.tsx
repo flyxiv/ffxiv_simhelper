@@ -35,6 +35,14 @@ const TotalRdpsBox = styled(Box)`
   ${TotalRdpsBoxStyle}
 `;
 
+const BuffBarBox = (width: number) => styled(Box)`
+	${BuffBarBoxStyle(width)}
+`
+
+const BarredBox = (idx: number) => styled(Box)`
+	${BuffBarStyle(idx)}
+`
+
 function JobBarChartPartyComposition(
 	data: PartyCompositionChartData,
 	minContribution: number,
@@ -47,13 +55,9 @@ function JobBarChartPartyComposition(
 	let maxDiff = maxContributionOfPossibleCompositions - minContribution;
 	let diff = data.totalRdps - minContribution;
 
-	let BuffBarBox = styled(Box)`
-      ${BuffBarBoxStyle((100 * diff) / maxDiff)}
-    `;
+	let BarBox = BuffBarBox((100 * diff) / maxDiff);
 
-	let Bar = styled(Box)`
-      ${BuffBarStyle(Math.min(index, 4))}
-    `;
+	let Bar = BarredBox(Math.min(index, 4));
 
 	return (
 		<PartyMemberBuffBox height={JOB_BAR_ITEM_HEIGHT} display="flex" flexDirection={"column"} justifyContent={"center"} alignItems={"center"}>
@@ -74,9 +78,9 @@ function JobBarChartPartyComposition(
 			</PartyCompositionIconBox>
 			<Box width="60%">
 				<TotalBuffBox>
-					<BuffBarBox height="40px">
+					<BarBox height="40px">
 						<Bar sx={{ height: "100%" }} />
-					</BuffBarBox>
+					</BarBox>
 				</TotalBuffBox>
 			</Box>
 			<TotalRdpsBox sx={{ height: "60px" }}>
@@ -156,16 +160,15 @@ export function PartyCompositionGraph(
 	minContribution: number,
 	maxContributionOfPossibleComposition: number,
 	maxComposition: number,
+	isMobile: boolean,
 	LANGUAGE_TEXTS: TextDictionary
 ) {
-	let partyCompositionBars = data.map((entry, index) => {
-		return isMobile() ? JobBarChartPartyCompositionMobile(entry, maxComposition) : JobBarChartPartyComposition(entry, minContribution, maxContributionOfPossibleComposition, maxComposition, index);
-	});
-
 	return (
 		<Box width="80%" display="flex" flexDirection={"column"} justifyContent={"center"} alignItems={"center"}>
 			{GraphTitleRow(LANGUAGE_TEXTS.PARTY_COMPOSITION_TEXT, LANGUAGE_TEXTS.TOTAL_RDPS_TEXT)}
-			{partyCompositionBars}
+			{data.map((entry, index) => {
+				return isMobile ? JobBarChartPartyCompositionMobile(entry, maxComposition) : JobBarChartPartyComposition(entry, minContribution, maxContributionOfPossibleComposition, maxComposition, index);
+			})}
 		</Box>
 	);
 }
