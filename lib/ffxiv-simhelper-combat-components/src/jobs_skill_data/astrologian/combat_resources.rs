@@ -104,6 +104,9 @@ impl CombatResource for AstrologianCombatResources {
     }
 
     fn trigger_on_gcd_crit(&mut self) {}
+    fn get_combo_remaining_time(&self) -> TimeType {
+        0
+    }
 
     fn get_next_buff_target(&self, skill_id: SkillIdType) -> PlayerIdType {
         if skill_id == 505 {
@@ -114,7 +117,7 @@ impl CombatResource for AstrologianCombatResources {
             0
         }
     }
-    fn update_stack_timer(&mut self, elapsed_time_millisecond: TimeType) {
+    fn update_other_time_related_states(&mut self, elapsed_time_millisecond: TimeType) {
         if let Some(timer) = self.stellar_timer {
             self.stellar_timer = Some(max(timer - elapsed_time_millisecond, 0));
         }

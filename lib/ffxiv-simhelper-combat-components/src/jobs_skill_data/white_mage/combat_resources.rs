@@ -75,13 +75,17 @@ impl CombatResource for WhitemageCombatResources {
     fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
-    fn update_stack_timer(&mut self, elapsed_time_millisecond: TimeType) {
+    fn update_other_time_related_states(&mut self, elapsed_time_millisecond: TimeType) {
         if elapsed_time_millisecond >= self.next_lily_time {
             self.add_resource(LILY_STACK_ID, 1);
             self.next_lily_time += LILY_STACK_INTERVAL_MILLISECOND;
         }
 
         self.next_lily_time -= elapsed_time_millisecond;
+    }
+
+    fn get_combo_remaining_time(&self) -> TimeType {
+        0
     }
 }
 

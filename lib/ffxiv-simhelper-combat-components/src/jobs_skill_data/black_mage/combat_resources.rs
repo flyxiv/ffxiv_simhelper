@@ -103,13 +103,17 @@ impl CombatResource for BlackmageCombatResources {
         0
     }
 
-    fn update_stack_timer(&mut self, elapsed_time_millisecond: TimeType) {
+    fn update_other_time_related_states(&mut self, elapsed_time_millisecond: TimeType) {
         if elapsed_time_millisecond >= self.next_polyglot_time {
             self.add_resource(POLYGLOT_STACK_ID, 1);
             self.next_polyglot_time += POLYGLOT_STACK_INTERVAL_MILLISECOND;
         }
 
         self.next_polyglot_time -= elapsed_time_millisecond;
+    }
+
+    fn get_combo_remaining_time(&self) -> TimeType {
+        0
     }
 }
 

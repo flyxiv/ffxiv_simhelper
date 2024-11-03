@@ -108,10 +108,14 @@ impl CombatResource for DarkknightCombatResources {
     fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
-    fn update_stack_timer(&mut self, elapsed_time: TimeType) {
+    fn update_other_time_related_states(&mut self, elapsed_time: TimeType) {
         if let Some(delay_time) = self.living_shadow_delay {
             self.living_shadow_delay = Some(max(delay_time - elapsed_time, 0))
         }
+    }
+
+    fn get_combo_remaining_time(&self) -> TimeType {
+        0
     }
 }
 

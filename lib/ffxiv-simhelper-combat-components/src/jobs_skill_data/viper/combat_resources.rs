@@ -1,3 +1,4 @@
+use crate::combat_resources::ffxiv_combat_resources::COMBO_MAX_TIME_LEFT_MILLISECOND;
 use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::viper::abilities::make_viper_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -10,6 +11,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{SkillIdType, TimeType};
 use std::cell::RefCell;
+use std::cmp::max;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -56,6 +58,7 @@ pub(crate) struct ViperCombatResources {
     current_combo: ComboType,
 
     resources: [ResourceType; VIPER_STACK_COUNT],
+    combo_time_left_millisecond: TimeType,
 }
 
 impl CombatResource for ViperCombatResources {
@@ -85,6 +88,11 @@ impl CombatResource for ViperCombatResources {
 
     fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
+            self.combo_time_left_millisecond = if *combo_id == 1 {
+                TimeType::MAX
+            } else {
+                COMBO_MAX_TIME_LEFT_MILLISECOND
+            };
             self.current_combo = Some(*combo_id);
         }
     }
@@ -104,7 +112,19 @@ impl CombatResource for ViperCombatResources {
     fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
-    fn update_stack_timer(&mut self, _: TimeType) {}
+    fn update_other_time_related_states(&mut self, time_elapsed_millisecond: TimeType) {
+        self.combo_time_left_millisecond = max(
+            self.combo_time_left_millisecond - time_elapsed_millisecond,
+            0,
+        );
+
+        if self.combo_time_left_millisecond == 0 {
+            self.current_combo = None;
+        }
+    }
+    fn get_combo_remaining_time(&self) -> TimeType {
+        self.combo_time_left_millisecond
+    }
 }
 
 impl ViperCombatResources {
@@ -114,6 +134,7 @@ impl ViperCombatResources {
             current_combo: None,
 
             resources: [0; VIPER_STACK_COUNT],
+            combo_time_left_millisecond: COMBO_MAX_TIME_LEFT_MILLISECOND,
         }
     }
 }

@@ -221,7 +221,7 @@ impl ReaperDatabase {
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
-            combo: Some(0),
+            combo: Some(1),
             delay_millisecond: None,
             casting_time_millisecond: 0,
             gcd_cooldown_millisecond: 2500,

@@ -171,7 +171,7 @@ impl CombatResource for MachinistCombatResources {
     fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
-    fn update_stack_timer(&mut self, elapsed_time: TimeType) {
+    fn update_other_time_related_states(&mut self, elapsed_time: TimeType) {
         if let Some((potency, delay)) = self.queen_damage_incoming {
             self.queen_damage_incoming = Some((potency, max(delay - elapsed_time, 0)));
         }
@@ -179,6 +179,10 @@ impl CombatResource for MachinistCombatResources {
         if let Some((potency, delay)) = self.wildfire_damage_incoming {
             self.wildfire_damage_incoming = Some((potency, max(delay - elapsed_time, 0)));
         }
+    }
+
+    fn get_combo_remaining_time(&self) -> TimeType {
+        0
     }
 }
 

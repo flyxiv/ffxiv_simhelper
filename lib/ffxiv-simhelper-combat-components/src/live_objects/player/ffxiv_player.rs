@@ -413,9 +413,7 @@ impl FfxivPlayer {
 
 impl CooldownTimer for FfxivPlayer {
     fn update_cooldown(&mut self, time_passed: TimeType) {
-        self.combat_resources
-            .borrow_mut()
-            .update_cooldown(time_passed);
+        self.combat_resources.borrow_mut().update_time(time_passed);
     }
 }
 

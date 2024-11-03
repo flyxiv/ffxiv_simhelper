@@ -33,6 +33,7 @@ pub(crate) enum SkillPrerequisite {
     And(Box<SkillPrerequisite>, Box<SkillPrerequisite>),
     Not(Box<SkillPrerequisite>),
     Combo(ComboType),
+    ComboTimeLeftLessOrEqualTo(TimeType),
     HasBufforDebuff(SkillIdType),
     BufforDebuffLessThan(SkillIdType, TimeType),
     HasResource(ResourceIdType, ResourceType),
@@ -537,6 +538,13 @@ pub(crate) trait PriorityTable: Sized + Clone {
                 time_offset,
                 *status_id,
             ),
+
+            SkillPrerequisite::ComboTimeLeftLessOrEqualTo(time_millisecond) => {
+                information_needed
+                    .combat_resources
+                    .get_combo_remaining_time()
+                    <= *time_millisecond
+            }
             SkillPrerequisite::BufforDebuffLessThan(status_id, time_millisecond) => {
                 let mut buff_remaining_time = if let Some(buff) = information_needed
                     .buffs

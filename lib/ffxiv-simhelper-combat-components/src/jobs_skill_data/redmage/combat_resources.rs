@@ -78,7 +78,10 @@ impl CombatResource for RedmageCombatResources {
     fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
-    fn update_stack_timer(&mut self, _: TimeType) {}
+    fn update_other_time_related_states(&mut self, _: TimeType) {}
+    fn get_combo_remaining_time(&self) -> TimeType {
+        0
+    }
 }
 
 impl RedmageCombatResources {

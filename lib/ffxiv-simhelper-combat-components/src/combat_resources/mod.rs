@@ -59,13 +59,17 @@ pub(crate) trait CombatResource: Clone + Sized {
 
     fn get_next_buff_target(&self, skill_id: SkillIdType) -> PlayerIdType;
 
-    fn update_cooldown(&mut self, elapsed_time: TimeType) {
+    fn update_time(&mut self, elapsed_time: TimeType) {
         let skill_table = self.get_skills_mut();
         for skill in skill_table.values_mut() {
             skill.update_cooldown(elapsed_time);
         }
-        self.update_stack_timer(elapsed_time);
+        self.update_other_time_related_states(elapsed_time);
     }
 
-    fn update_stack_timer(&mut self, elapsed_time: TimeType);
+    /// This is only implemented for jobs that actually have danger of not refreshing their combo
+    /// when doing their "proper" rotation due to performance reason.
+    fn get_combo_remaining_time(&self) -> TimeType;
+
+    fn update_other_time_related_states(&mut self, elapsed_time: TimeType);
 }

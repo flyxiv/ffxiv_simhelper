@@ -128,7 +128,10 @@ impl CombatResource for PictomancerCombatResources {
         0
     }
 
-    fn update_stack_timer(&mut self, _: TimeType) {}
+    fn update_other_time_related_states(&mut self, _: TimeType) {}
+    fn get_combo_remaining_time(&self) -> TimeType {
+        0
+    }
 }
 
 impl PictomancerCombatResources {

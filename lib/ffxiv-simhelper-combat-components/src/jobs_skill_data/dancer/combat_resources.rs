@@ -1,3 +1,4 @@
+use crate::combat_resources::ffxiv_combat_resources::COMBO_MAX_TIME_LEFT_MILLISECOND;
 use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::dancer::abilities::make_dancer_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -10,6 +11,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{SkillIdType, TimeType};
 use std::cell::RefCell;
+use std::cmp::max;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -27,6 +29,7 @@ pub(crate) struct DancerCombatResources {
     current_combo: ComboType,
     partner_player_id: PlayerIdType,
     resources: [ResourceType; DANCER_STACK_COUNT],
+    combo_remaining_time: TimeType,
 }
 
 impl CombatResource for DancerCombatResources {
@@ -56,6 +59,7 @@ impl CombatResource for DancerCombatResources {
 
     fn update_combo(&mut self, combo: &ComboType) {
         if let Some(combo_id) = combo {
+            self.combo_remaining_time = COMBO_MAX_TIME_LEFT_MILLISECOND;
             self.current_combo = Some(*combo_id);
         }
     }
@@ -75,7 +79,17 @@ impl CombatResource for DancerCombatResources {
     fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         self.partner_player_id
     }
-    fn update_stack_timer(&mut self, _: TimeType) {}
+    fn update_other_time_related_states(&mut self, elapsed_time_millisecond: TimeType) {
+        self.combo_remaining_time = max(self.combo_remaining_time - elapsed_time_millisecond, 0);
+
+        if self.combo_remaining_time == 0 {
+            self.current_combo = None;
+        }
+    }
+
+    fn get_combo_remaining_time(&self) -> TimeType {
+        self.combo_remaining_time
+    }
 }
 
 impl DancerCombatResources {
@@ -85,6 +99,7 @@ impl DancerCombatResources {
             current_combo: None,
             partner_player_id,
             resources: [0; DANCER_STACK_COUNT],
+            combo_remaining_time: COMBO_MAX_TIME_LEFT_MILLISECOND,
         }
     }
 }

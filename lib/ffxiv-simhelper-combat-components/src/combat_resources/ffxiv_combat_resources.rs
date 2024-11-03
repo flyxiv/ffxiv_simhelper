@@ -38,6 +38,8 @@ pub const ALL_FFXIV_COMBAT_JOBS: [&str; 21] = [
     "VPR", "BRD", "DNC", "MCH", "BLM", "SMN", "RDM", "PCT",
 ];
 
+pub static COMBO_MAX_TIME_LEFT_MILLISECOND: TimeType = 30000;
+
 #[derive(Clone)]
 pub(crate) enum FfxivCombatResources {
     Paladin(PaladinCombatResources),
@@ -235,6 +237,40 @@ impl CombatResource for FfxivCombatResources {
             Self::Summoner(summoner_resources) => summoner_resources.get_current_combo(),
             Self::Redmage(redmage_resources) => redmage_resources.get_current_combo(),
             Self::Pictomancer(pictomancer_resources) => pictomancer_resources.get_current_combo(),
+        }
+    }
+
+    fn get_combo_remaining_time(&self) -> TimeType {
+        match self {
+            Self::Paladin(paladin_resources) => paladin_resources.get_combo_remaining_time(),
+            Self::Warrior(warrior_resources) => warrior_resources.get_combo_remaining_time(),
+            Self::Darkknight(darkknight_resources) => {
+                darkknight_resources.get_combo_remaining_time()
+            }
+            Self::Gunbreaker(gunbreaker_resources) => {
+                gunbreaker_resources.get_combo_remaining_time()
+            }
+            Self::Whitemage(whitemage_resources) => whitemage_resources.get_combo_remaining_time(),
+            Self::Scholar(scholar_resources) => scholar_resources.get_combo_remaining_time(),
+            Self::Astrologian(astrologian_resources) => {
+                astrologian_resources.get_combo_remaining_time()
+            }
+            Self::Sage(sage_resources) => sage_resources.get_combo_remaining_time(),
+            Self::Dragoon(dragoon_resources) => dragoon_resources.get_combo_remaining_time(),
+            Self::Monk(monk_resources) => monk_resources.get_combo_remaining_time(),
+            Self::Ninja(ninja_resources) => ninja_resources.get_combo_remaining_time(),
+            Self::Samurai(samurai_resources) => samurai_resources.get_combo_remaining_time(),
+            Self::Reaper(reaper_resources) => reaper_resources.get_combo_remaining_time(),
+            Self::Viper(viper_resources) => viper_resources.get_combo_remaining_time(),
+            Self::Bard(bard_resources) => bard_resources.get_combo_remaining_time(),
+            Self::Machinist(machinist_resources) => machinist_resources.get_combo_remaining_time(),
+            Self::Dancer(dancer_resources) => dancer_resources.get_combo_remaining_time(),
+            Self::Blackmage(blackmage_resources) => blackmage_resources.get_combo_remaining_time(),
+            Self::Summoner(summoner_resources) => summoner_resources.get_combo_remaining_time(),
+            Self::Redmage(redmage_resources) => redmage_resources.get_combo_remaining_time(),
+            Self::Pictomancer(pictomancer_resources) => {
+                pictomancer_resources.get_combo_remaining_time()
+            }
         }
     }
 
@@ -463,44 +499,70 @@ impl CombatResource for FfxivCombatResources {
         }
     }
 
-    fn update_stack_timer(&mut self, elapsed_time: TimeType) {
+    fn update_other_time_related_states(&mut self, elapsed_time: TimeType) {
         match self {
-            Self::Paladin(paladin_resources) => paladin_resources.update_stack_timer(elapsed_time),
-            Self::Warrior(warrior_resources) => warrior_resources.update_stack_timer(elapsed_time),
+            Self::Paladin(paladin_resources) => {
+                paladin_resources.update_other_time_related_states(elapsed_time)
+            }
+            Self::Warrior(warrior_resources) => {
+                warrior_resources.update_other_time_related_states(elapsed_time)
+            }
             Self::Darkknight(darkknight_resources) => {
-                darkknight_resources.update_stack_timer(elapsed_time)
+                darkknight_resources.update_other_time_related_states(elapsed_time)
             }
             Self::Gunbreaker(gunbreaker_resources) => {
-                gunbreaker_resources.update_stack_timer(elapsed_time)
+                gunbreaker_resources.update_other_time_related_states(elapsed_time)
             }
             Self::Whitemage(whitemage_resources) => {
-                whitemage_resources.update_stack_timer(elapsed_time)
+                whitemage_resources.update_other_time_related_states(elapsed_time)
             }
-            Self::Scholar(scholar_resources) => scholar_resources.update_stack_timer(elapsed_time),
+            Self::Scholar(scholar_resources) => {
+                scholar_resources.update_other_time_related_states(elapsed_time)
+            }
             Self::Astrologian(astrologian_resources) => {
-                astrologian_resources.update_stack_timer(elapsed_time)
+                astrologian_resources.update_other_time_related_states(elapsed_time)
             }
-            Self::Sage(sage_resources) => sage_resources.update_stack_timer(elapsed_time),
-            Self::Dragoon(dragoon_resources) => dragoon_resources.update_stack_timer(elapsed_time),
-            Self::Monk(monk_resources) => monk_resources.update_stack_timer(elapsed_time),
-            Self::Ninja(ninja_resources) => ninja_resources.update_stack_timer(elapsed_time),
-            Self::Samurai(samurai_resources) => samurai_resources.update_stack_timer(elapsed_time),
-            Self::Reaper(reaper_resources) => reaper_resources.update_stack_timer(elapsed_time),
-            Self::Viper(viper_resources) => viper_resources.update_stack_timer(elapsed_time),
-            Self::Bard(bard_resources) => bard_resources.update_stack_timer(elapsed_time),
+            Self::Sage(sage_resources) => {
+                sage_resources.update_other_time_related_states(elapsed_time)
+            }
+            Self::Dragoon(dragoon_resources) => {
+                dragoon_resources.update_other_time_related_states(elapsed_time)
+            }
+            Self::Monk(monk_resources) => {
+                monk_resources.update_other_time_related_states(elapsed_time)
+            }
+            Self::Ninja(ninja_resources) => {
+                ninja_resources.update_other_time_related_states(elapsed_time)
+            }
+            Self::Samurai(samurai_resources) => {
+                samurai_resources.update_other_time_related_states(elapsed_time)
+            }
+            Self::Reaper(reaper_resources) => {
+                reaper_resources.update_other_time_related_states(elapsed_time)
+            }
+            Self::Viper(viper_resources) => {
+                viper_resources.update_other_time_related_states(elapsed_time)
+            }
+            Self::Bard(bard_resources) => {
+                bard_resources.update_other_time_related_states(elapsed_time)
+            }
             Self::Machinist(machinist_resources) => {
-                machinist_resources.update_stack_timer(elapsed_time)
+                machinist_resources.update_other_time_related_states(elapsed_time)
             }
-            Self::Dancer(dancer_resources) => dancer_resources.update_stack_timer(elapsed_time),
+            Self::Dancer(dancer_resources) => {
+                dancer_resources.update_other_time_related_states(elapsed_time)
+            }
             Self::Blackmage(blackmage_resources) => {
-                blackmage_resources.update_stack_timer(elapsed_time)
+                blackmage_resources.update_other_time_related_states(elapsed_time)
             }
             Self::Summoner(summoner_resources) => {
-                summoner_resources.update_stack_timer(elapsed_time)
+                summoner_resources.update_other_time_related_states(elapsed_time)
             }
-            Self::Redmage(redmage_resources) => redmage_resources.update_stack_timer(elapsed_time),
+            Self::Redmage(redmage_resources) => {
+                redmage_resources.update_other_time_related_states(elapsed_time)
+            }
             Self::Pictomancer(pictomancer_resources) => {
-                pictomancer_resources.update_stack_timer(elapsed_time)
+                pictomancer_resources.update_other_time_related_states(elapsed_time)
             }
         }
     }

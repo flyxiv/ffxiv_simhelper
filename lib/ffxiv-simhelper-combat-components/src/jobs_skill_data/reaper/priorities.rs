@@ -2,8 +2,8 @@ use crate::id_entity::IdEntity;
 use crate::jobs_skill_data::reaper::abilities::ReaperDatabase;
 use crate::rotation::priority_table::Opener::{GcdOpener, OgcdOpener};
 use crate::rotation::priority_table::SkillPrerequisite::{
-    And, BufforDebuffLessThan, Combo, HasBufforDebuff, HasResource, HasResourceExactly,
-    MillisecondsBeforeBurst, Not, Or, RelatedSkillCooldownLessOrEqualThan,
+    And, BufforDebuffLessThan, Combo, ComboTimeLeftLessOrEqualTo, HasBufforDebuff, HasResource,
+    HasResourceExactly, MillisecondsBeforeBurst, Not, Or, RelatedSkillCooldownLessOrEqualThan,
 };
 use crate::rotation::priority_table::{Opener, PriorityTable};
 use crate::rotation::SkillPriorityInfo;
@@ -144,15 +144,21 @@ pub(crate) fn make_reaper_gcd_priority_table(db: &ReaperDatabase) -> Vec<SkillPr
         },
         SkillPriorityInfo {
             skill_id: db.infernal_slice.get_id(),
-            prerequisite: Some(And(Box::new(HasResource(6, 2)), Box::new(Combo(Some(3))))),
+            prerequisite: Some(And(
+                Box::new(ComboTimeLeftLessOrEqualTo(10000)),
+                Box::new(Combo(Some(3))),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.waxing_slice.get_id(),
-            prerequisite: Some(And(Box::new(HasResource(6, 2)), Box::new(Combo(Some(2))))),
+            prerequisite: Some(And(
+                Box::new(ComboTimeLeftLessOrEqualTo(10000)),
+                Box::new(Combo(Some(2))),
+            )),
         },
         SkillPriorityInfo {
             skill_id: db.slice.get_id(),
-            prerequisite: Some(HasResource(6, 2)),
+            prerequisite: Some(ComboTimeLeftLessOrEqualTo(10000)),
         },
         SkillPriorityInfo {
             skill_id: db.executioners_gibbet.get_id(),

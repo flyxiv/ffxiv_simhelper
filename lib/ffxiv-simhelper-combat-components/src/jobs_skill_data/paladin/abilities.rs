@@ -12,7 +12,6 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_info::StatusInfo;
 use crate::types::PlayerIdType;
 use std::collections::HashMap;
-use std::hash::Hash;
 
 pub(crate) struct PaladinDatabase {
     pub(crate) fast_blade: AttackSkill,
@@ -36,7 +35,6 @@ pub(crate) struct PaladinDatabase {
     pub(crate) blade_of_honor: AttackSkill,
 
     pub(crate) fight_or_flight_buff: BuffStatus,
-    pub(crate) confiteor_ready: BuffStatus,
 
     pub(crate) potion: AttackSkill,
 }
@@ -744,7 +742,6 @@ impl PaladinDatabase {
             blade_of_honor,
 
             fight_or_flight_buff,
-            confiteor_ready,
 
             potion: potion_skill.potion,
         }

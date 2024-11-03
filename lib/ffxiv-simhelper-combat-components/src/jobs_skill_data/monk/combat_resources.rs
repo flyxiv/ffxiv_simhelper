@@ -114,9 +114,13 @@ impl CombatResource for MonkCombatResources {
     fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
-    fn update_stack_timer(&mut self, _: TimeType) {}
+    fn update_other_time_related_states(&mut self, _: TimeType) {}
     fn trigger_on_gcd_crit(&mut self) {
         self.add_resource(CHAKRA_STACK_ID, 1)
+    }
+
+    fn get_combo_remaining_time(&self) -> TimeType {
+        0
     }
 }
 

@@ -1,3 +1,4 @@
+use crate::combat_resources::ffxiv_combat_resources::COMBO_MAX_TIME_LEFT_MILLISECOND;
 use crate::combat_resources::CombatResource;
 use crate::jobs_skill_data::reaper::abilities::make_reaper_skill_list;
 use crate::live_objects::player::ffxiv_player::FfxivPlayer;
@@ -11,6 +12,7 @@ use crate::types::{ComboType, PlayerIdType, ResourceIdType, ResourceType};
 use crate::types::{SkillIdType, TimeType};
 use lazy_static::lazy_static;
 use std::cell::RefCell;
+use std::cmp::max;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -19,7 +21,7 @@ lazy_static! {
     static ref REAPER_NORMAL_GCD_IDS: Vec<SkillIdType> = vec![1200, 1201, 1202];
 }
 
-const REAPER_STACK_COUNT: usize = 7;
+const REAPER_STACK_COUNT: usize = 6;
 
 const ENSHROUD_COUNT_ID: ResourceIdType = 6;
 
@@ -37,7 +39,6 @@ const REAPER_MAX_STACKS: [ResourceType; REAPER_STACK_COUNT] = [
     ENSHROUD_STACK_MAX,
     LEMURES_STACK_MAX,
     EXECUTIONER_STACK_MAX,
-    100,
 ];
 
 /// Reaper Combat Resources Mechanism
@@ -49,9 +50,6 @@ const REAPER_MAX_STACKS: [ResourceType; REAPER_STACK_COUNT] = [
 /// - resource[3]: enshroud stack - gets five stacks when enshroud is used. Cross/Void Reaping + Communio consumes the stack
 /// - resource[4]: lemures stack - gets one stacks when Cross/Void reaping is used. Lemure's slice consumes 2 stacks
 /// - resource[5]: executioner stack - gets two stacks when gluttony is used. Executioner's Gallows/Gibbet consumes the stack
-/// - resource[6]: Combo refresh stack - when two enshroud is used consecutively, RPR needs to use a combo GCD(slice, waxing slice or infernal slice) to refresh the combo.
-///                This stack is increased whenever enshroud is used, and is reset to 0 every time RPR uses a combo GCD
-///                RPR must use a GCD to refresh the combo when the stack reaches 2
 #[derive(Clone)]
 pub(crate) struct ReaperCombatResources {
     skills: SkillTable<AttackSkill>,
@@ -60,6 +58,7 @@ pub(crate) struct ReaperCombatResources {
     player_id: PlayerIdType,
     current_combo: ComboType,
     resources: [ResourceType; REAPER_STACK_COUNT],
+    combo_time_left_millisecond: TimeType,
 }
 
 impl CombatResource for ReaperCombatResources {
@@ -88,8 +87,14 @@ impl CombatResource for ReaperCombatResources {
     }
 
     fn update_combo(&mut self, combo: &ComboType) {
-        if let Some(combo) = combo {
-            self.current_combo = Some(*combo);
+        if let Some(combo_id) = combo {
+            self.combo_time_left_millisecond = if *combo_id == 1 {
+                TimeType::MAX
+            } else {
+                COMBO_MAX_TIME_LEFT_MILLISECOND
+            };
+
+            self.current_combo = Some(*combo_id);
         }
     }
 
@@ -113,7 +118,20 @@ impl CombatResource for ReaperCombatResources {
     fn get_next_buff_target(&self, _: SkillIdType) -> PlayerIdType {
         0
     }
-    fn update_stack_timer(&mut self, _: TimeType) {}
+    fn update_other_time_related_states(&mut self, elapsed_time_millisecond: TimeType) {
+        self.combo_time_left_millisecond = max(
+            self.combo_time_left_millisecond - elapsed_time_millisecond,
+            0,
+        );
+
+        if self.combo_time_left_millisecond == 0 {
+            self.current_combo = None;
+        }
+    }
+
+    fn get_combo_remaining_time(&self) -> TimeType {
+        self.combo_time_left_millisecond
+    }
 }
 
 impl ReaperCombatResources {
@@ -123,6 +141,7 @@ impl ReaperCombatResources {
             player_id,
             current_combo: None,
             resources: [0; REAPER_STACK_COUNT],
+            combo_time_left_millisecond: COMBO_MAX_TIME_LEFT_MILLISECOND,
         }
     }
 }
