@@ -530,7 +530,7 @@ impl FfxivSimulationBoard {
             200,
             0,
             TimeType::MAX,
-            vec![FfxivEvent::IncreasePlayerResource(player_id, 0, 220, 0)],
+            vec![FfxivEvent::IncreasePlayerResource(player_id, 0, 200, 0)],
             self.event_queue.clone(),
             player_id,
             100,

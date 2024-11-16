@@ -112,7 +112,22 @@ pub(crate) fn make_gunbreaker_gcd_priority_table(
                     db.bloodfest.get_id(),
                     8000,
                 )),
-                Box::new(And(Box::new(HasResource(0, 3)), Box::new(Combo(Some(3))))),
+                Box::new(Or(
+                    Box::new(And(Box::new(HasResource(0, 3)), Box::new(Combo(Some(3))))),
+                    Box::new(And(
+                        Box::new(HasBufforDebuff(db.no_mercy_buff.get_id())),
+                        Box::new(And(
+                            Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                                db.gnashing_fang.get_id(),
+                                10000,
+                            )))),
+                            Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
+                                db.double_down.get_id(),
+                                40000,
+                            )))),
+                        )),
+                    )),
+                )),
             )),
         },
         SkillPriorityInfo {

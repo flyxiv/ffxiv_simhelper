@@ -63,14 +63,17 @@ pub(crate) fn make_darkknight_opener(db: &DarkknightDatabase, use_pots: bool) ->
             GcdOpener(db.the_blackest_night.get_id()),
             OgcdOpener((None, None)),
             GcdOpener(db.hard_slash.get_id()),
-            OgcdOpener((Some(db.potion.get_id()), Some(db.edge_of_shadow.get_id()))),
+            OgcdOpener((
+                Some(db.potion.get_id()),
+                Some(db.edge_of_shadow_proc.get_id()),
+            )),
         ]
     } else {
         vec![
             GcdOpener(db.the_blackest_night.get_id()),
             OgcdOpener((None, None)),
             GcdOpener(db.hard_slash.get_id()),
-            OgcdOpener((Some(db.edge_of_shadow.get_id()), None)),
+            OgcdOpener((Some(db.edge_of_shadow_proc.get_id()), None)),
         ]
     };
 
@@ -82,7 +85,7 @@ pub(crate) fn make_darkknight_opener(db: &DarkknightDatabase, use_pots: bool) ->
         GcdOpener(db.disesteem.get_id()),
         OgcdOpener((
             Some(db.salted_earth.get_id()),
-            Some(db.edge_of_shadow_proc.get_id()),
+            Some(db.edge_of_shadow.get_id()),
         )),
         GcdOpener(db.scarlet_delirium.get_id()),
         OgcdOpener((
@@ -164,7 +167,7 @@ pub(crate) fn make_darkknight_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.edge_of_shadow.get_id(),
-            prerequisite: Some(HasResource(0, 8000)),
+            prerequisite: Some(HasResource(0, 9000)),
         },
         SkillPriorityInfo {
             skill_id: db.delirium.get_id(),

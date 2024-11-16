@@ -561,7 +561,7 @@ impl DancerDatabase {
             id: 1506,
             name: "Fan Dance I".to_string(),
             player_id,
-            potency: 150,
+            potency: 180,
             trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![(
@@ -598,7 +598,7 @@ impl DancerDatabase {
             id: 1507,
             name: "Fan Dance III".to_string(),
             player_id,
-            potency: 200,
+            potency: 220,
             trait_percent: 120,
             additional_skill_events: vec![],
             proc_events: vec![],

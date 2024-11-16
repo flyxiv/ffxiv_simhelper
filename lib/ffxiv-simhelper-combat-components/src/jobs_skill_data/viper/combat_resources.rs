@@ -93,6 +93,7 @@ impl CombatResource for ViperCombatResources {
             } else {
                 COMBO_MAX_TIME_LEFT_MILLISECOND
             };
+
             self.current_combo = Some(*combo_id);
         }
     }

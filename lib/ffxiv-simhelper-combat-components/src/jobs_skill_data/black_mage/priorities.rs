@@ -80,15 +80,15 @@ pub(crate) fn make_blackmage_opener(db: &BlackmageDatabase, use_pot: bool) -> Ve
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.fire4_triplecast.get_id()),
         Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.despair_triplecast.get_id()),
-        Opener::OgcdOpener((Some(db.manafont.get_id()), Some(db.triplecast.get_id()))),
+        Opener::GcdOpener(db.despair.get_id()),
+        Opener::OgcdOpener((Some(db.manafont.get_id()), None)),
         Opener::GcdOpener(db.fire4_triplecast.get_id()),
-        Opener::OgcdOpener((None, None)),
+        Opener::OgcdOpener((Some(db.triplecast.get_id()), None)),
         Opener::GcdOpener(db.fire4_triplecast.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.flare_star_triplecast.get_id()),
         Opener::OgcdOpener((None, None)),
-        Opener::GcdOpener(db.fire4.get_id()),
+        Opener::GcdOpener(db.fire4_triplecast.get_id()),
         Opener::OgcdOpener((None, None)),
         Opener::GcdOpener(db.high_thunder.get_id()),
         Opener::OgcdOpener((None, None)),
@@ -137,10 +137,6 @@ pub(crate) fn make_blackmage_gcd_priority_table(db: &BlackmageDatabase) -> Vec<S
                 Box::new(HasResource(4, 1)),
                 Box::new(timing_for_triplecast),
             )),
-        },
-        SkillPriorityInfo {
-            skill_id: db.despair_triplecast.get_id(),
-            prerequisite: None,
         },
         SkillPriorityInfo {
             skill_id: db.despair.get_id(),
@@ -281,7 +277,7 @@ pub(crate) fn make_blackmage_ogcd_priority_table(
         SkillPriorityInfo {
             skill_id: db.triplecast.get_id(),
             prerequisite: Some(And(
-                Box::new(HasResource(2, 6)),
+                Box::new(HasResource(2, 5)),
                 Box::new(Not(Box::new(RelatedSkillCooldownLessOrEqualThan(
                     db.manafont.get_id(),
                     1000,
@@ -290,7 +286,7 @@ pub(crate) fn make_blackmage_ogcd_priority_table(
         },
         SkillPriorityInfo {
             skill_id: db.leylines.get_id(),
-            prerequisite: None,
+            prerequisite: Some(Not(Box::new(HasBufforDebuff(db.leylines_buff.get_id())))),
         },
         SkillPriorityInfo {
             skill_id: db.amplifier.get_id(),

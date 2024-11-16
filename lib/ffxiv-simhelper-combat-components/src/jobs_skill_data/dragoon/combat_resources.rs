@@ -16,7 +16,7 @@ use std::rc::Rc;
 
 const DRAGOON_STACKS_COUNT: usize = 2;
 
-const NASTROND_MAX_STACK: ResourceType = 3;
+const NASTROND_MAX_STACK: ResourceType = 1;
 const FIRSTMIND_MAX_STACK: ResourceType = 2;
 
 const DRAGOON_MAX_STACKS: [ResourceType; DRAGOON_STACKS_COUNT] =

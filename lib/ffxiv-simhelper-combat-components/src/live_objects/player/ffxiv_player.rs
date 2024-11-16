@@ -22,7 +22,7 @@ use crate::status::debuff_status::DebuffStatus;
 use crate::status::status_holder::StatusHolder;
 use crate::status::status_info::StatusInfo;
 use crate::status::status_timer::StatusTimer;
-use crate::types::{MultiplierType, StatusTable};
+use crate::types::{MultiplierType, ResourceIdType, ResourceType, StatusTable};
 use crate::types::{PlayerIdType, SkillIdType, TimeType};
 use std::cell::RefCell;
 use std::cmp::Reverse;
@@ -166,6 +166,10 @@ impl Player for FfxivPlayer {
 impl FfxivPlayer {
     pub fn get_id(&self) -> PlayerIdType {
         self.id
+    }
+
+    pub fn get_resource(&self, resource_id: ResourceIdType) -> ResourceType {
+        self.combat_resources.borrow().get_resource(resource_id)
     }
 
     fn update_player_time_informations(&mut self) {

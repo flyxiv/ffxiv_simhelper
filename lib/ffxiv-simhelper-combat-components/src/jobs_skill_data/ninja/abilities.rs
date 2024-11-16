@@ -762,7 +762,7 @@ impl NinjaDatabase {
             id: 1018,
             name: String::from("Dream Within a Dream"),
             player_id,
-            potency: 450,
+            potency: 540,
             use_type: UseType::UseOnTarget,
             trait_percent: 100,
             additional_skill_events: vec![],

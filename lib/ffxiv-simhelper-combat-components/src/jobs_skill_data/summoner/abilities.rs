@@ -603,7 +603,7 @@ impl SummonerDatabase {
             name: String::from("Summon Ifrit II"),
             player_id,
             potency: 800,
-            trait_percent: 100,
+            trait_percent: 110,
             additional_skill_events: vec![ApplyBuffStack(
                 player_id,
                 player_id,
@@ -714,7 +714,7 @@ impl SummonerDatabase {
             name: String::from("Summon Titan II"),
             player_id,
             potency: 800,
-            trait_percent: 100,
+            trait_percent: 110,
             additional_skill_events: vec![ApplyBuffStack(
                 player_id,
                 player_id,
@@ -808,7 +808,7 @@ impl SummonerDatabase {
             name: String::from("Summon Garuda II"),
             player_id,
             potency: 800,
-            trait_percent: 100,
+            trait_percent: 110,
             additional_skill_events: vec![ApplyBuffStack(
                 player_id,
                 player_id,
@@ -1082,7 +1082,7 @@ impl SummonerDatabase {
             id: 1628,
             name: String::from("Sunflare"),
             player_id,
-            potency: 700,
+            potency: 800,
             trait_percent: 130,
             additional_skill_events: vec![],
             proc_events: vec![],
