@@ -43,6 +43,7 @@ fn main() {
             partner2_id: None,
             job_abbrev: job.to_string(),
             power: PlayerPower {
+                piety: 440,
                 gcd: 2.5,
                 auto_attack_delays: 3.0,
                 critical_strike_rate: 0.15,

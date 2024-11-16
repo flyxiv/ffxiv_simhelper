@@ -137,16 +137,16 @@ PARTY_BOARD = {
 
 
 TANK_SPECS = [
-    "PLD",
-    "WAR",
     "DRK",
-    "GNB"
+    "GNB",
+    "PLD",
+    "WAR"
 ]
 
 HEALER_SPECS = [
     "AST",
-    "WHM",
     "SCH",
+	"WHM",
     "SGE"
 ]
 
@@ -154,22 +154,22 @@ MELEE_SPECS = [
     "NIN",
     "MNK",
     "DRG",
-    "SAM",
-    "VPR",
-    "RPR"
+	"SAM",
+    "RPR",
+    "VPR"
 ]
 
 RANGED_SPECS = [
     "DNC",
     "BRD",
-    "MCH"
+	"MCH"
 ]
 
 CASTER_SPECS = [
     "PCT",
+    "BLM",
     "RDM",
-    "SMN",
-    "BLM"
+    "SMN"
 ]
 
 OTHER_SPECS = MELEE_SPECS + CASTER_SPECS
@@ -213,12 +213,24 @@ async def send_requests(urls, party_info):
         results = await asyncio.gather(*tasks)
         return results
 
+def duplicate_check(party):
+    key = {}
+    for member in party:
+          key[member] = key.get(member, 0) + 1
+	
+    return key
+
 async def main():
     with open('party_rdps_table.json', 'r') as file:
         table = json.load(file)
     count = 0
 
     left_compositions = []
+    duplicate_checks = []
+
+    for key in table.keys():
+        key_list = key.split(",")
+        duplicate_checks.append(duplicate_check(key_list))
 
     for tank1 in TANK_SPECS:
         for tank2 in TANK_SPECS:
@@ -235,13 +247,19 @@ async def main():
                                         continue
 
 
-                                    key_list = sorted([tank1, tank2, heal1, heal2, melee, ranged, caster, other])
-                                    key = "".join(key_list)
+                                    key_list = [tank1, tank2, heal1, heal2, melee, ranged, caster, other]
+                                    key = ",".join(key_list)
+                                    duplicate_check_key = duplicate_check(key_list)
 
-                                    if key in table:
+                                    if duplicate_check_key in duplicate_checks:
                                         continue 
+                                    elif key in table:
+                                        print("skipped")
+                                        continue
+                                    else:
+                                        duplicate_checks.append(duplicate_check_key)
                                     
-                                    left_compositions.append({"tank": tank, "tank2": tank2, "heal1": heal1, "heal2": heal2, "melee": melee, "ranged": ranged, "caster": caster, "other": other, "key": key})
+                                    left_compositions.append({"tank": tank1, "tank2": tank2, "heal1": heal1, "heal2": heal2, "melee": melee, "ranged": ranged, "caster": caster, "other": other, "key": key})
     
     for composition in tqdm.tqdm(left_compositions):
         tank = composition["tank"]
@@ -269,6 +287,11 @@ async def main():
             print("flushing")
             with open('party_rdps_table.json', 'w') as f:
                 json.dump(table, f)
+	
+    if count % 100 > 0:
+        print("flushing")
+        with open('party_rdps_table.json', 'w') as f:
+            json.dump(table, f)
 
 # Entry point for the async function
 if __name__ == "__main__":

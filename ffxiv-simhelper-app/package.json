@@ -19,7 +19,7 @@
 	"license": "Proprietary - No Commercial Use",
 	"main": "src/main.js",
 	"home": ".",
-	"version": "1.0.4-beta",
+	"version": "1.0.5-beta",
 	"build": {
 		"appId": "com.ffxiv-simhelper.app",
 		"icon": "build/icon.png",

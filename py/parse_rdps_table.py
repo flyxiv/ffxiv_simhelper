@@ -9,7 +9,8 @@ def main():
     parsed_table = []
 
     for key, rdps in tqdm.tqdm(table.items()):
-        key_parsed = key.split(', ')
+        key_parsed = key.split(',')
+        print(key_parsed)
         tank1 = key_parsed[0]
         tank2 = key_parsed[1]
         healer1 = key_parsed[2]
@@ -27,6 +28,7 @@ def main():
             continue 
 
         visited_keys.append(key)
+
         entry = {"tank1" : tank1, "tank2" : tank2, "healer1" : healer1, "healer2" : healer2, "melee" : melee, "ranged" : ranged, "caster" : caster, "other" : other, "rdps" : rdps}
         parsed_table.append(entry)
     
