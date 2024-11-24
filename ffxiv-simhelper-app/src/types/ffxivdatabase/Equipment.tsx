@@ -68,7 +68,7 @@ totalEquipmentsJson.forEach((element) => {
   });
 });
 
-const CURRENT_MIN_ITEM_LEVEL = 710;
+const CURRENT_MIN_ITEM_LEVEL = 690;
 const CURRENT_MAX_ITEM_LEVEL = 735;
 
 export const {
