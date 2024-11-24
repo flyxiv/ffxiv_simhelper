@@ -1,4 +1,4 @@
-import { Box, Divider, Drawer, IconButton, Link, styled, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, Divider, Drawer, IconButton, Link, styled, Typography } from "@mui/material";
 import {
 	LeftMenuLogoStyle,
 	LeftMenuNavigationBarStyle,
@@ -18,7 +18,7 @@ import { EquipmentInput } from "../../types/EquipmentInput";
 import { convertToLinkUrl } from "../../page/home";
 import { LanguageInputForm } from "../input/basicform/LanguageInputForm";
 import { TextDictionary } from "../../const/languageTexts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 
 export const MENU_WIDTH_VW_XS = 80;
@@ -197,6 +197,7 @@ function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS
 
 			<Box width="95%" display="flex" justifyContent={"flex-start"} marginY={2} marginLeft={2}>
 				{LanguageInputForm()}
+				{ResetAllDataButton(LANGUAGE_TEXTS)}
 			</Box>
 
 			<LeftMenuNavigationBar paddingY={4} paddingLeft={2}>
@@ -248,6 +249,75 @@ function DefaultLeftMenuComponents(currentSimulationPage: string, LANGUAGE_TEXTS
 		</>
 	);
 }
+
+
+function ResetAllDataButton(
+  LANGUAGE_TEXTS: TextDictionary
+) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [buttonClickConfirmed, setButtonClickConfirmed] = useState(false);
+
+  const handleDialogClose = () => {
+    setDialogOpen(false); // 다이얼로그 닫기
+  };
+
+  const handleConfirm = () => {
+    setDialogOpen(false);
+	localStorage.clear();
+
+    setButtonClickConfirmed(true); // 다이얼로그 확인 클릭 시 버튼 클릭 확정
+  };
+
+
+  useEffect(() => {
+    if (buttonClickConfirmed) {
+      setButtonClickConfirmed(false); // 상태 초기화
+    }
+  }, [buttonClickConfirmed]);
+
+  return (
+    <>
+      <Button
+        sx={{
+          backgroundColor: AppConfigurations.primary,
+          color: "black",
+          borderRadius: 2,
+		  marginX: 2,
+        }}
+        onClick={() => {
+          setDialogOpen(true);
+        }}
+      >
+        <Typography
+          sx={{ fontWeight: "bold", fontSize: AppConfigurations.body2FontSize }}
+        >
+          {LANGUAGE_TEXTS.RESET_TEXT}
+        </Typography>
+      </Button>
+      <Dialog
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        aria-labelledby="confirm-dialog-title"
+        aria-describedby="confirm-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="confirm-dialog-description">
+            {LANGUAGE_TEXTS.RESET_DESCRIPTION_TEXT}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirm} color="primary" autoFocus>
+            {LANGUAGE_TEXTS.CONFIRM_TEXT}
+          </Button>
+          <Button onClick={handleDialogClose} color="primary">
+            {LANGUAGE_TEXTS.CANCEL_TEXT}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}
+
 
 function EquipmentLoadouts(
 	loadoutCount: number,

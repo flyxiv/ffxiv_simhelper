@@ -450,6 +450,8 @@ export interface TextDictionary {
 	PARTY_COMPOSITION_RESULT_TEXT: string,
 	PARTY_COMPOSITION_TEXT: string,
 	TOTAL_RDPS_TEXT: string,
+	RESET_TEXT: string,
+	RESET_DESCRIPTION_TEXT: string,
 
 	language: LanguageMode
 }
@@ -987,8 +989,12 @@ export const AppLanguageTexts: () => TextDictionary = () => {
 			? "RDPS Ranking(6:30 Sim, Top 50)"
 			: "RDPS 순위(6:30 시뮬, 상위 50)";
 
+	const RESET_TEXT = language === LanguageMode.ENGLISH_MODE ? "Reset Save Data" : "저장 데이터 초기화";
+	const RESET_DESCRIPTION_TEXT = language === LanguageMode.ENGLISH_MODE ? "Reset all saved data. ONLY USE WHEN THERE'S IRRECOVERABLE DATA" : "모든 저장된 데이터를 초기화합니다. 저장 데이터에 문제가 있을때만 사용하세요.";
 
 	let allTexts = {
+		RESET_TEXT,
+		RESET_DESCRIPTION_TEXT,
 		PARTY_COMPOSITION_INPUT_TEXT,
 		PARTY_COMPOSITION_RESULT_TEXT,
 		PARTY_COMPOSITION_TEXT,
