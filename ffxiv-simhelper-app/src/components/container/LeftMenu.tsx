@@ -266,6 +266,7 @@ function ResetAllDataButton(
 	localStorage.clear();
 
     setButtonClickConfirmed(true); // 다이얼로그 확인 클릭 시 버튼 클릭 확정
+	window.location.reload();
   };
 
 
