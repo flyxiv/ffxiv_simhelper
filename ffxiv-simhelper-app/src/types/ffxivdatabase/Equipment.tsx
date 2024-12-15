@@ -147,6 +147,11 @@ export function readEquipmentData(minItemLevel: number, maxItemLevel: number) {
       const equipments = equipmentDatabaseByKey.get(
         toEquipmentKeyString(key.jobAbbrev, key.slotName)
       );
+
+	  if (equipment.itemLevel === 725) {
+		continue;
+	  }
+
       if (equipments === undefined) {
         equipmentDatabaseByKey.set(
           toEquipmentKeyString(key.jobAbbrev, key.slotName),
