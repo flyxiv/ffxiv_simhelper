@@ -6,6 +6,7 @@ import {
 } from "../../../types/ffxivdatabase/ItemSet";
 import { AppConfigurations } from "../../../Themes";
 import {
+	CopyEquipmentInput,
   EquipmentInput,
   SingleEquipmentInputSaveState,
 } from "../../../types/EquipmentInput";
@@ -82,7 +83,7 @@ export function MainPlayerJobSelection(
   const handleJobChange = (event: SelectChangeEvent<string>) => {
     let newJobAbbrev = event.target.value;
 
-    let newTotalState = { ...totalEquipmentState };
+    let newTotalState = {...totalEquipmentState}; 
     let bisForNewJob = mapJobAbbrevToJobBisEquipments(newJobAbbrev);
 
     if (bisForNewJob === undefined) {
@@ -91,8 +92,8 @@ export function MainPlayerJobSelection(
 
     newTotalState.equipmentDatas.forEach((data) => {
       data.mainPlayerJobAbbrev = newJobAbbrev;
-      data.itemSet = bisForNewJob.itemSet;
-      data.gearSetMaterias = bisForNewJob.gearSetMaterias;
+      data.itemSet = [...bisForNewJob.itemSet];
+      data.gearSetMaterias = JSON.parse(JSON.stringify(bisForNewJob.gearSetMaterias));
       data.foodId = bisForNewJob.foodId;
       resetInvalidPartnersForNewJob(data);
     })
