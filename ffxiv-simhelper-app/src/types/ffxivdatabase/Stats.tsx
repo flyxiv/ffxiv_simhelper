@@ -43,7 +43,7 @@ export function getStatNames(jobAbbrev: string, gcdName: string) {
 
 export function getStatWeightNames(jobAbbrev: string, gcdName: string) {
   let statNames = getStatNames(jobAbbrev, gcdName);
-  return statNames.filter(statName => statName !== gcdName);
+  return statNames.filter(statName => statName !== gcdName && statName !== PIE_STAT_EN_NAME);
 }
 
 export function convertToSubStatInfos(totalStats: PlayerPower, LANGUAGE_TEXTS: TextDictionary) {

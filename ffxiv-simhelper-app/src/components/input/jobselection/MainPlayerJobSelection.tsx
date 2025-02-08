@@ -6,7 +6,6 @@ import {
 } from "../../../types/ffxivdatabase/ItemSet";
 import { AppConfigurations } from "../../../Themes";
 import {
-	CopyEquipmentInput,
   EquipmentInput,
   SingleEquipmentInputSaveState,
 } from "../../../types/EquipmentInput";
