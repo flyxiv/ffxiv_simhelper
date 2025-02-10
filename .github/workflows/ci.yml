@@ -36,6 +36,8 @@ jobs:
           yarn install  # Yarn으로 의존성 설치
 
       - name: Publish Electron Release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           cd ffxiv-simhelper-app  # 이동한 후 다시 확인
           yarn electron-publish-release
