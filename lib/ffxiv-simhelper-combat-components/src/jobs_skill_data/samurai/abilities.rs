@@ -438,7 +438,7 @@ impl SamuraiDatabase {
             id: 1109,
             name: String::from("Kaeshi Tendo Setsugekka"),
             player_id,
-            potency: 1020,
+            potency: 1100,
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
@@ -863,7 +863,7 @@ impl SamuraiDatabase {
             id: 1123,
             name: String::from("Tendo Setsugekka"),
             player_id,
-            potency: 1020,
+            potency: 1100,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,

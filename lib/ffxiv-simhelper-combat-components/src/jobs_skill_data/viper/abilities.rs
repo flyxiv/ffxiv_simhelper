@@ -762,7 +762,7 @@ impl ViperDatabase {
             id: 2120,
             name: String::from("Awakened Filler"),
             player_id,
-            potency: 280,
+            potency: 320,
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
