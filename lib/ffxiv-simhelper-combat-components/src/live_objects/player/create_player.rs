@@ -571,7 +571,7 @@ impl FfxivPlayer {
             id: 1907,
             owner_id: player_id,
             duration_left_millisecond: TimeType::MAX,
-            status_info: vec![StatusInfo::DamagePercent(32)],
+            status_info: vec![StatusInfo::DamagePercent(27)],
             duration_millisecond: TimeType::MAX,
             is_raidwide: false,
             name: "Enochian".to_string(),
