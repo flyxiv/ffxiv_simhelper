@@ -32,7 +32,7 @@ impl ScholarDatabase {
         let biolysis_dot: DebuffStatus = DebuffStatus {
             id: 600,
             owner_id: player_id,
-            potency: Some(75),
+            potency: Some(80),
             trait_percent: Some(130),
             damage_category: Some(DamageCategory::MagicalDot),
             damage_skill_id: Some(607),

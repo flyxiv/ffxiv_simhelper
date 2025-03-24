@@ -847,7 +847,7 @@ impl NinjaDatabase {
             id: 1021,
             name: String::from("Bhavakacra-Meisui"),
             player_id,
-            potency: 530,
+            potency: 550,
             use_type: UseType::UseOnTarget,
             trait_percent: 100,
             additional_skill_events: vec![],
