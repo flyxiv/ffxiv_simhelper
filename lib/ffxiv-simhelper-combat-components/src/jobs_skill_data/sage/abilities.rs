@@ -30,7 +30,7 @@ impl SageDatabase {
         let eukrasian_dosis_iii_dot: DebuffStatus = DebuffStatus {
             id: 700,
             owner_id: player_id,
-            potency: Some(75),
+            potency: Some(80),
             damage_category: Some(DamageCategory::MagicalDot),
             trait_percent: Some(130),
             damage_skill_id: Some(705),

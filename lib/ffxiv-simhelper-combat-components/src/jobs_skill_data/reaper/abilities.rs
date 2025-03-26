@@ -586,7 +586,7 @@ impl ReaperDatabase {
             id: 1214,
             name: String::from("Cross Reaping"),
             player_id,
-            potency: 560,
+            potency: 600,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -623,7 +623,7 @@ impl ReaperDatabase {
             id: 1215,
             name: String::from("Void Reaping"),
             player_id,
-            potency: 560,
+            potency: 600,
             trait_percent: 100,
             additional_skill_events: vec![ApplyBuff(
                 player_id,
@@ -778,7 +778,7 @@ impl ReaperDatabase {
             id: 1220,
             name: String::from("Sacrificium"),
             player_id,
-            potency: 530,
+            potency: 600,
             trait_percent: 100,
             additional_skill_events: vec![],
             proc_events: vec![],
