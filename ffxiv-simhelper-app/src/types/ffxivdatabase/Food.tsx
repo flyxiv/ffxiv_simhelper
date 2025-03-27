@@ -1,8 +1,8 @@
 import totalFoodJson from "../../assets/data/food_data.json";
 import { TextDictionary } from "../../const/languageTexts";
 
-export const FOOD_MIN_ILVL = 680;
-export const FOOD_MAX_ILVL = 710;
+export const FOOD_MIN_ILVL = 710;
+export const FOOD_MAX_ILVL = 740;
 
 export const totalFood: Array<Food> = [];
 totalFoodJson.forEach((element) => {

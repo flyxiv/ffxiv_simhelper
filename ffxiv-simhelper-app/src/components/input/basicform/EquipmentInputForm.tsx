@@ -146,9 +146,10 @@ function EquipmentMenuOfOneSlot(
   ) {
     let ring2 = totalState.itemSet[slotNameToSlotIndex(FINGER2_SLOT_EN_TEXT)];
     let ring2Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring2);
+
     if (
       ring2Equipment !== undefined &&
-      !ring2Equipment.name.includes("Archeo")
+      (!ring2Equipment.name.includes("Archeo") && !ring2Equipment.name.includes("Ceremonial"))
     ) {
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
         (equipment) =>
@@ -165,7 +166,7 @@ function EquipmentMenuOfOneSlot(
     let ring1Equipment = EQUIPMENT_DATABASE_BY_ID.get(ring1);
     if (
       ring1Equipment !== undefined &&
-      !ring1Equipment.name.includes("Archeo")
+      (!ring1Equipment.name.includes("Archeo") && !ring1Equipment.name.includes("Ceremonial"))
     ) {
       equipmentsAvailableInSlot = equipmentsAvailableInSlot.filter(
         (equipment) =>
